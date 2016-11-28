@@ -1,0 +1,30 @@
+<?php namespace OpenPolice\Models;
+// generated from /resources/views/admin/db/export-laravel-model-gen.blade.php
+
+use Illuminate\Database\Eloquent\Model;
+
+class OPCEvidence extends Model
+{
+	protected $table 		= 'OPC_Evidence';
+	protected $primaryKey 	= 'EvidID';
+	public $timestamps 		= true;
+	protected $fillable 	= 
+	[	
+		'EvidComplaintID', 
+		'EvidType', 
+		'EvidPrivacy', 
+		'EvidDateTime', 
+		'EvidTitle', 
+		'EvidEvidenceDesc', 
+		'EvidUploadFile', 
+		'EvidStoredFile', 
+		'EvidVideoLink', 
+		'EvidVideoDuration', 
+		'EvidCivilianID', 
+		'EvidDeptID', 
+		'EvidSceneID', 
+		'EvidEventSequenceID', 
+		'EvidInjuryID', 
+		'EvidNoteID', 
+	];
+}
