@@ -8,20 +8,20 @@ use Illuminate\Http\Request;
 
 use SurvLoop\Models\User;
 
-use OpenPolice\Models\OPCEventSequence;
-use OpenPolice\Models\OPCStops;
-use OpenPolice\Models\OPCSearches;
-use OpenPolice\Models\OPCArrests;
-use OpenPolice\Models\OPCForce;
-use OpenPolice\Models\OPCOrders;
-use OpenPolice\Models\OPCInjuries;
-use OpenPolice\Models\OPCEvidence;
-use OpenPolice\Models\OPCDepartments;
-use OpenPolice\Models\OPCLinksComplaintDept;
-use OpenPolice\Models\OPCLinksOfficerEvents;
-use OpenPolice\Models\OPCLinksOfficerOrders;
-use OpenPolice\Models\OPCLinksCivilianEvents;
-use OpenPolice\Models\OPCLinksCivilianOrders;
+use OpenPolice\Models\OPEventSequence;
+use OpenPolice\Models\OPStops;
+use OpenPolice\Models\OPSearches;
+use OpenPolice\Models\OPArrests;
+use OpenPolice\Models\OPForce;
+use OpenPolice\Models\OPOrders;
+use OpenPolice\Models\OPInjuries;
+use OpenPolice\Models\OPEvidence;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPLinksComplaintDept;
+use OpenPolice\Models\OPLinksOfficerEvents;
+use OpenPolice\Models\OPLinksOfficerOrders;
+use OpenPolice\Models\OPLinksCivilianEvents;
+use OpenPolice\Models\OPLinksCivilianOrders;
 
 use OpenPolice\Controllers\OpenPoliceReport;
 use OpenPolice\Controllers\VolunteerController;
@@ -333,7 +333,7 @@ class OpenPolice extends SurvFormTree
 		{
 			$this->nextBtnOverride = 'To continue, please find and select a department above';
 			$searchSuggest = array();
-			$deptCitys = OPCDepartments::select('DeptAddressCity')->distinct()->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)->get();
+			$deptCitys = OPDepartments::select('DeptAddressCity')->distinct()->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)->get();
 			if ($deptCitys && sizeof($deptCitys) > 0)
 			{
 				foreach ($deptCitys as $dept)
@@ -341,7 +341,7 @@ class OpenPolice extends SurvFormTree
 					if (!in_array($dept->DeptAddressCity, $searchSuggest)) $searchSuggest[] = json_encode($dept->DeptAddressCity);
 				}
 			}
-			$deptCounties = OPCDepartments::select('DeptAddressCounty')->distinct()->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)->get();
+			$deptCounties = OPDepartments::select('DeptAddressCounty')->distinct()->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)->get();
 			if ($deptCounties && sizeof($deptCounties) > 0)
 			{
 				foreach ($deptCounties as $dept)
@@ -349,7 +349,7 @@ class OpenPolice extends SurvFormTree
 					if (!in_array($dept->DeptAddressCounty, $searchSuggest)) $searchSuggest[] = json_encode($dept->DeptAddressCounty);
 				}
 			}
-			$deptFed = OPCDepartments::select('DeptName')->where('DeptType', 266)->get();
+			$deptFed = OPDepartments::select('DeptName')->where('DeptType', 266)->get();
 			if ($deptFed && sizeof($deptFed) > 0)
 			{
 				foreach ($deptFed as $dept)
@@ -820,12 +820,12 @@ class OpenPolice extends SurvFormTree
 			}
 			if ($newDeptID > 0)
 			{
-				$deptChk = OPCLinksComplaintDept::where('LnkComDeptComplaintID', $this->coreID)
+				$deptChk = OPLinksComplaintDept::where('LnkComDeptComplaintID', $this->coreID)
 					->where('LnkComDeptDeptID', $newDeptID)
 					->get();
 				if (!$deptChk || sizeof($deptChk) <= 0)
 				{
-					$newDeptLnk = new OPCLinksComplaintDept;
+					$newDeptLnk = new OPLinksComplaintDept;
 					$newDeptLnk->LnkComDeptComplaintID = $this->coreID;
 					$newDeptLnk->LnkComDeptDeptID = $newDeptID;
 					$newDeptLnk->save();
@@ -890,7 +890,10 @@ class OpenPolice extends SurvFormTree
 						{
 							if (!$this->REQ->has('injCivs') || !in_array($civID, $this->REQ->injCivs) || !$this->REQ->has('inj'.$civID.'Type'))
 							{
-								OPCInjuries::where('InjSubjectID', $civID)->where('InjType', $injType)->where('InjComplaintID', $this->coreID)->delete();
+								OPInjuries::where('InjSubjectID', $civID)
+									->where('InjType', $injType)
+									->where('InjComplaintID', $this->coreID)
+									->delete();
 							}
 						}
 					}
@@ -1493,7 +1496,7 @@ class OpenPolice extends SurvFormTree
 	protected function addNewEveSeq($eventType, $civID = -3)
 	{
 		//echo 'addNewEveSeq(' . $eventType . ', ' . $civID . ')<br />';
-		$newEveSeq = new OPCEventSequence;
+		$newEveSeq = new OPEventSequence;
 		$newEveSeq->EveComplaintID = $this->coreID;
 		$newEveSeq->EveType = $eventType;
 		$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
@@ -1503,7 +1506,7 @@ class OpenPolice extends SurvFormTree
 		$newEvent->save();
 		if ($civID > 0)
 		{
-			$civLnk = new OPCLinksCivilianEvents;
+			$civLnk = new OPLinksCivilianEvents;
 			$civLnk->LnkCivEveEveID = $newEveSeq->getKey();
 			$civLnk->LnkCivEveCivID = $civID;
 			$civLnk->save();
@@ -1519,13 +1522,13 @@ class OpenPolice extends SurvFormTree
 		//echo 'deleteEventByID(' . $nID . ', ' . $eveSeqID . ')<br />';
 		if ($eveSeqID > 0)
 		{
-			OPCEventSequence::find($eveSeqID)->delete();
-			OPCStops::where('StopEventSequenceID', $eveSeqID)->delete();
-			OPCSearches::where('SrchEventSequenceID', $eveSeqID)->delete();
-			OPCArrests::where('ArstEventSequenceID', $eveSeqID)->delete();
-			OPCForce::where('ForEventSequenceID', $eveSeqID)->delete();
-			OPCLinksCivilianEvents::where('LnkCivEveEveID', $eveSeqID)->delete();
-			OPCLinksOfficerEvents::where('LnkOffEveEveID', $eveSeqID)->delete();
+			OPEventSequence::find($eveSeqID)->delete();
+			OPStops::where('StopEventSequenceID', $eveSeqID)->delete();
+			OPSearches::where('SrchEventSequenceID', $eveSeqID)->delete();
+			OPArrests::where('ArstEventSequenceID', $eveSeqID)->delete();
+			OPForce::where('ForEventSequenceID', $eveSeqID)->delete();
+			OPLinksCivilianEvents::where('LnkCivEveEveID', $eveSeqID)->delete();
+			OPLinksOfficerEvents::where('LnkOffEveEveID', $eveSeqID)->delete();
 		}
 		return true;
 	}
@@ -1534,7 +1537,7 @@ class OpenPolice extends SurvFormTree
 	{
 		foreach ($this->REQ->input('item') as $i => $value)
 		{
-			$eveSeq = OPCEventSequence::find($value);
+			$eveSeq = OPEventSequence::find($value);
 			$eveSeq->EveOrder = $i;
 			$eveSeq->save();
 			//echo 'ajaxSaveIncEveOrder(), find(' . $value . ')->update(' . $i . ')<br />';
@@ -1594,10 +1597,10 @@ class OpenPolice extends SurvFormTree
 					if ($ordID <= 0) $ordID = $this->sessData->newDataRecordSimple('Orders', 'OrdEventSequenceID', $GLOBALS["DB"]->closestLoop["itemID"]);
 					$this->deleteOrderPeopleLinks($nID, $ordID);
 					$this->connectPeopleEventLinks('order'.$i.'Off', 'order'.$i.'Civ', -3, -3, $ordID);
-					OPCOrders::find($ordID)->update(array('OrdDescription' => $this->REQ->input('order'.$i)));
+					OPOrders::find($ordID)->update(array('OrdDescription' => $this->REQ->input('order'.$i)));
 					if ($nID == 342 && $this->REQ->has('hearOrder'.$i)) 
 					{
-						OPCOrders::find($ordID)->update(array('OrdTroubleUnderYN' => $this->REQ->input('hearOrder'.$i), 
+						OPOrders::find($ordID)->update(array('OrdTroubleUnderYN' => $this->REQ->input('hearOrder'.$i), 
 							'OrdTroubleUnderstading' => $this->REQ->input('hearOrder'.$i.'Why')));
 					}
 				}
@@ -1615,8 +1618,8 @@ class OpenPolice extends SurvFormTree
 	
 	protected function deleteOrderPeopleLinks($nID, $ordID)
 	{
-		OPCLinksCivilianOrders::where('LnkCivOrdOrdID', $ordID)->delete();
-		OPCLinksOfficerOrders::where('LnkOffOrdOrdID', $ordID)->delete();
+		OPLinksCivilianOrders::where('LnkCivOrdOrdID', $ordID)->delete();
+		OPLinksOfficerOrders::where('LnkOffOrdOrdID', $ordID)->delete();
 		return true;
 	}
 	
@@ -1658,17 +1661,18 @@ class OpenPolice extends SurvFormTree
 		{
 			if (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) <= 0)
 			{
-				$newInj = new OPCInjuries;
+				$newInj = new OPInjuries;
 				$newInj->InjType = $handcuffDefID;
 				$newInj->InjSubjectID = ((isset($stopRow[0]["Civilians"][0])) ? $stopRow[0]["Civilians"][0] : -3);
 				$newInj->save();
 				$this->sessData->dataSets["Injuries"]["Handcuff"][] = $newInj;
-				OPCStops::find($stopRow[0]["Event"]->StopID)->update(array('StopSubjectHandcuffInjury' => $newInj->InjID));
+				OPStops::find($stopRow[0]["Event"]->StopID)
+					->update(array('StopSubjectHandcuffInjury' => $newInj->InjID));
 			}
 		}
 		elseif (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) > 0)
 		{
-			OPCStops::find($stopRow[0]["Event"]->StopID)->update(array('StopSubjectHandcuffInjury' => NULL));
+			OPStops::find($stopRow[0]["Event"]->StopID)->update(array('StopSubjectHandcuffInjury' => NULL));
 			$this->sessData->deleteDataItem($nID, 'Injuries', $stopRow[0]["Event"]->StopSubjectHandcuffInjury);
 		}
 		return false;
@@ -2209,7 +2213,7 @@ class OpenPolice extends SurvFormTree
 
 	protected function storeUploadRecord($nID, $upArr, $upLinks)
 	{
-		$newEvid = new OPCEvidence;
+		$newEvid = new OPEvidence;
 		$newEvid->EvidComplaintID 	= $this->coreID;
 		$newEvid->EvidType 			= $upArr["type"];
 		$newEvid->EvidPrivacy 		= $upArr["privacy"];
@@ -2232,7 +2236,7 @@ class OpenPolice extends SurvFormTree
 	
 	protected function updateUploadRecord($nID, $upArr)
 	{
-		$evid = OPCEvidence::find($upArr["id"]);
+		$evid = OPEvidence::find($upArr["id"]);
 		$evid->EvidType 			= $upArr["type"];
 		$evid->EvidPrivacy 			= $upArr["privacy"];
 		$evid->EvidTitle 			= $upArr["title"];
@@ -2254,7 +2258,7 @@ class OpenPolice extends SurvFormTree
 				`EvidStoredFile` 	AS `storeFile`, 
 				`EvidVideoLink` 	AS `video`, 
 				`EvidVideoDuration` AS `vidDur` 
-			FROM `OPC_Evidence` 
+			FROM `OP_Evidence` 
 			WHERE `EvidComplaintID` LIKE '" . $this->coreID . "'";
 		if (sizeof($upLinks) > 0)
 		{
@@ -2291,11 +2295,11 @@ class OpenPolice extends SurvFormTree
 			
 			if (trim($request->get('policeDept')) == '') return '<i>Please type part of the department\'s name to find it.</i>';
 			// Prioritize by Incident City first, also by Department size (# of officers)
-			$depts = OPCDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
+			$depts = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
 				->where('DeptAddressState', $request->get('policeState'))
 				->orderBy('DeptName', 'asc')
 				->get();
-			$deptsFed = OPCDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
+			$deptsFed = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
 				->where('DeptType', 266)
 				->orderBy('DeptName', 'asc')
 				->get();

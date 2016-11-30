@@ -8,23 +8,23 @@ use Illuminate\Http\Request;
 use SurvLoop\Models\User;
 use SurvLoop\Models\SLDefinitions;
 
-use OpenPolice\Models\OPCComplaints;
-use OpenPolice\Models\OPCAllegations;
-use OpenPolice\Models\OPCOfficers;
-use OpenPolice\Models\OPCPersonContact;
-use OpenPolice\Models\OPCDepartments;
-use OpenPolice\Models\OPCOversight;
-use OpenPolice\Models\OPCLinksComplaintDept;
-use OpenPolice\Models\OPCCustomers;             
+use OpenPolice\Models\OPComplaints;
+use OpenPolice\Models\OPAllegations;
+use OpenPolice\Models\OPOfficers;
+use OpenPolice\Models\OPPersonContact;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPOversight;
+use OpenPolice\Models\OPLinksComplaintDept;
+use OpenPolice\Models\OPCustomers;             
 
-use OpenPolice\Models\OPCzVolunEditsDepts;
-use OpenPolice\Models\OPCzVolunEditsOvers;
-use OpenPolice\Models\OPCzVolunStatDays;
-use OpenPolice\Models\OPCzVolunUserInfo;
+use OpenPolice\Models\OPzVolunEditsDepts;
+use OpenPolice\Models\OPzVolunEditsOvers;
+use OpenPolice\Models\OPzVolunStatDays;
+use OpenPolice\Models\OPzVolunUserInfo;
 
-use OpenPolice\Models\OPCzComplaintEmails;
-use OpenPolice\Models\OPCzComplaintEmailed;
-use OpenPolice\Models\OPCzComplaintReviews;
+use OpenPolice\Models\OPzComplaintEmails;
+use OpenPolice\Models\OPzComplaintEmailed;
+use OpenPolice\Models\OPzComplaintReviews;
 
 use OpenPolice\Controllers\OpenPoliceReport;
 use OpenPolice\Controllers\VolunteerLeaderboard;
@@ -37,11 +37,11 @@ class OpenPoliceAdmin extends AdminSubsController
 	
 	public function initPowerUser($uID = -3)
 	{
-		$userInfo = OPCzVolunUserInfo::where('UserInfoUserID', $uID)
+		$userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)
 			->first();
 		if (!$userInfo || sizeof($userInfo) == 0)
 		{
-			$userInfo = new OPCzVolunUserInfo;
+			$userInfo = new OPzVolunUserInfo;
 			$userInfo->UserInfoUserID = $uID;
 			$userInfo->save();
 		}
@@ -50,13 +50,13 @@ class OpenPoliceAdmin extends AdminSubsController
 			|| intVal($userInfo->UserInfoPersonContactID) <= 0)
 		{
 			$thisUser = User::select('email')->find($uID);
-			$userContact = new OPCPersonContact;
+			$userContact = new OPPersonContact;
 			$userContact->PrsnEmail = $thisUser->email;
 			$userContact->save();
 			$userInfo->UserInfoPersonContactID = $userContact->PrsnID;
 			$userInfo->save();
 		}
-		else $userContact = OPCPersonContact::find($userInfo->UserInfoPersonContactID);
+		else $userContact = OPPersonContact::find($userInfo->UserInfoPersonContactID);
 		return [$userInfo, $userContact];
 	}
 	
@@ -244,7 +244,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	protected function loadSearchSuggestions()
 	{	
 		$this->v["searchSuggest"] = array();
-		$deptCitys = OPCDepartments::select('DeptAddressCity')->distinct()->get();
+		$deptCitys = OPDepartments::select('DeptAddressCity')->distinct()->get();
 		if ($deptCitys && sizeof($deptCitys) > 0)
 		{
 			foreach ($deptCitys as $dept)
@@ -255,7 +255,7 @@ class OpenPoliceAdmin extends AdminSubsController
 				}
 			}
 		}
-		$deptCounties = OPCDepartments::select('DeptAddressCounty')->distinct()->get();
+		$deptCounties = OPDepartments::select('DeptAddressCounty')->distinct()->get();
 		if ($deptCounties && sizeof($deptCounties) > 0)
 		{
 			foreach ($deptCounties as $dept)
@@ -303,10 +303,10 @@ class OpenPoliceAdmin extends AdminSubsController
 	{
 		$sort = "date";
 		$qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, i.* 
-			FROM `OPC_Complaints` c 
-			JOIN `OPC_Incidents` i ON c.`ComID` LIKE i.`IncComplaintID` 
-			LEFT OUTER JOIN `OPC_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 
-			LEFT OUTER JOIN `OPC_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` 
+			FROM `OP_Complaints` c 
+			JOIN `OP_Incidents` i ON c.`ComID` LIKE i.`IncComplaintID` 
+			LEFT OUTER JOIN `OP_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 
+			LEFT OUTER JOIN `OP_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` 
 			WHERE civ.`CivIsCreator` LIKE 'Y' ";
 		switch ($this->v["currPage"])
 		{
@@ -347,7 +347,7 @@ class OpenPoliceAdmin extends AdminSubsController
 				$sortInd = $comTime;
 				$this->v["comInfo"][$com->ComID] = ["alleg" => '', "comDate" => ''];
 				$allegsTmp = array();
-				$chkAlleg = OPCAllegations::select('AlleType')
+				$chkAlleg = OPAllegations::select('AlleType')
 					->where('AlleComplaintID', $com->ComID)
 					->get();
 				if ($chkAlleg && sizeof($chkAlleg) > 0)
@@ -410,13 +410,13 @@ class OpenPoliceAdmin extends AdminSubsController
 		$this->v["fullReport"] = $this->CustReport->printAdminReport($cid, $viewType);
 		$this->v["complaintRec"] = $this->CustReport->sessData->dataSets["Complaints"][0];
 		$this->v["firstReview"] = true;
-		$this->v["yourReview"] = new OPCzComplaintReviews;
+		$this->v["yourReview"] = new OPzComplaintReviews;
 		$this->v["allStaffName"] = array();
-		$this->v["latestReview"] = OPCzComplaintReviews::where('ComRevComplaint', '=', $cid)
+		$this->v["latestReview"] = OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
 			->where('ComRevType', 'Full')
 			->orderBy('ComRevDate', 'desc')
 			->first();
-		$this->v["reviews"] = OPCzComplaintReviews::where('ComRevComplaint', '=', $cid)
+		$this->v["reviews"] = OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
 			->where('ComRevType', 'NOT LIKE', 'Draft')
 			->orderBy('ComRevDate', 'asc')
 			->get();
@@ -435,7 +435,7 @@ class OpenPoliceAdmin extends AdminSubsController
 				}
 			}
 		}
-		$this->v["emailList"] = OPCzComplaintEmails::orderBy('ComEmailName', 'asc')->orderBy('ComEmailType', 'asc')->get();
+		$this->v["emailList"] = OPzComplaintEmails::orderBy('ComEmailName', 'asc')->orderBy('ComEmailType', 'asc')->get();
 		$this->v["emailMap"] = [ // 'Review Status' => Email ID#
 				'Submitted to Oversight' 			=> [7, 12], 
 				'Hold: Go Gold' 					=> [6],
@@ -461,16 +461,16 @@ class OpenPoliceAdmin extends AdminSubsController
 			foreach ($this->CustReport->sessData->dataSets["LinksComplaintDept"] as $i => $lnk)
 			{
 				$this->v["comDepts"][$cnt] = array("id" => $lnk->LnkComDeptDeptID);
-				$this->v["comDepts"][$cnt]["deptRow"] = OPCDepartments::find($lnk->LnkComDeptDeptID)->first();
-				$this->v["comDepts"][$cnt]["iaRow"] = OPCOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+				$this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID)->first();
+				$this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
 					->where('OverType', $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
 					->first();
-				$this->v["comDepts"][$cnt]["civRow"] = OPCOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+				$this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
 					->where('OverType', $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
 					->first();
 				if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || sizeof($this->v["comDepts"][$cnt]["iaRow"]) == 0)
 				{
-					$this->v["comDepts"][$cnt]["iaRow"] = new OPCOversight;
+					$this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
 					$this->v["comDepts"][$cnt]["iaRow"]->OverDeptID 		= $lnk->LnkComDeptDeptID;
 					$this->v["comDepts"][$cnt]["iaRow"]->OverType 			= $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Internal Affairs');
 					$this->v["comDepts"][$cnt]["iaRow"]->OverAgncName 		= $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
@@ -820,7 +820,7 @@ class OpenPoliceAdmin extends AdminSubsController
 		$this->admControlInit($request, '/dashboard/complaint/' . $cid . '/review');
 		if ($request->has('cID') && intVal($request->cID) > 0 && intVal($request->cID) == $cid)
 		{
-			$newReview = new OPCzComplaintReviews;
+			$newReview = new OPzComplaintReviews;
 			$newReview->ComRevComplaint 	= $cid;
 			$newReview->ComRevUser 			= $this->v["user"]->id;
 			$newReview->ComRevDate 			= date("Y-m-d H:i:s");
@@ -830,7 +830,7 @@ class OpenPoliceAdmin extends AdminSubsController
 			$newReview->ComRevMakeFeatured 	= intVal($request->revMakeFeatured);
 			if ($request->revType == 'Full')
 			{
-				OPCzComplaintReviews::where('ComRevComplaint', '=', $cid)
+				OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
 					->where('ComRevUser', Auth::user()->id)
 					->where('ComRevType', 'Full')
 					->update([ "ComRevType" => 'Draft' ]);
@@ -861,7 +861,7 @@ class OpenPoliceAdmin extends AdminSubsController
 			}
 			$newReview->save();
 			
-			$com = OPCComplaints::find($cid);
+			$com = OPComplaints::find($cid);
 			$com->comType = $newReview->ComRevComplaintType;
 			switch ($newReview->ComRevStatus)
 			{
@@ -942,30 +942,30 @@ class OpenPoliceAdmin extends AdminSubsController
 		$statRanges[] = array('All-Time Totals', "");
 		foreach ($statRanges as $i => $stat) {
 			$statTots[$i] = array( $stat[0] );
-			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT DISTINCT `EditDeptUser` FROM `OPC_zVolunEditsDepts` ".$stat[1]) ) );
-			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT `EditDeptID` FROM `OPC_zVolunEditsDepts` ".$stat[1]) ) );
+			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT DISTINCT `EditDeptUser` FROM `OP_zVolunEditsDepts` ".$stat[1]) ) );
+			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT `EditDeptID` FROM `OP_zVolunEditsDepts` ".$stat[1]) ) );
 			$overQry = ((strpos($stat[1], "WHERE") === false) ? " WHERE `EditOverType` LIKE '169'" : " AND `EditOverType` LIKE '169'");
-			$res = DB::select( DB::raw("SELECT SUM(`EditOverOnlineResearch`) as `tot` FROM `OPC_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
+			$res = DB::select( DB::raw("SELECT SUM(`EditOverOnlineResearch`) as `tot` FROM `OP_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
 			$statTots[$i][] = $res[0]->tot;
-			$res = DB::select( DB::raw("SELECT SUM(`EditOverMadeDeptCall`) as `tot` FROM `OPC_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
+			$res = DB::select( DB::raw("SELECT SUM(`EditOverMadeDeptCall`) as `tot` FROM `OP_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
 			$statTots[$i][] = $res[0]->tot;
-			$res = DB::select( DB::raw("SELECT SUM(`EditOverMadeIACall`) as `tot` FROM `OPC_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
+			$res = DB::select( DB::raw("SELECT SUM(`EditOverMadeIACall`) as `tot` FROM `OP_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
 			$statTots[$i][] = $res[0]->tot;
-			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT DISTINCT `EditDeptDeptID` FROM `OPC_zVolunEditsDepts` ".$stat[1]) ) );
+			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT DISTINCT `EditDeptDeptID` FROM `OP_zVolunEditsDepts` ".$stat[1]) ) );
 		}
 		
 		$deptEdits = array();
-		$recentEdits = OPCzVolunEditsDepts::take(100)
+		$recentEdits = OPzVolunEditsDepts::take(100)
 			->orderBy('EditDeptVerified', 'desc')
 			->get();
 		if ($recentEdits && sizeof($recentEdits) > 0)
 		{
 			foreach ($recentEdits as $i => $edit)
 			{
-				$iaEdit  = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('EditOverType', 169)
 					->first();
-				$civEdit = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('EditOverType', 170)
 					->first();
 				$userObj = User::find($edit->EditOverUser);
@@ -985,7 +985,7 @@ class OpenPoliceAdmin extends AdminSubsController
         foreach ($deptEdits as $deptEdit) {
 			$this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
 				"user" 		=> $deptEdit[0], 
-				"deptRow" 	=> OPCDepartments::find($deptEdit[1]->EditDeptDeptID), 
+				"deptRow" 	=> OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
 				"deptEdit" 	=> $deptEdit[1], 
 				"deptType" 	=> $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
 				"iaEdit" 	=> $deptEdit[2], 
@@ -996,7 +996,7 @@ class OpenPoliceAdmin extends AdminSubsController
 		$this->recalcVolunStats();
 		$past = 60;
 		$startDate = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$past, date("Y")));
-		$this->v["statDays"] = OPCzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+		$this->v["statDays"] = OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
 			->orderBy('VolunStatDate', 'asc')
 			->get();
 		$this->v["axisLabels"] = array();
@@ -1105,7 +1105,7 @@ class OpenPoliceAdmin extends AdminSubsController
         }
         
         
-		$edits  = OPCzVolunEditsOvers::where('EditOverType', 169)
+		$edits  = OPzVolunEditsOvers::where('EditOverType', 169)
 			->where('EditOverVerified', '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
 			->get();
         if ($edits && sizeof($edits) > 0)
@@ -1132,10 +1132,11 @@ class OpenPoliceAdmin extends AdminSubsController
         	}
         }
         
-        $statDays = OPCzVolunStatDays::where('VolunStatDate', '>=', $startDate)->delete();
+        $statDays = OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+        	->delete();
         foreach ($days as $day => $stats)
         {
-        	$newDay = new OPCzVolunStatDays;
+        	$newDay = new OPzVolunStatDays;
         	$newDay->VolunStatDate 				= $day;
         	$newDay->VolunStatSignups 			= $stats["signups"];
         	$newDay->VolunStatLogins 			= $stats["logins"];
@@ -1196,7 +1197,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	public function listOfficers(Request $request)
 	{
 		$this->admControlInit($request, '/dashboard/officers');
-		$this->v["officers"] = OPCOfficers::get();
+		$this->v["officers"] = OPOfficers::get();
 		return view('vendor.openpolice.admin.lists.officers', $this->v);
 	}
 	
@@ -1204,7 +1205,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	{
 		$this->admControlInit($request, '/dashboard/depts');
 		$this->v["deptComplaints"] = $this->v["deptAllegs"] = $deptList = array();
-		$comDeptLnks = OPCLinksComplaintDept::all();
+		$comDeptLnks = OPLinksComplaintDept::all();
 		if (sizeof($comDeptLnks) > 0) { foreach ($comDeptLnks as $lnk) {
 			if (!in_array($lnk->LnkComDeptDeptID, $deptList)) $deptList[] = $lnk->LnkComDeptDeptID;
 			if (!isset($this->v["deptComplaints"][$lnk->LnkComDeptDeptID])) {
@@ -1213,18 +1214,18 @@ class OpenPoliceAdmin extends AdminSubsController
 			}
 			$this->v["deptComplaints"][$lnk->LnkComDeptDeptID][] = $lnk->LnkComDeptComplaintID;
 		} }
-        $this->v["departments"] = OPCDepartments::whereIn('DeptID', $deptList)->get();
+        $this->v["departments"] = OPDepartments::whereIn('DeptID', $deptList)->get();
         return view('vendor.openpolice.admin.lists.depts', $this->v);
 	}
 	
 	public function listOvers(Request $request)
 	{
 		$this->admControlInit($request, '/dashboard/overs');
-		$this->v["oversights"] = DB::table('OPC_Oversight')
-			->where('OPC_Oversight.OverType', 170)
-            ->leftJoin('OPC_Departments', 'OPC_Departments.DeptID', '=', 'OPC_Oversight.OverDeptID')
-			->orderBy('OPC_Oversight.OverAddressState', 'asc')
-			->orderBy('OPC_Oversight.OverAddressCity', 'asc')
+		$this->v["oversights"] = DB::table('OP_Oversight')
+			->where('OP_Oversight.OverType', 170)
+            ->leftJoin('OP_Departments', 'OP_Departments.DeptID', '=', 'OP_Oversight.OverDeptID')
+			->orderBy('OP_Oversight.OverAddressState', 'asc')
+			->orderBy('OP_Oversight.OverAddressCity', 'asc')
             ->get();
         return view('vendor.openpolice.admin.lists.overs', $this->v);
 	}
@@ -1233,7 +1234,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	{
 		$this->admControlInit($request);
 		if ($request->OverID > 0 && $request->DeptID > 0) {
-			$over = OPCOversight::find($request->OverID);
+			$over = OPOversight::find($request->OverID);
 			$over->OverDeptID = $request->DeptID;
 			$over->save();
 		}
@@ -1243,21 +1244,21 @@ class OpenPoliceAdmin extends AdminSubsController
 	public function listLegal(Request $request)
 	{
 		$this->admControlInit($request, '/dashboard/legal');
-		$this->v["attorneys"] = OPCCustomers::where('CustType', 'Attorney')->get();
+		$this->v["attorneys"] = OPCustomers::where('CustType', 'Attorney')->get();
 		return view('vendor.openpolice.admin.lists.legal', $this->v);
 	}
 	
 	public function listAcademic(Request $request)
 	{
 		$this->admControlInit($request, '/dashboard/academic');
-		$this->v["academic"] = OPCCustomers::where('CustType', 'Academic')->get();
+		$this->v["academic"] = OPCustomers::where('CustType', 'Academic')->get();
 		return view('vendor.openpolice.admin.lists.academic', $this->v);
 	}
 	
 	public function listMedia(Request $request)
 	{
 		$this->admControlInit($request, '/dashboard/media');
-		$this->v["journalists"] = OPCCustomers::where('CustType', 'Journalist')->get();
+		$this->v["journalists"] = OPCustomers::where('CustType', 'Journalist')->get();
 		return view('vendor.openpolice.admin.lists.media', $this->v);
 	}
 	

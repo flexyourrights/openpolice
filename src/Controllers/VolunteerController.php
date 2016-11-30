@@ -10,13 +10,13 @@ use SurvLoop\Models\User;
 use SurvLoop\Models\SLDefinitions;
 use SurvLoop\Models\SLInstructs;
 
-use OpenPolice\Models\OPCDepartments;
-use OpenPolice\Models\OPCOversight;
-use OpenPolice\Models\OPCPersonContact;
-use OpenPolice\Models\OPCzVolunEditsDepts;
-use OpenPolice\Models\OPCzVolunEditsOvers;
-use OpenPolice\Models\OPCzVolunTmp;
-use OpenPolice\Models\OPCzVolunUserInfo;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPOversight;
+use OpenPolice\Models\OPPersonContact;
+use OpenPolice\Models\OPzVolunEditsDepts;
+use OpenPolice\Models\OPzVolunEditsOvers;
+use OpenPolice\Models\OPzVolunTmp;
+use OpenPolice\Models\OPzVolunUserInfo;
 
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenPoliceAdmin;
@@ -122,23 +122,23 @@ class VolunteerController extends OpenPoliceAdmin
 	protected function getNextDept()
 	{
         $this->v["nextDept"] = array(0, '', '');
-        OPCzVolunTmp::where('TmpType', 'EditDept')
+        OPzVolunTmp::where('TmpType', 'EditDept')
         	->where('TmpDate', '<', date("Y-m-d H:i:s", time(date("H")-6, date("i"), date("s"), date("n"), date("j"), date("Y"))))
         	->delete();
 		// First check for department temporarily reserved for this user
-		$tmpReserve = OPCzVolunTmp::where('TmpType', 'EditDept')
+		$tmpReserve = OPzVolunTmp::where('TmpType', 'EditDept')
 			->where('TmpUser', Auth::user()->id)
 			->first();
 		if ($tmpReserve && isset($tmpReserve->TmpVal) && intVal($tmpReserve->TmpVal) > 0)
 		{
-			$nextRow = OPCDepartments::where('DeptID', $tmpReserve->TmpVal)
+			$nextRow = OPDepartments::where('DeptID', $tmpReserve->TmpVal)
 				->first();
 			$this->v["nextDept"] = array( $nextRow->DeptID, $nextRow->DeptName, $nextRow->DeptSlug );
 		}
 		else { // no department reserved yet, find best next choice...
 			$nextRow = $qmen = array();
-			$qBase = "SELECT `DeptID`, `DeptName`, `DeptSlug` FROM `OPC_Departments` WHERE ";
-			$qReserves = " AND `DeptID` NOT IN (SELECT `TmpVal` FROM `OPC_zVolunTmp` WHERE `TmpType` LIKE 'EditDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
+			$qBase = "SELECT `DeptID`, `DeptName`, `DeptSlug` FROM `OP_Departments` WHERE ";
+			$qReserves = " AND `DeptID` NOT IN (SELECT `TmpVal` FROM `OP_zVolunTmp` WHERE `TmpType` LIKE 'EditDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
 			$qBig50 = ""; foreach ($this->big50 as $dept) $qBig50 .= " OR (`DeptName` LIKE '" . addslashes($dept[0]) . "' AND `DeptAddressState` LIKE '" . $dept[1] . "')";
 			$qmen[] = $qBase."(`DeptVerified` < '2015-01-01 00:00:00' OR `DeptVerified` IS NULL) AND (".substr($qBig50, 3).") " . $qReserves . " ORDER BY `DeptName`";
 			$qmen[] = $qBase."(`DeptVerified` < '2015-01-01 00:00:00' OR `DeptVerified` IS NULL) " . $qReserves . " ORDER BY RAND()";
@@ -152,7 +152,7 @@ class VolunteerController extends OpenPoliceAdmin
 			$this->v["nextDept"] = array( $nextRow[0]->DeptID, str_replace('Department', 'Dept', $nextRow[0]->DeptName), $nextRow[0]->DeptSlug );
 			
 			// Temporarily reserve this department for this user
-			$newTmp = new OPCzVolunTmp;
+			$newTmp = new OPzVolunTmp;
 			$newTmp->TmpUser = Auth::user()->id;
 			$newTmp->TmpDate = date("Y-m-d H:i:s");
 			$newTmp->TmpType = 'EditDept';
@@ -165,9 +165,9 @@ class VolunteerController extends OpenPoliceAdmin
 	public function getVolunEditsOverview()
 	{
 		$retArr = $userTots = $uNames = array();
-		$userEdits = DB::table('OPC_zVolunEditsDepts')
-            ->join('users', 'users.id', '=', 'OPC_zVolunEditsDepts.EditDeptUser')
-            ->select('users.id', 'users.name', 'OPC_zVolunEditsDepts.EditDeptDeptID')
+		$userEdits = DB::table('OP_zVolunEditsDepts')
+            ->join('users', 'users.id', '=', 'OP_zVolunEditsDepts.EditDeptUser')
+            ->select('users.id', 'users.name', 'OP_zVolunEditsDepts.EditDeptDeptID')
             ->get();
 		if (sizeof($userEdits) > 0)
 		{
@@ -195,7 +195,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["searchForm"] 	= $this->deptSearchForm();
 		$qman = " `DeptVerified` > '2015-01-01 00:00:00' ";
 		foreach ($this->big50 as $dept) $qman .= " OR (`DeptName` LIKE " . DB::getPdo()->quote($dept[0]) . " AND `DeptAddressState` LIKE " . DB::getPdo()->quote($dept[1]) . ")";
-		$this->v["deptRows"] = DB::select( DB::raw("SELECT * FROM `OPC_Departments` WHERE " . $qman . " ORDER BY `DeptScoreOpenness` DESC, `DeptVerified` DESC, `DeptName`, `DeptAddressState`") );
+		$this->v["deptRows"] = DB::select( DB::raw("SELECT * FROM `OP_Departments` WHERE " . $qman . " ORDER BY `DeptScoreOpenness` DESC, `DeptVerified` DESC, `DeptName`, `DeptAddressState`") );
 		$this->v["belowAdmMenu"] = $this->printSidebarLeaderboard()
 			. '<div class="taC p10 f16 gry9"><i>' . $GLOBALS["DB"]->dbRow->DbMission . '</i></div>';
 		//echo '<pre>'; print_r($this->v["yourUserInfo"]); echo '</pre>';
@@ -208,7 +208,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["viewType"] = 'all';
         $this->v["deptRows"] = array();
         $this->v["searchForm"] = $this->deptSearchForm();
-		$this->v["deptRows"] = OPCDepartments::orderBy('DeptName', 'asc')->paginate(50);
+		$this->v["deptRows"] = OPDepartments::orderBy('DeptName', 'asc')->paginate(50);
 		$this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
 		return view('vendor.openpolice.volun.volunteer', $this->v);
 	}
@@ -234,7 +234,7 @@ class VolunteerController extends OpenPoliceAdmin
 	public function indexSearchS(Request $request, $state = '')
 	{
 		$this->admControlInit($request, '/volunteer');
-		$deptRows = OPCDepartments::where('DeptAddressState', '=', $state)->orderBy('DeptName', 'asc')->paginate(50);
+		$deptRows = OPDepartments::where('DeptAddressState', '=', $state)->orderBy('DeptName', 'asc')->paginate(50);
         return $this->indexSearch($deptRows, $state, '');
 	}
 	
@@ -270,7 +270,7 @@ class VolunteerController extends OpenPoliceAdmin
 			}
 		}
 		$deptRows = array();
-		$evalQry = "\$deptRows = SurvLoop\\Models\\Gen\\OPCDepartments::"
+		$evalQry = "\$deptRows = SurvLoop\\Models\\Gen\\OPDepartments::"
 			. ((trim($state) != '') ? "where('DeptAddressState', '=', \$state)->" : "")
 			. "where(function(\$query) { return \$query->where('DeptName', 'LIKE', '" . addslashes($searches[0]) . "')";
 			for ($i = 1; $i < sizeof($searches); $i++)
@@ -301,12 +301,12 @@ class VolunteerController extends OpenPoliceAdmin
 	public function newDeptAdd($deptName = '', $deptState = '') {
 		if (trim($deptName) != '' && trim($deptState) != '')
 		{
-			$newDept = OPCDepartments::where('DeptName', $deptName)->where('DeptAddressState', $deptState)->first();
+			$newDept = OPDepartments::where('DeptName', $deptName)->where('DeptAddressState', $deptState)->first();
 			if ($newDept && isset($newDept->DeptSlug)) redirect('/volunteer/verify/'.$newDept->DeptSlug);
-			$newDept 	= new OPCDepartments;
-			$newIA 		= new OPCOversight;
-			$newEdit 	= new OPCzVolunEditsDepts;
-			$iaEdit 	= new OPCzVolunEditsOvers;
+			$newDept 	= new OPDepartments;
+			$newIA 		= new OPOversight;
+			$newEdit 	= new OPzVolunEditsDepts;
+			$iaEdit 	= new OPzVolunEditsOvers;
 			$newIA->OverType 			= $iaEdit->EditOverType 			= 169;
 			$newDept->DeptName 			= $newEdit->EditDeptName 			= $deptName;
 			$newDept->DeptAddressState 	= $newEdit->EditDeptAddressState 	= (($deptState != 'US') ? $deptState : '');
@@ -332,7 +332,7 @@ class VolunteerController extends OpenPoliceAdmin
 	public function deptEdit(REQUEST $request, $deptSlug)
 	{
 		$this->v["deptSlug"] 		= $deptSlug;
-		$this->v["deptRow"] 		= OPCDepartments::where('DeptSlug', $deptSlug)->first();
+		$this->v["deptRow"] 		= OPDepartments::where('DeptSlug', $deptSlug)->first();
 		$this->v["editsIA"] 		= $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = array();
 		$this->v["editTots"] 		= ["notes" => 0, "online" => 0, "callDept" => 0, "callIA" => 0];
 		$this->v["user"] 			= Auth::user();
@@ -344,17 +344,17 @@ class VolunteerController extends OpenPoliceAdmin
 			return redirect('/volunteer');
 		}
 		
-		$recentEdits = OPCzVolunEditsDepts::where('EditDeptDeptID', $this->v["deptRow"]->DeptID)
+		$recentEdits = OPzVolunEditsDepts::where('EditDeptDeptID', $this->v["deptRow"]->DeptID)
 			->orderBy('EditDeptVerified', 'desc')
 			->get();
 		if ($recentEdits && sizeof($recentEdits) > 0)
 		{
 			foreach ($recentEdits as $i => $edit)
 			{
-				$this->v["editsIA"][$i]  = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$this->v["editsIA"][$i]  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('EditOverType', 169)
 					->first();
-				$this->v["editsCiv"][$i] = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$this->v["editsCiv"][$i] = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('EditOverType', 170)
 					->first();
 				if ($this->v["editsIA"][$i])
@@ -392,14 +392,16 @@ class VolunteerController extends OpenPoliceAdmin
 		$this->v["FAQs"] 			= $this->deptEditFaqHTML();
 		$this->v["rightSide"]		= $this->getSidebarScript();
 		$this->v["stateDrop"] 		= $GLOBALS["DB"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
-		$this->v["iaRow"]   		= OPCOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)->where('OverType', 169)->first();
+		$this->v["iaRow"]   		= OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)->where('OverType', 169)->first();
 		if (!isset($this->v["iaRow"]) || sizeof($this->v["iaRow"]) == 0) {
-			$this->v["iaRow"] 		= new OPCOversight;
+			$this->v["iaRow"] 		= new OPOversight;
 			$this->v["iaRow"]->OverType = 169; // definition ID for Internal Affairs
 		}
-		$this->v["civRow"]  = OPCOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)->where('OverType', 170)->first();
+		$this->v["civRow"]  = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
+			->where('OverType', 170)
+			->first();
 		if (!isset($this->v["civRow"]) || sizeof($this->v["civRow"]) == 0) {
-			$this->v["civRow"] 		= new OPCOversight;
+			$this->v["civRow"] 		= new OPOversight;
 			$this->v["civRow"]->OverType = 170; // definition ID for Civilian Oversight
 		}
 		$this->v["iaForms"]  		= $this->deptEditPrintOver($this->v["iaRow"]);
@@ -466,20 +468,20 @@ class VolunteerController extends OpenPoliceAdmin
 	public function deptEditSave(Request $request, $deptSlug = '') 
 	{
 		$this->v["deptSlug"] = $deptSlug;
-		$this->v["deptRow"] = OPCDepartments::find($request->DeptID);
+		$this->v["deptRow"] = OPDepartments::find($request->DeptID);
 		$this->admControlInit($request, '/volunteer/verify');
 		
 		$ia = $civ = $deptEdit = $iaEdit = $civEdit = array();
 		
-		$this->v["deptRow"] = OPCDepartments::find($request->DeptID);
-		$deptEdit = new OPCzVolunEditsDepts;
+		$this->v["deptRow"] = OPDepartments::find($request->DeptID);
+		$deptEdit = new OPzVolunEditsDepts;
 		if (!isset($request->OverID) || intVal($request->OverID) <= 0) {
-			$ia = new OPCOversight;
+			$ia = new OPOversight;
 			$ia->OverDeptID = $request->DeptID;
 			$ia->OverType = 169;
 		}
-		else $ia = OPCOversight::find($request->OverID);
-		$iaEdit = new OPCzVolunEditsOvers;
+		else $ia = OPOversight::find($request->OverID);
+		$iaEdit = new OPzVolunEditsOvers;
 		
 		$deptEdit->EditDeptDeptID 						= $iaEdit->EditOverDeptID 						= $request->DeptID;
 		$deptEdit->EditDeptUser 						= $iaEdit->EditOverUser 						= Auth::user()->id;
@@ -550,12 +552,12 @@ class VolunteerController extends OpenPoliceAdmin
 		
 		if (trim($request->CivOverAgncName) != '' || trim($request->CivOverWebsite) != '' || intVal($request->CivOverID) > 0) {
 			if (!isset($request->CivOverID) || intVal($request->CivOverID) <= 0) {
-				$civ = new OPCOversight;
+				$civ = new OPOversight;
 				$civ->OverDeptID 			= $request->DeptID;
 				$civ->OverType 				= 170;
 			}
-			else $civ = OPCOversight::find($request->CivOverID);
-			$civEdit = new OPCzVolunEditsOvers;
+			else $civ = OPOversight::find($request->CivOverID);
+			$civEdit = new OPzVolunEditsOvers;
 			$civEdit->EditOverDeptID 		= $request->DeptID;
 			$civEdit->EditOverEditDeptID 	= $deptEdit->EditDeptID;
 			$civEdit->EditOverUser 			= Auth::user()->id;
@@ -570,7 +572,7 @@ class VolunteerController extends OpenPoliceAdmin
 			$civEdit->save();
 		}
 		
-		$tmpReserve = OPCzVolunTmp::where('TmpType', 'EditDept')
+		$tmpReserve = OPzVolunTmp::where('TmpType', 'EditDept')
 			->where('TmpUser', Auth::user()->id)
 			->where('TmpVal', $request->DeptID)
 			->delete();
@@ -697,19 +699,19 @@ class VolunteerController extends OpenPoliceAdmin
 		if (!$isAdmin) $this->admControlInit($request, '/volunteer/stars');
 		$this->v["isAdminList"] = $isAdmin;
 		$this->v["userObj"] = User::find($uid);
-		$this->v["userStats"] = OPCzVolunUserInfo::find($uid);
-		$this->v["userInfo"] = OPCPersonContact::find($this->v["userStats"]->UserInfoPersonContactID);
+		$this->v["userStats"] = OPzVolunUserInfo::find($uid);
+		$this->v["userInfo"] = OPPersonContact::find($this->v["userStats"]->UserInfoPersonContactID);
 		$deptEdits = array();
-		$recentEdits = OPCzVolunEditsDepts::where('EditDeptUser', $uid)
+		$recentEdits = OPzVolunEditsDepts::where('EditDeptUser', $uid)
 			->orderBy('EditDeptVerified', 'desc')->get();
 		if ($recentEdits && sizeof($recentEdits) > 0)
 		{
 			foreach ($recentEdits as $i => $edit)
 			{
-				$iaEdit  = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('OverType', 169)
 					->first();
-				$civEdit = OPCzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
+				$civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
 					->where('OverType', 170)
 					->first();
 				$userObj = User::find($edit->EditDeptUser);
@@ -727,7 +729,7 @@ class VolunteerController extends OpenPoliceAdmin
         {
 			$this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
 				"user" 		=> $deptEdit[0], 
-				"deptRow" 	=> OPCDepartments::find($deptEdit[1]->EditDeptDeptID), 
+				"deptRow" 	=> OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
 				"deptEdit" 	=> $deptEdit[1], 
 				"deptType" 	=> $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
 				"iaEdit" 	=> $deptEdit[2], 

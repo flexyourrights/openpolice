@@ -5,7 +5,7 @@ use DB;
 
 use SurvLoop\Models\User;
 
-use OpenPolice\Models\OPCzVolunUserInfo;
+use OpenPolice\Models\OPzVolunUserInfo;
 
 class VolunteerLeaderboard
 {
@@ -20,7 +20,7 @@ class VolunteerLeaderboard
 	
 	public function checkVolunStats()
 	{
-		// First ensure all volunteers and staff have a corresponding OPC_zVolunUserInfo record
+		// First ensure all volunteers and staff have a corresponding OP_zVolunUserInfo record
 		$volunteers = User::whereIn('id', function($query){
 			$query->select('RoleUserUID')
 					->from('SL_UsersRoles')
@@ -30,10 +30,10 @@ class VolunteerLeaderboard
 		{
 			foreach ($volunteers as $u)
 			{
-				$chk = OPCzVolunUserInfo::find($u->id);
+				$chk = OPzVolunUserInfo::find($u->id);
 				if (!$chk || sizeof($chk) == 0)
 				{
-					$tmp = new OPCzVolunUserInfo;
+					$tmp = new OPzVolunUserInfo;
 					$tmp->UserInfoUserID = $u->id;
 					$tmp->save();
 				}
@@ -42,16 +42,16 @@ class VolunteerLeaderboard
 		
 		// Now update all editing totals
 		$tally = $userTots = $uniqueDepts = array();
-		$edits = DB::table('OPC_zVolunEditsOvers')
-            ->leftJoin('OPC_zVolunEditsDepts', 'OPC_zVolunEditsOvers.EditOverEditDeptID', 
-            	'=', 'OPC_zVolunEditsDepts.EditDeptID')
-            ->select('OPC_zVolunEditsDepts.EditDeptPageTime', 
-            	'OPC_zVolunEditsOvers.EditOverUser', 
-            	'OPC_zVolunEditsOvers.EditOverDeptID', 
-            	'OPC_zVolunEditsOvers.EditOverOnlineResearch', 
-            	'OPC_zVolunEditsOvers.EditOverMadeDeptCall', 
-            	'OPC_zVolunEditsOvers.EditOverMadeIACall')
-			->where('OPC_zVolunEditsOvers.EditOverType', 169)
+		$edits = DB::table('OP_zVolunEditsOvers')
+            ->leftJoin('OP_zVolunEditsDepts', 'OP_zVolunEditsOvers.EditOverEditDeptID', 
+            	'=', 'OP_zVolunEditsDepts.EditDeptID')
+            ->select('OP_zVolunEditsDepts.EditDeptPageTime', 
+            	'OP_zVolunEditsOvers.EditOverUser', 
+            	'OP_zVolunEditsOvers.EditOverDeptID', 
+            	'OP_zVolunEditsOvers.EditOverOnlineResearch', 
+            	'OP_zVolunEditsOvers.EditOverMadeDeptCall', 
+            	'OP_zVolunEditsOvers.EditOverMadeIACall')
+			->where('OP_zVolunEditsOvers.EditOverType', 169)
             ->get();
 		if ($edits && sizeof($edits) > 0)
 		{
@@ -86,7 +86,7 @@ class VolunteerLeaderboard
 					}
 				}
 				$userTots[$uID][4] = $totDeptTime/sizeof($depts);
-				DB::table('OPC_zVolunUserInfo')
+				DB::table('OP_zVolunUserInfo')
 					->where('UserInfoUserID', $uID)
 					->update([
 						'UserInfoStars1' 		=> $userTots[$uID][0], 
@@ -103,14 +103,14 @@ class VolunteerLeaderboard
 	
 	public function loadUserInfoStars()
 	{
-		DB::raw("DELETE FROM `OPC_zVolunUserInfo` WHERE `UserInfoUserID` NOT IN (SELECT `id` FROM `users`)");
-		$this->UserInfoStars = DB::table('OPC_zVolunUserInfo')
-            ->join('users', 'OPC_zVolunUserInfo.UserInfoUserID', '=', 'users.id')
-            ->leftJoin('OPC_PersonContact', 'OPC_zVolunUserInfo.UserInfoPersonContactID', 
-            	'=', 'OPC_PersonContact.PrsnID')
-            ->select('users.name', 'OPC_zVolunUserInfo.*', 'OPC_PersonContact.PrsnAddressState')
-            ->orderBy('OPC_zVolunUserInfo.UserInfoStars', 'desc')
-            ->orderBy('OPC_zVolunUserInfo.UserInfoDepts', 'desc')
+		DB::raw("DELETE FROM `OP_zVolunUserInfo` WHERE `UserInfoUserID` NOT IN (SELECT `id` FROM `users`)");
+		$this->UserInfoStars = DB::table('OP_zVolunUserInfo')
+            ->join('users', 'OP_zVolunUserInfo.UserInfoUserID', '=', 'users.id')
+            ->leftJoin('OP_PersonContact', 'OP_zVolunUserInfo.UserInfoPersonContactID', 
+            	'=', 'OP_PersonContact.PrsnID')
+            ->select('users.name', 'OP_zVolunUserInfo.*', 'OP_PersonContact.PrsnAddressState')
+            ->orderBy('OP_zVolunUserInfo.UserInfoStars', 'desc')
+            ->orderBy('OP_zVolunUserInfo.UserInfoDepts', 'desc')
             ->get();
 		return true;
     }

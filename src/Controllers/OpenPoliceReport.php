@@ -1,11 +1,11 @@
 <?php
 namespace OpenPolice\Controllers;
 
-use OpenPolice\Models\OPCBodyParts;
+use OpenPolice\Models\OPBodyParts;
 
-use OpenPolice\Controllers\OPC;
+use OpenPolice\Controllers\OpenPolice;
 
-class OpenPoliceReport extends OPC
+class OpenPoliceReport extends OpenPolice
 {
 	
 	public $classExtension 	= 'OpenPoliceReport';
@@ -26,7 +26,10 @@ class OpenPoliceReport extends OPC
 		}
 		
 		$ComSlug = $this->sessData->dataSets["Complaints"][0]->ComSlug;
-		if (trim($ComSlug) == '') $ComSlug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID;
+		if (trim($ComSlug) == '')
+		{
+			$ComSlug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID;
+		}
 		
 		$this->v["isOwner"] = false;
 		$this->v["view"] = 'Public';
@@ -35,12 +38,13 @@ class OpenPoliceReport extends OPC
 			if ($this->v["user"]->id == $this->sessData->dataSets["Civilians"][0]->CivUserID)
 			{
 				$this->v["isOwner"] = true;
-				if (!$this->REQ->has('publicView') && ($reportType != 'Public' || $reportType == 'Investigate'))
+				if (!$this->REQ->has('publicView') 
+					&& ($reportType != 'Public' || $reportType == 'Investigate'))
 				{
 					$this->v["view"] = 'Investigate';
 				}
 			}
-			elseif ($this->v["user"]->hasRole('administrator') || $this->v["user"]->hasRole('staff'))
+			elseif ($this->v["user"]->hasRole('administrator|staff'))
 			{
 				$this->v["view"] = 'Investigate';
 			}
@@ -51,7 +55,8 @@ class OpenPoliceReport extends OPC
 		$this->groupInjuries();
 		
 		$metaDeptList = "";
-		if (isset($this->sessData->dataSets["Departments"]) && sizeof($this->sessData->dataSets["Departments"]) > 0)
+		if (isset($this->sessData->dataSets["Departments"]) 
+			&& sizeof($this->sessData->dataSets["Departments"]) > 0)
 		{
 			foreach ($this->sessData->dataSets["Departments"] as $dept)
 			{
@@ -87,7 +92,8 @@ class OpenPoliceReport extends OPC
 				$whoBlocks["Witnesses"][] = $this->printCivilian($civ);
 			}
 		}
-		if (isset($this->sessData->dataSets["Officers"]) && sizeof($this->sessData->dataSets["Officers"]) > 0)
+		if (isset($this->sessData->dataSets["Officers"]) 
+			&& sizeof($this->sessData->dataSets["Officers"]) > 0)
 		{
 			foreach ($this->sessData->dataSets["Officers"] as $ind => $off)
 			{
@@ -117,7 +123,8 @@ class OpenPoliceReport extends OPC
 		if (!isset($GLOBALS["meta"])) $GLOBALS["meta"] = array();
 		if (trim($this->sessData->dataSets["Complaints"][0]->ComHeadline) != '')
 		{
-			$GLOBALS["meta"]["title"] = $this->sessData->dataSets["Complaints"][0]->ComHeadline . " | Open Police Complaint #".$this->coreID;
+			$GLOBALS["meta"]["title"] = $this->sessData->dataSets["Complaints"][0]->ComHeadline 
+				. " | Open Police Complaint #".$this->coreID;
 		}
 		else $GLOBALS["meta"]["title"] =  trim(substr($metaDeptList, 1)) . " | Open Police Complaint #".$this->coreID."";
 		$GLOBALS["meta"]["desc"] = "Open Police Complaint #".$this->coreID . $metaDeptList . ", " 
@@ -127,7 +134,8 @@ class OpenPoliceReport extends OPC
 		$GLOBALS["meta"]["img"] = '';
 		
 		$comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->updated_at));
-		if (trim($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted) != '' && $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted != '0000-00-00 00:00:00') 
+		if (trim($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted) != '' 
+			&& $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted != '0000-00-00 00:00:00') 
 		{
 			$comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted));
 		}
@@ -159,12 +167,14 @@ class OpenPoliceReport extends OPC
 			if (sizeof($prsn) == 0) list($prsn, $phys, $vehic) = $this->queuePeopleSubsets($civID);
 			//echo '<pre>'; print_r($prsn); echo '</pre> civID: ' . $civID . ', privacy: ' . $this->sessData->dataSets["Complaints"][0]->ComPrivacy . '<br />';
 			$name = '';
-			if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID && (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
+			if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
+				&& (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
 				|| $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 206) )
 			{
 				$name = '<span style="color: #000;" title="This complainant did not provide their name to investigators.">Complainant</span>';
 			}
-			elseif (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' && ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate'))
+			elseif (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' 
+				&& ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate'))
 			{
 				$name = '<span style="color: #000;" title="This complainant wanted to publicly provide their name.">
 				' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast . '
@@ -186,12 +196,14 @@ class OpenPoliceReport extends OPC
 		if (!isset($this->v["offNames"][$off->OffID]) || trim($this->v["offNames"][$off->OffID]) == '')
 		{
 			if (sizeof($prsn) == 0) list($prsn, $phys, $vehic) = $this->queuePeopleSubsets($off->OffID, 'Officers');
-			//echo '<pre>'; print_r($prsn); echo '</pre> civID: ' . $civID . ', privacy: ' . $this->sessData->dataSets["Complaints"][0]->ComPrivacy . '<br />';
 			$name = '';
 			if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate')
 			{
 				$name = trim($prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast);
-				if (trim($name) == '' && trim($off->OffBadgeNumber) != '' && trim($off->OffBadgeNumber) != '0') $name = 'Badge #' . $off->OffBadgeNumber;
+				if (trim($name) == '' && trim($off->OffBadgeNumber) != '' && trim($off->OffBadgeNumber) != '0')
+				{
+					$name = 'Badge #' . $off->OffBadgeNumber;
+				}
 				if ($name == '') $name = 'Officer #' . (1+$ind);
 			}
 			else $name = 'Officer #' . (1+$ind);
@@ -819,12 +831,20 @@ class OpenPoliceReport extends OPC
 	protected function getInjBodyParts($inj)
 	{
 		$bodyParts = [];
-		$parts = OPCBodyParts::where('BodyInjuryID', $inj->InjID)->orderBy('BodyPart', 'asc')->get();
+		$parts = OPBodyParts::where('BodyInjuryID', $inj->InjID)
+			->orderBy('BodyPart', 'asc')
+			->get();
 		if ($parts && sizeof($parts) > 0)
 		{
-			foreach ($parts as $part) $bodyParts[] = $GLOBALS["DB"]->getDefValue('Body Part', $part->BodyPart);
+			foreach ($parts as $part)
+			{
+				$bodyParts[] = $GLOBALS["DB"]->getDefValue('Body Part', $part->BodyPart);
+			}
 		}
-		if (sizeof($bodyParts) == 1 && $bodyParts[0] == 'Unknown') $bodyParts[0] = 'Body Part: Unknown';
+		if (sizeof($bodyParts) == 1 && $bodyParts[0] == 'Unknown')
+		{
+			$bodyParts[0] = 'Body Part: Unknown';
+		}
 		return $bodyParts;
 	}
 	

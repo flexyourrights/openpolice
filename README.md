@@ -111,6 +111,14 @@ $ php artisan db:seed --class=SurvLoopSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
 ```
 
+* Log into Open Police admin dashboard...
+
+```
+user: open@openpolice.org
+password: openpolice
+```
+
+
 # <a name="documentation"></a>Documentation
 
 
