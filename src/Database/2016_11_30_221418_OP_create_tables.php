@@ -26,10 +26,10 @@ class OPCreateTables extends Migration
 			$table->string('ComABtests', 50)->nullable();
 			$table->integer('ComIncidentID')->unsigned()->nullable();
 			$table->index('ComIncidentID');
-			$table->foreign('ComIncidentID')->references('IncID')->on('OP_Incidents');
+			//$table->foreign('ComIncidentID')->references('IncID')->on('OP_Incidents');
 			$table->integer('ComAdminID')->unsigned()->nullable();
 			$table->index('ComAdminID');
-			$table->foreign('ComAdminID')->references('AdmID')->on('OP_Administrators');
+			//$table->foreign('ComAdminID')->references('AdmID')->on('OP_Administrators');
 			$table->integer('ComPrivacy')->unsigned()->nullable();
 			$table->string('ComAwardMedallion', 10)->nullable();
 			$table->longText('ComSummary')->nullable();
@@ -53,7 +53,7 @@ class OPCreateTables extends Migration
 			$table->longText('ComMediaLinks')->nullable();
 			$table->integer('ComAttID')->unsigned()->nullable();
 			$table->index('ComAttID');
-			$table->foreign('ComAttID')->references('PartID')->on('OP_Partners');
+			//$table->foreign('ComAttID')->references('PartID')->on('OP_Partners');
 			$table->longText('ComNotes')->nullable();
 			$table->dateTime('ComRecordSubmitted')->nullable();
 			$table->index('ComRecordSubmitted');
@@ -70,7 +70,7 @@ class OPCreateTables extends Migration
 			$table->increments('IncID');
 			$table->integer('IncComplaintID')->unsigned()->nullable();
 			$table->index('IncComplaintID');
-			$table->foreign('IncComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('IncComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->string('IncAddress')->nullable();
 			$table->string('IncAddress2')->nullable();
 			$table->string('IncAddressCity')->nullable();
@@ -89,7 +89,7 @@ class OPCreateTables extends Migration
 			$table->increments('ScnID');
 			$table->integer('ScnComplaintID')->unsigned()->nullable();
 			$table->index('ScnComplaintID');
-			$table->foreign('ScnComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('ScnComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->char('ScnIsVehicle', 1)->nullable();
 			$table->integer('ScnType')->unsigned()->nullable();
 			$table->longText('ScnDescription')->nullable();
@@ -102,7 +102,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('AlleSilID');
 			$table->integer('AlleSilComplaintID')->unsigned()->nullable();
-			$table->foreign('AlleSilComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('AlleSilComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->char('AlleSilStopYN', 1)->nullable();
 			$table->char('AlleSilStopWrongful', 1)->nullable();
 			$table->char('AlleSilOfficerID', 1)->nullable();
@@ -135,10 +135,10 @@ class OPCreateTables extends Migration
 			$table->increments('AlleID');
 			$table->integer('AlleComplaintID')->unsigned()->nullable();
 			$table->index('AlleComplaintID');
-			$table->foreign('AlleComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('AlleComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('AlleType')->unsigned()->nullable();
 			$table->integer('AlleEventSequenceID')->unsigned()->nullable();
-			$table->foreign('AlleEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('AlleEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->longText('AlleDescription')->nullable();
 			$table->integer('AlleFindings')->unsigned()->nullable();
 			$table->timestamps();
@@ -148,7 +148,7 @@ class OPCreateTables extends Migration
 			$table->increments('EveID');
 			$table->integer('EveComplaintID')->unsigned()->nullable();
 			$table->index('EveComplaintID');
-			$table->foreign('EveComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('EveComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('EveOrder')->nullable();
 			$table->string('EveType')->nullable();
 			$table->char('EveUserFinished', 1)->default('N')->nullable();
@@ -158,7 +158,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('StopID');
 			$table->integer('StopEventSequenceID')->unsigned()->nullable();
-			$table->foreign('StopEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('StopEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->longText('StopStatedReasonDesc')->nullable();
 			$table->char('StopSubjectAskedToLeave', 1)->nullable();
 			$table->longText('StopSubjectStatementsDesc')->nullable();
@@ -175,7 +175,7 @@ class OPCreateTables extends Migration
 			$table->char('StopSubjectHandcuffed', 1)->nullable();
 			$table->char('StopStopSubjectHandcuffInjYN', 1)->nullable();
 			$table->integer('StopSubjectHandcuffInjury')->unsigned()->nullable();
-			$table->foreign('StopSubjectHandcuffInjury')->references('InjID')->on('OP_Injuries');
+			//$table->foreign('StopSubjectHandcuffInjury')->references('InjID')->on('OP_Injuries');
 			$table->char('StopGivenCitation', 1)->nullable();
 			$table->string('StopChargesOther')->nullable();
 			$table->char('StopGivenWarning', 1)->nullable();
@@ -191,7 +191,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('StopReasID');
 			$table->integer('StopReasStopID')->unsigned()->nullable();
-			$table->foreign('StopReasStopID')->references('StopID')->on('OP_Stops');
+			//$table->foreign('StopReasStopID')->references('StopID')->on('OP_Stops');
 			$table->integer('StopReasReason')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -199,7 +199,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('SrchID');
 			$table->integer('SrchEventSequenceID')->unsigned()->nullable();
-			$table->foreign('SrchEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('SrchEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->char('SrchStatedReason', 1)->nullable();
 			$table->longText('SrchStatedReasonDesc')->nullable();
 			$table->char('SrchOfficerRequest', 1)->nullable();
@@ -226,7 +226,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('SrchConID');
 			$table->integer('SrchConSearchID')->unsigned()->nullable();
-			$table->foreign('SrchConSearchID')->references('SrchID')->on('OP_Searches');
+			//$table->foreign('SrchConSearchID')->references('SrchID')->on('OP_Searches');
 			$table->integer('SrchConType')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -234,7 +234,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('SrchSeizID');
 			$table->integer('SrchSeizSearchID')->unsigned()->nullable();
-			$table->foreign('SrchSeizSearchID')->references('SrchID')->on('OP_Searches');
+			//$table->foreign('SrchSeizSearchID')->references('SrchID')->on('OP_Searches');
 			$table->integer('SrchSeizType')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -242,7 +242,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('ArstID');
 			$table->integer('ArstEventSequenceID')->unsigned()->nullable();
-			$table->foreign('ArstEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('ArstEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->char('ArstChargesFiled', 1)->nullable();
 			$table->char('ArstStatedReason', 1)->nullable();
 			$table->longText('ArstStatedReasonDesc')->nullable();
@@ -261,7 +261,7 @@ class OPCreateTables extends Migration
 			$table->increments('ForID');
 			$table->integer('ForVictimUseWeapon')->unsigned()->nullable();
 			$table->integer('ForEventSequenceID')->unsigned()->nullable();
-			$table->foreign('ForEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('ForEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->char('ForVictimHadWeapon', 1)->nullable();
 			$table->integer('ForVictimWhatWeapon')->unsigned()->nullable();
 			$table->char('ForAgainstAnimal', 1)->nullable();
@@ -286,7 +286,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('ForceSubID');
 			$table->integer('ForceSubForceID')->unsigned()->nullable();
-			$table->foreign('ForceSubForceID')->references('ForID')->on('OP_Force');
+			//$table->foreign('ForceSubForceID')->references('ForID')->on('OP_Force');
 			$table->integer('ForceSubType')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -294,7 +294,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('ForceCivID');
 			$table->integer('ForceCivForceID')->unsigned()->nullable();
-			$table->foreign('ForceCivForceID')->references('ForID')->on('OP_Force');
+			//$table->foreign('ForceCivForceID')->references('ForID')->on('OP_Force');
 			$table->integer('ForceCivBodyWeapon')->nullable();
 			$table->timestamps();
 		});
@@ -302,9 +302,9 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('BodyID');
 			$table->integer('BodyForceID')->unsigned()->nullable();
-			$table->foreign('BodyForceID')->references('ForID')->on('OP_Force');
+			//$table->foreign('BodyForceID')->references('ForID')->on('OP_Force');
 			$table->integer('BodyInjuryID')->unsigned()->nullable();
-			$table->foreign('BodyInjuryID')->references('InjID')->on('OP_Injuries');
+			//$table->foreign('BodyInjuryID')->references('InjID')->on('OP_Injuries');
 			$table->integer('BodyPart')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -312,7 +312,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('OrdID');
 			$table->integer('OrdEventSequenceID')->unsigned()->nullable();
-			$table->foreign('OrdEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('OrdEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->longText('OrdDescription')->nullable();
 			$table->char('OrdTroubleUnderYN', 1)->nullable();
 			$table->string('OrdTroubleUnderstading')->nullable();
@@ -322,9 +322,9 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('ChrgID');
 			$table->integer('ChrgArrestID')->unsigned()->nullable();
-			$table->foreign('ChrgArrestID')->references('ArstID')->on('OP_Arrests');
+			//$table->foreign('ChrgArrestID')->references('ArstID')->on('OP_Arrests');
 			$table->integer('ChrgStopID')->unsigned()->nullable();
-			$table->foreign('ChrgStopID')->references('StopID')->on('OP_Stops');
+			//$table->foreign('ChrgStopID')->references('StopID')->on('OP_Stops');
 			$table->integer('ChrgCharges')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -332,7 +332,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('InjID');
 			$table->integer('InjSubjectID')->unsigned()->nullable();
-			$table->foreign('InjSubjectID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('InjSubjectID')->references('CivID')->on('OP_Civilians');
 			$table->integer('InjType')->unsigned()->nullable();
 			$table->integer('InjHowManyTimes')->nullable();
 			$table->longText('InjDescription')->nullable();
@@ -342,7 +342,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('InjCareID');
 			$table->integer('InjCareSubjectID')->unsigned()->nullable();
-			$table->foreign('InjCareSubjectID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('InjCareSubjectID')->references('CivID')->on('OP_Civilians');
 			$table->char('InjCareResultInDeath', 1)->nullable();
 			$table->dateTime('InjCareTimeOfDeath')->nullable();
 			$table->char('InjCareGotMedical', 1)->nullable();
@@ -365,7 +365,7 @@ class OPCreateTables extends Migration
 			$table->increments('EvidID');
 			$table->integer('EvidComplaintID')->unsigned()->nullable();
 			$table->index('EvidComplaintID');
-			$table->foreign('EvidComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('EvidComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('EvidType')->unsigned()->nullable();
 			$table->string('EvidPrivacy', 10)->default('Private')->nullable();
 			$table->date('EvidDateTime')->nullable();
@@ -376,18 +376,18 @@ class OPCreateTables extends Migration
 			$table->string('EvidVideoLink')->nullable();
 			$table->integer('EvidVideoDuration')->nullable();
 			$table->integer('EvidCivilianID')->unsigned()->nullable();
-			$table->foreign('EvidCivilianID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('EvidCivilianID')->references('CivID')->on('OP_Civilians');
 			$table->integer('EvidDeptID')->unsigned()->nullable();
 			$table->index('EvidDeptID');
-			$table->foreign('EvidDeptID')->references('DeptID')->on('OP_Departments');
+			//$table->foreign('EvidDeptID')->references('DeptID')->on('OP_Departments');
 			$table->integer('EvidSceneID')->unsigned()->nullable();
-			$table->foreign('EvidSceneID')->references('ScnID')->on('OP_Scenes');
+			//$table->foreign('EvidSceneID')->references('ScnID')->on('OP_Scenes');
 			$table->integer('EvidEventSequenceID')->unsigned()->nullable();
-			$table->foreign('EvidEventSequenceID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('EvidEventSequenceID')->references('EveID')->on('OP_EventSequence');
 			$table->integer('EvidInjuryID')->unsigned()->nullable();
-			$table->foreign('EvidInjuryID')->references('InjID')->on('OP_Injuries');
+			//$table->foreign('EvidInjuryID')->references('InjID')->on('OP_Injuries');
 			$table->integer('EvidNoteID')->unsigned()->nullable();
-			$table->foreign('EvidNoteID')->references('NoteID')->on('OP_ComplaintNotes');
+			//$table->foreign('EvidNoteID')->references('NoteID')->on('OP_ComplaintNotes');
 			$table->timestamps();
 		});
 		Schema::create('OP_EvidenceTime', function(Blueprint $table)
@@ -395,10 +395,10 @@ class OPCreateTables extends Migration
 			$table->increments('EviTimID');
 			$table->integer('EviTimAllegationID')->unsigned()->nullable();
 			$table->index('EviTimAllegationID');
-			$table->foreign('EviTimAllegationID')->references('AlleID')->on('OP_Allegations');
+			//$table->foreign('EviTimAllegationID')->references('AlleID')->on('OP_Allegations');
 			$table->integer('EviTimEvidenceID')->unsigned()->default(NULL)->nullable();
 			$table->index('EviTimEvidenceID');
-			$table->foreign('EviTimEvidenceID')->references('EvidID')->on('OP_Evidence');
+			//$table->foreign('EviTimEvidenceID')->references('EvidID')->on('OP_Evidence');
 			$table->integer('EviTimTimestamp')->nullable();
 			$table->string('EviTimDescription')->nullable();
 			$table->timestamps();
@@ -408,9 +408,9 @@ class OPCreateTables extends Migration
 			$table->increments('SurvID');
 			$table->integer('SurvComplaintID')->unsigned()->nullable();
 			$table->index('SurvComplaintID');
-			$table->foreign('SurvComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('SurvComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('SurvAuthUserID')->unsigned()->nullable();
-			$table->foreign('SurvAuthUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('SurvAuthUserID')->references('UserID')->on('OP_Users');
 			$table->timestamps();
 		});
 		Schema::create('OP_ComplaintNotes', function(Blueprint $table)
@@ -418,9 +418,9 @@ class OPCreateTables extends Migration
 			$table->increments('NoteID');
 			$table->integer('NoteComplaintID')->unsigned()->nullable();
 			$table->index('NoteComplaintID');
-			$table->foreign('NoteComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('NoteComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('NoteUserID')->unsigned()->nullable();
-			$table->foreign('NoteUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('NoteUserID')->references('UserID')->on('OP_Users');
 			$table->dateTime('NoteTimestamp')->default('NOW()')->nullable();
 			$table->longText('NoteContent')->nullable();
 			$table->timestamps();
@@ -430,15 +430,15 @@ class OPCreateTables extends Migration
 			$table->increments('CivID');
 			$table->integer('CivComplaintID')->unsigned()->nullable();
 			$table->index('CivComplaintID');
-			$table->foreign('CivComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('CivComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('CivUserID')->unsigned()->nullable();
-			$table->foreign('CivUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('CivUserID')->references('UserID')->on('OP_Users');
 			$table->char('CivIsCreator', 1)->default('N')->nullable();
 			$table->string('CivRole', 10)->nullable();
 			$table->integer('CivPersonID')->unsigned()->nullable();
-			$table->foreign('CivPersonID')->references('PrsnID')->on('OP_PersonContact');
+			//$table->foreign('CivPersonID')->references('PrsnID')->on('OP_PersonContact');
 			$table->integer('CivPhysDescID')->unsigned()->nullable();
-			$table->foreign('CivPhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
+			//$table->foreign('CivPhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
 			$table->char('CivGiveName', 1)->nullable();
 			$table->char('CivGiveContactInfo', 1)->nullable();
 			$table->char('CivGivePhysDesc', 1)->nullable();
@@ -456,15 +456,15 @@ class OPCreateTables extends Migration
 			$table->index('OffIsVerified');
 			$table->integer('OffComplaintID')->unsigned()->nullable();
 			$table->index('OffComplaintID');
-			$table->foreign('OffComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('OffComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->string('OffRole')->nullable();
 			$table->integer('OffDeptID')->unsigned()->nullable();
 			$table->index('OffDeptID');
-			$table->foreign('OffDeptID')->references('DeptID')->on('OP_Departments');
+			//$table->foreign('OffDeptID')->references('DeptID')->on('OP_Departments');
 			$table->integer('OffPersonID')->unsigned()->nullable();
-			$table->foreign('OffPersonID')->references('PrsnID')->on('OP_PersonContact');
+			//$table->foreign('OffPersonID')->references('PrsnID')->on('OP_PersonContact');
 			$table->integer('OffPhysDescID')->unsigned()->nullable();
-			$table->foreign('OffPhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
+			//$table->foreign('OffPhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
 			$table->char('OffGiveName', 1)->nullable();
 			$table->char('OffGivePhysDesc', 1)->nullable();
 			$table->char('OffHadVehicle', 1)->nullable();
@@ -523,7 +523,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('PhysRaceID');
 			$table->integer('PhysRacePhysDescID')->unsigned()->nullable();
-			$table->foreign('PhysRacePhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
+			//$table->foreign('PhysRacePhysDescID')->references('PhysID')->on('OP_PhysicalDesc');
 			$table->integer('PhysRaceRace')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -567,10 +567,10 @@ class OPCreateTables extends Migration
 			$table->integer('OverType')->unsigned()->nullable();
 			$table->integer('OverCivModel')->unsigned()->nullable();
 			$table->integer('OverUserID')->unsigned()->nullable();
-			$table->foreign('OverUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('OverUserID')->references('UserID')->on('OP_Users');
 			$table->integer('OverDeptID')->unsigned()->nullable();
 			$table->index('OverDeptID');
-			$table->foreign('OverDeptID')->references('DeptID')->on('OP_Departments');
+			//$table->foreign('OverDeptID')->references('DeptID')->on('OP_Departments');
 			$table->string('OverAgncName')->nullable();
 			$table->dateTime('OverVerified')->nullable();
 			$table->string('OverNamePrefix', 20)->nullable();
@@ -612,9 +612,9 @@ class OPCreateTables extends Migration
 			$table->increments('PartID');
 			$table->integer('PartType')->unsigned()->nullable();
 			$table->integer('PartUserID')->unsigned()->nullable();
-			$table->foreign('PartUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('PartUserID')->references('UserID')->on('OP_Users');
 			$table->integer('PartPersonID')->unsigned()->nullable();
-			$table->foreign('PartPersonID')->references('PrsnID')->on('OP_PersonContact');
+			//$table->foreign('PartPersonID')->references('PrsnID')->on('OP_PersonContact');
 			$table->string('PartTitle')->nullable();
 			$table->string('PartCompanyName')->nullable();
 			$table->string('PartCompanyWebsite')->nullable();
@@ -624,9 +624,9 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('AdmID');
 			$table->integer('AdmUserID')->unsigned()->nullable();
-			$table->foreign('AdmUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('AdmUserID')->references('UserID')->on('OP_Users');
 			$table->integer('AdmPersonID')->unsigned()->nullable();
-			$table->foreign('AdmPersonID')->references('PrsnID')->on('OP_PersonContact');
+			//$table->foreign('AdmPersonID')->references('PrsnID')->on('OP_PersonContact');
 			$table->longText('AdmBio')->nullable();
 			$table->timestamps();
 		});
@@ -635,10 +635,10 @@ class OPCreateTables extends Migration
 			$table->increments('LnkComDeptID');
 			$table->integer('LnkComDeptComplaintID')->unsigned()->nullable();
 			$table->index('LnkComDeptComplaintID');
-			$table->foreign('LnkComDeptComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('LnkComDeptComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('LnkComDeptDeptID')->unsigned()->nullable();
 			$table->index('LnkComDeptDeptID');
-			$table->foreign('LnkComDeptDeptID')->references('DeptID')->on('OP_Departments');
+			//$table->foreign('LnkComDeptDeptID')->references('DeptID')->on('OP_Departments');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksComplaintOversight', function(Blueprint $table)
@@ -646,17 +646,17 @@ class OPCreateTables extends Migration
 			$table->increments('LnkComOverID');
 			$table->integer('LnkComOverComplaintID')->unsigned()->nullable();
 			$table->index('LnkComOverComplaintID');
-			$table->foreign('LnkComOverComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('LnkComOverComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('LnkComOverOverID')->unsigned()->nullable();
 			$table->index('LnkComOverOverID');
-			$table->foreign('LnkComOverOverID')->references('OverID')->on('OP_Oversight');
+			//$table->foreign('LnkComOverOverID')->references('OverID')->on('OP_Oversight');
 			$table->dateTime('LnkComOverSubmitted')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverStillNoResponse')->nullable();
 			$table->dateTime('LnkComOverReceived')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverInvestigating')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverReportDate')->nullable();
 			$table->integer('LnkComOverOversightReportEvidenceID')->unsigned()->nullable();
-			$table->foreign('LnkComOverOversightReportEvidenceID')->references('EvidID')->on('OP_Evidence');
+			//$table->foreign('LnkComOverOversightReportEvidenceID')->references('EvidID')->on('OP_Evidence');
 			$table->integer('LnkComOverAgencyComplaintNumber')->nullable();
 			$table->timestamps();
 		});
@@ -664,72 +664,72 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('LnkOffAlleID');
 			$table->integer('LnkOffAlleOffID')->unsigned()->nullable();
-			$table->foreign('LnkOffAlleOffID')->references('OffID')->on('OP_Officers');
+			//$table->foreign('LnkOffAlleOffID')->references('OffID')->on('OP_Officers');
 			$table->integer('LnkOffAlleAlleID')->unsigned()->nullable();
-			$table->foreign('LnkOffAlleAlleID')->references('AlleID')->on('OP_Allegations');
+			//$table->foreign('LnkOffAlleAlleID')->references('AlleID')->on('OP_Allegations');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksOfficerEvents', function(Blueprint $table)
 		{
 			$table->increments('LnkOffEveID');
 			$table->integer('LnkOffEveOffID')->unsigned()->nullable();
-			$table->foreign('LnkOffEveOffID')->references('OffID')->on('OP_Officers');
+			//$table->foreign('LnkOffEveOffID')->references('OffID')->on('OP_Officers');
 			$table->integer('LnkOffEveEveID')->unsigned()->nullable();
-			$table->foreign('LnkOffEveEveID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('LnkOffEveEveID')->references('EveID')->on('OP_EventSequence');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksOfficerOrders', function(Blueprint $table)
 		{
 			$table->increments('LnkOffOrdID');
 			$table->integer('LnkOffOrdOffID')->unsigned()->nullable();
-			$table->foreign('LnkOffOrdOffID')->references('OffID')->on('OP_Officers');
+			//$table->foreign('LnkOffOrdOffID')->references('OffID')->on('OP_Officers');
 			$table->integer('LnkOffOrdOrdID')->unsigned()->nullable();
-			$table->foreign('LnkOffOrdOrdID')->references('OrdID')->on('OP_Orders');
+			//$table->foreign('LnkOffOrdOrdID')->references('OrdID')->on('OP_Orders');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksOfficerVehicles', function(Blueprint $table)
 		{
 			$table->increments('LnkOffVehicID');
 			$table->integer('LnkOffVehicOffID')->unsigned()->nullable();
-			$table->foreign('LnkOffVehicOffID')->references('OffID')->on('OP_Officers');
+			//$table->foreign('LnkOffVehicOffID')->references('OffID')->on('OP_Officers');
 			$table->integer('LnkOffVehicVehicID')->unsigned()->nullable();
-			$table->foreign('LnkOffVehicVehicID')->references('VehicID')->on('OP_Vehicles');
+			//$table->foreign('LnkOffVehicVehicID')->references('VehicID')->on('OP_Vehicles');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksCivilianAllegations', function(Blueprint $table)
 		{
 			$table->increments('LnkCivAlleID');
 			$table->integer('LnkCivAlleCivID')->unsigned()->nullable();
-			$table->foreign('LnkCivAlleCivID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('LnkCivAlleCivID')->references('CivID')->on('OP_Civilians');
 			$table->integer('LnkCivAlleAlleID')->unsigned()->nullable();
-			$table->foreign('LnkCivAlleAlleID')->references('AlleID')->on('OP_Allegations');
+			//$table->foreign('LnkCivAlleAlleID')->references('AlleID')->on('OP_Allegations');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksCivilianEvents', function(Blueprint $table)
 		{
 			$table->increments('LnkCivEveID');
 			$table->integer('LnkCivEveCivID')->unsigned()->nullable();
-			$table->foreign('LnkCivEveCivID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('LnkCivEveCivID')->references('CivID')->on('OP_Civilians');
 			$table->integer('LnkCivEveEveID')->unsigned()->nullable();
-			$table->foreign('LnkCivEveEveID')->references('EveID')->on('OP_EventSequence');
+			//$table->foreign('LnkCivEveEveID')->references('EveID')->on('OP_EventSequence');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksCivilianOrders', function(Blueprint $table)
 		{
 			$table->increments('LnkCivOrdID');
 			$table->integer('LnkCivOrdCivID')->unsigned()->nullable();
-			$table->foreign('LnkCivOrdCivID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('LnkCivOrdCivID')->references('CivID')->on('OP_Civilians');
 			$table->integer('LnkCivOrdOrdID')->unsigned()->nullable();
-			$table->foreign('LnkCivOrdOrdID')->references('OrdID')->on('OP_Orders');
+			//$table->foreign('LnkCivOrdOrdID')->references('OrdID')->on('OP_Orders');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksCivilianVehicles', function(Blueprint $table)
 		{
 			$table->increments('LnkCivVehicID');
 			$table->integer('LnkCivVehicCivID')->unsigned()->nullable();
-			$table->foreign('LnkCivVehicCivID')->references('CivID')->on('OP_Civilians');
+			//$table->foreign('LnkCivVehicCivID')->references('CivID')->on('OP_Civilians');
 			$table->integer('LnkCivVehicVehicID')->unsigned()->nullable();
-			$table->foreign('LnkCivVehicVehicID')->references('VehicID')->on('OP_Vehicles');
+			//$table->foreign('LnkCivVehicVehicID')->references('VehicID')->on('OP_Vehicles');
 			$table->string('LnkCivVehicRole', 10)->nullable();
 			$table->timestamps();
 		});
@@ -737,13 +737,13 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('PrivID');
 			$table->integer('PrivUserID')->unsigned()->nullable();
-			$table->foreign('PrivUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('PrivUserID')->references('UserID')->on('OP_Users');
 			$table->integer('PrivComplaintID')->unsigned()->nullable();
 			$table->index('PrivComplaintID');
-			$table->foreign('PrivComplaintID')->references('ComID')->on('OP_Complaints');
+			//$table->foreign('PrivComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('PrivDeptID')->unsigned()->nullable();
 			$table->index('PrivDeptID');
-			$table->foreign('PrivDeptID')->references('DeptID')->on('OP_Departments');
+			//$table->foreign('PrivDeptID')->references('DeptID')->on('OP_Departments');
 			$table->string('PrivAccessLevel')->nullable();
 			$table->timestamps();
 		});
@@ -751,7 +751,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('AdmActID');
 			$table->integer('AdmActUserID')->unsigned()->nullable();
-			$table->foreign('AdmActUserID')->references('UserID')->on('OP_Users');
+			//$table->foreign('AdmActUserID')->references('UserID')->on('OP_Users');
 			$table->dateTime('AdmActTimestamp')->default('NOW()')->nullable();
 			$table->string('AdmActTable')->nullable();
 			$table->integer('AdmActRecordID')->nullable();
