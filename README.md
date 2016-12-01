@@ -21,7 +21,7 @@ Open Police is built using SurvLoop, atop Laravel.
 
 * php: >=5.6.4
 * <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.3.*
-* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.0.*
+* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.*
 
 # <a name="getting-started"></a>Getting Started
 
@@ -45,7 +45,7 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "wikiworldorder/survloop": "dev-master#55b88dac25e5a26b1a183bb6d01061f83dad1d2a",
+    "wikiworldorder/survloop": "0.*",
     "wikiworldorder/openpolice": "dev-master",
 	...
 },
