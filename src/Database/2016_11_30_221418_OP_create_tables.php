@@ -421,7 +421,7 @@ class OPCreateTables extends Migration
 			//$table->foreign('NoteComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('NoteUserID')->unsigned()->nullable();
 			//$table->foreign('NoteUserID')->references('UserID')->on('OP_Users');
-			$table->dateTime('NoteTimestamp')->default('NOW()')->nullable();
+			$table->dateTime('NoteTimestamp')->nullable();
 			$table->longText('NoteContent')->nullable();
 			$table->timestamps();
 		});
@@ -752,7 +752,7 @@ class OPCreateTables extends Migration
 			$table->increments('AdmActID');
 			$table->integer('AdmActUserID')->unsigned()->nullable();
 			//$table->foreign('AdmActUserID')->references('UserID')->on('OP_Users');
-			$table->dateTime('AdmActTimestamp')->default('NOW()')->nullable();
+			$table->dateTime('AdmActTimestamp')->nullable();
 			$table->string('AdmActTable')->nullable();
 			$table->integer('AdmActRecordID')->nullable();
 			$table->longText('AdmActOldData')->nullable();
