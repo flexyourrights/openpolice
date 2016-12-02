@@ -197,15 +197,7 @@ class OpenPolice extends SurvFormTree
 	// CUSTOM={OnlyIfNoAllegationsOtherThan:WrongStop,Miranda,PoliceRefuseID]
 	protected function checkNodeConditionsCustom($nID, $condition = '')
 	{
-		//if ($this->debugOn) { echo 'checkNodeConditionsCustom(' . $nID . ', -'.$condition.'-<br />'; }
-		if ($condition == '#NotLoggedIn')
-		{
-			$user = Auth::user();
-			//if ($this->debugOn) { echo 'asdfasdf-checkNodeConditionsCustom(' . $nID . ', -'.$condition.'- --- userID: ' . $user->id . '<br />'; }
-			if ($user && $user->id > 0) return false;
-			else return true;
-		}
-		elseif ($condition == '#AllegationCheck1')
+		if ($condition == '#AllegationCheck1')
 		{
 			$foundAlleg = true;
 			if (isset($this->sessData->dataSets["Allegations"]) && sizeof($this->sessData->dataSets["Allegations"]) > 0)
@@ -546,8 +538,13 @@ class OpenPolice extends SurvFormTree
 		}
 		elseif ($nID == 270)
 		{
-			$ret .= '<br /><br /><center><h1>All Done! Taking you to <a href="/report'.$this->sessData->dataSets["Complaints"][0]->ComSlug.'">your finished complaint</a>...</h1></center>
-			<script type="text/javascript"> setTimeout("window.location=\'/report'.$this->sessData->dataSets["Complaints"][0]->ComSlug.'\'", 1500); </script>';
+			$url = '/report/' . $this->coreID;
+			if (trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '')
+			{
+				$url = '/report' . $this->sessData->dataSets["Complaints"][0]->ComSlug;
+			}
+			$ret .= '<br /><br /><center><h1>All Done! Taking you to <a href="' . $url . '">your finished complaint</a>...</h1></center>
+			<script type="text/javascript"> setTimeout("window.location=\'' . $url . '\'", 1500); </script>';
 			$this->createNewSess();
 		}
 		return $ret;
@@ -818,6 +815,7 @@ class OpenPolice extends SurvFormTree
 				}
 			}
 		}
+		elseif ($nID == 439) return true;
 		elseif ($nID == 16 || $nID == 17)
 		{
 			$this->sessData->currSessData($nID, $tbl, $fld, 'update', date("Y-m-d", strtotime($this->REQ->n15fld)).' '.$this->postFormTimeStr($nID));
@@ -877,14 +875,14 @@ class OpenPolice extends SurvFormTree
 			if (intVal($this->REQ->n145fld) > 0)
 			{
 				$newDeptID = intVal($this->REQ->n145fld);
-				$this->sessData->logDataSave($nID, 'NEW', 'ComplaintDeptLinks', $this->REQ->n145fld);
+				$this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', $this->REQ->n145fld);
 			}
 			elseif ($this->REQ->has('newDeptName') && trim($this->REQ->newDeptName) != '')
 			{
 				$tmpVolunCtrl = new VolunteerController;
 				$newDept = $tmpVolunCtrl->newDeptAdd($this->REQ->newDeptName, $this->REQ->newDeptAddressState);
 				$newDeptID = $newDept->DeptID;
-				$this->sessData->logDataSave($nID, 'NEW', 'ComplaintDeptLinks - !New Department Added!', $newDeptID);
+				$this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks - !New Department Added!', $newDeptID);
 			}
 			if ($newDeptID > 0)
 			{
@@ -920,7 +918,7 @@ class OpenPolice extends SurvFormTree
 			{
 				foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) $list .= ','.$eveSeq->EveID;
 			}
-			$this->sessData->logDataSave($nID, 'EVENTS', 'Ordering Event Instances', $list);
+			$this->sessData->logDataSave($nID, 'EVENTS', -3, 'Ordering Event Instances', $list);
 			return true;
 		}
 		elseif (in_array($nID, array(296, 295, 294, 293))) // adding Officers to Events
@@ -929,7 +927,7 @@ class OpenPolice extends SurvFormTree
 			//if ($this->debugOn) { echo 'adding Officers to EventSequence #' . $GLOBALS["DB"]->closestLoop["itemID"] . ', eventType: ' . $eventType . '<br />'; }
 			$this->deleteEventPeopleLinks($nID, $GLOBALS["DB"]->closestLoop["itemID"], 'Officer');
 			$this->connectPeopleEventLinks("n".$nID."fld", '', -3, $GLOBALS["DB"]->closestLoop["itemID"]);
-			if ($this->REQ->has('n'.$nID.'fld')) $this->sessData->logDataSave($nID, 'GOLD '.$eventType, 'Adding Officers', implode('-|-', $this->REQ->input('n'.$nID.'fld')));
+			if ($this->REQ->has('n'.$nID.'fld')) $this->sessData->logDataSave($nID, 'GOLD '.$eventType, -3, 'Adding Officers', implode('-|-', $this->REQ->input('n'.$nID.'fld')));
 			return true;
 		}
 		elseif ($this->allNodes[$nID]->nodeRow->NodePromptNotes == '[[MergeVictimsEventSequence]]')
@@ -995,17 +993,17 @@ class OpenPolice extends SurvFormTree
 					}
 				}
 			}
-			$this->sessData->logDataSave($nID, 'Injuries', 'New Records', str_replace(';;-|-', '-|-', $logs));
+			$this->sessData->logDataSave($nID, 'Injuries', -3, 'New Records', str_replace(';;-|-', '-|-', $logs));
 		}
 		elseif ($nID == 415) // Gold Victims with Injuries, checkin for Care, from [[VictimsWithInjuries]]
 		{ 	
 			$this->postCivSetPossibilities('Injuries', 'InjuryCare', 'InjCareSubjectID');
-			$this->sessData->logDataSave($nID, 'InjuryCare', 'New Records', (($this->REQ->has('InjuryCare')) ? implode(';;', $this->REQ->InjuryCare) : ''));
+			$this->sessData->logDataSave($nID, 'InjuryCare', -3, 'New Records', (($this->REQ->has('InjuryCare')) ? implode(';;', $this->REQ->InjuryCare) : ''));
 		}
 		elseif ($nID == 391) // Gold Victims without Arrests, but with Citations, from [[VictimsWithoutArrests]]
 		{ 	
 			$this->postCivSetPossibilities('Arrests', 'Charges');
-			$this->sessData->logDataSave($nID, 'Charges', 'New Records', (($this->REQ->has('Charges')) ? implode(';;', $this->REQ->Charges) : ''));
+			$this->sessData->logDataSave($nID, 'Charges', -3, 'New Records', (($this->REQ->has('Charges')) ? implode(';;', $this->REQ->Charges) : ''));
 		}
 		elseif ($nID == 274) // CONFIRM COMPLAINT SUBMISSION
 		{ 	
@@ -1555,7 +1553,7 @@ class OpenPolice extends SurvFormTree
 			. '-|-Citations:' . ((sizeof($arrests["Citations"]) > 0) ? implode(',', $arrests["Citations"]) : '')
 			. '-|-Warnings:' 	. ((sizeof($arrests["Warnings"]) > 0) ? implode(',', $arrests["Warnings"]) : '')
 			. '-|-Nones:' 	. ((sizeof($arrests["None"]) > 0) ? implode(',', $arrests["None"]) : '');
-		$this->sessData->logDataSave($nID, 'EVENTS', 'Adding Event Instances', $log);
+		$this->sessData->logDataSave($nID, 'EVENTS', -3, 'Adding Event Instances', $log);
 		$this->sessData->refreshDataSets();
 		$this->runLoopConditions();
 		return true;
@@ -1569,7 +1567,7 @@ class OpenPolice extends SurvFormTree
 		$newEveSeq->EveType = $eventType;
 		$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
 		$newEveSeq->save();
-		eval("\$newEvent = new " . $GLOBALS["DB"]->sysOpts["cust-abbr"] . "\\Models\\" . $GLOBALS["DB"]->tblModels[$eventType] . ";");
+		eval("\$newEvent = new App\\Models\\" . $GLOBALS["DB"]->tblModels[$eventType] . ";");
 		$newEvent->{ $GLOBALS["DB"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
 		$newEvent->save();
 		if ($civID > 0)
@@ -1609,7 +1607,7 @@ class OpenPolice extends SurvFormTree
 			$eveSeq->EveOrder = $i;
 			$eveSeq->save();
 			//echo 'ajaxSaveIncEveOrder(), find(' . $value . ')->update(' . $i . ')<br />';
-			//$this->sessData->logDataSave(288, $value, 'ajaxSaveIncEveOrder', $i);
+			//$this->sessData->logDataSave(288, $value, -3, 'ajaxSaveIncEveOrder', $i);
 		}
 		return true;
 	}
@@ -2174,7 +2172,7 @@ class OpenPolice extends SurvFormTree
 				if (!$this->REQ->has($tbl2) || !in_array($civID, $this->REQ->input($tbl2)))
 				{
 					$complaintIDLnk = ($tbl2 != 'InjuryCare') ? "->where('".$GLOBALS["DB"]->tblAbbr[$tbl2]."ComplaintID', ".$this->coreID.")" : "";
-					eval("" . $GLOBALS["DB"]->sysOpts["cust-abbr"] . "\\Models\\".$GLOBALS["DB"]->tblModels[$tbl2]."::where('".$GLOBALS["DB"]->tblAbbr[$tbl2]."SubjectID', ".$civID.")" . $complaintIDLnk . "->delete();");
+					eval("App\\Models\\".$GLOBALS["DB"]->tblModels[$tbl2]."::where('".$GLOBALS["DB"]->tblAbbr[$tbl2]."SubjectID', ".$civID.")" . $complaintIDLnk . "->delete();");
 				}
 			}
 		}

@@ -22,7 +22,7 @@
 			@elseif ($eventType == 'Searches')
 				Did an officer search a vehicle, home, person, or property? Or was any property seized?
 			@elseif ($eventType == 'Force')
-				Did an officer use any weapons or physical force? @endif
+				Did an officer use any weapons or physical force?
 			@endif
 		</div>
 		<div class="pL20">

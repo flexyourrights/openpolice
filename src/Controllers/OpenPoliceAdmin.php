@@ -37,6 +37,11 @@ class OpenPoliceAdmin extends AdminSubsController
 	
 	public function initPowerUser($uID = -3)
 	{
+		if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0
+			|| !$this->v["user"]->hasRole('administrator|staff|databaser|brancher|volunteer')) 
+		{
+			return redirect('/');
+		}
 		$userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)
 			->first();
 		if (!$userInfo || sizeof($userInfo) == 0)
@@ -197,7 +202,10 @@ class OpenPoliceAdmin extends AdminSubsController
 		$this->v["settings"] = array();
 		if ($settings && sizeof($settings) > 0)
 		{
-			foreach ($settings as $s) $this->v["settings"][$s->DefSubset] = $s->DefValue;
+			foreach ($settings as $s)
+			{
+				$this->v["settings"][$s->DefSubset] = $s->DefValue;
+			}
 		}
 		return true;
 	}
@@ -241,6 +249,14 @@ class OpenPoliceAdmin extends AdminSubsController
 	
 	public function dashboardDefault(Request $request)
 	{
+		if (!$this->v["user"]->hasRole('administrator|staff|databaser|brancher'))
+		{
+			if ($this->v["user"]->hasRole('volunteer'))
+			{
+				return redirect('/volunteer');
+			}
+			return redirect('/');
+		}
 		return redirect( '/dashboard/complaints' );
 	}
 	
@@ -580,7 +596,7 @@ class OpenPoliceAdmin extends AdminSubsController
 						$swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' . $this->coreID . '/update/goooobblygooook8923528350');
 						break;
 					case '[{ Login URL }]':
-						$swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/auth/login');
+						$swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/login');
 						break;
 					case '[{ Days From Now: 7, mm/dd/yyyy }]':
 						$swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));

@@ -1,6 +1,6 @@
 <!-- resources/views/auth/registerComplaint.blade.php -->
 
-<form id="postNodeForm" name="postNode" method="post" action="/auth/register" target="_parent" >
+<form id="postNodeForm" name="postNode" method="post" action="/register" target="_parent" >
 {!! csrf_field() !!}
 <input type="hidden" name="ajax" value="1">
 <input type="hidden" name="emailBlock" id="emailBlockID" value="1">
@@ -52,7 +52,7 @@ It is also important so we can contact you about the progress of your complaint.
 				or to file a new complaint with this email address.
 			</div>
 			<div class="col-md-4">
-				<a href="/auth/login" class="btn btn-lg btn-primary f26 mT20">Login</a>
+				<a href="/login" class="btn btn-lg btn-primary f26 mT20">Login</a>
 			</div>
 		</div>
 	</div>

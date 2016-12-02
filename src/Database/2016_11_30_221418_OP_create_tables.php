@@ -663,9 +663,9 @@ class OPCreateTables extends Migration
 		Schema::create('OP_LinksOfficerAllegations', function(Blueprint $table)
 		{
 			$table->increments('LnkOffAlleID');
-			$table->integer('LnkOffAlleOffID')->unsigned()->nullable();
+			$table->integer('LnkOffAlleOffID')->nullable(); // unsigned()->
 			//$table->foreign('LnkOffAlleOffID')->references('OffID')->on('OP_Officers');
-			$table->integer('LnkOffAlleAlleID')->unsigned()->nullable();
+			$table->integer('LnkOffAlleAlleID')->nullable(); // unsigned()->
 			//$table->foreign('LnkOffAlleAlleID')->references('AlleID')->on('OP_Allegations');
 			$table->timestamps();
 		});

@@ -270,7 +270,7 @@ class VolunteerController extends OpenPoliceAdmin
 			}
 		}
 		$deptRows = array();
-		$evalQry = "\$deptRows = SurvLoop\\Models\\Gen\\OPDepartments::"
+		$evalQry = "\$deptRows = App\\Models\\OPDepartments::"
 			. ((trim($state) != '') ? "where('DeptAddressState', '=', \$state)->" : "")
 			. "where(function(\$query) { return \$query->where('DeptName', 'LIKE', '" . addslashes($searches[0]) . "')";
 			for ($i = 1; $i < sizeof($searches); $i++)

@@ -19,8 +19,10 @@ class OpenPoliceReport extends OpenPolice
 	
 	public function printFullReport($reportType = '', $isAdmin = false)
 	{
-		if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, 
-			[$GLOBALS["DB"]->getDefID('Complaint Status', 'Hold'), $GLOBALS["DB"]->getDefID('Complaint Status', 'Pending Attorney')]))
+		if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
+			$GLOBALS["DB"]->getDefID('Complaint Status', 'Hold'), 
+			$GLOBALS["DB"]->getDefID('Complaint Status', 'Pending Attorney')
+			]))
 		{
 			return '<h1>Sorry, this complaint is not public.</h1>';
 		}

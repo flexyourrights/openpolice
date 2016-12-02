@@ -24031,6 +24031,17 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'CondTable' => '156',
 			'CondLoop' => '0'
 		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 45,
+			'CondTag' => '#NodeDisabled',
+			'CondDesc' => 'This node is not active (for the public).',
+			'CondOperator' => 'CUSTOM',
+			'CondOperDeet' => '0',
+			'CondField' => '0',
+			'CondTable' => '0',
+			'CondLoop' => '0'
+		]);
+		
 		DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 1,
 			'CondValCondID' => '1',
@@ -24186,6 +24197,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'CondValCondID' => '44',
 			'CondValValue' => 'Y'
 		]);
+		
 		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 1,
 			'CondNodeCondID' => '1',
@@ -24996,6 +25008,27 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'CondNodeCondID' => '27',
 			'CondNodeNodeID' => '621'
 		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 163,
+			'CondNodeCondID' => '45',
+			'CondNodeNodeID' => '491'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 163,
+			'CondNodeCondID' => '45',
+			'CondNodeNodeID' => '501'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 163,
+			'CondNodeCondID' => '45',
+			'CondNodeNodeID' => '507'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 163,
+			'CondNodeCondID' => '45',
+			'CondNodeNodeID' => '513'
+		]);
+		
 		DB::table('SL_DataLoop')->insert([
 			'DataLoopID' => 1,
 			'DataLoopTree' => '1',

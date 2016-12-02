@@ -15,7 +15,7 @@
 
 <div class="well">
 	<b>Adding A User:</b> Use the public volunteer sign up form 
-	(<a href="/auth/register" target="_blank">/auth/register</a>, while logged out, easiest in a separate browser) 
+	(<a href="/register" target="_blank">/auth/register</a>, while logged out, easiest in a separate browser) 
 	to first create the new user. Then reload this page and change their privileges here as needed.
 </div>
 
