@@ -5,26 +5,26 @@ use DB;
 use Auth;
 use Illuminate\Http\Request;
 
-use SurvLoop\Models\User;
-use SurvLoop\Models\SLDefinitions;
+use App\Models\User;
+use App\Models\SLDefinitions;
 
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPAllegations;
-use OpenPolice\Models\OPOfficers;
-use OpenPolice\Models\OPPersonContact;
-use OpenPolice\Models\OPDepartments;
-use OpenPolice\Models\OPOversight;
-use OpenPolice\Models\OPLinksComplaintDept;
-use OpenPolice\Models\OPCustomers;             
+use App\Models\OPComplaints;
+use App\Models\OPAllegations;
+use App\Models\OPOfficers;
+use App\Models\OPPersonContact;
+use App\Models\OPDepartments;
+use App\Models\OPOversight;
+use App\Models\OPLinksComplaintDept;
+use App\Models\OPCustomers;             
 
-use OpenPolice\Models\OPzVolunEditsDepts;
-use OpenPolice\Models\OPzVolunEditsOvers;
-use OpenPolice\Models\OPzVolunStatDays;
-use OpenPolice\Models\OPzVolunUserInfo;
+use App\Models\OPzVolunEditsDepts;
+use App\Models\OPzVolunEditsOvers;
+use App\Models\OPzVolunStatDays;
+use App\Models\OPzVolunUserInfo;
 
-use OpenPolice\Models\OPzComplaintEmails;
-use OpenPolice\Models\OPzComplaintEmailed;
-use OpenPolice\Models\OPzComplaintReviews;
+use App\Models\OPzComplaintEmails;
+use App\Models\OPzComplaintEmailed;
+use App\Models\OPzComplaintReviews;
 
 use OpenPolice\Controllers\OpenPoliceReport;
 use OpenPolice\Controllers\VolunteerLeaderboard;
@@ -64,6 +64,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	{
 		if (isset($this->v["user"]))
 		{
+			list($treeName, $dbName) = $this->loadDbTreeShortNames();
 			if ($this->v["user"]->hasRole('administrator|staff|databaser'))
 			{
 				return [
@@ -94,6 +95,7 @@ class OpenPoliceAdmin extends AdminSubsController
 							]]
 					]], 
 					['javascript:;',	'Form-Tree <span class="pull-right"><i class="fa fa-tree"></i></span>', 1, [
+							['/dashboard/tree/switch',		'<i>Current: ' . $treeName . '</i>', 1, []], 
 							['/dashboard/tree/map?all=1',	'Experience Map', 			1, []],
 							['/dashboard/tree/conds',		'Conditions / Filters', 	1, []],
 							['/dashboard/tree/data',		'Data Structures', 			1, []],
@@ -104,6 +106,7 @@ class OpenPoliceAdmin extends AdminSubsController
 							['/dashboard/tree',				'Session Stats', 			1, []] 
 					]], 
 					['javascript:;',	'Database Design <span class="pull-right"><i class="fa fa-database"></i></span>', 1, [
+							['/dashboard/db/switch',		'<i>Current: ' . $dbName . '</i>', 1, []], 
 							['/dashboard/db/all',			'Database Design', 			1, []], 
 							['/dashboard/db/bus-rules',		'Business Rules', 			1, []], 
 							['/dashboard/db/definitions',	'Definitions', 				1, []],
@@ -863,20 +866,22 @@ class OpenPoliceAdmin extends AdminSubsController
 			
 			$com = OPComplaints::find($cid);
 			$com->comType = $newReview->ComRevComplaintType;
+			
+			// MORGAN, this needs update!!!
 			switch ($newReview->ComRevStatus)
 			{
-				case 'Submitted to Oversight':				$com->comStatus = 100; break;
-				case 'Hold: Not Sure':						$com->comStatus = 95; break;
-				case 'Hold: Go Gold':						$com->comStatus = 95; break;
-				case 'Pending Attorney: Needed':			$com->comStatus = 98; break;
-				case 'Pending Attorney: Hook-Up':			$com->comStatus = 98; break;
-				case "Attorney'd":							$com->comStatus = 99; break;
-				case 'Incomplete':							$com->comStatus = 94; break;
-				case 'Received by Oversight':				$com->comStatus = 101; break;
-				case 'Pending Oversight Investigation':		$com->comStatus = 102; break;
-				case 'Declined To Investigate (Closed)':	$com->comStatus = 103; break;
-				case 'Investigated (Closed)':				$com->comStatus = 104; break;
-				case 'Closed':								$com->comStatus = 105; break;
+				case 'Submitted to Oversight':				$com->comStatus = 300; break;
+				case 'Hold: Not Sure':						$com->comStatus = 295; break;
+				case 'Hold: Go Gold':						$com->comStatus = 295; break;
+				case 'Pending Attorney: Needed':			$com->comStatus = 298; break;
+				case 'Pending Attorney: Hook-Up':			$com->comStatus = 298; break;
+				case "Attorney'd":							$com->comStatus = 299; break;
+				case 'Incomplete':							$com->comStatus = 294; break;
+				case 'Received by Oversight':				$com->comStatus = 301; break;
+				case 'Pending Oversight Investigation':		$com->comStatus = 302; break;
+				case 'Declined To Investigate (Closed)':	$com->comStatus = 303; break;
+				case 'Investigated (Closed)':				$com->comStatus = 304; break;
+				case 'Closed':								$com->comStatus = 305; break;
 			}
 			$com->save();
 		}
@@ -944,7 +949,7 @@ class OpenPoliceAdmin extends AdminSubsController
 			$statTots[$i] = array( $stat[0] );
 			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT DISTINCT `EditDeptUser` FROM `OP_zVolunEditsDepts` ".$stat[1]) ) );
 			$statTots[$i][] = sizeof( DB::select( DB::raw("SELECT `EditDeptID` FROM `OP_zVolunEditsDepts` ".$stat[1]) ) );
-			$overQry = ((strpos($stat[1], "WHERE") === false) ? " WHERE `EditOverType` LIKE '169'" : " AND `EditOverType` LIKE '169'");
+			$overQry = ((strpos($stat[1], "WHERE") === false) ? " WHERE `EditOverType` LIKE '303'" : " AND `EditOverType` LIKE '303'");
 			$res = DB::select( DB::raw("SELECT SUM(`EditOverOnlineResearch`) as `tot` FROM `OP_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
 			$statTots[$i][] = $res[0]->tot;
 			$res = DB::select( DB::raw("SELECT SUM(`EditOverMadeDeptCall`) as `tot` FROM `OP_zVolunEditsOvers` ".str_replace('EditDeptVerified', 'EditOverVerified', $stat[1]).$overQry) );
@@ -963,10 +968,10 @@ class OpenPoliceAdmin extends AdminSubsController
 			foreach ($recentEdits as $i => $edit)
 			{
 				$iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('EditOverType', 169)
+					->where('EditOverType', 303)
 					->first();
 				$civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('EditOverType', 170)
+					->where('EditOverType', 302)
 					->first();
 				$userObj = User::find($edit->EditOverUser);
 				$deptEdits[] = [
@@ -1105,7 +1110,7 @@ class OpenPoliceAdmin extends AdminSubsController
         }
         
         
-		$edits  = OPzVolunEditsOvers::where('EditOverType', 169)
+		$edits  = OPzVolunEditsOvers::where('EditOverType', 303)
 			->where('EditOverVerified', '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
 			->get();
         if ($edits && sizeof($edits) > 0)
@@ -1222,7 +1227,7 @@ class OpenPoliceAdmin extends AdminSubsController
 	{
 		$this->admControlInit($request, '/dashboard/overs');
 		$this->v["oversights"] = DB::table('OP_Oversight')
-			->where('OP_Oversight.OverType', 170)
+			->where('OP_Oversight.OverType', 302)
             ->leftJoin('OP_Departments', 'OP_Departments.DeptID', '=', 'OP_Oversight.OverDeptID')
 			->orderBy('OP_Oversight.OverAddressState', 'asc')
 			->orderBy('OP_Oversight.OverAddressCity', 'asc')

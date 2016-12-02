@@ -428,7 +428,7 @@ class OPCreateTables extends Migration
 		Schema::create('OP_Civilians', function(Blueprint $table)
 		{
 			$table->increments('CivID');
-			$table->integer('CivComplaintID')->unsigned()->nullable();
+			$table->integer('CivComplaintID')->nullable(); // unsigned()->
 			$table->index('CivComplaintID');
 			//$table->foreign('CivComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('CivUserID')->unsigned()->nullable();
@@ -757,6 +757,180 @@ class OPCreateTables extends Migration
 			$table->integer('AdmActRecordID')->nullable();
 			$table->longText('AdmActOldData')->nullable();
 			$table->longText('AdmActNewData')->nullable();
+			$table->timestamps();
+		});
+		
+		
+		Schema::create('OP_zComplaintEmailed', function(Blueprint $table)
+		{
+			$table->increments('ComEmailedID');
+			$table->integer('ComEmailedComplaintID')->unsigned()->nullable();
+			//$table->foreign('ComEmailedComplaintID')->references('UserID')->on('OP_Users');
+			$table->integer('ComEmailedEmailID')->nullable();
+			$table->dateTime('ComEmailedDate')->nullable();
+			$table->string('ComEmailedTo')->nullable();
+			$table->integer('ComEmailedFromUser')->nullable();
+			$table->longText('ComEmailedCustomSpots')->nullable();
+			$table->integer('ComEmailedOpts')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zComplaintEmails', function(Blueprint $table)
+		{
+			$table->increments('ComEmailID');
+			$table->string('ComEmailType')->nullable();
+			$table->longText('ComEmailCustomSpots')->nullable();
+			$table->string('ComEmailName')->nullable();
+			$table->longText('ComEmailSubject')->nullable();
+			$table->longText('ComEmailBody')->nullable();
+			$table->integer('ComEmailOpts')->default('1')->nullable();
+			$table->integer('ComEmailTotSent')->default('0')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zComplaintReviews', function(Blueprint $table)
+		{
+			$table->increments('ComRevID');
+			$table->integer('ComRevComplaint')->nullable();
+			$table->integer('ComRevUser')->nullable();
+			$table->dateTime('ComRevDate')->nullable();
+			$table->string('ComRevType', 10)->nullable();
+			$table->string('ComRevStatus', 50)->nullable();
+			$table->integer('ComRevNotAnon')->nullable();
+			$table->integer('ComRevOneIncident')->nullable();
+			$table->integer('ComRevCivilianContact')->nullable();
+			$table->integer('ComRevOneOfficer')->nullable();
+			$table->integer('ComRevOneAllegation')->nullable();
+			$table->integer('ComRevEvidenceUpload')->nullable();
+			$table->integer('ComRevEnglishSkill')->nullable();
+			$table->integer('ComRevReadability')->nullable();
+			$table->integer('ComRevConsistency')->nullable();
+			$table->integer('ComRevRealistic')->nullable();
+			$table->integer('ComRevOutrage')->nullable();
+			$table->integer('ComRevMakeFeatured')->nullable();
+			$table->integer('ComRevExplicitLang')->nullable();
+			$table->integer('ComRevGraphicContent')->nullable();
+			$table->integer('ComRevComplaintType')->nullable();
+			$table->string('ComRevNextAction')->nullable();
+			$table->longText('ComRevNote')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunEditsDepts', function(Blueprint $table)
+		{
+			$table->increments('EditDeptID');
+			$table->integer('EditDeptUser')->nullable();
+			$table->integer('EditDeptPageTime')->nullable();
+			$table->integer('EditDeptDeptID')->unsigned()->nullable();
+			$table->string('EditDeptName')->nullable();
+			$table->string('EditDeptSlug', 100)->nullable();
+			$table->integer('EditDeptType')->unsigned()->nullable();
+			$table->boolean('EditDeptStatus')->nullable();
+			$table->dateTime('EditDeptVerified')->nullable();
+			$table->string('EditDeptEmail')->nullable();
+			$table->string('EditDeptPhoneWork', 20)->nullable();
+			$table->string('EditDeptAddress')->nullable();
+			$table->string('EditDeptAddress2')->nullable();
+			$table->string('EditDeptAddressCity')->nullable();
+			$table->string('EditDeptAddressState', 2)->nullable();
+			$table->string('EditDeptAddressZip', 10)->nullable();
+			$table->string('EditDeptAddressCounty', 100)->nullable();
+			$table->string('EditDeptScoreOpenness', 11)->nullable();
+			$table->integer('EditDeptTotOfficers')->nullable();
+			$table->integer('EditDeptJurisdictionPopulation')->nullable();
+			$table->longText('EditDeptJurisdictionGPS')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunEditsOvers', function(Blueprint $table)
+		{
+			$table->increments('EditOverID');
+			$table->integer('EditOverUser')->unsigned()->nullable();
+			$table->integer('EditOverEditDeptID')->unsigned()->nullable();
+			$table->tinyInteger('EditOverOnlineResearch')->nullable();
+			$table->tinyInteger('EditOverMadeDeptCall')->nullable();
+			$table->tinyInteger('EditOverMadeIACall')->nullable();
+			$table->longText('EditOverNotes')->nullable();
+			$table->integer('EditOverOverID')->unsigned()->nullable();
+			$table->integer('EditOverType')->unsigned()->nullable();
+			$table->integer('EditOverCivModel')->unsigned()->nullable();
+			$table->integer('EditOverUserID')->unsigned()->nullable();
+			//$table->foreign('EditOverUserID')->references('UserID')->on('OP_Users');
+			$table->integer('EditOverDeptID')->unsigned()->nullable();
+			$table->index('EditOverDeptID');
+			//$table->foreign('EditOverDeptID')->references('DeptID')->on('OP_Departments');
+			$table->string('EditOverAgncName')->nullable();
+			$table->dateTime('EditOverVerified')->nullable();
+			$table->string('EditOverNamePrefix', 20)->nullable();
+			$table->string('EditOverNameFirst')->nullable();
+			$table->string('EditOverNickname')->nullable();
+			$table->string('EditOverNameMiddle', 100)->nullable();
+			$table->string('EditOverNameLast')->nullable();
+			$table->string('EditOverNameSuffix', 20)->nullable();
+			$table->string('EditOverTitle')->nullable();
+			$table->string('EditOverIDnumber', 50)->nullable();
+			$table->string('EditOverWebsite')->nullable();
+			$table->string('EditOverFacebook')->nullable();
+			$table->string('EditOverTwitter')->nullable();
+			$table->string('EditOverYouTube')->nullable();
+			$table->char('EditOverHomepageComplaintLink', 1)->nullable();
+			$table->string('EditOverWebComplaintInfo')->nullable();
+			$table->string('EditOverComplaintPDF')->nullable();
+			$table->string('EditOverComplaintWebForm')->nullable();
+			$table->string('EditOverEmail')->nullable();
+			$table->string('EditOverPhoneWork', 20)->nullable();
+			$table->string('EditOverAddress')->nullable();
+			$table->string('EditOverAddress2')->nullable();
+			$table->string('EditOverAddressCity')->nullable();
+			$table->string('EditOverAddressState', 2)->nullable();
+			$table->string('EditOverAddressZip', 10)->nullable();
+			$table->integer('EditOverSubmitDeadline')->nullable();
+			$table->boolean('EditOverOfficialFormNotReq')->nullable();
+			$table->boolean('EditOverOfficialAnon')->nullable();
+			$table->boolean('EditOverWaySubOnline')->nullable();
+			$table->boolean('EditOverWaySubEmail')->nullable();
+			$table->boolean('EditOverWaySubVerbalPhone')->nullable();
+			$table->boolean('EditOverWaySubPaperMail')->nullable();
+			$table->boolean('EditOverWaySubPaperInPerson')->nullable();
+			$table->boolean('EditOverWaySubNotary')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunStatDays', function(Blueprint $table)
+		{
+			$table->increments('VolunStatID');
+			$table->dateTime('VolunStatDate')->nullable();
+			$table->integer('VolunStatSignups')->nullable();
+			$table->integer('VolunStatLogins')->nullable();
+			$table->integer('VolunStatUsersUnique')->nullable();
+			$table->integer('VolunStatDeptsUnique')->nullable();
+			$table->integer('VolunStatOnlineResearch')->nullable();
+			$table->integer('VolunStatCallsDept')->nullable();
+			$table->integer('VolunStatCallsIA')->nullable();
+			$table->integer('VolunStatCallsTot')->nullable();
+			$table->integer('VolunStatTotalEdits')->nullable();
+			$table->integer('VolunStatOnlineResearchV')->nullable();
+			$table->integer('VolunStatCallsDeptV')->nullable();
+			$table->integer('VolunStatCallsIAV')->nullable();
+			$table->integer('VolunStatCallsTotV')->nullable();
+			$table->integer('VolunStatTotalEditsV')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunTmp', function(Blueprint $table)
+		{
+			$table->increments('TmpID');
+			$table->integer('TmpUser')->nullable();
+			$table->string('TmpType')->nullable();
+			$table->integer('TmpVal')->nullable();
+			$table->dateTime('TmpDate')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunUserInfo', function(Blueprint $table)
+		{
+			$table->increments('UserInfoID');
+			$table->integer('UserInfoUserID')->nullable();
+			$table->integer('UserInfoPersonContactID')->nullable();
+			$table->integer('UserInfoStars')->nullable();
+			$table->integer('UserInfoStars1')->nullable();
+			$table->integer('UserInfoStars2')->nullable();
+			$table->integer('UserInfoStars3')->nullable();
+			$table->integer('UserInfoDepts')->nullable();
+			$table->integer('UserInfoAvgTimeDept')->nullable();
 			$table->timestamps();
 		});
 	

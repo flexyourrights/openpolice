@@ -59,10 +59,10 @@
 		<td>{{ $com->PrsnNameFirst }} {{ $com->PrsnNameLast }}</td>
 		<td>{{ $com->ComAwardMedallion }}</td>
 		<td>
-			@if ($com->ComPrivacy == 204) Open
-			@elseif ($com->ComPrivacy == 205) No Names
-			@elseif ($com->ComPrivacy == 206) Anonymous
-			@elseif ($com->ComPrivacy == 207) Anonymized
+			@if ($com->ComPrivacy == 304) Open
+			@elseif ($com->ComPrivacy == 305) No Names
+			@elseif ($com->ComPrivacy == 306) Anonymous
+			@elseif ($com->ComPrivacy == 307) Anonymized
 			@endif
 		</td>
 	</tr>
@@ -70,11 +70,14 @@
 		<td colspan=2 class="pB20" style="border-top: 0px none;">
 		
 			@if (isset($r) && isset($r->ComRevReadability))
-				<i class="fa fa-search-plus slBlueDark" aria-hidden="true"></i> {{ ($r->ComRevNotAnon + $r->ComRevOneIncident + $r->ComRevCivilianContact + $r->ComRevOneOfficer + $r->ComRevOneAllegation + $r->ComRevEvidenceUpload) }}
+				<i class="fa fa-search-plus slBlueDark" aria-hidden="true"></i> 
+				{{ ($r->ComRevNotAnon + $r->ComRevOneIncident + $r->ComRevCivilianContact + $r->ComRevOneOfficer + $r->ComRevOneAllegation + $r->ComRevEvidenceUpload) }}
 				@if (($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) >= 0)
-					<i class="fa fa-thumbs-o-up mL20 pL20 slBlueDark" aria-hidden="true"></i> {{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
+					<i class="fa fa-thumbs-o-up mL20 pL20 slBlueDark" aria-hidden="true"></i> 
+					{{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
 				@else
-					<i class="fa fa-thumbs-o-down mL20 pL20 slBlueDark" aria-hidden="true"></i> {{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
+					<i class="fa fa-thumbs-o-down mL20 pL20 slBlueDark" aria-hidden="true"></i> 
+					{{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
 				@endif
 				@if ($r->ComRevMakeFeatured)
 					<i class="fa fa-certificate mL20 pL20 slBlueDark" aria-hidden="true"></i>

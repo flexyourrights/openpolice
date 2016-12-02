@@ -6,17 +6,17 @@ use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-use SurvLoop\Models\User;
-use SurvLoop\Models\SLDefinitions;
-use SurvLoop\Models\SLInstructs;
+use App\Models\User;
+use App\Models\SLDefinitions;
+use App\Models\SLInstructs;
 
-use OpenPolice\Models\OPDepartments;
-use OpenPolice\Models\OPOversight;
-use OpenPolice\Models\OPPersonContact;
-use OpenPolice\Models\OPzVolunEditsDepts;
-use OpenPolice\Models\OPzVolunEditsOvers;
-use OpenPolice\Models\OPzVolunTmp;
-use OpenPolice\Models\OPzVolunUserInfo;
+use App\Models\OPDepartments;
+use App\Models\OPOversight;
+use App\Models\OPPersonContact;
+use App\Models\OPzVolunEditsDepts;
+use App\Models\OPzVolunEditsOvers;
+use App\Models\OPzVolunTmp;
+use App\Models\OPzVolunUserInfo;
 
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenPoliceAdmin;
@@ -307,7 +307,7 @@ class VolunteerController extends OpenPoliceAdmin
 			$newIA 		= new OPOversight;
 			$newEdit 	= new OPzVolunEditsDepts;
 			$iaEdit 	= new OPzVolunEditsOvers;
-			$newIA->OverType 			= $iaEdit->EditOverType 			= 169;
+			$newIA->OverType 			= $iaEdit->EditOverType 			= 303;
 			$newDept->DeptName 			= $newEdit->EditDeptName 			= $deptName;
 			$newDept->DeptAddressState 	= $newEdit->EditDeptAddressState 	= (($deptState != 'US') ? $deptState : '');
 			$newDept->DeptSlug 			= $newEdit->EditDeptSlug 			= $deptState . '-' . Str::slug($deptName);
@@ -352,10 +352,10 @@ class VolunteerController extends OpenPoliceAdmin
 			foreach ($recentEdits as $i => $edit)
 			{
 				$this->v["editsIA"][$i]  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('EditOverType', 169)
+					->where('EditOverType', 303)
 					->first();
 				$this->v["editsCiv"][$i] = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('EditOverType', 170)
+					->where('EditOverType', 302)
 					->first();
 				if ($this->v["editsIA"][$i])
 				{
@@ -392,17 +392,17 @@ class VolunteerController extends OpenPoliceAdmin
 		$this->v["FAQs"] 			= $this->deptEditFaqHTML();
 		$this->v["rightSide"]		= $this->getSidebarScript();
 		$this->v["stateDrop"] 		= $GLOBALS["DB"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
-		$this->v["iaRow"]   		= OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)->where('OverType', 169)->first();
+		$this->v["iaRow"]   		= OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)->where('OverType', 303)->first();
 		if (!isset($this->v["iaRow"]) || sizeof($this->v["iaRow"]) == 0) {
 			$this->v["iaRow"] 		= new OPOversight;
-			$this->v["iaRow"]->OverType = 169; // definition ID for Internal Affairs
+			$this->v["iaRow"]->OverType = 303; // definition ID for Internal Affairs
 		}
 		$this->v["civRow"]  = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
-			->where('OverType', 170)
+			->where('OverType', 302)
 			->first();
 		if (!isset($this->v["civRow"]) || sizeof($this->v["civRow"]) == 0) {
 			$this->v["civRow"] 		= new OPOversight;
-			$this->v["civRow"]->OverType = 170; // definition ID for Civilian Oversight
+			$this->v["civRow"]->OverType = 302; // definition ID for Civilian Oversight
 		}
 		$this->v["iaForms"]  		= $this->deptEditPrintOver($this->v["iaRow"]);
 		$this->v["civForms"]  		= $this->deptEditPrintOver($this->v["civRow"], 'Civ');
@@ -478,7 +478,7 @@ class VolunteerController extends OpenPoliceAdmin
 		if (!isset($request->OverID) || intVal($request->OverID) <= 0) {
 			$ia = new OPOversight;
 			$ia->OverDeptID = $request->DeptID;
-			$ia->OverType = 169;
+			$ia->OverType = 303;
 		}
 		else $ia = OPOversight::find($request->OverID);
 		$iaEdit = new OPzVolunEditsOvers;
@@ -486,7 +486,7 @@ class VolunteerController extends OpenPoliceAdmin
 		$deptEdit->EditDeptDeptID 						= $iaEdit->EditOverDeptID 						= $request->DeptID;
 		$deptEdit->EditDeptUser 						= $iaEdit->EditOverUser 						= Auth::user()->id;
 		$deptEdit->EditDeptPageTime 					= time()-intVal($request->formLoaded);
-		$iaEdit->EditOverType 							= 169;
+		$iaEdit->EditOverType 							= 303;
 		
 		$this->v["deptRow"]->DeptVerified 				= $deptEdit->EditDeptVerified 					= date("Y-m-d H:i:s");
 		$this->v["deptRow"]->DeptName 					= $deptEdit->EditDeptName 						= $request->DeptName;
@@ -554,14 +554,14 @@ class VolunteerController extends OpenPoliceAdmin
 			if (!isset($request->CivOverID) || intVal($request->CivOverID) <= 0) {
 				$civ = new OPOversight;
 				$civ->OverDeptID 			= $request->DeptID;
-				$civ->OverType 				= 170;
+				$civ->OverType 				= 302;
 			}
 			else $civ = OPOversight::find($request->CivOverID);
 			$civEdit = new OPzVolunEditsOvers;
 			$civEdit->EditOverDeptID 		= $request->DeptID;
 			$civEdit->EditOverEditDeptID 	= $deptEdit->EditDeptID;
 			$civEdit->EditOverUser 			= Auth::user()->id;
-			$civEdit->EditOverType 			= 170;
+			$civEdit->EditOverType 			= 302;
 			
 			$civ->OverVerified 				= $civEdit->EditOverVerified 		= date("Y-m-d H:i:s");
 			$civ->OverAgncName 				= $civEdit->EditOverAgncName 		= $request->CivOverAgncName;
@@ -709,10 +709,10 @@ class VolunteerController extends OpenPoliceAdmin
 			foreach ($recentEdits as $i => $edit)
 			{
 				$iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('OverType', 169)
+					->where('OverType', 303)
 					->first();
 				$civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-					->where('OverType', 170)
+					->where('OverType', 302)
 					->first();
 				$userObj = User::find($edit->EditDeptUser);
 				$deptEdits[] = [

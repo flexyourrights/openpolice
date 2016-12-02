@@ -97,7 +97,7 @@ $ nano config/auth.php
 
 ```php
 ...
-'model' => SurvLoop\Models\User::class,
+'model' => App\Models\User::class,
 ...
 ```
 
@@ -107,7 +107,9 @@ $ nano config/auth.php
 $ php artisan vendor:publish --force
 $ php artisan migrate
 $ composer dump-autoload
-$ php artisan db:seed
+$ php artisan db:seed --class=SurvLoopSeeder
+$ php artisan db:seed --class=OpenPoliceSeeder
+$ php artisan db:seed --class=OpenPoliceDepartmentSeeder
 ```
 
 * Log into Open Police admin dashboard...

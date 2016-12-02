@@ -33,7 +33,7 @@ $(".n268fldCls").click(function(){
 $("#nFormComplete").click(function(){
 	if (checkNodeForm())
 	{
-		document.getElementById("n439hidden").value=298;
+		document.getElementById("n439hidden").value=398;
 		document.getElementById("stepID").value="next";
 		runFormSub();
 	}
@@ -42,7 +42,7 @@ $("#nFormComplete").click(function(){
 $("#nFormAnonymous").click(function(){
 	if (checkNodeForm())
 	{
-		document.getElementById("n439hidden").value=299;
+		document.getElementById("n439hidden").value=399;
 		document.getElementById("stepID").value="next";
 		runFormSub();
 	}

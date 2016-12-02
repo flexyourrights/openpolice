@@ -6,7 +6,7 @@
 		<div class="row">
 			<div class="col-md-3">
 				<b class="f18">Actions:</b><br />
-				@if ($sessData["Complaints"][0]->ComPrivacy != 204)
+				@if ($sessData["Complaints"][0]->ComPrivacy != 304)
 					@if ($view == 'Investigate')
 						Investigator View <i class="fa fa-check"></i> - 
 						<a class="f10" href="/report{{ $ComSlug }}/?publicView=1">Public View</a>
@@ -48,7 +48,7 @@
 </style>
 
 <div class="round20 brdRed mT20 mB20 pL20 pR20 pT10 pB10 f20 slRedDark investigateStatus">
-	@if (true || $sessData["Complaints"][0]->ComStatus == 96)
+	@if (true || $sessData["Complaints"][0]->ComStatus == 296)
 		We do not know if this complaint has been investigated yet. 
 	@endif
 	The events described here are allegations, which may or may not be factually accurate. 
@@ -139,7 +139,7 @@ If you <i>did</i> experience or witness misconduct in-person, <a href="#" target
 		
 		<div class="gry9">Incident:</div>
 		<div class="pL10 pB20">
-			@if (in_array($sessData["Complaints"][0]->ComPrivacy, [206, 207]))
+			@if (in_array($sessData["Complaints"][0]->ComPrivacy, [306, 307]))
 				{{ date('F Y', strtotime($sessData["Incidents"][0]->IncTimeStart)) }}
 			@else
 				{{ date('n/j/Y', strtotime($sessData["Incidents"][0]->IncTimeStart)) }}
@@ -149,7 +149,7 @@ If you <i>did</i> experience or witness misconduct in-person, <a href="#" target
 		
 		<div class="gry9">Submitted:</div>
 		<div class="pL10">
-			@if (in_array($sessData["Complaints"][0]->ComPrivacy, [206, 207]))
+			@if (in_array($sessData["Complaints"][0]->ComPrivacy, [306, 307]))
 				{{ date('F Y', strtotime($comDate)) }}
 			@else
 				{{ date('n/j/Y', strtotime($comDate)) }}
@@ -267,7 +267,7 @@ If you <i>did</i> experience or witness misconduct in-person, <a href="#" target
 
 <div class="complaintFooter">
 
-	@if (!in_array($sessData["Complaints"][0]->ComStatus, [94, 95, 98, 99]))
+	@if (!in_array($sessData["Complaints"][0]->ComStatus, [294, 295, 298, 299]))
 		<center><div class="row pB10 pT20 mT20">
 			<div class="col-md-6 taR">
 				<a href="https://twitter.com/share" class="twitter-share-button" 

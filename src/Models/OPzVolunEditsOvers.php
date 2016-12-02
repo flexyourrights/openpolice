@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenPolice\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,14 +11,16 @@ class OPzVolunEditsOvers extends Model
 	public $timestamps = true;
 	
 	protected $fillable = [
+		'EditOverUser', 
 		'EditOverEditDeptID', 
 		'EditOverOnlineResearch', 
 		'EditOverMadeDeptCall', 
 		'EditOverMadeIACall', 
 		'EditOverNotes', 
+		'EditOverOverID', 
 		'EditOverType', 
 		'EditOverCivModel', 
-		'EditOverUser', 
+		'EditOverUserID', 
 		'EditOverDeptID', 
 		'EditOverAgncName', 
 		'EditOverVerified', 

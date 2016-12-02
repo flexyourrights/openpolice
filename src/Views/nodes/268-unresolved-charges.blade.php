@@ -10,15 +10,19 @@
 	</div>
 	<div class="nFld pB20">
 		<div><nobr><label for="n268fld0" class="mR10">
-			<div class="disIn mR5"><input id="n268fld0" value="Y" type="radio" name="n268fld" class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
+			<div class="disIn mR5"><input id="n268fld0" value="Y" type="radio" name="n268fld" 
+				class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
 				@if ($ComUnresolvedCharges == 'Y') CHECKED @endif ></div> Yes
 		</label></nobr></div>
 		<div><label for="n268fld2" class="mR10">
-			<div class="disIn mR5"><input id="n268fld2" value="N" type="radio" name="n268fld" class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
-				@if ($ComUnresolvedCharges == 'N') CHECKED @endif ></div> No unresolved charges <span class="fPerc80">(or my attorney said I could use Open Police Complaints)</span>
+			<div class="disIn mR5"><input id="n268fld2" value="N" type="radio" name="n268fld" 
+				class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
+				@if ($ComUnresolvedCharges == 'N') CHECKED @endif ></div> No unresolved charges 
+				<span class="fPerc80">(or my attorney said I could use Open Police Complaints)</span>
 		</label></div>
 		<div><nobr><label for="n268fld1" class="mR10">
-			<div class="disIn mR5"><input id="n268fld1" value="?" type="radio" name="n268fld" class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
+			<div class="disIn mR5"><input id="n268fld1" value="?" type="radio" name="n268fld" 
+				class="n268fldCls" autocomplete="off" onClick="unresolveUpdate(this.value);" 
 				@if ($ComUnresolvedCharges == '?') CHECKED @endif ></div> Not sure
 		</label></nobr></div>
 	</div>
@@ -38,9 +42,11 @@
 				</div>
 				<div class="col-md-11 pT10">
 					<h3 id="StopY" class="m0 @if ($ComUnresolvedCharges == 'Y') disBlo @else disNon @endif "
-						>You should probably stop now and consult with a criminal attorney to ask for legal advice before submitting this complaint.</h3> 
+						>You should probably stop now and consult with a criminal attorney 
+						to ask for legal advice before submitting this complaint.</h3> 
 					<h3 id="StopQ" class="m0 @if ($ComUnresolvedCharges == '?') disBlo @else disNon @endif "
-						>Before submitting a complaint, you should try to check with everyone involved to ensure they do not have any unresolved criminal charges.</h3> 
+						>Before submitting a complaint, you should try to check with everyone 
+						involved to ensure they do not have any unresolved criminal charges.</h3> 
 				</div>
 			</div>
 		</div>
@@ -49,8 +55,10 @@
 		Let's avoid this risk of publicly publishing your complaint on the internet.</span>
 		</p>
 		<p class="pB20">
-		<span class="f22">Perhaps you should <a href="javascript:void(0)" class="showStoryCopy"><u>copy the narrative you wrote</u></a> and paste it into an email that you send to yourself. 
-		Then you can come back with it later when all charges have been resolved, or after checking with all lawyers involved.</span>
+		<span class="f22">Perhaps you should <a href="javascript:void(0)" class="showStoryCopy"
+		><u>copy the narrative you wrote</u></a> and paste it into an email that you send to yourself. 
+		Then you can come back with it later when all charges have been resolved, 
+		or after checking with all lawyers involved.</span>
 		</p>
 		<div class="p10"></div>
 		<div class="alert alert-success" role="alert">
@@ -66,13 +74,16 @@
 		<div class="row pT10">
 			<div class="col-md-8 pR20">
 				<p class="pB10">
-					<span class="f22"><span class="slBlueDark">You could keep going to create a high-quality complaint right now while memories are freshest,</span> 
+					<span class="f22"><span class="slBlueDark">You could keep going to create 
+					a high-quality complaint right now while memories are freshest,</span> 
 					then just print it out for your attorney or legal aid service. 
-					After you logout, we will delete your complaint from our database except for some anonymous multiple-choice answers. 
+					After you logout, we will delete your complaint from our database 
+					except for some anonymous multiple-choice answers. 
 					Only that anonymous information will be published publicly.</span>
 				</p>
 				<p>
-					<span class="f28 slBlueDark">This anonymous data will greatly help with efforts to improve police accountability, both in your neighborhood and nationwide. 
+					<span class="f28 slBlueDark">This anonymous data will greatly help with efforts 
+					to improve police accountability, both in your neighborhood and nationwide. 
 					<i class="fa fa-heart-o"></i></span>
 				</p>
 			</div>
@@ -81,8 +92,8 @@
 					<label for="n439fld0">
 						<div class="row">
 							<div class="col-md-1 pR5 pT20">
-								<input id="n439fld0" value="298" type="radio" name="n439fld" autocomplete="off" 
-									@if ($ComUnresolvedChargesActions == 298) CHECKED @endif >
+								<input id="n439fld0" value="398" type="radio" name="n439fld" autocomplete="off" 
+									@if ($ComUnresolvedChargesActions == 398) CHECKED @endif >
 							</div>
 							<div class="col-md-11 blk f22">
 								<label for="n439fld0">Create a full complaint to print or save</label>
@@ -92,8 +103,8 @@
 					<label for="n439fld1">
 						<div class="row pT20">
 							<div class="col-md-1 pR5 pT20">
-								<input id="n439fld1" value="299" type="radio" name="n439fld" autocomplete="off" 
-									@if ($ComUnresolvedChargesActions == 299) CHECKED @endif >
+								<input id="n439fld1" value="399" type="radio" name="n439fld" autocomplete="off" 
+									@if ($ComUnresolvedChargesActions == 399) CHECKED @endif >
 							</div>
 							<div class="col-md-11 blk f22">
 								<label for="n439fld1">Just provide anonymous complaint information</label>

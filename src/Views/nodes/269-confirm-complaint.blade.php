@@ -9,7 +9,7 @@
 
 		<div class="p10">
 			Below is a preview of your finished complaint. 
-			@if ($complaint->ComPrivacy == 204)
+			@if ($complaint->ComPrivacy == 304)
 				Remember that we will never voluntarily publish anyone's private information. 
 				This includes addresses, phone numbers, emails, etc.
 			@else

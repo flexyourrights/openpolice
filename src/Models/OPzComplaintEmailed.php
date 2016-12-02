@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenPolice\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,9 +10,13 @@ class OPzComplaintEmailed extends Model
 	protected $primaryKey = 'ComEmailedID';
 	
 	protected $fillable = [
-		'ComEmailedComplaintID', 'ComEmailedEmailID', 
-		'ComEmailedDate', 'ComEmailedTo', 'ComEmailedFromUser', 
-		'ComEmailedCustomSpots', 'ComEmailedOpts',  
+		'ComEmailedComplaintID', 
+		'ComEmailedEmailID', 
+		'ComEmailedDate', 
+		'ComEmailedTo', 
+		'ComEmailedFromUser', 
+		'ComEmailedCustomSpots', 
+		'ComEmailedOpts',  
 	];
     
     

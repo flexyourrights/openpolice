@@ -209,7 +209,8 @@
 				<div class="col-md-1 taR f24 bld">3)</div>
 				<div class="col-md-3 f24 slBlueDark">Provide helpful anonymous complaint data</div>
 				<div class="col-md-5">
-					<p>Your anonymous data will greatly help with efforts to improve police accountability, both in your neighborhood and nationwide. <i class="fa fa-heart-o"></i></p>
+					<p>Your anonymous data will greatly help with efforts to improve police accountability, 
+					both in your neighborhood and nationwide. <i class="fa fa-heart-o"></i></p>
 				</div>
 				<div class="col-md-3 pT20 taC">
 					<input type="button" value="Anonymous Data Only" class="btn btn-lg btn-primary" id="nFormAnonymous">

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenPolice\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +11,14 @@ class OPzVolunUserInfo extends Model
 	public $timestamps = true;
 	
 	protected $fillable = [
-		'UserInfoPersonContactID', 'UserInfoStars', 
-		'UserInfoStars1', 'UserInfoStars2', 'UserInfoStars3', 
-		'UserInfoDepts', 'UserInfoAvgTimeDept', 
+		'UserInfoUserID', 
+		'UserInfoPersonContactID', 
+		'UserInfoStars', 
+		'UserInfoStars1', 
+		'UserInfoStars2', 
+		'UserInfoStars3', 
+		'UserInfoDepts', 
+		'UserInfoAvgTimeDept', 
 	];
     
 }

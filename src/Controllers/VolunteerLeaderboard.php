@@ -3,9 +3,9 @@ namespace OpenPolice\Controllers;
 
 use DB;
 
-use SurvLoop\Models\User;
+use App\Models\User;
 
-use OpenPolice\Models\OPzVolunUserInfo;
+use App\Models\OPzVolunUserInfo;
 
 class VolunteerLeaderboard
 {
@@ -51,7 +51,7 @@ class VolunteerLeaderboard
             	'OP_zVolunEditsOvers.EditOverOnlineResearch', 
             	'OP_zVolunEditsOvers.EditOverMadeDeptCall', 
             	'OP_zVolunEditsOvers.EditOverMadeIACall')
-			->where('OP_zVolunEditsOvers.EditOverType', 169)
+			->where('OP_zVolunEditsOvers.EditOverType', 303)
             ->get();
 		if ($edits && sizeof($edits) > 0)
 		{

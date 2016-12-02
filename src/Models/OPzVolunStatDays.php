@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenPolice\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +11,21 @@ class OPzVolunStatDays extends Model
 	public $timestamps = true;
 	
 	protected $fillable = [
-		'VolunStatDate', 'VolunStatSignups', 'VolunStatLogins', 'VolunStatUsersUnique', 'VolunStatDeptsUnique', 
-		'VolunStatOnlineResearch', 'VolunStatCallsDept', 'VolunStatCallsIA', 'VolunStatCallsTot', 'VolunStatTotalEdits', 
-		'VolunStatOnlineResearchV', 'VolunStatCallsDeptV', 'VolunStatCallsIAV', 'VolunStatCallsTotV', 'VolunStatTotalEditsV', 
+		'VolunStatDate', 
+		'VolunStatSignups', 
+		'VolunStatLogins', 
+		'VolunStatUsersUnique', 
+		'VolunStatDeptsUnique', 
+		'VolunStatOnlineResearch', 
+		'VolunStatCallsDept', 
+		'VolunStatCallsIA', 
+		'VolunStatCallsTot', 
+		'VolunStatTotalEdits', 
+		'VolunStatOnlineResearchV', 
+		'VolunStatCallsDeptV', 
+		'VolunStatCallsIAV', 
+		'VolunStatCallsTotV', 
+		'VolunStatTotalEditsV', 
 	];
     
 }

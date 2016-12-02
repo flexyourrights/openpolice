@@ -27,6 +27,75 @@ class OpenPoliceSeeder extends Seeder
 			'RoleUserRID' 		=> '15'
 		]);
 		
+		
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'app-url')
+			->update([ 'DefDescription' => 'homestead.app' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'logo-url')
+			->update([ 'DefDescription' => 'homestead.app' ]);
+
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'cust-abbr')
+			->update([ 'DefDescription' => 'OpenPolice' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'site-name')
+			->update([ 'DefDescription' => 'Open Police' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'meta-title')
+			->update([ 'DefDescription' => 'Open Police Complaints: Share Your Story' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'meta-desc')
+			->update([ 'DefDescription' => 'Open Police Complaints helps victims of police misconduct create, save, and share first-rate digital police complaints. Let\'s make your story matter!' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'meta-keywords')
+			->update([ 'DefDescription' => 'Open Police, Open Police Complaints, Police Departments, Cops, Police, Officers, file complaint, submit, victims, accountability, #BlackLivesMatter, #BLM, transparency, open source' ]);
+
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'shortcut-icon')
+			->update([ 'DefDescription' => '/openpolice/logo-ico.png' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'logo-img-lrg')
+			->update([ 'DefDescription' => '/openpolice/logo-img-lrg.svg' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'logo-img-md')
+			->update([ 'DefDescription' => '/openpolice/logo-img-md.svg' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'logo-img-sm')
+			->update([ 'DefDescription' => '/openpolice/logo-img-sm.svg' ]);
+		DB::table('SL_Definitions')
+			->where('DefDatabase', 1)
+			->where('DefSet', 'System Settings')
+			->where('DefSubset', 'meta-img')
+			->update([ 'DefDescription' => '/openpolice/mata-img.png' ]);
+		
+		
+		
+		
+		
+		
 
 		DB::table('SL_Databases')->insert([
 			'DbID' => 1,
@@ -57,6 +126,8 @@ class OpenPoliceSeeder extends Seeder
 			'TreeType' => 'Primary Public Navigation',
 			'TreeName' => 'Open Police Complaint'
 		]);
+		
+		
 		
 		DB::table('SL_Tables')->insert([
 			'TblID' => 102,
@@ -17365,7 +17436,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeParentID' => '205',
 			'NodeType' => 'Data Manip: New',
 			'NodePromptText' => 'Create Wrongful Stop Allegation Record',
-			'NodeResponseSet' => '17',
+			'NodeResponseSet' => '117',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18063,7 +18134,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '210',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '30',
+			'NodeResponseSet' => '130',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18072,7 +18143,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '213',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '19',
+			'NodeResponseSet' => '119',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18081,7 +18152,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '218',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '20',
+			'NodeResponseSet' => '120',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18090,7 +18161,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '223',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '15',
+			'NodeResponseSet' => '115',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18099,7 +18170,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '228',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '16',
+			'NodeResponseSet' => '116',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18108,7 +18179,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '232',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '31',
+			'NodeResponseSet' => '131',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18117,7 +18188,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '235',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '24',
+			'NodeResponseSet' => '124',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18126,7 +18197,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '240',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '27',
+			'NodeResponseSet' => '127',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18135,7 +18206,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '427',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '32',
+			'NodeResponseSet' => '132',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18144,7 +18215,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '243',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '25',
+			'NodeResponseSet' => '125',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18153,7 +18224,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '248',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '26',
+			'NodeResponseSet' => '126',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18162,7 +18233,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '252',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '21',
+			'NodeResponseSet' => '121',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18171,7 +18242,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '256',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '22',
+			'NodeResponseSet' => '122',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18180,7 +18251,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '260',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '28',
+			'NodeResponseSet' => '128',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18189,7 +18260,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '261',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '29',
+			'NodeResponseSet' => '129',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18198,7 +18269,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '318',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '17',
+			'NodeResponseSet' => '117',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18207,7 +18278,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '333',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '19',
+			'NodeResponseSet' => '119',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18216,7 +18287,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '408',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '20',
+			'NodeResponseSet' => '120',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18225,7 +18296,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '353',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '15',
+			'NodeResponseSet' => '115',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18234,7 +18305,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '381',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '31',
+			'NodeResponseSet' => '131',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18243,7 +18314,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '383',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '16',
+			'NodeResponseSet' => '116',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18252,7 +18323,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '389',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '23',
+			'NodeResponseSet' => '123',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18261,7 +18332,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '397',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '24',
+			'NodeResponseSet' => '124',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18270,7 +18341,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '306',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '30',
+			'NodeResponseSet' => '130',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18279,7 +18350,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '311',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '18',
+			'NodeResponseSet' => '118',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -18298,7 +18369,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeParentID' => '3',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '204',
+			'NodeResponseSet' => '304',
 			'NodeDataBranch' => 'Complaints',
 			'NodeDataStore' => 'Complaints:ComPrivacy'
 		]);
@@ -18437,7 +18508,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeParentID' => '564',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: Update',
-			'NodeResponseSet' => '94',
+			'NodeResponseSet' => '194',
 			'NodeDataStore' => 'Complaints:ComStatus'
 		]);
 		DB::table('SL_Node')->insert([
@@ -18446,7 +18517,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeParentID' => '564',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: Update',
-			'NodeResponseSet' => '195',
+			'NodeResponseSet' => '295',
 			'NodeDataStore' => 'Complaints:ComType'
 		]);
 		DB::table('SL_Node')->insert([
@@ -18530,7 +18601,7 @@ This anonymous data will greatly help with efforts to improve police accountabil
 			'NodeTree' => '1',
 			'NodeParentID' => '591',
 			'NodeType' => 'Data Manip: New',
-			'NodeResponseSet' => '23',
+			'NodeResponseSet' => '123',
 			'NodeDataBranch' => 'Allegations',
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
@@ -19079,6 +19150,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeDefault' => 'N',
 			'NodeDataStore' => 'Civilians:CivIsCreator'
 		]);
+		
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1,
 			'NodeResNode' => '146',
@@ -19405,21 +19477,21 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 51,
 			'NodeResNode' => '138',
 			'NodeResEng' => '<b>Yes</b>, I am providing the information needed to formally submit this complaint to the relevant police oversight agency so they can properly investigate.  (Your complaint, including names, will be visible on the OPC website, but personal information w',
-			'NodeResValue' => '204'
+			'NodeResValue' => '304'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 52,
 			'NodeResNode' => '138',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '<b>Yes</b>, I am providing all of the above information, BUT do not want any names or personal information to appear on the OPC website.  (This includes both civilian and police officer names. <a href="#">Click here for an OPC website sample.</a>)<div cla',
-			'NodeResValue' => '205'
+			'NodeResValue' => '305'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 53,
 			'NodeResNode' => '138',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '<b>No</b>, I need my complaint to be completely anonymous.  (This will make it harder to investigate and prove your complaint. Neither OPC staff, nor investigators will be able to contact you. Any details which could be used for personal identification wi',
-			'NodeResValue' => '206'
+			'NodeResValue' => '306'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 55,
@@ -20070,21 +20142,21 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 178,
 			'NodeResNode' => '278',
 			'NodeResEng' => 'Workplace',
-			'NodeResValue' => '250'
+			'NodeResValue' => '350'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 179,
 			'NodeResNode' => '278',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Airport',
-			'NodeResValue' => '251'
+			'NodeResValue' => '351'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 180,
 			'NodeResNode' => '278',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Indoor Public Space',
-			'NodeResValue' => '253'
+			'NodeResValue' => '353'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 181,
@@ -21010,404 +21082,404 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 321,
 			'NodeResNode' => '450',
 			'NodeResEng' => '17',
-			'NodeResValue' => '17'
+			'NodeResValue' => '117'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 322,
 			'NodeResNode' => '43',
 			'NodeResEng' => 'Asian American',
-			'NodeResValue' => '218'
+			'NodeResValue' => '318'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 323,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Black or African American',
-			'NodeResValue' => '219'
+			'NodeResValue' => '319'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 324,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Hispanic or Latino',
-			'NodeResValue' => '220'
+			'NodeResValue' => '320'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 325,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Native American',
-			'NodeResValue' => '221'
+			'NodeResValue' => '321'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 326,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Pacific Islander',
-			'NodeResValue' => '222'
+			'NodeResValue' => '322'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 327,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'White',
-			'NodeResValue' => '223'
+			'NodeResValue' => '323'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 328,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '224'
+			'NodeResValue' => '324'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 329,
 			'NodeResNode' => '43',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Decline or Unknown',
-			'NodeResValue' => '225'
+			'NodeResValue' => '325'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 330,
 			'NodeResNode' => '49',
 			'NodeResEng' => 'Car',
-			'NodeResValue' => '255'
+			'NodeResValue' => '355'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 331,
 			'NodeResNode' => '49',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '256'
+			'NodeResValue' => '356'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 332,
 			'NodeResNode' => '49',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Boat',
-			'NodeResValue' => '257'
+			'NodeResValue' => '357'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 333,
 			'NodeResNode' => '49',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '258'
+			'NodeResValue' => '358'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 334,
 			'NodeResNode' => '67',
 			'NodeResEng' => '0-15',
-			'NodeResValue' => '1'
+			'NodeResValue' => '101'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 335,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '16-24',
-			'NodeResValue' => '2'
+			'NodeResValue' => '102'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 336,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '25-34',
-			'NodeResValue' => '3'
+			'NodeResValue' => '103'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 337,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '3',
 			'NodeResEng' => '35-44',
-			'NodeResValue' => '4'
+			'NodeResValue' => '104'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 338,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '4',
 			'NodeResEng' => '45-54',
-			'NodeResValue' => '5'
+			'NodeResValue' => '105'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 339,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '5',
 			'NodeResEng' => '55-64',
-			'NodeResValue' => '6'
+			'NodeResValue' => '106'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 340,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '6',
 			'NodeResEng' => '65-74',
-			'NodeResValue' => '7'
+			'NodeResValue' => '107'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 341,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '7',
 			'NodeResEng' => '75-84',
-			'NodeResValue' => '8'
+			'NodeResValue' => '108'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 342,
 			'NodeResNode' => '67',
 			'NodeResOrd' => '8',
 			'NodeResEng' => '85+',
-			'NodeResValue' => '9'
+			'NodeResValue' => '109'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 343,
 			'NodeResNode' => '74',
 			'NodeResEng' => 'Asian American',
-			'NodeResValue' => '218'
+			'NodeResValue' => '318'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 344,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Black or African American',
-			'NodeResValue' => '219'
+			'NodeResValue' => '319'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 345,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Hispanic or Latino',
-			'NodeResValue' => '220'
+			'NodeResValue' => '320'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 346,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Native American',
-			'NodeResValue' => '221'
+			'NodeResValue' => '321'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 347,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Pacific Islander',
-			'NodeResValue' => '222'
+			'NodeResValue' => '322'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 348,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'White',
-			'NodeResValue' => '223'
+			'NodeResValue' => '323'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 349,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '224'
+			'NodeResValue' => '324'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 350,
 			'NodeResNode' => '74',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Decline or Unknown',
-			'NodeResValue' => '225'
+			'NodeResValue' => '325'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 351,
 			'NodeResNode' => '79',
 			'NodeResEng' => 'Slim/Slender',
-			'NodeResValue' => '70'
+			'NodeResValue' => '170'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 352,
 			'NodeResNode' => '79',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Medium/Average',
-			'NodeResValue' => '71'
+			'NodeResValue' => '171'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 353,
 			'NodeResNode' => '79',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Athletic/Muscular',
-			'NodeResValue' => '72'
+			'NodeResValue' => '172'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 354,
 			'NodeResNode' => '79',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Large/Fat',
-			'NodeResValue' => '73'
+			'NodeResValue' => '173'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 355,
 			'NodeResNode' => '91',
 			'NodeResEng' => 'Car',
-			'NodeResValue' => '255'
+			'NodeResValue' => '355'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 356,
 			'NodeResNode' => '91',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '256'
+			'NodeResValue' => '356'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 357,
 			'NodeResNode' => '91',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Boat',
-			'NodeResValue' => '257'
+			'NodeResValue' => '357'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 358,
 			'NodeResNode' => '91',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '258'
+			'NodeResValue' => '358'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 359,
 			'NodeResNode' => '112',
 			'NodeResEng' => '0-15',
-			'NodeResValue' => '1'
+			'NodeResValue' => '101'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 360,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '16-24',
-			'NodeResValue' => '2'
+			'NodeResValue' => '102'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 361,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '25-34',
-			'NodeResValue' => '3'
+			'NodeResValue' => '103'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 362,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '3',
 			'NodeResEng' => '35-44',
-			'NodeResValue' => '4'
+			'NodeResValue' => '104'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 363,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '4',
 			'NodeResEng' => '45-54',
-			'NodeResValue' => '5'
+			'NodeResValue' => '105'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 364,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '5',
 			'NodeResEng' => '55-64',
-			'NodeResValue' => '6'
+			'NodeResValue' => '106'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 365,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '6',
 			'NodeResEng' => '65-74',
-			'NodeResValue' => '7'
+			'NodeResValue' => '107'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 366,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '7',
 			'NodeResEng' => '75-84',
-			'NodeResValue' => '8'
+			'NodeResValue' => '108'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 367,
 			'NodeResNode' => '112',
 			'NodeResOrd' => '8',
 			'NodeResEng' => '85+',
-			'NodeResValue' => '9'
+			'NodeResValue' => '109'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 368,
 			'NodeResNode' => '114',
 			'NodeResEng' => 'Asian American',
-			'NodeResValue' => '218'
+			'NodeResValue' => '318'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 369,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Black or African American',
-			'NodeResValue' => '219'
+			'NodeResValue' => '319'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 370,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Hispanic or Latino',
-			'NodeResValue' => '220'
+			'NodeResValue' => '320'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 371,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Native American',
-			'NodeResValue' => '221'
+			'NodeResValue' => '321'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 372,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Pacific Islander',
-			'NodeResValue' => '222'
+			'NodeResValue' => '322'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 373,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'White',
-			'NodeResValue' => '223'
+			'NodeResValue' => '323'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 374,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '224'
+			'NodeResValue' => '324'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 375,
 			'NodeResNode' => '114',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Decline or Unknown',
-			'NodeResValue' => '225'
+			'NodeResValue' => '325'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 376,
 			'NodeResNode' => '119',
 			'NodeResEng' => 'Slim/Slender',
-			'NodeResValue' => '70'
+			'NodeResValue' => '170'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 377,
 			'NodeResNode' => '119',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Medium/Average',
-			'NodeResValue' => '71'
+			'NodeResValue' => '171'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 378,
 			'NodeResNode' => '119',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Athletic/Muscular',
-			'NodeResValue' => '72'
+			'NodeResValue' => '172'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 379,
 			'NodeResNode' => '119',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Large/Fat',
-			'NodeResValue' => '73'
+			'NodeResValue' => '173'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 380,
@@ -21420,478 +21492,478 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '131',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '256'
+			'NodeResValue' => '356'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 382,
 			'NodeResNode' => '131',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Boat',
-			'NodeResValue' => '257'
+			'NodeResValue' => '357'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 383,
 			'NodeResNode' => '131',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '258'
+			'NodeResValue' => '358'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 393,
 			'NodeResNode' => '174',
 			'NodeResEng' => 'Asian American',
-			'NodeResValue' => '218'
+			'NodeResValue' => '318'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 394,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Black or African American',
-			'NodeResValue' => '219'
+			'NodeResValue' => '319'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 395,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Hispanic or Latino',
-			'NodeResValue' => '220'
+			'NodeResValue' => '320'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 396,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Native American',
-			'NodeResValue' => '221'
+			'NodeResValue' => '321'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 397,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Pacific Islander',
-			'NodeResValue' => '222'
+			'NodeResValue' => '322'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 398,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'White',
-			'NodeResValue' => '223'
+			'NodeResValue' => '323'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 399,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '224'
+			'NodeResValue' => '324'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 400,
 			'NodeResNode' => '174',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Decline or Unknown',
-			'NodeResValue' => '225'
+			'NodeResValue' => '325'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 401,
 			'NodeResNode' => '178',
 			'NodeResEng' => 'Slim/Slender',
-			'NodeResValue' => '70'
+			'NodeResValue' => '170'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 402,
 			'NodeResNode' => '178',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Medium/Average',
-			'NodeResValue' => '71'
+			'NodeResValue' => '171'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 403,
 			'NodeResNode' => '178',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Athletic/Muscular',
-			'NodeResValue' => '72'
+			'NodeResValue' => '172'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 404,
 			'NodeResNode' => '178',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Large/Fat',
-			'NodeResValue' => '73'
+			'NodeResValue' => '173'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 405,
 			'NodeResNode' => '189',
 			'NodeResEng' => 'Car',
-			'NodeResValue' => '260'
+			'NodeResValue' => '360'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 406,
 			'NodeResNode' => '189',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Van',
-			'NodeResValue' => '261'
+			'NodeResValue' => '361'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 407,
 			'NodeResNode' => '189',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '262'
+			'NodeResValue' => '362'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 408,
 			'NodeResNode' => '189',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '263'
+			'NodeResValue' => '363'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 409,
 			'NodeResNode' => '189',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Boat',
-			'NodeResValue' => '264'
+			'NodeResValue' => '364'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 410,
 			'NodeResNode' => '189',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '265'
+			'NodeResValue' => '365'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 417,
 			'NodeResNode' => '246',
 			'NodeResEng' => 'Baton',
-			'NodeResValue' => '182'
+			'NodeResValue' => '282'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 418,
 			'NodeResNode' => '246',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Taser',
-			'NodeResValue' => '183'
+			'NodeResValue' => '283'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 419,
 			'NodeResNode' => '246',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Gun',
-			'NodeResValue' => '184'
+			'NodeResValue' => '284'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 420,
 			'NodeResNode' => '246',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Mace or Pepper Spray',
-			'NodeResValue' => '185'
+			'NodeResValue' => '285'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 421,
 			'NodeResNode' => '246',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'K9 (Dog)',
-			'NodeResValue' => '186'
+			'NodeResValue' => '286'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 422,
 			'NodeResNode' => '246',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '187'
+			'NodeResValue' => '287'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 445,
 			'NodeResNode' => '339',
 			'NodeResEng' => 'Marijuana',
-			'NodeResValue' => '113'
+			'NodeResValue' => '213'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 446,
 			'NodeResNode' => '339',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Other Illegal Drugs (i.e. cocaine, MDMA, etc.)',
-			'NodeResValue' => '114'
+			'NodeResValue' => '214'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 447,
 			'NodeResNode' => '339',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Illegal Gun',
-			'NodeResValue' => '115'
+			'NodeResValue' => '215'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 448,
 			'NodeResNode' => '339',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Illegal Knife',
-			'NodeResValue' => '116'
+			'NodeResValue' => '216'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 449,
 			'NodeResNode' => '339',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Stolen Goods',
-			'NodeResValue' => '117'
+			'NodeResValue' => '217'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 450,
 			'NodeResNode' => '339',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '118'
+			'NodeResValue' => '218'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 451,
 			'NodeResNode' => '344',
 			'NodeResEng' => 'Hands/Arms',
-			'NodeResValue' => '143'
+			'NodeResValue' => '243'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 452,
 			'NodeResNode' => '344',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Body Weight',
-			'NodeResValue' => '144'
+			'NodeResValue' => '244'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 453,
 			'NodeResNode' => '344',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Knees',
-			'NodeResValue' => '145'
+			'NodeResValue' => '245'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 454,
 			'NodeResNode' => '344',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Feet/Legs',
-			'NodeResValue' => '146'
+			'NodeResValue' => '246'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 455,
 			'NodeResNode' => '345',
 			'NodeResEng' => 'Fist (Closed Hand)',
-			'NodeResValue' => '137'
+			'NodeResValue' => '237'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 456,
 			'NodeResNode' => '345',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Slap (Open Hand)',
-			'NodeResValue' => '138'
+			'NodeResValue' => '238'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 457,
 			'NodeResNode' => '345',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Kick (Feet)',
-			'NodeResValue' => '139'
+			'NodeResValue' => '239'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 458,
 			'NodeResNode' => '345',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Knee',
-			'NodeResValue' => '140'
+			'NodeResValue' => '240'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 459,
 			'NodeResNode' => '345',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Elbow',
-			'NodeResValue' => '141'
+			'NodeResValue' => '241'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 460,
 			'NodeResNode' => '345',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Head',
-			'NodeResValue' => '142'
+			'NodeResValue' => '242'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 461,
 			'NodeResNode' => '346',
 			'NodeResEng' => 'Hands',
-			'NodeResValue' => '147'
+			'NodeResValue' => '247'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 462,
 			'NodeResNode' => '346',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Tackle',
-			'NodeResValue' => '148'
+			'NodeResValue' => '248'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 463,
 			'NodeResNode' => '346',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Leg Sweep',
-			'NodeResValue' => '149'
+			'NodeResValue' => '249'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 464,
 			'NodeResNode' => '348',
 			'NodeResEng' => 'Lethal Ammo',
-			'NodeResValue' => '150'
+			'NodeResValue' => '250'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 465,
 			'NodeResNode' => '348',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Less-Lethal Ammo (e.g. rubber bullets, bean bag rounds)',
-			'NodeResValue' => '151'
+			'NodeResValue' => '251'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 492,
 			'NodeResNode' => '403',
 			'NodeResEng' => 'Cash',
-			'NodeResValue' => '208'
+			'NodeResValue' => '308'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 493,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Phone',
-			'NodeResValue' => '209'
+			'NodeResValue' => '309'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 494,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'TV',
-			'NodeResValue' => '210'
+			'NodeResValue' => '310'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 495,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Vehicle',
-			'NodeResValue' => '211'
+			'NodeResValue' => '311'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 496,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Real Estate',
-			'NodeResValue' => '212'
+			'NodeResValue' => '312'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 497,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Bank Account',
-			'NodeResValue' => '213'
+			'NodeResValue' => '313'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 498,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Boat',
-			'NodeResValue' => '214'
+			'NodeResValue' => '314'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 499,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Firearms',
-			'NodeResValue' => '215'
+			'NodeResValue' => '315'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 500,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '8',
 			'NodeResEng' => 'Identity Documents',
-			'NodeResValue' => '216'
+			'NodeResValue' => '316'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 501,
 			'NodeResNode' => '403',
 			'NodeResOrd' => '9',
 			'NodeResEng' => 'Other Items',
-			'NodeResValue' => '217'
+			'NodeResValue' => '317'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 502,
 			'NodeResNode' => '439',
 			'NodeResEng' => 'Full complaint to print or save',
-			'NodeResValue' => '298'
+			'NodeResValue' => '398'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 503,
 			'NodeResNode' => '439',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Anonymous complaint data only',
-			'NodeResValue' => '299'
+			'NodeResValue' => '399'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 504,
 			'NodeResNode' => '439',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Logout',
-			'NodeResValue' => '300'
+			'NodeResValue' => '400'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 505,
 			'NodeResNode' => '445',
 			'NodeResEng' => '0-15',
-			'NodeResValue' => '1'
+			'NodeResValue' => '101'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 506,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '16-24',
-			'NodeResValue' => '2'
+			'NodeResValue' => '102'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 507,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '25-34',
-			'NodeResValue' => '3'
+			'NodeResValue' => '103'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 508,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '3',
 			'NodeResEng' => '35-44',
-			'NodeResValue' => '4'
+			'NodeResValue' => '104'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 509,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '4',
 			'NodeResEng' => '45-54',
-			'NodeResValue' => '5'
+			'NodeResValue' => '105'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 510,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '5',
 			'NodeResEng' => '55-64',
-			'NodeResValue' => '6'
+			'NodeResValue' => '106'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 511,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '6',
 			'NodeResEng' => '65-74',
-			'NodeResValue' => '7'
+			'NodeResValue' => '107'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 512,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '7',
 			'NodeResEng' => '75-84',
-			'NodeResValue' => '8'
+			'NodeResValue' => '108'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 513,
 			'NodeResNode' => '445',
 			'NodeResOrd' => '8',
 			'NodeResEng' => '85+',
-			'NodeResValue' => '9'
+			'NodeResValue' => '109'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 514,
@@ -22102,7 +22174,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 546,
 			'NodeResNode' => '299',
 			'NodeResEng' => 'Walking Violation',
-			'NodeResValue' => '226',
+			'NodeResValue' => '326',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22110,7 +22182,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Disturbing the Peace',
-			'NodeResValue' => '227',
+			'NodeResValue' => '327',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22118,7 +22190,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Public Intoxication',
-			'NodeResValue' => '228',
+			'NodeResValue' => '328',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22126,7 +22198,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Illegal Drug Violation',
-			'NodeResValue' => '229',
+			'NodeResValue' => '329',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22134,7 +22206,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Suspected of Something Else',
-			'NodeResValue' => '230',
+			'NodeResValue' => '330',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22142,7 +22214,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Matched a Description of Someone',
-			'NodeResValue' => '231',
+			'NodeResValue' => '331',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22150,7 +22222,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Investigating Someone Else',
-			'NodeResValue' => '232',
+			'NodeResValue' => '332',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22158,7 +22230,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Providing Assistance/Responding to Call',
-			'NodeResValue' => '233',
+			'NodeResValue' => '333',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22166,7 +22238,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '8',
 			'NodeResEng' => 'Other Reason',
-			'NodeResValue' => '234',
+			'NodeResValue' => '334',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22174,13 +22246,13 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '299',
 			'NodeResOrd' => '9',
 			'NodeResEng' => 'Officer Did Not Give Reason For Stop',
-			'NodeResValue' => '235'
+			'NodeResValue' => '335'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 556,
 			'NodeResNode' => '297',
 			'NodeResEng' => 'Speeding',
-			'NodeResValue' => '236',
+			'NodeResValue' => '336',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22188,7 +22260,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Vehicle Defect',
-			'NodeResValue' => '237',
+			'NodeResValue' => '337',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22196,7 +22268,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Expired Registration',
-			'NodeResValue' => '238',
+			'NodeResValue' => '338',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22204,7 +22276,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'License Plate Violation',
-			'NodeResValue' => '239',
+			'NodeResValue' => '339',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22212,7 +22284,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Illegal Turn or Lane Change',
-			'NodeResValue' => '240',
+			'NodeResValue' => '340',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22220,7 +22292,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Seatbelt or Cell Phone Violation',
-			'NodeResValue' => '241',
+			'NodeResValue' => '341',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22228,7 +22300,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Stop Sign/Light Violation',
-			'NodeResValue' => '242',
+			'NodeResValue' => '342',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22236,7 +22308,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Driving While Impaired',
-			'NodeResValue' => '243',
+			'NodeResValue' => '343',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22244,7 +22316,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '8',
 			'NodeResEng' => 'Sobriety Checkpoint',
-			'NodeResValue' => '244',
+			'NodeResValue' => '344',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22252,7 +22324,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '9',
 			'NodeResEng' => 'Border Checkpoint',
-			'NodeResValue' => '245',
+			'NodeResValue' => '345',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22260,7 +22332,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '10',
 			'NodeResEng' => 'Other Reason',
-			'NodeResValue' => '246',
+			'NodeResValue' => '346',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22268,7 +22340,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '297',
 			'NodeResOrd' => '11',
 			'NodeResEng' => 'Officer Did Not Give Reason For Stop',
-			'NodeResValue' => '247'
+			'NodeResValue' => '347'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 568,
@@ -22421,21 +22493,21 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 590,
 			'NodeResNode' => '243',
 			'NodeResEng' => 'No or does not apply',
-			'NodeResValue' => '176'
+			'NodeResValue' => '276'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 591,
 			'NodeResNode' => '243',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '181'
+			'NodeResValue' => '281'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 592,
 			'NodeResNode' => '243',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '<span class="allegation">Displayed Weapon</span>',
-			'NodeResValue' => '177',
+			'NodeResValue' => '277',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22443,7 +22515,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '243',
 			'NodeResOrd' => '3',
 			'NodeResEng' => '<span class="allegation">Drew Weapon</span>',
-			'NodeResValue' => '178',
+			'NodeResValue' => '278',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22451,7 +22523,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '243',
 			'NodeResOrd' => '4',
 			'NodeResEng' => '<span class="allegation">Pointed Weapon</span>',
-			'NodeResValue' => '179',
+			'NodeResValue' => '279',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22459,7 +22531,7 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResNode' => '243',
 			'NodeResOrd' => '5',
 			'NodeResEng' => '<span class="allegation">Weapon Fired/Discharged</span>',
-			'NodeResValue' => '180',
+			'NodeResValue' => '280',
 			'NodeResShowKids' => '1'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -22554,42 +22626,42 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 656,
 			'NodeResNode' => '275',
 			'NodeResEng' => 'Outdoor public space (includes roads, sidewalks, parks, etc.)',
-			'NodeResValue' => '252'
+			'NodeResValue' => '352'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 657,
 			'NodeResNode' => '275',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Home, private residence, or dorm (includes just outside the residence)',
-			'NodeResValue' => '249'
+			'NodeResValue' => '349'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 658,
 			'NodeResNode' => '275',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'School',
-			'NodeResValue' => '304'
+			'NodeResValue' => '404'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 659,
 			'NodeResNode' => '275',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Workplace',
-			'NodeResValue' => '250'
+			'NodeResValue' => '350'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 660,
 			'NodeResNode' => '275',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Airport',
-			'NodeResValue' => '251'
+			'NodeResValue' => '351'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 661,
 			'NodeResNode' => '275',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Indoor public space',
-			'NodeResValue' => '253'
+			'NodeResValue' => '353'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 662,
@@ -22717,275 +22789,275 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 694,
 			'NodeResNode' => '392',
 			'NodeResEng' => 'Speeding',
-			'NodeResValue' => '74'
+			'NodeResValue' => '174'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 695,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Vehicle Defect',
-			'NodeResValue' => '75'
+			'NodeResValue' => '175'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 696,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Records Violation',
-			'NodeResValue' => '76'
+			'NodeResValue' => '176'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 697,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Illegal Turn or Lane Change',
-			'NodeResValue' => '77'
+			'NodeResValue' => '177'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 698,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Seatbelt or Cell Phone Violation',
-			'NodeResValue' => '78'
+			'NodeResValue' => '178'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 699,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Stop Sign/Light Violation',
-			'NodeResValue' => '79'
+			'NodeResValue' => '179'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 700,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Disorderly Conduct',
-			'NodeResValue' => '80'
+			'NodeResValue' => '180'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 701,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Disturbing the Peace',
-			'NodeResValue' => '81'
+			'NodeResValue' => '181'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 702,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '8',
 			'NodeResEng' => 'Loitering/Trespassing',
-			'NodeResValue' => '302'
+			'NodeResValue' => '402'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 703,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '9',
 			'NodeResEng' => 'Failure to Obey/Comply',
-			'NodeResValue' => '82'
+			'NodeResValue' => '182'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 704,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '10',
 			'NodeResEng' => 'Public Intoxication',
-			'NodeResValue' => '83'
+			'NodeResValue' => '183'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 705,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '11',
 			'NodeResEng' => 'Marijuana Possession',
-			'NodeResValue' => '84'
+			'NodeResValue' => '184'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 706,
 			'NodeResNode' => '392',
 			'NodeResOrd' => '12',
 			'NodeResEng' => 'Weapons Violation',
-			'NodeResValue' => '313'
+			'NodeResValue' => '413'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 707,
 			'NodeResNode' => '393',
 			'NodeResEng' => 'Walking Violation',
-			'NodeResValue' => '85'
+			'NodeResValue' => '185'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 708,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Disorderly Conduct',
-			'NodeResValue' => '86'
+			'NodeResValue' => '186'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 709,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Disturbing the Peace',
-			'NodeResValue' => '87'
+			'NodeResValue' => '187'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 710,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Failure to Obey/Comply',
-			'NodeResValue' => '88'
+			'NodeResValue' => '188'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 711,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Public Intoxication',
-			'NodeResValue' => '89'
+			'NodeResValue' => '189'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 712,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Loitering/Trespassing',
-			'NodeResValue' => '303'
+			'NodeResValue' => '403'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 713,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Marijuana Possession',
-			'NodeResValue' => '90'
+			'NodeResValue' => '190'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 714,
 			'NodeResNode' => '393',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Weapons Violation',
-			'NodeResValue' => '312'
+			'NodeResValue' => '412'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 715,
 			'NodeResNode' => '0',
 			'NodeResEng' => 'No or does not apply',
-			'NodeResValue' => '176'
+			'NodeResValue' => '276'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 716,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Displayed Weapon',
-			'NodeResValue' => '177'
+			'NodeResValue' => '277'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 717,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Drew Weapon',
-			'NodeResValue' => '178'
+			'NodeResValue' => '278'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 718,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Pointed Weapon',
-			'NodeResValue' => '179'
+			'NodeResValue' => '279'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 719,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Weapon Fired/Discharged',
-			'NodeResValue' => '180'
+			'NodeResValue' => '280'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 720,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '181'
+			'NodeResValue' => '281'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 727,
 			'NodeResNode' => '0',
 			'NodeResEng' => 'Baton',
-			'NodeResValue' => '182'
+			'NodeResValue' => '282'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 728,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Taser',
-			'NodeResValue' => '183'
+			'NodeResValue' => '283'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 729,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Gun',
-			'NodeResValue' => '184'
+			'NodeResValue' => '284'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 730,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Mace or Pepper Spray',
-			'NodeResValue' => '185'
+			'NodeResValue' => '285'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 731,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'K9 (Dog)',
-			'NodeResValue' => '186'
+			'NodeResValue' => '286'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 732,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '187'
+			'NodeResValue' => '287'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 733,
 			'NodeResNode' => '617',
 			'NodeResEng' => 'Gun',
-			'NodeResValue' => '315'
+			'NodeResValue' => '415'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 734,
 			'NodeResNode' => '617',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Knife',
-			'NodeResValue' => '316'
+			'NodeResValue' => '416'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 735,
 			'NodeResNode' => '617',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Other',
-			'NodeResValue' => '317'
+			'NodeResValue' => '417'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 742,
 			'NodeResNode' => '613',
 			'NodeResEng' => 'On Foot',
-			'NodeResValue' => '308'
+			'NodeResValue' => '408'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 743,
 			'NodeResNode' => '613',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'In Vehicles',
-			'NodeResValue' => '309'
+			'NodeResValue' => '409'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 744,
 			'NodeResNode' => '613',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Both',
-			'NodeResValue' => '310'
+			'NodeResValue' => '410'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 745,
 			'NodeResNode' => '613',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '314'
+			'NodeResValue' => '414'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 746,
@@ -23013,165 +23085,165 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 749,
 			'NodeResNode' => '0',
 			'NodeResEng' => 'No or does not apply',
-			'NodeResValue' => '176'
+			'NodeResValue' => '276'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 750,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Displayed Weapon',
-			'NodeResValue' => '177'
+			'NodeResValue' => '277'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 751,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Drew Weapon',
-			'NodeResValue' => '178'
+			'NodeResValue' => '278'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 752,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Pointed Weapon',
-			'NodeResValue' => '179'
+			'NodeResValue' => '279'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 753,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Weapon Fired/Discharged',
-			'NodeResValue' => '180'
+			'NodeResValue' => '280'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 754,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '181'
+			'NodeResValue' => '281'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 755,
 			'NodeResNode' => '618',
 			'NodeResEng' => 'No or does not apply',
-			'NodeResValue' => '176'
+			'NodeResValue' => '276'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 756,
 			'NodeResNode' => '618',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Displayed Weapon',
-			'NodeResValue' => '177'
+			'NodeResValue' => '277'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 757,
 			'NodeResNode' => '618',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Drew Weapon',
-			'NodeResValue' => '178'
+			'NodeResValue' => '278'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 758,
 			'NodeResNode' => '618',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Pointed Weapon',
-			'NodeResValue' => '179'
+			'NodeResValue' => '279'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 759,
 			'NodeResNode' => '618',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Weapon Fired/Discharged',
-			'NodeResValue' => '180'
+			'NodeResValue' => '280'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 760,
 			'NodeResNode' => '618',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '181'
+			'NodeResValue' => '281'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 761,
 			'NodeResNode' => '0',
 			'NodeResEng' => 'Fist (Closed Hand)',
-			'NodeResValue' => '137'
+			'NodeResValue' => '237'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 762,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Slap (Open Hand)',
-			'NodeResValue' => '138'
+			'NodeResValue' => '238'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 763,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Kick (Feet)',
-			'NodeResValue' => '139'
+			'NodeResValue' => '239'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 764,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Knee',
-			'NodeResValue' => '140'
+			'NodeResValue' => '240'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 765,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Elbow',
-			'NodeResValue' => '141'
+			'NodeResValue' => '241'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 766,
 			'NodeResNode' => '0',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Head',
-			'NodeResValue' => '142'
+			'NodeResValue' => '242'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 779,
 			'NodeResNode' => '620',
 			'NodeResEng' => 'Fist (Closed Hand)',
-			'NodeResValue' => '137'
+			'NodeResValue' => '237'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 780,
 			'NodeResNode' => '620',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Slap (Open Hand)',
-			'NodeResValue' => '138'
+			'NodeResValue' => '238'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 781,
 			'NodeResNode' => '620',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Kick (Feet)',
-			'NodeResValue' => '139'
+			'NodeResValue' => '239'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 782,
 			'NodeResNode' => '620',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Knee',
-			'NodeResValue' => '140'
+			'NodeResValue' => '240'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 783,
 			'NodeResNode' => '620',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Elbow',
-			'NodeResValue' => '141'
+			'NodeResValue' => '241'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 784,
 			'NodeResNode' => '620',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Head',
-			'NodeResValue' => '142'
+			'NodeResValue' => '242'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 785,
@@ -23407,126 +23479,127 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'NodeResID' => 818,
 			'NodeResNode' => '386',
 			'NodeResEng' => 'Assault on an Officer',
-			'NodeResValue' => '33'
+			'NodeResValue' => '133'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 819,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'Disorderly Conduct',
-			'NodeResValue' => '34'
+			'NodeResValue' => '134'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 820,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Disturbing the Peace',
-			'NodeResValue' => '35'
+			'NodeResValue' => '135'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 821,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '3',
 			'NodeResEng' => 'Loitering/Trespassing',
-			'NodeResValue' => '301'
+			'NodeResValue' => '401'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 822,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '4',
 			'NodeResEng' => 'Failure to Obey/Comply',
-			'NodeResValue' => '36'
+			'NodeResValue' => '136'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 823,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Obstructing/Interfering',
-			'NodeResValue' => '37'
+			'NodeResValue' => '137'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 824,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '6',
 			'NodeResEng' => 'Resisting Arrest',
-			'NodeResValue' => '38'
+			'NodeResValue' => '138'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 825,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '7',
 			'NodeResEng' => 'Public Intoxication',
-			'NodeResValue' => '39'
+			'NodeResValue' => '139'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 826,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '8',
 			'NodeResEng' => 'Marijuana Possession',
-			'NodeResValue' => '40'
+			'NodeResValue' => '140'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 827,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '9',
 			'NodeResEng' => 'Illegal Drugs Other Than Marijuana',
-			'NodeResValue' => '41'
+			'NodeResValue' => '141'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 828,
 			'NodeResNode' => '386',
 			'NodeResOrd' => '10',
 			'NodeResEng' => 'Weapons Violation',
-			'NodeResValue' => '311'
+			'NodeResValue' => '411'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 829,
 			'NodeResNode' => '173',
 			'NodeResEng' => '16-24',
-			'NodeResValue' => '2'
+			'NodeResValue' => '102'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 830,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '25-34',
-			'NodeResValue' => '3'
+			'NodeResValue' => '103'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 831,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '35-44',
-			'NodeResValue' => '4'
+			'NodeResValue' => '104'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 832,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '3',
 			'NodeResEng' => '45-54',
-			'NodeResValue' => '5'
+			'NodeResValue' => '105'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 833,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '4',
 			'NodeResEng' => '55-64',
-			'NodeResValue' => '6'
+			'NodeResValue' => '106'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 834,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '5',
 			'NodeResEng' => '65-74',
-			'NodeResValue' => '7'
+			'NodeResValue' => '107'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 835,
 			'NodeResNode' => '173',
 			'NodeResOrd' => '6',
 			'NodeResEng' => '75-84',
-			'NodeResValue' => '8'
+			'NodeResValue' => '108'
 		]);
+		
 		DB::table('SL_Conditions')->insert([
 			'CondID' => 1,
 			'CondTag' => '#NotAnonymized',

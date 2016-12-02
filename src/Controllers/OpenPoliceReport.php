@@ -1,7 +1,7 @@
 <?php
 namespace OpenPolice\Controllers;
 
-use OpenPolice\Models\OPBodyParts;
+use App\Models\OPBodyParts;
 
 use OpenPolice\Controllers\OpenPolice;
 
@@ -169,12 +169,12 @@ class OpenPoliceReport extends OpenPolice
 			$name = '';
 			if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
 				&& (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
-				|| $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 206) )
+				|| $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306) )
 			{
 				$name = '<span style="color: #000;" title="This complainant did not provide their name to investigators.">Complainant</span>';
 			}
 			elseif (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' 
-				&& ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate'))
+				&& ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["view"] == 'Investigate'))
 			{
 				$name = '<span style="color: #000;" title="This complainant wanted to publicly provide their name.">
 				' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast . '
@@ -197,7 +197,7 @@ class OpenPoliceReport extends OpenPolice
 		{
 			if (sizeof($prsn) == 0) list($prsn, $phys, $vehic) = $this->queuePeopleSubsets($off->OffID, 'Officers');
 			$name = '';
-			if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate')
+			if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["view"] == 'Investigate')
 			{
 				$name = trim($prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast);
 				if (trim($name) == '' && trim($off->OffBadgeNumber) != '' && trim($off->OffBadgeNumber) != '0')
@@ -345,7 +345,7 @@ class OpenPoliceReport extends OpenPolice
 		
 		$contactInfo = $this->printCivContact($prsn, $civ->CivID);
 		$name = $this->getCivReportName($civ->CivID);
-		if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 206 
+		if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306 
 			&& $civ->CivID == $this->sessData->dataSets["Civilians"][0]->CivID)
 		{
 			$name .= ' <span class="f12 nobld">(Anonymous)</span>';
@@ -422,15 +422,15 @@ class OpenPoliceReport extends OpenPolice
 	
 	protected function printCivContact($prsn, $civID)
 	{
-		if ($civID == $this->sessData->dataSets["Civilians"][0]->CivID && $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 206) return ' ';
+		if ($civID == $this->sessData->dataSets["Civilians"][0]->CivID && $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306) return ' ';
 		if ($this->v["view"] == 'Public')
 		{
-			$info = ((trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' && $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 204) 	? ', Name' : '')
+			$info = ((trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' && $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 304) 	? ', Name' : '')
 				. ((trim($prsn->PrsnAddress) != '') 		? ', Address' : '')
 				. ((trim($prsn->PrsnPhoneHome) != '') 		? ', Phone Number' : '') 
 				. ((trim($prsn->PrsnEmail) != '') 			? ', Email' : '') 
 				. ((trim($prsn->PrsnFacebook) != '') 		? ', Facebook' : '');
-			if (($civID != $this->sessData->dataSets["Civilians"][0]->CivID || $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 206)
+			if (($civID != $this->sessData->dataSets["Civilians"][0]->CivID || $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 306)
 				&& trim($info) != '')
 			{
 				return '<i class="gryA">Not public: ' . substr($info, 1) . '</i>';
@@ -457,7 +457,7 @@ class OpenPoliceReport extends OpenPolice
 		
 		$name = '<div class="f20 pB10"><b>' . $this->getOffReportName($off) . '</b></div>';
 		
-		if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate') 
+		if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["view"] == 'Investigate') 
 		{ 	// then name or badge number (if provided) should appear in official name
 			if (trim($prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast) != ''
 				&& trim($off->OffBadgeNumber) != '' && intVal($off->OffBadgeNumber) > 0)
@@ -499,7 +499,7 @@ class OpenPoliceReport extends OpenPolice
 		{
 			if (trim($vehic->VehicTransportation) != '')$deets[] = '<span>Transportation:</span></td><td>'.$GLOBALS["DB"]->getDefValue('Transportation Officer', $vehic->VehicTransportation);
 			if (trim($vehic->VehicVehicleDesc) != '') 	$deets[] = '<span>Vehicle Description:</span></td><td>'.$vehic->VehicVehicleDesc;
-			if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 204 || $this->v["view"] == 'Investigate') 
+			if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["view"] == 'Investigate') 
 			{
 				if (trim($vehic->VehicVehicleNumber) != '') $deets[] = '<span>Vehicle Number:</span></td><td>'.$vehic->VehicVehicleNumber;
 				if (trim($vehic->VehicVehicleLicence) != '')$deets[] = '<span>License Plate:</span></td><td>'.$vehic->VehicVehicleLicence;
@@ -860,7 +860,7 @@ class OpenPoliceReport extends OpenPolice
 		{
 			$deets1[] = '<i>Doctor Information...</i>';
 			$name = trim($injCare->InjCareDoctorNameFirst . ' ' . $injCare->InjCareDoctorNameLast);
-			if ($this->v["view"] == 'Public' && in_array($this->sessData->dataSets["Complaints"][0]->ComPrivacy, [205, 206, 207]))
+			if ($this->v["view"] == 'Public' && in_array($this->sessData->dataSets["Complaints"][0]->ComPrivacy, [305, 306, 207]))
 			{
 				if ($name != '') $deets1[] = '<span>Name:</span></td><td><i class="gry6">Not public</i>';
 				if (trim($injCare->InjCareDoctorEmail) != '') 		$deets1[] = '<span>Email:</span></td><td><i class="gry6">Not public</i>';
@@ -880,7 +880,7 @@ class OpenPoliceReport extends OpenPolice
 			$deets2[] = '<i>Emergency Medical Staff...</i>';
 			if (trim($injCare->InjCareEmergencyDeptName) != '') 	$deets2[] = '<span>Department Name:</span></td><td>'.$injCare->InjCareEmergencyDeptName;
 			$name = trim($injCare->InjCareEmergencyNameFirst . ' ' . $injCare->InjCareEmergencyNameLast);
-			if ($this->v["view"] == 'Public' && in_array($this->sessData->dataSets["Complaints"][0]->ComPrivacy, [205, 206, 207]))
+			if ($this->v["view"] == 'Public' && in_array($this->sessData->dataSets["Complaints"][0]->ComPrivacy, [305, 306, 207]))
 			{
 				if ($name != '') $deets2[] = '<span>Name:</span></td><td><i class="gry6">Not public</i>';
 				if (trim($injCare->InjCareEmergencyIDnumber) != '') 	$deets2[] = '<span>ID#:</span></td><td><i class="gry6">Not public</i>';

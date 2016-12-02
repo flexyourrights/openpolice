@@ -10,8 +10,8 @@
 	<div class="div mT10 pT10 pB20 f22">
 		<label for="n138fld0">
 			<h2>
-				<input type="radio" name="n138fld" id="n138fld0" class="mR10" autocomplete="off" value="204" 
-					@if ($ComPrivacy == 204) CHECKED @endif  >
+				<input type="radio" name="n138fld" id="n138fld0" class="mR10" autocomplete="off" value="304" 
+					@if ($ComPrivacy == 304) CHECKED @endif  >
 				Full Transparency
 			</h2>
 			<div class="pL20">
@@ -23,8 +23,8 @@
 	<div class="pB20 f22">
 		<label for="n138fld1">
 			<h2 class="mT10">
-				<input type="radio" name="n138fld" id="n138fld1" class="mR10" autocomplete="off" value="205" 
-					@if ($ComPrivacy == 205) CHECKED @endif  >
+				<input type="radio" name="n138fld" id="n138fld1" class="mR10" autocomplete="off" value="305" 
+					@if ($ComPrivacy == 305) CHECKED @endif  >
 				No Names Public
 			</h2>
 			<div class="pL20">
@@ -39,8 +39,8 @@
 	<div class="pB20 f22">
 		<label for="n138fld2">
 			<h2 class="mT10">
-				<input type="radio" name="n138fld" id="n138fld2" class="mR10" autocomplete="off" value="206" 
-					@if ($ComPrivacy == 206) CHECKED @endif  >
+				<input type="radio" name="n138fld" id="n138fld2" class="mR10" autocomplete="off" value="306" 
+					@if ($ComPrivacy == 306) CHECKED @endif  >
 				Anonymous
 			</h2>
 			<div class="pL20">
