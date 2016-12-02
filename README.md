@@ -46,7 +46,7 @@ $ nano composer.json
 "require": {
 	...
     "wikiworldorder/survloop": "0.*",
-    "wikiworldorder/openpolice": "dev-master",
+    "wikiworldorder/openpolice": "0.*",
 	...
 },
 ...
@@ -107,8 +107,7 @@ $ nano config/auth.php
 $ php artisan vendor:publish --force
 $ php artisan migrate
 $ composer dump-autoload
-$ php artisan db:seed --class=SurvLoopSeeder
-$ php artisan db:seed --class=OpenPoliceSeeder
+$ php artisan db:seed
 ```
 
 * Log into Open Police admin dashboard...
