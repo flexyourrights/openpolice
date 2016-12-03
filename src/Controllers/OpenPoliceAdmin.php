@@ -249,9 +249,10 @@ class OpenPoliceAdmin extends AdminSubsController
 	
 	public function dashboardDefault(Request $request)
 	{
-		if (!$this->v["user"]->hasRole('administrator|staff|databaser|brancher'))
+		$user = Auth::user();
+		if (!$user->hasRole('administrator|staff|databaser|brancher'))
 		{
-			if ($this->v["user"]->hasRole('volunteer'))
+			if ($user->hasRole('volunteer'))
 			{
 				return redirect('/volunteer');
 			}
