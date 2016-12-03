@@ -91,11 +91,6 @@ class OpenPoliceSeeder extends Seeder
 			->where('DefSubset', 'meta-img')
 			->update([ 'DefDescription' => '/openpolice/mata-img.png' ]);
 		
-		
-		
-		
-		
-		
 
 		DB::table('SL_Databases')->insert([
 			'DbID' => 1,
@@ -104,14 +99,15 @@ class OpenPoliceSeeder extends Seeder
 			'DbName' => 'Open Police Complaints',
 			'DbDesc' => 'The nation\'s most trusted police complaints service',
 			'DbMission' => 'The purpose of the Open Police Complaints (OPC) database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States.',
-			'DbOpts' => '2',
 			'DbTables' => '47',
 			'DbFields' => '496'
 		]);
+		
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 1,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
+			'TreeType' => 'Primary Public',
 			'TreeName' => 'Open Police Complaint',
 			'TreeRootURL' => 'https://app.openpolicecomplaints.org',
 			'TreeRoot' => '3',
@@ -123,7 +119,7 @@ class OpenPoliceSeeder extends Seeder
 			'TreeID' => 2,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
-			'TreeType' => 'Primary Public Navigation',
+			'TreeType' => 'Primary Public XML',
 			'TreeName' => 'Open Police Complaint'
 		]);
 		
@@ -25014,17 +25010,17 @@ Next, you can edit the original story you wrote. Be sure to include these allega
 			'CondNodeNodeID' => '491'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 163,
+			'CondNodeID' => 164,
 			'CondNodeCondID' => '45',
 			'CondNodeNodeID' => '501'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 163,
+			'CondNodeID' => 165,
 			'CondNodeCondID' => '45',
 			'CondNodeNodeID' => '507'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 163,
+			'CondNodeID' => 166,
 			'CondNodeCondID' => '45',
 			'CondNodeNodeID' => '513'
 		]);
