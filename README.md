@@ -1,5 +1,5 @@
 
-# WikiWorldOrder/OpenPolice
+# FlexYourRights/OpenPolice
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.3-orange.svg?style=flat-square)](http://laravel.com)
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
@@ -46,7 +46,7 @@ $ nano composer.json
 "require": {
 	...
     "wikiworldorder/survloop": "0.*",
-    "wikiworldorder/openpolice": "0.*",
+    "flexyourrights/openpolice": "0.*",
 	...
 },
 ...
@@ -55,7 +55,7 @@ $ nano composer.json
 	"psr-4": {
 		...
 		"SurvLoop\\": "vendor/wikiworldorder/survloop/src/",
-		"OpenPolice\\": "vendor/wikiworldorder/openpolice/src/",
+		"OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
 	}
 	...
 },

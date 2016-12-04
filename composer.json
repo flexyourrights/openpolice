@@ -1,5 +1,5 @@
 {
-    "name": "wikiworldorder/openpolice",
+    "name": "flexyourrights/openpolice",
     "description": "The purpose of the Open Police database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States. Open Police is built using SurvLoop, atop Laravel.",
     "keywords": [
     	"Open Police",
@@ -19,7 +19,7 @@
     "authors": [
         {
             "name": "Morgan Lesko",
-            "homepage": "https://github.com/wikiworldorder/openpolice",
+            "homepage": "https://github.com/flexyourrights/openpolice",
             "email": "morgan@flexyourrights.org",
             "role": "Developer"
         }
