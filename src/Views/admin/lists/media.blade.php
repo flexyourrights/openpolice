@@ -5,10 +5,10 @@
 @section('content')
 
 <h1>
-	<i class="fa fa-list-ul"></i> Journalists
-	@if ($journalists && sizeof($journalists) > 0)
-		<nobr><span class="f14">({{ number_format(sizeof($journalists)) }})</span></nobr>
-	@endif
+    <i class="fa fa-list-ul"></i> Journalists
+    @if ($journalists && sizeof($journalists) > 0)
+        <nobr><span class="f14">({{ number_format(sizeof($journalists)) }})</span></nobr>
+    @endif
 </h1>
 
 <div class="p5"></div>

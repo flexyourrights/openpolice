@@ -5,17 +5,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPScenes extends Model
 {
-	protected $table 		= 'OP_Scenes';
-	protected $primaryKey 	= 'ScnID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'ScnComplaintID', 
-		'ScnIsVehicle', 
-		'ScnType', 
-		'ScnDescription', 
-		'ScnForcibleEntry', 
-		'ScnCCTV', 
-		'ScnCCTVDesc', 
-	];
+    protected $table         = 'OP_Scenes';
+    protected $primaryKey     = 'ScnID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'ScnComplaintID', 
+        'ScnIsVehicle', 
+        'ScnType', 
+        'ScnDescription', 
+        'ScnForcibleEntry', 
+        'ScnCCTV', 
+        'ScnCCTVDesc', 
+    ];
 }

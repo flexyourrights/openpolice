@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPForceSubType extends Model
 {
-	protected $table 		= 'OP_ForceSubType';
-	protected $primaryKey 	= 'ForceSubID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'ForceSubForceID', 
-		'ForceSubType', 
-	];
+    protected $table         = 'OP_ForceSubType';
+    protected $primaryKey     = 'ForceSubID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'ForceSubForceID', 
+        'ForceSubType', 
+    ];
 }

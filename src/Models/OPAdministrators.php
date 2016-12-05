@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPAdministrators extends Model
 {
-	protected $table 		= 'OP_Administrators';
-	protected $primaryKey 	= 'AdmID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'AdmUserID', 
-		'AdmPersonID', 
-		'AdmBio', 
-	];
+    protected $table         = 'OP_Administrators';
+    protected $primaryKey     = 'AdmID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'AdmUserID', 
+        'AdmPersonID', 
+        'AdmBio', 
+    ];
 }

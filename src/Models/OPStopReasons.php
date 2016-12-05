@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPStopReasons extends Model
 {
-	protected $table 		= 'OP_StopReasons';
-	protected $primaryKey 	= 'StopReasID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'StopReasStopID', 
-		'StopReasReason', 
-	];
+    protected $table         = 'OP_StopReasons';
+    protected $primaryKey     = 'StopReasID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'StopReasStopID', 
+        'StopReasReason', 
+    ];
 }

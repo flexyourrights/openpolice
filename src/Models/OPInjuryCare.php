@@ -5,26 +5,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPInjuryCare extends Model
 {
-	protected $table 		= 'OP_InjuryCare';
-	protected $primaryKey 	= 'InjCareID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'InjCareSubjectID', 
-		'InjCareResultInDeath', 
-		'InjCareTimeOfDeath', 
-		'InjCareGotMedical', 
-		'InjCareHospitalTreated', 
-		'InjCareDoctorNameFirst', 
-		'InjCareDoctorNameLast', 
-		'InjCareDoctorEmail', 
-		'InjCareDoctorPhone', 
-		'InjCareEmergencyOnScene', 
-		'InjCareEmergencyNameFirst', 
-		'InjCareEmergencyNameLast', 
-		'InjCareEmergencyIDnumber', 
-		'InjCareEmergencyVehicleNumber', 
-		'InjCareEmergencyLicenceNumber', 
-		'InjCareEmergencyDeptName', 
-	];
+    protected $table         = 'OP_InjuryCare';
+    protected $primaryKey     = 'InjCareID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'InjCareSubjectID', 
+        'InjCareResultInDeath', 
+        'InjCareTimeOfDeath', 
+        'InjCareGotMedical', 
+        'InjCareHospitalTreated', 
+        'InjCareDoctorNameFirst', 
+        'InjCareDoctorNameLast', 
+        'InjCareDoctorEmail', 
+        'InjCareDoctorPhone', 
+        'InjCareEmergencyOnScene', 
+        'InjCareEmergencyNameFirst', 
+        'InjCareEmergencyNameLast', 
+        'InjCareEmergencyIDnumber', 
+        'InjCareEmergencyVehicleNumber', 
+        'InjCareEmergencyLicenceNumber', 
+        'InjCareEmergencyDeptName', 
+    ];
 }

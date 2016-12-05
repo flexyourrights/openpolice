@@ -5,19 +5,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksComplaintOversight extends Model
 {
-	protected $table 		= 'OP_LinksComplaintOversight';
-	protected $primaryKey 	= 'LnkComOverID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'LnkComOverComplaintID', 
-		'LnkComOverOverID', 
-		'LnkComOverSubmitted', 
-		'LnkComOverStillNoResponse', 
-		'LnkComOverReceived', 
-		'LnkComOverInvestigating', 
-		'LnkComOverReportDate', 
-		'LnkComOverOversightReportEvidenceID', 
-		'LnkComOverAgencyComplaintNumber', 
-	];
+    protected $table         = 'OP_LinksComplaintOversight';
+    protected $primaryKey     = 'LnkComOverID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'LnkComOverComplaintID', 
+        'LnkComOverOverID', 
+        'LnkComOverSubmitted', 
+        'LnkComOverStillNoResponse', 
+        'LnkComOverReceived', 
+        'LnkComOverInvestigating', 
+        'LnkComOverReportDate', 
+        'LnkComOverOversightReportEvidenceID', 
+        'LnkComOverAgencyComplaintNumber', 
+    ];
 }

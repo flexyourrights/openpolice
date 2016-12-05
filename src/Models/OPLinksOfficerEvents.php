@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksOfficerEvents extends Model
 {
-	protected $table 		= 'OP_LinksOfficerEvents';
-	protected $primaryKey 	= 'LnkOffEveID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'LnkOffEveOffID', 
-		'LnkOffEveEveID', 
-	];
+    protected $table         = 'OP_LinksOfficerEvents';
+    protected $primaryKey     = 'LnkOffEveID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'LnkOffEveOffID', 
+        'LnkOffEveEveID', 
+    ];
 }

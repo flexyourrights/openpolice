@@ -25,7 +25,8 @@ Open Police is built using SurvLoop, atop Laravel.
 
 # <a name="getting-started"></a>Getting Started
 
-Here are instructions if you are new to Laravel, or just want step-by-step instructions on how to install its development environment, Homestead: <a href="http://wikiworldorder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/" target="_blank">WikiWorldOrder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/</a>.
+Here are instructions if you are new to Laravel, or just want step-by-step instructions on how to install its development environment, Homestead: 
+<a href="https://OpenPoliceComplaints.org/how-to-install-laravel/" target="_blank">OpenPoliceComplaints.org/how-to-install-laravel/</a>.
 
 The instructions below include the needed steps to install SurvLoop, as well as the Open Police system.
 

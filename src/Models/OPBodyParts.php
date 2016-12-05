@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPBodyParts extends Model
 {
-	protected $table 		= 'OP_BodyParts';
-	protected $primaryKey 	= 'BodyID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'BodyForceID', 
-		'BodyInjuryID', 
-		'BodyPart', 
-	];
+    protected $table         = 'OP_BodyParts';
+    protected $primaryKey     = 'BodyID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'BodyForceID', 
+        'BodyInjuryID', 
+        'BodyPart', 
+    ];
 }

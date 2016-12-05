@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPrivilegeProfiles extends Model
 {
-	protected $table 		= 'OP_PrivilegeProfiles';
-	protected $primaryKey 	= 'PrivID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'PrivUserID', 
-		'PrivComplaintID', 
-		'PrivDeptID', 
-		'PrivAccessLevel', 
-	];
+    protected $table         = 'OP_PrivilegeProfiles';
+    protected $primaryKey     = 'PrivID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'PrivUserID', 
+        'PrivComplaintID', 
+        'PrivDeptID', 
+        'PrivAccessLevel', 
+    ];
 }

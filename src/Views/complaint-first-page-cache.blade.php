@@ -7,10 +7,10 @@
 
 
 <a name="navBar"></a><div id="burgerBar"><a id="navBurger" href="#navBar"><i class="fa fa-bars"></i></a></div>
-		<div id="navSummary"><nobr><a href="/" class="f18">Sharing Your Story</a></nobr> 
-		<nobr>: <a href="javascript:void(0)" id="navJump1" class="f16">Basic Info</a></nobr><nobr> : <a id="jump157" href="javascript:void(0)" class="navJump f14">Tell Your Story</a></nobr>
-		<div id="percWrap"><div id="percMark" style="width: 1%;"></div></div>
-		</div><div class="fC"></div><div id="progressBar"><ul>
+        <div id="navSummary"><nobr><a href="/" class="f18">Sharing Your Story</a></nobr> 
+        <nobr>: <a href="javascript:void(0)" id="navJump1" class="f16">Basic Info</a></nobr><nobr> : <a id="jump157" href="javascript:void(0)" class="navJump f14">Tell Your Story</a></nobr>
+        <div id="percWrap"><div id="percMark" style="width: 1%;"></div></div>
+        </div><div class="fC"></div><div id="progressBar"><ul>
 <li><a href="javascript:void(0)" id="jump1" class="navJump f18 progBarCurr">Basic Info</a>
  :  <a href="javascript:void(0)" id="jump157" class="navJump f16 progBarCurr">Tell Your Story</a>
 , <span class="progSectDisable f16">When</span>
@@ -32,16 +32,16 @@
 , <span class="progSectDisable f16">Submit Complaint</span>
 </li></ul></div><div class="p5 w100"></div>
 <div style="min-height: 20px;"><div id="legendReq" class="fR taR slRedDark">*required</div>
-		<div id="setNavHintRemove" class="fR">remove <span class="nFormLnkDel"><i class="fa fa-minus-square-o"></i></span></div>
-		<div id="setNavHintEdit" class="fR">edit <span class="nFormLnkEdit"><i class="fa fa-pencil fa-flip-horizontal"></i></span></div>
-		<div class="fC"></div></div>
-		<form id="postNodeForm" name="postNode" method="post" action="#"  >
-		<input type="hidden" name="node" id="nodeID" value="1">
-		<input type="hidden" name="set" id="setID" value="">
-		<input type="hidden" name="setItem" id="setItemID" value="-3">
-		<input type="hidden" name="step" id="stepID" value="next">
-		<input type="hidden" name="jumpTo" id="jumpToID" value="-3">
-		<input type="hidden" name="afterJumpTo" id="afterJumpToID" value="-3">
+        <div id="setNavHintRemove" class="fR">remove <span class="nFormLnkDel"><i class="fa fa-minus-square-o"></i></span></div>
+        <div id="setNavHintEdit" class="fR">edit <span class="nFormLnkEdit"><i class="fa fa-pencil fa-flip-horizontal"></i></span></div>
+        <div class="fC"></div></div>
+        <form id="postNodeForm" name="postNode" method="post" action="#"  >
+        <input type="hidden" name="node" id="nodeID" value="1">
+        <input type="hidden" name="set" id="setID" value="">
+        <input type="hidden" name="setItem" id="setItemID" value="-3">
+        <input type="hidden" name="step" id="stepID" value="next">
+        <input type="hidden" name="jumpTo" id="jumpToID" value="-3">
+        <input type="hidden" name="afterJumpTo" id="afterJumpToID" value="-3">
 <input type="hidden" name="n1Visible" id="n1VisibleID" value="1"><div class="fC"></div><div><div id="node1" class="nodeWrap">
 
 <div id="nLabel1" class="nPrompt"><label for="n1FldID"><span class="slRedDark">*</span> <div class="nPromptHeader disIn">Your Story Matters</div><br />Tell us the simplest version of the story of what happened DURING this police encounter. Later, you will provide more details about the people involved. Focus on the facts more than your feelings, or anything unrelated. Don't worry about spelling and grammar now, because you can review this draft at the end of the process.</label></div>
@@ -53,29 +53,29 @@
 addFld("n1FldID"); 
 
 function checkNodeForm() {
-	if (document.getElementById("stepID").value == "back") return true;
-	totFormErrors=0; formErrorsEng = "";
+    if (document.getElementById("stepID").value == "back") return true;
+    totFormErrors=0; formErrorsEng = "";
 if (document.getElementById('n1VisibleID').value == 1) reqFormFld(1);
 
-	if (totFormErrors > 0) { setFormErrs(); return false; }
-	else { clearFormErrs(); }
-	return true; 
+    if (totFormErrors > 0) { setFormErrs(); return false; }
+    else { clearFormErrs(); }
+    return true; 
 }
 $(function() {
-	function runFormSub() {
-		$("#ajaxWrap").slideUp(100); 
-		window.location="#"; blurAllFlds();
-		$.ajax({ type: "POST", url: "?ajax=1&sub=1", data: $("#postNodeForm").serialize(), success: function(data) { $("#ajaxWrap").empty(); $("#ajaxWrap").append(data); } });
-		return false;
-	}
-	$("#nFormBack").click(function() { document.getElementById("stepID").value="back";  return runFormSub(); });
-	$("#nFormNext").click(function() { if (checkNodeForm()) { runFormSub(); } return false; });
-	
-	$(document).on("click", "a.navJump", function() {
-		document.getElementById("jumpToID").value = $(this).attr("id").replace("jump", ""); return runFormSub(); 
-	});
-				$("#navBurger").click(function(){ $("#progressBar").slideToggle("slow"); });
-				$(".privacyJump").click(function() { document.getElementById("jumpToID").value="137"; document.getElementById("afterJumpToID").value="1"; return runFormSub(); });
+    function runFormSub() {
+        $("#ajaxWrap").slideUp(100); 
+        window.location="#"; blurAllFlds();
+        $.ajax({ type: "POST", url: "?ajax=1&sub=1", data: $("#postNodeForm").serialize(), success: function(data) { $("#ajaxWrap").empty(); $("#ajaxWrap").append(data); } });
+        return false;
+    }
+    $("#nFormBack").click(function() { document.getElementById("stepID").value="back";  return runFormSub(); });
+    $("#nFormNext").click(function() { if (checkNodeForm()) { runFormSub(); } return false; });
+    
+    $(document).on("click", "a.navJump", function() {
+        document.getElementById("jumpToID").value = $(this).attr("id").replace("jump", ""); return runFormSub(); 
+    });
+                $("#navBurger").click(function(){ $("#progressBar").slideToggle("slow"); });
+                $(".privacyJump").click(function() { document.getElementById("jumpToID").value="137"; document.getElementById("afterJumpToID").value="1"; return runFormSub(); });
 nodeKidList[1] = new Array();
  
 });

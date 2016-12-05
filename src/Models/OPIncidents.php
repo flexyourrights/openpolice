@@ -5,22 +5,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPIncidents extends Model
 {
-	protected $table 		= 'OP_Incidents';
-	protected $primaryKey 	= 'IncID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'IncComplaintID', 
-		'IncAddress', 
-		'IncAddress2', 
-		'IncAddressCity', 
-		'IncAddressState', 
-		'IncAddressZip', 
-		'IncAddressLat', 
-		'IncAddressLng', 
-		'IncLandmarks', 
-		'IncTimeStart', 
-		'IncTimeEnd', 
-		'IncDuration', 
-	];
+    protected $table         = 'OP_Incidents';
+    protected $primaryKey     = 'IncID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'IncComplaintID', 
+        'IncAddress', 
+        'IncAddress2', 
+        'IncAddressCity', 
+        'IncAddressState', 
+        'IncAddressZip', 
+        'IncAddressLat', 
+        'IncAddressLng', 
+        'IncLandmarks', 
+        'IncTimeStart', 
+        'IncTimeEnd', 
+        'IncDuration', 
+    ];
 }

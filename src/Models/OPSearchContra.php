@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPSearchContra extends Model
 {
-	protected $table 		= 'OP_SearchContra';
-	protected $primaryKey 	= 'SrchConID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'SrchConSearchID', 
-		'SrchConType', 
-	];
+    protected $table         = 'OP_SearchContra';
+    protected $primaryKey     = 'SrchConID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'SrchConSearchID', 
+        'SrchConType', 
+    ];
 }

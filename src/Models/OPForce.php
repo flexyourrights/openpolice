@@ -5,25 +5,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPForce extends Model
 {
-	protected $table 		= 'OP_Force';
-	protected $primaryKey 	= 'ForID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'ForEventSequenceID', 
-		'ForAgainstAnimal', 
-		'ForAnimalDesc', 
-		'ForType', 
-		'ForTypeOther', 
-		'ForGunAmmoType', 
-		'ForGunDesc', 
-		'ForHowManyTimes', 
-		'ForOrdersBeforeForce', 
-		'ForOrdersSubjectResponse', 
-		'ForWhileHandcuffed', 
-		'ForWhileHeldDown', 
-		'ForOfficerInjured', 
-		'ForOfficerInjuredDesc', 
-		'ForAllegUnreasonable', 
-	];
+    protected $table         = 'OP_Force';
+    protected $primaryKey     = 'ForID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'ForEventSequenceID', 
+        'ForAgainstAnimal', 
+        'ForAnimalDesc', 
+        'ForType', 
+        'ForTypeOther', 
+        'ForGunAmmoType', 
+        'ForGunDesc', 
+        'ForHowManyTimes', 
+        'ForOrdersBeforeForce', 
+        'ForOrdersSubjectResponse', 
+        'ForWhileHandcuffed', 
+        'ForWhileHeldDown', 
+        'ForOfficerInjured', 
+        'ForOfficerInjuredDesc', 
+        'ForAllegUnreasonable', 
+    ];
 }

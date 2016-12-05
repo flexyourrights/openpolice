@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPVehicles extends Model
 {
-	protected $table 		= 'OP_Vehicles';
-	protected $primaryKey 	= 'VehicID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'VehicTransportation', 
-		'VehicVehicleMake', 
-		'VehicVehicleModel', 
-		'VehicVehicleDesc', 
-		'VehicVehicleLicence', 
-		'VehicVehicleNumber', 
-	];
+    protected $table         = 'OP_Vehicles';
+    protected $primaryKey     = 'VehicID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'VehicTransportation', 
+        'VehicVehicleMake', 
+        'VehicVehicleModel', 
+        'VehicVehicleDesc', 
+        'VehicVehicleLicence', 
+        'VehicVehicleNumber', 
+    ];
 }

@@ -5,26 +5,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPEvidence extends Model
 {
-	protected $table 		= 'OP_Evidence';
-	protected $primaryKey 	= 'EvidID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'EvidComplaintID', 
-		'EvidType', 
-		'EvidPrivacy', 
-		'EvidDateTime', 
-		'EvidTitle', 
-		'EvidEvidenceDesc', 
-		'EvidUploadFile', 
-		'EvidStoredFile', 
-		'EvidVideoLink', 
-		'EvidVideoDuration', 
-		'EvidCivilianID', 
-		'EvidDeptID', 
-		'EvidSceneID', 
-		'EvidEventSequenceID', 
-		'EvidInjuryID', 
-		'EvidNoteID', 
-	];
+    protected $table         = 'OP_Evidence';
+    protected $primaryKey     = 'EvidID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'EvidComplaintID', 
+        'EvidType', 
+        'EvidPrivacy', 
+        'EvidDateTime', 
+        'EvidTitle', 
+        'EvidEvidenceDesc', 
+        'EvidUploadFile', 
+        'EvidStoredFile', 
+        'EvidVideoLink', 
+        'EvidVideoDuration', 
+        'EvidCivilianID', 
+        'EvidDeptID', 
+        'EvidSceneID', 
+        'EvidEventSequenceID', 
+        'EvidInjuryID', 
+        'EvidNoteID', 
+    ];
 }

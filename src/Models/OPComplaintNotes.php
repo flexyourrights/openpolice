@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPComplaintNotes extends Model
 {
-	protected $table 		= 'OP_ComplaintNotes';
-	protected $primaryKey 	= 'NoteID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'NoteComplaintID', 
-		'NoteUserID', 
-		'NoteTimestamp', 
-		'NoteContent', 
-	];
+    protected $table         = 'OP_ComplaintNotes';
+    protected $primaryKey     = 'NoteID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'NoteComplaintID', 
+        'NoteUserID', 
+        'NoteTimestamp', 
+        'NoteContent', 
+    ];
 }

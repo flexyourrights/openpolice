@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksOfficerVehicles extends Model
 {
-	protected $table 		= 'OP_LinksOfficerVehicles';
-	protected $primaryKey 	= 'LnkOffVehicID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'LnkOffVehicOffID', 
-		'LnkOffVehicVehicID', 
-		'LnkOffVehicRole', 
-	];
+    protected $table         = 'OP_LinksOfficerVehicles';
+    protected $primaryKey     = 'LnkOffVehicID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'LnkOffVehicOffID', 
+        'LnkOffVehicVehicID', 
+        'LnkOffVehicRole', 
+    ];
 }

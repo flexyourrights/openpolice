@@ -5,31 +5,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPSearches extends Model
 {
-	protected $table 		= 'OP_Searches';
-	protected $primaryKey 	= 'SrchID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'SrchEventSequenceID', 
-		'SrchStatedReason', 
-		'SrchStatedReasonDesc', 
-		'SrchOfficerRequest', 
-		'SrchOfficerRequestDesc', 
-		'SrchSubjectConsent', 
-		'SrchSubjectSay', 
-		'SrchOfficerThreats', 
-		'SrchOfficerThreatsDesc', 
-		'SrchStrip', 
-		'SrchStripSearchDesc', 
-		'SrchK9sniff', 
-		'SrchContrabandDiscovered', 
-		'SrchOfficerWarrant', 
-		'SrchOfficerWarrantSay', 
-		'SrchSeized', 
-		'SrchSeizedDesc', 
-		'SrchDamage', 
-		'SrchDamageDesc', 
-		'SrchAllegWrongfulSearch', 
-		'SrchAllegWrongfulProperty', 
-	];
+    protected $table         = 'OP_Searches';
+    protected $primaryKey     = 'SrchID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'SrchEventSequenceID', 
+        'SrchStatedReason', 
+        'SrchStatedReasonDesc', 
+        'SrchOfficerRequest', 
+        'SrchOfficerRequestDesc', 
+        'SrchSubjectConsent', 
+        'SrchSubjectSay', 
+        'SrchOfficerThreats', 
+        'SrchOfficerThreatsDesc', 
+        'SrchStrip', 
+        'SrchStripSearchDesc', 
+        'SrchK9sniff', 
+        'SrchContrabandDiscovered', 
+        'SrchOfficerWarrant', 
+        'SrchOfficerWarrantSay', 
+        'SrchSeized', 
+        'SrchSeizedDesc', 
+        'SrchDamage', 
+        'SrchDamageDesc', 
+        'SrchAllegWrongfulSearch', 
+        'SrchAllegWrongfulProperty', 
+    ];
 }

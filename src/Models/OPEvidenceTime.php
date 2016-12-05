@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPEvidenceTime extends Model
 {
-	protected $table 		= 'OP_EvidenceTime';
-	protected $primaryKey 	= 'EviTimID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'EviTimAllegationID', 
-		'EviTimEvidenceID', 
-		'EviTimTimestamp', 
-		'EviTimDescription', 
-	];
+    protected $table         = 'OP_EvidenceTime';
+    protected $primaryKey     = 'EviTimID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'EviTimAllegationID', 
+        'EviTimEvidenceID', 
+        'EviTimTimestamp', 
+        'EviTimDescription', 
+    ];
 }

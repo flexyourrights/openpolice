@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPCharges extends Model
 {
-	protected $table 		= 'OP_Charges';
-	protected $primaryKey 	= 'ChrgID';
-	public $timestamps 		= true;
-	protected $fillable 	= 
-	[	
-		'ChrgArrestID', 
-		'ChrgStopID', 
-		'ChrgCharges', 
-	];
+    protected $table         = 'OP_Charges';
+    protected $primaryKey     = 'ChrgID';
+    public $timestamps         = true;
+    protected $fillable     = 
+    [    
+        'ChrgArrestID', 
+        'ChrgStopID', 
+        'ChrgCharges', 
+    ];
 }
