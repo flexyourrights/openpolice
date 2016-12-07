@@ -26,13 +26,10 @@ class VolunteerLeaderboard
                     ->from('SL_UsersRoles')
                     ->get();            
         })->get();
-        if ($volunteers && sizeof($volunteers) > 0)
-        {
-            foreach ($volunteers as $u)
-            {
+        if ($volunteers && sizeof($volunteers) > 0) {
+            foreach ($volunteers as $u) {
                 $chk = OPzVolunUserInfo::find($u->id);
-                if (!$chk || sizeof($chk) == 0)
-                {
+                if (!$chk || sizeof($chk) == 0) {
                     $tmp = new OPzVolunUserInfo;
                     $tmp->UserInfoUserID = $u->id;
                     $tmp->save();
@@ -53,32 +50,35 @@ class VolunteerLeaderboard
                 'OP_zVolunEditsOvers.EditOverMadeIACall')
             ->where('OP_zVolunEditsOvers.EditOverType', 303)
             ->get();
-        if ($edits && sizeof($edits) > 0)
-        {
-            foreach ($edits as $edit)
-            {
-                if (!isset($tally[$edit->EditOverUser]))
-                {
+        if ($edits && sizeof($edits) > 0) {
+            foreach ($edits as $edit) {
+                if (!isset($tally[$edit->EditOverUser])) {
                     $userTots[$edit->EditOverUser] = array(0, 0, 0, 0, 0);
                     $tally[$edit->EditOverUser] = array();
                 }
-                if (!isset($tally[$edit->EditOverUser][$edit->EditOverDeptID]))                     $tally[$edit->EditOverUser][$edit->EditOverDeptID] = array(0, 0, 0, 0);
-                if ($edit->EditOverOnlineResearch && intVal($edit->EditOverOnlineResearch) > 0)     $tally[$edit->EditOverUser][$edit->EditOverDeptID][0] = 1;
-                if ($edit->EditOverMadeDeptCall && intVal($edit->EditOverMadeDeptCall) > 0)         $tally[$edit->EditOverUser][$edit->EditOverDeptID][1] = 1;
-                if ($edit->EditOverMadeIACall && intVal($edit->EditOverMadeIACall) > 0)             $tally[$edit->EditOverUser][$edit->EditOverDeptID][2] = 1;
-                if ($edit->EditDeptPageTime && intVal($edit->EditDeptPageTime) > 0)                 $tally[$edit->EditOverUser][$edit->EditOverDeptID][3] += intVal($edit->EditDeptPageTime);
+                if (!isset($tally[$edit->EditOverUser][$edit->EditOverDeptID])) {
+                    $tally[$edit->EditOverUser][$edit->EditOverDeptID] = array(0, 0, 0, 0);
+                }
+                if ($edit->EditOverOnlineResearch && intVal($edit->EditOverOnlineResearch) > 0) {
+                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][0] = 1;
+                }
+                if ($edit->EditOverMadeDeptCall && intVal($edit->EditOverMadeDeptCall) > 0) {
+                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][1] = 1;
+                }
+                if ($edit->EditOverMadeIACall && intVal($edit->EditOverMadeIACall) > 0) {
+                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][2] = 1;
+                }
+                if ($edit->EditDeptPageTime && intVal($edit->EditDeptPageTime) > 0) {
+                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][3] += intVal($edit->EditDeptPageTime);
+                }
             }
         }
-        if (sizeof($tally) > 0)
-        {
-            foreach ($tally as $uID => $depts)
-            {
+        if (sizeof($tally) > 0) {
+            foreach ($tally as $uID => $depts) {
                 $userTots[$uID][3] = sizeof($depts);
                 $totDeptTime = 0;
-                if (sizeof($depts) > 0)
-                {
-                    foreach ($depts as $deptID => $t)
-                    {
+                if (sizeof($depts) > 0) {
+                    foreach ($depts as $deptID => $t) {
                         $userTots[$uID][0] += $t[0];
                         $userTots[$uID][1] += $t[1];
                         $userTots[$uID][2] += $t[2];
