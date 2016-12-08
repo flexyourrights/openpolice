@@ -15,7 +15,7 @@
 
 <div class="well">
     <b>Adding A User:</b> Use the public volunteer sign up form 
-    (<a href="/register" target="_blank">/auth/register</a>, while logged out, easiest in a separate browser) 
+    (<a href="/register" target="_blank">/register</a>, while logged out, easiest in a separate browser) 
     to first create the new user. Then reload this page and change their privileges here as needed.
 </div>
 
@@ -37,11 +37,16 @@
     @forelse ($userSet as $volun)
         <tr>
             <td><b>{!! $volun->printUsername(true, '/dashboard/volun/user/') !!}</b></td>
-            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" value="volunteer" @if ($volun->hasRole('volunteer')) CHECKED @endif ></td>
-            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" value="staff" {{ $disableAdmin }} @if ($volun->hasRole('staff')) CHECKED @endif ></td>
-            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" value="brancher" {{ $disableAdmin }} @if ($volun->hasRole('brancher')) CHECKED @endif ></td>
-            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" value="databaser" {{ $disableAdmin }} @if ($volun->hasRole('databaser')) CHECKED @endif ></td>
-            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" value="administrator" {{ $disableAdmin }} @if ($volun->hasRole('administrator')) CHECKED @endif ></td>
+            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" 
+                value="volunteer" @if ($volun->hasRole('volunteer')) CHECKED @endif ></td>
+            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" 
+                value="staff" {{ $disableAdmin }} @if ($volun->hasRole('staff')) CHECKED @endif ></td>
+            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" 
+                value="brancher" {{ $disableAdmin }} @if ($volun->hasRole('brancher')) CHECKED @endif ></td>
+            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" 
+                value="databaser" {{ $disableAdmin }} @if ($volun->hasRole('databaser')) CHECKED @endif ></td>
+            <td class="taC"><input type="checkbox" name="user{{ $volun->id }}[]" 
+                value="administrator" {{ $disableAdmin }} @if ($volun->hasRole('administrator')) CHECKED @endif ></td>
             <td><a href="mailto:{{ $volun->email }}">{{ str_replace('@', ' @', $volun->email) }}</a></td>
         </tr>
     @empty

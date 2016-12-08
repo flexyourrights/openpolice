@@ -15900,7 +15900,7 @@ Amazing job! Thank you so much for sharing your story. You should receive emails
 <div class="p20"></div>
 <a href="#" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-floppy-o"></i></div> Save Your Complaint</a>
 <div class="p20"></div>
-<a href="/auth/logout" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-sign-out"></i></div> Logout</a>
+<a href="/logout" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-sign-out"></i></div> Logout</a>
 <div class="p20"></div>
 <a href="#" class="facebookShareBig" target="_blank"><div class="disIn f32 pR5"><i class="fa fa-facebook-square"></i></div> Share On Police Department\'s Facebook Page</a>'
         ]);

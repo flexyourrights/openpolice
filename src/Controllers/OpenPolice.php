@@ -2207,8 +2207,8 @@ class OpenPolice extends SurvFormTree
     
     public function allegationsList(Request $request)
     {
-        $this->v["content"] = view( 'vendor.openpolice.allegations' );
-        return view( 'vendor.survloop.master', $this->v );
+        $this->v["content"] = view('vendor.openpolice.allegations' );
+        return view('vendor.survloop.master', $this->v);
     }
     
     

@@ -56,9 +56,9 @@ class OpenPoliceReport extends OpenPolice
         }
         
         $whoBlocks = [
-            "Subjects"         => [], 
-            "Witnesses"     => [], 
-            "Officers"         => []
+            "Subjects"  => [], 
+            "Witnesses" => [], 
+            "Officers"  => []
         ];
         if ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Helper') {
             $whoBlocks["Subjects"][] = '<div class="reportSectHead">Complainant:</div>' 
@@ -605,8 +605,9 @@ class OpenPoliceReport extends OpenPolice
                 }
             }
         }
-        return view( 'vendor.openpolice.complaint-report-what-hap', [ "allegs" => $allegs, "deets" => $deets, 
-            "eventDesc" => $this->reportEventTitle($incEve) ] )->render();
+        return view('vendor.openpolice.complaint-report-what-hap', [ "allegs" => $allegs, "deets" => $deets, 
+            "eventDesc" => $this->reportEventTitle($incEve) 
+        ])->render();
     }
     
     // similar to printEventSequenceLine($eveSeq), but with Report-driven names
@@ -699,8 +700,7 @@ class OpenPoliceReport extends OpenPolice
                 . $this->printYN($event->StopRequestOfficerID);
         }
         if (trim($event->StopOfficerRefuseID) != '') {
-            $deets[] = '<span>Officer Refuse To Give ID?</span></td><td>' 
-                . $this->printYN($event->StopOfficerRefuseID);
+            $deets[] = '<span>Officer Refuse To Give ID?</span></td><td>' . $this->printYN($event->StopOfficerRefuseID);
         }
         if (trim($event->StopSubjectFrisk) != '') {
             $deets[] = '<span>Subject Frisked?</span></td><td>' . $this->printYN($event->StopSubjectFrisk);
@@ -713,7 +713,9 @@ class OpenPoliceReport extends OpenPolice
             /*
             if (sizeof($this->sessData->dataSets["Injuries"]["Handcuff"]) > 0) {
                 foreach ($this->sessData->dataSets["Injuries"]["Handcuff"] as $inj) {
-                    if ($inj->InjID == $event->StopSubjectHandcuffInjury && trim($inj->InjDescription) != '') $desc .= ', ' . $inj->InjDescription;
+                    if ($inj->InjID == $event->StopSubjectHandcuffInjury && trim($inj->InjDescription) != '') {
+                        $desc .= ', ' . $inj->InjDescription;
+                    }
                 }
             }
             */

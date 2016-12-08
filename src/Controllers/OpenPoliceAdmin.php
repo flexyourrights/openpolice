@@ -65,104 +65,279 @@ class OpenPoliceAdmin extends AdminSubsController
     public function loadAdmMenu()
     {
         if (isset($this->v["user"])) {
-            list($treeName, $dbName) = $this->loadDbTreeShortNames();
+            list($treeMenu, $dbMenu) = $this->loadAdmMenuBasics();
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 return [
-                    ['/dashboard',    'Dashboard', 1, []], 
-                    ['javascript:;',    'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>', 1, [
-                            ['/dashboard/complaints',            'Requiring Action',        1, []], 
-                            ['/dashboard/complaints/me',         'Assigned To Me',          1, []], 
-                            ['/dashboard/complaints/waiting',    'Waiting',                 1, []], 
-                            ['/dashboard/complaints/all',        'All Complete',            1, []], 
-                            ['/dashboard/complaints/incomplete', 'Incomplete Sessions',     1, []], 
-                            ['/dashboard/complaints/emails',     'Settings & Emails',       1, []]
-                    ]], 
-                    ['javascript:;',    'Volunteering <span class="pull-right"><i class="fa fa-users"></i></span>', 1, [
-                            ['/dashboard/volun',                 'Recent Department Edits', 1, []], 
-                            ['/dashboard/volun/stars',           'List of Volunteers',      1, []], 
-                            ['/volunteer',                       'Departments Dashboard',   1, []], 
-                            ['/volunteer/nextDept',              'Verify A Department',     1, []], 
-                            ['/dashboard/instruct',              'Edit Instructions',       1, []]
-                    ]], 
-                    ['javascript:;',    'Directories <span class="pull-right"><i class="fa fa-list-ul"></i></span>', 1, [
-                            ['/dashboard/officers',              'Police Officers',         1, []], 
-                            ['/dashboard/depts',                 'Police Departments',      1, []], 
-                            ['/dashboard/overs',                 'Oversight Agencies',      1, []], 
-                            ['javascript:;',                     'Other Contacts',          1, [
-                                ['/dashboard/legal',             'Attorneys',               1, []], 
-                                ['/dashboard/academic',          'Academic',                1, []], 
-                                ['/dashboard/media',             'Journalists',             1, []]
-                            ]]
-                    ]], 
-                    ['javascript:;',    'Form-Tree <span class="pull-right"><i class="fa fa-tree"></i></span>', 1, [
-                            ['/dashboard/tree/switch', '<i>Current: ' . $treeName . '</i>', 1, []], 
-                            ['/dashboard/tree/map?all=1',        'Experience Map',          1, []],
-                            ['/dashboard/tree/conds',            'Conditions / Filters',    1, []],
-                            ['/dashboard/tree/data',             'Data Structures',         1, []],
-                            ['/dashboard/tree/xmlmap',           'Data XML Map',            1, []],
-                            ['/dashboard/tree/workflows',        'Workflows',               1, []],
-                            ['/test" target="_blank',            'Test OPC',                1, []], 
-                            ['/dashboard/tree/stats?all=1',      'Response Stats',          1, []],
-                            ['/dashboard/tree',                  'Session Stats',           1, []] 
-                    ]], 
-                    ['javascript:;',    'Database Design <span class="pull-right"><i class="fa fa-database"></i></span>', 1, [
-                            ['/dashboard/db/switch', '<i>Current: ' . $dbName . '</i>',     1, []], 
-                            ['/dashboard/db/all',                'Database Design',         1, []], 
-                            ['/dashboard/db/bus-rules',          'Business Rules',          1, []], 
-                            ['/dashboard/db/definitions',        'Definitions',             1, []],
-                            ['/dashboard/db',                    'Tables Overview',         1, []], 
-                            ['/dashboard/db/diagrams',           'Table Diagrams',          1, []],
-                            ['/dashboard/db/field-matrix',       'Field Matrix',            1, []],
-                            ['/dashboard/db/export',             'Export / Install',        1, []]
-                    ]]
+                    [
+                        '/dashboard',
+                        'Dashboard',
+                        1,
+                        []
+                    ], [
+                        'javascript:;',
+                        'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>',
+                        1,
+                        [
+                            [
+                                '/dashboard/complaints',
+                                'Requiring Action',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/complaints/me',
+                                'Assigned To Me',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/complaints/waiting',
+                                'Waiting',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/complaints/all',
+                                'All Complete',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/complaints/incomplete',
+                                'Incomplete Sessions',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/complaints/emails',
+                                'Settings & Emails',
+                                1,
+                                []
+                            ]
+                        ]
+                    ], [
+                        'javascript:;',
+                        'Volunteering <span class="pull-right"><i class="fa fa-users"></i></span>',
+                        1,
+                        [
+                            [
+                                '/dashboard/volun',
+                                'Recent Department Edits',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/volun/stars',
+                                'List of Volunteers',
+                                1,
+                                []
+                            ], [
+                                '/volunteer',
+                                'Departments Dashboard',
+                                1,
+                                []
+                            ], [
+                                '/volunteer/nextDept',
+                                'Verify A Department',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/instruct',
+                                'Edit Instructions',
+                                1,
+                                []
+                            ]
+                        ]
+                    ], [
+                        'javascript:;',
+                        'Directories <span class="pull-right"><i class="fa fa-list-ul"></i></span>',
+                        1,
+                        [
+                            [
+                                '/dashboard/officers',
+                                'Police Officers',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/depts',
+                                'Police Departments',
+                                1,
+                                []
+                            ], [
+                                '/dashboard/overs',
+                                'Oversight Agencies',
+                                1,
+                                []
+                            ], [
+                                'javascript:;',
+                                'Other Contacts',
+                                1,
+                                [
+                                    [
+                                        '/dashboard/legal',
+                                        'Attorneys',
+                                        1,
+                                        []
+                                    ], [
+                                        '/dashboard/academic',
+                                        'Academic',
+                                        1,
+                                        []
+                                    ], [
+                                        '/dashboard/media',
+                                        'Journalists',
+                                        1,
+                                        []
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ], 
+                    $treeMenu,
+                    $dbMenu
                 ];
             } elseif ($this->v["user"]->hasRole('volunteer')) {
                 return [
-                    ['/volunteer',            'Police Departments <span class="pull-right"><i class="fa fa-list-ul"></i></span>', 1, []], 
-                    ['/volunteer/nextDept',    'Verify A Department <span class="pull-right"><i class="fa fa-check"></i></span>', 1, []], 
-                    ['/volunteer/stars',     'You Have [[score]] Stars <span class="pull-right"><img src="/openpolice/star1.png" height=20 border=0 style="margin-top: -5px;" ></span>', 1, []]
+                    [
+                        '/volunteer',
+                        'Police Departments <span class="pull-right"><i class="fa fa-list-ul"></i></span>',
+                        1,
+                        []
+                    ], [
+                        '/volunteer/nextDept',
+                        'Verify A Department <span class="pull-right"><i class="fa fa-check"></i></span>',
+                        1,
+                        []
+                    ], [
+                        '/volunteer/stars',
+                        'You Have [[score]] Stars <span class="pull-right"><img src="/openpolice/star1.png" height=20 '
+                             . 'border=0 style="margin-top: -5px;" ></span>',
+                        1,
+                        []
+                    ]
                 ];
             }
         }
-        return [['/dashboard',    'Dashboard', 1, []]];
+        return [
+            [
+                '/dashboard',
+                'Dashboard',
+                1,
+                []
+            ]
+        ];
     }
     
     protected function tweakAdmMenu($currPage = '')
     {
         if (strpos($currPage, '/dashboard/complaint/' . $this->coreID . '') !== false 
             && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
-            $this->admMenuData = array( "adminNav" => [], "currNavPos" => [] );
+            $this->admMenuData = [
+                "adminNav" => [],
+                "currNavPos" => []
+            ];
             $this->admMenuData["adminNav"] = [
-                ['/dashboard/complaints',    'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>', 1, []], 
-                ['javascript:;',    'Complaint #' . $this->coreID, 1, [
-                        ['/dashboard/complaint/' . $this->coreID,              'View Complaint',          1, []], 
-                        ['/dashboard/complaint/' . $this->coreID . '/review',  'Review This Complaint',   1, []], 
-                        ['/dashboard/complaint/' . $this->coreID . '/emails',  'Send Complaint Emails',   1, []],
-                        ['/dashboard/complaint/' . $this->coreID . '/update',  'Update Complaint Status', 1, []], 
-                        ['/dashboard/complaint/' . $this->coreID . '/history', 'View Past Reviews',       1, []] 
-                ]]
+                [
+                    '/dashboard/complaints',
+                    'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>',
+                    1,
+                    []
+                ], [
+                    'javascript:;',
+                    'Complaint #' . $this->coreID,
+                    1,
+                    [
+                        [
+                            '/dashboard/complaint/' . $this->coreID,
+                            'View Complaint',
+                            1,
+                            []
+                        ], [
+                            '/dashboard/complaint/' . $this->coreID . '/review',
+                            'Review This Complaint',
+                            1,
+                            []
+                        ], [
+                            '/dashboard/complaint/' . $this->coreID . '/emails',
+                            'Send Complaint Emails',
+                            1,
+                            []
+                        ], [
+                            '/dashboard/complaint/' . $this->coreID . '/update',
+                            'Update Complaint Status',
+                            1,
+                            []
+                        ], [
+                            '/dashboard/complaint/' . $this->coreID . '/history',
+                            'View Past Reviews',
+                            1,
+                            []
+                        ] 
+                    ]
+                ]
             ];
         } elseif (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["currNavPos"] = array(2, 3, -1, -1);
+                $this->admMenuData["currNavPos"] = [2, 3, -1, -1];
             } else {
-                $this->admMenuData["currNavPos"] = array(1, -1, -1, -1);
+                $this->admMenuData["currNavPos"] = [1, -1, -1, -1];
             }
-            $volunteeringSubMenu = ['javascript:;" id="navBtnContact0',    '<b>Verifying Department</b>', 1, [
-                ['javascript:;" id="navBtnContact',    '&nbsp;&nbsp;Contact Info         <div id="currContact" class="disIn pull-right mL20"><i class="fa fa-chevron-right"></i></div>',         1, []], 
-                ['javascript:;" id="navBtnWeb',        '&nbsp;&nbsp;Web & Complaints     <div id="currWeb" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',         1, []], 
-                ['javascript:;" id="navBtnIA',        '&nbsp;&nbsp;Internal Affairs     <div id="currIA" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',     1, []], 
-                ['javascript:;" id="navBtnOver',    '&nbsp;&nbsp;Civilian Oversight <div id="currOver" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',     1, []], 
-                ['javascript:;" id="navBtnSave',    '<span class="btn btn-lg btn-primary">Save All Changes <i class="fa fa-floppy-o"></i></span>', 1, []], 
-                ['javascript:;" id="navBtnEdits',     '<span class="gry9">&nbsp;&nbsp;Past Edits:</span> ' 
-                                                    . ((isset($this->v["editsSummary"][1])) ? $this->v["editsSummary"][1]: '') 
-                                                    . '<div id="currEdits" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>', 1, []], 
-                ['javascript:;" id="navBtnCheck',     '<span class="gry9">&nbsp;&nbsp;Volunteer Checklist</span> <div id="currCheck" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>', 1, []], 
-                ['javascript:;" id="navBtnPhone',    '<span class="gry9">&nbsp;&nbsp;Sample Phone Script</span>',     1, []], 
-                ['javascript:;" id="navBtnFAQ',    '<span class="gry9">&nbsp;&nbsp;Frequently Asked <i class="fa fa-question"></i>s</span> <div id="currFAQ" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',     1, []]
-            ]];
-            if ($this->v["user"]->hasRole('administrator') || $this->v["user"]->hasRole('staff') 
-                || $this->v["user"]->hasRole('databaser')) {
+            $volunteeringSubMenu = [
+                'javascript:;" id="navBtnContact0',
+                '<b>Verifying Department</b>',
+                1,
+                [
+                    [
+                        'javascript:;" id="navBtnContact',
+                        '&nbsp;&nbsp;Contact Info <div id="currContact" class="disIn pull-right mL20">'
+                            . '<i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnWeb',
+                        '&nbsp;&nbsp;Web & Complaints <div id="currWeb" class="disNon pull-right mL20">'
+                             . '<i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnIA',
+                        '&nbsp;&nbsp;Internal Affairs <div id="currIA" class="disNon pull-right mL20">'
+                            . '<i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnOver',
+                        '&nbsp;&nbsp;Civilian Oversight <div id="currOver" class="disNon pull-right mL20">'
+                            . '<i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnSave',
+                        '<span class="btn btn-lg btn-primary">Save All Changes <i class="fa fa-floppy-o"></i></span>', 
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnEdits',
+                        '<span class="gry9">&nbsp;&nbsp;Past Edits:</span> ' 
+                            . ((isset($this->v["editsSummary"][1])) ? $this->v["editsSummary"][1]: '') . '<div id="currEdits" '
+                            . 'class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnCheck',
+                        '<span class="gry9">&nbsp;&nbsp;Volunteer Checklist</span> <div id="currCheck" '
+                            . 'class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnPhone',
+                        '<span class="gry9">&nbsp;&nbsp;Sample Phone Script</span>',
+                        1,
+                        []
+                    ], [
+                        'javascript:;" id="navBtnFAQ',
+                        '<span class="gry9">&nbsp;&nbsp;Frequently Asked <i class="fa fa-question"></i>s</span> <div '
+                            . 'id="currFAQ" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        1,
+                        []
+                    ]
+                ]
+            ];
+            if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["adminNav"][2][3][3] = $volunteeringSubMenu;
             } else { // is Volunteer
                 $volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
@@ -210,7 +385,9 @@ class OpenPoliceAdmin extends AdminSubsController
         
         $this->v["management"] = ($this->v["user"]->hasRole('administrator|staff'));
         $this->v["volunOpts"] = 1;
-        if ($this->REQ->session()->has('volunOpts')) $this->v["volunOpts"] = $this->REQ->session()->get('volunOpts');
+        if ($this->REQ->session()->has('volunOpts')) {
+            $this->v["volunOpts"] = $this->REQ->session()->get('volunOpts');
+        }
         $this->v["ways"] = [
             'Online-Submittable Form', 
             'Submit via Email Allowed', 
@@ -376,7 +553,7 @@ class OpenPoliceAdmin extends AdminSubsController
             }
             krsort($this->v["complaints"]);
         }
-        return view( 'vendor.openpolice.admin.complaints.complaints-listing', $this->v );
+        return view('vendor.openpolice.admin.complaints.complaints-listing', $this->v);
     }
     
     function clearIncompletes()
@@ -457,9 +634,9 @@ class OpenPoliceAdmin extends AdminSubsController
         $this->prepEmailComData();
         $this->v["e1"] = $this->processEmail($this->v["email1"]);
         $this->v["e2"] = $this->processEmail($this->v["email2"]);
-        $this->v["allReviews"] = view( 'vendor.openpolice.complaint-staff-review', $this->v )->render();
-        $this->v["sendingEmails"] = view( 'vendor.openpolice.complaint-staff-emails', $this->v )->render();
-        return view( 'vendor.openpolice.admin.complaints.complaint-review', $this->v );
+        $this->v["allReviews"] = view('vendor.openpolice.complaint-staff-review', $this->v)->render();
+        $this->v["sendingEmails"] = view('vendor.openpolice.complaint-staff-emails', $this->v)->render();
+        return view('vendor.openpolice.admin.complaints.complaint-review', $this->v);
     }
     
     public function prepEmailComData()
@@ -545,15 +722,27 @@ class OpenPoliceAdmin extends AdminSubsController
         }
         
         $dynamos = [
-            '[{ Complaint ID }]', '[{ Complaint URL }]', '[{ Complaint URL Link }]', 
-            '[{ Complainant Name }]', '[{ Confirmation URL }]', '[{ Go Gold Secure URL }]', 
-            '[{ Submit Silver Secure URL }]', '[{ Update Complaint Secure URL }]', '[{ Login URL }]', 
-            '[{ Days From Now: 7, mm/dd/yyyy }]', '[{ Complaint Number of Weeks Old }]', 
-            '[{ Analyst Name }]', '[{ Complaint Department Submission Ways }]', 
-            '[{ Complaint Oversight Agency }]', '[{ Complaint Police Department }]', 
-            '[{ Dear Primary Oversight Agency }]', '[{ Complaint Investigability Score & Description }]', 
-            '[{ Complaint Allegation List }]', '[{ Oversight Complaint Secure URL }]', 
-            '[{ Complaint Department Complaint PDF }]', '[{ Complaint Department Complaint Web }]', 
+            '[{ Complaint ID }]', 
+            '[{ Complaint URL }]', 
+            '[{ Complaint URL Link }]', 
+            '[{ Complainant Name }]', 
+            '[{ Confirmation URL }]', 
+            '[{ Go Gold Secure URL }]', 
+            '[{ Submit Silver Secure URL }]', 
+            '[{ Update Complaint Secure URL }]', 
+            '[{ Login URL }]', 
+            '[{ Days From Now: 7, mm/dd/yyyy }]', 
+            '[{ Complaint Number of Weeks Old }]', 
+            '[{ Analyst Name }]', 
+            '[{ Complaint Department Submission Ways }]', 
+            '[{ Complaint Oversight Agency }]', 
+            '[{ Complaint Police Department }]', 
+            '[{ Dear Primary Oversight Agency }]', 
+            '[{ Complaint Investigability Score & Description }]', 
+            '[{ Complaint Allegation List }]', 
+            '[{ Oversight Complaint Secure URL }]', 
+            '[{ Complaint Department Complaint PDF }]', 
+            '[{ Complaint Department Complaint Web }]', 
             '[{ Flex Article Suggestions Based On Responses }]'
         ];
         foreach ($dynamos as $dy) {
@@ -944,14 +1133,14 @@ class OpenPoliceAdmin extends AdminSubsController
                 $this->v["printVoluns"][$list][] = $tmpArr;
             }
         }
-        return view( 'vendor.openpolice.admin.volun.volun', $this->v );
+        return view('vendor.openpolice.admin.volun.volun', $this->v);
     }
     
     public function volunManage(REQUEST $request)
     {
         $this->admControlInit($request, '/dashboard/volun/stars');
         $this->loadPrintVoluns();
-        return view( 'vendor.openpolice.admin.volun.volunManage', $this->v );
+        return view('vendor.openpolice.admin.volun.volunManage', $this->v);
     }
     
     public function volunManagePost(REQUEST $request)

@@ -5,10 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPComplaints extends Model
 {
-    protected $table         = 'OP_Complaints';
-    protected $primaryKey     = 'ComID';
-    public $timestamps         = true;
-    protected $fillable     = 
+    protected $table      = 'OP_Complaints';
+    protected $primaryKey = 'ComID';
+    public $timestamps    = true;
+    protected $fillable   = 
     [    
         'ComStatus', 
         'ComType', 

@@ -5,7 +5,7 @@
     {!! $admTopMenu !!}
     <ul class="nav navbar-nav navbar-right">
     <li><a href="/dashboard">Dashboard</a></li>
-    <li><a href="/auth/logout">Logout</a></li>
+    <li><a href="/logout">Logout</a></li>
     </ul>
     
 @else
@@ -14,7 +14,7 @@
         <ul class="nav navbar-nav navbar-right">
         <li><a href="/dashboard">Dashboard</a></li>
         @if (isset($user)) <li><a href="/volunteer/user/{{ $user->id }}">Profile</a></li> @endif
-        <li><a href="/auth/logout">Logout</a></li>
+        <li><a href="/logout">Logout</a></li>
         </ul>
         <form name="volunDeptSearch" method="get" onSubmit="subVolunDeptSearch(); return false;" class="navbar-form navbar-right">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -68,7 +68,7 @@
         <ul class="nav navbar-nav navbar-right">
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/volunteer/user/{{ $user->id }}">Profile</a></li>
-        <li><a href="/auth/logout">Logout</a></li>
+        <li><a href="/logout">Logout</a></li>
         </ul>
         <form class="navbar-form navbar-right">
         <input type="text" class="form-control" placeholder="Search..." style="height: 33px;">
