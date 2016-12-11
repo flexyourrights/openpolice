@@ -15,7 +15,7 @@
                 Full Transparency
             </h2>
             <div class="pL20">
-                I want to publish all the names of civilians and police officers on this website.
+                I want to publish the names of all civilians and police officers to this website.
             </div>
         </label>
     </div>
@@ -28,7 +28,7 @@
                 No Names Public
             </h2>
             <div class="pL20">
-                I don't want to publish any names on this website.
+                I don't want to publish any names to this website.
             </div>
         </label>
         <div class="gry9 f16 pL20"><i>
@@ -48,7 +48,7 @@
             </div>
         </label>
         <div class="gry9 f16 pL20"><i>
-            No names will be published on this website. Neither OPC staff nor investigators will be able to contact you. 
+            No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. 
             Any details that could be used for personal identification may be deleted from the database.
         </i></div>
     </div>

@@ -1212,7 +1212,6 @@ class OpenPoliceAdmin extends AdminSubsController
                 ];
             }
         }
-        //echo '<pre>'; print_r($deptEdits); echo '</pre>';
         $this->v["statTots"] = $statTots;
         $this->v["recentEdits"] = '';
         foreach ($deptEdits as $deptEdit) {

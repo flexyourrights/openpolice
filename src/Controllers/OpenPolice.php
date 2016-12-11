@@ -133,7 +133,6 @@ class OpenPolice extends SurvFormTree
         $this->minorSections[4][] = array(431,         'Sharing Options');
         $this->minorSections[4][] = array(156,         'Submit Complaint');
         
-        //echo '<pre>'; print_r(Auth::user()); echo '</pre><div style="padding: 100px;">' . Auth::user()->name . '</div>';
         return true;
     }
         
@@ -547,7 +546,6 @@ class OpenPolice extends SurvFormTree
                 if (sizeof($prevEvents) > 0) {
                     foreach ($prevEvents as $i => $prevEveID) {
                         $eveSeq = $this->getEventSequence($prevEveID);
-                        //echo '<pre>'; print_r($eveSeq); echo '</pre>';
                         $ret .= '<div class="nFld pT20" style="font-size: 125%;"><label for="eventMerge' . $i . '">
                             <input type="radio" name="eventMerge" id="eventMerge' . $i . '" value="' . $prevEveID . '">
                             <span class="mL5">' . $this->printEventSequenceLine($eveSeq[0]) . '</span>
@@ -745,7 +743,6 @@ class OpenPolice extends SurvFormTree
     { 
         if (sizeof($tmpSubTier) == 0) $tmpSubTier = $this->loadNodeSubTier($nID);
         list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
-        //if ($this->debugOn) { echo 'postNodePublicCustom('.$nID.'), tbl: ' . $tbl . ', fld: ' . $fld . '<br />'; }
         $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
         if ($nID == 15) return true; // Incident Start-End Date & Times
         if ($nID == 268) { // Unresolved criminal charges
@@ -931,7 +928,6 @@ class OpenPolice extends SurvFormTree
     // returns an array of overrides for ($currNodeSessionData, ???... 
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $currNodeSessionData = '')
     {
-        //if ($this->debugOn) { echo 'printNodeSessDataOverride('.$nID.')<br />'; }
         if ($nID == 19) { // Would you like to provide the GPS location?
             if (intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLat) != 0 
                 || intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLng) != 0) {
@@ -1056,7 +1052,6 @@ class OpenPolice extends SurvFormTree
     
     protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
     {
-        //echo 'printSetLoopNavRowCustom(' . $nID . '<br />';
         if (in_array($nID, array(55, 97)) && $loopItem->CivIsCreator == 'Y') {
             return '<div class="wrapLoopItem"><h2 class="m0">You</h2></div>' . "\n"; // edit jumps Complainant back to select role in incident
         } elseif ($nID == 143 && $loopItem && sizeof($loopItem) > 0) {     // $tbl == 'Departments'
@@ -1479,7 +1474,6 @@ class OpenPolice extends SurvFormTree
             $eveSeq = OPEventSequence::find($value);
             $eveSeq->EveOrder = $i;
             $eveSeq->save();
-            //echo 'ajaxSaveIncEveOrder(), find(' . $value . ')->update(' . $i . ')<br />';
             //$this->sessData->logDataSave(288, $value, -3, 'ajaxSaveIncEveOrder', $i);
         }
         return true;
@@ -1525,13 +1519,11 @@ class OpenPolice extends SurvFormTree
     {
         /*
         $eventType = $this->getEveSeqTypeFromNode($nID);
-        //if ($this->debugOn) { echo 'processOrders('.$nID.'), event: ' . $eventType . '<br />'; }
         for ($i=0; $i<20; $i++)
         {
             if ($this->REQ->has('ordID'.$i) && $this->REQ->has('orderVis'.$i))
             {
                 $ordID = intVal($this->REQ->input('ordID'.$i));
-                //if ($this->debugOn) { echo 'processOrders('.$nID.'), event: ' . $eventType . ', ordID: ' . $ordID . '<br />'; }
                 if ($this->REQ->input('orderVis'.$i) == 'Y' && trim($this->REQ->input('order'.$i)) != '')
                 {
                     if ($ordID <= 0) $ordID = $this->sessData->newDataRecordSimple('Orders', 'OrdEventSequenceID', $GLOBALS["DB"]->closestLoop["itemID"]);
@@ -1645,7 +1637,6 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        //if ($this->debugOn) { echo 'getLinkedToEvent('.$Ptype.', '.$allegID.', '.$eveSeqID.', '.$ordID.'): '; print_r($retArr); echo '<br />'; }
         return $retArr;
     }
     

@@ -28,7 +28,6 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function tweakAdmMenu($currPage = '')
     {
-        //echo '<pre>'; print_r($this->admMenuData["adminNav"]); echo '</pre>';
         if (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["currNavPos"] = [2, 3, -1, -1];

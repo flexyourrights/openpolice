@@ -5,8 +5,9 @@
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
-The purpose of the Open Police database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States. 
-Open Police is built using SurvLoop, atop Laravel.
+The purpose of the Open Police database is to maintain the data we collect from users and to supply information that 
+supports the work of police oversight professionals throughout the United States. 
+Open Police is built using SurvLoop, atop Laravel. Please help make this software as strong as possible.
 
 # Table of Contents
 * [Requirements](#requirements)
