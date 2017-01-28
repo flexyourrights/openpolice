@@ -4,13 +4,13 @@
     <div class="alert alert-warning f20" role="alert">
         No police departments found when searching:
         <div class="p20"><i class="blk mR20">"<b>{{ $search }}</b>"</i> in <i class="blk mL20">{{ $stateName }}</i></div>
-        Please try typing in something else in the search bar above.<br />
+        Please type something else in the search bar above.<br />
     </div>
     <div class="jumbotron">
 @else
     <div class="jumbotron">
     @foreach($depts as $dept)
-        @if ($dept->DeptType == 266) 
+        @if ($dept->DeptType == 366) 
             <h2>{{ $dept->DeptName }}</h2>
             <div class="mTn10"><b><i>(Federal)</i></b></div>
         @else

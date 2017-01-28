@@ -28,6 +28,7 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function tweakAdmMenu($currPage = '')
     {
+    	$this->loadDbLookups();
         if (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["currNavPos"] = [2, 3, -1, -1];
@@ -311,7 +312,7 @@ class VolunteerController extends OpenPoliceAdmin
             $newDept->DeptName          = $newEdit->EditDeptName         = $deptName;
             $newDept->DeptAddressState  = $newEdit->EditDeptAddressState = (($deptState != 'US') ? $deptState : '');
             $newDept->DeptSlug          = $newEdit->EditDeptSlug         = $deptState . '-' . Str::slug($deptName);
-            $newDept->DeptType          = $newEdit->EditDeptType         = (($deptState == 'US') ? 266 : 0);
+            $newDept->DeptType          = $newEdit->EditDeptType         = (($deptState == 'US') ? 366 : 0);
             $newDept->DeptStatus        = 1;
             $newDept->save();
             $newIA->OverDeptID          = $newEdit->EditDeptDeptID       = $iaEdit->EditOverDeptID = $newDept->DeptID;
@@ -331,6 +332,7 @@ class VolunteerController extends OpenPoliceAdmin
     
     public function deptEdit(REQUEST $request, $deptSlug)
     {
+    	$this->loadDbLookups();
         $this->v["deptSlug"]    = $deptSlug;
         $this->v["deptRow"]     = OPDepartments::where('DeptSlug', $deptSlug)->first();
         $this->v["editsIA"]     = $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = [];
@@ -372,7 +374,7 @@ class VolunteerController extends OpenPoliceAdmin
                     $this->v["userNames"][$edit->EditDeptUser] = User::find($edit->EditDeptUser)
                         ->printUsername(true, '/dashboard/volun/user/');
                 }
-                if ($this->v["user"]->hasRole('administrator') || $this->v["user"]->hasRole('staff')) {
+                if ($this->v["user"]->hasRole('administrator|staff')) {
                     $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
                         "user"     => $this->v["userNames"][$edit->EditDeptUser], 
                         "deptRow"  => $this->v["deptRow"], 
@@ -716,7 +718,8 @@ class VolunteerController extends OpenPoliceAdmin
         if (!$isAdmin) $this->admControlInit($request, '/volunteer/stars');
         $this->v["isAdminList"] = $isAdmin;
         $this->v["userObj"] = User::find($uid);
-        $this->v["userStats"] = OPzVolunUserInfo::find($uid);
+        $this->v["userStats"] = OPzVolunUserInfo::where('UserInfoUserID', $uid)
+        	->first();
         $this->v["userInfo"] = OPPersonContact::find($this->v["userStats"]->UserInfoPersonContactID);
         $deptEdits = [];
         $recentEdits = OPzVolunEditsDepts::where('EditDeptUser', $uid)
@@ -725,13 +728,13 @@ class VolunteerController extends OpenPoliceAdmin
         if ($recentEdits && sizeof($recentEdits) > 0) {
             foreach ($recentEdits as $i => $edit) {
                 $iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('OverType', 303)
+                    ->where('EditOverType', 303)
                     ->first();
                 $civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('OverType', 302)
+                    ->where('EditOverType', 302)
                     ->first();
                 $userObj = User::find($edit->EditDeptUser);
-                $deptEdits = [
+                $deptEdits[] = [
                     $userObj->printUsername(true, '/dashboard/volun/user/'), 
                     $edit, 
                     $iaEdit, 
@@ -740,16 +743,18 @@ class VolunteerController extends OpenPoliceAdmin
             }
         }
         $this->v["recentEdits"] = '';
-        foreach ($deptEdits as $deptEdit) {
-            $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
-                "user"     => $deptEdit[0], 
-                "deptRow"  => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
-                "deptEdit" => $deptEdit[1], 
-                "deptType" => $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
-                "iaEdit"   => $deptEdit[2], 
-                "civEdit"  => $deptEdit[3]
-            ])->render();
-        }
+        if ($deptEdits && sizeof($deptEdits) > 0) {
+			foreach ($deptEdits as $deptEdit) {
+				$this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
+					"user"     => $deptEdit[0], 
+					"deptRow"  => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
+					"deptEdit" => $deptEdit[1], 
+					"deptType" => $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
+					"iaEdit"   => $deptEdit[2], 
+					"civEdit"  => $deptEdit[3]
+				])->render();
+			}
+		}
         return view('vendor.openpolice.admin.volun.volunProfile', $this->v);
     }
     

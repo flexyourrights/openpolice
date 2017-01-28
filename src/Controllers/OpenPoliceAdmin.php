@@ -104,7 +104,7 @@ class OpenPoliceAdmin extends AdminSubsController
                                 1,
                                 []
                             ], [
-                                '/dashboard/complaints/emails',
+                                '/dashboard/subs/emails',
                                 'Settings & Emails',
                                 1,
                                 []
@@ -973,8 +973,9 @@ class OpenPoliceAdmin extends AdminSubsController
                         if (sizeof($this->v["comDepts"]) > 1) {
                             for ($i = 1; $i < sizeof($this->v["comDepts"]); $i++) {
                                 if (trim($swap) != '') $swap .= '<br />';
-                                $swap .= $this->v["comDepts"][0][$which]->OverAgncName
-                                    . ': ' . $this->swapURLwrap($this->v["comDepts"][$i][$this->v["comDepts"][$i]["whichOver"]]->OverComplaintWebForm);
+                                $currWhich = $this->v["comDepts"][$i]["whichOver"];
+                                $swap .= $this->v["comDepts"][0][$which]->OverAgncName . ': ' 
+                                    . $this->swapURLwrap($this->v["comDepts"][$i][$currWhich]->OverComplaintWebForm);
                             }
                         }
                         break;
@@ -1212,6 +1213,7 @@ class OpenPoliceAdmin extends AdminSubsController
                 ];
             }
         }
+        //echo '<pre>'; print_r($deptEdits); echo '</pre>';
         $this->v["statTots"] = $statTots;
         $this->v["recentEdits"] = '';
         foreach ($deptEdits as $deptEdit) {

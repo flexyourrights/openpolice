@@ -28,7 +28,8 @@ class VolunteerLeaderboard
         })->get();
         if ($volunteers && sizeof($volunteers) > 0) {
             foreach ($volunteers as $u) {
-                $chk = OPzVolunUserInfo::find($u->id);
+                $chk = OPzVolunUserInfo::where('UserInfoUserID', $u->id)
+                	->first();
                 if (!$chk || sizeof($chk) == 0) {
                     $tmp = new OPzVolunUserInfo;
                     $tmp->UserInfoUserID = $u->id;

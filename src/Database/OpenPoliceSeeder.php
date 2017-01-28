@@ -28,68 +28,2977 @@ class OpenPoliceSeeder extends Seeder
         ]);
         
         
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'app-url')
-            ->update([ 'DefDescription' => 'homestead.app' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'logo-url')
-            ->update([ 'DefDescription' => 'homestead.app' ]);
-
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'cust-abbr')
-            ->update([ 'DefDescription' => 'OpenPolice' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'site-name')
-            ->update([ 'DefDescription' => 'Open Police' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'meta-title')
-            ->update([ 'DefDescription' => 'Open Police Complaints: Share Your Story' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'meta-desc')
-            ->update([ 'DefDescription' => 'Open Police Complaints helps victims of police misconduct create, save, and share first-rate digital police complaints. Let\'s make your story matter!' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'meta-keywords')
-            ->update([ 'DefDescription' => 'Open Police, Open Police Complaints, Police Departments, Cops, Police, Officers, file complaint, submit, victims, accountability, #BlackLivesMatter, #BLM, transparency, open source' ]);
-
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'shortcut-icon')
-            ->update([ 'DefDescription' => '/openpolice/logo-ico.png' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'logo-img-lrg')
-            ->update([ 'DefDescription' => '/openpolice/logo-img-lrg.svg' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'logo-img-md')
-            ->update([ 'DefDescription' => '/openpolice/logo-img-md.svg' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'logo-img-sm')
-            ->update([ 'DefDescription' => '/openpolice/logo-img-sm.svg' ]);
-        DB::table('SL_Definitions')
-            ->where('DefDatabase', 1)
-            ->where('DefSet', 'System Settings')
-            ->where('DefSubset', 'meta-img')
-            ->update([ 'DefDescription' => '/openpolice/mata-img.png' ]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 1,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'cust-abbr',
+			'DefDescription' => 'OpenPolice'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 2,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'app-url',
+			'DefDescription' => 'homestead.app'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 3,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'logo-url',
+			'DefDescription' => 'homestead.app'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 4,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'site-name',
+			'DefDescription' => 'Open Police'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 5,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'meta-title',
+			'DefDescription' => 'Open Police Complaints: Share Your Story'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 6,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'meta-desc',
+			'DefDescription' => 'Open Police Complaints helps victims of police misconduct create, save, and share first-rate digital police complaints. Let\'s make your story matter!'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 7,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'meta-keywords',
+			'DefDescription' => 'Open Police, Open Police Complaints, Police Departments, Cops, Police, Officers, file complaint, submit, victims, accountability, #BlackLivesMatter, #BLM, transparency, open source'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 8,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'meta-img',
+			'DefDescription' => '/openpolice/mata-img.png'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 9,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'logo-img-lrg',
+			'DefDescription' => '/openpolice/logo-img-lrg.svg'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 10,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'logo-img-md',
+			'DefDescription' => '/openpolice/logo-img-md.svg'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 11,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'logo-img-sm',
+			'DefDescription' => '/openpolice/logo-img-sm.svg'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 12,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'shortcut-icon',
+			'DefDescription' => '/openpolice/logo-ico.png'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 13,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'test-mode',
+			'DefDescription' => 'On'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 14,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'upload-types',
+			'DefDescription' => 'Evidence Types'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 15,
+			'DefDatabase' => '1',
+			'DefSet' => 'User Roles',
+			'DefSubset' => 'administrator',
+			'DefValue' => 'Administrator',
+			'DefDescription' => 'Highest system administrative privileges, can add, remove, and change permissions of other system users.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 16,
+			'DefDatabase' => '1',
+			'DefSet' => 'User Roles',
+			'DefSubset' => 'staff',
+			'DefOrder' => '1',
+			'DefValue' => 'Analyst',
+			'DefDescription' => 'Full staff privileges'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 17,
+			'DefDatabase' => '1',
+			'DefSet' => 'User Roles',
+			'DefSubset' => 'volunteer',
+			'DefOrder' => '2',
+			'DefValue' => 'Volunteer',
+			'DefDescription' => 'Basic volunteer privileges'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 18,
+			'DefDatabase' => '1',
+			'DefSet' => 'User Roles',
+			'DefSubset' => 'databaser',
+			'DefOrder' => '3',
+			'DefValue' => 'Database Designer',
+			'DefDescription' => 'Beyond standard staff permissions to view the database designing tools, these Database Designers also have permission to make changes.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 19,
+			'DefDatabase' => '1',
+			'DefSet' => 'User Roles',
+			'DefSubset' => 'brancher',
+			'DefOrder' => '4',
+			'DefValue' => 'Branching-Form Editor',
+			'DefDescription' => 'Beyond standard staff permissions to view the branching tree and statistics, these Editor also have permission to make changes.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 20,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'signup-instruct',
+			'DefDescription' => '<h1 class="mT0">Sign Up</h1>'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 21,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-main-light',
+			'DefDescription' => '#53f1eb'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 22,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-main-dark',
+			'DefDescription' => '#2b3493'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 23,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-main-faint',
+			'DefDescription' => '#edf8ff'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 24,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-alert-light',
+			'DefDescription' => '#f38c5f'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 25,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-alert-dark',
+			'DefDescription' => '#ec2327'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 26,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-go-light',
+			'DefDescription' => '#29B76F'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 27,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-go-dark',
+			'DefDescription' => '#006D36'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 28,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'show-logo-title',
+			'DefDescription' => 'Off'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 29,
+			'DefDatabase' => '1',
+			'DefSet' => 'Style Settings',
+			'DefSubset' => 'color-logo',
+			'DefDescription' => '#53f1eb'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 30,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'users-create-db',
+			'DefDescription' => 'On'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 31,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'xml-example-core-id',
+			'DefDescription' => '1'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 32,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'app-license',
+			'DefDescription' => 'Creative Commons Attribution-ShareAlike License'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 33,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'app-license-url',
+			'DefDescription' => 'http://creativecommons.org/licenses/by-sa/3.0/'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 34,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'app-license-img',
+			'DefDescription' => '/survloop/creative-commons-by-sa-88x31.png'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 35,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefValue' => 'New Database',
+			'DefDescription' => 'This is part of the SurvLoop installation process, where a user creates a new Database and a primary/default Experience to go with it.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 36,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '5',
+			'DefValue' => 'New Experience',
+			'DefDescription' => 'Create a new, secondary Experience for an existing Database.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 37,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '3',
+			'DefValue' => 'Add a Data Field',
+			'DefDescription' => 'Create a new Field in the Database, without adding it as an Experience Node yet.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 38,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '7',
+			'DefValue' => 'New Experience Question',
+			'DefDescription' => 'Create a new Question Node in a User Experience. This might include a simplified version of adding a new Database Field.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 39,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '1',
+			'DefValue' => 'Add a Data Table',
+			'DefDescription' => 'Create a new Database Table to later fill with Fields.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 40,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '2',
+			'DefValue' => 'Edit Database Table',
+			'DefDescription' => 'Edit the basic properties of a Database Table.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 41,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '4',
+			'DefValue' => 'Edit Database Field',
+			'DefDescription' => 'Edit the basic or thorough properties of a Database Field.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 42,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '6',
+			'DefValue' => 'Edit Experience',
+			'DefDescription' => 'Edit the basic properties of a User Experience.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 43,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Design Tweak Types',
+			'DefOrder' => '8',
+			'DefValue' => 'Edit Experience Question',
+			'DefDescription' => 'Edit the basic properties of a Experience Question Node.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 44,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefValue' => 'Value Ranges',
+			'DefDescription' => 'Each definition in a set of Value Ranges represents one response a user can choose when responding to some question/prompt.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 45,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '1',
+			'DefValue' => 'System Settings',
+			'DefDescription' => 'Each definition for System Settings represents one system-wide specification.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 46,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '2',
+			'DefValue' => 'Style Settings',
+			'DefDescription' => 'Each definition for Style Settings represents one color or other branding element needed system-wide.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 47,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '3',
+			'DefValue' => 'Instructions',
+			'DefDescription' => 'Each definition which is an Instruction represents one blurb, used somewhere in the system, which can be edited by system administrators.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 48,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '4',
+			'DefValue' => 'Diagrams',
+			'DefDescription' => 'Each definition which is a Diagram represents one document uploaded by system administrators.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 49,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '5',
+			'DefValue' => 'Custom Settings',
+			'DefDescription' => 'Each definition for Custom Settings represents one system-wide specification, which is established and defined by a client-specific installation of SurvLoop.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 50,
+			'DefDatabase' => '3',
+			'DefSubset' => 'SurvLoop Definition Types',
+			'DefOrder' => '6',
+			'DefValue' => 'User Roles',
+			'DefDescription' => 'Each definition for User Roles represents one system-wide type of user permissions.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 101,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefIsActive' => '0',
+			'DefValue' => '0-15'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 102,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => '16-24'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 103,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => '25-34'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 104,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => '35-44'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 105,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => '45-54'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 106,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => '55-64'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 107,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => '65-74'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 108,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => '75-84'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 109,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Age Ranges',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => '85+'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 110,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Findings',
+			'DefIsActive' => '0',
+			'DefValue' => 'Exonerated',
+			'DefDescription' => '"Exonerated" means that the conduct at issue occurred but is not a violation of department rules.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 111,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Findings',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Unfounded',
+			'DefDescription' => 'An "unfounded" adjudication means that the allegations are not true.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 112,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Findings',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Not Sustained',
+			'DefDescription' => 'A "not sustained" or "not resolved" or "unresolved" adjudication means that there is insufficient evidence to prove or disprove the allegations by a preponderance of evidence.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 113,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Findings',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sustained',
+			'DefDescription' => 'A "founded" or "sustained" adjudication means that allegations are true by a preponderance of the evidence and that the conduct at issue is a violation of department rules.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 114,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Findings',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other',
+			'DefDescription' => 'This "other" category might include withdrawn complaints, complaints lacking sufficient information to complete an investigation, or complaints against officers not employed or no longer employed by the department.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 115,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefIsActive' => '0',
+			'DefValue' => 'Unreasonable Force',
+			'DefDescription' => 'Excessive Force: The amount of force the officer used was not "objectively reasonable."
+Example: A complainant alleged that she accidentally drove into an area during road construction. An officer who was directing traffic approached her, yelled at her to get off the road, put his hand through her window, and started twisting her arm until she moved her car.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 116,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Wrongful Arrest',
+			'DefDescription' => 'Wrongful Arrest: An arrest lacked probable cause.
+Example: A complainant alleged that an officer approached him as he was sitting on a bench, detained him, handcuffed him, and searched his backpack without his consent.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 117,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Wrongful Detention',
+			'DefDescription' => 'Wrongful Stop: A detention that lacked reasonable suspicion.
+Example: A complainant alleged that an officer approached him as he was sitting on a bench, detained him, handcuffed him, and searched his backpack without his consent.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 118,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Wrongful Entry',
+			'DefDescription' => 'Wrongful Entry: An officer entered private property without either consent or a warrant.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 119,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Wrongful Search',
+			'DefDescription' => 'Wrongful Search: A search violated the protections provided by the 4th Amendment of the United States Constitution.
+Example: A complainant alleged that an officer searched his car without consent after he was pulled over for an unsafe lane change.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 120,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Wrongful Property Seizure',
+			'DefDescription' => 'Wrongful Seizure: A seizure violated the protections provided by the 4th Amendment of the United States Constitution.
+Example: A complainant alleged that an officer searched his car without consent after he was pulled over for an unsafe lane change.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 121,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Bias-Based Policing',
+			'DefDescription' => 'Bias-Based Policing: An officer engaged in conduct based on a person\'s race, color, religion (religious creed), age, marital status, national origin, ancestry, sex, sexual orientation, actual or perceived gender identity, medical condition, or disability.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 122,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Retaliation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 123,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Retaliation: Unnecessary Charges',
+			'DefDescription' => 'Retaliation: Example: "Resisting Arrest" and "Interfering" are common "cover charges"/"contempt of cop".'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 124,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Excessive Citation',
+			'DefDescription' => 'Example: A motorist gets pulled over and cited for speeding. On the same ticket, the officer also cites him for "illegal window tint," "muffler violation," "seat belt violation," and "illegal lane change."'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 125,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Intimidating Display Of Weapon',
+			'DefDescription' => 'Non-Verbal Intimidation Using Weaopn: Weapon-related threats do not apply to weapons safely in holsters. Actual use of weapon against a person is use of force, not just intimidation.
+(This Allegation should not appear for users who have any Use of Force Allegations)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 126,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sexual Assault',
+			'DefDescription' => 'Sexual Assault: Any involuntary sexual act in which a person is coerced or physically forced to engage against their will, or any non-consensual sexual touching of a person.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 127,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '12',
+			'DefIsActive' => '0',
+			'DefValue' => 'Policy or Procedure',
+			'DefDescription' => 'Procedure: The officer took actions which did not follow appropriate policy, procedure, or guidelines.
+Example: An officer parks an official police vehicle in a handicap parking spot. There did not seem to be any emergency to justify this.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 128,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '13',
+			'DefIsActive' => '0',
+			'DefValue' => 'Conduct Unbecoming an Officer',
+			'DefDescription' => 'Conduct Unbecoming an Officer: A reasonable person would find the officer\'s on or off duty conduct to be unbecoming a police officer, and such conduct reflected adversely on the department.
+Example: A complainant alleged that an officer routinely gets intoxicated and at a local bar and threatens people while flashing his badge.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 129,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '14',
+			'DefIsActive' => '0',
+			'DefValue' => 'Discourtesy',
+			'DefDescription' => 'Discourtesy: The officer used profane or derogatory language, wasn\'t tactful, lost his/her temper, made verbal threats, became impatient, or was otherwise discourteous.
+Example: An officer allegedly directed vulgar language at a complainant.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 130,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '16',
+			'DefIsActive' => '0',
+			'DefValue' => 'Officer Refused To Provide ID',
+			'DefDescription' => 'Example: An officer allegedly failed to provide the complainant with his name and badge number after the identification was requested.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 131,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '17',
+			'DefIsActive' => '0',
+			'DefValue' => 'Miranda Rights'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 132,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '18',
+			'DefIsActive' => '0',
+			'DefValue' => 'Neglect of Duty',
+			'DefDescription' => 'Procedure: The officer\'s inaction did not follow appropriate policy, procedure, or guidelines.
+Example: A woman is groped on the street by an unknown man. When the police arrive, they refuse to file an official report or investigate.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 133,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefIsActive' => '0',
+			'DefValue' => 'Assault on an Officer'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 134,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disorderly Conduct'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 135,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disturbing the Peace'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 136,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Failure to Obey/Comply'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 137,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Obstructing/Interfering'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 138,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Resisting Arrest'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 139,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Public Intoxication'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 140,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Marijuana Possession'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 141,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Drugs Other Than Marijuana'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 142,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefIsActive' => '0',
+			'DefValue' => 'Race'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 143,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Color'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 144,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Ethnicity'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 145,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'National Origin'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 146,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Religion'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 147,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Age'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 148,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Gender'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 149,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Gender Identity'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 150,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sexual Orientation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 151,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Family Responsibilities'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 152,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disability'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 153,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Educational Level'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 154,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '12',
+			'DefIsActive' => '0',
+			'DefValue' => 'Political Affiliations'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 155,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '13',
+			'DefIsActive' => '0',
+			'DefValue' => 'Source of Income'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 156,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '14',
+			'DefIsActive' => '0',
+			'DefValue' => 'Place'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 157,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '15',
+			'DefIsActive' => '0',
+			'DefValue' => 'Residence'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 158,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Bias Type',
+			'DefOrder' => '16',
+			'DefIsActive' => '0',
+			'DefValue' => 'Business'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 159,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefIsActive' => '0',
+			'DefValue' => 'Head'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 160,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Neck'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 161,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Torso'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 162,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hand'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 163,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Elbow'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 164,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Arm'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 165,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Foot'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 166,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Knee'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 167,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Leg'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 168,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Crotch'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 169,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Part',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Unknown'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 170,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Slim/Slender'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 171,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Medium/Average'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 172,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Athletic/Muscular'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 173,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Body Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Large/Fat'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 174,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefIsActive' => '0',
+			'DefValue' => 'Speeding'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 175,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Vehicle Defect'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 176,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Records Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 177,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Turn or Lane Change'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 178,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Seatbelt or Cell Phone Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 179,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Stop Sign/Light Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 180,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disorderly Conduct'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 181,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disturbing the Peace'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 182,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Failure to Obey/Comply'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 183,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Public Intoxication'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 184,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Marijuana Possession'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 185,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefIsActive' => '0',
+			'DefValue' => 'Walking Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 186,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disorderly Conduct'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 187,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disturbing the Peace'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 188,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Failure to Obey/Comply'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 189,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Public Intoxication'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 190,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Marijuana Possession'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 191,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Oversight Models',
+			'DefIsActive' => '0',
+			'DefValue' => 'Investigative'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 192,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Oversight Models',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Review'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 193,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Oversight Models',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Audit'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 194,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefIsActive' => '0',
+			'DefValue' => 'Incomplete'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 195,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hold'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 196,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'New'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 197,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Reviewed'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 198,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Pending Attorney',
+			'DefDescription' => 'This Complaint has NOT been submitted to any Oversight Agencies, because it has been determined to be a good prospect for an Attorney.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 199,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Attorney\'d'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 200,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Submitted to Oversight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 201,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Received by Oversight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 202,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Pending Oversight Investigation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 203,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Declined To Investigate (Closed)',
+			'DefDescription' => 'Department acknowledges complaint, but did not initiate any investigation process.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 204,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Investigated (Closed)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 205,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Complaint Status',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Closed',
+			'DefDescription' => 'Should only be used for Complaint Types: [Fantastical,] Abuse, Spam, Test, Not Sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 206,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefIsActive' => '0',
+			'DefValue' => 'Incomplete'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 207,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hold'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 208,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'New'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 209,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Reviewed'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 210,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Submitted to Oversight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 211,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Received to Oversight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 212,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Compliment Status',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Closed'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 213,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Marijuana'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 214,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other Illegal Drugs (i.e. cocaine, MDMA, etc.)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 215,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Gun'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 216,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Knife'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 217,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Stolen Goods'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 218,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Contraband Types',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 219,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Customer Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Attorney'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 220,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Customer Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Academic'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 221,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Customer Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Journalist'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 222,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Customer Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Researcher'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 223,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Evidence Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Photograph'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 224,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Evidence Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Diagram'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 225,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Evidence Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Document'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 226,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Evidence Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Video'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 227,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefIsActive' => '0',
+			'DefValue' => 'Control Hold',
+			'DefDescription' => 'An officer\'s use of his/her limbs, torso or body weight, to move or restrain a person or to constrict a person\'s movements.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 228,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Body Weapons',
+			'DefDescription' => 'An officer\'s use of his/her limbs in a manner similar to an impact weapon, e.g, using his/her hands to punch, hit or slap a person.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 229,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Takedown',
+			'DefDescription' => 'An officer\'s use of his/her limbs, torso or body weight to force a person against an immovable object (such as a car or a wall) or to force a person to the ground.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 230,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Baton Strike'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 231,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Taser'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 232,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Gun',
+			'DefDescription' => 'i.e. Firearm'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 233,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Mace or Pepper Spray',
+			'DefDescription' => 'i.e. Chemical Agent'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 234,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'K9 (Dog) Bite'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 235,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Vehicle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 236,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other',
+			'DefDescription' => 'e.g. Rough Ride, Car Impact, Flashlight Strike, Lifting Up Cuffs...'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 237,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefIsActive' => '0',
+			'DefValue' => 'Fist (Closed Hand)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 238,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Slap (Open Hand)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 239,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Kick (Feet)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 240,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Knee'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 241,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Elbow'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 242,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Body Weapons',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Head'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 243,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Control Hold',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hands/Arms'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 244,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Control Hold',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Body Weight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 245,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Control Hold',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Knees'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 246,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Control Hold',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Feet/Legs'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 247,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Takedown',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hands'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 248,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Takedown',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Tackle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 249,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Force Type - Takedown',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Leg Sweep'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 250,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gun Ammo Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Lethal Ammo'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 251,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gun Ammo Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Less-Lethal Ammo (e.g. rubber bullets, bean bag rounds)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 252,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Incident Event Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Stop'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 253,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Incident Event Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Search'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 254,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Incident Event Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Force'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 255,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Incident Event Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Arrest'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 256,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Fatal injuries',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 257,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Major bone broken',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 258,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Compound fracture',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 259,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'In-patient hospital stay required',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 260,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Blood loss requiring transfusion',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 261,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Major concussion',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 262,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Longer than brief loss of consciousness',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 263,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Debilitating chronic pain',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 264,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Damage to organ (other than skin)',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 265,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Effective Tasings',
+			'DefDescription' => 'LEVEL 1 (most serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 266,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Minor bone broken',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 267,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Major laceration requiring stitches',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 268,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '12',
+			'DefIsActive' => '0',
+			'DefValue' => 'Minor concussion',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 269,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '13',
+			'DefIsActive' => '0',
+			'DefValue' => 'Brief loss of consciousness',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 270,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '14',
+			'DefIsActive' => '0',
+			'DefValue' => 'Chipped or lost tooth',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 271,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '15',
+			'DefIsActive' => '0',
+			'DefValue' => 'Major abrasion',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 272,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '16',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sprain',
+			'DefDescription' => 'LEVEL 2 (serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 273,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '17',
+			'DefIsActive' => '0',
+			'DefValue' => 'Bruising',
+			'DefDescription' => 'LEVEL 3 (least serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 274,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '18',
+			'DefIsActive' => '0',
+			'DefValue' => 'Minor laceration',
+			'DefDescription' => 'LEVEL 3 (least serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 275,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Injury Types',
+			'DefOrder' => '19',
+			'DefIsActive' => '0',
+			'DefValue' => 'Minor abrasion',
+			'DefDescription' => 'LEVEL 3 (least serious)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 276,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefIsActive' => '0',
+			'DefValue' => 'No or does not apply'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 277,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Displayed Weapon'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 278,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Drew Weapon'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 279,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Pointed Weapon'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 280,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Weapon Fired/Discharged'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 281,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidating Displays Of Weapon',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Not sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 282,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefIsActive' => '0',
+			'DefValue' => 'Baton'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 283,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Taser'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 284,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Gun'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 285,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Mace or Pepper Spray'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 286,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Canine (Dog)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 287,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Intimidation Weapons',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 288,
+			'DefDatabase' => '1',
+			'DefSubset' => 'No Charges Filed',
+			'DefIsActive' => '0',
+			'DefValue' => 'N/A'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 289,
+			'DefDatabase' => '1',
+			'DefSubset' => 'No Charges Filed',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'ALL Charges Were Dropped Before Release'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 290,
+			'DefDatabase' => '1',
+			'DefSubset' => 'No Charges Filed',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'No Charges Were Ever Filed'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 291,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Officer Discipline Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Training and/or Counseling'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 292,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Officer Discipline Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Letter of Reprimand'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 293,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Officer Discipline Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Suspension'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 294,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Officer Discipline Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Termination'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 295,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefIsActive' => '0',
+			'DefValue' => 'Unreviewed'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 296,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Legitimate'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 297,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Not About Police'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 298,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Abuse'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 299,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Spam'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 300,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Test'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 301,
+			'DefDatabase' => '1',
+			'DefSubset' => 'OPC Staff/Internal Complaint Type',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Not Sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 302,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Oversight Agency Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Civilian Oversight'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 303,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Oversight Agency Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Internal Affairs'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 304,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Privacy Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Submit Publicly'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 305,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Privacy Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Names Visible to Police but not Public'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 306,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Privacy Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Completely Anonymous',
+			'DefDescription' => 'Anonymous complaints would have no public-facing details for civilians or officers. This is an option the user has early in the complaint process.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 307,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Privacy Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Anonymized',
+			'DefDescription' => 'Anonymized complaints would have all open-ended questions scrubbed, only leaving aggregate-friendly data. This is an action take by an analyst or the complainant some time after the complaint was submitted.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 308,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Cash'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 309,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Phone'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 310,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'TV'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 311,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Vehicle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 312,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Real Estate'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 313,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Bank Account'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 314,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Boat'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 315,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Firearms'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 316,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Identity Documents'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 317,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Property Seized Types',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other Items'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 318,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefIsActive' => '0',
+			'DefValue' => 'Asian American'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 319,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Black or African American'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 320,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Hispanic or Latino'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 321,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Native American'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 322,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Pacific Islander'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 323,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'White'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 324,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 325,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Races',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Decline or Unknown'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 326,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefIsActive' => '0',
+			'DefValue' => 'Walking Violation',
+			'DefDescription' => 'e.g. Jay Walking'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 327,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disturbing the Peace'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 328,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Public Intoxication'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 329,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Drug Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 330,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Suspected of Something Else'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 331,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Matched a Description of Someone'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 332,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Investigating Someone Else'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 333,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Providing Assistance/Responding to Call'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 334,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other Reason'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 335,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Officer Did Not Give Reason For Stop',
+			'DefDescription' => 'e.g. NYC Stop & Frisk'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 336,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefIsActive' => '0',
+			'DefValue' => 'Speeding'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 337,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Vehicle Defect'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 338,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Expired Registration'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 339,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'License Plate Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 340,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Illegal Turn or Lane Change'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 341,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Seatbelt or Cell Phone Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 342,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Stop Sign/Light Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 343,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Driving While Impaired',
+			'DefDescription' => 'The officer stated this as the reason for stop, but this was not at a designated "sobriety checkpoint" (that option is below).'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 344,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sobriety Checkpoint'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 345,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Border Checkpoint'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 346,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '11',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other Reason'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 347,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '12',
+			'DefIsActive' => '0',
+			'DefValue' => 'Officer Did Not Give Reason For Stop'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 349,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Home, private residence, or dorm (includes just outside the residence)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 350,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Workplace'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 351,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Airport'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 352,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Outdoor public space (includes roads, sidewalks, parks, etc.)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 353,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Indoor public space'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 355,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Civilian',
+			'DefIsActive' => '0',
+			'DefValue' => 'Car'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 356,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Civilian',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Bicycle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 357,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Civilian',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Boat'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 358,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Civilian',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Motorcycle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 360,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Car'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 361,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Van'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 362,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Motorcycle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 363,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Bicycle'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 364,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Boat'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 365,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Officer',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 366,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Federal Law Enforcement'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 367,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'State Police'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 368,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefIsActive' => '0',
+			'DefValue' => 'Local Police'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 369,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sheriffs\' Offices'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 370,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other Police Departments'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 371,
+			'DefDatabase' => '1',
+			'DefSubset' => 'User Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Admin'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 372,
+			'DefDatabase' => '1',
+			'DefSubset' => 'User Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Oversight Agency'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 373,
+			'DefDatabase' => '1',
+			'DefSubset' => 'User Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Customer'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 374,
+			'DefDatabase' => '1',
+			'DefSubset' => 'User Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Civilian'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 375,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefIsActive' => '0',
+			'DefValue' => 'Threats'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 376,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Shouting'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 377,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Cursing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 378,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Racism'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 379,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Sexism'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 380,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Homophobia'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 381,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Lies'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 382,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Verbal Abuse Types',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Disrespect'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 383,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefIsActive' => '0',
+			'DefValue' => 'Female'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 384,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Male'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 385,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'Female to male transgender'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 386,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '4',
+			'DefIsActive' => '0',
+			'DefValue' => 'Male to female transgender'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 387,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '9',
+			'DefIsActive' => '0',
+			'DefValue' => 'Not sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 388,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '10',
+			'DefIsActive' => '0',
+			'DefValue' => 'Other',
+			'DefDescription' => 'http://www.hrc.org/resources/collecting-transgender-inclusive-gender-data-in-workplace-and-other-surveys'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 389,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '8',
+			'DefIsActive' => '0',
+			'DefValue' => 'Intersex'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 390,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '5',
+			'DefIsActive' => '0',
+			'DefValue' => 'Genderqueer/Androgynous'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 391,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '6',
+			'DefIsActive' => '0',
+			'DefValue' => 'Cross-dresser'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 392,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '7',
+			'DefIsActive' => '0',
+			'DefValue' => 'Transsexual'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 393,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Gender Identity',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Transgender'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 394,
+			'DefDatabase' => '1',
+			'DefSubset' => 'How Did You Hear',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'ACLU (American Civil Liberties Union)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 395,
+			'DefDatabase' => '1',
+			'DefSubset' => 'How Did You Hear',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'NAACP (National Association for the Advancement of Colored People)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 396,
+			'DefDatabase' => '1',
+			'DefSubset' => 'How Did You Hear',
+			'DefOrder' => '3',
+			'DefIsActive' => '0',
+			'DefValue' => 'CopWatch'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 397,
+			'DefDatabase' => '1',
+			'DefSubset' => 'How Did You Hear',
+			'DefIsActive' => '0',
+			'DefValue' => 'NACOLE (National Association for Civilian Oversight of Law Enforcement)'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 398,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Unresolved Charges Actions',
+			'DefIsActive' => '0',
+			'DefValue' => 'Full complaint to print or save'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 399,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Unresolved Charges Actions',
+			'DefOrder' => '1',
+			'DefIsActive' => '0',
+			'DefValue' => 'Anonymous complaint data only'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 400,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Unresolved Charges Actions',
+			'DefOrder' => '2',
+			'DefIsActive' => '0',
+			'DefValue' => 'Logout'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 401,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '3',
+			'DefValue' => 'Loitering/Trespassing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 402,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '8',
+			'DefValue' => 'Loitering/Trespassing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 403,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '5',
+			'DefValue' => 'Loitering/Trespassing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 404,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Scene Type',
+			'DefOrder' => '3',
+			'DefValue' => 'School'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 405,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Pedestrian Stop',
+			'DefOrder' => '2',
+			'DefValue' => 'Loitering/Trespassing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 406,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Reason for Vehicle Stop',
+			'DefOrder' => '10',
+			'DefValue' => 'Loitering/Trespassing'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 407,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation Civilian',
+			'DefOrder' => '4',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 408,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Chase Types',
+			'DefValue' => 'On Foot'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 409,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Chase Types',
+			'DefOrder' => '1',
+			'DefValue' => 'In Vehicles'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 410,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Chase Types',
+			'DefOrder' => '2',
+			'DefValue' => 'Both'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 411,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Arrest Charges',
+			'DefOrder' => '10',
+			'DefValue' => 'Weapons Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 412,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges Pedestrian',
+			'DefOrder' => '7',
+			'DefValue' => 'Weapons Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 413,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Citation Charges',
+			'DefOrder' => '12',
+			'DefValue' => 'Weapons Violation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 414,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Chase Types',
+			'DefOrder' => '3',
+			'DefValue' => 'Not sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 415,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Weapons',
+			'DefValue' => 'Gun'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 416,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Weapons',
+			'DefOrder' => '1',
+			'DefValue' => 'Knife'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 417,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Weapons',
+			'DefOrder' => '2',
+			'DefValue' => 'Other'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 418,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Allegation Type',
+			'DefOrder' => '15',
+			'DefValue' => 'Profanity',
+			'DefDescription' => 'The officer used profane or derogatory language.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 419,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefValue' => 'Valor',
+			'DefDescription' => 'The officer showed extraordinary courage in the face of danger.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 420,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '1',
+			'DefValue' => 'Lifesaving',
+			'DefDescription' => 'The officer applied medical aid exceeding the normal call of duty.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 421,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '2',
+			'DefValue' => 'De-escalation',
+			'DefDescription' => 'The officer skillfully calmed down a tense situation, using minimal or no force.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 422,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '3',
+			'DefValue' => 'Professionalism',
+			'DefDescription' => 'The officer behaved in a courteous, respectful, and straightforward manner.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 423,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '4',
+			'DefValue' => 'Fairness',
+			'DefDescription' => 'The officer’s use of power was reasonable, appropriate, and free from bias.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 424,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '5',
+			'DefValue' => 'Constitutional Policing',
+			'DefDescription' => 'The officer’s words and actions showed respect for the Bill of Rights.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 425,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '6',
+			'DefValue' => 'Compassion',
+			'DefDescription' => 'The officer displayed empathy and generosity beyond the call of duty.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 426,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Commendation Type',
+			'DefOrder' => '7',
+			'DefValue' => 'Community Service',
+			'DefDescription' => 'The officer engaged the community to build bonds of trust.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 427,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Types of Departments',
+			'DefOrder' => '5',
+			'DefValue' => 'Private Security Company'
+		]);
+        
         
 
         DB::table('SL_Databases')->insert([

@@ -9,7 +9,7 @@
         <h1>System Settings</h1>
     </div>
     @if (isset($settings) && sizeof($settings) > 0)
-        <form action="/dashboard/complaints/emails" method="post" >
+        <form action="/dashboard/subs/emails" method="post" >
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="savingSettings" value="1">
             @foreach ($settings as $i => $s)
@@ -43,7 +43,7 @@
         </h1>
     </div>
     <div class="col-md-6 pT20 taR">
-        <a href="/dashboard/complaints/email/-3" class="btn btn-default">Create New Auto-Email</a>
+        <a href="/dashboard/subs/email/-3" class="btn btn-default">Create New Auto-Email</a>
         <a href="javascript:void(0)" class="btn btn-default mL20" id="showAll">Show/Hide All Email Bodies</a>
     </div>
 </div>
@@ -58,7 +58,7 @@
 @forelse ($emailList as $i => $email)
     <div class="row pT10 pB10 f18 @if ($i%2 == 0) row2 @endif ">
         <div class="col-md-4">
-            <a href="/dashboard/complaints/email/{{ $email->ComEmailID }}"><i class="fa fa-pencil fa-flip-horizontal mR10" aria-hidden="true"></i></a>
+            <a href="/dashboard/subs/email/{{ $email->ComEmailID }}"><i class="fa fa-pencil fa-flip-horizontal mR10" aria-hidden="true"></i></a>
             {{ $email->ComEmailType }} 
             <br />
             @if ($email->ComEmailType == 'Blurb')

@@ -1,20 +1,20 @@
 <?php namespace App\Models;
-// generated from /resources/views/admin/db/export-laravel-model-gen.blade.php
+// generated from /resources/views/vendor/survloop/admin/db/export-laravel-model-gen.blade.php
 
 use Illuminate\Database\Eloquent\Model;
 
 class OPPartners extends Model
 {
-    protected $table         = 'OP_Partners';
-    protected $primaryKey     = 'PartID';
-    public $timestamps         = true;
-    protected $fillable     = 
+    protected $table      = 'OP_Partners';
+    protected $primaryKey = 'PartID';
+    public $timestamps    = true;
+    protected $fillable   = 
     [    
-        'PartType', 
-        'PartUserID', 
-        'PartPersonID', 
-        'PartTitle', 
-        'PartCompanyName', 
-        'PartCompanyWebsite', 
+		'PartType', 
+		'PartUserID', 
+		'PartPersonID', 
+		'PartTitle', 
+		'PartCompanyName', 
+		'PartCompanyWebsite', 
     ];
 }

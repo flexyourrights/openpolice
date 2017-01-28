@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <textarea name="emailBody" class="form-control f22" style="height: 200px;">{{ $currEmail->emailBody }}</textarea>
+        <textarea name="emailBody" class="form-control f16" style="height: 300px;">{{ $currEmail->ComEmailBody }}</textarea>
     </div>
 </div>
 

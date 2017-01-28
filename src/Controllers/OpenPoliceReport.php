@@ -141,6 +141,7 @@ class OpenPoliceReport extends OpenPolice
     {
         if (!isset($this->v["civNames"][$civID]) || trim($this->v["civNames"][$civID]) == '') {
             if (sizeof($prsn) == 0) list($prsn, $phys, $vehic) = $this->queuePeopleSubsets($civID);
+            //echo '<pre>'; print_r($prsn); echo '</pre> civID: ' . $civID . ', privacy: ' . $this->sessData->dataSets["Complaints"][0]->ComPrivacy . '<br />';
             $name = '';
             if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
                 && (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
@@ -612,6 +613,7 @@ class OpenPoliceReport extends OpenPolice
     // similar to printEventSequenceLine($eveSeq), but with Report-driven names
     protected function reportEventTitle($eveSeq)
     {
+        //if ($this->debugOn) { echo 'printEventSequenceLine:<pre>'; print_r($eveSeq); echo '</pre>'; }
         if (!isset($eveSeq["EveType"]) || sizeof($eveSeq["Event"]) <= 0) return '';
         $retVal = '';
         if ($eveSeq["EveType"] == 'Force' && isset($eveSeq["Event"]->ForType) 

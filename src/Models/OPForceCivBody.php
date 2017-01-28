@@ -3,14 +3,14 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPSearchContra extends Model
+class OPForceCivBody extends Model
 {
-    protected $table      = 'OP_SearchContra';
-    protected $primaryKey = 'SrchConID';
+    protected $table      = 'OP_ForceCivBody';
+    protected $primaryKey = 'ForceCivID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'SrchConSearchID', 
-		'SrchConType', 
+		'ForceCivForceID', 
+		'ForceCivBodyWeapon', 
     ];
 }

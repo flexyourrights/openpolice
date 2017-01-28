@@ -3,14 +3,18 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPSearchContra extends Model
+class OPAdminActions extends Model
 {
-    protected $table      = 'OP_SearchContra';
-    protected $primaryKey = 'SrchConID';
+    protected $table      = 'OP_AdminActions';
+    protected $primaryKey = 'AdmActID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'SrchConSearchID', 
-		'SrchConType', 
+		'AdmActUserID', 
+		'AdmActTimestamp', 
+		'AdmActTable', 
+		'AdmActRecordID', 
+		'AdmActOldData', 
+		'AdmActNewData', 
     ];
 }

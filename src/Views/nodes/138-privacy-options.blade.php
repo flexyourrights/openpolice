@@ -5,6 +5,7 @@
     <h2 class="mT0 slBlueDark">Transparency Options</h2>
     <div class="nPrompt">
         How do you want the names of people involved to appear on your public complaint?
+        <small class="red pL10 mTn10">*required</small>
     </div>
 
     <div class="div mT10 pT10 pB20 f22">
@@ -15,7 +16,7 @@
                 Full Transparency
             </h2>
             <div class="pL20">
-                I want to publish the names of all civilians and police officers to this website.
+                I want to publish all the names of civilians and police officers on this website.
             </div>
         </label>
     </div>
@@ -28,7 +29,7 @@
                 No Names Public
             </h2>
             <div class="pL20">
-                I don't want to publish any names to this website.
+                I don't want to publish any names on this website.
             </div>
         </label>
         <div class="gry9 f16 pL20"><i>
@@ -48,7 +49,7 @@
             </div>
         </label>
         <div class="gry9 f16 pL20"><i>
-            No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. 
+            No names will be published on this website. Neither OPC staff nor investigators will be able to contact you. 
             Any details that could be used for personal identification may be deleted from the database.
         </i></div>
     </div>
@@ -61,3 +62,8 @@
 </div> <!-- end #node138 -->
 
 <div class="nodeGap"></div>
+
+
+<script type="text/javascript">
+addFld("n138fld0"); addFld("n138fld1"); addFld("n138fld2"); 
+</script>
