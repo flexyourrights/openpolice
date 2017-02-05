@@ -38,10 +38,10 @@ class OpenPolice extends SurvFormTree
     protected $allCivs             = [];
     public $eventTypes             = ['Stops', 'Searches', 'Force', 'Arrests'];
     protected $eventTypeLabel     = [
-        'Stops'     => 'Stop/Questioning',
-        'Searches'     => 'Search/Seizure',
-        'Force'     => 'Use of Force',
-        'Arrests'     => 'Arrest'
+        'Stops'    => 'Stop/Questioning',
+        'Searches' => 'Search/Seizure',
+        'Force'    => 'Use of Force',
+        'Arrests'  => 'Arrest'
     ];
     protected $eventTypeLookup     = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup     = []; // array('Event Type' => array($civID, $civID, $civID))
@@ -281,35 +281,7 @@ class OpenPolice extends SurvFormTree
     protected function customNodePrint($nID = -3, $tmpSubTier = [])
     {
         $ret = '';
-        if ($nID == 1) {
-            return view('vendor.openpolice.nodes.1-landing-page', [
-                    "ComSummary" => $this->sessData->currSessData($nID, 'Complaints', 'ComSummary') 
-                ])->render();
-            $this->pageHasReqs++;
-        } elseif ($nID == 452) {
-            $this->pageJSvalid .= view('vendor.openpolice.nodes.452-jsvalid-unresolved-charges', [])->render();
-            $this->pageAJAX .= view('vendor.openpolice.nodes.452-ajax-unresolved-charges', [])->render();
-            $ret .= $this->customNodePrintWrap( $nID, view('vendor.openpolice.nodes.452-unresolved-charges', [ 
-                "ComAttorneyHas"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComAttorneyHas'), 
-                "ComAttorneyOKedOPC"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComAttorneyOKedOPC'), 
-                "ComAttorneyWant"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComAttorneyWant'), 
-                "ComAnyoneCharged"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComAnyoneCharged'), 
-                "ComAllChargesResolved"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComAllChargesResolved'), 
-                "ComUnresolvedChargesActions"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComUnresolvedChargesActions'), 
-                "ComSummary"
-                    => $this->sessData->currSessData($nID, 'Complaints', 'ComSummary')
-            ])->render() );
-        } elseif ($nID == 138) {
-            $ret .= view('vendor.openpolice.nodes.138-privacy-options', [ 
-                "ComPrivacy" => $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            ])->render();
-        } elseif ($nID == 454) {
+        if ($nID == 454) {
             return view('vendor.openpolice.registerComplaint', [
                 "complaintID" => $this->coreID, 
                 "anonyLogin" => ( in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
@@ -440,17 +412,18 @@ class OpenPolice extends SurvFormTree
             }
                 
             $ret .= view('vendor.openpolice.nodes.285-gold-what-happened', [ 
-                "victims"             => $victims,
-                "victimNames"        => $victimNames, 
-                "victim1youLower"    => $victim1youLower, 
-                "sceneType"            => $sceneType, 
-                "eventTypes"        => $this->eventTypes,
-                "eventTypeLabel"    => $this->eventTypeLabel, 
-                "forceCivs"            => $forceCivs, 
-                "forceType"            => $GLOBALS["DB"]->defValues["Force Type"], 
-                "otherInd"            => $otherInd, 
-                "forceAnimal"        => $forceAnimal, 
-                "eventCivLookup"    => $this->eventCivLookup, 
+                "victims"         => $victims,
+                "victimNames"     => $victimNames, 
+                "victim1youLower" => $victim1youLower, 
+                "sceneType"       => $sceneType, 
+                "eventTypes"      => $this->eventTypes,
+                "eventTypeLabel"  => $this->eventTypeLabel, 
+                "forceCivs"       => $forceCivs, 
+                "forceType"       => $GLOBALS["DB"]->defValues["Force Type"], 
+                "otherInd"        => $otherInd, 
+                "forceAnimal"     => $forceAnimal, 
+                "eventCivLookup"  => $this->eventCivLookup, 
+                "userRole"        => trim($this->sessData->dataSets["Civilians"][0]->CivRole)
             ])->render();
             $this->pageHasReqs++;
         } elseif ($nID == 288) {
@@ -498,26 +471,6 @@ class OpenPolice extends SurvFormTree
                 The official medical evidence will also help improve your complaint.</i>
             </div>
             </div>';
-        } elseif ($nID == 267) {
-            $allegs = ((isset($this->sessData->dataSets["Allegations"])) 
-                ? $this->sessData->dataSets["Allegations"] : []);
-            $ret .= view('vendor.openpolice.nodes.267-review-story', [
-                "ComSummary" => $this->sessData->dataSets["Complaints"][0]->ComSummary, 
-                "allegs" => $this->commaAllegationList($allegs) ])->render()
-            . '<div class="nPrompt pB10">
-                <div class=\'mBn10\'>Keep this under 400 words.</div>
-                <i>word count:</i> &nbsp;&nbsp;<div id="wordCnt267" class="f18 disIn"></div>
-            </div>';
-        } elseif ($nID == 269) {
-            $treeClassReport = new OpenPoliceReport(new Request, $this->coreID);
-            $treeClassReport->loadSessionData($this->coreID);
-            $previewPublic = $treeClassReport->printFullReport('Public');
-            $previewPrivate = $treeClassReport->printFullReport('Investigate');
-            $ret .= view('vendor.openpolice.nodes.269-confirm-complaint', [
-                "complaint"         => $this->sessData->dataSets["Complaints"][0], 
-                "previewPublic"     => $previewPublic, 
-                "previewPrivate"     => $previewPrivate, 
-            ])->render();
         } elseif ($nID == 270) {
             $url = '/report/' . $this->coreID;
             if (trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
@@ -549,7 +502,6 @@ class OpenPolice extends SurvFormTree
                 if (sizeof($prevEvents) > 0) {
                     foreach ($prevEvents as $i => $prevEveID) {
                         $eveSeq = $this->getEventSequence($prevEveID);
-                        //echo '<pre>'; print_r($eveSeq); echo '</pre>';
                         $ret .= '<div class="nFld pT20" style="font-size: 125%;"><label for="eventMerge' . $i . '">
                             <input type="radio" name="eventMerge" id="eventMerge' . $i . '" value="' . $prevEveID . '">
                             <span class="mL5">' . $this->printEventSequenceLine($eveSeq[0]) . '</span>
@@ -747,12 +699,13 @@ class OpenPolice extends SurvFormTree
     { 
         if (sizeof($tmpSubTier) == 0) $tmpSubTier = $this->loadNodeSubTier($nID);
         list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
-        //if ($this->debugOn) { echo 'postNodePublicCustom('.$nID.'), tbl: ' . $tbl . ', fld: ' . $fld . '<br />'; }
         $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
-        if ($nID == 15) return true; // Incident Start-End Date & Times
-        if ($nID == 268) { // Unresolved criminal charges
-            if ($this->REQ->has('n268fld') && in_array($this->REQ->n268fld, ['Y', '?']) 
-                && $this->REQ->has('n439fld')) {
+        if ($nID == 28) { // Complainant's Role
+            $this->sessData->dataSets["Civilians"][0]->CivRole = trim($this->REQ->input('n28fld'));
+            $this->sessData->dataSets["Civilians"][0]->save();
+            return true;
+        } elseif ($nID == 439) { // Unresolved criminal charges decision
+            if ($this->REQ->has('n439fld')) {
                 $defID = $GLOBALS["DB"]->getDefID('Unresolved Charges Actions', 'Full complaint to print or save');
                 if ($this->REQ->input('n439fld') == $defID) {
                     $defID = $GLOBALS["DB"]->getDefID('Privacy Types', 'Anonymized');
@@ -770,10 +723,18 @@ class OpenPolice extends SurvFormTree
                     }
                 }
             }
-        } elseif ($nID == 439) {
+            return false;
+        } elseif ($nID == 15) { // Incident Start-End Date & Times
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', date("Y-m-d", strtotime($this->REQ->n15fld)).' '.$this->postFormTimeStr(16));
             return true;
-        } elseif ($nID == 16 || $nID == 17) {
+        } elseif ($nID == 16) {
+            return true;
+        } elseif ($nID == 17) {
             $this->sessData->currSessData($nID, $tbl, $fld, 'update', date("Y-m-d", strtotime($this->REQ->n15fld)).' '.$this->postFormTimeStr($nID));
+            return true;
+        } elseif ($nID == 47) { // Complainant Recorded Incident?
+            $this->sessData->dataSets["Civilians"][0]->CivCameraRecord = $this->REQ->input('n47fld');
+            $this->sessData->dataSets["Civilians"][0]->save();
             return true;
         } elseif ($nID == 577) { // Victim Vehicle is a previously entered?
             $previously = $this->getNodeCurrSessData(577);
@@ -867,6 +828,32 @@ class OpenPolice extends SurvFormTree
             }
         } elseif ($nID == 146) { // Going Gold?
             // probably some transitions required?
+            if ($this->REQ->has('n146fld') && $this->REQ->n146fld == 'Gold' 
+                && sizeof($this->sessData->loopItemIDs["Victims"]) == 1) {
+                $this->checkHasEventSeq($nID);
+                if (sizeof($this->eventCivLookup["Stops"]) == 0 
+                    && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilStopYN)
+                    && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilStopYN, ['Y', '?'])) {
+                    $this->addNewEveSeq('Stops', $this->sessData->loopItemIDs["Victims"][0]);
+                }
+                if (sizeof($this->eventCivLookup["Searches"]) == 0 
+                    && ( (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilSearchYN)
+                    && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilSearchYN, ['Y', '?']))
+                    || (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilPropertyYN)
+                    && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilPropertyYN, ['Y', '?'])) )) {
+                    $this->addNewEveSeq('Searches', $this->sessData->loopItemIDs["Victims"][0]);
+                }
+                if (sizeof($this->eventCivLookup["Force"]) == 0 
+                    && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilForceYN)
+                    && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilForceYN, ['Y', '?'])) {
+                    $this->addNewEveSeq('Force', $this->sessData->loopItemIDs["Victims"][0]);
+                }
+                if (sizeof($this->eventCivLookup["Arrests"]) == 0 
+                    && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestYN)
+                    && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestYN, ['Y', '?'])) {
+                    $this->addNewEveSeq('Arrests', $this->sessData->loopItemIDs["Victims"][0]);
+                }
+            }
             return false;
         } elseif ($nID == 285) { // establishing Events' instances
             $this->initializeGoldEvents($nID);
@@ -964,18 +951,21 @@ class OpenPolice extends SurvFormTree
     // returns an array of overrides for ($currNodeSessionData, ???... 
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $currNodeSessionData = '')
     {
-        //if ($this->debugOn) { echo 'printNodeSessDataOverride('.$nID.')<br />'; }
-        if ($nID == 19) { // Would you like to provide the GPS location?
+        if ($nID == 28) { // Complainant's Role
+            return [trim($this->sessData->dataSets["Civilians"][0]->CivRole)];
+        } elseif ($nID == 47) { // Complainant Recorded Incident?
+            return [trim($this->sessData->dataSets["Civilians"][0]->CivCameraRecord)];
+        } elseif ($nID == 19) { // Would you like to provide the GPS location?
             if (intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLat) != 0 
                 || intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLng) != 0) {
-                return array('Yes');
+                return ['Yes'];
             } else {
                 return [];
             }
         } elseif ($nID == 39) {
             if ($currNodeSessionData == '') {
                 $user = Auth::user();
-                return array($user->email);
+                return [$user->email];
             }
         } elseif ($nID == 671) { // Officers Used Profanity?
             $currVals = [];
@@ -1108,13 +1098,11 @@ class OpenPolice extends SurvFormTree
     
     protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
     {
-        //echo 'printSetLoopNavRowCustom(' . $nID . '<br />';
-        if (in_array($nID, array(55, 97)) && $loopItem->CivIsCreator == 'Y') {
-            return '<div class="wrapLoopItem"><h2 class="m0">You</h2></div>' . "\n"; // edit jumps Complainant back to select role in incident
-        } elseif ($nID == 143 && $loopItem && sizeof($loopItem) > 0) {     // $tbl == 'Departments'
+        if ($nID == 143 && $loopItem && sizeof($loopItem) > 0) { // $tbl == 'Departments'
             return view('vendor.openpolice.nodes.143-dept-loop-custom-row', [
                 "loopItem" => $this->sessData->getChildRow('LinksComplaintDept', $loopItem->getKey(), 'Departments'), 
-                "setIndex" => $setIndex
+                "setIndex" => $setIndex, 
+                "itemID"   => $loopItem->getKey()
             ])->render();
         }
         return '';
@@ -1327,7 +1315,7 @@ class OpenPolice extends SurvFormTree
     
     protected function checkHasEventSeq($nID)
     {
-        if (sizeof($this->eventCivLookup) > 0) return $this->eventCivLookup;
+        //if (sizeof($this->eventCivLookup) > 0) return $this->eventCivLookup;
         $this->eventCivLookup = [
             'Stops'        => [], 
             'Searches'     => [], 
@@ -1355,7 +1343,7 @@ class OpenPolice extends SurvFormTree
                 $this->eventCivLookup["Searches"][] = $civ;
             }
             if ($this->getCivEveSeqIdByType($civ, 'Force') > 0) {
-                $this->eventCivLookup["Force"][]   = $civ;
+                $this->eventCivLookup["Force"][] = $civ;
             }
             if ($arrestEveSeqID > 0) {
                 $this->eventCivLookup["Arrests"][] = $civ;
@@ -1842,9 +1830,9 @@ class OpenPolice extends SurvFormTree
     {
         $race = $GLOBALS["DB"]->getDefValue('Races', $raceDefID);
         if (in_array($race, ['Other', 'Decline or Unknown'])) return '';
-        return str_replace('Asian American',             'Asian', 
-            str_replace('Black or African American',     'Black', 
-            str_replace('Hispanic or Latino',             'Hispanic', 
+        return str_replace('Asian American',         'Asian', 
+            str_replace('Black or African American', 'Black', 
+            str_replace('Hispanic or Latino',        'Hispanic', 
             $race)));
     }
     
@@ -1854,15 +1842,15 @@ class OpenPolice extends SurvFormTree
         $civ2 = [];
         $civ2 = $this->sessData->getChildRow($type, $id, 'PersonContact');
         if (sizeof($civ2) > 0 && (trim($civ2->PrsnNameFirst) != '' || trim($civ2->PrsnNameLast) != '')) {
-            $name = $civ2->PrsnNameFirst.' '.$civ2->PrsnNameLast.' '.$name;
+            $name = $civ2->PrsnNameFirst . ' ' . $civ2->PrsnNameLast . ' ' . $name;
         } else {
             if ($type == 'Officers' && isset($row->OffBadgeNumber) && intVal($row->OffBadgeNumber) > 0) {
-                $name = 'Badge #' . $row->OffBadgeNumber .' '.$name;
+                $name = 'Badge #' . $row->OffBadgeNumber . ' ' . $name;
             } else {
                 $civ2 = $this->sessData->getChildRow($type, $id, 'PhysicalDesc');
                 if (sizeof($civ2) > 0) {
-                    if (trim($civ2->PhysGender) != '') $name = $this->getGenderLabel($civ2).' '.$name;
-                    if (intVal($civ2->PhysRace) > 0) $name = $this->shortRaceName($civ2->PhysRace).' '.$name;
+                    if (trim($civ2->PhysGender) != '') $name = $this->getGenderLabel($civ2) . ' ' . $name;
+                    if (intVal($civ2->PhysRace) > 0) $name = $this->shortRaceName($civ2->PhysRace) . ' ' . $name;
                 }
             }
         }
@@ -1881,14 +1869,13 @@ class OpenPolice extends SurvFormTree
         if ($civ->CivIsCreator == 'Y' && (($loop == 'Victims' && $civ->CivRole == 'Victim') 
             || ($loop == 'Witnesses' && $civ->CivRole == 'Witness')) ) {
             if (!$this->isReport) {
-                $name = 'You '.$name;
+                $name = 'You ' . $name;
             } else {
-                $name = $civ->CivNameFirst.' '.$civ->CivNameLast;
+                $name = $civ->CivNameFirst . ' ' . $civ->CivNameLast;
                 if (trim($name) == '') $name = 'Complainant';
             }
         }
         else $name = $this->getPersonLabel('Civilians', $civ->CivID, $civ);
-        if (trim($name) == '') $name = (($loop == 'Victims') ? 'Victim' : 'Witness') . ' #' . (1+$itemInd);
         return trim($name);
     }
     
@@ -2234,22 +2221,29 @@ class OpenPolice extends SurvFormTree
     public function runAjaxChecks(Request $request) {
         
         if ($request->has('email') && $request->has('password')) {
+            
             print_r($request);
             $chk = User::where('email', $request->email)->get();
             if ($chk && sizeof($chk) > 0) echo 'found';
             echo 'not found';
             exit;
+            
         } elseif ($request->has('policeDept')) {
+            
             if (trim($request->get('policeDept')) == '') {
                 return '<i>Please type part of the department\'s name to find it.</i>';
             }
+            $depts = [];
             // Prioritize by Incident City first, also by Department size (# of officers)
-            $depts = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
-                ->where('DeptAddressState', $request->get('policeState'))
-                ->orderBy('DeptName', 'asc')
-                ->get();
+            $reqState = (($request->has('policeState')) ? trim($request->get('policeState')) : '');
+            if (!in_array($reqState, ['', 'US'])) {
+                $depts = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
+                    ->where('DeptAddressState', $reqState)
+                    ->orderBy('DeptName', 'asc')
+                    ->get();
+            }
             $deptsFed = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
-                ->where('DeptType', 266)
+                ->where('DeptType', 366)
                 ->orderBy('DeptName', 'asc')
                 ->get();
             if ($deptsFed && sizeof($deptsFed) > 0) {
@@ -2262,8 +2256,11 @@ class OpenPolice extends SurvFormTree
                 "newDeptStateDrop" => $GLOBALS["DB"]->states->stateDrop($request->get('policeState'), true)
             ]);
             return '';
+            
         } elseif ($request->has('saveIncEveOrder')) {
+            
             $this->ajaxSaveIncEveOrder();
+            
         }
         exit;
     }

@@ -97,7 +97,7 @@
                             <fieldset class="form-group">
                                 <label for="DeptAddressStateID">State</label>
                                 <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" autocomplete="off" >
-                                {!! $GLOBALS["DB"]->states->stateDrop() !!}
+                                {!! $GLOBALS["DB"]->states->stateDrop('', true) !!}
                                 </select>
                             </fieldset>
                         </div>

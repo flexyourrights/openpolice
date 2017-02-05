@@ -1,16 +1,14 @@
 <!-- resources/views/vendor/openpolice/nodes/285-gold-what-happened.blade.php -->
 
 <h1>What Happened?</h1>
+<div class=""></div>
 
 @foreach ($eventTypes as $eventType)
     @if ($eventType != 'Arrests')
-        <div id="nLabel285{{ $eventType }}" class="nPrompt mT20">
-        @if (sizeof($victims) > 1) 
-            <nobr><span class="fPerc125 bld slBlueDark">{!! $eventTypeLabel[$eventType] !!}:</span></nobr>
-        @endif
-        </div>
-        <div class="nPrompt">
-            <b>{{ $eventTypeLabel[$eventType] }}:</b> 
+        <?php /* <div id="nLabel285{{ $eventType }}" class="nPrompt mT20">
+            <h2 class="slBlueDark">{!! $eventTypeLabel[$eventType] !!}:</h2>
+        </div> */ ?>
+        <div class="nPrompt mT20 pT20">
             @if ($eventType == 'Stops')
                 Did an officer 
                 @if ($sceneType == 'home') 
@@ -35,7 +33,9 @@
                         @if (sizeof($victims) > 1)
                             {{ $victimNames[$civ] }}
                         @else
-                            Yes
+                            @if ($eventType == 'Force') Yes, against you
+                            @else Yes
+                            @endif
                         @endif
                     </label></nobr>
                 </div> 
@@ -80,7 +80,7 @@
                     <nobr><label for="n285fldForceAnimalID">
                         <input type="checkbox" id="n285fldForceAnimalID" name="n285fld{{ $eventType }}[]" value="0" 
                             @if (sizeof($forceAnimal) > 0) CHECKED @endif autocomplete="off" 
-                            > Against A Pet or Other Animal
+                            > Yes, against a pet or other animal
                     </label></nobr>
                 </div>
                 <div id="node285" class="nodeWrap pT10 pL20 mBn10 @if (sizeof($forceAnimal) > 0) disBlo @else disNon @endif "><nobr>
@@ -128,9 +128,13 @@
 
 <div>
     <div id="nLabel285civQ" class="nPrompt pT20 mT20">
-        Did an officer take 
-        @if (sizeof($victims) > 1) anyone @else {!! $victim1youLower !!} @endif
-        into custody or jail?
+        @if (sizeof($victims) > 1) 
+            Did any of these things happen to anyone during this incident?
+        @else
+            @if ($userRole == 'Victim') Did any of these things happen to you during this incident?
+            @else Did any of these things happen to someone during this incident?
+            @endif
+        @endif
     </div>
     @foreach ($victims as $i => $civ)
         <div class="pL20 pB20">
@@ -138,7 +142,7 @@
             <div class="nFld disIn mR20"><nobr><label for="n285civ{{ $i }}arrest">
                 <input id="n285civ{{ $i }}arrest" name="n285civ{{ $i }}" value="Arrests" type="radio" autocomplete="off" 
                     @if (in_array($civ, $eventCivLookup["Arrests"])) CHECKED @endif 
-                    > Yes, Arrested
+                    > Arrested
             </label></nobr></div>
             <div class="nFld disIn mR20"><nobr><label for="n285civ{{ $i }}citation">
                 <input id="n285civ{{ $i }}citation" name="n285civ{{ $i }}" value="Citations" type="radio" autocomplete="off" 
@@ -152,7 +156,7 @@
             </label></nobr></div>
             <div class="nFld disIn mR20"><nobr><label for="n285civ{{ $i }}none">
                 <input id="n285civ{{ $i }}none" name="n285civ{{ $i }}" value="None" type="radio" autocomplete="off" 
-                    > None
+                    > None of these
             </label></nobr></div>
         </div>
     @endforeach

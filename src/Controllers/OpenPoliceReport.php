@@ -8,14 +8,15 @@ use OpenPolice\Controllers\OpenPolice;
 class OpenPoliceReport extends OpenPolice
 {
     
-    public $classExtension     = 'OpenPoliceReport';
-    public $treeID             = 1;
+    public $classExtension  = 'OpenPoliceReport';
+    public $treeID          = 1;
     protected $isReport     = true;
+    public $hideDisclaim    = false;
     
     protected $subjects     = array();
-    protected $witnesses     = array();
+    protected $witnesses    = array();
     protected $whatHaps     = array();
-    protected $charges         = array();
+    protected $charges      = array();
     
     public function printFullReport($reportType = '', $isAdmin = false)
     {
@@ -133,6 +134,7 @@ class OpenPoliceReport extends OpenPolice
             "basicAllegationList"  => $this->basicAllegationList(true),
             "basicAllegationListF" => $this->simpleAllegationList(),
             "featureImg"           => $this->getFeatureImg(),
+            "hideDisclaim"         => $this->hideDisclaim,
             "isAdmin"              => $isAdmin
         ]);
     }
@@ -651,7 +653,7 @@ class OpenPoliceReport extends OpenPolice
     {              
         $deets = array();
         $StopReasons = '';
-        if (sizeof($this->sessData->dataSets["StopReasons"]) > 0) {
+        if (isset($this->sessData->dataSets["StopReasons"]) && sizeof($this->sessData->dataSets["StopReasons"]) > 0) {
             foreach ($this->sessData->dataSets["StopReasons"] as $reas) {
                 if ($event->StopID == $reas->StopReasStopID) {
                     $stop = $GLOBALS["DB"]->getDefValue('Reason for Pedestrian Stop', $reas->StopReasReason);

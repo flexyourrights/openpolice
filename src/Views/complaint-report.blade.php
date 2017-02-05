@@ -47,12 +47,14 @@
 }
 </style>
 
-<div class="round20 brdRed mT20 mB20 pL20 pR20 pT10 pB10 f20 slRedDark investigateStatus">
-    @if (true || $sessData["Complaints"][0]->ComStatus == 296)
-        We do not know if this complaint has been investigated yet. 
-    @endif
-    The events described here are allegations, which may or may not be factually accurate. 
-</div>
+@if (!isset($hideDisclaim) || !$hideDisclaim)
+    <div class="round20 brdRed mT20 mB20 pL20 pR20 pT10 pB10 f20 slRedDark investigateStatus">
+        @if (true || $sessData["Complaints"][0]->ComStatus == 296)
+            We do not know if this complaint has been investigated yet. 
+        @endif
+        The events described here are allegations, which may or may not be factually accurate. 
+    </div>
+@endif
 
 <div class="row mB20 complaintReportTitle">
     <div class="col-md-8">
@@ -81,32 +83,6 @@
 </div>
 
 <?php /*
-
-
-
-@if ( complaint role == 'Upset'
-
-<p>
-This site might not be for you. You said you are upset about police brutality on the news or on the internet. 
-But this site is for people who <i>experienced</i> or <i>witnessed</i> police misconduct <i>in-person</i>.
-</p><p>
-We do appreciate your interest in police accountability. Here are some other ways you can help:
-<ul>
-<li>Contact the police department you're upset about. <a href="#" target="_blank">Click here to search for the department involved</a>.</li>
-<li>Write to your representatives. <a href="http://www.joincampaignzero.org/action" target="_blank">Click here to urge them to support better police accountability</a>.</li>
-<li>Check out <a href="http://FlexYourRights.org">FlexYourRights.org</a> for helpful info on how to handle police encounters.</li>
-</ul>
-<p>
-If you <i>did</i> experience or witness misconduct in-person, <a href="#" target="_blank">click here to resume your complaint</a>.
-</p>
-
-@endif
-
-
-
-
-
-
 
 @if ($featureImg != '')
     <img src="{{ $featureImg }}" border=0 width=100% >

@@ -47,27 +47,31 @@
         <div class="col-md-6">
             <fieldset class="form-group">
                 <label for="DeptNameID">Department Name</label>
-                <input id="DeptNameID" name="DeptName" value="{{ $deptRow->DeptName }}" type="text" class="form-control" > 
+                <input id="DeptNameID" name="DeptName" value="{{ $deptRow->DeptName }}" 
+                    type="text" class="form-control" > 
             </fieldset>
             <fieldset class="form-group">
                 <label for="DeptAddressID">Street Address</label>
-                <input id="DeptAddressID" name="DeptAddress" value="{{ $deptRow->DeptAddress }}" type="text" class="form-control" > 
+                <input id="DeptAddressID" name="DeptAddress" value="{{ $deptRow->DeptAddress }}" 
+                    type="text" class="form-control" > 
             </fieldset>
             <fieldset class="form-group">
                 <label for="DeptAddress2ID">Address Line 2</label>
-                <input id="DeptAddress2ID" name="DeptAddress2" value="{{ $deptRow->DeptAddress2 }}" type="text" class="form-control" > 
+                <input id="DeptAddress2ID" name="DeptAddress2" value="{{ $deptRow->DeptAddress2 }}" 
+                    type="text" class="form-control" > 
             </fieldset>
             <div class="row">
                 <div class="col-md-6">
                     <fieldset class="form-group">
                         <label for="DeptAddressCityID">City</label>
-                        <input id="DeptAddressCityID" name="DeptAddressCity" value="{{ $deptRow->DeptAddressCity }}" type="text" class="form-control" > 
+                        <input id="DeptAddressCityID" name="DeptAddressCity" value="{{ $deptRow->DeptAddressCity }}" 
+                            type="text" class="form-control" > 
                     </fieldset>
                 </div>
                 <div class="col-md-3">
                     <fieldset class="form-group">
                         <label for="DeptAddressStateID">State</label>
-                        <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" autocomplete="off" >
+                        <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" autocomplete="off">
                         {!! $stateDrop !!}
                         </select>
                     </fieldset>

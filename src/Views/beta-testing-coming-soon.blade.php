@@ -2,7 +2,7 @@
 
 <center>
 <br /><br />
-<h1>Coming January 2017!</h1>
+<h1>Coming February 2017!</h1>
 ...We're Almost Done With Our Beta Version...
 <div class="row pB20 pT20">
     <div class="col-md-3"></div>
