@@ -13,10 +13,9 @@
                 {!! $stateDropstateDrop !!}
             </select>
         </div>
-        <div class="col-md-1 taR">
-            <a href="javascript:void(0)" id="ajaxSubmit" class="btn btn-primary"><i class="fa fa-search"></i></a>
+        <div class="col-md-1">
+            <a href="javascript:void(0)" id="ajaxSubmit" class="btn btn-primary w100"><i class="fa fa-search"></i></a>
         </div>
     </div>
 </div>
 <div id="ajaxSearch"></div>
-<div class="fC p10"></div>

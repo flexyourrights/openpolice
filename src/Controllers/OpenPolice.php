@@ -107,6 +107,7 @@ class OpenPolice extends SurvFormTree
         $this->minorSections[0][] = array(437,         'Privacy Options');
         $this->minorSections[0][] = array(158,         'When');
         $this->minorSections[0][] = array(159,         'Where');
+        $this->minorSections[0][] = array(707,         'The Scene');
         
         $this->minorSections[1][] = array(139,         'About You');
         $this->minorSections[1][] = array(140,         'Victims');
@@ -140,48 +141,51 @@ class OpenPolice extends SurvFormTree
     // Initializing a bunch of things which are not [yet] automatically determined by the software
     protected function loadExtra()
     {
-        if (!isset($this->sessData->dataSets["Complaints"][0]->ComUniqueStr) 
-            || trim($this->sessData->dataSets["Complaints"][0]->ComUniqueStr) == '') {
-            $this->sessData->dataSets["Complaints"][0]->update([
-                'ComUniqueStr' => $this->getRandStr('Complaints', 'ComUniqueStr', 20)
-            ]);
-        }
-        if ((!isset($this->sessData->dataSets["Complaints"][0]->ComIPaddy) 
-            || trim($this->sessData->dataSets["Complaints"][0]->ComIPaddy) == '') && isset($_SERVER["REMOTE_ADDR"])) {
-            $this->sessData->dataSets["Complaints"][0]->update([
-                'ComIPaddy' => bcrypt($_SERVER["REMOTE_ADDR"])
-            ]);
-        }
-        if (!isset($this->sessData->dataSets["Complaints"][0]->ComIsMobile) 
-            || trim($this->sessData->dataSets["Complaints"][0]->ComIsMobile) == '') {
-            $isMobile = 0;
-            if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec'
-                . '|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?'
-                . '|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap'
-                . '|windows (ce|phone)|xda|xiino/i', $_SERVER['HTTP_USER_AGENT'])
-                || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av'
-                . '|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb'
-                . '|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw'
-                . '|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8'
-                . '|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit'
-                . '|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)'
-                . '|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji'
-                . '|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga'
-                . '|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)'
-                . '|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf'
-                . '|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil'
-                . '|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380'
-                . '|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc'
-                . '|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01'
-                . '|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)'
-                . '|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61'
-                . '|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i', 
-                substr($_SERVER['HTTP_USER_AGENT'],0,4))) {
-                $isMobile = 1;
+        if (isset($this->sessData->dataSets["Complaints"])) {
+            if ((isset($this->sessData->dataSets["Complaints"][0])
+                && !isset($this->sessData->dataSets["Complaints"][0]->ComUniqueStr)) 
+                || trim($this->sessData->dataSets["Complaints"][0]->ComUniqueStr) == '') {
+                $this->sessData->dataSets["Complaints"][0]->update([
+                    'ComUniqueStr' => $this->getRandStr('Complaints', 'ComUniqueStr', 20)
+                ]);
             }
-            $this->sessData->dataSets["Complaints"][0]->update([
-                'ComIsMobile' => $isMobile
-            ]);
+            if ((!isset($this->sessData->dataSets["Complaints"][0]->ComIPaddy) 
+                || trim($this->sessData->dataSets["Complaints"][0]->ComIPaddy) == '') && isset($_SERVER["REMOTE_ADDR"])) {
+                $this->sessData->dataSets["Complaints"][0]->update([
+                    'ComIPaddy' => bcrypt($_SERVER["REMOTE_ADDR"])
+                ]);
+            }
+            if (!isset($this->sessData->dataSets["Complaints"][0]->ComIsMobile) 
+                || trim($this->sessData->dataSets["Complaints"][0]->ComIsMobile) == '') {
+                $isMobile = 0;
+                if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec'
+                    . '|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?'
+                    . '|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap'
+                    . '|windows (ce|phone)|xda|xiino/i', $_SERVER['HTTP_USER_AGENT'])
+                    || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av'
+                    . '|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb'
+                    . '|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw'
+                    . '|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8'
+                    . '|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit'
+                    . '|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)'
+                    . '|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji'
+                    . '|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga'
+                    . '|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)'
+                    . '|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf'
+                    . '|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil'
+                    . '|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380'
+                    . '|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc'
+                    . '|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01'
+                    . '|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)'
+                    . '|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61'
+                    . '|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i', 
+                    substr($_SERVER['HTTP_USER_AGENT'],0,4))) {
+                    $isMobile = 1;
+                }
+                $this->sessData->dataSets["Complaints"][0]->update([
+                    'ComIsMobile' => $isMobile
+                ]);
+            }
         }
         if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
             && isset($this->sessData->dataSets["Civilians"][0])
@@ -258,6 +262,13 @@ class OpenPolice extends SurvFormTree
         return false; 
     }
     
+    protected function isAnonyLogin()
+    {
+        return ( in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
+            || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
+                == intVal($GLOBALS["DB"]->getDefID('Privacy Types', 'Completely Anonymous')) );
+    }
+    
     
 /*****************************************************************************
 // START Processes Which Override Basic Node Printing and $_POST Processing
@@ -281,42 +292,32 @@ class OpenPolice extends SurvFormTree
     protected function customNodePrint($nID = -3, $tmpSubTier = [])
     {
         $ret = '';
-        if ($nID == 454) {
-            return view('vendor.openpolice.registerComplaint', [
-                "complaintID" => $this->coreID, 
-                "anonyLogin" => ( in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
-                    || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
-                        == intVal($GLOBALS["DB"]->getDefID('Privacy Types', 'Completely Anonymous')) ), 
-                "anonyPass" => uniqid(),
-                "currAdmPage" => '', 
-                "user" => Auth::user()
-            ])->render();
-        } elseif ($nID == 576) {
+        if ($nID == 576) {
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
-                "nodes"            =>    [576, 577, 578, 91, 92, 93, 94, 95], 
-                "alreadyDescribed" =>    $this->getNodeCurrSessData($nID),
-                "whichVehic"       =>    $this->getNodeCurrSessData(577),
-                "vehicDeets"       =>    $this->printNodePublic(578),
-                "vehicles"         =>    $this->getVehicles()
+                "nodes"            => [576, 577, 578, 91, 92, 93, 94, 95], 
+                "alreadyDescribed" => $this->getNodeCurrSessData($nID),
+                "whichVehic"       => $this->getNodeCurrSessData(577),
+                "vehicDeets"       => $this->printNodePublic(578),
+                "vehicles"         => $this->getVehicles()
             ])->render();
         } elseif ($nID == 571) {
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
-                "nodes"            =>    [571, 572, 583, 131, 132, 133, 134, 135], 
-                "alreadyDescribed" =>    $this->getNodeCurrSessData($nID),
-                "whichVehic"       =>    $this->getNodeCurrSessData(572),
-                "vehicDeets"       =>    $this->printNodePublic(583),
-                "vehicles"         =>    $this->getVehicles()
+                "nodes"            => [571, 572, 583, 131, 132, 133, 134, 135], 
+                "alreadyDescribed" => $this->getNodeCurrSessData($nID),
+                "whichVehic"       => $this->getNodeCurrSessData(572),
+                "vehicDeets"       => $this->printNodePublic(583),
+                "vehicles"         => $this->getVehicles()
             ])->render();
         } elseif ($nID == 584) {
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
-                "nodes"                =>    [584, 585, 589, 189, 190, 191, 192, -3], 
-                "alreadyDescribed"    =>    $this->getNodeCurrSessData($nID),
-                "whichVehic"        =>    $this->getNodeCurrSessData(585),
-                "vehicDeets"        =>    $this->printNodePublic(589),
-                "vehicles"            =>    $this->getVehicles()
+                "nodes"            => [584, 585, 589, 189, 190, 191, 192, -3], 
+                "alreadyDescribed" => $this->getNodeCurrSessData($nID),
+                "whichVehic"       => $this->getNodeCurrSessData(585),
+                "vehicDeets"       => $this->printNodePublic(589),
+                "vehicles"         => $this->getVehicles()
             ])->render();
         } elseif ($nID == 145) {
-            $this->nextBtnOverride = 'To continue, please find and select a department above';
+            $this->nextBtnOverride = 'Find & Select A Department';
             $searchSuggest = [];
             $deptCitys = OPDepartments::select('DeptAddressCity')
                 ->distinct()
@@ -437,7 +438,7 @@ class OpenPolice extends SurvFormTree
             $ret .= '<div id="nLabel288" class="nPrompt">
                 <h2>Please drag the events below into the order they happened.</h2> 
             </div>
-            <br /><ul id="sortable">' . "\n";
+            <div class="nFld mB20 pB20"><ul id="sortable">' . "\n";
             $eveSeqs = $this->getEventSequence();
             if (sizeof($eveSeqs) > 0) {
                 foreach ($eveSeqs as $eveSeq) {
@@ -447,7 +448,7 @@ class OpenPolice extends SurvFormTree
                         . $this->printEventSequenceLine($eveSeq) . '</li>' . "\n";
                 }
             }
-            $ret .= '</ul>' . "\n";
+            $ret .= '</ul></div>' . "\n";
             
         } elseif ($nID == 415) {
             $civInjs = $this->getCivSetPossibilities('Injuries', 'InjuryCare');
@@ -667,22 +668,6 @@ class OpenPolice extends SurvFormTree
                     else { $("#civ"+injInd+"InjTypes").slideUp("slow"); }
                 });' . "\n";
             }
-        } elseif ($promptNotesSpecial == '[[BodyClicker]]') {
-            $parts = ((trim($currNodeSessionData) != '') ? $this->mexplode(';;', substr($currNodeSessionData, 1, strlen($currNodeSessionData)-2)) : []);
-            
-            $ret .= '<div class="bodyClick">
-            <div style="top: 8px; left: 25px;"><nobr><label for="body0">Head</label><input name="n'.$nID.'fld[]" id="body0" value="59" ' . ((in_array(59, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 38px; left: 31px;"><nobr><label for="body1">Neck</label><input name="n'.$nID.'fld[]" id="body1" value="60" ' . ((in_array(60, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 70px; left: 71px;"><center><label for="body2">Torso</label><br /><input name="n'.$nID.'fld[]" id="body2" value="61" ' . ((in_array(61, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></center></div>
-            <div style="top: 145px; left: -40px;"><nobr><label for="body3">Hand</label><input name="n'.$nID.'fld[]" id="body3" value="62" ' . ((in_array(62, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 96px; left: -14px;"><nobr><label for="body4">Elbow</label><input name="n'.$nID.'fld[]" id="body4" value="63" ' . ((in_array(63, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 114px; left: 137px;"><nobr><input name="n'.$nID.'fld[]" id="body5" value="64" ' . ((in_array(64, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"><label for="body5">Arm</label></nobr></div>
-            <div style="top: 274px; left: 19px;"><nobr><label for="body6">Foot</label><input name="n'.$nID.'fld[]" id="body6" value="65" ' . ((in_array(65, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 208px; left: 15px;"><nobr><label for="body7">Knee</label><input name="n'.$nID.'fld[]" id="body7" value="66" ' . ((in_array(66, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></nobr></div>
-            <div style="top: 189px; left: 105px;"><nobr><input name="n'.$nID.'fld[]" id="body8" value="67" ' . ((in_array(67, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"><label for="body8">Leg</label></nobr></div>
-            <div style="top: 135px; left: 67px;"><center><label for="body9">Crotch</label><br /><input name="n'.$nID.'fld[]" id="body9" value="68" ' . ((in_array(68, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"></center></div>
-            <div style="top: 0px; left: 180px;"><nobr><input name="n'.$nID.'fld[]" id="bodyUnknown" value="69" ' . ((in_array(69, $parts)) ? 'CHECKED' : '') . ' type="checkbox" autocomplete="off"><label for="bodyUnknown">Unknown</label></nobr></div>
-            </div>';
         } elseif ($promptNotesSpecial == '[[VictimsWithoutArrests]]') {
             $ret .= $this->formCivSetPossibilities('!Arrests', 'Charges');
         }
@@ -699,7 +684,9 @@ class OpenPolice extends SurvFormTree
     { 
         if (sizeof($tmpSubTier) == 0) $tmpSubTier = $this->loadNodeSubTier($nID);
         list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
-        $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
+        if (isset($this->sessData->dataSets["Complaints"])) {
+            $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
+        }
         if ($nID == 28) { // Complainant's Role
             $this->sessData->dataSets["Civilians"][0]->CivRole = trim($this->REQ->input('n28fld'));
             $this->sessData->dataSets["Civilians"][0]->save();
@@ -972,7 +959,7 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
                 if ($off->OffUsedProfanity == 'Y') $currVals[] = $off->getKey();
             }
-            return $currVals;
+            return [';' . implode(';', $currVals) . ';'];
         } elseif ($nID == 674) { // Officer Used Profanity?
             return trim($this->sessData->dataSets["Officers"][0]->OffUsedProfanity);
         } elseif ($nID == 670) { // Victims Used Profanity?
@@ -980,7 +967,7 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
                 if ($civ->CivUsedProfanity == 'Y') $currVals[] = $civ->getKey();
             }
-            return $currVals;
+            return [';' . implode(';', $currVals) . ';'];
         } elseif ($nID == 676) { // Victim Used Profanity?
             $civInd = $this->getFirstVictimCivInd();
             if ($civInd >= 0) {
@@ -2267,7 +2254,7 @@ class OpenPolice extends SurvFormTree
     
     public function allegationsList(Request $request)
     {
-        $this->v["content"] = view('vendor.openpolice.allegations' );
+        $this->v["content"] = view('vendor.openpolice.allegations');
         return view('vendor.survloop.master', $this->v);
     }
     

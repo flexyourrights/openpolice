@@ -1,10 +1,9 @@
 <!-- resources/views/vendor/openpolice/ajax/search-police-dept.blade.php -->
 
 @if (sizeof($depts) == 0)
-    <div class="alert alert-warning f20" role="alert">
-        No police departments found when searching:
-        <div class="p20"><i class="blk mR20">"<b>{{ $search }}</b>"</i> in <i class="blk mL20">{{ $stateName }}</i></div>
-        Please type something else in the search bar above.<br />
+    <div class="alert alert-warning fPerc125" role="alert">
+        <p><b>No police departments found by searching <span class="slBlueDark">"{{ $search }}"</span> in 
+        <span class="slBlueDark">{{ $stateName }}</span>. Please type something else in the search bar above.</b></p>
     </div>
 @else
     <div class="jumbotron">
@@ -36,7 +35,7 @@
     </div>
 @endif
 
-<div class="nPrompt gry9 p20">
+<div class="gry6 fPerc125">
     <p>
         Tips for finding the right department:
     </p>
@@ -47,7 +46,8 @@
     </ul>
     <p>
         If you are not sure what police department was involved, 
-        <a href="javascript:void(0)" class="deptLoad" id="dept18124">click here to select a department place holder</a>.
+        <a href="javascript:void(0)" class="deptLoad" id="dept18124"
+            >click here to select a department place holder</a>.
     </p><p>
         If you still can't find the right department, 
         <a id="addNewDept" href="javascript:void(0);">click here to add it to our database</a>.
@@ -80,5 +80,14 @@
     </div>
 </div>
 
+<div class="p10"></div>
 
-
+<style>
+#dept18124 { font-size: 14pt; }
+@media screen and (max-width: 768px) {
+    #dept18124 { font-size: 14pt; }
+}
+@media screen and (max-width: 480px) {
+    #dept18124 { font-size: 14pt; }
+}
+</style>

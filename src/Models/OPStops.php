@@ -36,5 +36,12 @@ class OPStops extends Model
 		'StopAllegWrongfulStop', 
 		'StopAllegWrongfulEntry', 
 		'StopAllegRetaliatoryCharges', 
+		'StopBreathAlcohol', 
+		'StopBreathAlcoholFailed', 
+		'StopBreathCannabis', 
+		'StopBreathCannabisFailed', 
+		'StopSalivaTest', 
+		'StopSobrietyOther', 
+		'StopSobrietyOtherDescribe', 
     ];
 }
