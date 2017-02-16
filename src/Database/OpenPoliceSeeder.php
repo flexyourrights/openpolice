@@ -18538,7 +18538,7 @@ Example: A woman is groped on the street by an unknown man. When the police arri
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
 			'TreeName' => 'Open Police Complaint',
-			'TreeRootURL' => 'https://app.openpolicecomplaints.org',
+			'TreeRootURL' => 'https://app.openpolice.org',
 			'TreeRoot' => '3',
 			'TreeFirstPage' => '667',
 			'TreeLastPage' => '529',
@@ -21023,10 +21023,10 @@ We will submit this story to official police oversight agencies. So please check
 
 Amazing job! Thank you so much for sharing your story. You should receive emails regarding the status of submitting your complaint to an appropriate police department oversight agency.
 
-<a href="https://app.openpolicecomplaints.org/report/" target="_blank" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-file-text"></i></div> View Your Story</a>
+<a href="/report/" target="_blank" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-file-text"></i></div> View Your Story</a>
 <div class="p20"></div>
 <a href="#" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-facebook-square"></i></div> Share Your Story Facebook</a>
-<a href="https://app.openpolicecomplaints.org/report/" target="_blank" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-print"></i></div> Print Your Complaint</a>
+<a href="https://app.openpolice.org/report/" target="_blank" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-print"></i></div> Print Your Complaint</a>
 <div class="p20"></div>
 <a href="#" class="facebookShareBig"><div class="disIn f32 pR5"><i class="fa fa-floppy-o"></i></div> Save Your Complaint</a>
 <div class="p20"></div>
@@ -24269,7 +24269,7 @@ Next, you can edit the original story you wrote. Be sure to include your allegat
 			'NodeParentID' => '482',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<div class="jumbotron">
-<img src="https://app.openpolicecomplaints.org/images/medal-gold.png" align="right" hspace=5 width=20% >
+<img src="https://app.openpolice.org/images/medal-gold.png" align="right" hspace=5 width=20% >
             <h1>Great Job! Want To Go Gold?</h1>
             You have completed a solid complaint. This includes basic info that most departments need to investigate your complaint. 
             <br /><br />

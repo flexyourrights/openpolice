@@ -25,7 +25,7 @@
         which is the gold standard for government transparency regarding police misconduct complaints.
     </p>
     <div class="p20"></div>
-    <a href="https://openpolicecomplaints.org/about/" class="f26" target="_blank"
+    <a href="https://openpolice.org/about/" class="f26" target="_blank"
         ><i>Read About Other Guidance We've Already Received...</i></a>
 </div>
 

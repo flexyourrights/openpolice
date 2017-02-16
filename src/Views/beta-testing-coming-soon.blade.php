@@ -16,10 +16,10 @@
 </div>
 <div class="row pT20">
     <div class="col-md-6">
-        <a href="https://openpolicecomplaints.org/civilian-oversight-future/" class="f30 p20 m20">Our Vision for OPC</a>
+        <a href="https://openpolice.org/civilian-oversight-future/" class="f30 p20 m20">Our Vision for OPC</a>
     </div>
     <div class="col-md-6">
-        <a href="https://OpenPoliceComplaints.org/" class="f30 p20 m20">Back To Main Site</a>
+        <a href="https://openpolice.org/" class="f30 p20 m20">Back To Main Site</a>
     </div>
 </div>
 </center>

@@ -248,15 +248,16 @@
             <div class="col-md-6 taR">
                 <a href="https://twitter.com/share" class="twitter-share-button" 
                     data-text="Check out this police complaint!" data-via="opencomplaints" 
-                    data-url="https://app.openpolicecomplaints.org/report{{ $ComSlug }}" >Tweet</a>
+                    data-url="{{ $GLOBALS['DB']->sysOpts['app-url'] }}/report{{ $ComSlug }}" >Tweet</a>
             </div>
             <div class="col-md-6 taL">
                 <div class="fb-share-button" data-layout="button_count" 
-                    data-href="https://app.openpolicecomplaints.org/report{{ $ComSlug }}"></div>
+                    data-href="{{ $GLOBALS['DB']->sysOpts['app-url'] }}/report{{ $ComSlug }}"></div>
             </div>
         </div>
     @endif
     
-    <center><a class="f12 noUnd" href="/report{{ $ComSlug }}">https://app.openpolicecomplaints.org/report{{ $ComSlug }}</a></center>
+    <center><a class="f12 noUnd" href="/report{{ $ComSlug }}"
+        >{{ $GLOBALS['DB']->sysOpts['app-url'] }}/report{{ $ComSlug }}</a></center>
 
 </div>

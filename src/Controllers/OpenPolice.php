@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\SLZips;
 
 use App\Models\OPEventSequence;
 use App\Models\OPStops;
@@ -16,6 +17,7 @@ use App\Models\OPForce;
 use App\Models\OPOrders;
 use App\Models\OPInjuries;
 use App\Models\OPEvidence;
+use App\Models\OPCivilians;
 use App\Models\OPDepartments;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksOfficerEvents;
@@ -96,45 +98,44 @@ class OpenPolice extends SurvFormTree
     {
         // Establishing Main Navigation Organization, with Node ID# and Section Titles
         $this->majorSections = [];
-        $this->majorSections[] = array(1,             'Your Story');
-        $this->majorSections[] = array(4,             'Who\'s Involved');
-        $this->majorSections[] = array(5,             'Allegations');
-        $this->majorSections[] = array(6,             'Go Gold');
-        $this->majorSections[] = array(419,         'Finish');
+        $this->majorSections[] = array(1,      'Your Story');
+        $this->majorSections[] = array(4,      'Who\'s Involved');
+        $this->majorSections[] = array(5,      'Allegations');
+        $this->majorSections[] = array(6,      'Go Gold');
+        $this->majorSections[] = array(419,    'Finish');
         
         $this->minorSections = array( [], [], [], [], [] );
-        $this->minorSections[0][] = array(157,         'Start Your Story');
-        $this->minorSections[0][] = array(437,         'Privacy Options');
-        $this->minorSections[0][] = array(158,         'When');
-        $this->minorSections[0][] = array(159,         'Where');
-        $this->minorSections[0][] = array(707,         'The Scene');
+        $this->minorSections[0][] = array(157, 'Start Your Story');
+        $this->minorSections[0][] = array(437, 'Privacy Options');
+        $this->minorSections[0][] = array(158, 'When');
+        $this->minorSections[0][] = array(159, 'Where');
+        $this->minorSections[0][] = array(707, 'The Scene');
         
-        $this->minorSections[1][] = array(139,         'About You');
-        $this->minorSections[1][] = array(140,         'Victims');
-        $this->minorSections[1][] = array(141,         'Witnesses');
-        $this->minorSections[1][] = array(144,         'Police Departments');
-        $this->minorSections[1][] = array(142,         'Officers');
+        $this->minorSections[1][] = array(139, 'About You');
+        $this->minorSections[1][] = array(140, 'Victims');
+        $this->minorSections[1][] = array(141, 'Witnesses');
+        $this->minorSections[1][] = array(144, 'Police Departments');
+        $this->minorSections[1][] = array(142, 'Officers');
         
-        $this->minorSections[2][] = array(198,         'Stops');
-        $this->minorSections[2][] = array(199,         'Searches');
-        $this->minorSections[2][] = array(200,         'Force');
-        $this->minorSections[2][] = array(201,         'Arrests');
-        $this->minorSections[2][] = array(202,         'Citations');
-        $this->minorSections[2][] = array(154,         'Other');
+        $this->minorSections[2][] = array(198, 'Stops');
+        $this->minorSections[2][] = array(199, 'Searches');
+        $this->minorSections[2][] = array(200, 'Force');
+        $this->minorSections[2][] = array(201, 'Arrests');
+        $this->minorSections[2][] = array(202, 'Citations');
+        $this->minorSections[2][] = array(154, 'Other');
         
-        $this->minorSections[3][] = array(484,         'What Happened');
-        $this->minorSections[3][] = array(149,         'Stops');
-        $this->minorSections[3][] = array(150,         'Searches');
-        $this->minorSections[3][] = array(151,         'Force');
-        $this->minorSections[3][] = array(152,         'Arrests');
-        $this->minorSections[3][] = array(153,         'Citations');
-        $this->minorSections[3][] = array(410,         'Injuries');
+        $this->minorSections[3][] = array(484, 'GO GOLD!');
+        $this->minorSections[3][] = array(149, 'Stops');
+        $this->minorSections[3][] = array(150, 'Searches');
+        $this->minorSections[3][] = array(151, 'Force');
+        $this->minorSections[3][] = array(152, 'Arrests');
+        $this->minorSections[3][] = array(153, 'Citations');
+        $this->minorSections[3][] = array(410, 'Injuries');
         
-        $this->minorSections[4][] = array(420,         'Review Narrative');
-        $this->minorSections[4][] = array(431,         'Sharing Options');
-        $this->minorSections[4][] = array(156,         'Submit Complaint');
+        $this->minorSections[4][] = array(420, 'Review Narrative');
+        $this->minorSections[4][] = array(431, 'Sharing Options');
+        $this->minorSections[4][] = array(156, 'Submit Complaint');
         
-        //echo '<pre>'; print_r(Auth::user()); echo '</pre><div style="padding: 100px;">' . Auth::user()->name . '</div>';
         return true;
     }
         
@@ -199,15 +200,9 @@ class OpenPolice extends SurvFormTree
         return true;
     }
     
-    protected function isOwnerUser()
-    {
-        if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0) return false;
-        return ($this->sessData->dataSets["Civilians"][0]->CivUserID == $this->v["user"]->id);
-    }
-    
     protected function overrideMinorSection($nID = -3, $majorSectInd = -3)
     {
-        if (in_array($nID, [286, 285, 288])) return 148;
+        if (in_array($nID, [483, 484, 485])) return 148;
         return -1;
     }
     
@@ -267,6 +262,50 @@ class OpenPolice extends SurvFormTree
         return ( in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
             || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
                 == intVal($GLOBALS["DB"]->getDefID('Privacy Types', 'Completely Anonymous')) );
+    }
+    
+    public function findUserCoreID()
+    {
+        $this->coreIncompletes = [];
+        if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
+            $incompletes = DB::table('OP_Civilians')
+                ->join('OP_Complaints', 'OP_Civilians.CivComplaintID', '=', 'OP_Complaints.ComID')
+                ->where('OP_Civilians.CivUserID', $this->v["user"]->id)
+                ->where('OP_Civilians.CivIsCreator', 'Y')
+                ->where('OP_Complaints.ComStatus', $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete'))
+                ->whereNotNull('OP_Complaints.ComSummary')
+                ->where('OP_Complaints.ComSummary', 'NOT LIKE', '')
+                ->select('OP_Complaints.*') //, 'OP_Civilians.CivID', 'OP_Civilians.CivRole'
+                ->orderBy('OP_Complaints.created_at', 'desc')
+                ->get();
+            if ($incompletes && sizeof($incompletes) > 0) {
+                foreach ($incompletes as $i => $com) {
+                    $this->coreIncompletes[] = [$com->ComID, $com];
+                }
+                return $this->coreIncompletes[0][0];
+            }
+        }
+        return -3;
+    }
+    
+    public function multiRecordCheckIntro()
+    {
+        return '<h1 class="mT0 mB20 slBlueDark">You Have Multiple Open Complaints:</h1>';
+    }
+    
+    public function multiRecordCheckRowSummary($coreRecord)
+    {
+        if (isset($coreRecord[1]->ComSummary) && trim($coreRecord[1]->ComSummary) != '') {
+            return '<textarea class="w100 bgNone brdC gry6 pL5" style="height: '
+                . (($coreRecord[0] == $this->coreID) ? 75 : 69) . 'px;">' 
+                . trim($coreRecord[1]->ComSummary) . '</textarea>';
+        }
+        return '';
+    }
+    
+    public function multiRecordCheckDelWarn()
+    {
+        return 'Are you sure you want to delete this complaint? Deleting it CANNOT be undone.';
     }
     
     
@@ -354,102 +393,9 @@ class OpenPolice extends SurvFormTree
             ])->render();
             $ret .= view('vendor.openpolice.nodes.145-dept-search', [ 
                 "IncAddressCity" => $this->sessData->dataSets["Incidents"][0]->IncAddressCity, 
-                "stateDropstateDrop" => $GLOBALS["DB"]->states->stateDrop($this->sessData->dataSets["Incidents"][0]->IncAddressState, true) 
+                "stateDropstateDrop" => $GLOBALS["DB"]->states->stateDrop(
+                    $this->sessData->dataSets["Incidents"][0]->IncAddressState, true) 
             ])->render();
-        } elseif ($nID == 285) {
-            $this->checkHasEventSeq($nID);
-            $victims = $this->sessData->loopItemIDs['Victims'];
-            $victimNames = $victimArrest = [];
-            foreach ($victims as $i => $civ) $victimNames[$civ] = $this->getCivilianNameFromID($civ);
-            $victim1youLower = ((isset($victims[0]) && isset($victimNames[$victims[0]])) ? $this->youLower($victimNames[$victims[0]]) : 'you');
-            //$victim1youLower = $this->youLower($victimNames[$victims[0]]);
-            
-            $sceneType = 'vehicle';
-            if (in_array($this->sessData->dataSets["Scenes"][0]->ScnType, [
-                    $GLOBALS["DB"]->getDefID('Scene Type', 'Home or Private Residence'), 
-                    $GLOBALS["DB"]->getDefID('Scene Type', 'Workplace')
-                ])) {
-                $sceneType = 'home';
-            }
-            
-            $forceAnimal = [];
-            if (isset($this->eventCivLookup["Force Animal"][0]) 
-                && intVal($this->eventCivLookup["Force Animal"][0]) > 0) {
-                $forceAnimal = $this->sessData->getRowById('Force', $this->eventCivLookup["Force Animal"][0]);
-            }
-            $GLOBALS["DB"]->loadDefinitions('Force Type');
-            $otherInd = -3;
-            foreach ($GLOBALS["DB"]->defValues["Force Type"] as $i => $fType) {
-                if ($fType->DefValue == 'Other') $otherInd = $i;
-            }
-            
-            $this->pageAJAX .= '$("#n285fldForceAnimalID").click(function() {
-                if (document.getElementById("n285fldForceAnimalID").checked) { $("#node285").slideDown("fast"); }
-                else { $("#node285").slideUp("fast"); }
-            });' . "\n";
-            $this->pageJSvalid .= "if (document.getElementById('n285fldForceAnimalID').checked) {
-                if (document.getElementById('ForceAnimalDescID').value.trim() == '') { setFormLabelRed(285); totFormErrors++; }
-                else { setFormLabelBlack(285); }
-            } \n";
-            foreach ($victims as $i => $civ) {
-                $this->pageAJAX .= '$("#n285fldForce'.$i.'").click(function(){
-                    if (document.getElementById("n285fldForce'.$i.'").checked) $("#forceCiv'.$i.'").slideDown("fast");
-                    else $("#forceCiv'.$i.'").slideUp("fast");
-                });' . "\n";
-            }
-            $forceCivs = $this->getCivForceTypes();
-            if (sizeof($forceCivs) > 0) {
-                foreach ($forceCivs as $civID => $forces) {
-                    $this->pageFldList[] = 'n-'.$civID.'fld';
-                    foreach ($GLOBALS["DB"]->defValues["Force Type"] as $i => $fType) $this->pageFldList[] = 'n'.$civID.'fld'.$i;
-                    $this->pageJSvalid .= "if (document.getElementById('n".$civID."VisibleID').value == 1) reqFormFldRadio(".$civID.", " . sizeof($GLOBALS["DB"]->defValues["Force Type"]) . ");
-                                   if (document.getElementById('n-".$civID."VisibleID').value == 1) reqFormFld(-".$civID.");";
-                    $this->pageAJAX .= 'conditionNodes['.$civID.'] = true; nodeKidList['.$civID.'] = [-'.$civID.']; nodeKidList[-'.$civID.'] = new [];
-                    $(".n'.$civID.'fldCls").click(function(){ var foundKidResponse = false;
-                        if (document.getElementById("n'.$civID.'fld'.$otherInd.'").checked) foundKidResponse = true;
-                        if (foundKidResponse) { document.getElementById("node'.$civID.'kids").style.display="inline"; kidsVisible('.$civID.', true, true); } else { document.getElementById("node'.$civID.'kids").style.display="none"; kidsVisible('.$civID.', false, true); }
-                    });' . "\n";
-                }
-            }
-                
-            $ret .= view('vendor.openpolice.nodes.285-gold-what-happened', [ 
-                "victims"         => $victims,
-                "victimNames"     => $victimNames, 
-                "victim1youLower" => $victim1youLower, 
-                "sceneType"       => $sceneType, 
-                "eventTypes"      => $this->eventTypes,
-                "eventTypeLabel"  => $this->eventTypeLabel, 
-                "forceCivs"       => $forceCivs, 
-                "forceType"       => $GLOBALS["DB"]->defValues["Force Type"], 
-                "otherInd"        => $otherInd, 
-                "forceAnimal"     => $forceAnimal, 
-                "eventCivLookup"  => $this->eventCivLookup, 
-                "userRole"        => trim($this->sessData->dataSets["Civilians"][0]->CivRole)
-            ])->render();
-            $this->pageHasReqs++;
-        } elseif ($nID == 288) {
-            $this->pageAJAX .= '$("#sortable").sortable({ axis: "y", update: function (event, ui) {
-                var data = $(this).sortable("serialize");
-                //alert("/ajax/?saveIncEveOrder=1&"+data);
-                document.getElementById("hidFrameID").src="/ajax/?saveIncEveOrder=1&"+data+"";
-                //$("#hidFrameID").load("/ajax/?saveIncEveOrder=1&"+data);
-            } }); $("#sortable").disableSelection();';
-                // $.ajax({ data: data, type: "POST", url: "/ajax/?saveIncEveOrder=1" });
-            $ret .= '<div id="nLabel288" class="nPrompt">
-                <h2>Please drag the events below into the order they happened.</h2> 
-            </div>
-            <div class="nFld mB20 pB20"><ul id="sortable">' . "\n";
-            $eveSeqs = $this->getEventSequence();
-            if (sizeof($eveSeqs) > 0) {
-                foreach ($eveSeqs as $eveSeq) {
-                    $ret .= '<li id="item-'.$eveSeq["EveID"].'" class="sortOff" onMouseOver="'
-                        . 'this.className=\'sortOn\';" onMouseOut="this.className=\'sortOff\';">'
-                        . '<span><i class="fa fa-ellipsis-v slBlueLight mL20 mR20"></i></span> ' 
-                        . $this->printEventSequenceLine($eveSeq) . '</li>' . "\n";
-                }
-            }
-            $ret .= '</ul></div>' . "\n";
-            
         } elseif ($nID == 415) {
             $civInjs = $this->getCivSetPossibilities('Injuries', 'InjuryCare');
             $ret .= '<div id="node415" class="nodeWrap">
@@ -525,15 +471,15 @@ class OpenPolice extends SurvFormTree
                     $currOrder->Officers  = $this->getLinkedToEvent('Officer', -3, -3, $currOrder->OrdID);
                     $currOrder->Civilians = $this->getLinkedToEvent('Civilian', -3, -3, $currOrder->OrdID);
                 }
-                $ret .= '<input type="hidden" name="ordID'.$i.'" value="' 
+                $ret .= '<input type="hidden" name="ordID' . $i . '" value="' 
                     . ((isset($currOrder->OrdID)) ? $currOrder->OrdID : -3) . '">
-                    <input type="hidden" id="orderVis'.$i.'ID" name="orderVis'.$i.'" value="' 
+                    <input type="hidden" id="orderVis' . $i . 'ID" name="orderVis' . $i . '" value="' 
                     . (($i == 0 || isset($currOrder->OrdID)) ? 'Y' : 'N') . '">
-                    <a name="ord'.$i.'"></a><div id="order'.$i.'" class="dis' 
+                    <a name="ord' . $i . '"></a><div id="order' . $i . '" class="dis' 
                     . (($i == 0 || isset($currOrder->OrdID)) ? 'Blo' : 'Non') . ' w100 orderBlock">' . "\n";
                 
                 if ($i > 0) {
-                    $ret .= '<a href="#ord'.($i-1).'" id="delOrder'.$i.'" class="nFormLnkDel fR mTn10">'
+                    $ret .= '<a href="#ord'.($i-1).'" id="delOrder' . $i . '" class="nFormLnkDel fR mTn10">'
                         . '<i class="fa fa-minus-square-o"></i></a><div class="fC mBn10"></div>';
                 }
                 
@@ -543,19 +489,19 @@ class OpenPolice extends SurvFormTree
                         . '<div class="nFld disIn mL20 mR20">' . "\n";
                     foreach ($offs as $offInd => $off) {
                         $ret .= '<div class="nFld disIn mR20"><nobr><input type="checkbox" '
-                             . 'name="order'.$i.'Off[]" id="order'.$i.'Off'.$offInd.'" value="' . $off->OffID . '" ';
+                             . 'name="order' . $i . 'Off[]" id="order' . $i . 'Off'.$offInd.'" value="' . $off->OffID . '" ';
                         if (isset($currOrder->OrdID)) {
                             if (in_array($off->OffID, $currOrder->Officers)) $ret .= 'CHECKED'; 
                         }
                         elseif (in_array($off->OffID, $eventOffs)) $ret .= 'CHECKED';
-                        $ret .= ' > <label for="order'.$i.'Off'.$offInd.'">' 
+                        $ret .= ' > <label for="order' . $i . 'Off'.$offInd.'">' 
                             . $this->getLoopItemLabel('Officers', $off, $offInd) 
                             . '</label></nobr></div> ' . "\n";
                     }
                     $ret .= '</div></div></div>' . "\n";
                 } elseif (sizeof($offs) == 1) {
-                    $ret .= '<input type="hidden" name="order'.$i.'Off" '
-                        . 'id="order'.$i.'OffID" value="' . $offs[0]->OffID . '">' . "\n";
+                    $ret .= '<input type="hidden" name="order' . $i . 'Off" '
+                        . 'id="order' . $i . 'OffID" value="' . $offs[0]->OffID . '">' . "\n";
                 }
                 
                 $civs = $this->getCivilianList('Civilians');
@@ -564,49 +510,49 @@ class OpenPolice extends SurvFormTree
                         . '<div class="nFld disIn mL20 mR20">' . "\n";
                     foreach ($civs as $civInd => $civ) {
                         $ret .= '<div class="nFld disIn mR20"><nobr><input type="checkbox" '
-                            . 'name="order'.$i.'Civ[]" id="order'.$i.'Civ'.$civInd.'" value="' . $civ . '" ';
+                            . 'name="order' . $i . 'Civ[]" id="order' . $i . 'Civ'.$civInd.'" value="' . $civ . '" ';
                         if (isset($currOrder->OrdID)) {
                             if (in_array($civ, $currOrder->Civilians)) $ret .= 'CHECKED'; 
                         } elseif (in_array($civ, $eventCivs)) {
                             $ret .= 'CHECKED';
                         }
-                        $ret .= ' > <label for="order'.$i.'Civ'.$civInd.'">' 
+                        $ret .= ' > <label for="order' . $i . 'Civ'.$civInd.'">' 
                             . $this->getLoopItemLabel('Civilians', $this->sessData->getRowById('Civilians', $civ), $civInd) 
                             . '</label></nobr></div> ' . "\n";
                     }
                     $ret .= '</div></div></div>' . "\n";
                 } elseif (sizeof($civs) == 1) {
-                    $ret .= '<input type="hidden" name="order'.$i.'Civ" '
-                        . 'id="order'.$i.'CivID" value="' . $civs[0] . '">' . "\n";
+                    $ret .= '<input type="hidden" name="order' . $i . 'Civ" '
+                        . 'id="order' . $i . 'CivID" value="' . $civs[0] . '">' . "\n";
                 }
                 
                 $ret .= '<div class="nodeWrap"><div class="nPrompt">Order Given:</div><div class="nFld">'
-                    . '<input type="text" name="order'.$i.'" id="order'.$i.'ID" class="form-control" value="' 
+                    . '<input type="text" name="order' . $i . '" id="order' . $i . 'ID" class="form-control" value="' 
                     . ((isset($currOrder->OrdID)) ? $currOrder->OrdDescription : '') . '"></div></div>';
                 
                 if ($nID == 342) { // only if Order for Use of Force
                     $ret .= '<div class="nodeWrap">
                         <div class="nPrompt disIn mR20">Did recipient have trouble hearing order?</div>
-                        <div class="nFld disIn mR20"><nobr><label for="hearOrder'.$i.'Y">
-                            <input id="hearOrder'.$i.'Y" name="hearOrder'.$i.'" value="Y" type="radio" autocomplete="off" class="ordHearCls" ' 
+                        <div class="nFld disIn mR20"><nobr><label for="hearOrder' . $i . 'Y">
+                            <input id="hearOrder' . $i . 'Y" name="hearOrder' . $i . '" value="Y" type="radio" autocomplete="off" class="ordHearCls" ' 
                             . ((isset($currOrder->OrdID) && $currOrder->OrdTroubleUnderYN == 'Y') ? 'CHECKED' : '') 
                             . ' > Yes
                         </label></nobr></div>
-                        <div class="nFld disIn mR20"><nobr><label for="hearOrder'.$i.'N">
-                            <input id="hearOrder'.$i.'N" name="hearOrder'.$i.'" value="N" type="radio" autocomplete="off" class="ordHearCls" ' 
+                        <div class="nFld disIn mR20"><nobr><label for="hearOrder' . $i . 'N">
+                            <input id="hearOrder' . $i . 'N" name="hearOrder' . $i . '" value="N" type="radio" autocomplete="off" class="ordHearCls" ' 
                             . ((isset($currOrder->OrdID) && $currOrder->OrdTroubleUnderYN == 'N') ? 'CHECKED' : '') 
                             . ' > No
                         </label></nobr></div>
-                        <div class="nFld disIn"><nobr><label for="hearOrder'.$i.'Q">
-                            <input id="hearOrder'.$i.'Q" name="hearOrder'.$i.'" value="?" type="radio" autocomplete="off" class="ordHearCls" ' 
+                        <div class="nFld disIn"><nobr><label for="hearOrder' . $i . 'Q">
+                            <input id="hearOrder' . $i . 'Q" name="hearOrder' . $i . '" value="?" type="radio" autocomplete="off" class="ordHearCls" ' 
                             . ((isset($currOrder->OrdID) && $currOrder->OrdTroubleUnderYN == '?') ? 'CHECKED' : '') 
                             . ' > Don\'t Know
                         </label></nobr></div>
                     </div>
-                    <div id="orderHearing'.$i.'" class="nodeWrap pL20 dis' 
+                    <div id="orderHearing' . $i . '" class="nodeWrap pL20 dis' 
                         . ((isset($currOrder->OrdID) && $currOrder->OrdTroubleUnderYN == 'Y') ? 'Blo' : 'Non') . '">
                         <div class="nPrompt">What did the victim say or do before use of force?</div>
-                        <div class="nFld"><input type="text" name="hearOrder'.$i.'Why" class="form-control" value="' 
+                        <div class="nFld"><input type="text" name="hearOrder' . $i . 'Why" class="form-control" value="' 
                         . ((isset($currOrder->OrdTroubleUnderstading)) ? $currOrder->OrdTroubleUnderstading : '') . '"></div>
                     </div>';
                 }
@@ -624,12 +570,12 @@ class OpenPolice extends SurvFormTree
                 $("#order"+delOrd+"").slideUp("slow"); document.getElementById("orderVis"+delOrd+"ID").value="N";
             });' . "\n";
             if ($nID == 342) { // only if Order for Use of Force
-            $this->pageAJAX .= "\t\t".'$(document).on("click", ".ordHearCls", function() {
-                ordHearInd = $(this).attr("id").replace("hearOrder", "").replace("Y", "").replace("N", "").replace("Q", "");
-                ordHearVal = $(this).attr("value");
-                if (ordHearVal == "Y") { $("#orderHearing"+ordHearInd+"").slideDown("slow"); }
-                else { $("#orderHearing"+ordHearInd+"").slideUp("slow"); }
-            });' . "\n";
+                $this->pageAJAX .= "\t\t".'$(document).on("click", ".ordHearCls", function() {
+                    ordHearInd = $(this).attr("id").replace("hearOrder", "").replace("Y", "").replace("N", "").replace("Q", "");
+                    ordHearVal = $(this).attr("value");
+                    if (ordHearVal == "Y") { $("#orderHearing"+ordHearInd+"").slideDown("slow"); }
+                    else { $("#orderHearing"+ordHearInd+"").slideUp("slow"); }
+                });' . "\n";
             }
         } elseif ($promptNotesSpecial == '[[VictimsWithForce]]') { // node 411
             $civInjs = $this->getCivSetPossibilities('Force', 'Injuries', 'Type');
@@ -687,11 +633,7 @@ class OpenPolice extends SurvFormTree
         if (isset($this->sessData->dataSets["Complaints"])) {
             $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
         }
-        if ($nID == 28) { // Complainant's Role
-            $this->sessData->dataSets["Civilians"][0]->CivRole = trim($this->REQ->input('n28fld'));
-            $this->sessData->dataSets["Civilians"][0]->save();
-            return true;
-        } elseif ($nID == 439) { // Unresolved criminal charges decision
+        if ($nID == 439) { // Unresolved criminal charges decision
             if ($this->REQ->has('n439fld')) {
                 $defID = $GLOBALS["DB"]->getDefID('Unresolved Charges Actions', 'Full complaint to print or save');
                 if ($this->REQ->input('n439fld') == $defID) {
@@ -800,8 +742,9 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
                 if (isset($this->REQ->n670fld) && in_array($civ->getKey(), $this->REQ->n670fld)) {
                     $this->sessData->dataSets["Civilians"][$i]->CivUsedProfanity = 'Y';
+                } else {
+                    $this->sessData->dataSets["Civilians"][$i]->CivUsedProfanity = '';
                 }
-                else $this->sessData->dataSets["Civilians"][$i]->CivUsedProfanity = '';
                 $this->sessData->dataSets["Civilians"][$i]->save();
             }
         } elseif ($nID == 676) { // Victim Used Profanity?
@@ -813,56 +756,123 @@ class OpenPolice extends SurvFormTree
                 else $this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity = '';
                 $this->sessData->dataSets["Civilians"][$civInd]->save();
             }
-        } elseif ($nID == 146) { // Going Gold?
-            // probably some transitions required?
+        } elseif ($nID == 146) { // Going Gold transitions, if needed...
             if ($this->REQ->has('n146fld') && $this->REQ->n146fld == 'Gold' 
                 && sizeof($this->sessData->loopItemIDs["Victims"]) == 1) {
                 $this->checkHasEventSeq($nID);
                 if (sizeof($this->eventCivLookup["Stops"]) == 0 
                     && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilStopYN)
                     && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilStopYN, ['Y', '?'])) {
-                    $this->addNewEveSeq('Stops', $this->sessData->loopItemIDs["Victims"][0]);
+                    foreach ($this->sessData->loopItemIDs["Victims"] as $civ) $this->addNewEveSeq('Stops', $civ);
                 }
                 if (sizeof($this->eventCivLookup["Searches"]) == 0 
                     && ( (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilSearchYN)
                     && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilSearchYN, ['Y', '?']))
                     || (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilPropertyYN)
                     && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilPropertyYN, ['Y', '?'])) )) {
-                    $this->addNewEveSeq('Searches', $this->sessData->loopItemIDs["Victims"][0]);
+                    foreach ($this->sessData->loopItemIDs["Victims"] as $civ) $this->addNewEveSeq('Searches', $civ);
                 }
                 if (sizeof($this->eventCivLookup["Force"]) == 0 
                     && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilForceYN)
                     && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilForceYN, ['Y', '?'])) {
-                    $this->addNewEveSeq('Force', $this->sessData->loopItemIDs["Victims"][0]);
+                    foreach ($this->sessData->loopItemIDs["Victims"] as $civ) $this->addNewEveSeq('Force', $civ);
                 }
                 if (sizeof($this->eventCivLookup["Arrests"]) == 0 
                     && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestYN)
                     && in_array($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestYN, ['Y', '?'])) {
-                    $this->addNewEveSeq('Arrests', $this->sessData->loopItemIDs["Victims"][0]);
+                    foreach ($this->sessData->loopItemIDs["Victims"] as $civ) $this->addNewEveSeq('Arrests', $civ);
                 }
             }
             return false;
-        } elseif ($nID == 285) { // establishing Events' instances
-            $this->initializeGoldEvents($nID);
-            return true;
-        } elseif ($nID == 288) { // order Events
-            $list = '';
-            if (sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-                foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                    $list .= ','.$eveSeq->EveID;
+        } elseif (in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
+            $this->initGoldEventMult($nID, ((in_array($nID, [732, 736])) ? 'Stops' : 'Searches'));
+        } elseif (in_array($nID, [738, 737, 739])) { // Gold Stops & Searches, Only One Victims
+            $this->initGoldEventSingle($nID, ((in_array($nID, [738, 737])) ? 'Stops' : 'Searches'));
+        } elseif ($nID == 740) { // Use of Force on Victims
+            $GLOBALS["DB"]->loadDefinitions('Force Type');
+            $loopRows = $this->sessData->getLoopRows('Victims');
+            foreach ($loopRows as $i => $civ) {
+                $nIDtxt = 'n' . $nID . 'cyc' . $i . 'fld';
+                $nIDtxt2 = 'n742cyc' . $i . 'fld';
+                if ($this->REQ->has($nIDtxt) && sizeof($this->REQ->input($nIDtxt)) > 0 
+                    && trim($this->REQ->input($nIDtxt)[0]) == 'Y' && $this->REQ->has($nIDtxt2) 
+                    && sizeof($this->REQ->input($nIDtxt2)) > 0) {
+                    foreach ($this->REQ->input($nIDtxt2) as $forceType) {
+                        if ($this->getCivForceEventID($nID, $civ->CivID, $forceType) <= 0) {
+                            $this->addNewEveSeq('Force', $civ->CivID, $forceType);
+                        }
+                    }
+                }
+                foreach ($GLOBALS["DB"]->defValues["Force Type"] as $i => $def) {
+                    if (!$this->REQ->has($nIDtxt2) || !in_array($def->DefID, $this->REQ->input($nIDtxt2))) {
+                        $this->deleteEventByID($nID, $this->getCivForceEventID($nID, $civ->CivID, $def->DefID));
+                    }
                 }
             }
-            $this->sessData->logDataSave($nID, 'EVENTS', -3, 'Ordering Event Instances', $list);
+        } elseif ($nID == 742) { // Use of Force on Victims: Sub-Types processed by 740
             return true;
-        } elseif (in_array($nID, array(296, 295, 294, 293))) { // adding Officers to Events
-            $eventType = $this->getEveSeqTypeFromNode($nID);
-            $this->deleteEventPeopleLinks($nID, $GLOBALS["DB"]->closestLoop["itemID"], 'Officer');
-            $this->connectPeopleEventLinks("n".$nID."fld", '', -3, $GLOBALS["DB"]->closestLoop["itemID"]);
-            if ($this->REQ->has('n'.$nID.'fld')) {
-                $this->sessData->logDataSave($nID, 'GOLD '.$eventType, -3, 'Adding Officers', 
-                    implode('-|-', $this->REQ->input('n'.$nID.'fld')));
+        } elseif ($nID == 743) { // Use of Force against Animal: Yes/No
+            if (!$this->REQ->has('n'.$nID.'fld') || sizeof($this->REQ->input('n'.$nID.'fld')) == 0) {
+                $animalsForce = $this->getCivAnimalForces();
+                if ($animalsForce && sizeof($animalsForce) > 0) {
+                    foreach ($animalsForce as $force) $this->deleteEventByID($nID, $force->ForEventSequenceID);
+                }
             }
-            return true;
+        } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
+            if ($this->REQ->has('n743fld') && sizeof($this->REQ->n743fld) > 0 && $this->REQ->has('n744fld') 
+                && sizeof($this->REQ->n744fld) > 0 && intVal($this->REQ->n743fld[0]) == 'Y') {
+                $animalDesc = (($this->REQ->has('n746fld')) ? trim($this->REQ->n746fld) : '');
+                $animalsForce = $this->getCivAnimalForces();
+                foreach ($this->REQ->n744fld as $forceType) {
+                    $foundType = false;
+                    if ($animalsForce && sizeof($animalsForce) > 0) {
+                        foreach ($animalsForce as $force) {
+                            if ($force->ForType == $forceType) $foundType = true;
+                        }
+                    }
+                    if (!$foundType) {
+                        $newForce = $this->addNewEveSeq('Force', -3, $forceType);
+                        $newForce->ForAgainstAnimal = 'Y';
+                        $newForce->ForAnimalDesc = $animalDesc;
+                        $newForce->save();
+                    }
+                }
+                if ($animalsForce && sizeof($animalsForce) > 0) {
+                    foreach ($animalsForce as $force) {
+                        if (!$this->REQ->has('n743fld') || !in_array($force->ForType, $this->REQ->n743fld)) {
+                            $this->deleteEventByID($nID, $force->ForEventSequenceID);
+                        }
+                    }
+                }
+            }
+        } elseif ($nID == 741) { // Arrests, Citations, Warnings
+            $this->checkHasEventSeq($nID);
+            $loopRows = $this->sessData->getLoopRows('Victims');
+            foreach ($loopRows as $i => $civ) {
+                $nIDtxt = 'n' . $nID . 'cyc' . $i . 'fld';
+                if ($this->REQ->has($nIDtxt) && trim($this->REQ->input($nIDtxt)) != '') {
+                    if ($this->REQ->input($nIDtxt) == 'Arrests') {
+                        if (!in_array($civ->CivID, $this->eventCivLookup['Arrests'])) {
+                            $this->addNewEveSeq('Arrests', $civ->CivID);
+                        }
+                        $loopRows[$i]->CivGivenCitation = 'N';
+                        $loopRows[$i]->CivGivenWarning = 'N';
+                    } elseif ($this->REQ->input($nIDtxt) == 'Citations') {
+                        $loopRows[$i]->CivGivenCitation = 'Y';
+                        $loopRows[$i]->CivGivenWarning = 'N';
+                        $this->delCivEvent($nID, 'Arrests', $civ->CivID);
+                    } elseif ($this->REQ->input($nIDtxt) == 'Warnings') {
+                        $loopRows[$i]->CivGivenCitation = 'N';
+                        $loopRows[$i]->CivGivenWarning = 'Y';
+                        $this->delCivEvent($nID, 'Arrests', $civ->CivID);
+                    } elseif ($this->REQ->input($nIDtxt) == 'None') {
+                        $loopRows[$i]->CivGivenCitation = 'N';
+                        $loopRows[$i]->CivGivenWarning = 'N';
+                        $this->delCivEvent($nID, 'Arrests', $civ->CivID);
+                    }
+                    $loopRows[$i]->save();
+                }
+            }
         } elseif ($this->allNodes[$nID]->nodeRow->NodePromptNotes == '[[MergeVictimsEventSequence]]') {
             return $this->processEventMerge($nID);
         } elseif ($this->allNodes[$nID]->nodeRow->NodePromptNotes == '[[OfficerOrders]]') {
@@ -900,7 +910,7 @@ class OpenPolice extends SurvFormTree
                                 }
                             }
                             if (!$found) {
-                                $injRow = $this->sessData->newDataRecordSimple('Injuries', 'InjSubjectID', $civID);
+                                $injRow = $this->sessData->newDataRecord('Injuries', 'InjSubjectID', $civID);
                                 $injRow->InjType = $injType;
                                 $injRow->save();
                             }
@@ -938,6 +948,7 @@ class OpenPolice extends SurvFormTree
     // returns an array of overrides for ($currNodeSessionData, ???... 
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $currNodeSessionData = '')
     {
+        if (sizeof($this->sessData->dataSets) == 0) return [];
         if ($nID == 28) { // Complainant's Role
             return [trim($this->sessData->dataSets["Civilians"][0]->CivRole)];
         } elseif ($nID == 47) { // Complainant Recorded Incident?
@@ -973,8 +984,66 @@ class OpenPolice extends SurvFormTree
             if ($civInd >= 0) {
                 return trim($this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity);
             }
-        } elseif ($nID == 269) {
-            return array((($this->sessData->dataSets["Complaints"][0]->ComStatus == 'New') ? 'Y' : ''));
+        } elseif ($nID == in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
+            $ret = [];
+            $eveType = (in_array($nID, [732, 736])) ? 'Stops' : 'Searches';
+            if (sizeof($this->sessData->loopItemIDs["Victims"]) > 0) {
+                foreach ($this->sessData->loopItemIDs["Victims"] as $civ) {
+                    if ($this->getCivEventID($nID, $eveType, $civ) > 0) $ret[] = $civ;
+                }
+            }
+            return $ret;
+        } elseif (in_array($nID, [738, 737, 739])) { // Gold Stops & Searches, Only One Victims
+            $eveType = (in_array($nID, [738, 737])) ? 'Stops' : 'Searches';
+            if ($this->getCivEventID($nID, $eveType, $this->sessData->loopItemIDs["Victims"][0]) > 0) {
+                return ['Y'];
+            }
+        } elseif ($nID == 740) { // Use of Force on Victims
+            $ret = [];
+            $this->checkHasEventSeq($nID);
+            foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
+                if (in_array($civ, $this->eventCivLookup['Force'])) $ret[] = 'cyc' . $i . 'Y';
+            }
+            return $ret;
+        } elseif ($nID == 742) { // Use of Force on Victims: Sub-Types
+            $ret = [];
+            $GLOBALS["DB"]->loadDefinitions('Force Type');
+            foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
+                foreach ($GLOBALS["DB"]->defValues["Force Type"] as $j => $def) {
+                    if ($this->getCivForceEventID($nID, $civ, $def->DefID) > 0) {
+                        $ret[] = 'cyc' . $i . $def->DefID;
+                    }
+                }
+            }
+            return $ret;
+        } elseif ($nID == 743) { // Use of Force against Animal: Yes/No
+            $animalsForce = $this->getCivAnimalForces();
+            if ($animalsForce && sizeof($animalsForce) > 0) return ['Y'];
+        } elseif ($nID == 746) { // Use of Force against Animal: Description
+            if (isset($this->eventCivLookup["Force Animal"][0]) 
+                && intVal($this->eventCivLookup["Force Animal"][0]) > 0) {
+                $forceAnimal = $this->sessData->getRowById('Force', $this->eventCivLookup["Force Animal"][0]);
+                return [$forceAnimal->ForAnimalDesc];
+            }
+        } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
+            $ret = [];
+            $animalsForce = $this->getCivAnimalForces();
+            if ($animalsForce && sizeof($animalsForce) > 0) {
+                foreach ($animalsForce as $force) $ret[] = $force->ForType;
+            }
+            return $ret;
+        } elseif ($nID == 741) { // Arrests, Citations, Warnings
+            $ret = [];
+            $this->checkHasEventSeq($nID);
+            foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
+                if (in_array($civ, $this->eventCivLookup['Arrests'])) $ret[] = 'cyc' . $i . 'Arrests';
+                elseif (in_array($civ, $this->eventCivLookup['Citations'])) $ret[] = 'cyc' . $i . 'Citations';
+                elseif (in_array($civ, $this->eventCivLookup['Warnings'])) $ret[] = 'cyc' . $i . 'Warnings';
+                else $ret[] = 'cyc' . $i . 'None';
+            }
+            return $ret;
+        } elseif ($nID == 269) { // Confirm Submission, Complaint Completed!
+            return [(($this->sessData->dataSets["Complaints"][0]->ComStatus == 'New') ? 'Y' : '')];
         }
         return [];
     }
@@ -985,19 +1054,21 @@ class OpenPolice extends SurvFormTree
         if ($GLOBALS["DB"]->closestLoop["loop"] == 'Events') {
             $event = $this->getEventSequence($GLOBALS["DB"]->closestLoop["itemID"]);
         }
-        if (strpos($nodePromptText, '[SetCivLabel]') !== false) {
-            $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
-            if (trim($civName) == '' && isset($event[0]["Civilians"])) {
-                $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
+        if (isset($event[0]) && isset($event[0]["EveID"])) {
+            if (strpos($nodePromptText, '[LoopItemLabel]') !== false) {
+                $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
+                if (trim($civName) == '' && isset($event[0]["Civilians"])) {
+                    $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
+                }
+                $nodePromptText = str_replace('[LoopItemLabel]', 
+                    '<span class="slBlueDark"><b>' . $civName . '</b></span>', $nodePromptText);
             }
-            $nodePromptText = str_replace('[SetCivLabel]', 
-                '<span class="slBlueDark"><b>' . $civName . '</b></span>', $nodePromptText);
-        }
-        if (strpos($nodePromptText, '[ForceType]') !== false) {
-            $forceDesc = $GLOBALS["DB"]->getDefValue('Force Type', $event[0]["Event"]->ForType);
-            if ($forceDesc == 'Other') $forceDesc = $event[0]["Event"]->ForTypeOther;
-            $nodePromptText = str_replace('[ForceType]', '<span class="slBlueDark"><b>'
-                . $forceDesc . '</b></span>', $nodePromptText);
+            if (strpos($nodePromptText, '[ForceType]') !== false) {
+                $forceDesc = $GLOBALS["DB"]->getDefValue('Force Type', $event[0]["Event"]->ForType);
+                if ($forceDesc == 'Other') $forceDesc = $event[0]["Event"]->ForTypeOther;
+                $nodePromptText = str_replace('[ForceType]', '<span class="slBlueDark"><b>'
+                    . $forceDesc . '</b></span>', $nodePromptText);
+            }
         }
         if (strpos($nodePromptText, '[InjuryType]') !== false) {
             $inj = $this->sessData->getRowById('Injuries', $GLOBALS["DB"]->closestLoop["itemID"]);
@@ -1061,8 +1132,7 @@ class OpenPolice extends SurvFormTree
         } elseif ($loop == 'Departments') {
             return $this->getDeptName($itemRow, $itemInd);
         } elseif ($loop == 'Events') {
-            $EveSeq = $this->getEventSequence($itemRow->EveID);
-            return $this->printEventSequenceLine($EveSeq[0], 'Civilians');
+            return $this->getEventLabel($itemRow->getKey());
         } elseif ($loop == 'Injuries') {
             return $this->getCivilianNameFromID($itemRow->InjSubjectID) . ': ' 
                 .  $GLOBALS["DB"]->getDefValue('Injury Types', $itemRow->InjType);
@@ -1313,28 +1383,25 @@ class OpenPolice extends SurvFormTree
             'Warnings'     => [], 
             'No Punish'    => []
         ];
-        foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
-            $arrestEveSeqID = $this->getCivEveSeqIdByType($civ, 'Arrests');
-            $stopEveSeqID     = $this->getCivEveSeqIdByType($civ, 'Stops');
-            
-            if ($stopEveSeqID > 0) {
-                $this->eventCivLookup["Stops"][] = $civ;
-                $stop = $this->sessData->getChildRow('EventSequence', $stopEveSeqID, 'Stops');
-                if ($stop->StopGivenCitation == 'Y') $this->eventCivLookup["Citations"][] = $civ;
-                if ($stop->StopGivenWarning == 'Y') $this->eventCivLookup["Warnings"][] = $civ;
-                if ($stop->StopGivenCitation == 'N' && $stop->StopGivenWarning == 'N' && $arrestEveSeqID <= 0) {
-                    $this->eventCivLookup["No Punish"][] = $civ;
-                }
+        $loopRows = $this->sessData->getLoopRows('Victims');
+        foreach ($loopRows as $i => $civ) {
+            if ($this->getCivEveSeqIdByType($civ->CivID, 'Stops') > 0) {
+                $this->eventCivLookup["Stops"][] = $civ->CivID;
             }
-            if ($this->getCivEveSeqIdByType($civ, 'Searches') > 0) {
-                $this->eventCivLookup["Searches"][] = $civ;
+            if ($this->getCivEveSeqIdByType($civ->CivID, 'Searches') > 0) {
+                $this->eventCivLookup["Searches"][] = $civ->CivID;
             }
-            if ($this->getCivEveSeqIdByType($civ, 'Force') > 0) {
-                $this->eventCivLookup["Force"][] = $civ;
+            if ($this->getCivEveSeqIdByType($civ->CivID, 'Force') > 0) {
+                $this->eventCivLookup["Force"][] = $civ->CivID;
             }
-            if ($arrestEveSeqID > 0) {
-                $this->eventCivLookup["Arrests"][] = $civ;
+            if ($this->getCivEveSeqIdByType($civ->CivID, 'Arrests') > 0) {
+                $this->eventCivLookup["Arrests"][] = $civ->CivID;
+            } elseif (($civ->CivGivenCitation == 'N' || trim($civ->CivGivenCitation) == '') 
+                && ($civ->CivGivenWarning == 'N' || trim($civ->CivGivenWarning) == '')) {
+                $this->eventCivLookup["No Punish"][] = $civ->CivID;
             }
+            if ($civ->CivGivenCitation == 'Y') $this->eventCivLookup["Citations"][] = $civ->CivID;
+            if ($civ->CivGivenWarning == 'Y') $this->eventCivLookup["Warnings"][] = $civ->CivID;
         }
         if (isset($this->sessData->dataSets["Force"]) && sizeof($this->sessData->dataSets["Force"]) > 0) {
             foreach ($this->sessData->dataSets["Force"] as $forceRow) {
@@ -1346,126 +1413,7 @@ class OpenPolice extends SurvFormTree
         return true;
     }
     
-    protected function initializeGoldEvents($nID)
-    {   // Node $nID == 285
-        $arrests = array('Arrests' => [], 'Citations' => [], 'Warnings' => [], 'None' => []);
-        $this->checkHasEventSeq($nID);
-        $GLOBALS["DB"]->loadDefinitions('Force Type');
-        $victims = $this->sessData->loopItemIDs["Victims"];
-        $victims[] = 0;
-        foreach ($victims as $i => $civ) {
-            if ($this->REQ->has('n285civ'.$i.'') && trim($this->REQ->input('n285civ'.$i.'')) != '') {
-                $arrests[$this->REQ->input('n285civ'.$i.'')][] = $civ;
-            }
-            foreach ($this->eventTypes as $eventType) {
-                if ($eventType == 'Force') {
-                    
-                    if ($this->REQ->has('n285fldForce') && in_array($civ, $this->REQ->get('n285fldForce'))) {
-                        foreach ($GLOBALS["DB"]->defValues["Force Type"] as $j => $fType) {
-                            $civTypeOther = '';
-                            $civTypeExists = $civTypeChecked = false;
-                            if ($this->REQ->has('n'.$civ.'fld') 
-                                && in_array($fType->DefID, $this->REQ->get('n'.$civ.'fld'))) {
-                                $civTypeChecked = true;
-                                if ($fType->DefVal == 'Other' && $this->REQ->has('n-'.$civ.'fld')) {
-                                    $civTypeOther = trim($this->REQ->get('n-'.$civ.'fld'));
-                                }
-                            }
-                            if (isset($this->sessData->dataSets["Force"]) 
-                                && sizeof($this->sessData->dataSets["Force"]) > 0) {
-                                foreach ($this->sessData->dataSets["Force"] as $k => $force) {
-                                    $currCivs = $this->getLinkedToEvent('Civilian', $force->ForEventSequenceID);
-                                    if (sizeof($currCivs) > 0) {
-                                        foreach ($currCivs as $l => $c) {
-                                            if ($c == $civ && $force->ForType == $fType->DefID) {
-                                                $civTypeExists = true;
-                                                if (!$civTypeChecked) {
-                                                    $this->deleteEventByID($nID, $force->ForEventSequenceID);
-                                                } elseif ($fType->DefVal == 'Other') {
-                                                    $force->ForTypeOther = $civTypeOther;
-                                                    $force->save();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if ($civTypeChecked && !$civTypeExists) {
-                                $newForce = $this->addNewEveSeq('Force', $civ);
-                                $newForce->ForType = $fType->DefID;
-                                $newForce->ForTypeOther = $civTypeOther;
-                                $newForce->ForAgainstAnimal = 'N';
-                                if ($civ == 0) {
-                                    $newForce->ForAgainstAnimal = 'Y';
-                                    $newForce->ForAnimalDesc = trim($this->REQ->ForceAnimalDesc);
-                                }
-                                $newForce->save();
-                            }
-                        }
-                        
-                    } else { // civilian not checked for force
-                        if (isset($this->sessData->dataSets["Force"]) 
-                            && sizeof($this->sessData->dataSets["Force"]) > 0) {
-                            foreach ($this->sessData->dataSets["Force"] as $k => $force) {
-                                if ($civ > 0) {
-                                    if (in_array($civ, 
-                                        $this->getLinkedToEvent('Civilian', $force->ForEventSequenceID))) {
-                                        $this->deleteEventByID($nID, $force->ForEventSequenceID);
-                                    }
-                                } elseif ($force->ForAgainstAnimal == 'Y') {
-                                    $this->deleteEventByID($nID, $force->ForEventSequenceID);
-                                }
-                            }
-                        }
-                    }
-                    
-                } elseif ($civ > 0) { // and not Force
-                    
-                    // *forcing Stops row creation if Citation or Written Warning
-                    if (($this->REQ->has('n285fld'.$eventType) 
-                        && in_array($civ, $this->REQ->input('n285fld'.$eventType)))
-                        || ($eventType == 'Stops' && (in_array($civ, $arrests["Citations"]) 
-                        || in_array($civ, $arrests["Warnings"])))
-                        || ($eventType == 'Arrests' && in_array($civ, $arrests["Arrests"]))) { // then we've got one
-                        $newEvent = [];
-                        if (!in_array($civ, $this->eventCivLookup[$eventType])) {
-                            $newEvent = $this->addNewEveSeq($eventType, $civ);
-                        }
-                        if ($eventType == 'Stops') {
-                            if (!$newEvent || sizeof($newEvent) == 0) { 
-                                // not a new Stop, so let's load the old record
-                                $eveSeqID = $this->getCivEveSeqIdByType($civ, 'Stops');
-                                $newEvent = $this->sessData->getChildRow('EventSequence', $eveSeqID, 'Stops'); 
-                            }
-                            $newEvent->StopGivenCitation = ((in_array($civ, $arrests["Citations"])) ? 'Y' : 'N');
-                            $newEvent->StopGivenWarning = ((in_array($civ, $arrests["Warnings"])) ? 'Y' : 'N');
-                            $newEvent->save();
-                        }
-                    } elseif (in_array($civ, $this->eventCivLookup[$eventType])) {
-                        $eveSeqID = $this->getCivEveSeqIdByType($civ, $eventType);
-                        $event = $this->sessData->getChildRow('EventSequence', $eveSeqID, $eventType); 
-                        $this->sessData->deleteDataItem($nID, 'EventSequence', $eveSeqID);
-                        $this->sessData->deleteDataItem($nID, $eventType, $event->getKey());
-                    }
-                    
-                }
-            }
-        }
-        $log = '-|-Stops:'     . (($this->REQ->has('n285fldStops')) ? implode(',', $this->REQ->n285fldStops) : '')
-            . '-|-Searches:'     . (($this->REQ->has('n285fldSearches')) ? implode(',', $this->REQ->n285fldSearches) : '')
-            . '-|-Force:'     . (($this->REQ->has('n285fldForce')) ? implode(',', $this->REQ->n285fldForce) : '')
-            . '-|-Animal:'     . (($this->REQ->has('n285fldForceAnimal')) ? 'Y::'.$this->REQ->ForceAnimalDesc : 'N')
-            . '-|-Arrests:'     . ((sizeof($arrests["Arrests"]) > 0) ? implode(',', $arrests["Arrests"]) : '')
-            . '-|-Citations:' . ((sizeof($arrests["Citations"]) > 0) ? implode(',', $arrests["Citations"]) : '')
-            . '-|-Warnings:'     . ((sizeof($arrests["Warnings"]) > 0) ? implode(',', $arrests["Warnings"]) : '')
-            . '-|-Nones:'     . ((sizeof($arrests["None"]) > 0) ? implode(',', $arrests["None"]) : '');
-        $this->sessData->logDataSave($nID, 'EVENTS', -3, 'Adding Event Instances', $log);
-        $this->sessData->refreshDataSets();
-        $this->runLoopConditions();
-        return true;
-    }
-    
-    protected function addNewEveSeq($eventType, $civID = -3)
+    protected function addNewEveSeq($eventType, $civID = -3, $forceType = -3)
     {
         $newEveSeq = new OPEventSequence;
         $newEveSeq->EveComplaintID = $this->coreID;
@@ -1474,6 +1422,7 @@ class OpenPolice extends SurvFormTree
         $newEveSeq->save();
         eval("\$newEvent = new App\\Models\\" . $GLOBALS["DB"]->tblModels[$eventType] . ";");
         $newEvent->{ $GLOBALS["DB"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
+        if ($eventType == 'Force' && $forceType > 0) $newEvent->ForType = $forceType;
         $newEvent->save();
         if ($civID > 0) {
             $civLnk = new OPLinksCivilianEvents;
@@ -1484,6 +1433,48 @@ class OpenPolice extends SurvFormTree
         $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
         $this->sessData->dataSets[$eventType][] = $newEvent;
         return $newEvent;
+    }
+    
+    protected function getCivEventID($nID, $eveType, $civID)
+    {
+        $civLnk = DB::table('OP_LinksCivilianEvents')
+            ->join('OP_EventSequence', 'OP_EventSequence.EveID', '=', 'OP_LinksCivilianEvents.LnkCivEveEveID')
+            ->where('OP_EventSequence.EveType', $eveType)
+            ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
+            ->select('OP_EventSequence.*')
+            ->first();
+        if ($civLnk && isset($civLnk->EveID)) return $civLnk->EveID;
+        return -3;
+    }
+    
+    protected function getCivForceEventID($nID, $civID, $forceType)
+    {
+        $civLnk = DB::table('OP_LinksCivilianEvents')
+            ->join('OP_EventSequence', 'OP_EventSequence.EveID', '=', 'OP_LinksCivilianEvents.LnkCivEveEveID')
+            ->join('OP_Force', 'OP_Force.ForEventSequenceID', '=', 'OP_EventSequence.EveID')
+            ->where('OP_EventSequence.EveType', 'Force')
+            ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
+            ->where('OP_Force.ForType', $forceType)
+            ->select('OP_EventSequence.*')
+            ->first();
+        if ($civLnk && isset($civLnk->EveID)) return $civLnk->EveID;
+        return -3;
+    }
+    
+    protected function getCivAnimalForces()
+    {
+        return DB::table('OP_EventSequence')
+            ->join('OP_Force', 'OP_Force.ForEventSequenceID', '=', 'OP_EventSequence.EveID')
+            ->where('OP_EventSequence.EveComplaintID', $this->coreID)
+            ->where('OP_EventSequence.EveType', 'Force')
+            ->where('OP_Force.ForAgainstAnimal', 'Y')
+            ->select('OP_Force.*')
+            ->get();
+    }
+    
+    protected function delCivEvent($nID, $eveType, $civID)
+    {
+        return $this->deleteEventByID($nID, $this->getCivEventID($nID, $eveType, $civID));
     }
     
     protected function deleteEventByID($nID, $eveSeqID)
@@ -1500,14 +1491,37 @@ class OpenPolice extends SurvFormTree
         return true;
     }
     
-    public function ajaxSaveIncEveOrder()
+    public function initGoldEventMult($nID, $eveType)
     {
-        foreach ($this->REQ->input('item') as $i => $value) {
-            $eveSeq = OPEventSequence::find($value);
-            $eveSeq->EveOrder = $i;
-            $eveSeq->save();
-            //echo 'ajaxSaveIncEveOrder(), find(' . $value . ')->update(' . $i . ')<br />';
-            //$this->sessData->logDataSave(288, $value, -3, 'ajaxSaveIncEveOrder', $i);
+        $this->checkHasEventSeq($nID);
+        if (sizeof($this->eventCivLookup[$eveType]) > 0) {
+            foreach ($this->eventCivLookup[$eveType] as $civ) {
+                if (!in_array($civ, $this->REQ->input('n' . $nID . 'fld'))) {
+                    $this->delCivEvent($nID, $eveType, $civ);
+                }
+            }
+        }
+        if ($this->REQ->has('n' . $nID . 'fld') && sizeof($this->REQ->input('n' . $nID . 'fld')) > 0) {
+            foreach ($this->REQ->input('n' . $nID . 'fld') as $civ) {
+                if (!in_array($civ, $this->eventCivLookup[$eveType])) {
+                    $this->addNewEveSeq($eveType, $civ);
+                }
+            }
+        }
+        return true;
+    }
+    
+    public function initGoldEventSingle($nID, $eveType)
+    {
+        $this->checkHasEventSeq($nID);
+        $civ = $this->sessData->loopItemIDs["Victims"][0];
+        if ($this->REQ->has('n' . $nID . 'fld') && sizeof($this->REQ->input('n' . $nID . 'fld')) > 0
+            && trim($this->REQ->input('n' . $nID . 'fld')[0]) == 'Y') {
+            if (!in_array($civ, $this->eventCivLookup[$eveType])) {
+                $this->addNewEveSeq($eveType, $civ);
+            }
+        } else {
+            $this->delCivEvent($nID, $eveType, $civ);
         }
         return true;
     }
@@ -1533,90 +1547,6 @@ class OpenPolice extends SurvFormTree
             //exit;
         }
         */
-        return true;
-    }
-    
-    protected function getEventOrders($eveSeqID, $eventType)
-    {
-        $eveSeqOrders = [];
-        if (isset($this->sessData->dataSets["Orders"][$eventType]) 
-            && sizeof($this->sessData->dataSets["Orders"][$eventType]) > 0) {
-            foreach ($this->sessData->dataSets["Orders"][$eventType] as $ord) {
-                if ($ord->OrdEventSequenceID == $eveSeqID) $eveSeqOrders[] = $ord;
-            }
-        }
-        return $eveSeqOrders;
-    }
-
-    protected function processOrders($nID)
-    {
-        /*
-        $eventType = $this->getEveSeqTypeFromNode($nID);
-        //if ($this->debugOn) { echo 'processOrders('.$nID.'), event: ' . $eventType . '<br />'; }
-        for ($i=0; $i<20; $i++)
-        {
-            if ($this->REQ->has('ordID'.$i) && $this->REQ->has('orderVis'.$i))
-            {
-                $ordID = intVal($this->REQ->input('ordID'.$i));
-                //if ($this->debugOn) { echo 'processOrders('.$nID.'), event: ' . $eventType . ', ordID: ' . $ordID . '<br />'; }
-                if ($this->REQ->input('orderVis'.$i) == 'Y' && trim($this->REQ->input('order'.$i)) != '')
-                {
-                    if ($ordID <= 0) $ordID = $this->sessData->newDataRecordSimple('Orders', 'OrdEventSequenceID', $GLOBALS["DB"]->closestLoop["itemID"]);
-                    $this->deleteOrderPeopleLinks($nID, $ordID);
-                    $this->connectPeopleEventLinks('order'.$i.'Off', 'order'.$i.'Civ', -3, -3, $ordID);
-                    OPOrders::find($ordID)->update(array('OrdDescription' => $this->REQ->input('order'.$i)));
-                    if ($nID == 342 && $this->REQ->has('hearOrder'.$i)) 
-                    {
-                        OPOrders::find($ordID)->update(array('OrdTroubleUnderYN' => $this->REQ->input('hearOrder'.$i), 
-                            'OrdTroubleUnderstading' => $this->REQ->input('hearOrder'.$i.'Why')));
-                    }
-                }
-                elseif ($ordID > 0)
-                {     // then deleting previously submitted order
-                    $this->deleteOrderPeopleLinks($nID, $ordID);
-                    $this->sessData->deleteDataItem($nID, 'Orders', $ordID);
-                }
-            }
-        }
-        $this->loadAllSessData();
-        */
-        return true;
-    }
-    
-    protected function deleteOrderPeopleLinks($nID, $ordID)
-    {
-        OPLinksCivilianOrders::where('LnkCivOrdOrdID', $ordID)->delete();
-        OPLinksOfficerOrders::where('LnkOffOrdOrdID', $ordID)->delete();
-        return true;
-    }
-    
-    protected function connectPeopleOrderLinks($nID, $ordID, $Ptype = '')
-    {
-        
-        
-        /* ummm */
-        
-        
-        return true;
-    }
-    
-    protected function deleteEventPeopleLinks($nID, $ordID, $Ptype = '')
-    {
-        
-        
-        /* ummm */
-        
-        
-        return true;
-    }
-    
-    protected function connectPeopleEventLinks($nID, $ordID, $Ptype = '')
-    {
-        
-        
-        /* ummm */
-        
-        
         return true;
     }
     
@@ -1676,25 +1606,8 @@ class OpenPolice extends SurvFormTree
         return $retArr;
     }
     
-    // get list of all Civilians or Officers connected to all instances of one type of Incident Event
-    protected function getLinkedToEventType($Ptype = 'Officer', $eventType = 'Stops')
-    {
-        $retArr = [];
-        if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                if ($eveSeq->EveType == $eventType) {
-                    $tmpArr = $this->getLinkedToEvent($Ptype, $eveSeq->EveID);
-                    if (sizeof($tmpArr) > 0) { foreach ($tmpArr as $civID) { $retArr[] = $civID; } }
-                }
-            }
-        }
-        return $retArr;
-    }
-    
     protected function getCivEveSeqIdByType($civID, $eventType)
     {
-        $foundCivEvent = -3;
         if ($eventType != '' && isset($this->sessData->dataSets["EventSequence"]) 
             && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
             foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
@@ -1705,7 +1618,7 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        return $foundCivEvent;
+        return -3;
     }
     
     protected function getEveSeqRowType($eveSeqID = -3)
@@ -1750,8 +1663,18 @@ class OpenPolice extends SurvFormTree
         return $eveSeqs;
     }
     
+    protected function getEventLabel($eveSeqID = -3)
+    {
+        if ($eveSeqID > 0) {
+            $eveSeq = $this->getEventSequence($eveSeqID);
+            return $this->printEventSequenceLine($eveSeq);
+        }
+        return '';
+    }
+    
     protected function printEventSequenceLine($eveSeq, $info = '')
     {
+        if (!isset($eveSeq["EveType"]) && sizeof($eveSeq) > 0) $eveSeq = $eveSeq[0];
         if (!isset($eveSeq["EveType"]) || sizeof($eveSeq["Event"]) <= 0) return '';
         $ret = '<span class="slBlueDark">';
         if ($eveSeq["EveType"] == 'Force' 
@@ -1828,7 +1751,9 @@ class OpenPolice extends SurvFormTree
         $name = '';
         $civ2 = [];
         $civ2 = $this->sessData->getChildRow($type, $id, 'PersonContact');
-        if (sizeof($civ2) > 0 && (trim($civ2->PrsnNameFirst) != '' || trim($civ2->PrsnNameLast) != '')) {
+        if (sizeof($civ2) > 0 && trim($civ2->PrsnNickname) != '') {
+            $name = $civ2->PrsnNickname;
+        } elseif (sizeof($civ2) > 0 && (trim($civ2->PrsnNameFirst) != '' || trim($civ2->PrsnNameLast) != '')) {
             $name = $civ2->PrsnNameFirst . ' ' . $civ2->PrsnNameLast . ' ' . $name;
         } else {
             if ($type == 'Officers' && isset($row->OffBadgeNumber) && intVal($row->OffBadgeNumber) > 0) {
@@ -1855,11 +1780,11 @@ class OpenPolice extends SurvFormTree
         $name = '';
         if ($civ->CivIsCreator == 'Y' && (($loop == 'Victims' && $civ->CivRole == 'Victim') 
             || ($loop == 'Witnesses' && $civ->CivRole == 'Witness')) ) {
-            if (!$this->isReport) {
-                $name = 'You ' . $name;
-            } else {
+            if ($this->isReport) {
                 $name = $civ->CivNameFirst . ' ' . $civ->CivNameLast;
                 if (trim($name) == '') $name = 'Complainant';
+            } else {
+                $name = 'You ' . $name;
             }
         }
         else $name = $this->getPersonLabel('Civilians', $civ->CivID, $civ);
@@ -1942,37 +1867,6 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->dataSets["Civilians"] as $civ) $civs[] = $civ->CivID;
         }
         return $civs;
-    }
-    
-    // returns list of force types associated with each civilian. Animal is stored as CivID #0
-    protected function getCivForceTypes()
-    {
-        $forceCivs = [];
-        if (isset($this->sessData->dataSets["Force"]) && sizeof($this->sessData->dataSets["Force"]) > 0) {
-            foreach ($this->sessData->dataSets["Force"] as $force) {
-                if ($force->ForAgainstAnimal == 'Y') {
-                    if (!isset($forceCivs[0])) $forceCivs[0] = array("recs" => [], "types" => [], "other" => '');
-                    $forceCivs[0]["recs"][] = $force;
-                    $forceCivs[0]["types"][] = $force->ForType;
-                    if ($force->ForType == $GLOBALS["DB"]->getDefID('Force Type', 'Other')) {
-                        $forceCivs[0]["other"] = $force->ForTypeOther;
-                    }
-                } else {
-                    $civs = $this->getLinkedToEvent('Civilian', $force->ForEventSequenceID);
-                    if (sizeof($civs) > 0) {
-                        foreach ($civs as $civID) {
-                            if (!isset($forceCivs[$civID])) $forceCivs[$civID] = array("recs" => [], "types" => [], "other" => '');
-                            $forceCivs[$civID]["recs"][] = $force;
-                            $forceCivs[$civID]["types"][] = $force->ForType;
-                            if ($force->ForType == $GLOBALS["DB"]->getDefID('Force Type', 'Other')) {
-                                $forceCivs[$civID]["other"] = $force->ForTypeOther;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $forceCivs;
     }
 
     // This function provides an "opts" set of Civilian IDs related to Table 1 which are to be used as candidates for Table 2.
@@ -2058,7 +1952,7 @@ class OpenPolice extends SurvFormTree
         if ($this->REQ->has($tbl2) && sizeof($this->REQ->input($tbl2)) > 0) { 
             foreach ($this->REQ->input($tbl2) as $civID) {
                 if (!isset($possible["active"][$civID])) {
-                    $injRow = $this->sessData->newDataRecordSimple($tbl2, $activeFld, $civID);
+                    $injRow = $this->sessData->newDataRecord($tbl2, $activeFld, $civID);
                 }
             }
         }
@@ -2146,7 +2040,7 @@ class OpenPolice extends SurvFormTree
         $newEvid->EvidPrivacy       = $upArr["privacy"];
         $newEvid->EvidDateTime      = date("Y-m-d H:i:s");
         $newEvid->EvidTitle         = $upArr["title"];
-        $newEvid->EvidEvidenceDesc  = $upArr["desc"];
+        //$newEvid->EvidEvidenceDesc  = $upArr["desc"];
         $newEvid->EvidUploadFile    = $upArr["upFile"];
         $newEvid->EvidStoredFile    = $upArr["storeFile"];
         $newEvid->EvidVideoLink     = $upArr["video"];
@@ -2205,8 +2099,8 @@ class OpenPolice extends SurvFormTree
 
 
     
-    public function runAjaxChecks(Request $request) {
-        
+    public function runAjaxChecks(Request $request)
+    {
         if ($request->has('email') && $request->has('password')) {
             
             print_r($request);
@@ -2223,11 +2117,53 @@ class OpenPolice extends SurvFormTree
             $depts = [];
             // Prioritize by Incident City first, also by Department size (# of officers)
             $reqState = (($request->has('policeState')) ? trim($request->get('policeState')) : '');
+            if (in_array(strtolower($request->policeDept), ['washington dc', 'washington d.c.'])) {
+                $request->policeDept = 'Washington';
+            }
             if (!in_array($reqState, ['', 'US'])) {
                 $depts = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
                     ->where('DeptAddressState', $reqState)
                     ->orderBy('DeptName', 'asc')
                     ->get();
+                $deptsMore = OPDepartments::where('DeptAddressCity', 'LIKE', '%'.$request->policeDept.'%')
+                    ->where('DeptAddressState', $reqState)
+                    ->orderBy('DeptName', 'asc')
+                    ->get();
+                if ($deptsMore && sizeof($deptsMore) > 0) {
+                    foreach ($deptsMore as $d) $depts[] = $d;
+                }
+                $zips = $counties = [];
+                $cityZips = SLZips::where('ZipCity', 'LIKE', '%'.$request->policeDept.'%')
+                    ->where('ZipState', 'LIKE', $reqState)
+                    ->get();
+                if ($cityZips && sizeof($cityZips) > 0) {
+                    foreach ($cityZips as $z) {
+                        $zips[] = $z->ZipZip;
+                        $counties[] = $z->ZipCounty;
+                    }
+                    $deptsMore = OPDepartments::whereIn('DeptAddressZip', $zips)
+                        ->orderBy('DeptName', 'asc')
+                        ->get();
+                    if ($deptsMore && sizeof($deptsMore) > 0) {
+                        foreach ($deptsMore as $d) $depts[] = $d;
+                    }
+                    foreach ($counties as $c) {
+                        $deptsMore = OPDepartments::where('DeptName', 'LIKE', '%'.$c.'%')
+                            ->where('DeptAddressState', $reqState)
+                            ->orderBy('DeptName', 'asc')
+                            ->get();
+                        if ($deptsMore && sizeof($deptsMore) > 0) {
+                            foreach ($deptsMore as $d) $depts[] = $d;
+                        }
+                        $deptsMore = OPDepartments::where('DeptAddressCounty', 'LIKE', '%'.$c.'%')
+                            ->where('DeptAddressState', $reqState)
+                            ->orderBy('DeptName', 'asc')
+                            ->get();
+                        if ($deptsMore && sizeof($deptsMore) > 0) {
+                            foreach ($deptsMore as $d) $depts[] = $d;
+                        }
+                    }
+                }
             }
             $deptsFed = OPDepartments::where('DeptName', 'LIKE', '%'.$request->policeDept.'%')
                 ->where('DeptType', 366)
@@ -2243,10 +2179,6 @@ class OpenPolice extends SurvFormTree
                 "newDeptStateDrop" => $GLOBALS["DB"]->states->stateDrop($request->get('policeState'), true)
             ]);
             return '';
-            
-        } elseif ($request->has('saveIncEveOrder')) {
-            
-            $this->ajaxSaveIncEveOrder();
             
         }
         exit;

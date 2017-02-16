@@ -30,7 +30,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/allegations',         'OpenPolice\Controllers\OpenPolice@allegationsList');
     
     Route::get( '/form-tree', function () {
-        header("Location: https://app.openpolicecomplaints.org/dox/OPC_Form_Tree_Map.pdf");
+        header("Location: /dox/OPC_Form_Tree_Map.pdf");
         exit;
     });
     

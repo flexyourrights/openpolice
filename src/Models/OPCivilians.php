@@ -25,5 +25,7 @@ class OPCivilians extends Model
 		'CivCameraRecord', 
 		'CivUsedProfanity', 
 		'CivOccupation', 
+		'CivGivenCitation', 
+		'CivGivenWarning', 
     ];
 }

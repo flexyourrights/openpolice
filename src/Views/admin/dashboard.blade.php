@@ -32,21 +32,36 @@
 
 <h1 class="mTn20">Full Admin Menu...</h1>
 <div class="row">
-    @forelse ($adminNav as $i => $nav)
-        @if ($i > 0)
-            <div class="col-md-2 pB20">
-                <b class="f20">{!! str_replace('pull-right', 'pull-left mR5', $nav[1]) !!}</b>
+    <div class="col-md-6">
+        <div class="row">
+            @for ($i=0; $i<sizeof($adminNav)-2; $i++)
+                @if ($i > 0)
+                    <h2>{!! str_replace('pull-right', 'pull-left mR5', $adminNav[$i][1]) !!}</h2>
+                    <ul>
+                    @if (sizeof($adminNav[$i][3]) > 0)
+                        @foreach ($adminNav[$i][3] as $link)
+                            <li><a href="{{ $link[0] }}" class="f16">{!! $link[1] !!}</a></li>
+                        @endforeach
+                    @endif
+                    </ul>
+                @endif
+            @endfor
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            @for ($i=sizeof($adminNav)-2; $i<sizeof($adminNav); $i++)
+                <h2>{!! str_replace('pull-right', 'pull-left mR5', $adminNav[$i][1]) !!}</h2>
                 <ul>
-                @if (sizeof($nav[3]) > 0)
-                    @foreach ($nav[3] as $link)
+                @if (sizeof($adminNav[$i][3]) > 0)
+                    @foreach ($adminNav[$i][3] as $link)
                         <li><a href="{{ $link[0] }}" class="f16">{!! $link[1] !!}</a></li>
                     @endforeach
                 @endif
                 </ul>
-            </div>
-        @endif
-    @empty
-    @endforelse
+            @endfor
+        </div>
+    </div>
 </div>
 
 

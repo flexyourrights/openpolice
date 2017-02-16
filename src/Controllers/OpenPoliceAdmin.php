@@ -162,7 +162,7 @@ class OpenPoliceAdmin extends AdminSubsController
                                 'Oversight Agencies',
                                 1,
                                 []
-                            ], [
+                            ] /* , [
                                 'javascript:;',
                                 'Other Contacts',
                                 1,
@@ -184,7 +184,7 @@ class OpenPoliceAdmin extends AdminSubsController
                                         []
                                     ]
                                 ]
-                            ]
+                            ] */
                         ]
                     ], 
                     $treeMenu,
@@ -754,7 +754,7 @@ class OpenPoliceAdmin extends AdminSubsController
                         $swap = $this->coreID;
                         break;
                     case '[{ Complaint URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . '/report' 
                             . $this->CustReport->sessData->dataSets["Complaints"][0]->ComSlug);
                         break;
                     case '[{ Complaint URL Link }]':
@@ -765,23 +765,23 @@ class OpenPoliceAdmin extends AdminSubsController
                             $this->CustReport->sessData->dataSets["Civilians"][0]->CivID);
                         break;
                     case '[{ Confirmation URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
                             . $this->coreID . '/confirm-email/goooobblygooook8923528350');
                         break;
                     case '[{ Go Gold Secure URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
                             . $this->coreID . '/go-gold/goooobblygooook8923528350');
                         break;
                     case '[{ Submit Silver Secure URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
                             . $this->coreID . '/submit-silver/goooobblygooook8923528350');
                         break;
                     case '[{ Update Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
                             . $this->coreID . '/update/goooobblygooook8923528350');
                         break;
                     case '[{ Login URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/login');
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'login');
                         break;
                     case '[{ Days From Now: 7, mm/dd/yyyy }]':
                         $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
@@ -938,7 +938,7 @@ class OpenPoliceAdmin extends AdminSubsController
                         $swap = $this->CustReport->simpleAllegationList();
                         break;
                     case '[{ Oversight Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap('https://app.openpolicecomplaints.org/report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
                             . $this->coreID . '/oversight/goooobblygooook8923528350');
                         break;
                     case '[{ Complaint Department Complaint PDF }]':
