@@ -5,10 +5,10 @@
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
-Open Police is an open-source web app empowering citizens to prepare, file, and track reports of police conduct. 
-The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing users to 
-publish reports online, we aim to establish better public transparency and oversight of police activity in the U.S.. 
-Open Police is built using <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, atop 
+Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
+conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
+users to publish reports online, we aim to establish better public transparency and oversight of police activity in the 
+U.S.. Open Police is built using <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
 <a href="http://openpolicereport.org" target="_blank">OpenPolice.org</a><br />
