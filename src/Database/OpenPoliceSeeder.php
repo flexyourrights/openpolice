@@ -6813,7 +6813,7 @@ Please write what you were charged with. ',
 			'FldName' => 'Type',
 			'FldEng' => 'Allegation Type',
 			'FldDesc' => 'The specific misconduct accusations cited by Complainants against one or more Officers related to a single Incident. Essential for statistical purposes and for prioritizing new Complaints. ',
-			'FldNotes' => 'Asked at the end during Phase 4: Policy or Procedure, Courtesy, Intimidating Display Of Weapon, Sexual Assault, Conduct Unbecoming an Officer (Neglect of Duty is part of Policy/Procedure)',
+			'FldNotes' => 'Asked at the end during Phase 4: Policy or Procedure, Courtesy, Intimidating Display of Weapon, Sexual Assault, Conduct Unbecoming an Officer (Neglect of Duty is part of Policy/Procedure)',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -9086,7 +9086,7 @@ If selected, we might want to email user article on How to Track Down CCTV Foota
 			'FldOrd' => '21',
 			'FldSpecSource' => '0',
 			'FldName' => 'IntimidatingWeapon',
-			'FldEng' => 'Intimidating Display Of Weapon?',
+			'FldEng' => 'Intimidating Display of Weapon?',
 			'FldDesc' => 'The Officer brandished or discharged a weapon in threatening manner. Important for identifying non-Force complaints where an Officer might have used a weapon for intimidation purposes.',
 			'FldNotes' => 'IF this Complaint includes a Use of Force Allegation, THEN the Complainant should NOT be offered this Weapon Intimidation Allegation.
 
@@ -14833,27 +14833,6 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
-			'FldID' => 1177,
-			'FldDatabase' => '1',
-			'FldTable' => '112',
-			'FldOrd' => '35',
-			'FldSpecSource' => '0',
-			'FldName' => 'IsMobile',
-			'FldEng' => 'Using Mobile Device?',
-			'FldDesc' => 'Indicates whether or not this Complaint was started on a mobile device. This is important for tracking trends of usage, and potential debugging.',
-			'FldForeignTable' => '0',
-			'FldForeignMin' => '0',
-			'FldForeignMax' => '0',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldValues' => '0;1',
-			'FldType' => 'INT',
-			'FldDataType' => 'Numeric',
-			'FldDataLength' => '1',
-			'FldCharSupport' => ',Numbers,',
-			'FldCompareSame' => '878800'
-		]);
-		DB::table('SL_Fields')->insert([
 			'FldID' => 1178,
 			'FldDatabase' => '1',
 			'FldTable' => '165',
@@ -15951,7 +15930,7 @@ Example: A complainant alleged that an officer searched his car without consent 
 			'DefSubset' => 'Allegation Type',
 			'DefOrder' => '5',
 			'DefIsActive' => '0',
-			'DefValue' => 'Wrongful Property Seizure',
+			'DefValue' => 'Wrongful Property Seizure or Damage',
 			'DefDescription' => 'Wrongful Seizure: A seizure violated the protections provided by the 4th Amendment of the United States Constitution.
 Example: A complainant alleged that an officer searched his car without consent after he was pulled over for an unsafe lane change.'
 		]);
@@ -15996,7 +15975,7 @@ Example: A complainant alleged that an officer searched his car without consent 
 			'DefSubset' => 'Allegation Type',
 			'DefOrder' => '10',
 			'DefIsActive' => '0',
-			'DefValue' => 'Intimidating Display Of Weapon',
+			'DefValue' => 'Intimidating Display of Weapon',
 			'DefDescription' => 'Non-Verbal Intimidation Using Weaopn: Weapon-related threats do not apply to weapons safely in holsters. Actual use of weapon against a person is use of force, not just intimidation.
 (This Allegation should not appear for users who have any Use of Force Allegations)'
 		]);
@@ -18538,7 +18517,7 @@ Example: A woman is groped on the street by an unknown man. When the police arri
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
 			'TreeName' => 'Open Police Complaint',
-			'TreeRootURL' => 'https://app.openpolice.org',
+			'TreeSlug' => 'https://app.openpolice.org',
 			'TreeRoot' => '3',
 			'TreeFirstPage' => '667',
 			'TreeLastPage' => '529',

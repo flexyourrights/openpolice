@@ -17,7 +17,7 @@
                     <i class="gry9">{{ date("M n, Y, g:i a", strtotime($r->ComRevDate)) }}, by {!! $allStaffName[$r->ComRevUser] !!}</i><br />
                     <div class="pL5 f18">
                         <div class="f22"><b>{{ $r->ComRevStatus }}</b></div>
-                        {{ $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}
+                        {{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}
                         @if ($r->ComRevType == 'Full') 
                             <nobr><i class="fa fa-search-plus mL20 slBlueDark f16" aria-hidden="true"></i> {{ ($r->ComRevNotAnon + $r->ComRevOneIncident + $r->ComRevCivilianContact + $r->ComRevOneOfficer + $r->ComRevOneAllegation + $r->ComRevEvidenceUpload) }}</nobr>
                             @if (($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) >= 0)
@@ -56,7 +56,7 @@
                     </div>
                     <div class="col-md-6 taR">
                         <b class="f16 gry9">Change Complaint Type: <a href="#" id="legitTypeBtn">{{ str_replace('Legitimate', 'Complaint About Police', 
-                            $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $complaintRec->ComType)) }}</a></b>
+                            $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $complaintRec->ComType)) }}</a></b>
                         <?php /* <label class="mL20 pL20">
                             <input type="checkbox" name="ComRevMakeFeatured" value="1" class="mR20" 
                                 @if (isset($latestReview->ComRevMakeFeatured) && intVal($latestReview->ComRevMakeFeatured) == 1) CHECKED @endif
@@ -140,7 +140,7 @@
                                 <i class="gry9">{{ date("M n, Y, g:i a", strtotime($r->ComRevDate)) }}, by {!! $allStaffName[$r->ComRevUser] !!}</i><br />
                                 <div class="pL5 f18">
                                     <div class="f22"><b>{{ $r->ComRevStatus }}</b></div>
-                                    {{ $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}
+                                    {{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}
                                     @if ($r->ComRevType == 'Full') 
                                         <nobr><i class="fa fa-search-plus mL20 slBlueDark f16" aria-hidden="true"></i> {{ ($r->ComRevNotAnon + $r->ComRevOneIncident + $r->ComRevCivilianContact + $r->ComRevOneOfficer + $r->ComRevOneAllegation + $r->ComRevEvidenceUpload) }}</nobr>
                                         @if (($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) >= 0)
@@ -183,7 +183,7 @@
                                     ])->render() !!}
                             </div>
                             
-                            <b class="f16">Change Complaint Type: <a href="#" id="legitTypeBtn">{{ $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $complaintRec->ComType) }}</a></b>
+                            <b class="f16">Change Complaint Type: <a href="#" id="legitTypeBtn">{{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $complaintRec->ComType) }}</a></b>
                             <div id="legitTypeDrop" class="disNon">
                                 <select name="revComplaintType" class="form-control f18 mB10 mL5" autocomplete=off >
                                     <option value="195" @if ($complaintRec->ComType == 195) SELECTED @endif >Unreviewed</option>
@@ -261,7 +261,7 @@
                             <th class="taR" style="border-right: 1px #AAA solid;">Legitimate</th>
                             @foreach ($reviews as $i => $r)
                                 @if ($r->ComRevType == 'Full') 
-                                    <td class="taC @if ($i%2 == 0) row2 @endif ">{{ $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}</td>
+                                    <td class="taC @if ($i%2 == 0) row2 @endif ">{{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $r->ComRevComplaintType) }}</td>
                                 @endif
                             @endforeach
                         </tr>

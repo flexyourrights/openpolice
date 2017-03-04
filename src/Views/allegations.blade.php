@@ -9,12 +9,12 @@
 		<li>Sexual Assault</li>
 		<li>Unreasonable Force</li>
 		<li>Wrongful Arrest</li>
-		<li>Wrongful Property Seizure</li>
+		<li>Wrongful Property Seizure or Damage</li>
 		</ul>
 		<b>Tier 2</b>
 		<ul>
 		<li>Sexual Harassment</li>
-		<li>Intimidating Display Of Weapon</li>
+		<li>Intimidating Display of Weapon</li>
 		<li>Wrongful Search</li>
 		<li>Wrongful Entry</li>
 		<li>Wrongful Detention</li>

@@ -130,9 +130,9 @@
                 <a href="https://en.wikipedia.org/wiki/{!! str_replace(' ', '_', str_replace('Dept', 'Department', $deptRow->DeptName)) !!}" 
                     class="btn btn-xs btn-default slBlueDark mB10" target="_blank">Department on <i class="fa fa-wikipedia-w"></i>ikipedia</a>
                 <br />
-                <a href="https://en.wikipedia.org/wiki/{!! str_replace(' ', '_', $deptRow->DeptAddressCity.', '.$GLOBALS['DB']->states->getState($deptRow->DeptAddressState)) !!}" 
+                <a href="https://en.wikipedia.org/wiki/{!! str_replace(' ', '_', $deptRow->DeptAddressCity.', '.$GLOBALS['SL']->states->getState($deptRow->DeptAddressState)) !!}" 
                     class="btn btn-xs btn-default slBlueDark mR10" target="_blank">City&nbsp;&nbsp;<i class="fa fa-wikipedia-w"></i></a>
-                <a href="https://en.wikipedia.org/wiki/{!! str_replace(' ', '_', $deptRow->DeptAddressCounty.' County, '.$GLOBALS['DB']->states->getState($deptRow->DeptAddressState)) !!}" 
+                <a href="https://en.wikipedia.org/wiki/{!! str_replace(' ', '_', $deptRow->DeptAddressCounty.' County, '.$GLOBALS['SL']->states->getState($deptRow->DeptAddressState)) !!}" 
                     class="btn btn-xs btn-default slBlueDark" target="_blank">County&nbsp;&nbsp;<i class="fa fa-wikipedia-w"></i></a>
             </td></tr></table>
             <h3 class="blk m0">Stats</h3>

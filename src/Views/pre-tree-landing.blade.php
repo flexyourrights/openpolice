@@ -29,10 +29,10 @@
     
     <p class="p10 pB20 gry9">
         <b class="red fPerc125">If</b> you started a complaint but got disconnected, you can 
-        <a href="{{ $GLOBALS['DB']->sysOpts['app-url'] }}/login">login</a> to finish it.<br />
+        <a href="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/login">login</a> to finish it.<br />
         <a name="privOpts"></a>
         If you submitted a complaint and want to post updates about the investigation, you can 
-        <a href="{{ $GLOBALS['DB']->sysOpts['app-url'] }}/login">login</a> for that too.
+        <a href="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/login">login</a> for that too.
     </p>
     
     <h1 class="mT20 slBlueDark">Privacy / Transparency Options</h1>

@@ -21,16 +21,14 @@ Route::group(['middleware' => ['web']], function () {
         'uses' => 'OpenPolice\Controllers\VolunteerController@volunProfileAdm', 
         'middleware' => ['auth']
     ]);
-    
+                                                                     
     Route::get('/evidence/{cid}/{upID}',     [
         'uses' => 'OpenPolice\Controllers\OpenPoliceReport@retrieveUpload',
         'middleware' => ['auth']
     ]);
     
-    Route::get( '/allegations',         'OpenPolice\Controllers\OpenPolice@allegationsList');
-    
     Route::get( '/form-tree', function () {
-        header("Location: /dox/OPC_Form_Tree_Map.pdf");
+        header("Location: /tree/complaint");
         exit;
     });
     

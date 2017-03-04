@@ -1,0 +1,58 @@
+/* arabic */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cairo'), local('Cairo-Regular'), url(/survloop/fonts/cairo-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+FB50-FDFF, U+FE80-FEFC;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cairo'), local('Cairo-Regular'), url(/survloop/fonts/cairo-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Cairo'), local('Cairo-Regular'), url(/survloop/fonts/cairo-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+
+body, p, div, table tr td, table tr th, input, textarea, select {
+	font-family: 'Cairo', sans-serif;
+}
+b, h1, h2, h3, h4, h5, h6 {
+	font-family: 'Cairo', sans-serif;
+}
+
+
+input.fingerTxt, input.form-control.fingerTxt, 
+textarea.fingerTxt, textarea.form-control.fingerTxt, 
+select.fingerTxt, select.form-control.fingerTxt {
+    /* font-family: Baskerville,Baskerville Old Face,Hoefler Text,Garamond,Times New Roman,serif; */
+    color: #000;
+}
+
+label.finger, label.fingerAct, .finger:hover, input.finger:hover+label {
+    /* font-family: Baskerville,Baskerville Old Face,Hoefler Text,Garamond,Times New Roman,serif; */
+    color: #000;
+}
+label.fingerAct, label.fingerAct:active, input.fingerAct:active+label, 
+label.fingerAct:hover, input.fingerAct:hover+label, label.finger:active, input.finger:active+label {
+    color: #2b3493;
+}
+
+.fontBasker, .fontBasker div, .fontBasker div div {
+    /* font-family: Baskerville,Baskerville Old Face,Hoefler Text,Garamond,Times New Roman,serif; */
+}
+
+
+.nPrompt ul {
+    list-style-image: url("https://app.openpolice.org:8443/survloop/dot.png");
+}

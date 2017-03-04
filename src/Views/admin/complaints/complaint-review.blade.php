@@ -27,7 +27,7 @@
                     <div class="checkbox mTn5 mL5 brdTop">
                         <div class="fL"><label>
                             <input type="checkbox" name="complaintLegit" value="196" 
-                                @if ($firstReview || $GLOBALS["DB"]->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
+                                @if ($firstReview || $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
                                     CHECKED 
                                 @endif
                                 onClick="if (this.checked) { document.getElementById('notLegit').style.display='none'; } else { document.getElementById('notLegit').style.display='block';  }" 
@@ -46,7 +46,7 @@
                     <div id="notLegit" class="pL10 
                         @if ($firstReview)
                             disNon 
-                        @elseif ($GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
+                        @elseif ($GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
                             disNon
                         @else
                             disBlo
@@ -55,35 +55,35 @@
                         <div class="radio">
                             <nobr><label>
                                 <input type="radio" name="revComplaintType" value="197" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not About Police')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not About Police')
                                         CHECKED
                                     @endif
                                     > Not about police
                             </label></nobr>
                             <nobr><label class="mL20">
                                 <input type="radio" name="revComplaintType" value="198" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Abuse')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Abuse')
                                         CHECKED
                                     @endif
                                     > Abuse
                             </label></nobr>
                             <nobr><label class="mL20">
                                 <input type="radio" name="revComplaintType" value="199" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Spam')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Spam')
                                         CHECKED
                                     @endif
                                     > Spam
                             </label></nobr>
                             <nobr><label class="mL20">
                                 <input type="radio" name="revComplaintType" value="200" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Test')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Test')
                                         CHECKED
                                     @endif
                                     > Test submission
                             </label></nobr>
                             <nobr><label class="mL20">
                                 <input type="radio" name="revComplaintType" value="200" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not Sure')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not Sure')
                                         CHECKED
                                     @endif
                                     > Not Sure
@@ -366,42 +366,42 @@
                         <div class="radio f18">
                             <nobr><label class="mR20">
                                 <input type="radio" name="revComplaintType" value="196" 
-                                    @if ($firstReview || $GLOBALS["DB"]->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
+                                    @if ($firstReview || $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Legitimate')
                                         CHECKED 
                                     @endif
                                     > Police Complaint
                             </label></nobr>
                             <nobr><label class="mL20 mR20">
                                 <input type="radio" name="revComplaintType" value="197" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not About Police')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not About Police')
                                         CHECKED
                                     @endif
                                     > Not About Police
                             </label></nobr>
                             <nobr><label class="mL20 mR20">
                                 <input type="radio" name="revComplaintType" value="198" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Abuse')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Abuse')
                                         CHECKED
                                     @endif
                                     > Abuse
                             </label></nobr>
                             <nobr><label class="mL20 mR20">
                                 <input type="radio" name="revComplaintType" value="199" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Spam')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Spam')
                                         CHECKED
                                     @endif
                                     > Spam
                             </label></nobr>
                             <nobr><label class="mL20 mR20">
                                 <input type="radio" name="revComplaintType" value="200" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Test')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Test')
                                         CHECKED
                                     @endif
                                     > Test Submission
                             </label></nobr>
                             <nobr><label class="mL20">
                                 <input type="radio" name="revComplaintType" value="200" 
-                                    @if (!$firstReview && $GLOBALS['DB']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not Sure')
+                                    @if (!$firstReview && $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $yourReview->ComRevComplaintType) == 'Not Sure')
                                         CHECKED
                                     @endif
                                     > Not Sure

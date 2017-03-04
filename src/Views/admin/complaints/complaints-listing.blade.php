@@ -22,7 +22,7 @@
     <tr>
         <td rowspan=2 class="taC" >
             <a href="/dashboard/complaint/{{ $com->ComID }}/review" 
-            @if ($com->ComStatus == $GLOBALS["DB"]->getDefID('Complaint Status', 'New')) 
+            @if ($com->ComStatus == $GLOBALS['SL']->getDefID('Complaint Status', 'New')) 
                 class="btn btn btn-primary round20 p5 f22"
             @else
                 class="btn btn btn-default round20 p5 f22 slBlueDark"
@@ -31,19 +31,19 @@
         </td>
         <td class="f18">
             <nobr>
-            @if ($GLOBALS["DB"]->getDefValue('Complaint Status', $com->ComStatus) == 'New')
+            @if ($GLOBALS['SL']->getDefValue('Complaint Status', $com->ComStatus) == 'New')
                 <i class="fa fa-star slRedDark"></i>
             @endif
-            {{ $GLOBALS["DB"]->getDefValue('Complaint Status', $com->ComStatus) }}
+            {{ $GLOBALS['SL']->getDefValue('Complaint Status', $com->ComStatus) }}
             </nobr>
         </td>
         <td class="f18">
             <nobr>
-            @if ($GLOBALS["DB"]->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) == 'Unreviewed')
+            @if ($GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) == 'Unreviewed')
                 <i class="fa fa-star slRedDark"></i>
             @endif
-            @if ($com->ComStatus != $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete')) 
-                {{ $GLOBALS["DB"]->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) }}
+            @if ($com->ComStatus != $GLOBALS['SL']->getDefID('Complaint Status', 'Incomplete')) 
+                {{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) }}
             @else 
                 <span class="f12 gry9"><i>through node #{{ $com->ComSubmissionProgress }}</i></span>
             @endif

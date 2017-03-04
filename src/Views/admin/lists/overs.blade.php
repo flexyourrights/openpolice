@@ -36,7 +36,7 @@
         {{ $over->OverAddressCity }}, {{ $over->OverAddressState }}
     </td>
     <td class="vaT">
-        <a href="{{ $over->OverWebsite }}" target="_blank" class="noUnd"><?= $GLOBALS["DB"]->urlPreview($over->OverWebsite) ?></a><br />
+        <a href="{{ $over->OverWebsite }}" target="_blank" class="noUnd"><?= $GLOBALS['SL']->urlPreview($over->OverWebsite) ?></a><br />
         {{ $over->OverPhoneWork }}
     </td>
     </tr>

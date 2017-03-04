@@ -6,9 +6,9 @@
             <div class="col-md-12 p20">
                 <div class="fL">
                     <h4 class="m0 gry9">
-                        {{ $GLOBALS["DB"]->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}
+                        {{ $GLOBALS['SL']->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}
                         @if (intVal($loopItem->DeptType) > 0) 
-                            , {{ $GLOBALS["DB"]->getDefValById($loopItem->DeptType) }}
+                            , {{ $GLOBALS['SL']->getDefValById($loopItem->DeptType) }}
                         @endif
                     </h4>
                     <h2 class="m0">{{ $loopItem->DeptName }}</h2>
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div id="wrapItem{{ $itemID }}Off" class="wrapItemOff brdA round20 mB20">
-        <i class="mR20 fL">Deleted: {{ $GLOBALS["DB"]->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}: 
+        <i class="mR20 fL">Deleted: {{ $GLOBALS['SL']->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}: 
             {!! $loopItem->DeptName !!}</i> 
         <a href="javascript:;" id="unDelLoopItem{{ $itemID }}" class="unDelLoopItem nFormLnkEdit mL20 fR"
             ><i class="fa fa-undo"></i> Undo</a>

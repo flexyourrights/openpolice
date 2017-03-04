@@ -28,8 +28,7 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function tweakAdmMenu($currPage = '')
     {
-    	$this->loadDbLookups();
-        if (isset($this->v["deptSlug"])) {
+    	if (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["currNavPos"] = [2, 3, -1, -1];
             } else {
@@ -199,7 +198,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["deptRows"] = DB::select( DB::raw("SELECT * FROM `OP_Departments` WHERE " . $qman 
             . " ORDER BY `DeptScoreOpenness` DESC, `DeptVerified` DESC, `DeptName`, `DeptAddressState`") );
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard()
-            . '<div class="taC p10 f16 gry9"><i>' . $GLOBALS["DB"]->dbRow->DbMission . '</i></div>';
+            . '<div class="taC p10 f16 gry9"><i>' . $GLOBALS["SL"]->dbRow->DbMission . '</i></div>';
         return view('vendor.openpolice.volun.volunteer', $this->v);
     }
     
@@ -218,7 +217,7 @@ class VolunteerController extends OpenPoliceAdmin
     {
         return view('vendor.openpolice.volun.volunEditSearch', [ 
             "deptName"  => $deptName, 
-            "stateDrop" => $GLOBALS["DB"]->states->stateDrop($state) 
+            "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
         ])->render();
     }
     
@@ -287,7 +286,7 @@ class VolunteerController extends OpenPoliceAdmin
     public function nextDept()
     {
         $this->getNextDept();
-        return redirect('/volunteer/verify/'.$this->v["nextDept"][2]);
+        return $this->redir('/volunteer/verify/'.$this->v["nextDept"][2]);
     }
     
     
@@ -295,15 +294,15 @@ class VolunteerController extends OpenPoliceAdmin
     {
         if ($request->has('deptName') && $request->has('DeptAddressState')) {
             $newDept = $this->newDeptAdd($request->deptName, $request->DeptAddressState);
-            return redirect('/volunteer/verify/' . $newDept->DeptSlug);
+            return $this->redir('/volunteer/verify/' . $newDept->DeptSlug);
         }
-        return redirect('/volunteer');
+        return $this->redir('/volunteer');
     }
     
     public function newDeptAdd($deptName = '', $deptState = '') {
         if (trim($deptName) != '' && trim($deptState) != '') {
             $newDept = OPDepartments::where('DeptName', $deptName)->where('DeptAddressState', $deptState)->first();
-            if ($newDept && isset($newDept->DeptSlug)) redirect('/volunteer/verify/'.$newDept->DeptSlug);
+            if ($newDept && isset($newDept->DeptSlug)) return $this->redir('/volunteer/verify/'.$newDept->DeptSlug);
             $newDept = new OPDepartments;
             $newIA   = new OPOversight;
             $newEdit = new OPzVolunEditsDepts;
@@ -332,7 +331,7 @@ class VolunteerController extends OpenPoliceAdmin
     
     public function deptEdit(REQUEST $request, $deptSlug)
     {
-    	$this->loadDbLookups();
+    	$this->loadDbLookups($request);
         $this->v["deptSlug"]    = $deptSlug;
         $this->v["deptRow"]     = OPDepartments::where('DeptSlug', $deptSlug)->first();
         $this->v["editsIA"]     = $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = [];
@@ -342,7 +341,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["recentEdits"] = '';
         
         if (!isset($this->v["deptRow"]->DeptID) || intVal($this->v["deptRow"]->DeptID) <= 0) {
-            return redirect('/volunteer');
+            return $this->redir('/volunteer');
         }
         
         $recentEdits = OPzVolunEditsDepts::where('EditDeptDeptID', $this->v["deptRow"]->DeptID)
@@ -379,7 +378,7 @@ class VolunteerController extends OpenPoliceAdmin
                         "user"     => $this->v["userNames"][$edit->EditDeptUser], 
                         "deptRow"  => $this->v["deptRow"], 
                         "deptEdit" => $edit, 
-                        "deptType" => $GLOBALS["DB"]->getDefValue('Types of Departments', $edit->DeptType),
+                        "deptType" => $GLOBALS["SL"]->getDefValue('Types of Departments', $edit->DeptType),
                         "iaEdit"   => $this->v["editsIA"][$i], 
                         "civEdit"  => $this->v["editsCiv"][$i]
                     ])->render();
@@ -396,7 +395,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["volunChecklist"]       = $this->deptEditChecklistHTML();
         $this->v["FAQs"]                 = $this->deptEditFaqHTML();
         $this->v["rightSide"]            = $this->getSidebarScript();
-        $this->v["stateDrop"]            = $GLOBALS["DB"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
+        $this->v["stateDrop"]            = $GLOBALS["SL"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
         $this->v["iaRow"]                = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
                                              ->where('OverType', 303)
                                              ->first();
@@ -594,15 +593,15 @@ class VolunteerController extends OpenPoliceAdmin
         
         if ($request->whatNext == 'again') {
             $request->session()->put('whatNext', 'again');
-            return redirect('/volunteer/verify/'.$request->DeptSlug);
+            return $this->redir('/volunteer/verify/'.$request->DeptSlug);
         } elseif ($request->whatNext == 'list') {
             $request->session()->put('whatNext', 'list');
-            return redirect('/volunteer');
+            return $this->redir('/volunteer');
         } else { // moving to next (reserved) department
             $request->session()->put('whatNext', 'another');
-            return redirect('/volunteer/verify/'.$request->whatNext);
+            return $this->redir('/volunteer/verify/'.$request->whatNext);
         }
-        return redirect('/volunteer'); // this line shouldn't happen
+        return $this->redir('/volunteer'); // this line shouldn't happen
     }
     
     protected function collectCivOversightForm(&$civ, &$civEdit, $request)
@@ -639,9 +638,9 @@ class VolunteerController extends OpenPoliceAdmin
     
     public function deptEditChecklistHTML()
     {
-        $script1 = $GLOBALS["DB"]->getInstruct('Phone Script: Department');
-        $script2 = $GLOBALS["DB"]->getInstruct('Phone Script: Internal Affairs');
-        $instruct = $GLOBALS["DB"]->getInstruct('Volunteer Department Data Mining');
+        $script1 = $GLOBALS["SL"]->getInstruct('Phone Script: Department');
+        $script2 = $GLOBALS["SL"]->getInstruct('Phone Script: Internal Affairs');
+        $instruct = $GLOBALS["SL"]->getInstruct('Volunteer Department Data Mining');
         // doing this manually for now, but should be automated...
         return str_replace('[[ Phone Script: Department ]]', $script1, 
             str_replace('[[ Phone Script: Internal Affairs ]]', $script2, $instruct));
@@ -649,8 +648,8 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function getSidebarScript()
     {
-        $script1 = $GLOBALS["DB"]->getInstruct('Phone Script: Department');
-        $script2 = $GLOBALS["DB"]->getInstruct('Phone Script: Internal Affairs');
+        $script1 = $GLOBALS["SL"]->getInstruct('Phone Script: Department');
+        $script2 = $GLOBALS["SL"]->getInstruct('Phone Script: Internal Affairs');
         return view('vendor.openpolice.volun.volunScript-cache', [
             'script1' => $script1, 
             'script2' => $script2
@@ -659,7 +658,7 @@ class VolunteerController extends OpenPoliceAdmin
     
     public function deptEditFaqHTML()
     {
-        return $GLOBALS["DB"]->getInstruct('Volunteer Data Mining FAQs');
+        return $GLOBALS["SL"]->getInstruct('Volunteer Data Mining FAQs');
     }
     
     public function deptEditCheck()
@@ -675,11 +674,11 @@ class VolunteerController extends OpenPoliceAdmin
     public function saveDefaultState(Request $request)
     {
         $this->admControlInit($request);
-        if ($this->REQ->has('newState')) {
-            $this->v["yourContact"]->update([ "PrsnAddressState" => $this->REQ->newState ]);
+        if ($GLOBALS["SL"]->REQ->has('newState')) {
+            $this->v["yourContact"]->update([ "PrsnAddressState" => $GLOBALS["SL"]->REQ->newState ]);
         }
-        if ($this->REQ->has('newPhone')) {
-            $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $this->REQ->newPhone ]);
+        if ($GLOBALS["SL"]->REQ->has('newPhone')) {
+            $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $GLOBALS["SL"]->REQ->newPhone ]);
         }
         exit;
     }
@@ -749,7 +748,7 @@ class VolunteerController extends OpenPoliceAdmin
 					"user"     => $deptEdit[0], 
 					"deptRow"  => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
 					"deptEdit" => $deptEdit[1], 
-					"deptType" => $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
+					"deptType" => $GLOBALS["SL"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
 					"iaEdit"   => $deptEdit[2], 
 					"civEdit"  => $deptEdit[3]
 				])->render();

@@ -39,7 +39,7 @@ class OpenPoliceAdmin extends AdminSubsController
     {
         if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0
             || !$this->v["user"]->hasRole('administrator|staff|databaser|brancher|volunteer')) {
-            return redirect('/');
+            return $this->redir('/');
         }
         $userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)
             ->first();
@@ -65,17 +65,12 @@ class OpenPoliceAdmin extends AdminSubsController
     public function loadAdmMenu()
     {
         if (isset($this->v["user"])) {
-            list($treeMenu, $dbMenu) = $this->loadAdmMenuBasics();
+            $treeMenu = $this->loadAdmMenuBasics();
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 return [
                     [
-                        '/dashboard',
-                        'Dashboard',
-                        1,
-                        []
-                    ], [
                         'javascript:;',
-                        'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>',
+                        '<i class="fa fa-star mR5"></i> Complaints',
                         1,
                         [
                             [
@@ -112,7 +107,7 @@ class OpenPoliceAdmin extends AdminSubsController
                         ]
                     ], [
                         'javascript:;',
-                        'Volunteering <span class="pull-right"><i class="fa fa-users"></i></span>',
+                        '<i class="fa fa-users mR5"></i> Volunteering',
                         1,
                         [
                             [
@@ -144,7 +139,7 @@ class OpenPoliceAdmin extends AdminSubsController
                         ]
                     ], [
                         'javascript:;',
-                        'Directories <span class="pull-right"><i class="fa fa-list-ul"></i></span>',
+                        '<i class="fa fa-list-ul mR5"></i> Directories',
                         1,
                         [
                             [
@@ -187,8 +182,7 @@ class OpenPoliceAdmin extends AdminSubsController
                             ] */
                         ]
                     ], 
-                    $treeMenu,
-                    $dbMenu
+                    $treeMenu
                 ];
             } elseif ($this->v["user"]->hasRole('volunteer')) {
                 return [
@@ -272,9 +266,9 @@ class OpenPoliceAdmin extends AdminSubsController
             ];
         } elseif (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["currNavPos"] = [2, 3, -1, -1];
+                $this->admMenuData["currNavPos"] = [1, 3, -1, -1];
             } else {
-                $this->admMenuData["currNavPos"] = [1, -1, -1, -1];
+                $this->admMenuData["currNavPos"] = [0, -1, -1, -1];
             }
             $volunteeringSubMenu = [
                 'javascript:;" id="navBtnContact0',
@@ -338,38 +332,24 @@ class OpenPoliceAdmin extends AdminSubsController
                 ]
             ];
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["adminNav"][2][3][3] = $volunteeringSubMenu;
+                $this->admMenuData["adminNav"][1][3][3] = $volunteeringSubMenu;
             } else { // is Volunteer
                 $volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
-                $this->admMenuData["adminNav"][1] = $volunteeringSubMenu;
+                $this->admMenuData["adminNav"][0] = $volunteeringSubMenu;
             }
         }
         if (!$this->v["user"]->hasRole('administrator|staff|databaser')) {
-            if (isset($this->admMenuData["adminNav"][2]) && isset($this->admMenuData["adminNav"][2][1])) {
+            if (isset($this->admMenuData["adminNav"][1]) && isset($this->admMenuData["adminNav"][1][1])) {
                 if (!isset($this->v["yourUserInfo"]->UserInfoStars)) {
-                    $this->admMenuData["adminNav"][2][1] = 0;
+                    $this->admMenuData["adminNav"][1][1] = 0;
                 } else {
-                    $this->admMenuData["adminNav"][2][1] = str_replace('[[score]]', 
-                        intVal($this->v["yourUserInfo"]->UserInfoStars), $this->admMenuData["adminNav"][2][1]);
+                    $this->admMenuData["adminNav"][1][1] = str_replace('[[score]]', 
+                        intVal($this->v["yourUserInfo"]->UserInfoStars), $this->admMenuData["adminNav"][1][1]);
                 }
             }
         }
         
         $this->getAdmMenuLoc($currPage);
-        return true;
-    }
-    
-    protected function loadSysSettings() 
-    {
-        $settings = SLDefinitions::where('DefSet', 'Custom Settings')
-            ->orderBy('DefOrder', 'asc')
-            ->get();
-        $this->v["settings"] = [];
-        if ($settings && sizeof($settings) > 0) {
-            foreach ($settings as $s) {
-                $this->v["settings"][$s->DefSubset] = $s->DefValue;
-            }
-        }
         return true;
     }
     
@@ -381,12 +361,10 @@ class OpenPoliceAdmin extends AdminSubsController
         if (trim($this->v["currPage"]) == '') $this->v["currPage"] = '/dashboard';
         $this->v["allowEdits"] = ($this->v["user"]->hasRole('administrator|staff'));
         
-        $this->loadSysSettings();
-        
         $this->v["management"] = ($this->v["user"]->hasRole('administrator|staff'));
         $this->v["volunOpts"] = 1;
-        if ($this->REQ->session()->has('volunOpts')) {
-            $this->v["volunOpts"] = $this->REQ->session()->get('volunOpts');
+        if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
+            $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
         }
         $this->v["ways"] = [
             'Online-Submittable Form', 
@@ -426,11 +404,11 @@ class OpenPoliceAdmin extends AdminSubsController
         $user = Auth::user();
         if (!$user->hasRole('administrator|staff|databaser|brancher')) {
             if ($user->hasRole('volunteer')) {
-                return redirect('/volunteer');
+                return $this->redir('/volunteer');
             }
-            return redirect('/');
+            return $this->redir('/');
         }
-        return redirect( '/dashboard/complaints' );
+        return $this->redir( '/dashboard/complaints' );
     }
     
     protected function loadSearchSuggestions()
@@ -496,32 +474,32 @@ class OpenPoliceAdmin extends AdminSubsController
             WHERE civ.`CivIsCreator` LIKE 'Y' ";
         switch ($this->v["currPage"]) {
             case '/dashboard/complaints':         
-                $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'New') . "' 
+                $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'New') . "' 
                     OR (c.`ComType` IN (
-                    '" . $GLOBALS["DB"]->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed') . "', 
-                    '" . $GLOBALS["DB"]->getDefID('OPC Staff/Internal Complaint Type', 'Not Sure') . "'
+                    '" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed') . "', 
+                    '" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Not Sure') . "'
                     ) AND c.`ComStatus` NOT LIKE '" 
-                    . $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete') . "') )"; 
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "') )"; 
                 break;
             case '/dashboard/complaints/me':     
                 $qman .= " AND c.`ComAdminID` LIKE '" . $this->v["user"]->id . "' 
-                    AND c.`ComStatus` NOT LIKE '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete') . "'";
+                    AND c.`ComStatus` NOT LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "'";
                 break;
             case '/dashboard/complaints/waiting':     
                 $qman .= " AND (c.`ComStatus` IN (
-                    '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'Attorney\'d') . "', 
-                    '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'Submitted to Oversight') . "', 
-                    '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'Received by Oversight') . "', 
-                    '" . $GLOBALS["DB"]->getDefID('Complaint Status', 'Pending Oversight Investigation') . "'
+                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Attorney\'d') . "', 
+                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight') . "', 
+                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Received by Oversight') . "', 
+                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Oversight Investigation') . "'
                     ) )"; 
                 break;
             case '/dashboard/complaints/all':     
                 $qman .= " AND c.`ComStatus` NOT LIKE '" 
-                    . $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete') . "'";
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "'";
                 break;
             case '/dashboard/complaints/incomplete':     
                 $qman .= " AND c.`ComStatus` LIKE '" 
-                    . $GLOBALS["DB"]->getDefID('Complaint Status', 'Incomplete') . "'";
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "'";
                 break;
         }
         $this->v["complaints"] = $this->v["comInfo"] = [];
@@ -541,7 +519,7 @@ class OpenPoliceAdmin extends AdminSubsController
                 if ($chkAlleg && sizeof($chkAlleg) > 0) {
                     if ($sort == 'Allegations') $sortInd = sizeof($chkAlleg)+($sortInd/10000000000);
                     foreach ($chkAlleg as $alleg) $allegsTmp[] = $alleg;
-                    $this->v["comInfo"][$com->ComID]["alleg"] = $this->CustReport->commaAllegationList($allegsTmp);
+                    $this->v["comInfo"][$com->ComID]["alleg"] = $this->CustReport->commaAllegationList();
                 }
                 $this->v["comInfo"][$com->ComID]["comDate"] = date("n/j/Y", $comTime);
                 
@@ -562,7 +540,7 @@ class OpenPoliceAdmin extends AdminSubsController
         if (!isset($_SESSION["clearIncompletes"])) {
             $qmen = $delComs = [];
             $qman = "SELECT * FROM `Complaints` WHERE `ComCreated` < '" . date("Y-m-d 00:00:00", mktime(0, 0, 0, date("n"), date("j")-2, date("Y"))) . "' AND (`ComSubmissionProgress` < '1' OR `ComSummary` IS NULL)";
-            $chk = mysqli_query($GLOBALS["DB"], $qman); // echo $qman . '<br />';
+            $chk = mysqli_query($GLOBALS["SL"], $qman); // echo $qman . '<br />';
             if ($chk && mysqli_num_rows($chk) > 0) { 
                 while ($row = mysqli_fetch_array($chk)) { $delComs[] = $row["ComID"]; }
                 $qmen[] = "DELETE FROM `Civilians` WHERE `CivComplaintID` IN ('" . implode("', '", $delComs) . "')";
@@ -572,7 +550,7 @@ class OpenPoliceAdmin extends AdminSubsController
             }
             $qmen[] = "DELETE FROM `AuthUser` WHERE `UserCreated` < '" . date("Y-m-d 00:00:00", mktime(0, 0, 0, date("n"), date("j")-2, date("Y"))) . "' AND `UserName` IS NULL AND `UserPassword` IS NULL AND `UserID` NOT IN (SELECT `CivUserID` FROM `Civilians`)";
             foreach ($qmen as $qman) {
-                $chk = mysqli_query($GLOBALS["DB"], $qman); // echo $qman . '<br />';
+                $chk = mysqli_query($GLOBALS["SL"], $qman); // echo $qman . '<br />';
             }
             $_SESSION["clearIncompletes"] = true;
         }
@@ -586,7 +564,6 @@ class OpenPoliceAdmin extends AdminSubsController
     public function complaintView(Request $request, $cid, $viewType = 'view') 
     {
         $this->v["cID"] = $this->coreID = $cid;
-        $this->loadSysSettings();
         $currPage = '/dashboard/complaint/' . $cid . (($viewType == 'view') ? '' : '/'.$viewType);
         if ($this->v["settings"]["Complaint Evaluations"] == 'N') $currPage = '/dashboard/complaints/all';
         $this->admControlInit($request, $currPage);
@@ -594,7 +571,7 @@ class OpenPoliceAdmin extends AdminSubsController
         if ($viewType == 'review' && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
             $this->v["admMenuHideable"] = true;
         }
-        $this->CustReport->loadSessionData($cid);
+        $this->CustReport->loadSessionData('Complaints', $cid);
         $this->v["fullReport"] = $this->CustReport->printAdminReport($cid, $viewType);
         $this->v["complaintRec"] = $this->CustReport->sessData->dataSets["Complaints"][0];
         $this->v["firstReview"] = true;
@@ -648,16 +625,16 @@ class OpenPoliceAdmin extends AdminSubsController
                 $this->v["comDepts"][$cnt] = array("id" => $lnk->LnkComDeptDeptID);
                 $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID)->first();
                 $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                    ->where('OverType', $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
+                    ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
                     ->first();
                 $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                    ->where('OverType', $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
+                    ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
                     ->first();
                 if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || sizeof($this->v["comDepts"][$cnt]["iaRow"]) == 0) {
                     $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
                     $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID       = $lnk->LnkComDeptDeptID;
                     $this->v["comDepts"][$cnt]["iaRow"]->OverType
-                        = $GLOBALS["DB"]->getDefID('Oversight Agency Types', 'Internal Affairs');
+                        = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
                     $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
                         = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
                     $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
@@ -754,7 +731,7 @@ class OpenPoliceAdmin extends AdminSubsController
                         $swap = $this->coreID;
                         break;
                     case '[{ Complaint URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . '/report' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/report' 
                             . $this->CustReport->sessData->dataSets["Complaints"][0]->ComSlug);
                         break;
                     case '[{ Complaint URL Link }]':
@@ -765,23 +742,23 @@ class OpenPoliceAdmin extends AdminSubsController
                             $this->CustReport->sessData->dataSets["Civilians"][0]->CivID);
                         break;
                     case '[{ Confirmation URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
                             . $this->coreID . '/confirm-email/goooobblygooook8923528350');
                         break;
                     case '[{ Go Gold Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
                             . $this->coreID . '/go-gold/goooobblygooook8923528350');
                         break;
                     case '[{ Submit Silver Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
                             . $this->coreID . '/submit-silver/goooobblygooook8923528350');
                         break;
                     case '[{ Update Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
                             . $this->coreID . '/update/goooobblygooook8923528350');
                         break;
                     case '[{ Login URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'login');
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'login');
                         break;
                     case '[{ Days From Now: 7, mm/dd/yyyy }]':
                         $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
@@ -935,10 +912,10 @@ class OpenPoliceAdmin extends AdminSubsController
                         }
                         break;
                     case '[{ Complaint Allegation List }]':
-                        $swap = $this->CustReport->simpleAllegationList();
+                        $swap = $this->CustReport->commaAllegationList();
                         break;
                     case '[{ Oversight Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["DB"]->sysOpts["app-url"] . 'report/' 
+                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
                             . $this->coreID . '/oversight/goooobblygooook8923528350');
                         break;
                     case '[{ Complaint Department Complaint PDF }]':
@@ -1041,7 +1018,7 @@ class OpenPoliceAdmin extends AdminSubsController
     
     public function complaintReviewPost(Request $request, $cid) 
     {
-        $this->CustReport->loadSessionData($cid);
+        $this->CustReport->loadSessionData('Complaints', $cid);
         $this->admControlInit($request, '/dashboard/complaint/' . $cid . '/review');
         if ($request->has('cID') && intVal($request->cID) > 0 && intVal($request->cID) == $cid) {
             $newReview = new OPzComplaintReviews;
@@ -1101,8 +1078,8 @@ class OpenPoliceAdmin extends AdminSubsController
             }
             $com->save();
         }
-        //$this->CustReport->loadSessionData();
-        return redirect('/dashboard/complaint/' . $cid . '/history');
+        //$this->CustReport->loadSessionData('Complaints');
+        return $this->redir('/dashboard/complaint/' . $cid . '/history');
     }
     
     
@@ -1221,7 +1198,7 @@ class OpenPoliceAdmin extends AdminSubsController
                 "user"         => $deptEdit[0], 
                 "deptRow"     => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
                 "deptEdit"     => $deptEdit[1], 
-                "deptType"     => $GLOBALS["DB"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
+                "deptType"     => $GLOBALS["SL"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
                 "iaEdit"     => $deptEdit[2], 
                 "civEdit"     => $deptEdit[3]
             ])->render();
@@ -1471,7 +1448,7 @@ class OpenPoliceAdmin extends AdminSubsController
             $over->OverDeptID = $request->DeptID;
             $over->save();
         }
-        return redirect('/dashboard/overs#o'.$request->OverID);
+        return $this->redir('/dashboard/overs#o'.$request->OverID);
     }
     
     public function listLegal(Request $request)

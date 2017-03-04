@@ -26,7 +26,7 @@
             @endif >
         <label class="sr-only" for="stateID">Select Your State</label>
         <select id="stateID" name="state" class="form-control mL5 mR5">
-            {!! $GLOBALS["DB"]->states->stateDrop($currState) !!}
+            {!! $GLOBALS['SL']->states->stateDrop($currState) !!}
         </select> 
         <a href="javascript:void(0)" onClick="return subVolunDeptSearch();" class="btn btn-med btn-primary f16"><i class="fa fa-search"></i></a>
         </form>
