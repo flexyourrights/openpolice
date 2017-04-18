@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/admin/lists/officers.blade.php -->
 
-@extends('vendor.survloop.admin.admin')
+@extends('vendor.survloop.master')
 
 @section('content')
 

@@ -154,20 +154,20 @@
 
 <div class="complaintFooter">
     @if (!in_array($sessData['Complaints'][0]->ComStatus, [294, 295, 298, 299]))
-        <center><div class="row pB10 pT20 mT20">
-            <div class="col-md-6 taR">
-                <a href="https://twitter.com/share" class="twitter-share-button" 
-                    data-text="Check out this police complaint!" data-via="opencomplaints" 
-                    data-url="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}" >Tweet</a>
-            </div>
-            <div class="col-md-6 taL">
-                <div class="fb-share-button" data-layout="button_count" 
-                    data-href="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}"></div>
-            </div>
-        </div></center>
+        @if (isset($emojiTags) && trim($emojiTags) != '') <div class="fL">{!! $emojiTags !!}</div> @endif
+        <div class="fL" style="padding: 13px 20px 0px 40px;">
+            <a href="https://twitter.com/share" class="twitter-share-button" 
+                data-text="Check out this police complaint!" data-via="opencomplaints" 
+                data-url="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}" >Tweet</a>
+        </div>
+        <div class="fL" style="padding: 8px 10px 0px 20px;">
+            <div class="fb-share-button" data-layout="button_count" 
+                data-href="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}"></div>
+        </div>
+        <div class="fC"></div>
     @endif
-    <center><a class="f12 noUnd" href="/complaint-report/{{ $complaintID }}"
-        >{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}</a></center>
+    <a class="f12 noUnd" href="/complaint-report/{{ $complaintID }}"
+        >{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-report/{{ $complaintID }}</a>
 </div>
 
 </div>

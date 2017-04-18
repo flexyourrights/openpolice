@@ -392,8 +392,8 @@ class VolunteerController extends OpenPoliceAdmin
         if (!$request->session()->has('whatNext')) $request->session()->put('whatNext', 'another');
         $this->getNextDept();
         $this->v["whatNext"]             = $request->session()->get('whatNext');
-        $this->v["volunChecklist"]       = $this->deptEditChecklistHTML();
-        $this->v["FAQs"]                 = $this->deptEditFaqHTML();
+        $this->v["volunChecklist"]       = $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist');
+        $this->v["FAQs"]                 = $GLOBALS["SL"]->getBlurb('Volunteer Data Mining FAQs');
         $this->v["rightSide"]            = $this->getSidebarScript();
         $this->v["stateDrop"]            = $GLOBALS["SL"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
         $this->v["iaRow"]                = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
@@ -636,29 +636,14 @@ class VolunteerController extends OpenPoliceAdmin
         return true;
     }
     
-    public function deptEditChecklistHTML()
-    {
-        $script1 = $GLOBALS["SL"]->getInstruct('Phone Script: Department');
-        $script2 = $GLOBALS["SL"]->getInstruct('Phone Script: Internal Affairs');
-        $instruct = $GLOBALS["SL"]->getInstruct('Volunteer Department Data Mining');
-        // doing this manually for now, but should be automated...
-        return str_replace('[[ Phone Script: Department ]]', $script1, 
-            str_replace('[[ Phone Script: Internal Affairs ]]', $script2, $instruct));
-    }
-    
     protected function getSidebarScript()
     {
-        $script1 = $GLOBALS["SL"]->getInstruct('Phone Script: Department');
-        $script2 = $GLOBALS["SL"]->getInstruct('Phone Script: Internal Affairs');
+        $script1 = $GLOBALS["SL"]->getBlurb('Phone Script: Department');
+        $script2 = $GLOBALS["SL"]->getBlurb('Phone Script: Internal Affairs');
         return view('vendor.openpolice.volun.volunScript-cache', [
             'script1' => $script1, 
             'script2' => $script2
         ]);
-    }
-    
-    public function deptEditFaqHTML()
-    {
-        return $GLOBALS["SL"]->getInstruct('Volunteer Data Mining FAQs');
     }
     
     public function deptEditCheck()
@@ -666,7 +651,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["content"] = '<div class="p20"></div>
             <h1 class="slBlueDark" style="margin-bottom: 5px;">Department Info: Volunteer Checklist</h1>
             <a href="/volunteer"><i class="fa fa-caret-left"></i> Back To Department List</a>' 
-            . $this->deptEditChecklistHTML() . '<div class="p20"></div>';
+            . $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist') . '<div class="p20"></div>';
         return view('vendor.survloop.master', $this->v);
     }
     

@@ -10,6 +10,7 @@ class OPInjuries extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+        'InjComplaintID', 
 		'InjSubjectID', 
 		'InjType', 
 		'InjHowManyTimes', 

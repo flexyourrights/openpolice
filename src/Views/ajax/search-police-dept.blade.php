@@ -16,7 +16,7 @@
         @endif
         <div class="row mT10 mB10">
             <div class="col-md-3 pT5 pB5">
-                <a href="javascript:void(0)" class="deptLoad btn btn-primary btn-block f26 taC" 
+                <a href="javascript:void(0)" class="deptLoad btn btn-xl btn-primary btn-block taC" 
                     id="dept{{ $dept->DeptID }}">Select</a>
             </div>
             <div class="col-md-9 f16">

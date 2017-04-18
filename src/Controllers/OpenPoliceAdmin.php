@@ -98,16 +98,11 @@ class OpenPoliceAdmin extends AdminSubsController
                                 'Incomplete Sessions',
                                 1,
                                 []
-                            ], [
-                                '/dashboard/subs/emails',
-                                'Settings & Emails',
-                                1,
-                                []
                             ]
                         ]
                     ], [
                         'javascript:;',
-                        '<i class="fa fa-users mR5"></i> Volunteering',
+                        '<i class="fa fa-users mR5"></i> Volunteers',
                         1,
                         [
                             [
@@ -128,11 +123,6 @@ class OpenPoliceAdmin extends AdminSubsController
                             ], [
                                 '/volunteer/nextDept',
                                 'Verify A Department',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/instruct',
-                                'Edit Instructions',
                                 1,
                                 []
                             ]
@@ -1060,23 +1050,7 @@ class OpenPoliceAdmin extends AdminSubsController
             
             $com = OPComplaints::find($cid);
             $com->comType = $newReview->ComRevComplaintType;
-            
-            // MORGAN, this needs update!!!
-            switch ($newReview->ComRevStatus) {
-                case 'Submitted to Oversight':           $com->comStatus = 300; break;
-                case 'Hold: Not Sure':                   $com->comStatus = 295; break;
-                case 'Hold: Go Gold':                    $com->comStatus = 295; break;
-                case 'Pending Attorney: Needed':         $com->comStatus = 298; break;
-                case 'Pending Attorney: Hook-Up':        $com->comStatus = 298; break;
-                case "Attorney'd":                       $com->comStatus = 299; break;
-                case 'Incomplete':                       $com->comStatus = 294; break;
-                case 'Received by Oversight':            $com->comStatus = 301; break;
-                case 'Pending Oversight Investigation':  $com->comStatus = 302; break;
-                case 'Declined To Investigate (Closed)': $com->comStatus = 303; break;
-                case 'Investigated (Closed)':            $com->comStatus = 304; break;
-                case 'Closed':                           $com->comStatus = 305; break;
-            }
-            $com->save();
+            $com->comStatus = $GLOBALS["SL"]->getDefID('Complaint Status', $newReview->ComRevStatus);
         }
         //$this->CustReport->loadSessionData('Complaints');
         return $this->redir('/dashboard/complaint/' . $cid . '/history');
@@ -1112,30 +1086,6 @@ class OpenPoliceAdmin extends AdminSubsController
             }
         }
         return view('vendor.openpolice.admin.volun.volun', $this->v);
-    }
-    
-    public function volunManage(REQUEST $request)
-    {
-        $this->admControlInit($request, '/dashboard/volun/stars');
-        $this->loadPrintVoluns();
-        return view('vendor.openpolice.admin.volun.volunManage', $this->v);
-    }
-    
-    public function volunManagePost(REQUEST $request)
-    {
-        $volunteers = User::where('name', 'NOT LIKE', 'Session#%')->get();
-        foreach ($volunteers as $i => $volun) {
-            foreach ($volun->rolesRanked as $role) {
-                if ($request->has('user'.$volun->id) && in_array($role, $request->get('user'.$volun->id))) {
-                    if (!$volun->hasRole($role)) {
-                        $volun->assignRole($role);
-                    }
-                } elseif ($volun->hasRole($role)) {
-                    $volun->revokeRole($role);
-                }
-            }
-        }
-        return $this->volunManage($request);
     }
         
     public function volunDepts(Request $request)
@@ -1364,41 +1314,6 @@ class OpenPoliceAdmin extends AdminSubsController
         
         return true;
     }
-    
-    
-        
-    public function volunEmail(Request $request)
-    {
-        $this->admControlInit($request, '/dashboard/volun/stars');
-        $this->loadPrintVoluns();
-        return view('vendor.openpolice.admin.volun.volunEmail', $this->v);
-    }
-    
-    
-    
-    protected function loadPrintVoluns()
-    {
-        $this->v["printVoluns"] = [ [], [], [], [] ]; // voluns, staff, admin
-        $volunteers = User::where('name', 'NOT LIKE', 'Session#%')
-            ->orderBy('name', 'asc')
-            ->get();
-        foreach ($volunteers as $i => $volun) {
-            $list = 3;
-            if ($volun->hasRole('administrator')) $list = 0;
-            elseif ($volun->hasRole('databaser')) $list = 1;
-            elseif ($volun->hasRole('brancher'))  $list = 2;
-            elseif ($volun->hasRole('staff'))     $list = 3;
-            elseif ($volun->hasRole('volunteer')) $list = 4;
-            $this->v["printVoluns"][$list][] = $volun;
-        }
-        $this->v["disableAdmin"] = ((!$this->v["user"]->hasRole('administrator')) ? ' DISABLED ' : '');
-        return true;
-    }
-    
-    
-    
-    
-
     
     public function listOfficers(Request $request)
     {

@@ -207,46 +207,6 @@ Route::group(['middleware' => ['web']], function () {
         'middleware' => ['auth']
     ]);
     
-    Route::get('/dashboard/user/{uid}', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@profile', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::get( '/dashboard/volun/email', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@volunEmail', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::post('/dashboard/volun/users', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@volunManagePost', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::get('/dashboard/volun/users', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@volunManage', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::get('/dashboard/instruct', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@instructList', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::post('/dashboard/instruct/new', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@instructNew', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::post('/dashboard/instruct/{instID}', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@instructEditSave', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::get('/dashboard/instruct/{instID}', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@instructEdit', 
-        'middleware' => ['auth']
-    ]);
-    
     
     
     /********************************************************/

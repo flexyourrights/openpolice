@@ -1,0 +1,1 @@
+<img src="/openpolice/logo-ico-loading-anim.gif" border=0 class="round10 mT20 mB20" style="width: 75px;" >

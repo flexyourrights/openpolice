@@ -13,6 +13,9 @@ class OpenPoliceReport extends OpenPolice
     protected $isReport     = true;
     public $hideDisclaim    = false;
     
+    protected $comSlug      = '';
+    protected $comDate      = '';
+    protected $deptList     = [];
     protected $subjects     = [];
     protected $witnesses    = [];
     protected $whoBlocks    = [];
@@ -20,18 +23,33 @@ class OpenPoliceReport extends OpenPolice
     protected $charges      = [];
     protected $injuries     = [];
     
-    public function printFullReport($reportType = '', $isAdmin = false)
+    public function prepReport()
+    {
+        $this->deptList = "";
+        if (isset($this->sessData->dataSets["Departments"]) && sizeof($this->sessData->dataSets["Departments"]) > 0) {
+            foreach ($this->sessData->dataSets["Departments"] as $dept) {
+                $this->deptList .= ', <a href="/department/' . $dept->DeptSlug . '">' . $dept->DeptName . '</a>';
+            }
+        }
+        $this->comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->updated_at));
+        if (trim($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted) != '' 
+            && $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted != '0000-00-00 00:00:00') {
+            $this->comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted));
+        }
+        $this->comSlug = $this->sessData->dataSets["Complaints"][0]->ComSlug;
+        if (trim($this->comSlug) == '') {
+            $this->comSlug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID;
+        }
+        return true;
+    }
+    
+    public function printFullReport($reportType = '', $isAdmin = false, $inForms = false)
     {
         if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Hold'), 
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney')
             ])) {
             return '<h1>Sorry, this complaint is not public.</h1>';
-        }
-        
-        $ComSlug = $this->sessData->dataSets["Complaints"][0]->ComSlug;
-        if (trim($ComSlug) == '') {
-            $ComSlug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID;
         }
         
         $this->v["isOwner"] = false;
@@ -47,17 +65,13 @@ class OpenPoliceReport extends OpenPolice
                 $this->v["view"] = 'Investigate';
             }
         }
+        
+        $this->prepReport();
+        
         $this->v["civNames"] = $this->v["offNames"] = [];
         $this->whatHaps = $this->getEventSequence();
         $this->findCharges();
         $this->groupInjuries();
-        
-        $metaDeptList = "";
-        if (isset($this->sessData->dataSets["Departments"]) && sizeof($this->sessData->dataSets["Departments"]) > 0) {
-            foreach ($this->sessData->dataSets["Departments"] as $dept) {
-                $metaDeptList = ", ".$dept->DeptName;
-            }
-        }
         
         $this->whoBlocks = [
             "Subjects"  => [], 
@@ -105,28 +119,22 @@ class OpenPoliceReport extends OpenPolice
             $GLOBALS["meta"]["title"] = $this->sessData->dataSets["Complaints"][0]->ComHeadline 
                 . " | Open Police Complaint #".$this->coreID;
         } else {
-            $GLOBALS["meta"]["title"] =  trim(substr($metaDeptList, 1)) 
+            $GLOBALS["meta"]["title"] =  trim(substr(strip_tags($this->deptList), 1)) 
                 . " | Open Police Complaint #".$this->coreID."";
         }
-        $GLOBALS["meta"]["desc"] = "Open Police Complaint #".$this->coreID . $metaDeptList . ", " 
+        $GLOBALS["meta"]["desc"] = "Open Police Complaint #".$this->coreID . strip_tags($this->deptList) . ", " 
             . date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart)) 
             . " - " . substr($this->sessData->dataSets["Complaints"][0]->ComSummary, 0, 140) . " ...";
-        $GLOBALS["meta"]["keywords"] = $metaDeptList . ", " . $this->commaAllegationList();
+        $GLOBALS["meta"]["keywords"] = strip_tags($this->deptList) . ", " . $this->commaAllegationList();
         $GLOBALS["meta"]["img"] = '';
-        
-        $comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->updated_at));
-        if (trim($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted) != '' 
-            && $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted != '0000-00-00 00:00:00') {
-            $comDate = date("n/j/Y", strtotime($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted));
-        }
 
         return view('vendor.openpolice.complaint-report', [
             "isOwner"              => $this->v["isOwner"], 
             "view"                 => $this->v["view"], 
             "complaintID"          => $this->coreID, 
-            "comDate"              => $comDate, 
+            "comDate"              => $this->comDate, 
             "sessData"             => $this->sessData->dataSets, 
-            "ComSlug"              => $ComSlug, 
+            "ComSlug"              => $this->comSlug, 
             "complainantName"      => $complainantNameTop, 
             "civNames"             => $this->v["civNames"], 
             "civBlocks"            => $this->printCivBlocks(), 
@@ -139,7 +147,28 @@ class OpenPoliceReport extends OpenPolice
             "basicAllegationListF" => $this->commaAllegationList(),
             "featureImg"           => $this->getFeatureImg(),
             "hideDisclaim"         => $this->hideDisclaim,
-            "isAdmin"              => $isAdmin
+            "isAdmin"              => $isAdmin,
+            "inForms"              => $inForms,
+            "emojiSpot"            => 't' . $this->treeID . 'r' . $this->coreID,
+            "emojiTags"            => $this->printEmojiTags()
+        ]);
+    }
+    
+    public function printPreviewReport($isAdmin = false)
+    {
+        $this->prepReport();
+        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets["Complaints"][0]->ComSummary, 50);
+        return view('vendor.openpolice.complaint-report-preview', [
+            "storyPrev"            => $storyPrev,
+            "complaint"            => $this->sessData->dataSets["Complaints"][0], 
+            "incident"             => $this->sessData->dataSets["Incidents"][0], 
+            "complaintID"          => $this->coreID, 
+            "comDate"              => $this->comDate, 
+            "ComSlug"              => $this->comSlug, 
+            "basicAllegationList"  => $this->basicAllegationList(true),
+            "basicAllegationListF" => $this->commaAllegationList(true),
+            "featureImg"           => $this->getFeatureImg(),
+            "deptList"             => $this->deptList
         ]);
     }
     

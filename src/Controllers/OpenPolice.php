@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\SLZips;
 
+use App\Models\OPComplaints;
 use App\Models\OPEventSequence;
 use App\Models\OPStops;
 use App\Models\OPSearches;
@@ -101,30 +102,27 @@ class OpenPolice extends SurvFormTree
     
     protected function recordIsEditable($coreTbl, $coreID, $coreRec = [])
     {
-        if (sizeof($coreRec) == 0 && $coreID > 0) {
-            eval("\$coreRec = " . $GLOBALS["SL"]->modelPath('Complaints') . "::find(" . $coreID . ");");
-        }
-        if (isset($coreRec->ComStatus)) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete')) {
-                return true;
-            }
-        }
+        if (sizeof($coreRec) == 0 && $coreID > 0) $coreRec = OPComplaints::find($coreID);
+        if (!isset($coreRec->ComStatus)) return true;
+        if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete')) return true;
         return false;
     }
     
-    protected function getAllPublicCoreIDs($coreTbl)
+    protected function getAllPublicCoreIDs($coreTbl = '')
     {
-        $ret = $list = [];
+        if (trim($coreTbl) == '') $coreTbl = $GLOBALS["SL"]->coreTbl;
+        $this->allPublicCoreIDs = $list = [];
         if ($coreTbl == 'Complaints') {
-            eval("\$list = " . $GLOBALS["SL"]->modelPath('Complaints') 
-                . "::where('ComType', " . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Legitimate') 
-                . ")->whereIn('ComStatus', [" . implode(', ', $this->getPublishedStatusList()) 
-                . "])->orderBy('created_at', 'desc')->get();");
+            $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList())
+                ->where('ComType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Legitimate'))
+                ->select('ComID')
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
         if ($list && sizeof($list) > 0) {
-            foreach ($list as $l) $ret[] = $l->getKey();
+            foreach ($list as $l) $this->allPublicCoreIDs[] = $l->getKey();
         }
-        return $ret;
+        return $this->allPublicCoreIDs;
     }
     
     protected function getPublishedStatusList()
@@ -290,9 +288,10 @@ class OpenPolice extends SurvFormTree
         return -3;
     } */
     
-    public function multiRecordCheckIntro()
+    public function multiRecordCheckIntro($cnt = 1)
     {
-        return '<h1 class="mT0 mB20 slBlueDark">You Have Multiple Open Complaints:</h1>';
+        return '<h3 class="mT0 mB20 slBlueDark">You Have ' 
+            . (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints') . ':</h3>';
     }
     
     public function multiRecordCheckRowSummary($coreRecord)
@@ -415,11 +414,11 @@ class OpenPolice extends SurvFormTree
             } else {
                 $ret .= $this->formCivSetPossibilities('Injuries', 'InjuryCare', $civInjs);
             }
-            $ret .= '<div class="nFld slRedDark mB20">
+            /* <div class="nFld slRedDark mB20">
                 <b>IMPORTANT!</b> If anyone has been injured, they need to get medical attention now! 
                 Official medical evidence will also help improve your complaint.
-            </div>
-            </div>';
+            </div> */
+            $ret .= '</div>';
         } elseif ($nID == 270) {
             $url = '/complaint-report/' . $this->coreID;
             if (trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
@@ -1273,13 +1272,17 @@ class OpenPolice extends SurvFormTree
         return $this->allegations;
     }
     
-    public function commaAllegationList()
+    public function commaAllegationList($ulist = false)
     {
         $ret = '';
         $this->simpleAllegationList();
         if (sizeof($this->allegations) > 0) {
             foreach ($this->allegations as $i => $alleg) {
-                $ret .= (($i > 0) ? ', ' : '') . $alleg[0];
+                if ($ulist) {
+                    $ret .= '<li>' . $alleg[0] . '</li>';
+                } else {
+                    $ret .= (($i > 0) ? ', ' : '') . $alleg[0];
+                }
             }
         }
         return $ret;
@@ -2211,7 +2214,7 @@ class OpenPolice extends SurvFormTree
 
 
     
-    public function runAjaxChecks(Request $request)
+    public function runAjaxChecks(Request $request, $over = '')
     {
         if ($request->has('email') && $request->has('password')) {
             

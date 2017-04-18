@@ -1,6 +1,6 @@
 <!-- resources/views/admin/volun.blade.php -->
 
-@extends('vendor.survloop.admin.admin')
+@extends('vendor.survloop.master')
 
 @section('content')
 
@@ -9,7 +9,7 @@
         <h1><i class="fa fa-users"></i> Volunteers <i class="gry9 f16">( {{ number_format(sizeof($printVoluns[0])) }} )</i></h1>
     </div>
     <div class="col-md-6 taR p20">
-        <a href="/dashboard/volun/users" class="btn btn-default">Manage Users</i></a>
+        <a href="/dashboard/users" class="btn btn-default">Manage Users</i></a>
         <a href="/dashboard/volun/email" class="btn btn-default">Email Users</i></a>
     </div>
 </div>
