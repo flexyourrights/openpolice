@@ -13,4 +13,7 @@ class OPForceSubType extends Model
 		'ForceSubForceID', 
 		'ForceSubType', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

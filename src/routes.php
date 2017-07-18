@@ -13,6 +13,10 @@
 
 Route::group(['middleware' => ['web']], function () {
 
+    Route::get( '/dept/{deptSlug}',               'OpenPolice\Controllers\OpenPolice@deptPage');
+    Route::get( '/sharing-your-story/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
+        
+        
     Route::post('/profile/{uid}',     [
         'uses' => 'OpenPolice\Controllers\VolunteerController@volunProfileAdm', 
         'middleware' => ['auth']
@@ -36,77 +40,77 @@ Route::group(['middleware' => ['web']], function () {
     /********************************************************/
     
     
-    Route::get('/volunteer', [
+    Route::get('/dashboard/volunteer', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@index',
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/all', [
+    Route::get('/dashboard/volunteer/all', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@indexAll', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/nextDept', [
+    Route::get('/dashboard/volunteer/nextDept', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@nextDept', 
         'middleware' => ['auth']
     ]);
     
-    Route::post('/volunteer/newDept', [
+    Route::post('/dashboard/volunteer/newDept', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@newDept',
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/s/{state}', [
+    Route::get('/dashboard/volunteer/s/{state}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@indexSearchS', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/d/{deptName}',             [
+    Route::get('/dashboard/volunteer/d/{deptName}',             [
         'uses' => 'OpenPolice\Controllers\VolunteerController@indexSearchD', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/s/{state}/d/{deptName}', [
+    Route::get('/dashboard/volunteer/s/{state}/d/{deptName}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@indexSearchSD', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/verify/checklist', [
+    Route::get('/dashboard/volunteer/verify/checklist', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@deptEditCheck', 
         'middleware' => ['auth']
     ]);
     
-    Route::post('/volunteer/verify/{deptSlug}', [
+    Route::post('/dashboard/volunteer/verify/{deptSlug}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@deptEditSave', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/verify/{deptSlug}', [
+    Route::get('/dashboard/volunteer/verify/{deptSlug}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@deptEdit', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/stars', [
+    Route::get('/dashboard/volunteer/stars', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@printStars', 
         'middleware' => ['auth']
     ]);
     
-    Route::post('/volunteer/saveDefaultState', [
+    Route::post('/dashboard/volunteer/saveDefaultState', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@saveDefaultState', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/user/{uid}', [
+    Route::get('/dashboard/volunteer/user/{uid}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@volunProfile', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/dashboard/volun/user/{uid}', [
+    Route::get('/dashboard/dashboard/volun/user/{uid}', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@volunProfileAdm', 
         'middleware' => ['auth']
     ]);
     
-    Route::get('/volunteer/user/{uid}/edit', [
+    Route::get('/dashboard/volunteer/user/{uid}/edit', [
         'uses' => 'OpenPolice\Controllers\VolunteerController@updateProfile', 
         'middleware' => ['auth']
     ]);
@@ -187,6 +191,16 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/dashboard/complaints/incomplete', [
         'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@listIncomplete', 
+        'middleware' => ['auth']
+    ]);
+    
+    Route::get('/dashboard/complaints/unpublished', [
+        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@listUnpublished', 
+        'middleware' => ['auth']
+    ]);
+    
+    Route::get('/dashboard/complaints/flagged', [
+        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@listFlagged', 
         'middleware' => ['auth']
     ]);
     

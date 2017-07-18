@@ -16,4 +16,7 @@ class OPAllegations extends Model
 		'AlleDescription', 
 		'AlleFindings', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

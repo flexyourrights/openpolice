@@ -28,4 +28,7 @@ class OPDepartments extends Model
 		'DeptJurisdictionPopulation', 
 		'DeptJurisdictionGPS', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

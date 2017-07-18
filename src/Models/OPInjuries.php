@@ -10,10 +10,13 @@ class OPInjuries extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-        'InjComplaintID', 
+		'InjComplaintID', 
 		'InjSubjectID', 
 		'InjType', 
 		'InjHowManyTimes', 
 		'InjDescription', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

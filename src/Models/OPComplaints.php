@@ -10,21 +10,18 @@ class OPComplaints extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+		'ComUserID', 
 		'ComStatus', 
 		'ComType', 
-		'ComIsCompliment', 
-		'ComSubmissionProgress', 
-		'ComTreeVersion', 
-		'ComABtests', 
 		'ComIncidentID', 
-		'ComAdminID', 
+		'ComSceneID', 
 		'ComPrivacy', 
 		'ComAwardMedallion', 
 		'ComSummary', 
-		'ComSummaryPublic', 
-		'ComHeadline', 
 		'ComTriedOtherWays', 
 		'ComTriedOtherWaysDesc', 
+		'ComOfficerInjured', 
+		'ComOfficerInjuredDesc', 
 		'ComAttorneyHas', 
 		'ComAttorneyOKedOPC', 
 		'ComAttorneyWant', 
@@ -35,18 +32,24 @@ class OPComplaints extends Model
 		'ComGovtInvestigation', 
 		'ComGovtInvestigationWhyNot', 
 		'ComHowHear', 
-		'ComSlug', 
+		'ComFeedback', 
 		'ComOfficerDisciplined', 
 		'ComOfficerDisciplineType', 
 		'ComMediaLinks', 
+		'ComAdminID', 
 		'ComAttID', 
 		'ComNotes', 
+		'ComSlug', 
 		'ComRecordSubmitted', 
-		'ComNumberOfSessions', 
-		'ComSessionSeconds', 
+		'ComSubmissionProgress', 
+		'ComVersionAB', 
+		'ComTreeVersion', 
 		'ComHoneyPot', 
 		'ComIsMobile', 
 		'ComUniqueStr', 
 		'ComIPaddy', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

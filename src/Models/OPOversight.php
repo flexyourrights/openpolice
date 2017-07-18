@@ -49,4 +49,7 @@ class OPOversight extends Model
 		'OverWaySubPaperInPerson', 
 		'OverWaySubNotary', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

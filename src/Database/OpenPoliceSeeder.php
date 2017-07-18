@@ -17360,7 +17360,7 @@ Example: A woman is groped on the street by an unknown man. When the police arri
 			'DefSubset' => 'OPC Staff/Internal Complaint Type',
 			'DefOrder' => '1',
 			'DefIsActive' => '0',
-			'DefValue' => 'Legitimate'
+			'DefValue' => 'Police Complaint'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 297,

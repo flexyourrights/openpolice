@@ -27,4 +27,7 @@ class OPInjuryCare extends Model
 		'InjCareEmergencyLicenceNumber', 
 		'InjCareEmergencyDeptName', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -13,4 +13,7 @@ class OPLinksComplaintDept extends Model
 		'LnkComDeptComplaintID', 
 		'LnkComDeptDeptID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

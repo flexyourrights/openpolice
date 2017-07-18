@@ -15,4 +15,7 @@ class OPOrders extends Model
 		'OrdTroubleUnderYN', 
 		'OrdTroubleUnderstading', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

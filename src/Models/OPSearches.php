@@ -32,4 +32,7 @@ class OPSearches extends Model
 		'SrchAllegWrongfulSearch', 
 		'SrchAllegWrongfulProperty', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

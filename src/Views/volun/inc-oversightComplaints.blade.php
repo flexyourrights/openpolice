@@ -46,16 +46,16 @@
     
     <div class="col-md-1"></div>
     
-    <div class="col-md-5 blk f16">
+    <div class="col-md-5">
         <div>Link to Complaint Info from Home Page? <span class="slBlueDark f10">{{ $deptPoints["ComplaintInfoHomeLnk"] }}</span></div>
-        <div class="radio-inline blk mR20">
+        <div class="radio-inline mR20">
             <label class="nobld">
                 <input type="radio" name="{{ $overType }}OverHomepageComplaintLink" id="{{ $overType }}OverHomepageComplaintLinkA" value="Y" 
                 @if (isset($overRow->OverHomepageComplaintLink) && $overRow->OverHomepageComplaintLink == 'Y') CHECKED @endif
                 onClick="checkScore();" onChange="checkScore();"> Yes
             </label>
         </div>
-        <div class="radio-inline blk mL20">
+        <div class="radio-inline mL20">
             <label class="nobld">
                 <input type="radio" name="{{ $overType }}OverHomepageComplaintLink" id="{{ $overType }}OverHomepageComplaintLinkB" value="N" 
                 @if (isset($overRow->OverHomepageComplaintLink) && $overRow->OverHomepageComplaintLink == 'N') CHECKED @endif
@@ -75,7 +75,7 @@
                 type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         
-        <h4 class="gry9 mT20">How Can Complaints Be Submitted (AND Investigated)?</h4>
+        <div class="mT20 blk fPerc125">How Can Complaints Be Submitted (AND Investigated)?</div>
         @foreach ($ways as $i => $w)
             <div class="checkbox">
                 <label>
@@ -108,15 +108,13 @@
             @endif
         @endforeach
         <fieldset class="form-group">
-            <label for="{{ $overType }}OverSubmitDeadlineID">Complaint must be submitted within how many days</label>
+            <label for="{{ $overType }}OverSubmitDeadlineID">Complaint must be submitted within how many days?</label>
             <div class="row">
-                <div class="col-md-3">
-                    <input id="{{ $overType }}OverSubmitDeadlineID" name="{{ $overType }}OverSubmitDeadline" 
+                <div class="col-md-6">
+                    <nobr><input id="{{ $overType }}OverSubmitDeadlineID" name="{{ $overType }}OverSubmitDeadline" 
                         @if (intVal($overRow->OverSubmitDeadline) >= 0) value="{{ $overRow->OverSubmitDeadline }}" @else value="" @endif
-                        type="number" class="form-control @if (intVal($overRow->OverSubmitDeadline) == -1) disNon @else disBlo @endif "> 
-                </div>
-                <div class="col-md-3 pT10 f18">
-                    <div id="{{ $overType }}OverSubmitDeadLabel" class=" @if (intVal($overRow->OverSubmitDeadline) == -1) disNon @else disBlo @endif ">days</div>
+                        type="number" class="form-control @if (intVal($overRow->OverSubmitDeadline) == -1) disNon @else disIn @endif " style="width: 60px;"> 
+                    <div id="{{ $overType }}OverSubmitDeadLabel" class=" @if (intVal($overRow->OverSubmitDeadline) == -1) disNon @else disIn @endif ">days</div></nobr>
                 </div>
                 <div class="col-md-6 taR">
                     <div class="checkbox mTn10">

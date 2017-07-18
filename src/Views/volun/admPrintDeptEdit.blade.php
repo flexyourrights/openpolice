@@ -21,7 +21,7 @@
     </td><td class="pT10 pB20">
     
     @if (isset($deptRow->DeptName)) 
-        <a @if (isset($deptRow->DeptSlug)) href="/volunteer/verify/{{ $deptRow->DeptSlug }}" @endif 
+        <a @if (isset($deptRow->DeptSlug)) href="/dashboard/volunteer/verify/{{ $deptRow->DeptSlug }}" @endif 
             ><b>{{ $deptEdit->EditDeptName }}</b></a><br />
     @endif
     @if (sizeof($iaEdit) > 0)

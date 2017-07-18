@@ -40,7 +40,7 @@
         <tr @if ((1+$i)%10 == 0) style="border-bottom: 2px #000 dotted;" @endif >
             <td class="taL">
             @if ($u->userID == $yourStats->userID) <img src="/openpolice/star1.png" border=0 height=26 class="mTn5" > @endif 
-            <a href="/volunteer/user/{{ $u->userID }}"
+            <a href="/dashboard/volunteer/user/{{ $u->userID }}"
                 @if ($u->userID == $yourStats->userID) class="bld f24" @endif >{{ $u->name }}</a></td>
             <td class=" @if ($u->userID == $yourStats->userID) bld f24 @endif " >
                 @if ($u->UserInfoStars > 0)

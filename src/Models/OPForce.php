@@ -10,10 +10,7 @@ class OPForce extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ForVictimUseWeapon', 
 		'ForEventSequenceID', 
-		'ForVictimHadWeapon', 
-		'ForVictimWhatWeapon', 
 		'ForAgainstAnimal', 
 		'ForAnimalDesc', 
 		'ForType', 
@@ -23,12 +20,11 @@ class OPForce extends Model
 		'ForHowManyTimes', 
 		'ForOrdersBeforeForce', 
 		'ForOrdersSubjectResponse', 
-		'ForChase', 
-		'ForChaseType', 
 		'ForWhileHandcuffed', 
 		'ForWhileHeldDown', 
-		'ForOfficerInjured', 
-		'ForOfficerInjuredDesc', 
 		'ForAllegUnreasonable', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

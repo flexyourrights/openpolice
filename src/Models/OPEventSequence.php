@@ -15,4 +15,7 @@ class OPEventSequence extends Model
 		'EveType', 
 		'EveUserFinished', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

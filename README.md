@@ -54,6 +54,7 @@ The instructions below include the needed steps to install SurvLoop, as well as 
 
 ```
 $ php artisan make:auth
+$ php artisan vendor:publish --tag=laravel-notifications
 ```
 
 * Update `composer.json` to add requirements and an easier SurvLoop and OpenPolice reference:
@@ -94,6 +95,8 @@ $ nano config/app.php
 ```
 
 ```php
+...
+    'name' => 'Open Police Complaints',
 ...
 'providers' => [
 	...

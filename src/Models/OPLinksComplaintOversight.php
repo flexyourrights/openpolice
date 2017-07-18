@@ -20,4 +20,7 @@ class OPLinksComplaintOversight extends Model
 		'LnkComOverOversightReportEvidenceID', 
 		'LnkComOverAgencyComplaintNumber', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

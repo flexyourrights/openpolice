@@ -14,4 +14,7 @@ class OPBodyParts extends Model
 		'BodyInjuryID', 
 		'BodyPart', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

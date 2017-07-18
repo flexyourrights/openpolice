@@ -13,4 +13,7 @@ class OPSurveys extends Model
 		'SurvComplaintID', 
 		'SurvAuthUserID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

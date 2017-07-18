@@ -45,7 +45,7 @@ class OpenPoliceReport extends OpenPolice
     
     public function printFullReport($reportType = '', $isAdmin = false, $inForms = false)
     {
-        if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
+        if (!$isAdmin && in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Hold'), 
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney')
             ])) {
@@ -55,7 +55,8 @@ class OpenPoliceReport extends OpenPolice
         $this->v["isOwner"] = false;
         $this->v["view"] = 'Public';
         if ($this->v["user"] && isset($this->v["user"]->id)) {
-            if ($this->v["user"]->id == $this->sessData->dataSets["Civilians"][0]->CivUserID) {
+            if (isset($this->sessData->dataSets["Civilians"]) 
+                && $this->v["user"]->id == $this->sessData->dataSets["Civilians"][0]->CivUserID) {
                 $this->v["isOwner"] = true;
                 if (!$GLOBALS["SL"]->REQ->has('publicView') 
                     && ($reportType != 'Public' || $reportType == 'Investigate')) {
@@ -78,7 +79,8 @@ class OpenPoliceReport extends OpenPolice
             "Witnesses" => [], 
             "Officers"  => []
         ];
-        if ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Helper') {
+        if (isset($this->sessData->dataSets["Civilians"]) 
+            && $this->sessData->dataSets["Civilians"][0]->CivRole == 'Helper') {
             $this->whoBlocks["Subjects"][] = $this->printCivilian($this->sessData->dataSets["Civilians"][0], 0);
         }
         $this->subjects = $this->sessData->getLoopRows('Victims');
@@ -102,7 +104,7 @@ class OpenPoliceReport extends OpenPolice
             }
         }
         
-        $this->printwhatHaps = '<div class="reportSectHead2">What Happened...</div>';
+        $this->printwhatHaps = '<div class="reportSectHead2">What Happened?</div>';
         if ($this->isGold()) {
             if (sizeof($this->whatHaps) > 0) {
                 foreach ($this->whatHaps as $incEve) {
@@ -113,6 +115,8 @@ class OpenPoliceReport extends OpenPolice
         
         $complainantNameTop = $this->getCivReportName($this->sessData->dataSets["Civilians"][0]->CivID);
         if ($complainantNameTop == $this->getNameTopAnon()) $complainantNameTop = 'Anonymous';
+        
+        $uploads = $this->getUploads([280, 324, 413, 317, 371], $isAdmin, $this->v["isOwner"]);
         
         if (!isset($GLOBALS["meta"])) $GLOBALS["meta"] = [];
         if (trim($this->sessData->dataSets["Complaints"][0]->ComHeadline) != '') {
@@ -141,6 +145,7 @@ class OpenPoliceReport extends OpenPolice
             "offBlocks"            => $this->printOffBlocks(), 
             "printwhatHaps"        => $this->printwhatHaps, 
             "fullAllegations"      => $this->printFullAllegs(),
+            "uploads"              => $uploads,
             "injuries"             => $this->injuries, 
             "hasMedicalCare"       => $this->hasMedicalCare, 
             "basicAllegationList"  => $this->basicAllegationList(true),
@@ -157,7 +162,7 @@ class OpenPoliceReport extends OpenPolice
     public function printPreviewReport($isAdmin = false)
     {
         $this->prepReport();
-        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets["Complaints"][0]->ComSummary, 50);
+        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets["Complaints"][0]->ComSummary, 70);
         return view('vendor.openpolice.complaint-report-preview', [
             "storyPrev"            => $storyPrev,
             "complaint"            => $this->sessData->dataSets["Complaints"][0], 
@@ -772,7 +777,7 @@ class OpenPoliceReport extends OpenPolice
     
     protected function printFullAllegs()
     {
-        $ret = '<div class="reportSectHead2">Allegations...</div>'; // . $this->basicAllegationList(true);
+        $ret = '<div class="reportSectHead2">Allegations</div>'; // . $this->basicAllegationList(true);
         $this->simpleAllegationList();
         if (isset($this->allegations) && sizeof($this->allegations) > 0) {
             foreach ($this->allegations as $alleg) {

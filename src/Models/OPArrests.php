@@ -23,4 +23,7 @@ class OPArrests extends Model
 		'ArstAllegWrongfulArrest', 
 		'ArstAllegRetaliatoryCharges', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

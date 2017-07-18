@@ -15,4 +15,7 @@ class OPComplaintNotes extends Model
 		'NoteTimestamp', 
 		'NoteContent', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -13,4 +13,7 @@ class OPLinksOfficerVehicles extends Model
 		'LnkOffVehicOffID', 
 		'LnkOffVehicVehicID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

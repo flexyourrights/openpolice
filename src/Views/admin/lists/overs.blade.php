@@ -25,9 +25,9 @@
 @forelse($oversights as $over)
     <a name="o{{ $over->OverID }}"></name>
     <tr>
-    <td class="vaT"><a href="/volunteer/verify/{{ $over->DeptSlug }}#over"><i class="fa fa-pencil"></i></a></td>
+    <td class="vaT"><a href="/dashboard/volunteer/verify/{{ $over->DeptSlug }}#over"><i class="fa fa-pencil"></i></a></td>
     <td class="vaT">
-        <a href="/volunteer/verify/{{ $over->DeptSlug }}#over" class="w100">
+        <a href="/dashboard/volunteer/verify/{{ $over->DeptSlug }}#over" class="w100">
         <div class="slBlueDark f18">{{ $over->OverAgncName }}</div>
         <div class="gry4">{{ $over->DeptName }}</div>
         </a>

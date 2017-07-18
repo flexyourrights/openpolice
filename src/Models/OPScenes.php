@@ -10,7 +10,6 @@ class OPScenes extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ScnComplaintID', 
 		'ScnIsVehicle', 
 		'ScnType', 
 		'ScnDescription', 
@@ -18,4 +17,7 @@ class OPScenes extends Model
 		'ScnCCTV', 
 		'ScnCCTVDesc', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -18,4 +18,7 @@ class OPVehicles extends Model
 		'VehicVehicleLicence', 
 		'VehicVehicleNumber', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -14,4 +14,7 @@ class OPLinksCivilianVehicles extends Model
 		'LnkCivVehicVehicID', 
 		'LnkCivVehicRole', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

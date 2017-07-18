@@ -22,7 +22,8 @@ use App\Models\OPzVolunEditsOvers;
 use App\Models\OPzVolunStatDays;
 use App\Models\OPzVolunUserInfo;
 
-use App\Models\OPzComplaintEmails;
+use App\Models\SLEmails;
+use App\Models\SLEmailed;
 use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
 
@@ -65,7 +66,28 @@ class OpenPoliceAdmin extends AdminSubsController
     public function loadAdmMenu()
     {
         if (isset($this->v["user"])) {
+            $published = $flagged = 0;
+            /* $chk = DSStories::where('StryStatus', $GLOBALS["SL"]->getDefID('Story Status', 'Published'))
+                ->select('StryID')
+                ->get();
+            $published = sizeof($chk);
+            $flagIDs = [];
+            $flags = SLSessEmojis::where('SessEmoTreeID', 1)
+                ->where('SessEmoDefID', 194)
+                ->select('SessEmoRecID')
+                ->get();
+            if ($flags && sizeof($flags) > 0) {
+                foreach ($flags as $f) {
+                    if (!in_array($f->SessEmoRecID, $flagIDs)) $flagIDs[] = $f->SessEmoRecID;
+                }
+            }
+            $chk = DSStories::whereIn('StryID', $flagIDs)
+                ->where('StryStatus', $GLOBALS["SL"]->getDefID('Story Status', 'Published'))
+                ->select('StryID')
+                ->get();
+            $flagged = sizeof($chk); */
             $treeMenu = $this->loadAdmMenuBasics();
+            unset($treeMenu[3][4]);
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 return [
                     [
@@ -73,126 +95,44 @@ class OpenPoliceAdmin extends AdminSubsController
                         '<i class="fa fa-star mR5"></i> Complaints',
                         1,
                         [
-                            [
-                                '/dashboard/complaints',
-                                'Requiring Action',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/complaints/me',
-                                'Assigned To Me',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/complaints/waiting',
-                                'Waiting',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/complaints/all',
-                                'All Complete',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/complaints/incomplete',
-                                'Incomplete Sessions',
-                                1,
-                                []
-                            ]
+                            $this->admMenuLnk('/dashboard/complaints/all',
+                                '<span class="label label-primary mR5">' . $published . '</span> All Published'), 
+                            $this->admMenuLnk('/dashboard/complaints/flagged', 
+                                (($flagged > 0) ? '<span class="label label-danger mR5">' . $flagged . '</span> ' : '') 
+                                    . 'Flagged For Review'), 
+                            $this->admMenuLnk('/dashboard/complaints/unpublished', 'Un-Published Complaints'), 
+                            $this->admMenuLnk('/dashboard/complaints/incomplete', 'Incomplete Complaints'),
+                            $this->admMenuLnk('/dashboard/emails', 'Manage Email Templates'),
+                            $this->admMenuLnkContact(false)
                         ]
                     ], [
                         'javascript:;',
                         '<i class="fa fa-users mR5"></i> Volunteers',
                         1,
                         [
-                            [
-                                '/dashboard/volun',
-                                'Recent Department Edits',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/volun/stars',
-                                'List of Volunteers',
-                                1,
-                                []
-                            ], [
-                                '/volunteer',
-                                'Departments Dashboard',
-                                1,
-                                []
-                            ], [
-                                '/volunteer/nextDept',
-                                'Verify A Department',
-                                1,
-                                []
-                            ]
+                            $this->admMenuLnk('/dashboard/volun', 'Recent Department Edits'), 
+                            $this->admMenuLnk('/dashboard/volun/stars', 'List of Volunteers'), 
+                            $this->admMenuLnk('/dashboard/volunteer', 'Departments Dashboard'), 
+                            $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Department')
                         ]
                     ], [
                         'javascript:;',
                         '<i class="fa fa-list-ul mR5"></i> Directories',
                         1,
                         [
-                            [
-                                '/dashboard/officers',
-                                'Police Officers',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/depts',
-                                'Police Departments',
-                                1,
-                                []
-                            ], [
-                                '/dashboard/overs',
-                                'Oversight Agencies',
-                                1,
-                                []
-                            ] /* , [
-                                'javascript:;',
-                                'Other Contacts',
-                                1,
-                                [
-                                    [
-                                        '/dashboard/legal',
-                                        'Attorneys',
-                                        1,
-                                        []
-                                    ], [
-                                        '/dashboard/academic',
-                                        'Academic',
-                                        1,
-                                        []
-                                    ], [
-                                        '/dashboard/media',
-                                        'Journalists',
-                                        1,
-                                        []
-                                    ]
-                                ]
-                            ] */
+                            $this->admMenuLnk('/dashboard/officers', 'Police Officers'), 
+                            $this->admMenuLnk('/dashboard/depts', 'Police Departments'), 
+                            $this->admMenuLnk('/dashboard/overs', 'Oversight Agencies'), 
+                            $this->admMenuLnk('/dashboard/volunteer/legal', 'Attorneys')
                         ]
                     ], 
                     $treeMenu
                 ];
             } elseif ($this->v["user"]->hasRole('volunteer')) {
                 return [
-                    [
-                        '/volunteer',
-                        'Police Departments <span class="pull-right"><i class="fa fa-list-ul"></i></span>',
-                        1,
-                        []
-                    ], [
-                        '/volunteer/nextDept',
-                        'Verify A Department <span class="pull-right"><i class="fa fa-check"></i></span>',
-                        1,
-                        []
-                    ], [
-                        '/volunteer/stars',
-                        'You Have [[score]] Stars <span class="pull-right"><img src="/openpolice/star1.png" height=20 '
-                             . 'border=0 style="margin-top: -5px;" ></span>',
-                        1,
-                        []
-                    ]
+                    $this->admMenuLnk('/dashboard/volunteer', 'Police Departments'), 
+                    $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Dept.'), 
+                    $this->admMenuLnk('/dashboard/volunteer/stars', 'You Have [[score]] Stars')
                 ];
             }
         }
@@ -208,6 +148,7 @@ class OpenPoliceAdmin extends AdminSubsController
     
     protected function tweakAdmMenu($currPage = '')
     {
+        /*
         if (strpos($currPage, '/dashboard/complaint/' . $this->coreID . '') !== false 
             && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
             $this->admMenuData = [
@@ -254,7 +195,9 @@ class OpenPoliceAdmin extends AdminSubsController
                     ]
                 ]
             ];
-        } elseif (isset($this->v["deptSlug"])) {
+        } else
+        */
+        if (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["currNavPos"] = [1, 3, -1, -1];
             } else {
@@ -394,7 +337,7 @@ class OpenPoliceAdmin extends AdminSubsController
         $user = Auth::user();
         if (!$user->hasRole('administrator|staff|databaser|brancher')) {
             if ($user->hasRole('volunteer')) {
-                return $this->redir('/volunteer');
+                return $this->redir('/dashboard/volunteer');
             }
             return $this->redir('/');
         }
@@ -453,12 +396,24 @@ class OpenPoliceAdmin extends AdminSubsController
         return $this->printComplaintListing($request);
     }
     
+    public function listUnpublished(Request $request)
+    {
+        $this->admControlInit($request, '/dashboard/complaints/unpublished');
+        return $this->printComplaintListing($request);
+    }
+    
+    public function listFlagged(Request $request)
+    {
+        $this->admControlInit($request, '/dashboard/complaints/flagged');
+        return $this->printComplaintListing($request);
+    }
+    
     protected function printComplaintListing(Request $request)
     {
         $sort = "date";
         $qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, i.* 
             FROM `OP_Complaints` c 
-            JOIN `OP_Incidents` i ON c.`ComID` LIKE i.`IncComplaintID` 
+            JOIN `OP_Incidents` i ON c.`ComIncidentID` LIKE i.`IncID` 
             LEFT OUTER JOIN `OP_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 
             LEFT OUTER JOIN `OP_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` 
             WHERE civ.`CivIsCreator` LIKE 'Y' ";
@@ -549,60 +504,159 @@ class OpenPoliceAdmin extends AdminSubsController
     
     
     
-
-    
     public function complaintView(Request $request, $cid, $viewType = 'view') 
     {
         $this->v["cID"] = $this->coreID = $cid;
         $currPage = '/dashboard/complaint/' . $cid . (($viewType == 'view') ? '' : '/'.$viewType);
-        if ($this->v["settings"]["Complaint Evaluations"] == 'N') $currPage = '/dashboard/complaints/all';
         $this->admControlInit($request, $currPage);
-        $this->v["viewType"] = $viewType;
-        if ($viewType == 'review' && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
-            $this->v["admMenuHideable"] = true;
+        $this->v["firstRevDone"] = false;
+        if ($request->has('firstReview') && intVal($request->firstReview) > 0) {
+            $newTypeVal = $GLOBALS["SL"]->getDefValue('OPC Staff/Internal Complaint Type', $request->firstReview);
+            $newReview = new OPzComplaintReviews;
+            $newReview->ComRevComplaint = $cid;
+            $newReview->ComRevUser      = $this->v["user"]->id;
+            $newReview->ComRevDate      = date("Y-m-d H:i:s");
+            $newReview->ComRevType      = 'First';
+            $newReview->ComRevStatus    = $newTypeVal;
+            $newReview->save();
+            $com = OPComplaints::find($cid);
+            $com->comType = $request->firstReview;
+            $com->save();
+            $this->v["firstRevDone"] = true;
         }
-        $this->CustReport->loadSessionData('Complaints', $cid);
-        $this->v["fullReport"] = $this->CustReport->printAdminReport($cid, $viewType);
+        /* if ($this->v["settings"]["Complaint Evaluations"] == 'N') {
+            $currPage = '/dashboard/complaints/all';
+            $this->setCurrPage($currPage);
+        } */
+        $this->v["viewType"] = $viewType;
+        /* if ($viewType == 'review' && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
+            $this->v["admMenuHideable"] = true;
+        } */
+        $this->CustReport->loadAllSessData('Complaints', $cid);
+        $this->v["fullReport"]   = $this->CustReport->printAdminReport($cid, $viewType);
         $this->v["complaintRec"] = $this->CustReport->sessData->dataSets["Complaints"][0];
-        $this->v["firstReview"] = true;
-        $this->v["yourReview"] = new OPzComplaintReviews;
-        $this->v["allStaffName"] = [];
-        $this->v["latestReview"] = OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
-            ->where('ComRevType', 'Full')
-            ->orderBy('ComRevDate', 'desc')
-            ->first();
-        $this->v["reviews"] = OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
+        $this->v["firstReview"]  = true;
+        $this->v["lastReview"]   = true;
+        $this->v["history"]      = [];
+        $allUserNames = [];
+        $reviews = OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
             ->where('ComRevType', 'NOT LIKE', 'Draft')
-            ->orderBy('ComRevDate', 'asc')
+            ->orderBy('ComRevDate', 'desc')
             ->get();
-        if ($this->v["reviews"] && sizeof($this->v["reviews"]) > 0) {
-            foreach ($this->v["reviews"] as $i => $r) {
-                if ($r->ComRevUser == Auth::user()->id) {
-                    $this->v["firstReview"] = false;
-                    $this->v["yourReview"] = $r;
-                }
-                if (!isset($this->v["allStaffName"][$r->ComRevUser])) {
-                    $this->v["allStaffName"][$r->ComRevUser] = User::find($r->ComRevUser)
+        if ($reviews && sizeof($reviews) > 0) {
+            foreach ($reviews as $i => $r) {
+                if ($i == 0) $this->v["lastReview"] = $r;
+                $this->v["firstReview"] = false;
+                if (!isset($allUserNames[$r->ComRevUser])) {
+                    $allUserNames[$r->ComRevUser] = User::find($r->ComRevUser)
                         ->printUsername(true, '/dashboard/volun/user/');
+                }
+                $desc = '<span class="slBlueDark">' . $r->ComRevStatus . '</span>';
+                if (isset($r->ComRevNote) && trim($r->ComRevNote) != '') {
+                    $desc .= ' - ' . $r->ComRevNote;
+                }
+                $this->v["history"][] = [
+                    "type" => 'Status', 
+                    "date" => strtotime($r->ComRevDate), 
+                    "desc" => $desc, 
+                    "who"  => $allUserNames[$r->ComRevUser]
+                ];
+            }
+        }
+        $this->v["emailList"] = SLEmails::orderBy('EmailName', 'asc')
+            ->orderBy('EmailType', 'asc')
+            ->get();
+        $emails = SLEmailed::where('EmailedTree', 1)
+            ->where('EmailedRecID', $cid)
+            ->orderBy('EmailedDate', 'asc')
+            ->get();
+        if ($emails && sizeof($emails) > 0) {
+            foreach ($emails as $i => $e) {
+                if (!isset($allUserNames[$e->EmailedFromUser])) {
+                    $allUserNames[$e->EmailedFromUser] = User::find($e->EmailedFromUser)
+                        ->printUsername(true, '/dashboard/volun/user/');
+                }
+                $desc = '<a href="javascript:void(0)" id="emaSubj' . $e->EmailedID . '" class="emaSubj">';
+                if ($this->v["emailList"] && sizeof($this->v["emailList"]) > 0) {
+                    foreach ($this->v["emailList"] as $ema) {
+                        if ($e->EmailedEmailID == $ema->EmailID) $desc = $ema->EmailSubject;
+                    }
+                }
+                $desc = '</a><div id="emaBody' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                $this->v["history"][] = [
+                    "type" => 'Email', 
+                    "date" => strtotime($e->EmailDate), 
+                    "desc" => $desc, 
+                    "who"  => $allUserNames[$e->EmailedFromUser]
+                ];
+            }
+        }
+        $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');
+        $this->prepEmailComData();
+        $isOverCompatible = $this->CustReport->isOverCompatible($this->v["comDepts"][0][
+                            $this->v["comDepts"][0]["whichOver"]]);
+        $this->v["emailsTo"] = [ "To Complainant" => [], "To Oversight" => [] ];
+        $complainantUser = User::find($this->v["complaintRec"]->ComUserID);
+        if ($complainantUser && isset($complainantUser->email)) {
+            $name = $complainantUser->name;
+            if (isset($this->CustReport->sessData->dataSets["PersonContact"])
+                && sizeof($this->CustReport->sessData->dataSets["PersonContact"]) > 0
+                && isset($this->CustReport->sessData->dataSets["PersonContact"][0]->PrsnNameFirst)) {
+                $name = $this->CustReport->sessData->dataSets["PersonContact"][0]->PrsnNameFirst . ' '
+                    . $this->CustReport->sessData->dataSets["PersonContact"][0]->PrsnNameLast;
+            }
+            $this->v["emailsTo"]["To Complainant"][] = [ $complainantUser->email, $name, true ];
+        }
+        if ($isOverCompatible) {
+            $this->v["emailsTo"]["To Oversight"][] = [
+                $this->v["comDepts"][0][$this->v["comDepts"][0]["whichOver"]]->OverEmail,
+                $this->v["comDepts"][0][$this->v["comDepts"][0]["whichOver"]]->OverAgncName,
+                true
+            ];
+        }
+        $this->v["emailMap"] = [ // 'Review Status' => Email ID#
+                'Submitted to Oversight'    => [7, 12], 
+                'Hold: Go Gold'             => [6],
+                'Pending Attorney: Needed'  => [17],
+                'Pending Attorney: Hook-Up' => [18]
+            ];
+        $this->v["emailID"] = ($request->has('email') ? $request->email : -3);
+        if ($this->v["emailID"] <= 0) {
+            if (!$emails || sizeof($emails) == 0) {
+                switch ($this->v["complaintRec"]->ComStatus) {
+                    case $GLOBALS["SL"]->getDefID('Complaint Status', 'OK to Submit to Oversight'):
+                        if ($isOverCompatible) {
+                            $this->v["emailID"] = 12; // Send to oversight agency
+                        } else {
+                            $this->v["emailID"] = 9; // How to manually submit
+                        }
+                        break;
+                    case $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight'):
+                        
+                        break;
                 }
             }
         }
-        $this->v["emailList"] = OPzComplaintEmails::orderBy('ComEmailName', 'asc')
-            ->orderBy('ComEmailType', 'asc')
-            ->get();
-        $this->v["emailMap"] = [ // 'Review Status' => Email ID#
-                'Submitted to Oversight'             => [7, 12], 
-                'Hold: Go Gold'                     => [6],
-                'Pending Attorney: Needed'             => [17],
-                'Pending Attorney: Hook-Up'         => [18]
-            ];
-        $this->v["email1"] = ($request->has('email1') ? $request->email1 : -3);
-        $this->v["email2"] = ($request->has('email2') ? $request->email2 : -3);
-        $this->prepEmailComData();
-        $this->v["e1"] = $this->processEmail($this->v["email1"]);
-        $this->v["e2"] = $this->processEmail($this->v["email2"]);
-        $this->v["allReviews"] = view('vendor.openpolice.complaint-staff-review', $this->v)->render();
-        $this->v["sendingEmails"] = view('vendor.openpolice.complaint-staff-emails', $this->v)->render();
+        
+        $this->v["currEmail"] = [];
+        if (isset($this->CustReport->sessData->dataSets["LinksComplaintDept"]) 
+            && sizeof($this->CustReport->sessData->dataSets["LinksComplaintDept"]) > 0) {
+            foreach ($this->CustReport->sessData->dataSets["LinksComplaintDept"] as $deptLnk) {
+                $this->CustReport->loadDeptStuff($deptLnk->LnkComDeptDeptID);
+                $this->v["currEmail"][] = $this->processEmail($this->v["emailID"], $deptLnk->LnkComDeptDeptID);
+            }
+        }
+        if (sizeof($this->v["currEmail"]) > 0) { 
+            foreach ($this->v["currEmail"] as $j => $email) {
+                $GLOBALS["SL"]->pageJAVA .= 'CKEDITOR.replace( "emailBodyCust' . $j . 'ID", {
+                    customConfig: "/survloop/ckeditor-config.js" } );';
+            }
+        }
+        $GLOBALS["SL"]->pageAJAX .= '$("#legitTypeBtn").click(function(){ $("#legitTypeDrop").slideToggle("fast"); });
+        $("#newStatusUpdate").click(function(){ $("#newStatusUpdateBlock").slideToggle("fast"); });
+        $("#newEmails").click(function(){ $("#analystEmailer").slideToggle("fast"); });
+        ' . (($viewType == 'update') ? 'window.location = "#new"; ' : '');
+        $this->v["needsWsyiwyg"] = true;
         return view('vendor.openpolice.admin.complaints.complaint-review', $this->v);
     }
     
@@ -610,9 +664,10 @@ class OpenPoliceAdmin extends AdminSubsController
     {
         $cnt = 0;
         $this->v["comDepts"] = [];
+        //echo '<pre>'; print_r($this->CustReport->sessData->dataSets["LinksComplaintDept"]); echo '</pre>';
         if (sizeof($this->CustReport->sessData->dataSets["LinksComplaintDept"]) > 0) {
             foreach ($this->CustReport->sessData->dataSets["LinksComplaintDept"] as $i => $lnk) {
-                $this->v["comDepts"][$cnt] = array("id" => $lnk->LnkComDeptDeptID);
+                $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
                 $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID)->first();
                 $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
                     ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
@@ -622,7 +677,7 @@ class OpenPoliceAdmin extends AdminSubsController
                     ->first();
                 if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || sizeof($this->v["comDepts"][$cnt]["iaRow"]) == 0) {
                     $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID       = $lnk->LnkComDeptDeptID;
+                    $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
                     $this->v["comDepts"][$cnt]["iaRow"]->OverType
                         = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
                     $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
@@ -649,336 +704,115 @@ class OpenPoliceAdmin extends AdminSubsController
                     && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
                     $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
                 }
+                $this->v["comDepts"][$cnt]["overInfo"] 
+                    = $this->getOversightInfo($this->v["comDepts"][$cnt][$this->v["comDepts"][$cnt]["whichOver"]]);
                 $cnt++;
             }
         }
         return true;
     }
     
-    public function processEmail($emailID)
+    public function getOversightInfo($overRow)
     {
-        $email = array("rec" => false, "splits" => []);
+        $ret = '';
+        if ($overRow && isset($overRow->OverAgncName) && trim($overRow->OverAgncName) != '') {
+            $ret .= '<b>' . $overRow->OverAgncName . '</b><br />';
+            if (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') {
+                $ret .= '<a href="' . $overRow->OverWebsite . '" target="_blank">' . $overRow->OverWebsite 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') {
+                $ret .= '<a href="' . $overRow->OverFacebook . '" target="_blank">' . $overRow->OverFacebook 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') {
+                $ret .= '<a href="' . $overRow->OverTwitter . '" target="_blank">' . $overRow->OverTwitter 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') {
+                $ret .= '<a href="' . $overRow->OverYouTube . '" target="_blank">' . $overRow->OverYouTube 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverPhoneWork) && trim($overRow->OverPhoneWork) != '') {
+                $ret .= $overRow->OverPhoneWork . '<br />';
+            }
+            if (isset($overRow->OverAddress) && trim($overRow->OverAddress) != '') {
+                $ret .= $overRow->OverAddress . '<br />';
+                if (isset($overRow->OverAddress2) && trim($overRow->OverAddress2) != '') {
+                    $ret .= $overRow->OverAddress2 . '<br />';
+                }
+                $ret .= $overRow->OverAddressCity . ', ' . $overRow->OverAddressState . ' ' 
+                    . $overRow->OverAddressZip . '<br />';
+            }
+            $ret .= '<br />';
+            if (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
+                && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') {
+                $ret .= 'You can submit your complaint through your oversight agency\'s online complaint form. '
+                    . 'Pro Tip: Somewhere in their official form, include a link to your OPC complaint.<br /><a href="'
+                    . $overRow->OverComplaintWebForm . '" target="_blank">' . $overRow->OverComplaintWebForm 
+                    . '</a><br /><br />';
+            }
+            if (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
+                && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') {
+                $ret .= 'You can submit your complaint by emailing your oversight agency. We recommend you '
+                    . 'include a link to your OPC complaint in your email.<br />'
+                    . '<a href="mailto:' . $overRow->OverEmail . '">' . $overRow->OverEmail . '</a><br /><br />';
+            }
+            if (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') {
+                $ret .= 'You can print out and use your oversight agency\'s official complaint form online. '
+                    . 'We recommend you also print your full OPC complaint and submit it along with their '
+                    . 'official form.<br /><a href="' . $overRow->OverComplaintPDF . '" target="_blank">' 
+                    . $overRow->OverComplaintPDF . '</a><br /><br />';
+            }
+            $ret .= '<i>More about this complaint process:</i><br />';
+            if (isset($overRow->OverWebComplaintInfo) && trim($overRow->OverWebComplaintInfo) != '') {
+                $ret .= '<a href="' . $overRow->OverWebComplaintInfo . '" target="_blank">' 
+                    . $overRow->OverWebComplaintInfo . '</a><br />';
+            }
+            if (!isset($overRow->OverOfficialFormNotReq) || intVal($overRow->OverOfficialFormNotReq) == 0) {
+                $ret .= 'Only complaints submitted on official forms will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) {
+                $ret .= 'Submitted complaints may require a notary to be investigated.<br />'; 
+            }
+            if (!isset($overRow->OverOfficialAnon) || intVal($overRow->OverOfficialAnon) == 0) {
+                $ret .= 'Anonymous complaints will not be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) {
+                $ret .= 'Complaints submitted by phone will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) {
+                $ret .= 'Complaints submitted by snail mail will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) {
+                $ret .= 'Complaints submitted in person will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverSubmitDeadline) && intVal($overRow->OverSubmitDeadline) > 0) {
+                $ret .= 'Complaints must be submitted within ' . number_format($overRow->OverSubmitDeadline) 
+                    . ' days of your incident to be investigated.<br />'; 
+            }
+        }
+        return $ret;
+    }
+    
+    public function processEmail($emailID, $deptID = -3)
+    {
+        $email = [ "rec" => false, "body" => '', "subject" => '' ];
         if ($emailID > 0) {
             if (sizeof($this->v["emailList"]) > 0) {
                 foreach ($this->v["emailList"] as $e) {
-                    if ($e->ComEmailID == $ComEmailID) $email["rec"] = $e;
+                    if ($e->EmailID == $emailID) $email["rec"] = $e;
                 }
-                if ($email["rec"] !== false && isset($email["rec"]->ComEmailBody) 
-                    && trim($email["rec"]->ComEmailBody) != '') {
-                    $emailBody = $this->swapBlurb($email["rec"]->ComEmailBody);
-                    if (strpos($emailBody, '[{ Evaluator Message }]') !== false) {
-                        $email["splits"] = explode('[{ Evaluator Message }]', $emailBody);
-                    }
+                if ($email["rec"] !== false && isset($email["rec"]->EmailBody) 
+                    && trim($email["rec"]->EmailBody) != '') {
+                    $email["body"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailBody);
+                    $email["body"] = $this->CustReport->sendEmailBlurbsCustom($email["body"], $deptID);
+                    $email["subject"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailSubject);
+                    $email["subject"] = $this->CustReport->sendEmailBlurbsCustom($email["subject"], $deptID);
                 }
             }
         }
         return $email;
-    }
-    
-    public function swapBlurb($emailBody)
-    {
-        if (trim($emailBody) != '' && sizeof($this->v["emailList"]) > 0) {
-            foreach ($this->v["emailList"] as $i => $e) {
-                if ($e->ComEmailType == 'Blurb') {
-                    $emailTag = '[{ ' . $e->ComEmailName . ' }]';
-                    if (strpos($emailBody, $emailTag) !== false) {
-                        $emailBody = str_replace($emailTag, $this->swapBlurb($e->ComEmailBody), $emailBody);
-                    }
-                }
-            }
-        }
-        
-        $dynamos = [
-            '[{ Complaint ID }]', 
-            '[{ Complaint URL }]', 
-            '[{ Complaint URL Link }]', 
-            '[{ Complainant Name }]', 
-            '[{ Confirmation URL }]', 
-            '[{ Go Gold Secure URL }]', 
-            '[{ Submit Silver Secure URL }]', 
-            '[{ Update Complaint Secure URL }]', 
-            '[{ Login URL }]', 
-            '[{ Days From Now: 7, mm/dd/yyyy }]', 
-            '[{ Complaint Number of Weeks Old }]', 
-            '[{ Analyst Name }]', 
-            '[{ Complaint Department Submission Ways }]', 
-            '[{ Complaint Oversight Agency }]', 
-            '[{ Complaint Police Department }]', 
-            '[{ Dear Primary Oversight Agency }]', 
-            '[{ Complaint Investigability Score & Description }]', 
-            '[{ Complaint Allegation List }]', 
-            '[{ Oversight Complaint Secure URL }]', 
-            '[{ Complaint Department Complaint PDF }]', 
-            '[{ Complaint Department Complaint Web }]', 
-            '[{ Flex Article Suggestions Based On Responses }]'
-        ];
-        foreach ($dynamos as $dy) {
-            if (strpos($emailBody, $dy) !== false) {
-                $swap = $dy;
-                $dyCore = str_replace('[{ ', '', str_replace(' }]', '', $dy));
-                switch ($dy) {
-                    case '[{ Complaint ID }]': 
-                        $swap = $this->coreID;
-                        break;
-                    case '[{ Complaint URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/report' 
-                            . $this->CustReport->sessData->dataSets["Complaints"][0]->ComSlug);
-                        break;
-                    case '[{ Complaint URL Link }]':
-                        $swap = $this->CustReport->sessData->dataSets["Complaints"][0]->ComSlug;
-                        break;
-                    case '[{ Complainant Name }]':
-                        $swap = $this->getCivilianNameFromID(
-                            $this->CustReport->sessData->dataSets["Civilians"][0]->CivID);
-                        break;
-                    case '[{ Confirmation URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
-                            . $this->coreID . '/confirm-email/goooobblygooook8923528350');
-                        break;
-                    case '[{ Go Gold Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
-                            . $this->coreID . '/go-gold/goooobblygooook8923528350');
-                        break;
-                    case '[{ Submit Silver Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
-                            . $this->coreID . '/submit-silver/goooobblygooook8923528350');
-                        break;
-                    case '[{ Update Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
-                            . $this->coreID . '/update/goooobblygooook8923528350');
-                        break;
-                    case '[{ Login URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'login');
-                        break;
-                    case '[{ Days From Now: 7, mm/dd/yyyy }]':
-                        $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
-                        break;
-                    case '[{ Complaint Number of Weeks Old }]':
-                        $dayCount = date_diff(mktime(), strtotime(
-                            $this->CustReport->sessData->dataSets["Complaints"][0]->ComRecordSubmitted
-                            ))->format('%a');
-                        $swap = floor($dayCount/7);
-                        break;
-                    case '[{ Analyst Name }]':
-                        $swap = str_replace('<a', '<a target="_blank"', 
-                            $this->v["user"]->printCasualUsername(true, '', '/dashboard/volun/user/'));
-                        break;
-                    case '[{ Complaint Department Submission Ways }]':
-                        $swap = '';
-                        foreach ($this->v["comDepts"] as $i => $d)
-                        {
-                            $swap = '<br /><b>' . $d["deptRow"]->DeptName . '</b>';
-                            if (isset($d[$d["whichOver"]]->OverAddress) 
-                                && trim($d[$d["whichOver"]]->OverAddress) != '') {
-                                $swap .= '<br />' . $d[$d["whichOver"]]->OverAddress;
-                                if (trim($d[$d["whichOver"]]->OverAddress2) != '') {
-                                    $swap .= '<br />' . $d[$d["whichOver"]]->OverAddress2;
-                                }
-                                $swap .= '<br />' . $d[$d["whichOver"]]->OverAddressCity . ', ' 
-                                    . $d[$d["whichOver"]]->OverAddressState . ' ' 
-                                    . $d[$d["whichOver"]]->OverAddressZip . '<br />';
-                            }
-                            if (isset($d[$d["whichOver"]]->OverPhoneWork) 
-                                && trim($d[$d["whichOver"]]->OverPhoneWork) != '') {
-                                $swap .= '<br />' . $d[$d["whichOver"]]->OverPhoneWork;
-                            }
-                            if (isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '') {
-                                $swap .= '<br />' . $this->swapURLwrap('mailto:' . $d[$d["whichOver"]]->OverEmail);
-                            }
-                            $swap .= '<br />About their complaint process:<ul>';
-                            if (intVal($d["iaRow"]->OverSubmitDeadline) > 0) {
-                                $incident = strtotime(
-                                    $this->CustReport->sessData->dataSets["Incidents"][0]->IncTimeStart);
-                                $swap .= '<li>You need to officially submit your complaint within ' 
-                                    . $d["iaRow"]->OverSubmitDeadline . ' of the incident (by ' 
-                                    . date("n/j/y", mktime(0, 0, 0, date("n", $incident), 
-                                        ($d["iaRow"]->OverSubmitDeadline+date("j", $incident)), date("Y", $incident)))
-                                    . ')</li>';
-                            }
-                            if (intVal($d["iaRow"]->OverWaySubOnline) == 1 
-                                && trim($d["iaRow"]->OverComplaintWebForm) != '') {
-                                $swap .= '<li>You can use their online form: ' 
-                                    . $this->swapURLwrap($d["iaRow"]->OverComplaintWebForm) . '</li>';
-                            }
-                            if (intVal($d["iaRow"]->OverWaySubEmail) == 1 && trim($d["iaRow"]->OverEmail) != '') {
-                                $swap .= '<li>You can email them the pdf of your OPC complaint.</li>';
-                            }
-                            if (intVal($d["iaRow"]->OverWaySubVerbalPhone) == 1) {
-                                $swap .= '<li>You can call their phone number and describe your complaint</li>';
-                            }
-                            $pdfForm = '';
-                            if (isset($d[$d["whichOver"]]->OverComplaintPDF) 
-                                && trim($d[$d["whichOver"]]->OverComplaintPDF) != '') {
-                                $pdfForm = ': ' . $this->swapURLwrap($d[$d["whichOver"]]->OverComplaintPDF);
-                            }
-                            if (intVal($d["iaRow"]->OverOfficialFormNotReq) == 1) {
-                                $swap .= '<li>You can print out your OPC complaint because you do not have to use '
-                                    . 'their official complaint form' . $pdfForm . '</li>';
-                            } else {
-                                $swap .= '<li>You have to use their official complaint form' . $pdfForm . '</li>';
-                            }
-                            if (intVal($d["iaRow"]->OverWaySubPaperMail) == 1 
-                                && intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1) {
-                                $swap .= '<li>You can either submit your complaint in-person or send it to their '
-                                    . 'mailing address</li>';
-                            } elseif (intVal($d["iaRow"]->OverWaySubPaperMail) == 1) {
-                                $swap .= '<li>You can either send your complaint to their mailing address</li>';
-                            }
-                            if (intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1) {
-                                $swap .= '<li>You can either submit your complaint in-person</li>';
-                            }
-                            $swap .= '</ul>';
-                        }
-                        break;
-                    case '[{ Complaint Police Department }]':
-                        $swap = $this->v["comDepts"][0]["deptRow"]->DeptName;
-                        if (sizeof($this->v["comDepts"]) > 1) {
-                            for ($i = 1; $i < sizeof($this->v["comDepts"]); $i++) {
-                                if (sizeof($this->v["comDepts"]) == 2) {
-                                    $swap .= ' and ';
-                                } elseif ($i == sizeof($this->v["comDepts"])-1) {
-                                    $swap .= ', and ';
-                                } else {
-                                    $swap .= ', ';
-                                }
-                                $swap .= $this->v["comDepts"][$i]["deptRow"]->DeptName;
-                            }
-                        }
-                        break;
-                    case '[{ Complaint Oversight Agency }]':
-                        $swap = $this->v["comDepts"][0][$this->v["comDepts"][0]["whichOver"]]->OverAgncName;
-                        if ($swap != $this->v["comDepts"][0]["deptRow"]->DeptName) {
-                            $swap .= ' (for the ' . $this->v["comDepts"][0]["deptRow"]->DeptName . ')';
-                        }
-                        if (sizeof($this->v["comDepts"]) > 1) {
-                            for ($i = 1; $i < sizeof($this->v["comDepts"]); $i++) {
-                                if (sizeof($this->v["comDepts"]) == 2) $swap .= ' and ';
-                                elseif ($i == sizeof($this->v["comDepts"])-1) $swap .= ', and ';
-                                else $swap .= ', ';
-                                $swap .= $this->v["comDepts"][$i][$this->v["comDepts"][$i]["whichOver"]]->OverAgncName;
-                                if ($this->v["comDepts"][$i][$this->v["comDepts"][$i]["whichOver"]]->OverAgncName 
-                                    != $this->v["comDepts"][$i]["deptRow"]->DeptName)
-                                {
-                                    $swap .= ' (for the ' . $this->v["comDepts"][$i]["deptRow"]->DeptName . ')';
-                                }
-                            }
-                        }
-                        break;
-                    case '[{ Dear Primary Oversight Agency }]':
-                        $swap = 'To whom it may concern:';
-                        break;
-                    case '[{ Complaint Investigability Score & Description }]':
-                        $swap = '';
-                        if (isset($this->v["latestReview"]) && isset($this->v["latestReview"]->ComRevNotAnon)) {
-                            $score = $this->v["latestReview"]->ComRevNotAnon 
-                                + $this->v["latestReview"]->ComRevOneIncident 
-                                + $this->v["latestReview"]->ComRevCivilianContact 
-                                + $this->v["latestReview"]->ComRevOneOfficer 
-                                + $this->v["latestReview"]->ComRevOneAllegation 
-                                + $this->v["latestReview"]->ComRevEvidenceUpload;
-                            $swap = '<h3>Investigability Score: ' . $score . '</h3>';
-                            $swapDesc = '';
-                            if (intVal($this->v["latestReview"]->ComRevNotAnon) == 1) {
-                                $swapDesc .= ', Not anonymous';
-                            }
-                            if (intVal($this->v["latestReview"]->ComRevOneIncident) == 1) {
-                                $swapDesc .= ', Focused on one incident';
-                            }
-                            if (intVal($this->v["latestReview"]->ComRevCivilianContact) == 1) {
-                                $swapDesc .= ', Civilian contact info';
-                            }
-                            if (intVal($this->v["latestReview"]->ComRevOneOfficer) == 1) {
-                                $swapDesc .= ', Officer info';
-                            }
-                            if (intVal($this->v["latestReview"]->ComRevOneAllegation) == 1) {
-                                $swapDesc .= ', Specific Allegations';
-                            }
-                            if (intVal($this->v["latestReview"]->ComRevEvidenceUpload) == 1) {
-                                $swapDesc .= ', Evidence Uploaded';
-                            }
-                            if (trim($swapDesc) != '') {
-                                $swap .= substr($swapDesc, 1);
-                            }
-                        }
-                        break;
-                    case '[{ Complaint Allegation List }]':
-                        $swap = $this->CustReport->commaAllegationList();
-                        break;
-                    case '[{ Oversight Complaint Secure URL }]':
-                        $swap = $this->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-report/' 
-                            . $this->coreID . '/oversight/goooobblygooook8923528350');
-                        break;
-                    case '[{ Complaint Department Complaint PDF }]':
-                        $which = $this->v["comDepts"][0]["whichOver"];
-                        if (isset($this->v["comDepts"][0][$which]->OverComplaintPDF) 
-                            && trim($this->v["comDepts"][0][$which]->OverComplaintPDF) != '') {
-                            $swap = '';
-                            if (sizeof($this->v["comDepts"]) > 1) {
-                                $swap .= $this->v["comDepts"][0][$which]->OverAgncName;
-                            }
-                            $swap .= ': ' . $this->swapURLwrap($this->v["comDepts"][0][$which]->OverComplaintPDF);
-                        }
-                        if (sizeof($this->v["comDepts"]) > 1) {
-                            for ($i = 1; $i < sizeof($this->v["comDepts"]); $i++) {
-                                if (trim($swap) != '') $swap .= '<br />';
-                                $which = $this->v["comDepts"][$i]["whichOver"];
-                                $swap .= $this->v["comDepts"][0][$which]->OverAgncName . ': ' 
-                                    . $this->swapURLwrap($this->v["comDepts"][$i][$which]->OverComplaintPDF);
-                            }
-                        }
-                        break;
-                    case '[{ Complaint Department Complaint Web }]':
-                        $which = $this->v["comDepts"][0]["whichOver"];
-                        if (isset($this->v["comDepts"][0][$which]->OverComplaintWebForm) 
-                            && trim($this->v["comDepts"][0][$which]->OverComplaintWebForm) != '') {
-                            $swap = '';
-                            if (sizeof($this->v["comDepts"]) > 1) {
-                                $swap = $this->v["comDepts"][0][$which]->OverAgncName;
-                            }
-                            $swap .= ': ' . $this->swapURLwrap($this->v["comDepts"][0][$which]->OverComplaintWebForm);
-                        }
-                        if (sizeof($this->v["comDepts"]) > 1) {
-                            for ($i = 1; $i < sizeof($this->v["comDepts"]); $i++) {
-                                if (trim($swap) != '') $swap .= '<br />';
-                                $currWhich = $this->v["comDepts"][$i]["whichOver"];
-                                $swap .= $this->v["comDepts"][0][$which]->OverAgncName . ': ' 
-                                    . $this->swapURLwrap($this->v["comDepts"][$i][$currWhich]->OverComplaintWebForm);
-                            }
-                        }
-                        break;
-                    case '[{ Link To All Police Department\'s Complaints }]':
-                        $swap = '';
-                        break;
-                    case '[{ Flex Article Suggestions Based On Responses }]':
-                        $swap = '';
-                        break;
-                }
-                $ifPos = strpos($emailBody, '@if[{ ' . $dyCore . ' }]');
-                if ($ifPos === false) {
-                    if (trim($swap) == '') $swap = $dy;
-                } else {
-                    $ifEndPos = strpos($emailBody, $dy, (5+$ifPos));
-                    if (trim($swap) == '') {
-                        $emailBody = substr($emailBody, $ifPos, $ifEndPos-$ifPos+strlen($dy)+1);
-                    } else {
-                        $emailBody = substr($emailBody, 0, $ifPos) . substr($emailBody, $ifPos+strlen($dy)+3);
-                    }
-                }
-                $emailBody = str_replace($dy, $swap, $emailBody);
-            }
-        }
-        
-        $emailBody = str_replace('[{ Flex Article Suggestions Based On Responses }]', 
-            '[{ Flex Article Suggestions Based On Responses }]', $emailBody);
-        
-        $emailBody = str_replace('Hello Complainant,', 'Hello,', $emailBody);
-
-        return $emailBody;
-    }
-    
-    public function swapURLwrap($url)
-    {
-        return '<a href="' . $url . '" target="_blank">' . str_replace('mailto:', '', $url) . '</a>'; 
     }
     
     public function complaintReview(Request $request, $cid) 
@@ -1008,23 +842,23 @@ class OpenPoliceAdmin extends AdminSubsController
     
     public function complaintReviewPost(Request $request, $cid) 
     {
-        $this->CustReport->loadSessionData('Complaints', $cid);
         $this->admControlInit($request, '/dashboard/complaint/' . $cid . '/review');
+        $this->CustReport->loadSessionData('Complaints', $cid);
         if ($request->has('cID') && intVal($request->cID) > 0 && intVal($request->cID) == $cid) {
             $newReview = new OPzComplaintReviews;
-            $newReview->ComRevComplaint             = $cid;
-            $newReview->ComRevUser                  = $this->v["user"]->id;
-            $newReview->ComRevDate                  = date("Y-m-d H:i:s");
-            $newReview->ComRevType                  = $request->revType;
-            $newReview->ComRevNote                  = $request->revNote;
-            $newReview->ComRevStatus                = $request->revStatus;
-            $newReview->ComRevMakeFeatured          = intVal($request->revMakeFeatured);
+            $newReview->ComRevComplaint    = $cid;
+            $newReview->ComRevUser         = $this->v["user"]->id;
+            $newReview->ComRevDate         = date("Y-m-d H:i:s");
+            $newReview->ComRevType         = $request->revType;
+            $newReview->ComRevNote         = $request->revNote;
+            $newReview->ComRevStatus       = $request->revStatus;
+            $newReview->ComRevMakeFeatured = intVal($request->revMakeFeatured);
             if ($request->revType == 'Full') {
                 OPzComplaintReviews::where('ComRevComplaint', '=', $cid)
                     ->where('ComRevUser', Auth::user()->id)
                     ->where('ComRevType', 'Full')
                     ->update([ "ComRevType" => 'Draft' ]);
-                $newReview->ComRevComplaintType     = 196;
+                $newReview->ComRevComplaintType     = 296;
                 if ((!$request->has('complaintLegit') || intVal($request->complaintLegit) == 0)
                     && $request->has('revComplaintType') && intVal($request->revComplaintType) > 0) {
                     $newReview->ComRevComplaintType = intVal($request->revComplaintType);
@@ -1050,13 +884,23 @@ class OpenPoliceAdmin extends AdminSubsController
             
             $com = OPComplaints::find($cid);
             $com->comType = $newReview->ComRevComplaintType;
-            $com->comStatus = $GLOBALS["SL"]->getDefID('Complaint Status', $newReview->ComRevStatus);
+            if (in_array($newReview->ComRevStatus, ['Hold: Go Gold', 'Hold: Not Sure'])) {
+                $com->comStatus = $GLOBALS["SL"]->getDefID('Complaint Status', 'Hold');
+            } elseif (in_array($newReview->ComRevStatus, ['Pending Attorney: Needed', 'Pending Attorney: Hook-Up'])) {
+                $com->comStatus = $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney');
+            } else {
+                $com->comStatus = $GLOBALS["SL"]->getDefID('Complaint Status', $newReview->ComRevStatus);
+            }
+            $com->save();
         }
         //$this->CustReport->loadSessionData('Complaints');
         return $this->redir('/dashboard/complaint/' . $cid . '/history');
     }
     
-    
+    public function comStatus($defID)
+    {
+        return $GLOBALS["SL"]->getDefID('Complaint Status', $defID);
+    }
     
     
     
@@ -1145,12 +989,12 @@ class OpenPoliceAdmin extends AdminSubsController
         $this->v["recentEdits"] = '';
         foreach ($deptEdits as $deptEdit) {
             $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
-                "user"         => $deptEdit[0], 
-                "deptRow"     => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
-                "deptEdit"     => $deptEdit[1], 
-                "deptType"     => $GLOBALS["SL"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
-                "iaEdit"     => $deptEdit[2], 
-                "civEdit"     => $deptEdit[3]
+                "user"     => $deptEdit[0], 
+                "deptRow"  => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
+                "deptEdit" => $deptEdit[1], 
+                "deptType" => $GLOBALS["SL"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
+                "iaEdit"   => $deptEdit[2], 
+                "civEdit"  => $deptEdit[3]
             ])->render();
         }
         

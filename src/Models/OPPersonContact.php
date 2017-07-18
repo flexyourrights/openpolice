@@ -28,4 +28,7 @@ class OPPersonContact extends Model
 		'PrsnBirthday', 
 		'PrsnFacebook', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

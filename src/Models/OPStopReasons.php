@@ -13,4 +13,7 @@ class OPStopReasons extends Model
 		'StopReasStopID', 
 		'StopReasReason', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -6,7 +6,7 @@
     @forelse ($leaderboard->UserInfoStars as $i => $u)
         @if ($i < 10)
             <tr>
-                <td class="taC"><a href="/volunteer/user/{{ $u->UserInfoUserID }}">{{ $u->name }}</a></td>
+                <td class="taC"><a href="/dashboard/volunteer/user/{{ $u->UserInfoUserID }}">{{ $u->name }}</a></td>
                 <td class="pR20">{{ $u->UserInfoStars }}</td>
             </tr>
         @endif

@@ -1,25 +1,21 @@
-<!-- resources/views/vendor/openpolice/volun/volunDeptEdit.blade.php -->
+<!-- resources/views/vendor/openpolice/volun/volun-dept-edit.blade.php -->
 
 @extends('vendor.survloop.master')
 
 @section('content')
 
-<form name="deptEditor" action="/volunteer/verify/{{ $deptRow->DeptSlug }}" method="post" onSubmit="formSub();" autocomplete="off">
+<form name="deptEditor" action="/dashboard/volunteer/verify/{{ $deptRow->DeptSlug }}" method="post" onSubmit="formSub();" autocomplete="off">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="formLoaded" value="<?= time() ?>">
 <input type="hidden" name="DeptID" value="{{ $deptRow->DeptID }}">
 <input type="hidden" id="ScoreOpen" name="DeptScoreOpenness" value="{{ intVal($deptRow->DeptScoreOpenness) }}" >
 
-<div class="row">
-    <div class="col-md-3 pT5">
-        <div class="row">
-            <div class="col-md-10 pT10"><div class="f20 lH20 pT5">Department Complaint <nobr>Accessibility Score</nobr></div></div>
-            <div class="col-md-2 taL f48 bld" id="ScoreOpenVis">
-                {{ intVal($deptRow->DeptScoreOpenness) }}
-            </div>
-        </div>
+<div class="row mT10 mB5">
+    <div class="col-md-6">
+        <a class="toggleScoreInfo btn btn-info btn-lg" href="javascript:;">OPC Accessibility Score: 
+            <div id="ScoreOpenVis" class="disIn bld mL5">{{ intVal($deptRow->DeptScoreOpenness) }}</div></a>
     </div>
-    <div class="col-md-9 taR pT20">
+    <div class="col-md-6 taR pB10">
         {!! $editsSummary[0] !!}
         <?php /* <h1>
             Verifying: {{ str_replace('Police Dept', '', str_replace('Department', 'Dept', $deptRow->DeptName)) }} 
@@ -38,7 +34,7 @@
         </div>
         <div class="col-md-3 taR">
             <a href="https://www.google.com/search?as_q={{ $deptRow->DeptName }}, {{ $deptRow->DeptAddressState }} {{ $deptRow->DeptAddressZip }}" 
-                class="btn btn-default slBlueDark" target="_blank">Begin Department Search&nbsp;&nbsp;
+                class="btn btn-default slBlueDark mT5" target="_blank">Begin Department Search&nbsp;&nbsp;
                 <span class=""><i class="fa fa-google"></i></span></a>
         </div>
     </div>
@@ -281,7 +277,7 @@
         <div class="col-md-9">
             <h2 class="slBlueDark m0">
                 Volunteer Checklist 
-                <a class="f12" href="/volunteer/verify/checklist" target="_blank"><i class="fa fa-external-link"></i> Open In New Window</a>
+                <a class="f12" href="/dashboard/volunteer/verify/checklist" target="_blank"><i class="fa fa-external-link"></i> Open In New Window</a>
             </h2>
         </div>
         <div class="col-md-3 pT20 taR"></div>
@@ -312,7 +308,6 @@
     
 </form>
 
-
 <style>
 #navBtnSave .fa-angle-right, #navBtnSave .fa-chevron-right { display: none; }
 fieldset.form-group label { font-weight: normal; margin-top: 10px; }
@@ -322,130 +317,5 @@ input.form-control, select.form-control { font-weight: normal; font-size: 18px; 
 #roundHelp div label img { margin-top: -5px; }
 #faqList ul li { padding-bottom: 30px; }
 </style>
-
-<script type="text/javascript">
-window.onload = function() {
-    var input = document.getElementById("DeptEmailID").focus();
-}
-$(function() {
-    $("#navBtnPhone").click(function() {
-        if (document.getElementById("rightSide")) {
-            if (!document.getElementById("rightSide").className || document.getElementById("rightSide").className == 'disNon') showRightSide();
-            else hideRightSide();
-        }
-    });
-    
-    function loadtab(newTab) {
-        var tabList = ["Contact", "Web", "IA", "Over", "Save", "Edits", "Check", "FAQ"]; // , "Chklst", "Phone"
-        for (var i=0; i<tabList.length; i++) {
-            if (newTab.localeCompare(tabList[i]) == 0) {
-                if (document.getElementById("curr"+tabList[i]+"")) document.getElementById("curr"+tabList[i]+"").style.display='inline';
-                //else if (tabList[i] != 'Save') alert("not found: curr"+tabList[i]+"");
-                if (document.getElementById("dept"+tabList[i]+"")) document.getElementById("dept"+tabList[i]+"").style.display='block';
-                //else alert("not found: dept"+tabList[i]+"");
-                //alert(tabList[i]+' matches '+document.getElementById("dept"+tabList[i]+"").style.display);
-            }
-            else {
-                if (document.getElementById("curr"+tabList[i]+"")) document.getElementById("curr"+tabList[i]+"").style.display='none';
-                //else if (tabList[i] != 'Save') alert("not found: curr"+tabList[i]+"");
-                if (document.getElementById("dept"+tabList[i]+"")) document.getElementById("dept"+tabList[i]+"").style.display='none';
-                //else alert("not found: dept"+tabList[i]+"");
-                //alert(tabList[i]+' no match '+document.getElementById("dept"+tabList[i]+"").style.display);
-            }
-        }
-        return true;
-    }
-    $("#navbarDept").click(function()         { loadtab('Contact'); });
-    $("#navBtnContact0").click(function()     { loadtab('Contact'); });
-    $("#navBtnContact").click(function()     { loadtab('Contact'); });
-    $("#navBtnWeb").click(function()         { loadtab('Web'); });
-    $("#navBtnIA").click(function()         { loadtab('IA'); });
-    $("#navBtnOver").click(function()         { loadtab('Over'); });
-    $("#navBtnSave").click(function()         { loadtab('Save'); });
-    $("#navBtnEdits").click(function()         { loadtab('Edits'); });
-    $("#navBtnCheck").click(function()         { loadtab('Check'); });
-    $("#navBtnFAQ").click(function()         { loadtab('FAQ'); });
-    loadtab('Contact');
-    
-    $("#IAOverContactBtn").click(function() {
-        document.getElementById("IAContactBtn").style.display="none";
-        $("#IAOverContactForm").fadeIn("fast");
-    });
-    $("#CivOverContactBtn").click(function() {
-        document.getElementById("CivContactBtn").style.display="none";
-        $("#CivOverContactForm").fadeIn("fast");
-    });
-    $("#CivOversightBtn").click(function() {
-        document.getElementById("CivOversightWrap").style.display="none";
-        $("#CivOverForm").fadeIn("fast");
-    });
-    
-    if (window.location.hash) {
-        if (window.location.hash == '#over') loadtab('Over');
-    }
-});
-
-function checkScore() {
-    var newScore = 0;
-    if (document.getElementById("IAOverWebsiteID") && document.getElementById("IAOverWebsiteID").value != "")                             newScore += {{ $deptPoints["Website"] }};
-    if (document.getElementById("IAOverFacebookID") && document.getElementById("IAOverFacebookID").value != "")                         newScore += {{ $deptPoints["FB"] }};
-    if (document.getElementById("IAOverTwitterID") && document.getElementById("IAOverTwitterID").value != "")                             newScore += {{ $deptPoints["Twit"] }};
-    if (document.getElementById("IAOverYouTubeID") && document.getElementById("IAOverYouTubeID").value != "")                             newScore += {{ $deptPoints["YouTube"] }};
-    if (document.getElementById("IAOverWebComplaintInfoID") && document.getElementById("IAOverWebComplaintInfoID").value != "")         newScore += {{ $deptPoints["ComplaintInfo"] }};
-    if (document.getElementById("IAOverComplaintPDFID") && document.getElementById("IAOverComplaintPDFID").value != "")                 newScore += {{ $deptPoints["FormPDF"] }};
-    if (document.getElementById("IAOverHomepageComplaintLinkA") && document.getElementById("IAOverHomepageComplaintLinkA").checked)     newScore += {{ $deptPoints["ComplaintInfoHomeLnk"] }};
-    @foreach ($ways as $i => $w)
-        @if ($i > 0) 
-            if (document.getElementById("IA{{ $waysFlds[$i] }}ID") && document.getElementById("IA{{ $waysFlds[$i] }}ID").checked)         newScore += {{ $wayPoints[$i] }};
-        @endif
-    @endforeach
-    if (document.getElementById("IAOverComplaintWebFormID") && document.getElementById("IAOverComplaintWebFormID").value != "")         newScore += {{ $deptPoints["FormPDF"] }};
-    if (document.getElementById("ScoreOpen")) document.getElementById("ScoreOpen").value=newScore;
-    if (document.getElementById("ScoreOpenVis")) document.getElementById("ScoreOpenVis").innerHTML=newScore;
-    return true;
-}
-setTimeout("checkScore()", 50);
-
-function formSub()
-{
-    /*
-    if (document.getElementById("IAOverWebComplaintInfoID").value == "" && document.getElementById("CivOverWebComplaintInfoID").value != "") {
-        document.getElementById("IAOverWebComplaintInfoID").value = document.getElementById("CivOverWebComplaintInfoID").value;
-    }
-    if (document.getElementById("IAOverComplaintPDFID").value == "" && document.getElementById("CivOverComplaintPDFID").value != "") {
-        document.getElementById("IAOverComplaintPDFID").value = document.getElementById("CivOverComplaintPDFID").value;
-    }
-    @foreach ($ways as $i => $w)
-        if (!document.getElementById("{{ $waysFlds[$i] }}ID").checked && document.getElementById("Civ{{ $waysFlds[$i] }}ID").checked) {
-            document.getElementById("{{ $waysFlds[$i] }}ID").checked = true;
-        }
-    @endforeach
-    if (document.getElementById("OverComplaintWebFormID").value == "" && document.getElementById("CivOverComplaintWebFormID").value != "") {
-        document.getElementById("OverComplaintWebFormID").value = document.getElementById("CivOverComplaintWebFormID").value;
-    }
-    */
-    checkScore();
-    return true;
-}
-function checkStar(checkboxID, starID)
-{
-    if (document.getElementById(checkboxID) && document.getElementById(starID))
-    {
-        if (document.getElementById(checkboxID).checked)
-        {
-            document.getElementById(starID).src='/openpolice/star1.png';
-            document.getElementById(starID+'b').src='/openpolice/star1.png';
-            document.getElementById(starID+'c').src='/openpolice/star1.png';
-        }
-        else
-        {
-            document.getElementById(starID).src='/openpolice/star1-gry.png';
-            document.getElementById(starID+'b').src='/openpolice/star1-gry.png';
-            document.getElementById(starID+'c').src='/openpolice/star1-gry.png';
-        }
-    }
-    return true;
-}
-</script>
 
 @endsection

@@ -13,4 +13,7 @@ class OPLinksOfficerAllegations extends Model
 		'LnkOffAlleOffID', 
 		'LnkOffAlleAlleID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

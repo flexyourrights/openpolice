@@ -42,4 +42,7 @@ class OPStops extends Model
 		'StopSobrietyOther', 
 		'StopSobrietyOtherDescribe', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

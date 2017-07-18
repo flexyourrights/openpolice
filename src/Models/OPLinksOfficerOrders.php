@@ -13,4 +13,7 @@ class OPLinksOfficerOrders extends Model
 		'LnkOffOrdOffID', 
 		'LnkOffOrdOrdID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -1,6 +1,6 @@
 <div class="w100 ovrFlo pL5">
     <div class="panel panel-info">
-        <div class="panel-heading">Main Department Phone Script <a class="pull-right" href="/volunteer/verify/checklist#script" target="_blank"><i class="fa fa-external-link"></i></a></div>
+        <div class="panel-heading">Main Department Phone Script <a class="pull-right" href="/dashboard/volunteer/verify/checklist#script" target="_blank"><i class="fa fa-external-link"></i></a></div>
         <div class="panel-body slBlueDark">
             {!! $script1 !!}
         </div>

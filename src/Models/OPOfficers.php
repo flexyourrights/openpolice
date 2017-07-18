@@ -30,5 +30,9 @@ class OPOfficers extends Model
 		'OffUniform', 
 		'OffUsedProfanity', 
 		'OffAdditionalDetails', 
+		'OffGaveCompliment', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

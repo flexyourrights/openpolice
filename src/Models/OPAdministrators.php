@@ -12,6 +12,8 @@ class OPAdministrators extends Model
     [    
 		'AdmUserID', 
 		'AdmPersonID', 
-		'AdmBio', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

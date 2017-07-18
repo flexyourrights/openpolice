@@ -23,4 +23,7 @@ class OPIncidents extends Model
 		'IncTimeEnd', 
 		'IncDuration', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

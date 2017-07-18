@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\SLZips;
 
 use App\Models\OPComplaints;
+use App\Models\OPCompliments;
+use App\Models\OPIncidents;
 use App\Models\OPEventSequence;
 use App\Models\OPStops;
 use App\Models\OPSearches;
@@ -20,15 +22,19 @@ use App\Models\OPInjuries;
 use App\Models\OPEvidence;
 use App\Models\OPCivilians;
 use App\Models\OPDepartments;
+use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksOfficerEvents;
 use App\Models\OPLinksOfficerOrders;
 use App\Models\OPLinksCivilianEvents;
 use App\Models\OPLinksCivilianOrders;
+use App\Models\OPPersonContact;
+use App\Models\OPzVolunUserInfo;
 
 use OpenPolice\Controllers\OpenPoliceReport;
 use OpenPolice\Controllers\VolunteerController;
 
+use SurvLoop\Controllers\DatabaseLookups;
 use SurvLoop\Controllers\SurvFormTree;
 
 class OpenPolice extends SurvFormTree
@@ -44,6 +50,7 @@ class OpenPolice extends SurvFormTree
         [115, 'Unreasonable Force'],
         [116, 'Wrongful Arrest'], 
         [120, 'Wrongful Property Seizure or Damage'],
+        [480, 'Sexual Harassment'], 
         [125, 'Intimidating Display of Weapon'], 
         [119, 'Wrongful Search'],
         [118, 'Wrongful Entry'],
@@ -68,6 +75,14 @@ class OpenPolice extends SurvFormTree
     ];
     protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))
+    public $deptStuff          = []; // for records related to complaint's departments and oversight
+    
+    protected function isCompliment()
+    { 
+        if (!isset($this->sessData->dataSets["Complaints"])) return ($this->treeID == 5);
+        return (isset($this->sessData->dataSets["Complaints"][0]->ComIsCompliment)
+            && intVal($this->sessData->dataSets["Complaints"][0]->ComIsCompliment) == 1);
+    }
     
     protected function isSilver()
     { 
@@ -76,7 +91,7 @@ class OpenPolice extends SurvFormTree
     }
     
     protected function isGold()
-    {     
+    {
         if (!isset($this->sessData->dataSets["Complaints"])) return false;
         return ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold');
     }
@@ -100,11 +115,24 @@ class OpenPolice extends SurvFormTree
         return (sizeof($this->sessData->loopItemIDs["Officers"]) > 1); 
     }
     
+    public function chkCoreRecEmpty($coreID = -3, $coreRec = [])
+    {
+        if ($coreID <= 0) $coreID = $this->coreID;
+        if (sizeof($coreRec) == 0 && $coreID > 0) $coreRec = OPComplaints::find($coreID);
+        if (!isset($coreRec->ComSubmissionProgress) || intVal($coreRec->ComSubmissionProgress) <= 0) return true;
+        if (!isset($coreRec->ComSummary) || trim($coreRec->ComSummary) == '') return true;
+        return false;
+    }
+    
     protected function recordIsEditable($coreTbl, $coreID, $coreRec = [])
     {
         if (sizeof($coreRec) == 0 && $coreID > 0) $coreRec = OPComplaints::find($coreID);
         if (!isset($coreRec->ComStatus)) return true;
-        if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete')) return true;
+        if ($this->treeID == 1) {
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete')) return true;
+        } elseif ($this->treeID == 5) {
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Compliment Status', 'Incomplete')) return true;
+        }
         return false;
     }
     
@@ -114,26 +142,40 @@ class OpenPolice extends SurvFormTree
         $this->allPublicCoreIDs = $list = [];
         if ($coreTbl == 'Complaints') {
             $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList())
-                ->where('ComType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Legitimate'))
+                ->where('ComType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
                 ->select('ComID')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } elseif ($coreTbl == 'Compliments') {
+            $list = OPCompliments::whereIn('CompliStatus', $this->getPublishedStatusList())
+                ->where('CompliType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
+                ->select('CompliID')
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
         if ($list && sizeof($list) > 0) {
-            foreach ($list as $l) $this->allPublicCoreIDs[] = $l->getKey();
+            foreach ($list as $l) {
+                if ($l->getKey() > 0) $this->allPublicCoreIDs[] = $l->getKey();
+            }
         }
+        //echo '<pre>'; print_r($this->allPublicCoreIDs); echo '</pre>';
         return $this->allPublicCoreIDs;
     }
     
     protected function getPublishedStatusList()
     {
         return [
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Reviewed'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Received by Oversight'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Oversight Investigation'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Declined To Investigate (Closed)'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status', 'Investigated (Closed)')
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'Reviewed'), 
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'Submitted to Oversight'), 
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'Received by Oversight'), 
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'OK to Submit to Oversight'), 
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'Declined To Investigate (Closed)'), 
+            $GLOBALS["SL"]->getDefID('Complaint Status',  'Investigated (Closed)'), 
+            
+            $GLOBALS["SL"]->getDefID('Compliment Status', 'Reviewed'), 
+            $GLOBALS["SL"]->getDefID('Compliment Status', 'Submitted to Oversight'), 
+            $GLOBALS["SL"]->getDefID('Compliment Status', 'Received by Oversight'), 
+            $GLOBALS["SL"]->getDefID('Compliment Status', 'Closed')
         ];
     }
     
@@ -143,11 +185,11 @@ class OpenPolice extends SurvFormTree
         // Establishing Main Navigation Organization, with Node ID# and Section Titles
         $this->majorSections = [];
         if ($GLOBALS["SL"]->treeID == 1) {
-            $this->majorSections[] = array(1,      'Your Story');
-            $this->majorSections[] = array(4,      'Who\'s Involved');
-            $this->majorSections[] = array(5,      'Allegations');
-            $this->majorSections[] = array(6,      'Go Gold');
-            $this->majorSections[] = array(419,    'Finish');
+            $this->majorSections[] = array(1,      'Your Story',        'active');
+            $this->majorSections[] = array(4,      'Who\'s Involved',   'active');
+            $this->majorSections[] = array(5,      'Allegations',       'active');
+            $this->majorSections[] = array(6,      'Go Gold',           'disabled');
+            $this->majorSections[] = array(419,    'Finish',            'active');
             
             $this->minorSections = array( [], [], [], [], [] );
             $this->minorSections[0][] = array(157, 'Start Your Story');
@@ -169,24 +211,54 @@ class OpenPolice extends SurvFormTree
             $this->minorSections[2][] = array(202, 'Citations');
             $this->minorSections[2][] = array(154, 'Other');
             
-            $this->minorSections[3][] = array(484, 'GO GOLD!');
-            $this->minorSections[3][] = array(149, 'Stops');
-            $this->minorSections[3][] = array(150, 'Searches');
-            $this->minorSections[3][] = array(151, 'Force');
-            $this->minorSections[3][] = array(152, 'Arrests');
+            $this->minorSections[3][] = array(483, 'GO GOLD!');
+            $this->minorSections[3][] = array(148, 'Event Details');
             $this->minorSections[3][] = array(153, 'Citations');
             $this->minorSections[3][] = array(410, 'Injuries');
             
             $this->minorSections[4][] = array(420, 'Review Narrative');
             $this->minorSections[4][] = array(431, 'Sharing Options');
             $this->minorSections[4][] = array(156, 'Submit Complaint');
+        } elseif ($GLOBALS["SL"]->treeID == 5) {
+            $this->majorSections[] = array(752,    'Your Story',        'active');
+            $this->majorSections[] = array(761,    'Who\'s Involved',   'active');
+            $this->majorSections[] = array(763,    'Compliments',       'active');
+            $this->majorSections[] = array(764,    'Finish',            'active');
+            
+            $this->minorSections = array( [], [], [], [], [] );
+            $this->minorSections[0][] = array(753, 'Start Your Story');
+            $this->minorSections[0][] = array(867, 'Privacy Options');
+            $this->minorSections[0][] = array(877, 'When & Where');
+            $this->minorSections[0][] = array(887, 'The Scene');
+            
+            $this->minorSections[1][] = array(762, 'About You');
+            $this->minorSections[1][] = array(765, 'Police Departments');
+            $this->minorSections[1][] = array(766, 'Officers');
+            
+            $this->minorSections[2][] = array(945, 'Compliment Officers');
+            
+            $this->minorSections[3][] = array(957, 'Review Narrative');
+            $this->minorSections[3][] = array(961, 'Feedback');
+            $this->minorSections[3][] = array(964, 'Submit Complaint');
         }
         return true;
+    }
+    
+    protected function extraNavItems()
+    {
+        return 'setNavItem("Home", "/"); '
+            . 'setNavItem("Search Complaints", "/search"); '
+            . 'setNavItem("About Us", "/about"); '
+            . 'setNavItem("FAQs", "/frequently-asked-questions"); '
+            . 'setNavItem("Terms, Policies, & Rules", "/privacy-policy"); '
+            . 'setNavItem("Contact Us", "/contact"); '
+            . 'setNavItem("Donate", "https://flexyourrights-org.myshopify.com/products/md"); ';
     }
         
     // Initializing a bunch of things which are not [yet] automatically determined by the software
     protected function loadExtra()
     {
+        if ($GLOBALS["SL"]->treeID == 1 && $this->isGold()) $this->majorSections[3][2] = 'active';
         if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
             && isset($this->sessData->dataSets["Civilians"][0])
             && (!isset($this->sessData->dataSets["Civilians"][0]->CivUserID) 
@@ -194,6 +266,43 @@ class OpenPolice extends SurvFormTree
             $this->sessData->dataSets["Civilians"][0]->update([
                 'CivUserID' => $this->v["user"]->id
             ]);
+        }
+        if ($this->treeID == 5 && isset($this->sessData->dataSets["Complaints"])
+            && (!isset($this->sessData->dataSets["Complaints"][0]->ComIsCompliment)
+                || intVal($this->sessData->dataSets["Complaints"][0]->ComIsCompliment) != 1)) {
+            $this->sessData->dataSets["Complaints"][0]->ComIsCompliment = 1;
+            $this->sessData->dataSets["Complaints"][0]->save();
+        }
+        if (session()->has('opcDeptID') && intVal(session()->get('opcDeptID')) > 0) {
+            if ($this->treeID == 1) {
+                if (isset($this->sessData->dataSets["Complaints"])
+                    && intVal($this->sessData->dataSets["Complaints"][0]->ComSubmissionProgress) > 0) {
+                    if (!isset($this->sessData->dataSets["LinksComplaintDept"])) {
+                        $this->sessData->dataSets["LinksComplaintDept"] = [];
+                    }
+                    if (sizeof($this->sessData->dataSets["LinksComplaintDept"]) == 0) {
+                        $newDept = new OPLinksComplaintDept;
+                        $newDept->LnkComDeptComplaintID = $this->coreID;
+                        $newDept->LnkComDeptDeptID      = intVal(session()->get('opcDeptID'));
+                        $newDept->save();
+                        session()->forget('opcDeptID');
+                    }
+                }
+            } elseif ($this->treeID == 5) {
+                if (isset($this->sessData->dataSets["Compliments"])
+                    && intVal($this->sessData->dataSets["Compliments"][0]->ComSubmissionProgress) > 0) {
+                    if (!isset($this->sessData->dataSets["LinksComplimentDept"])) {
+                        $this->sessData->dataSets["LinksComplimentDept"] = [];
+                    }
+                    if (sizeof($this->sessData->dataSets["LinksComplimentDept"]) == 0) {
+                        $newDept = new OPLinksComplimentDept;
+                        $newDept->LnkCompliDeptComplimentID = $this->coreID;
+                        $newDept->LnkCompliDeptDeptID       = intVal(session()->get('opcDeptID'));
+                        $newDept->save();
+                        session()->forget('opcDeptID');
+                    }
+                }
+            }
         }
         $this->v["isPublic"] = $this->isPublic();
         return true;
@@ -222,6 +331,14 @@ class OpenPolice extends SurvFormTree
                 }
             }
             return $noSexAlleg;
+        } elseif ($condition == '#IncidentHasAddress') {
+            if (isset($this->sessData->dataSets["Incidents"]) 
+                && isset($this->sessData->dataSets["Incidents"][0]->IncAddress)
+                && trim($this->sessData->dataSets["Incidents"][0]->IncAddress) != '') {
+                return true;
+            } else {
+                return false;
+            }
         } elseif ($condition == '#HasArrestOrForce') {
             if ($this->sessData->dataHas('Arrests') || $this->sessData->dataHas('Force')) return true;
             else return false;
@@ -258,10 +375,16 @@ class OpenPolice extends SurvFormTree
     
     protected function isAnonyLogin()
     {
-        return (isset($this->sessData->dataSets["Complaints"]) 
-            && (in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
-            || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
-                == intVal($GLOBALS["SL"]->getDefID('Privacy Types', 'Completely Anonymous'))));
+        if ($this->treeID == 1) {
+            return (isset($this->sessData->dataSets["Complaints"]) 
+                && (in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
+                || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
+                    == intVal($GLOBALS["SL"]->getDefID('Privacy Types', 'Completely Anonymous'))));
+        } elseif ($this->treeID == 5) {
+            return (isset($this->sessData->dataSets["Compliments"]) 
+                && intVal($this->sessData->dataSets["Compliments"][0]->CompliPrivacy)
+                    == intVal($GLOBALS["SL"]->getDefID('Privacy Types', 'Completely Anonymous')));
+        }
     }
     
     /* public function findUserCoreID()
@@ -290,18 +413,54 @@ class OpenPolice extends SurvFormTree
     
     public function multiRecordCheckIntro($cnt = 1)
     {
-        return '<h3 class="mT0 mB20 slBlueDark">You Have ' 
-            . (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints') . ':</h3>';
+        $ret = '<a id="unfinishedBtn" class="btn btn-lg btn-default w100" href="javascript:;">'
+            . $this->v["user"]->name . ', You Have ';
+        if ($this->treeID == 1) {
+            $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');
+        } elseif ($this->treeID == 5) {
+            $ret .= (($cnt == 1) ? 'An Unfinished Compliment' : 'Unfinished Compliments');
+        }
+        return $ret . '</a>';
+    }
+    
+    public function multiRecordCheckRowTitle($coreRecord)
+    {
+        $ret = '';
+        if ($this->treeID == 1) {
+            if (isset($coreRecord[1]->ComSummary) && trim($coreRecord[1]->ComSummary) != '') {
+                $ret .= $this->wordLimitDotDotDot($coreRecord[1]->ComSummary, 10);
+            } else {
+                $ret .= '(empty)';
+            }
+        } elseif ($this->treeID == 5) {
+            if (isset($coreRecord[1]->CompliSummary) && trim($coreRecord[1]->CompliSummary) != '') {
+                $ret .= $this->wordLimitDotDotDot($coreRecord[1]->CompliSummary, 10);
+            } else {
+                $ret .= '(empty)';
+            }
+        }
+        return trim($ret);
     }
     
     public function multiRecordCheckRowSummary($coreRecord)
     {
-        if (isset($coreRecord[1]->ComSummary) && trim($coreRecord[1]->ComSummary) != '') {
-            return '<textarea class="w100 bgNone brdC gry6 pL5" style="height: '
-                . (($coreRecord[0] == $this->coreID) ? 75 : 69) . 'px;">' 
-                . trim($coreRecord[1]->ComSummary) . '</textarea>';
+        $ret = 'Started ' . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
+        if ($this->treeID == 1) {
+            $incident = OPIncidents::find($coreRecord[1]->ComIncidentID);
+            if ($incident && isset($incident->IncAddressCity)) {
+                $ret .= $incident->IncAddressCity . ', Incident Date: ' 
+                    . date('n/j/y', strtotime($incident->IncTimeStart));
+            }
+            $ret .= ' (Complaint #' . $coreRecord[1]->getKey() . ')';
+        } elseif ($this->treeID == 5) {
+            $incident = OPIncidents::find($coreRecord[1]->CompliIncidentID);
+            if ($incident && isset($incident->IncAddressCity)) {
+                $ret .= $incident->IncAddressCity . ', Incident Date: ' 
+                    . date('n/j/y', strtotime($incident->IncTimeStart));
+            }
+            $ret .= ' (Compliment #' . $coreRecord[1]->getKey() . ')';
         }
-        return '';
+        return $ret;
     }
     
     public function multiRecordCheckDelWarn()
@@ -316,23 +475,27 @@ class OpenPolice extends SurvFormTree
     
     protected function rawOrderPercentTweak($nID, $rawPerc, $found = -3)
     { 
-        if ($this->isGold()) return $rawPerc;
+        if ($this->isGold() && !$this->isCompliment()) return $rawPerc;
         return round(100*($found/(sizeof($this->nodesRawOrder)-200)));
-    }
-    
-    protected function loadProgBarTweak()
-    {
-        if ($this->currNode() == 137 && !in_array(4, $this->sessMajorsTouched)) {
-            $this->currMajorSection = 1;
-            $this->currMinorSection = 0;
-        }
-        return true;
     }
 
     protected function customNodePrint($nID = -3, $tmpSubTier = [])
     {
         $ret = '';
-        if ($nID == 576) {
+        if ($nID == 1095) {
+            $ret .= '<div class="nPrompt">Incident Address: ' . $this->sessData->dataSets["Incidents"][0]->IncAddress 
+                . ', ' . ((isset($this->sessData->dataSets["Incidents"][0]->IncAddress2)
+                    && trim($this->sessData->dataSets["Incidents"][0]->IncAddress2) != '') 
+                    ? $this->sessData->dataSets["Incidents"][0]->IncAddress2 . ', ' : '')
+                . $this->sessData->dataSets["Incidents"][0]->IncAddressCity . ', '
+                . $this->sessData->dataSets["Incidents"][0]->IncAddressState . ' '
+                . ((isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) 
+                    ? $this->sessData->dataSets["Incidents"][0]->IncAddressZip : '') . '</div>';
+        } elseif ($nID == 576) {
+            $GLOBALS["SL"]->pageJAVA .= 'addFld("n576fld0"); addFld("n576fld1");';
+            $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.576-vehicle-details-ajax', [
+                "nodes"            => [576, 577, 578, 91, 92, 93, 94, 95]
+            ])->render();
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
                 "nodes"            => [576, 577, 578, 91, 92, 93, 94, 95], 
                 "alreadyDescribed" => $this->getNodeCurrSessData($nID),
@@ -341,6 +504,10 @@ class OpenPolice extends SurvFormTree
                 "vehicles"         => $this->getVehicles()
             ])->render();
         } elseif ($nID == 571) {
+            $GLOBALS["SL"]->pageJAVA .= 'addFld("n571fld0"); addFld("n571fld1");';
+            $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.576-vehicle-details-ajax', [
+                "nodes"            => [571, 572, 583, 131, 132, 133, 134, 135], 
+            ])->render();
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
                 "nodes"            => [571, 572, 583, 131, 132, 133, 134, 135], 
                 "alreadyDescribed" => $this->getNodeCurrSessData($nID),
@@ -349,6 +516,10 @@ class OpenPolice extends SurvFormTree
                 "vehicles"         => $this->getVehicles()
             ])->render();
         } elseif ($nID == 584) {
+            $GLOBALS["SL"]->pageJAVA .= 'addFld("n584fld0"); addFld("n584fld1");';
+            $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.576-vehicle-details-ajax', [
+                "nodes"            => [584, 585, 589, 189, 190, 191, 192, -3], 
+            ])->render();
             $ret .= view('vendor.openpolice.nodes.576-vehicle-details', [
                 "nodes"            => [584, 585, 589, 189, 190, 191, 192, -3], 
                 "alreadyDescribed" => $this->getNodeCurrSessData($nID),
@@ -356,7 +527,7 @@ class OpenPolice extends SurvFormTree
                 "vehicDeets"       => $this->printNodePublic(589),
                 "vehicles"         => $this->getVehicles()
             ])->render();
-        } elseif ($nID == 145) {
+        } elseif (in_array($nID, [145, 920])) {
             $this->nextBtnOverride = 'Find & Select A Department';
             $searchSuggest = [];
             $deptCitys = OPDepartments::select('DeptAddressCity')
@@ -389,11 +560,13 @@ class OpenPolice extends SurvFormTree
                     }
                 }
             }
-            $this->pageAJAX .= view('vendor.openpolice.nodes.145-ajax-dept-search', [
+            $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.145-ajax-dept-search', [
+                "nID"           => $nID,
                 "searchSuggest" => $searchSuggest
             ])->render();
             $ret .= view('vendor.openpolice.nodes.145-dept-search', [ 
-                "IncAddressCity" => $this->sessData->dataSets["Incidents"][0]->IncAddressCity, 
+                "nID"                => $nID,
+                "IncAddressCity"     => $this->sessData->dataSets["Incidents"][0]->IncAddressCity, 
                 "stateDropstateDrop" => $GLOBALS["SL"]->states->stateDrop(
                     $this->sessData->dataSets["Incidents"][0]->IncAddressState, true) 
             ])->render();
@@ -419,15 +592,36 @@ class OpenPolice extends SurvFormTree
                 Official medical evidence will also help improve your complaint.
             </div> */
             $ret .= '</div>';
-        } elseif ($nID == 270) {
-            $url = '/complaint-report/' . $this->coreID;
-            if (trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
+        } elseif (in_array($nID, [270, 973])) {
+            //$this->sessData->dataSets["Complaints"][0]->
+            $url = '/complaint-read/' . $this->coreID;
+            if ($nID == 973) $url = '/compliment-report/' . $this->coreID;
+            /* if ($nID == 270 && trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
                 $url = '/report' . $this->sessData->dataSets["Complaints"][0]->ComSlug;
-            }
+            } elseif ($nID == 973 && trim($this->sessData->dataSets["Compliments"][0]->CompliSlug) != '') {
+                $url = '/report' . $this->sessData->dataSets["Compliments"][0]->CompliSlug;
+            } */
             $ret .= '<br /><br /><center><h1>All Done! Taking you to <a href="' . $url . '">your finished '
-                . 'complaint</a>...</h1></center><script type="text/javascript"> setTimeout("window.location=\'' 
+                . (($nID == 270) ? 'complaint' : 'compliment') 
+                . '</a>...</h1></center><script type="text/javascript"> setTimeout("window.location=\'' 
                 . $url . '\'", 1500); </script>';
-            $this->createNewSess();
+            $this->restartSess($GLOBALS["SL"]->REQ);
+            
+        // Custom Nodes on site pages
+        } elseif ($nID == 1099) {
+            
+            if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+                if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
+                    $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
+                } else {
+                    $this->v["deptID"] = -3;
+                }
+            }
+            $this->loadDeptStuff($this->v["deptID"]);
+            $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", ".toggleScoreInfo", function() { $("#toggleScoreInfoDeets").slideToggle("fast"); });
+            $(document).on("click", ".toggleOPCcompat", function() { $("#toggleOPCcompatDeets").slideToggle("fast"); });';
+            $ret .= view('vendor.openpolice.dept-page', [ "deptStuff" => $this->deptStuff ])->render();
+            
         }
         return $ret;
     }
@@ -561,7 +755,7 @@ class OpenPolice extends SurvFormTree
             }
             $ret .= '<div class="orderBlock"><center><a href="javascript:;" id="nFormAddOrder" class="btn btn-default"><nobr><i class="fa fa-plus-circle"></i> Add Another Order/Question</nobr></a></center></div>
             <div class="fC"></div>';
-            $this->pageAJAX .= "\t\t".'$("#nFormAddOrder").click(function() { var maxOrder = 1;
+            $GLOBALS["SL"]->pageAJAX .= "\t\t".'$("#nFormAddOrder").click(function() { var maxOrder = 1;
                 for (var i=0; i<20; i++) { if (document.getElementById("orderVis"+i+"ID").value=="Y") maxOrder = 1+i; }
                 document.getElementById("nFormAddOrder").href="#ord"+maxOrder+"";
                 if (document.getElementById("orderVis"+maxOrder+"ID")) { $("#order"+maxOrder+"").slideDown("slow"); document.getElementById("orderVis"+maxOrder+"ID").value="Y"; }
@@ -571,7 +765,7 @@ class OpenPolice extends SurvFormTree
                 $("#order"+delOrd+"").slideUp("slow"); document.getElementById("orderVis"+delOrd+"ID").value="N";
             });' . "\n";
             if ($nID == 342) { // only if Order for Use of Force
-                $this->pageAJAX .= "\t\t".'$(document).on("click", ".ordHearCls", function() {
+                $GLOBALS["SL"]->pageAJAX .= "\t\t".'$(document).on("click", ".ordHearCls", function() {
                     ordHearInd = $(this).attr("id").replace("hearOrder", "").replace("Y", "").replace("N", "").replace("Q", "");
                     ordHearVal = $(this).attr("value");
                     if (ordHearVal == "Y") { $("#orderHearing"+ordHearInd+"").slideDown("slow"); }
@@ -609,9 +803,10 @@ class OpenPolice extends SurvFormTree
                     }
                     $ret .= '</div>
                 </div>';
-                $this->pageAJAX .= "\t\t".'$(document).on("click", ".civInjury", function() {
+                $GLOBALS["SL"]->pageAJAX .= "\t\t".'$(document).on("click", ".civInjury", function() {
                     injInd = $(this).attr("id").replace("injCivs", "");
-                    if (document.getElementById("injCivs"+injInd+"").checked) { $("#civ"+injInd+"InjTypes").slideDown("slow"); }
+                    if (document.getElementById("injCivs"+injInd+"").checked) { '
+                        . '$("#civ"+injInd+"InjTypes").slideDown("slow"); }
                     else { $("#civ"+injInd+"InjTypes").slideUp("slow"); }
                 });' . "\n";
             }
@@ -623,7 +818,7 @@ class OpenPolice extends SurvFormTree
     
     protected function customNodePrintButton($nID = -3, $promptNotes = '')
     { 
-        if ($nID == 270) return '<!-- no buttons, all done! -->';
+        if (in_array($nID, [270, 973])) return '<!-- no buttons, all done! -->';
         return '';
     }
     
@@ -655,12 +850,14 @@ class OpenPolice extends SurvFormTree
             }
             return false;
         } elseif ($nID == 15) { // Incident Start-End Date & Times
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)).' '.$this->postFormTimeStr(16));
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', 
+                date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)).' '.$this->postFormTimeStr(16));
             return true;
         } elseif ($nID == 16) {
             return true;
         } elseif ($nID == 17) {
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)).' '.$this->postFormTimeStr($nID));
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', 
+                date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)).' '.$this->postFormTimeStr($nID));
             return true;
         } elseif ($nID == 47) { // Complainant Recorded Incident?
             $this->sessData->dataSets["Civilians"][0]->CivCameraRecord = $GLOBALS["SL"]->REQ->input('n47fld');
@@ -699,14 +896,16 @@ class OpenPolice extends SurvFormTree
             if ($GLOBALS["SL"]->REQ->n584fld == 'N') return true;
         } elseif ($nID == 589) { // Officer Vehicle is a previously entered?
             if ($GLOBALS["SL"]->REQ->n584fld == 'Y') return true;
-        } elseif ($nID == 145) { // Searched & Found Police Department
+        } elseif (in_array($nID, [145, 920])) { // Searched & Found Police Department
             $newDeptID = -3;
-            if (intVal($GLOBALS["SL"]->REQ->n145fld) > 0) {
-                $newDeptID = intVal($GLOBALS["SL"]->REQ->n145fld);
-                $this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', $GLOBALS["SL"]->REQ->n145fld);
+            if (intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
+                $newDeptID = intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
+                $this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', 
+                    $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
             } elseif ($GLOBALS["SL"]->REQ->has('newDeptName') && trim($GLOBALS["SL"]->REQ->newDeptName) != '') {
                 $tmpVolunCtrl = new VolunteerController;
-                $newDept = $tmpVolunCtrl->newDeptAdd($GLOBALS["SL"]->REQ->newDeptName, $GLOBALS["SL"]->REQ->newDeptAddressState);
+                $newDept = $tmpVolunCtrl->newDeptAdd($GLOBALS["SL"]->REQ->newDeptName, 
+                    $GLOBALS["SL"]->REQ->newDeptAddressState);
                 $newDeptID = $newDept->DeptID;
                 $logTxt = 'ComplaintDeptLinks - !New Department Added!';
                 $this->sessData->logDataSave($nID, 'NEW', -3, $logTxt, $newDeptID);
@@ -752,7 +951,8 @@ class OpenPolice extends SurvFormTree
             $civInd = $this->getFirstVictimCivInd();
             if ($civInd >= 0) {
                 if (isset($GLOBALS["SL"]->REQ->n676fld)) {
-                    $this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity = trim($GLOBALS["SL"]->REQ->n676fld);
+                    $this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity 
+                        = trim($GLOBALS["SL"]->REQ->n676fld);
                 }
                 else $this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity = '';
                 $this->sessData->dataSets["Civilians"][$civInd]->save();
@@ -799,13 +999,15 @@ class OpenPolice extends SurvFormTree
                     && trim($GLOBALS["SL"]->REQ->input($nIDtxt)[0]) == 'Y' && $GLOBALS["SL"]->REQ->has($nIDtxt2) 
                     && sizeof($GLOBALS["SL"]->REQ->input($nIDtxt2)) > 0) {
                     foreach ($GLOBALS["SL"]->REQ->input($nIDtxt2) as $forceType) {
-                        if ($this->getCivForceEventID($nID, $civ->CivID, $forceType) <= 0) {
+                        if ($GLOBALS["SL"]->REQ->n740cyc0fld == 'Y' 
+                            && $this->getCivForceEventID($nID, $civ->CivID, $forceType) <= 0) {
                             $this->addNewEveSeq('Force', $civ->CivID, $forceType);
                         }
                     }
                 }
                 foreach ($GLOBALS["SL"]->defValues["Force Type"] as $i => $def) {
-                    if (!$GLOBALS["SL"]->REQ->has($nIDtxt2) || !in_array($def->DefID, $GLOBALS["SL"]->REQ->input($nIDtxt2))) {
+                    if ($GLOBALS["SL"]->REQ->n740cyc0fld == 'N' || !$GLOBALS["SL"]->REQ->has($nIDtxt2) 
+                        || !in_array($def->DefID, $GLOBALS["SL"]->REQ->input($nIDtxt2))) {
                         $this->deleteEventByID($nID, $this->getCivForceEventID($nID, $civ->CivID, $def->DefID));
                     }
                 }
@@ -820,8 +1022,9 @@ class OpenPolice extends SurvFormTree
                 }
             }
         } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
-            if ($GLOBALS["SL"]->REQ->has('n743fld') && sizeof($GLOBALS["SL"]->REQ->n743fld) > 0 && $GLOBALS["SL"]->REQ->has('n744fld') 
-                && sizeof($GLOBALS["SL"]->REQ->n744fld) > 0 && intVal($GLOBALS["SL"]->REQ->n743fld[0]) == 'Y') {
+            if ($GLOBALS["SL"]->REQ->has('n743fld') && sizeof($GLOBALS["SL"]->REQ->n743fld) > 0 
+                && $GLOBALS["SL"]->REQ->has('n744fld') && sizeof($GLOBALS["SL"]->REQ->n744fld) > 0 
+                && intVal($GLOBALS["SL"]->REQ->n743fld[0]) == 'Y') {
                 $animalDesc = (($GLOBALS["SL"]->REQ->has('n746fld')) ? trim($GLOBALS["SL"]->REQ->n746fld) : '');
                 $animalsForce = $this->getCivAnimalForces();
                 foreach ($GLOBALS["SL"]->REQ->n744fld as $forceType) {
@@ -840,7 +1043,8 @@ class OpenPolice extends SurvFormTree
                 }
                 if ($animalsForce && sizeof($animalsForce) > 0) {
                     foreach ($animalsForce as $force) {
-                        if (!$GLOBALS["SL"]->REQ->has('n743fld') || !in_array($force->ForType, $GLOBALS["SL"]->REQ->n743fld)) {
+                        if (!$GLOBALS["SL"]->REQ->has('n743fld') 
+                            || !in_array($force->ForType, $GLOBALS["SL"]->REQ->n743fld)) {
                             $this->deleteEventByID($nID, $force->ForEventSequenceID);
                         }
                     }
@@ -901,7 +1105,8 @@ class OpenPolice extends SurvFormTree
             if ($GLOBALS["SL"]->REQ->has('injCivs') && sizeof($GLOBALS["SL"]->REQ->injCivs) > 0) {
                 foreach ($GLOBALS["SL"]->REQ->injCivs as $civID) {
                     $logs .= '-|-civ:'.$civID.'::';
-                    if ($GLOBALS["SL"]->REQ->has('inj'.$civID.'Type') && sizeof($GLOBALS["SL"]->REQ->input('inj'.$civID.'Type')) > 0) {
+                    if ($GLOBALS["SL"]->REQ->has('inj'.$civID.'Type') 
+                        && sizeof($GLOBALS["SL"]->REQ->input('inj'.$civID.'Type')) > 0) {
                         foreach ($GLOBALS["SL"]->REQ->input('inj'.$civID.'Type') as $injType) {
                             $logs .= $injType.';;';
                             $found = false;
@@ -931,13 +1136,16 @@ class OpenPolice extends SurvFormTree
         } elseif ($nID == 274) { // CONFIRM COMPLAINT SUBMISSION
             $slug = $this->sessData->dataSets["Incidents"][0]->IncAddressCity . '-' 
                 . $this->sessData->dataSets["Incidents"][0]->IncAddressState;
-            if ($GLOBALS["SL"]->REQ->has('n274fld') && trim($GLOBALS["SL"]->REQ->n274fld) != '') $slug = $GLOBALS["SL"]->REQ->n274fld;
+            if ($GLOBALS["SL"]->REQ->has('n274fld') && trim($GLOBALS["SL"]->REQ->n274fld) != '') {
+                $slug = $GLOBALS["SL"]->REQ->n274fld;
+            }
             $slug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID . '/' . Str::slug($slug);
             $this->sessData->dataSets["Complaints"][0]->update(["ComSlug" => $slug]);
         } elseif ($nID == 269) { // CONFIRM COMPLAINT SUBMISSION
             if ($GLOBALS["SL"]->REQ->has('n269fld')) {
                 if ($GLOBALS["SL"]->REQ->n269fld == 'Y') {
-                    $this->sessData->currSessData($nID, 'Complaints', 'ComStatus', 'update', 196); // 'New'
+                    $this->sessData->currSessData($nID, 'Complaints', 'ComStatus', 'update', 
+                        $GLOBALS["SL"]->getDefID('Complaint Status', 'New')); // 'New'
                     $this->sessData->currSessData($nID, 'Complaints', 'ComRecordSubmitted', 'update', 
                         date("Y-m-d H:i:s"));
                 }
@@ -999,12 +1207,14 @@ class OpenPolice extends SurvFormTree
             if ($this->getCivEventID($nID, $eveType, $this->sessData->loopItemIDs["Victims"][0]) > 0) {
                 return ['Y'];
             }
+            return ['N'];
         } elseif ($nID == 740) { // Use of Force on Victims
             $ret = [];
             $this->checkHasEventSeq($nID);
             foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
                 if (in_array($civ, $this->eventCivLookup['Force'])) $ret[] = 'cyc' . $i . 'Y';
             }
+            if (sizeof($ret) == 0) $ret = ['N'];
             return $ret;
         } elseif ($nID == 742) { // Use of Force on Victims: Sub-Types
             $ret = [];
@@ -1105,6 +1315,10 @@ class OpenPolice extends SurvFormTree
             $nodePromptText = str_replace('[[List of Events and Allegations]]', 
                 $this->basicAllegationList(true), $nodePromptText);
         }
+        if (strpos($nodePromptText, '[[List of Compliments]]') !== false) {
+            $nodePromptText = str_replace('[[List of Compliments]]', 
+                $this->commaComplimentList(), $nodePromptText);
+        }
         return $nodePromptText;
     }
     
@@ -1117,7 +1331,7 @@ class OpenPolice extends SurvFormTree
     
     protected function nodePrintJumpToCustom($nID = -3)
     {
-        //if ($nID == 137 && intVal(session()->get('privacyJumpBackTo')) > 0) return session()->get('privacyJumpBackTo');
+       //if ($nID == 137 && intVal(session()->get('privacyJumpBackTo')) > 0) return session()->get('privacyJumpBackTo');
         return -3; 
     }
     
@@ -1128,7 +1342,7 @@ class OpenPolice extends SurvFormTree
             return $this->getCivName($loop, $itemRow, $itemInd);
         } elseif ($loop == 'Civilians') {
             return $this->getCivilianNameFromID($itemRow->getKey());
-        } elseif ($loop == 'Officers') {
+        } elseif (in_array($loop, ['Officers', 'Excellent Officers'])) {
             return $this->getOfficerName($itemRow, $itemInd);
         } elseif ($loop == 'Departments') {
             return $this->getDeptName($itemRow, $itemInd);
@@ -1156,7 +1370,7 @@ class OpenPolice extends SurvFormTree
     
     protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
     {
-        if ($nID == 143 && $loopItem && sizeof($loopItem) > 0) { // $tbl == 'Departments'
+        if (in_array($nID, [143, 917]) && $loopItem && sizeof($loopItem) > 0) { // $tbl == 'Departments'
             return view('vendor.openpolice.nodes.143-dept-loop-custom-row', [
                 "loopItem" => $this->sessData->getChildRow('LinksComplaintDept', $loopItem->getKey(), 'Departments'), 
                 "setIndex" => $setIndex, 
@@ -1285,6 +1499,51 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
+        return $ret;
+    }
+    
+    protected function commaComplimentList()
+    {
+        $types = [];
+        if (isset($this->sessData->dataSets["OffCompliments"]) 
+            && sizeof($this->sessData->dataSets["OffCompliments"]) > 0) {
+            foreach ($this->sessData->dataSets["OffCompliments"] as $off) {
+                if (isset($off->OffCompValor) && trim($off->OffCompValor) == 'Y') {
+                    $types[] = 'Valor';
+                }
+                if (isset($off->OffCompLifesaving) && trim($off->OffCompLifesaving) == 'Y') {
+                    $types[] = 'Lifesaving';
+                }
+                if (isset($off->OffCompDeescalation) && trim($off->OffCompDeescalation) == 'Y') {
+                    $types[] = 'De-escalation';
+                }
+                if (isset($off->OffCompProfessionalism) && trim($off->OffCompProfessionalism) == 'Y') {
+                    $types[] = 'Professionalism';
+                }
+                if (isset($off->OffCompFairness) && trim($off->OffCompFairness) == 'Y') {
+                    $types[] = 'Fairness';
+                }
+                if (isset($off->OffCompConstitutional) && trim($off->OffCompConstitutional) == 'Y') {
+                    $types[] = 'Constitutional';
+                }
+                if (isset($off->OffCompCompassion) && trim($off->OffCompCompassion) == 'Y') {
+                    $types[] = 'Compassion';
+                }
+                if (isset($off->OffCompCommunity) && trim($off->OffCompCommunity) == 'Y') {
+                    $types[] = 'Community';
+                }
+            }
+        }
+        $ret = '';
+        if (in_array('Valor', $types))           $ret .= ', Valor';
+        if (in_array('Lifesaving', $types))      $ret .= ', Lifesaving';
+        if (in_array('De-escalation', $types))   $ret .= ', De-escalation';
+        if (in_array('Professionalism', $types)) $ret .= ', Professionalism';
+        if (in_array('Fairness', $types))        $ret .= ', Fairness';
+        if (in_array('Constitutional', $types))  $ret .= ', Constitutional Policing';
+        if (in_array('Compassion', $types))      $ret .= ', Compassion';
+        if (in_array('Community', $types))       $ret .= ', Community Service';
+        if (trim($ret) != '') $ret = trim(substr($ret, 1));
         return $ret;
     }
     
@@ -1616,7 +1875,8 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) > 0) {
+        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
+            && sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) > 0) {
             foreach ($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld') as $civ) {
                 if (!in_array($civ, $this->eventCivLookup[$eveType])) {
                     $this->addNewEveSeq($eveType, $civ);
@@ -1649,7 +1909,8 @@ class OpenPolice extends SurvFormTree
             $civs = $this->getLinkedToEvent('Civilian', $GLOBALS["SL"]->closestLoop["itemID"]);
             if (sizeof($civs) > 0) { 
                 foreach ($civs as $civID) {
-                    $this->savePeopleEventLink($this->saveDataNewRow('PeopleEventLinks', '+'), -3, $civID, -3, intVal($GLOBALS["SL"]->REQ->eventMerge));
+                    $this->savePeopleEventLink($this->saveDataNewRow('PeopleEventLinks', '+'), -3, $civID, -3, 
+                        intVal($GLOBALS["SL"]->REQ->eventMerge));
                 }
             }
             $this->deleteEventPeopleLinks($nID, $GLOBALS["SL"]->closestLoop["itemID"]);
@@ -1717,7 +1978,6 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        //if ($this->debugOn) { echo 'getLinkedToEvent('.$Ptype.', '.$allegID.', '.$eveSeqID.', '.$ordID.'): '; print_r($retArr); echo '<br />'; }
         return $retArr;
     }
     
@@ -1896,7 +2156,10 @@ class OpenPolice extends SurvFormTree
         if ($civ->CivIsCreator == 'Y' && (($loop == 'Victims' && $civ->CivRole == 'Victim') 
             || ($loop == 'Witnesses' && $civ->CivRole == 'Witness')) ) {
             if ($this->isReport) {
-                $name = $civ->CivNameFirst . ' ' . $civ->CivNameLast;
+                if (isset($civ->CivPersonID) && intVal($civ->CivPersonID) > 0) {
+                    $contact = $this->sessData->getChildRow('Civilians', $civ->CivPersonID, 'PersonContact');
+                    $name = $contact->PrsnNameFirst . ' ' . $contact->PrsnNameLast;
+                }
                 if (trim($name) == '') $name = 'Complainant';
             } else {
                 $name = 'You ' . $name;
@@ -1917,6 +2180,7 @@ class OpenPolice extends SurvFormTree
             }
             return $this->getCivName($role, $this->sessData->dataSets["Civilians"][0], 1);
         }
+        echo '<br /><br /><br />civID: ' . $civID . '<br />';
         $civInd = $this->sessData->getLoopIndFromID('Victims', $civID);
         if ($civInd >= 0) {
             return $this->getCivName('Victims', $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
@@ -1933,6 +2197,7 @@ class OpenPolice extends SurvFormTree
     {
         $name = $this->getPersonLabel('Officers', $officer->OffID, $officer);
         if (trim($name) == '') $name = 'Officer #' . (1+$itemIndex);
+        else $name .= ' (Officer #' . (1+$itemIndex) . ')';
         return trim($name);
     }
     
@@ -1984,8 +2249,9 @@ class OpenPolice extends SurvFormTree
         return $civs;
     }
 
-    // This function provides an "opts" set of Civilian IDs related to Table 1 which are to be used as candidates for Table 2.
-    // It also provides an "active" set of Civilian IDs which already have records in Table 2, with one field value optionally associated.
+    // This function provides an "opts" set of Civilian IDs related to Table 1 which are to be used as candidates for 
+    // Table 2. It also provides an "active" set of Civilian IDs which already have records in Table 2, with one field 
+    // value optionally associated.
     // Usages: ('Force', 'Injuries', 'InjType'), ('Injuries', 'InjuryCare'), ('!Arrests', 'Charges')
     protected function getCivSetPossibilities($tbl1, $tbl2, $activeFld = 'ID')
     {
@@ -2110,11 +2376,13 @@ class OpenPolice extends SurvFormTree
 // START Processes Which Manage Uploads
 *****************************************************************************/
     
-    // $upArr = array('type' => '', 'title' => '', 'desc' => '', 'privacy' => '', 'upFile' => '', 'storeFile' => '', 'video' => '', 'vidDur' => 0);
+    // $upArr = array('type' => '', 'title' => '', 'desc' => '', 'privacy' => '', 'upFile' => '', 'storeFile' => '', 
+    // 'video' => '', 'vidDur' => 0);
     protected function getUploadLinks($nID)
     {
         $upLinks = [];
-        $upLinks = array('CivilianID' => -3, 'DeptID' => -3, 'SceneID' => -3, 'EventSequenceID' => -3, 'InjuryID' => -3, 'NoteID' => -3);
+        $upLinks = array('CivilianID' => -3, 'DeptID' => -3, 'SceneID' => -3, 'EventSequenceID' => -3, 'InjuryID' => -3, 
+            'NoteID' => -3);
         if ($nID == 280) {
             $upLinks["SceneID"] = $this->sessData->dataSets["Scenes"][0]->ScnID;
         } elseif ($nID == 317) {
@@ -2259,6 +2527,15 @@ class OpenPolice extends SurvFormTree
                 if ($deptsRes && sizeof($deptsRes) > 0) {
                     foreach ($deptsRes as $d) $depts[] = $d;
                 }
+                $deptsRes = OPDepartments::where('DeptAddress', 'LIKE', '%'.$request->policeDept.'%')
+                    ->where('DeptAddressState', $reqState)
+                    ->orderBy('DeptJurisdictionPopulation', 'desc')
+                    ->orderBy('DeptTotOfficers', 'desc')
+                    ->orderBy('DeptName', 'asc')
+                    ->get();
+                if ($deptsRes && sizeof($deptsRes) > 0) {
+                    foreach ($deptsRes as $d) $depts[] = $d;
+                }
                 $zips = $counties = [];
                 $cityZips = SLZips::where('ZipCity', 'LIKE', '%'.$request->policeDept.'%')
                     ->where('ZipState', 'LIKE', $reqState)
@@ -2323,11 +2600,6 @@ class OpenPolice extends SurvFormTree
         return view('vendor.survloop.master', $this->v);
     }
     
-    protected function printNodePageFoot()
-    {
-        return ''; //$GLOBALS["SL"]->sysOpts["footer-master"];
-    }
-    
     
     
     public function sortableStart($nID)
@@ -2344,6 +2616,325 @@ class OpenPolice extends SurvFormTree
     {
         return '<div class="red mB10">WARNING: If documents show sensitive personal information, set this to "private." 
             This includes addresses, phone numbers, emails, or social security numbers.</div>';
+    }
+    
+    
+    public function isOverCompatible($overRow)
+    {
+        return (isset($overRow->OverEmail) && trim($overRow->OverEmail) != '' 
+            && isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
+            && isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) == 1);
+    }
+    
+    public function loadDeptStuff($deptID = -3)
+    {
+        if ($deptID > 0 && !isset($this->deptStuff[$deptID])) {
+            $this->deptStuff[$deptID] = [ "id" => $deptID ];
+            $this->deptStuff[$deptID]["deptRow"] = OPDepartments::where('DeptID', $deptID)->first();
+            $this->deptStuff[$deptID]["iaRow"] = OPOversight::where('OverDeptID', $deptID)
+                ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
+                ->first();
+            $this->deptStuff[$deptID]["civRow"] = OPOversight::where('OverDeptID', $deptID)
+                ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
+                ->first();
+            if (!isset($this->deptStuff[$deptID]["iaRow"]) || sizeof($this->deptStuff[$deptID]["iaRow"]) == 0) {
+                $this->deptStuff[$deptID]["iaRow"] = new OPOversight;
+                $this->deptStuff[$deptID]["iaRow"]->OverDeptID       = $deptID;
+                $this->deptStuff[$deptID]["iaRow"]->OverType         = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
+                $this->deptStuff[$deptID]["iaRow"]->OverAgncName     = $this->deptStuff[$deptID]["deptRow"]->DeptName;
+                $this->deptStuff[$deptID]["iaRow"]->OverAddress      = $this->deptStuff[$deptID]["deptRow"]->DeptAddress;
+                $this->deptStuff[$deptID]["iaRow"]->OverAddress2     = $this->deptStuff[$deptID]["deptRow"]->DeptAddress2;
+                $this->deptStuff[$deptID]["iaRow"]->OverAddressCity  = $this->deptStuff[$deptID]["deptRow"]->DeptAddressCity;
+                $this->deptStuff[$deptID]["iaRow"]->OverAddressState = $this->deptStuff[$deptID]["deptRow"]->DeptAddressState;
+                $this->deptStuff[$deptID]["iaRow"]->OverAddressZip   = $this->deptStuff[$deptID]["deptRow"]->DeptAddressZip;
+                $this->deptStuff[$deptID]["iaRow"]->OverPhoneWork    = $this->deptStuff[$deptID]["deptRow"]->DeptPhoneWork;
+                $this->deptStuff[$deptID]["iaRow"]->save();
+            }
+            $this->deptStuff[$deptID]["deptAddy"] = $this->deptStuff[$deptID]["deptRow"]->DeptAddress . ', ';
+            if (isset($this->deptStuff[$deptID]["deptRow"]->DeptAddress2) 
+                && trim($this->deptStuff[$deptID]["deptRow"]->DeptAddress2) != '') {
+                $this->deptStuff[$deptID]["deptAddy"] .= $this->deptStuff[$deptID]["deptRow"]->DeptAddress2 . ', ';
+            }
+            $this->deptStuff[$deptID]["deptAddy"] .= $this->deptStuff[$deptID]["deptRow"]->DeptAddressCity . ', ' 
+                . $this->deptStuff[$deptID]["deptRow"]->DeptAddressState . ' ' . $this->deptStuff[$deptID]["deptRow"]->DeptAddressZip;
+            $this->deptStuff[$deptID]["iaAddy"] = '';
+            if (isset($this->deptStuff[$deptID]["iaRow"]->OverAddress) && trim($this->deptStuff[$deptID]["iaRow"]->OverAddress) != '') {
+                $this->deptStuff[$deptID]["iaAddy"] = $this->deptStuff[$deptID]["iaRow"]->OverAddress . ', ';
+                if (isset($this->deptStuff[$deptID]["iaRow"]->OverAddress2) 
+                    && trim($this->deptStuff[$deptID]["iaRow"]->OverAddress2) != '') {
+                    $this->deptStuff[$deptID]["iaAddy"] .= $this->deptStuff[$deptID]["iaRow"]->OverAddress2 . ', ';
+                }
+                $this->deptStuff[$deptID]["iaAddy"] .= $this->deptStuff[$deptID]["iaRow"]->OverAddressCity . ', ' 
+                    . $this->deptStuff[$deptID]["iaRow"]->OverAddressState . ' ' . $this->deptStuff[$deptID]["iaRow"]->OverAddressZip;
+            }
+            $this->deptStuff[$deptID]["civAddy"]  = '';
+            if (isset($this->deptStuff[$deptID]["civRow"]->OverAddress) && trim($this->deptStuff[$deptID]["civRow"]->OverAddress) != '') {
+                $this->deptStuff[$deptID]["civAddy"] = $this->deptStuff[$deptID]["civRow"]->OverAddress . ', ';
+                if (isset($this->deptStuff[$deptID]["civRow"]->OverAddress2) 
+                    && trim($this->deptStuff[$deptID]["civRow"]->OverAddress2) != '') {
+                    $this->deptStuff[$deptID]["civAddy"] .= $this->deptStuff[$deptID]["civRow"]->OverAddress2 . ', ';
+                }
+                $this->deptStuff[$deptID]["civAddy"] .= $this->deptStuff[$deptID]["civRow"]->OverAddressCity . ', ' 
+                    . $this->deptStuff[$deptID]["civRow"]->OverAddressState . ' ' . $this->deptStuff[$deptID]["civRow"]->OverAddressZip;
+            }
+            
+            $this->deptStuff[$deptID]["whichOver"] = '';
+            if (isset($this->deptStuff[$deptID]["civRow"]) && isset($this->deptStuff[$deptID]["civRow"]->OverAgncName)) {
+                $this->deptStuff[$deptID]["whichOver"] = "civRow";
+            } elseif (isset($this->deptStuff[$deptID]["iaRow"]) && isset($this->deptStuff[$deptID]["iaRow"]->OverAgncName)) {
+                $this->deptStuff[$deptID]["whichOver"] = "iaRow";
+            }
+            
+            $overRow = $this->deptStuff[$deptID][$this->deptStuff[$deptID]["whichOver"]];
+            $this->deptStuff[$deptID]["score"] = [];
+            $this->deptStuff[$deptID]["score"][] = [ 30, 'Has online complaint submission form', 
+                (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
+                && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 20, 'Has complaint information on website', 
+                (isset($overRow->OverWebComplaintInfo)) ];
+            $this->deptStuff[$deptID]["score"][] = [ 15, 'Has complaint information linked from home page', 
+                (isset($overRow->OverHomepageComplaintLink) && trim($overRow->OverHomepageComplaintLink) == 'Y') ];
+            $this->deptStuff[$deptID]["score"][] = [ 15, 'Has complaint form PDF on website', 
+                (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 15, 'Investigates complaints sent via email', 
+                (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
+                && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 15, 'Official department form not required for investigation', 
+                (isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) > 0) ];
+            $this->deptStuff[$deptID]["score"][] = [ 15, 'Anonymous complaints investigated', 
+                (isset($overRow->OverOfficialAnon) && intVal($overRow->OverOfficialAnon) == 1) ];
+            $this->deptStuff[$deptID]["score"][] = [ 5, 'Has a unique department website', 
+                (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 5, 'Has a Facebook page', 
+                (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 5, 'Has a Twitter account', 
+                (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 5, 'Has a YouTube channel', 
+                (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') ];
+            $this->deptStuff[$deptID]["score"][] = [ 3, 'Investigates complaints sent via phone', 
+                (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) ];
+            $this->deptStuff[$deptID]["score"][] = [ 2, 'Investigates complaints sent via snail mail', 
+                (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) ];
+            $this->deptStuff[$deptID]["score"][] = [ 0, 'Requires complaints to be filed in person', 
+                (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) ];
+            $this->deptStuff[$deptID]["score"][] = [ -10, 'Requires Notary (for any type of complaint)', 
+                (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) ];
+        }
+        return true;
+    }
+    
+    public function sendEmailBlurbsCustom($emailBody, $deptID = -3)
+    {
+        if (sizeof($this->deptStuff) == 0) {
+            if ($deptID > 0) {
+                $this->loadDeptStuff($deptID);
+            } elseif (isset($this->sessData->dataSets["LinksComplaintDept"]) 
+                && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
+                foreach ($this->sessData->dataSets["LinksComplaintDept"] as $deptLnk) {
+                    $this->loadDeptStuff($deptLnk->LnkComDeptDeptID);
+                }
+            }
+        } elseif (!isset($this->deptStuff[$deptID]) == 0) {
+            $this->loadDeptStuff($deptID);
+        }
+        if (strpos($emailBody, '[{ Complaint Oversight Agency }]') !== false) {
+            $overName = $this->deptStuff[$deptID][$this->deptStuff[$deptID]["whichOver"]]->OverAgncName;
+            $forDept = (($overName != $this->deptStuff[$deptID]["deptRow"]->DeptName) 
+                ? ' (for the ' . $this->deptStuff[$deptID]["deptRow"]->DeptName . ')' : '');
+            $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Oversight Agency }]', $emailBody);
+            $emailBody = $splits[0] . $overName . $forDept;
+            for ($i=1; $i<sizeof($splits); $i++) {
+                $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
+            }
+        }
+        $dynamos = [
+            '[{ Complaint ID }]', 
+            '[{ Complaint URL }]', 
+            '[{ Complaint URL Link }]', 
+            '[{ Complainant Name }]', 
+            '[{ Confirmation URL }]', 
+            '[{ Go Gold Secure URL }]', 
+            '[{ Submit Silver Secure URL }]', 
+            '[{ Update Complaint Secure URL }]', 
+            '[{ Login URL }]', 
+            '[{ Days From Now: 7, mm/dd/yyyy }]', 
+            '[{ Complaint Number of Weeks Old }]', 
+            '[{ Analyst Name }]', 
+            '[{ Complaint Department Submission Ways }]', 
+            '[{ Complaint Police Department }]', 
+            '[{ Complaint Police Department URL }]', 
+            '[{ Dear Primary Oversight Agency }]', 
+            '[{ Complaint Investigability Score & Description }]', 
+            '[{ Complaint Allegation List }]', 
+            '[{ Oversight Complaint Secure URL }]', 
+            '[{ Complaint Department Complaint PDF }]', 
+            '[{ Complaint Department Complaint Web }]', 
+            '[{ Flex Article Suggestions Based On Responses }]'
+        ];
+        foreach ($dynamos as $dy) {
+            if (strpos($emailBody, $dy) !== false) {
+                $swap = $dy;
+                $dyCore = str_replace('[{ ', '', str_replace(' }]', '', $dy));
+                switch ($dy) {
+                    case '[{ Complaint ID }]': 
+                        $swap = $this->coreID;
+                        break;
+                    case '[{ Complaint URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
+                            . $this->coreID);
+                        break;
+                    case '[{ Complaint URL Link }]':
+                        $swap = $this->sessData->dataSets["Complaints"][0]->ComSlug;
+                        break;
+                    case '[{ Complainant Name }]':
+                        if (isset($this->sessData->dataSets["Civilians"][0]->CivPersonID) 
+                            && intVal($this->sessData->dataSets["Civilians"][0]->CivPersonID) > 0) {
+                            $contact = $this->sessData->getRowById('PersonContact', 
+                                $this->sessData->dataSets["Civilians"][0]->CivPersonID);
+                            if ($contact && isset($contact->PrsnNameFirst)) {
+                                $swap = $contact->PrsnNameFirst;
+                            }
+                        }
+                        break;
+                    case '[{ Confirmation URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-read/' 
+                            . $this->coreID . '/confirm-email/goooobblygooook8923528350');
+                        break;
+                    case '[{ Go Gold Secure URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-read/' 
+                            . $this->coreID . '/go-gold/goooobblygooook8923528350');
+                        break;
+                    case '[{ Submit Silver Secure URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-read/' 
+                            . $this->coreID . '/submit-silver/goooobblygooook8923528350');
+                        break;
+                    case '[{ Update Complaint Secure URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-read/' 
+                            . $this->coreID . '/update/goooobblygooook8923528350');
+                        break;
+                    case '[{ Login URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'login');
+                        break;
+                    case '[{ Days From Now: 7, mm/dd/yyyy }]':
+                        $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
+                        break;
+                    case '[{ Complaint Number of Weeks Old }]':
+                        $dayCount = date_diff(mktime(), strtotime(
+                            $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted
+                            ))->format('%a');
+                        $swap = floor($dayCount/7);
+                        break;
+                    case '[{ Analyst Name }]':
+                        $swap = $this->userFormalName($this->v["user"]->id);
+                        break;
+                    case '[{ Complaint Police Department }]':
+                        $swap = $this->deptStuff[$deptID]["deptRow"]->DeptName;
+                        break;
+                    case '[{ Complaint Police Department URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/dept/' 
+                            . $this->deptStuff[$deptID]["deptRow"]->DeptSlug);
+                        break;
+                    case '[{ Dear Primary Oversight Agency }]':
+                        $swap = 'To whom it may concern:';
+                        break;
+                    case '[{ Complaint Allegation List }]':
+                        $swap = $this->CustReport->commaAllegationList();
+                        break;
+                    case '[{ Oversight Complaint Secure URL }]':
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . 'complaint-read/' 
+                            . $this->coreID . '/oversight/goooobblygooook8923528350');
+                        break;
+                    case '[{ Complaint Department Complaint PDF }]':
+                        $which = $this->deptStuff[$deptID]["whichOver"];
+                        if (isset($this->deptStuff[$deptID][$which]->OverComplaintPDF) 
+                            && trim($this->deptStuff[$deptID][$which]->OverComplaintPDF) != '') {
+                            $swap = '';
+                            if (sizeof($this->deptStuff) > 1) {
+                                $swap .= $this->deptStuff[$deptID][$which]->OverAgncName;
+                            }
+                            $swap .= ': ' 
+                                . $GLOBALS["SL"]->swapURLwrap($this->deptStuff[$deptID][$which]->OverComplaintPDF);
+                        }
+                        if (sizeof($this->deptStuff) > 1) {
+                            for ($i = 1; $i < sizeof($this->deptStuff); $i++) {
+                                if (trim($swap) != '') $swap .= '<br />';
+                                $which = $this->deptStuff[$i]["whichOver"];
+                                $swap .= $this->deptStuff[$deptID][$which]->OverAgncName . ': ' 
+                                    . $GLOBALS["SL"]->swapURLwrap($this->deptStuff[$i][$which]->OverComplaintPDF);
+                            }
+                        }
+                        break;
+                    case '[{ Complaint Department Complaint Web }]':
+                        $which = $this->deptStuff[$deptID]["whichOver"];
+                        if (isset($this->deptStuff[$deptID][$which]->OverComplaintWebForm) 
+                            && trim($this->deptStuff[$deptID][$which]->OverComplaintWebForm) != '') {
+                            $swap = '';
+                            if (sizeof($this->deptStuff) > 1) {
+                                $swap = $this->deptStuff[$deptID][$which]->OverAgncName;
+                            }
+                            $swap .= ': ' . $GLOBALS["SL"]->swapURLwrap(
+                                $this->deptStuff[$deptID][$which]->OverComplaintWebForm);
+                        }
+                        if (sizeof($this->deptStuff) > 1) {
+                            for ($i = 1; $i < sizeof($this->deptStuff); $i++) {
+                                if (trim($swap) != '') $swap .= '<br />';
+                                $currWhich = $this->deptStuff[$i]["whichOver"];
+                                $swap .= $this->deptStuff[$deptID][$which]->OverAgncName . ': ' 
+                                    . $GLOBALS["SL"]->swapURLwrap(
+                                        $this->deptStuff[$i][$currWhich]->OverComplaintWebForm);
+                            }
+                        }
+                        break;
+                    case '[{ Flex Article Suggestions Based On Responses }]':
+                        $swap = '';
+                        break;
+                }
+                $emailBody = str_replace($dy, $swap, $emailBody);
+            }
+        }
+        
+        $emailBody = str_replace('[{ Flex Article Suggestions Based On Responses }]', 
+            '[{ Flex Article Suggestions Based On Responses }]', $emailBody);
+        
+        $emailBody = str_replace('Hello Complainant,', 'Hello,', $emailBody);
+
+        return $emailBody;
+    }
+    
+    public function deptPage(Request $request, $deptSlug = '')
+    {
+        $deptID = -3;
+        $deptRow = OPDepartments::where('DeptSlug', $deptSlug)->first();
+        if ($deptRow && isset($deptRow->DeptID)) {
+            $deptID = $deptRow->DeptID;
+            $request->d = $deptRow->DeptID;
+        }
+        $this->loadPageVariation($request, 1, 25, '/dept/' . $deptSlug);
+        if ($deptID > 0) $this->v["deptID"] = $deptRow->DeptID;
+        return $this->index($request);
+    }
+    
+    public function shareStoryDept(Request $request, $deptSlug = '')
+    {
+        $this->loadPageVariation($request, 1, 24, '/sharing-your-story/' . $deptSlug);
+        $deptRow = OPDepartments::where('DeptSlug', $deptSlug)->first();
+        if ($deptRow && isset($deptRow->DeptID)) session()->put('opcDeptID', $deptRow->DeptID);
+        return $this->index($request);
+    }
+    
+    
+    public function userFormalName($uID)
+    {
+        $userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)->first();
+        if ($userInfo && isset($userInfo->UserInfoPersonContactID)) {
+            $personContact = OPPersonContact::find($userInfo->UserInfoPersonContactID);
+            if ($personContact && (isset($personContact->PrsnNameFirst) || isset($personContact->PrsnNameLast))) {
+                return trim($personContact->PrsnNameFirst . ' ' . $personContact->PrsnNameLast);
+            }
+        }
+        $usr = User::find($uID);
+        if ($usr && isset($usr->name)) return $usr->name;
+        return '';
     }
     
     

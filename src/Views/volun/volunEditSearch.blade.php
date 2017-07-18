@@ -17,7 +17,7 @@ function subVolunDeptSearch() {
     if (document.getElementById('stateID').value != '') url += '/s/'+document.getElementById('stateID').value;
     if (document.getElementById('deptNameID').value != '') url += '/d/'+encodeURIComponent(document.getElementById('deptNameID').value);
     if (url == '') url = '/all';
-    window.location = '/volunteer'+url;
+    window.location = '/dashboard/volunteer'+url;
     return true;
 }
 </script>

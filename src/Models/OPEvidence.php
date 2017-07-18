@@ -11,6 +11,7 @@ class OPEvidence extends Model
     protected $fillable   = 
     [    
 		'EvidComplaintID', 
+		'EvidComplimentID', 
 		'EvidType', 
 		'EvidPrivacy', 
 		'EvidDateTime', 
@@ -27,4 +28,7 @@ class OPEvidence extends Model
 		'EvidInjuryID', 
 		'EvidNoteID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

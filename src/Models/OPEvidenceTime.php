@@ -15,4 +15,7 @@ class OPEvidenceTime extends Model
 		'EviTimTimestamp', 
 		'EviTimDescription', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

@@ -1,21 +1,21 @@
 <!-- resources/views/vendor/openpolice/nodes/145-dept-search.blade.php -->
 
-<input type="hidden" name="n145fld" id="n145FldID" value="">
+<input type="hidden" name="n{{ $nID }}fld" id="n{{ $nID }}FldID" value="">
 <div class="nFld mTn20">
     <div class="row mB10">
-        <div class="col-md-9">
+        <div class="col-md-7 pT5">
             <input type="text" name="deptNameIn" id="deptNameInID" value="{{ $IncAddressCity }}" 
-                class="form-control fingerTxt">
+                class="form-control input-lg">
         </div>
-        <div class="col-md-2">
-            <select name="deptState" id="deptStateID" class="form-control fingerTxt">
+        <div class="col-md-3 pT5">
+            <select name="deptState" id="deptStateID" class="form-control input-lg">
                 <option value="">Select State</option>
                 {!! $stateDropstateDrop !!}
             </select>
         </div>
-        <div class="col-md-1">
-            <a href="javascript:void(0)" id="ajaxSubmit" class="btn btn-primary w100 p15"
-                ><h2><i class="fa fa-search"></i></h2></a>
+        <div class="col-md-2 pT5">
+            <a href="javascript:void(0)" id="ajaxSubmit" class="btn btn-lg btn-primary w100"
+                ><i class="fa fa-search"></i></a>
         </div>
     </div>
 </div>

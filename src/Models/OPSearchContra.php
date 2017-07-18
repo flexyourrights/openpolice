@@ -13,4 +13,7 @@ class OPSearchContra extends Model
 		'SrchConSearchID', 
 		'SrchConType', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

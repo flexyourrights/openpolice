@@ -13,4 +13,7 @@ class OPLinksCivilianOrders extends Model
 		'LnkCivOrdCivID', 
 		'LnkCivOrdOrdID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

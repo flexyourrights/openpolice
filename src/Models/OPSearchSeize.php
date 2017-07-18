@@ -13,4 +13,7 @@ class OPSearchSeize extends Model
 		'SrchSeizSearchID', 
 		'SrchSeizType', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

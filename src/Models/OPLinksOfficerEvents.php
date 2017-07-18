@@ -13,4 +13,7 @@ class OPLinksOfficerEvents extends Model
 		'LnkOffEveOffID', 
 		'LnkOffEveEveID', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

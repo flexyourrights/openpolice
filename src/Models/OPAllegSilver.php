@@ -30,6 +30,7 @@ class OPAllegSilver extends Model
 		'AlleSilProcedure', 
 		'AlleSilNeglectDuty', 
 		'AlleSilBias', 
+		'AlleSilSexualHarass', 
 		'AlleSilSexualAssault', 
 		'AlleSilIntimidatingWeapon', 
 		'AlleSilIntimidatingWeaponType', 
@@ -37,4 +38,7 @@ class OPAllegSilver extends Model
 		'AlleSilUnbecoming', 
 		'AlleSilDiscourteous', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

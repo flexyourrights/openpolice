@@ -14,4 +14,7 @@ class OPCharges extends Model
 		'ChrgStopID', 
 		'ChrgCharges', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

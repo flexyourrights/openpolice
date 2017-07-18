@@ -10,7 +10,7 @@
 </h1>
 
 <a href="javascript:void(0)" class="btn btn-default mR10" disabled ><i class="fa fa-plus-circle"></i> Add New Department</a>
-<a href="/volunteer/all" class="btn btn-default mR10">All Departments</a>
+<a href="/dashboard/volunteer/all" class="btn btn-default mR10">All Departments</a>
 
 <div class="p5"></div>
 

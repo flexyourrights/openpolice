@@ -13,4 +13,7 @@ class OPPhysicalDescRace extends Model
 		'PhysRacePhysDescID', 
 		'PhysRaceRace', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

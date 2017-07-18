@@ -17,4 +17,7 @@ class OPPartners extends Model
 		'PartCompanyName', 
 		'PartCompanyWebsite', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }

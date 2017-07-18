@@ -23,4 +23,7 @@ class OPPhysicalDesc extends Model
 		'PhysClothesDesc', 
 		'PhysDisabilitiesDesc', 
     ];
+    
+    // END SurvLoop auto-generated portion of Model
+    
 }
