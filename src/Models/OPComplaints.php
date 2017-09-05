@@ -10,6 +10,7 @@ class OPComplaints extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+		'ComPublicID', 
 		'ComUserID', 
 		'ComStatus', 
 		'ComType', 

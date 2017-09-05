@@ -3,8 +3,6 @@
 <div class="row slReportPreview">
     <div class="col-md-6">
         <p class="fPerc125">{{ $storyPrev }}</p>
-        <p><a href="/complaint-report/{{ $complaintID }}" class="btn btn-primary"
-            >Read Complaint #{{ $complaintID }}</a></p>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-5 pB10">
@@ -17,5 +15,7 @@
         <li>{{ $incident->IncAddressCity }}, {{ $incident->IncAddressState }}</li>
         </ul>
         <b class="fPerc125">Allegations:</b><ul>{!! $basicAllegationListF !!}</ul>
+        <p><a href="/complaint-report/{{ $complaintID }}" class="btn btn-primary mT10"
+                >Read Complaint #{{ $complaintID }}</a></p>
     </div>
 </div>

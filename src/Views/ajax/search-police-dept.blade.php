@@ -63,13 +63,13 @@
         <div class="col-md-6">
             <fieldset class="form-group">
                 <label for="newDeptNameID">Department Name <span class="red f12">* required</span></label>
-                <input id="newDeptNameID" name="newDeptName" type="text" value="" class="form-control" >
+                <input id="newDeptNameID" name="newDeptName" type="text" value="" class="form-control input-lg" >
             </fieldset>
         </div>
         <div class="col-md-3">
             <fieldset class="form-group">
                 <label for="newDeptAddressStateID">State <span class="red f12">* required</span></label>
-                <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control" autocomplete="off" >
+                <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control input-lg" autocomplete="off" >
                 {!! $newDeptStateDrop !!}
                 </select>
             </fieldset>

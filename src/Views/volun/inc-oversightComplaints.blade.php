@@ -16,30 +16,30 @@
             <label for="{{ $overType }}OverWebsiteID">Website URL</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["Website"] }}</span> @endif
             <input id="{{ $overType }}OverWebsiteID" name="{{ $overType }}OverWebsite" value="{{ $overRow->OverWebsite }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         <fieldset class="form-group">
             <label for="{{ $overType }}OverFacebookID">Facebook URL</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["FB"] }}</span> @endif
             <input id="{{ $overType }}OverFacebookID" name="{{ $overType }}OverFacebook" value="{{ $overRow->OverFacebook }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         <fieldset class="form-group">
             <label for="{{ $overType }}OverTwitterID">Twitter URL</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["Twit"] }}</span> @endif
             <input id="{{ $overType }}OverTwitterID" name="{{ $overType }}OverTwitter" value="{{ $overRow->OverTwitter }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         <fieldset class="form-group">
             <label for="{{ $overType }}OverYouTubeID">YouTube Channel URL</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["YouTube"] }}</span> @endif
             <input id="{{ $overType }}OverYouTubeID" name="{{ $overType }}OverYouTube" value="{{ $overRow->OverYouTube }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         @if ($overType == 'IA')
             <fieldset class="form-group">
                 <label for="DeptEmailID">Department Main Email Address</label>
-                <input id="DeptEmailID" name="DeptEmail" value="{{ $deptRow->DeptEmail }}" type="text" class="form-control" > 
+                <input id="DeptEmailID" name="DeptEmail" value="{{ $deptRow->DeptEmail }}" type="text" class="form-control input-lg" > 
             </fieldset>
         @endif
     </div>
@@ -66,13 +66,13 @@
             <label for="{{ $overType }}OverWebComplaintInfoID">Complaint Info URL</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["ComplaintInfo"] }}</span> @endif
             <input id="{{ $overType }}OverWebComplaintInfoID" name="{{ $overType }}OverWebComplaintInfo" value="{{ $overRow->OverWebComplaintInfo }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         <fieldset class="form-group">
             <label for="{{ $overType }}OverComplaintPDFID">Complaint Form PDF</label>
             @if ($overType == 'IA') <span class="slBlueDark f10">{{ $deptPoints["FormPDF"] }}</span> @endif
             <input id="{{ $overType }}OverComplaintPDFID" name="{{ $overType }}OverComplaintPDF" value="{{ $overRow->OverComplaintPDF }}" 
-                type="text" class="form-control" onKeyUp="checkScore();" onChange="checkScore();" > 
+                type="text" class="form-control input-lg" onKeyUp="checkScore();" onChange="checkScore();" > 
         </fieldset>
         
         <div class="mT20 blk fPerc125">How Can Complaints Be Submitted (AND Investigated)?</div>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-md-11">
                             <input id="{{ $overType }}OverComplaintWebFormID" name="{{ $overType }}OverComplaintWebForm" value="{{ $overRow->OverComplaintWebForm }}" type="text" 
-                                onKeyUp="checkScore(); if (this.value != '') { document.getElementById('OverWaySubOnlineID').checked = true; }" onChange="checkScore();" class="form-control" > 
+                                onKeyUp="checkScore(); if (this.value != '') { document.getElementById('OverWaySubOnlineID').checked = true; }" onChange="checkScore();" class="form-control input-lg" > 
                         </div>
                     </div>
                 </fieldset>

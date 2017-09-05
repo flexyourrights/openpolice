@@ -14,28 +14,28 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-primary disBlo btnTall" href="?firstReview=296">
+                    <a class="btn btn-lg btn-primary disBlo" href="?firstReview=296">
                     Police Complaint</a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-default disBlo btnTall" href="?firstReview=297">
+                    <a class="btn btn-lg btn-default disBlo" href="?firstReview=297">
                     Not About Police</a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-default disBlo btnTall" href="?firstReview=298">
-                    <div style="padding-top: 18px;">Abuse</div></a>
+                    <a class="btn btn-lg btn-default disBlo" href="?firstReview=298">
+                    Abuse</a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-default disBlo btnTall" href="?firstReview=299">
-                    <div style="padding-top: 18px;">Spam</div></a>
+                    <a class="btn btn-lg btn-default disBlo" href="?firstReview=299">
+                    Spam</a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-default disBlo btnTall" href="?firstReview=300">
+                    <a class="btn btn-lg btn-default disBlo" href="?firstReview=300">
                     Test Submission</a>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-xl btn-default disBlo btnTall" href="?firstReview=301">
-                    <div style="padding-top: 18px;">Not Sure</div></a>
+                    <a class="btn btn-lg btn-default disBlo" href="?firstReview=301">
+                    Not Sure</a>
                 </div>
             </div>
         </div>
@@ -47,30 +47,13 @@
     <div id="analystHistory" class="row disBlo">
         <div class="col-md-7">
         
-            <h2>Complaint History: ID #{{ $cID }}</h2>
-            @if ($history && sizeof($history) > 0)
-                @foreach ($history as $i => $h)
-                    <div class="p5 brdBot">
-                        <h4 class="m0 slBlueDark">
-                            @if ($h["type"] == 'Status')
-                                <i class="fa fa-tachometer mR5" aria-hidden="true"></i> 
-                            @elseif ($h["type"] == 'Email')
-                                <i class="fa fa-envelope mR5" aria-hidden="true"></i>
-                            @endif
-                            {!! $h["desc"] !!}
-                        </h4>
-                        <span class="slGrey">{!! $h["who"] !!}, {{ date("n/j/y h:ia", $h["date"]) }}</span>
-                    </div>
-                @endforeach
-            @else
-                <div class="p5 brdBot"><i>This complaint has not been reviewed yet.</i></div>
-            @endif
-            
             @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             
-                <form action="/dashboard/complaint/{{ $cID }}/emails/type" method="post" >
+                <form action="/dashboard/complaint/{{ $complaintRec->ComPublicID }}/emails/type" method="post" 
+                    onSubmit="return chkEmaForm();" >
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="cID" value="{{ $cID }}">
+                <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
+                <input type="hidden" name="emailID" value="{{ $emailID }}">
                 <a name="emailer"></a>
                 <div id="analystEmailComposer" class="panel panel-info mT10
                     @if (intVal($emailID) > 0) disBlo @else disNon @endif ">
@@ -81,41 +64,104 @@
                         </h1></div>
                     </div>
                     <div class="panel-body">
+                        @if ($emailID == 12)
+                            @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
+                                @if (!isset($stuff["overUser"]) || !isset($stuff["overUser"]->email))
+                                    <div class="alert alert-danger mT10 fPerc133" role="alert">
+                                        <strong>{{ $stuff["deptRow"]->DeptName }}</strong> 
+                                        is NOT OPC-Compliant!<br />Do not send them an email!</div>
+                                @endif
+                            @empty
+                            @endforelse
+                        @endif
+                    
                         <div class="nFld m0">
                         
                         @forelse ($currEmail as $j => $email)
                             @if ($j > 0) <div class="pT20"><hr></div> @endif
                             <h3 class="m0">Send To</h3>
-                            <select class="form-control input-lg w100" name="emailTo{{ $j }}" id="emailTo{{ $j }}ID">
+                            <select class="form-control input-lg w100 changeEmailTo" autocomplete=off 
+                                name="emailTo{{ $j }}" id="emailTo{{ $j }}ID">
                             @forelse ($emailsTo[$email["rec"]->EmailType] as $i => $ema)
                                 <option value="{{ $ema[0] }}" @if ($ema[2]) SELECTED @endif 
-                                    >{{ $ema[0] }} ({{ $ema[1] }}) </option>
-                            @empty                                   
+                                    >{{ $ema[1] }} ({{ $ema[0] }}) </option>
+                            @empty
                             @endforelse
+                                <option value="--CUSTOM--">Type in custom email address:</option>
                             </select>
+                            <div id="emailTo{{ $j }}CustID" class="row mT5 disNon">
+                                <div class="col-md-6">
+                                    Recipient Name
+                                    <input type="text" name="emailTo{{ $j }}CustName" id="emailTo{{ $j }}CustNameID" 
+                                        class="form-control input-lg" autocomplete=off >
+                                </div>
+                                <div class="col-md-6">
+                                    Recipient Email
+                                    <input type="text" name="emailTo{{ $j }}CustEmail" id="emailTo{{ $j }}CustEmailID" 
+                                        class="form-control input-lg" autocomplete=off >
+                                </div>
+                            </div>
                             <div class="p10"></div>
                             <h3 class="m0">Email Subject</h3>
                             <input type="text" class="form-control input-lg w100" name="emailSubj{{ $j }}" 
-                                id="emailSubj{{ $j }}ID" value="{{ $email['subject'] }}" >
+                                id="emailSubj{{ $j }}ID" value="{{ $email['subject'] }}" autocomplete=off >
                             <div class="p10"></div>
                             <h3 class="m0">Email Body</h3>
                             <textarea name="emailBodyCust{{ $j }}" id="emailBodyCust{{ $j }}ID" class="w100" 
-                                style="height: 500px;" >{!! $email["body"] !!}</textarea>
+                                style="height: 500px;" autocomplete=off >{!! $email["body"] !!}</textarea>
                         @empty
                         @endforelse
                         </div>
+                        
+                        @if ($emailID == 12)
+                            @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
+                                @if (!isset($stuff["overUser"]) || !isset($stuff["overUser"]->email))
+                                    <div class="alert alert-danger mT10 fPerc133" role="alert">
+                                        <strong>{{ $stuff["deptRow"]->DeptName }}</strong> 
+                                        is NOT OPC-Compliant!<br />Do not send them an email!</div>
+                                @endif
+                            @empty
+                            @endforelse
+                        @endif
+                        
                         <div class="m20 taC"><input type="submit" class="btn btn-xl btn-primary w66"
                             value="Send Email"></div>
                         
                     </div>
                 </div>
                 </form>
+                <script type="text/javascript">
+                function chkEmaForm() {
+                    for (var j=0; j < {{ sizeof($currEmail) }}; j++) {
+                        if (!document.getElementById('emailTo'+j+'ID') 
+                            || document.getElementById('emailTo'+j+'ID').value.trim() == '') {
+                            alert("Please provide an email address to send this message.");
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                </script>
             
+            @else
+            
+                <h2>Complaint History: ID #{{ $cID }}</h2>
+                {!! view('vendor.openpolice.admin.complaints.complaint-review-history', [
+                    "history" => $history ])->render() !!}
+                    
             @endif
             
         </div>
-        <div class="col-md-5 pT20 pB10">
+        <div class="col-md-5 pB10">
         
+            @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
+                <h2>Complaint History: ID #{{ $cID }}</h2>
+                {!! view('vendor.openpolice.admin.complaints.complaint-review-history', [
+                    "history" => $history ])->render() !!}
+                <div class="p10"></div>
+            @endif
+            <div class="p10"></div>
+            
             <a id="newStatusUpdate" class="btn btn-xl disBlo @if ($firstRevDone) btn-primary @else btn-default @endif " href="javascript:;">
                 <div class="row">
                     <div class="col-md-1"><i class="fa fa-tachometer" aria-hidden="true"></i></div>
@@ -127,7 +173,8 @@
             
             <div id="newStatusUpdateBlock" class="p10 mB20 mTn5 round5 brd
                 @if ($firstRevDone) disBlo @else disNon @endif " style="border-top: 0px none;">
-                <form name="comUpdate" action="/dashboard/complaint/{{ $cID }}/review/save" method="post" >
+                <form name="comUpdate" action="/dashboard/complaint/{{ $complaintRec->ComPublicID }}/review/save" 
+                    method="post" >
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="cID" value="{{ $cID }}">
                 <input type="hidden" name="revType" value="Update">
@@ -189,7 +236,7 @@
                     </select>
                 </div>
                 <div class="mT20 taC"><a href="javascript:;" class="btn btn-lg btn-primary w66"
-                    onClick="window.location='/dashboard/complaint/{{ $cID }}/review?email='+document.getElementById('emailID').value+'#emailer';"
+                    onClick="window.location='/dashboard/complaint/{{ $complaintRec->ComPublicID }}/review?email='+document.getElementById('emailID').value+'#emailer';"
                     >Load Email Template</a>
                 </div>
             </div>

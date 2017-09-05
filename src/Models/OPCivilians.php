@@ -32,6 +32,8 @@ class OPCivilians extends Model
 		'CivOccupation', 
 		'CivGivenCitation', 
 		'CivGivenWarning', 
+		'CivHasInjury', 
+		'CivHasInjuryCare', 
     ];
     
     // END SurvLoop auto-generated portion of Model

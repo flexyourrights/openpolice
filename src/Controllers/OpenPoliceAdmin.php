@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\SLDefinitions;
+use App\Models\SLNode;
 
 use App\Models\OPComplaints;
 use App\Models\OPAllegations;
@@ -39,7 +40,7 @@ class OpenPoliceAdmin extends AdminSubsController
     public function initPowerUser($uID = -3)
     {
         if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0
-            || !$this->v["user"]->hasRole('administrator|staff|databaser|brancher|volunteer')) {
+            || !$this->v["user"]->hasRole('administrator|staff|databaser|volunteer')) {
             return $this->redir('/');
         }
         $userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)
@@ -100,30 +101,21 @@ class OpenPoliceAdmin extends AdminSubsController
                             $this->admMenuLnk('/dashboard/complaints/flagged', 
                                 (($flagged > 0) ? '<span class="label label-danger mR5">' . $flagged . '</span> ' : '') 
                                     . 'Flagged For Review'), 
-                            $this->admMenuLnk('/dashboard/complaints/unpublished', 'Un-Published Complaints'), 
+                            $this->admMenuLnk('/dashboard/complaints/waiting', 'Complaints Awaiting Investigation'), 
                             $this->admMenuLnk('/dashboard/complaints/incomplete', 'Incomplete Complaints'),
                             $this->admMenuLnk('/dashboard/emails', 'Manage Email Templates'),
                             $this->admMenuLnkContact(false)
                         ]
                     ], [
                         'javascript:;',
-                        '<i class="fa fa-users mR5"></i> Volunteers',
+                        '<i class="fa fa-search mR5" aria-hidden="true"></i> Oversight',
                         1,
                         [
-                            $this->admMenuLnk('/dashboard/volun', 'Recent Department Edits'), 
-                            $this->admMenuLnk('/dashboard/volun/stars', 'List of Volunteers'), 
                             $this->admMenuLnk('/dashboard/volunteer', 'Departments Dashboard'), 
-                            $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Department')
-                        ]
-                    ], [
-                        'javascript:;',
-                        '<i class="fa fa-list-ul mR5"></i> Directories',
-                        1,
-                        [
                             $this->admMenuLnk('/dashboard/officers', 'Police Officers'), 
-                            $this->admMenuLnk('/dashboard/depts', 'Police Departments'), 
                             $this->admMenuLnk('/dashboard/overs', 'Oversight Agencies'), 
-                            $this->admMenuLnk('/dashboard/volunteer/legal', 'Attorneys')
+                            $this->admMenuLnk('/dashboard/volunteer/legal', 'Attorneys'),
+                            $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Department')
                         ]
                     ], 
                     $treeMenu
@@ -148,61 +140,8 @@ class OpenPoliceAdmin extends AdminSubsController
     
     protected function tweakAdmMenu($currPage = '')
     {
-        /*
-        if (strpos($currPage, '/dashboard/complaint/' . $this->coreID . '') !== false 
-            && $this->v["settings"]["Complaint Evaluations"] == 'Y') {
-            $this->admMenuData = [
-                "adminNav" => [],
-                "currNavPos" => []
-            ];
-            $this->admMenuData["adminNav"] = [
-                [
-                    '/dashboard/complaints',
-                    'Complaints <span class="pull-right"><i class="fa fa-star"></i></span>',
-                    1,
-                    []
-                ], [
-                    'javascript:;',
-                    'Complaint #' . $this->coreID,
-                    1,
-                    [
-                        [
-                            '/dashboard/complaint/' . $this->coreID,
-                            'View Complaint',
-                            1,
-                            []
-                        ], [
-                            '/dashboard/complaint/' . $this->coreID . '/review',
-                            'Review This Complaint',
-                            1,
-                            []
-                        ], [
-                            '/dashboard/complaint/' . $this->coreID . '/emails',
-                            'Send Complaint Emails',
-                            1,
-                            []
-                        ], [
-                            '/dashboard/complaint/' . $this->coreID . '/update',
-                            'Update Complaint Status',
-                            1,
-                            []
-                        ], [
-                            '/dashboard/complaint/' . $this->coreID . '/history',
-                            'View Past Reviews',
-                            1,
-                            []
-                        ] 
-                    ]
-                ]
-            ];
-        } else
-        */
+        //echo '<br /><br /><br />tweakAdmMenu(<pre>'; print_r($this->admMenuData["adminNav"]); echo '</pre>';
         if (isset($this->v["deptSlug"])) {
-            if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["currNavPos"] = [1, 3, -1, -1];
-            } else {
-                $this->admMenuData["currNavPos"] = [0, -1, -1, -1];
-            }
             $volunteeringSubMenu = [
                 'javascript:;" id="navBtnContact0',
                 '<b>Verifying Department</b>',
@@ -265,10 +204,12 @@ class OpenPoliceAdmin extends AdminSubsController
                 ]
             ];
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["adminNav"][1][3][3] = $volunteeringSubMenu;
+                $this->admMenuData["adminNav"][1][] = $volunteeringSubMenu;
+                $this->admMenuData["currNavPos"] = [3, -1, -1, -1];
             } else { // is Volunteer
                 $volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
                 $this->admMenuData["adminNav"][0] = $volunteeringSubMenu;
+                $this->admMenuData["currNavPos"] = [0, -1, -1, -1];
             }
         }
         if (!$this->v["user"]->hasRole('administrator|staff|databaser')) {
@@ -335,7 +276,7 @@ class OpenPoliceAdmin extends AdminSubsController
     public function dashboardDefault(Request $request)
     {
         $user = Auth::user();
-        if (!$user->hasRole('administrator|staff|databaser|brancher')) {
+        if (!$user->hasRole('administrator|staff|databaser')) {
             if ($user->hasRole('volunteer')) {
                 return $this->redir('/dashboard/volunteer');
             }
@@ -398,7 +339,7 @@ class OpenPoliceAdmin extends AdminSubsController
     
     public function listUnpublished(Request $request)
     {
-        $this->admControlInit($request, '/dashboard/complaints/unpublished');
+        $this->admControlInit($request, '/dashboard/complaints/flagged');
         return $this->printComplaintListing($request);
     }
     
@@ -420,23 +361,24 @@ class OpenPoliceAdmin extends AdminSubsController
         switch ($this->v["currPage"]) {
             case '/dashboard/complaints':         
                 $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'New') . "' 
-                    OR (c.`ComType` IN (
-                    '" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed') . "', 
-                    '" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Not Sure') . "'
-                    ) AND c.`ComStatus` NOT LIKE '" 
-                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "') )"; 
+                    OR (c.`ComType` IN ('" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed')
+                    . "', '" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Not Sure') 
+                    . "') AND c.`ComStatus` NOT LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') 
+                    . "') )"; 
                 break;
             case '/dashboard/complaints/me':     
                 $qman .= " AND c.`ComAdminID` LIKE '" . $this->v["user"]->id . "' 
                     AND c.`ComStatus` NOT LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "'";
                 break;
-            case '/dashboard/complaints/waiting':     
-                $qman .= " AND (c.`ComStatus` IN (
-                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Attorney\'d') . "', 
-                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight') . "', 
-                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Received by Oversight') . "', 
-                    '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Oversight Investigation') . "'
-                    ) )"; 
+            case '/dashboard/complaints/flagged':
+                $qman .= " AND (c.`ComStatus` IN ('" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Hold') . "', '" 
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney') . "') )"; 
+                break;
+            case '/dashboard/complaints/waiting':
+                $qman .= " AND (c.`ComStatus` IN ('" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Attorney\'d') 
+                    . "', '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight') . "', '" 
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Received by Oversight') . "', '" 
+                    . $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Oversight Investigation') . "') )"; 
                 break;
             case '/dashboard/complaints/all':     
                 $qman .= " AND c.`ComStatus` NOT LIKE '" 
@@ -447,32 +389,59 @@ class OpenPoliceAdmin extends AdminSubsController
                     . $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete') . "'";
                 break;
         }
-        $this->v["complaints"] = $this->v["comInfo"] = [];
+        $this->v["complaints"] = $this->v["comInfo"] = $this->v["lastNodes"] = [];
         $compls = DB::select( DB::raw($qman) );
         if ($compls && sizeof($compls) > 0) {
             foreach ($compls as $com) {
+                $this->CustReport->loadAllSessData('Complaints', $com->ComID);
                 $comTime = strtotime($com->updated_at);
                 if (trim($com->ComRecordSubmitted) != '' && $com->ComRecordSubmitted != '0000-00-00 00:00:00') {
                     $comTime = strtotime($com->ComRecordSubmitted);
                 }
-                $sortInd = $comTime;
-                $this->v["comInfo"][$com->ComID] = ["alleg" => '', "comDate" => ''];
-                $allegsTmp = [];
-                $chkAlleg = OPAllegations::select('AlleType')
-                    ->where('AlleComplaintID', $com->ComID)
-                    ->get();
-                if ($chkAlleg && sizeof($chkAlleg) > 0) {
-                    if ($sort == 'Allegations') $sortInd = sizeof($chkAlleg)+($sortInd/10000000000);
-                    foreach ($chkAlleg as $alleg) $allegsTmp[] = $alleg;
-                    $this->v["comInfo"][$com->ComID]["alleg"] = $this->CustReport->commaAllegationList();
+                if (!isset($com->ComStatus) || intVal($com->ComStatus) <= 0) {
+                    $com->ComStatus = $GLOBALS['SL']->getDefID('Complaint Status', 'Incomplete');
+                    OPComplaints::find($com->ComID)->update([ "ComStatus" => $com->ComStatus ]);
                 }
-                $this->v["comInfo"][$com->ComID]["comDate"] = date("n/j/Y", $comTime);
-                
-                //$this->v["comInfo"][$com->ComID]["investigability"] = ...
-                //$this->v["comInfo"][$com->ComID]["rating"] = ...
-                //$this->v["comInfo"][$com->ComID]["featured"] = ...
-                
-                $this->v["complaints"][$sortInd] = $com;
+                if (!isset($com->ComType) || intVal($com->ComType) <= 0) {
+                    $com->ComType = $GLOBALS['SL']->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed');
+                    OPComplaints::find($com->ComID)->update([ "ComType" => $com->ComType ]);
+                }
+                $cutoffTime = mktime(date("H"), date("i"), date("s"), date("m"), date("d")-1, date("Y"));
+                if ($comTime < $cutoffTime) {
+                    if (!isset($com->ComSummary) || trim($com->ComSummary) == '') {
+                        OPComplaints::find($com->ComID)->delete();
+                        $comTime = false;
+                    }
+                }
+                if ($comTime !== false) {
+                    $sortInd = $comTime;
+                    $this->v["comInfo"][$com->ComID] = [ "alleg" => '', "comDate" => '' ];
+                    $allegsTmp = [];
+                    $chkAlleg = OPAllegations::select('AlleType')
+                        ->where('AlleComplaintID', $com->ComID)
+                        ->get();
+                    if ($chkAlleg && sizeof($chkAlleg) > 0) {
+                        if ($sort == 'Allegations') $sortInd = sizeof($chkAlleg)+($sortInd/10000000000);
+                        foreach ($chkAlleg as $alleg) $allegsTmp[] = $alleg;
+                        $this->v["comInfo"][$com->ComID]["alleg"] = $this->CustReport->commaAllegationList();
+                    }
+                    $this->v["comInfo"][$com->ComID]["comDate"] = date("n/j/Y", $comTime);
+                    if ($com->ComStatus == $GLOBALS['SL']->getDefID('Complaint Status', 'Incomplete')) {
+                        if ($com->ComSubmissionProgress > 0 
+                            && !isset($this->v["lastNodes"][$com->ComSubmissionProgress])) {
+                            $node = SLNode::find($com->ComSubmissionProgress);
+                            if ($node && isset($node->NodePromptNotes)) {
+                                $this->v["lastNodes"][$com->ComSubmissionProgress] = $node->NodePromptNotes;
+                            }
+                        }
+                    }
+                    
+                    //$this->v["comInfo"][$com->ComID]["investigability"] = ...
+                    //$this->v["comInfo"][$com->ComID]["rating"] = ...
+                    //$this->v["comInfo"][$com->ComID]["featured"] = ...
+                    
+                    $this->v["complaints"][$sortInd] = $com;
+                }
             }
             krsort($this->v["complaints"]);
         }
@@ -509,6 +478,7 @@ class OpenPoliceAdmin extends AdminSubsController
         $this->v["cID"] = $this->coreID = $cid;
         $currPage = '/dashboard/complaint/' . $cid . (($viewType == 'view') ? '' : '/'.$viewType);
         $this->admControlInit($request, $currPage);
+        $cid = $GLOBALS["SL"]->chkInPublicID($cid);
         $this->v["firstRevDone"] = false;
         if ($request->has('firstReview') && intVal($request->firstReview) > 0) {
             $newTypeVal = $GLOBALS["SL"]->getDefValue('OPC Staff/Internal Complaint Type', $request->firstReview);
@@ -551,7 +521,10 @@ class OpenPoliceAdmin extends AdminSubsController
                     $allUserNames[$r->ComRevUser] = User::find($r->ComRevUser)
                         ->printUsername(true, '/dashboard/volun/user/');
                 }
-                $desc = '<span class="slBlueDark">' . $r->ComRevStatus . '</span>';
+                $desc = '<span class="slBlueDark">' 
+                    . ((isset($r->ComRevNextAction) && trim($r->ComRevNextAction) == 'Complaint Received'
+                        && $r->ComRevStatus == 'Submitted to Oversight') ? $r->ComRevNextAction : $r->ComRevStatus)
+                    . '</span>';
                 if (isset($r->ComRevNote) && trim($r->ComRevNote) != '') {
                     $desc .= ' - ' . $r->ComRevNote;
                 }
@@ -568,7 +541,7 @@ class OpenPoliceAdmin extends AdminSubsController
             ->get();
         $emails = SLEmailed::where('EmailedTree', 1)
             ->where('EmailedRecID', $cid)
-            ->orderBy('EmailedDate', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
         if ($emails && sizeof($emails) > 0) {
             foreach ($emails as $i => $e) {
@@ -576,19 +549,22 @@ class OpenPoliceAdmin extends AdminSubsController
                     $allUserNames[$e->EmailedFromUser] = User::find($e->EmailedFromUser)
                         ->printUsername(true, '/dashboard/volun/user/');
                 }
-                $desc = '<a href="javascript:void(0)" id="emaSubj' . $e->EmailedID . '" class="emaSubj">';
-                if ($this->v["emailList"] && sizeof($this->v["emailList"]) > 0) {
-                    foreach ($this->v["emailList"] as $ema) {
-                        if ($e->EmailedEmailID == $ema->EmailID) $desc = $ema->EmailSubject;
-                    }
-                }
-                $desc = '</a><div id="emaBody' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                $desc = '<a href="javascript:void(0)" id="emaSubj' . $e->EmailedID . '" class="emaSubj">' 
+                    . $e->EmailedSubject . '</a> <i>to ' . substr($e->EmailedTo, 0, strpos($e->EmailedTo, '<'))  
+                    . '<span class="fPerc66">&lt; ' 
+                    . str_replace('>', '', substr($e->EmailedTo, 1+strpos($e->EmailedTo, '<'))) . ' &gt;</span></i>'
+                    . '<div id="emaBody' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
                 $this->v["history"][] = [
                     "type" => 'Email', 
-                    "date" => strtotime($e->EmailDate), 
+                    "date" => strtotime($e->created_at), 
                     "desc" => $desc, 
                     "who"  => $allUserNames[$e->EmailedFromUser]
                 ];
+                $GLOBALS["SL"]->pageAJAX .= ' $(document).on("click", ".emaSubj", function() { '
+                    . 'var emaID = $(this).attr("id").replace("emaSubj", "");'
+                    . 'if (document.getElementById("emaBody"+emaID+"")) $("#emaBody"+emaID+"").slideToggle("fast"); '
+                    . '}); ';
+                
             }
         }
         $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');
@@ -622,19 +598,24 @@ class OpenPoliceAdmin extends AdminSubsController
             ];
         $this->v["emailID"] = ($request->has('email') ? $request->email : -3);
         if ($this->v["emailID"] <= 0) {
-            if (!$emails || sizeof($emails) == 0) {
-                switch ($this->v["complaintRec"]->ComStatus) {
-                    case $GLOBALS["SL"]->getDefID('Complaint Status', 'OK to Submit to Oversight'):
-                        if ($isOverCompatible) {
-                            $this->v["emailID"] = 12; // Send to oversight agency
-                        } else {
-                            $this->v["emailID"] = 9; // How to manually submit
-                        }
-                        break;
-                    case $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight'):
-                        
-                        break;
-                }
+            switch ($this->v["complaintRec"]->ComStatus) {
+                case $GLOBALS["SL"]->getDefID('Complaint Status', 'OK to Submit to Oversight'):
+                    if ($isOverCompatible) {
+                        $this->v["emailID"] = 12; // Send to oversight agency
+                    } else {
+                        $this->v["emailID"] = 9; // How to manually submit
+                    }
+                    break;
+                case $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight'):
+                case $GLOBALS["SL"]->getDefID('Complaint Status', 'Received by Oversight'):
+                    $chk = SLEmailed::where('EmailedTree', 1)
+                        ->where('EmailedRecID', $cid)
+                        ->where('EmailedEmailID', 7)
+                        ->first();
+                    if (!$chk || !isset($chk->created_at)) {
+                        $this->v["emailID"] = 7; // Sent to oversight agency
+                    }
+                    break;
             }
         }
         
@@ -648,14 +629,62 @@ class OpenPoliceAdmin extends AdminSubsController
         }
         if (sizeof($this->v["currEmail"]) > 0) { 
             foreach ($this->v["currEmail"] as $j => $email) {
-                $GLOBALS["SL"]->pageJAVA .= 'CKEDITOR.replace( "emailBodyCust' . $j . 'ID", {
-                    customConfig: "/survloop/ckeditor-config.js" } );';
+                $GLOBALS["SL"]->pageJAVA .= ' tinymce.init({ selector:"#emailBodyCust' . $j . 'ID" }); ';
             }
         }
+        
+        $emailSent = false;
+        $emaInd = 0;
+        while ($request->has('emailID') && $request->has('emailTo' . $emaInd . '') 
+            && trim($request->get('emailTo' . $emaInd . '')) != '') {
+            $userToID = -3;
+            $chk = User::where('email', trim($request->get('emailTo' . $emaInd . '')))->first();
+            if ($chk && isset($chk->id)) $userToID = $chk->id;
+            $coreID = ((isset($this->CustReport->coreID)) ? $this->CustReport->coreID : -3);
+            $emaTo = trim($request->get('emailTo' . $emaInd . ''));
+            if ($emaTo == '--CUSTOM--') {
+                $emaTo = trim($request->get('emailTo' . $emaInd . 'CustEmail'));
+                //trim($request->get('emailTo' . $emaInd . 'CustName'))
+            }
+            $this->sendNewEmailSimple(trim($request->get('emailBodyCust' . $emaInd . '')), 
+                trim($request->get('emailSubj' . $emaInd . '')), $emaTo, $request->get('emailID'), 
+                $GLOBALS["SL"]->treeID, $coreID, $userToID);
+            if (intVal($request->get('emailID')) == 12) {
+                $this->CustReport->sessData->dataSets["Complaints"][0]->update([ 
+                    "ComStatus" => $GLOBALS["SL"]->getDefID('Complaint Status', 'Submitted to Oversight') ]);
+                $deptID = $this->v["currEmail"][$emaInd]["deptID"];
+                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) && isset($GLOBALS["SL"]->x["depts"][$deptID]["whichOver"])) {
+                    $whichRow = $GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]];
+                    if ($whichRow && isset($whichRow->OverID)) {
+                        $this->CustReport->logOverUpDate($coreID, $whichRow->OverID, 'Submitted');
+                    }
+                }
+                $newReview = new OPzComplaintReviews;
+                $newReview->ComRevComplaint = $this->coreID;
+                $newReview->ComRevUser      = $this->v["user"]->id;
+                $newReview->ComRevDate      = date("Y-m-d H:i:s");
+                $newReview->ComRevType      = 'Update';
+                $newReview->ComRevStatus    = 'Submitted to Oversight';
+                $newReview->save();
+            }
+            $emailSent = true;
+            $emaInd++;
+        }
+        if ($emailSent) {
+            return $this->redir('/dashboard/complaint/' . $cid . '/review', true);
+        }
+        
         $GLOBALS["SL"]->pageAJAX .= '$("#legitTypeBtn").click(function(){ $("#legitTypeDrop").slideToggle("fast"); });
         $("#newStatusUpdate").click(function(){ $("#newStatusUpdateBlock").slideToggle("fast"); });
         $("#newEmails").click(function(){ $("#analystEmailer").slideToggle("fast"); });
-        ' . (($viewType == 'update') ? 'window.location = "#new"; ' : '');
+        $(document).on("change", ".changeEmailTo", function() { 
+            var emaInd = $(this).attr("name").replace("emailTo", "");
+            if (document.getElementById("emailTo"+emaInd+"ID") && document.getElementById("emailTo"+emaInd+"ID").value == "--CUSTOM--") {
+                $("#emailTo"+emaInd+"CustID").slideDown("fast");
+            } else {
+                $("#emailTo"+emaInd+"CustID").slideUp("fast"); 
+            }
+        }); ' . (($viewType == 'update') ? 'window.location = "#new"; ' : '');
         $this->v["needsWsyiwyg"] = true;
         return view('vendor.openpolice.admin.complaints.complaint-review', $this->v);
     }
@@ -667,46 +696,48 @@ class OpenPoliceAdmin extends AdminSubsController
         //echo '<pre>'; print_r($this->CustReport->sessData->dataSets["LinksComplaintDept"]); echo '</pre>';
         if (sizeof($this->CustReport->sessData->dataSets["LinksComplaintDept"]) > 0) {
             foreach ($this->CustReport->sessData->dataSets["LinksComplaintDept"] as $i => $lnk) {
-                $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
-                $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID)->first();
-                $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                    ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
-                    ->first();
-                $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                    ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
-                    ->first();
-                if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || sizeof($this->v["comDepts"][$cnt]["iaRow"]) == 0) {
-                    $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverType
-                        = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
-                    $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
-                        = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
-                    $this->v["comDepts"][$cnt]["iaRow"]->save();
+                if (isset($lnk->LnkComDeptDeptID) && intVal($lnk->LnkComDeptDeptID) > 0) {
+                    $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
+                    $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID);
+                    $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                        ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
+                        ->first();
+                    $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                        ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
+                        ->first();
+                    if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || sizeof($this->v["comDepts"][$cnt]["iaRow"]) == 0) {
+                        $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverType
+                            = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
+                        $this->v["comDepts"][$cnt]["iaRow"]->save();
+                    }
+                    $this->v["comDepts"][$cnt]["whichOver"] = '';
+                    if (isset($this->v["comDepts"][0]["civRow"]) 
+                        && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)) {
+                        $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
+                    } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
+                        && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
+                        $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
+                    }
+                    $this->v["comDepts"][$cnt]["overInfo"] 
+                        = $this->getOversightInfo($this->v["comDepts"][$cnt][$this->v["comDepts"][$cnt]["whichOver"]]);
+                    $cnt++;
                 }
-                $this->v["comDepts"][$cnt]["whichOver"] = '';
-                if (isset($this->v["comDepts"][0]["civRow"]) 
-                    && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)) {
-                    $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
-                } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
-                    && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
-                    $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
-                }
-                $this->v["comDepts"][$cnt]["overInfo"] 
-                    = $this->getOversightInfo($this->v["comDepts"][$cnt][$this->v["comDepts"][$cnt]["whichOver"]]);
-                $cnt++;
             }
         }
         return true;
@@ -797,7 +828,7 @@ class OpenPoliceAdmin extends AdminSubsController
     
     public function processEmail($emailID, $deptID = -3)
     {
-        $email = [ "rec" => false, "body" => '', "subject" => '' ];
+        $email = [ "rec" => false, "body" => '', "subject" => '', "deptID" => $deptID ];
         if ($emailID > 0) {
             if (sizeof($this->v["emailList"]) > 0) {
                 foreach ($this->v["emailList"] as $e) {
@@ -843,8 +874,10 @@ class OpenPoliceAdmin extends AdminSubsController
     public function complaintReviewPost(Request $request, $cid) 
     {
         $this->admControlInit($request, '/dashboard/complaint/' . $cid . '/review');
+        $pubID = $cid;
+        $cid = $GLOBALS["SL"]->chkInPublicID($cid);
         $this->CustReport->loadSessionData('Complaints', $cid);
-        if ($request->has('cID') && intVal($request->cID) > 0 && intVal($request->cID) == $cid) {
+        if ($request->has('cID') && intVal($request->cID) > 0 && intVal($request->cID) == $pubID) {
             $newReview = new OPzComplaintReviews;
             $newReview->ComRevComplaint    = $cid;
             $newReview->ComRevUser         = $this->v["user"]->id;
@@ -894,7 +927,7 @@ class OpenPoliceAdmin extends AdminSubsController
             $com->save();
         }
         //$this->CustReport->loadSessionData('Complaints');
-        return $this->redir('/dashboard/complaint/' . $cid . '/history');
+        return $this->redir('/dashboard/complaint/' . $pubID . '/history');
     }
     
     public function comStatus($defID)

@@ -3,17 +3,18 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPEvidenceTime extends Model
+class SLUploadsTime extends Model
 {
-    protected $table      = 'OP_EvidenceTime';
-    protected $primaryKey = 'EviTimID';
+    protected $table      = 'SL_UploadsTime';
+    protected $primaryKey = 'UpTiID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'EviTimAllegationID', 
-		'EviTimEvidenceID', 
-		'EviTimTimestamp', 
-		'EviTimDescription', 
+		'UpTiUploadID', 
+		'UpTiTimestamp', 
+		'UpTiDescription', 
+		'UpTiLinkFldID', 
+		'UpTiLinkRecID', 
     ];
     
     // END SurvLoop auto-generated portion of Model

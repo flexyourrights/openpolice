@@ -10,8 +10,7 @@ class OPCharges extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ChrgArrestID', 
-		'ChrgStopID', 
+		'ChrgEventID', 
 		'ChrgCharges', 
     ];
     

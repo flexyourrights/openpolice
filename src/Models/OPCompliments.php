@@ -10,6 +10,7 @@ class OPCompliments extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+		'CompliPublicID', 
 		'CompliUserID', 
 		'CompliStatus', 
 		'CompliType', 

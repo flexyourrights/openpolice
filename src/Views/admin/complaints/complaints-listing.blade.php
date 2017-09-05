@@ -6,30 +6,30 @@
 
 <h1>
     <i class="fa fa-star"></i> 
-    @if ($currPage == '/dashboard/complaints')                     All New Complaints, or Requiring Action
-    @elseif ($currPage == '/dashboard/complaints/me')             All Complaints Assigned To Me
-    @elseif ($currPage == '/dashboard/complaints/waiting')         All Complaints Waiting for Investigation
-    @elseif ($currPage == '/dashboard/complaints/all')             All Complete Complaints
-    @elseif ($currPage == '/dashboard/complaints/incomplete')     All Incomplete Complaints
+    @if ($currPage == '/dashboard/complaints')                 All New Complaints, or Requiring Action
+    @elseif ($currPage == '/dashboard/complaints/me')          All Complaints Assigned To Me
+    @elseif ($currPage == '/dashboard/complaints/flagged')     All Complaints Flagged for Review
+    @elseif ($currPage == '/dashboard/complaints/waiting')     All Complaints Waiting for Investigation
+    @elseif ($currPage == '/dashboard/complaints/all')         All Complete Complaints
+    @elseif ($currPage == '/dashboard/complaints/incomplete')  All Incomplete Complaints
     @endif
 </h1>
 
 <div class="p5"></div>
 
 <table class="table">
-<tr><th><i>ID#</i></th><th>Status</th><th>Type</th><th>Submitted</th><th>Incident</th><th>City</th><th>Complainant</th><th>Level</th><th>Privacy</th></tr>
+<tr><th class="taC"><i>ID#</i></th><th>Status</th>
+<th>@if ($currPage == '/dashboard/complaints/incomplete') Last Page
+@elseif ($currPage == '/dashboard/complaints/unpublished') Type / Last Page @else Type @endif </th>
+<th>Submitted</th><th>Incident</th><th>City</th><th>Complainant</th><th>Level</th><th>Privacy</th></tr>
 @forelse ($complaints as $com)
     <tr>
         <td rowspan=2 class="taC" >
-            <a href="/dashboard/complaint/{{ $com->ComID }}/review" 
+            <a href="/dashboard/complaint/{{ $com->ComPublicID }}/review" class="btn w100 
             @if ($com->ComStatus == $GLOBALS['SL']->getDefID('Complaint Status', 'New')) 
-                class="btn btn btn-primary round20 p5 f22"
-            @else
-                class="btn btn btn-default round20 p5 f22 slBlueDark"
-            @endif
-            >#{{ number_format($com->ComID) }}</a>
+                btn-primary @else btn-default @endif ">#{{ number_format($com->ComPublicID) }}</a>
         </td>
-        <td class="f18">
+        <td>
             <nobr>
             @if ($GLOBALS['SL']->getDefValue('Complaint Status', $com->ComStatus) == 'New')
                 <i class="fa fa-star slRedDark"></i>
@@ -37,22 +37,26 @@
             {{ $GLOBALS['SL']->getDefValue('Complaint Status', $com->ComStatus) }}
             </nobr>
         </td>
-        <td class="f18">
+        <td>
             <nobr>
-            @if ($GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) == 'Unreviewed')
-                <i class="fa fa-star slRedDark"></i>
-            @endif
-            @if ($com->ComStatus != $GLOBALS['SL']->getDefID('Complaint Status', 'Incomplete')) 
-                {{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) }}
+            @if ($com->ComStatus == $GLOBALS['SL']->getDefID('Complaint Status', 'Incomplete')) 
+                @if ($com->ComSubmissionProgress > 0 && isset($lastNodes[$com->ComSubmissionProgress]))
+                    <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                    <a href="/u/complaint/{{ $lastNodes[$com->ComSubmissionProgress] }}?preview=1" target="_blank"
+                        >/{{ $lastNodes[$com->ComSubmissionProgress] }}</a>
+                @endif
             @else 
-                <span class="f12 gry9"><i>through node #{{ $com->ComSubmissionProgress }}</i></span>
+                @if ($GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) == 'Unreviewed')
+                    <i class="fa fa-star slRedDark"></i>
+                @endif
+                {{ $GLOBALS['SL']->getDefValue('OPC Staff/Internal Complaint Type', $com->ComType) }}
             @endif
             </nobr>
         </td>
-        <td class="f18">
+        <td>
             {{ $comInfo[$com->ComID]["comDate"] }}
         </td>
-        <td class="f18">
+        <td>
             @if (trim($com->IncTimeStart) != '') {{ date("n/j/Y", strtotime($com->IncTimeStart)) }} @endif
         </td>
         <td>{{ $com->IncAddressCity }}, {{ $com->IncAddressState }}</td>
@@ -67,26 +71,19 @@
         </td>
     </tr>
     <tr>
-        <td colspan=2 class="pB20" style="border-top: 0px none;">
-        
-            @if (isset($r) && isset($r->ComRevReadability))
-                <i class="fa fa-search-plus slBlueDark" aria-hidden="true"></i> 
-                {{ ($r->ComRevNotAnon + $r->ComRevOneIncident + $r->ComRevCivilianContact + $r->ComRevOneOfficer + $r->ComRevOneAllegation + $r->ComRevEvidenceUpload) }}
-                @if (($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) >= 0)
-                    <i class="fa fa-thumbs-o-up mL20 pL20 slBlueDark" aria-hidden="true"></i> 
-                    {{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
+        <td colspan=8 style="border-top: 0px none; padding-top: 0px;">
+            <div class="slGrey" style="margin-top: -5px;">
+            @if (trim($comInfo[$com->ComID]["alleg"]) != '') 
+                {!! $comInfo[$com->ComID]["alleg"] !!} - 
+            @endif
+            @if (isset($com->ComSummary) && trim($com->ComSummary) != '')
+                @if (strlen(strip_tags($com->ComSummary)) > (150-strlen($comInfo[$com->ComID]["alleg"])))
+                    {{ substr(strip_tags($com->ComSummary), 0, (150-strlen($comInfo[$com->ComID]["alleg"]))) }}...
                 @else
-                    <i class="fa fa-thumbs-o-down mL20 pL20 slBlueDark" aria-hidden="true"></i> 
-                    {{ ($r->ComRevReadability + $r->ComRevConsistency + $r->ComRevRealistic + $r->ComRevOutrage) }}
-                @endif
-                @if ($r->ComRevMakeFeatured)
-                    <i class="fa fa-certificate mL20 pL20 slBlueDark" aria-hidden="true"></i>
+                    {{ $com->ComSummary }}
                 @endif
             @endif
-            
-        </td>
-        <td colspan=5 class="pB20 gry9" style="border-top: 0px none;">
-            {!! $comInfo[$com->ComID]["alleg"] !!}
+            </div>
         </td>
     </tr>
 @empty

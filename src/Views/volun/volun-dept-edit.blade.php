@@ -44,30 +44,30 @@
             <fieldset class="form-group">
                 <label for="DeptNameID">Department Name</label>
                 <input id="DeptNameID" name="DeptName" value="{{ $deptRow->DeptName }}" 
-                    type="text" class="form-control" > 
+                    type="text" class="form-control input-lg" > 
             </fieldset>
             <fieldset class="form-group">
                 <label for="DeptAddressID">Street Address</label>
                 <input id="DeptAddressID" name="DeptAddress" value="{{ $deptRow->DeptAddress }}" 
-                    type="text" class="form-control" > 
+                    type="text" class="form-control input-lg" > 
             </fieldset>
             <fieldset class="form-group">
                 <label for="DeptAddress2ID">Address Line 2</label>
                 <input id="DeptAddress2ID" name="DeptAddress2" value="{{ $deptRow->DeptAddress2 }}" 
-                    type="text" class="form-control" > 
+                    type="text" class="form-control input-lg" > 
             </fieldset>
             <div class="row">
                 <div class="col-md-6">
                     <fieldset class="form-group">
                         <label for="DeptAddressCityID">City</label>
                         <input id="DeptAddressCityID" name="DeptAddressCity" value="{{ $deptRow->DeptAddressCity }}" 
-                            type="text" class="form-control" > 
+                            type="text" class="form-control input-lg" > 
                     </fieldset>
                 </div>
                 <div class="col-md-3">
                     <fieldset class="form-group">
                         <label for="DeptAddressStateID">State</label>
-                        <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" autocomplete="off">
+                        <select id="DeptAddressStateID" name="DeptAddressState" class="form-control input-lg" autocomplete="off">
                         {!! $stateDrop !!}
                         </select>
                     </fieldset>
@@ -75,18 +75,18 @@
                 <div class="col-md-3">
                     <fieldset class="form-group">
                         <label for="DeptAddressZipID">Zip</label>
-                        <input id="DeptAddressZipID" name="DeptAddressZip" value="{{ $deptRow->DeptAddressZip }}" type="text" class="form-control" > 
+                        <input id="DeptAddressZipID" name="DeptAddressZip" value="{{ $deptRow->DeptAddressZip }}" type="text" class="form-control input-lg" > 
                     </fieldset>
                 </div>
             </div>
             <fieldset class="form-group">
                 <label for="DeptAddressCountyID">County</label>
-                <input id="DeptAddressCountyID" name="DeptAddressCounty" value="{{ $deptRow->DeptAddressCounty }}" type="text" class="form-control" > 
+                <input id="DeptAddressCountyID" name="DeptAddressCounty" value="{{ $deptRow->DeptAddressCounty }}" type="text" class="form-control input-lg" > 
             </fieldset>
             <div class="disNon">
                 <fieldset class="form-group gryA">
                     <label for="DeptSlugID">URL Slug</label>
-                    <input id="DeptSlugID" name="DeptSlug" value="{{ $deptRow->DeptSlug }}" type="text" class="form-control gryA" > 
+                    <input id="DeptSlugID" name="DeptSlug" value="{{ $deptRow->DeptSlug }}" type="text" class="form-control input-lg gryA" > 
                 </fieldset>
             </div>
         </div>
@@ -98,7 +98,7 @@
                 <div class="col-md-6">
                     <fieldset class="form-group">
                         <label for="DeptTypeID">Type of Department</label>
-                        <select id="DeptTypeID" name="DeptType" class="form-control" >
+                        <select id="DeptTypeID" name="DeptType" class="form-control input-lg" >
                         <option value="" @if (trim($deptRow->DeptType) == '') SELECTED @endif >select</option>
                         @foreach ($deptTypes as $t) 
                             <option value="{{ $t->DefID }}" @if ($t->DefID == $deptRow->DeptType) SELECTED @endif >{{ $t->DefValue }}</option>
@@ -109,7 +109,7 @@
                 <div class="col-md-6">
                     <fieldset class="form-group">
                         <label for="DeptStatusID">Activity Status</label>
-                        <select id="DeptStatusID" name="DeptStatus" class="form-control" >
+                        <select id="DeptStatusID" name="DeptStatus" class="form-control input-lg" >
                         <option value="1" @if (intVal($deptRow->DeptStatus) == 1) SELECTED @endif >Active Department</option>
                         <option value="0" @if (intVal($deptRow->DeptStatus) == 0) SELECTED @endif >Inactive Department</option>
                         </select>
@@ -118,7 +118,7 @@
             </div>
             <fieldset class="form-group">
                 <label for="DeptPhoneWorkID">Main Phone Number</label>
-                <input id="DeptPhoneWorkID" name="DeptPhoneWork" value="{{ $deptRow->DeptPhoneWork }}" type="text" class="form-control" > 
+                <input id="DeptPhoneWorkID" name="DeptPhoneWork" value="{{ $deptRow->DeptPhoneWork }}" type="text" class="form-control input-lg" > 
             </fieldset>
             
             <div class="p20"></div>
@@ -135,11 +135,11 @@
             <small class="text-muted mTn20"><i>Please provide numbers like "1600000", not "1.6 million".</i></small>
             <fieldset class="form-group">
                 <label for="DeptTotOfficersID"># of Employees <span class="gryC">(all employees, not just officers)</span></label>
-                <input id="DeptTotOfficersID" name="DeptTotOfficers" value="{{ $deptRow->DeptTotOfficers }}" type="number" class="form-control" > 
+                <input id="DeptTotOfficersID" name="DeptTotOfficers" value="{{ $deptRow->DeptTotOfficers }}" type="number" class="form-control input-lg" > 
             </fieldset>
             <fieldset class="form-group">
                 <label for="DeptJurisdictionPopulationID"># of Population Served</label>
-                <input id="DeptJurisdictionPopulationID" name="DeptJurisdictionPopulation" class="form-control" 
+                <input id="DeptJurisdictionPopulationID" name="DeptJurisdictionPopulation" class="form-control input-lg" 
                     value="{{ $deptRow->DeptJurisdictionPopulation }}" type="number" > 
             </fieldset>
         </div>
@@ -199,11 +199,11 @@
         <div class="col-md-5 pB20 mB20">
             <fieldset class="form-group">
                 <h3><label for="whatNextID">Got notes for other staff and volunteers?</label></h3>
-                <textarea name="EditOverNotes" id="EditOverNotesID" class="form-control"></textarea>
+                <textarea name="EditOverNotes" id="EditOverNotesID" class="form-control input-lg"></textarea>
             </fieldset>
             <fieldset class="form-group">
                 <h3><label for="whatNextID">After Saving...</label></h3>
-                <select name="whatNext" id="whatNextID" class="form-control f26">
+                <select name="whatNext" id="whatNextID" class="form-control input-lg">
                     <option value="{{ $nextDept[2] }}" @if ($whatNext == 'another') SELECTED @endif >Next: {{ $nextDept[1] }}</option>
                     <option value="again" @if ($whatNext == 'again') SELECTED @endif >Save Changes &amp; Keep Editing Department</option>
                     <option value="list" @if ($whatNext == 'list') SELECTED @endif >Go Back to List of Departments</option>
@@ -311,7 +311,6 @@
 <style>
 #navBtnSave .fa-angle-right, #navBtnSave .fa-chevron-right { display: none; }
 fieldset.form-group label { font-weight: normal; margin-top: 10px; }
-input.form-control, select.form-control { font-weight: normal; font-size: 18px; }
 #roundHelp div label input { margin-top: 6px; }
 #roundHelp div label i { width: 25px; text-align: center; }
 #roundHelp div label img { margin-top: -5px; }

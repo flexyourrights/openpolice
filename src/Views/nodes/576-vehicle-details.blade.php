@@ -9,20 +9,20 @@
 
 <div id="node{{ $nodes[0] }}" class="nodeWrap">
     <div id="nLabel{{ $nodes[0] }}" class="nPrompt">
-        <h2>Have you already described this vehicle?</h2>
+        Have you already described this vehicle?
     </div>
     <div class="nFld" style="margin-top: 20px;">
         <label for="n{{ $nodes[0] }}fld0" id="n{{ $nodes[0] }}fld0lab" 
             class=" @if ($alreadyDescribed == 'Y') fingerAct @else finger @endif ">
             <div class="disIn mR5"><input id="n{{ $nodes[0] }}fld0" value="Y" type="radio" name="n{{ $nodes[0] }}fld" 
                 @if ($alreadyDescribed == 'Y') CHECKED @endif
-                autocomplete="off" onClick="checkNodeUp({{ $nodes[0] }}, 0, 1);" ></div> Yes
+                autocomplete="off" onClick="checkNodeUp('{{ $nodes[0] }}', 0, 1);" ></div> Yes
         </label>
         <label for="n{{ $nodes[0] }}fld1" id="n{{ $nodes[0] }}fld1lab" 
             class=" @if ($alreadyDescribed == 'N' || sizeof($vehicles) == 0) fingerAct @else finger @endif ">
             <div class="disIn mR5"><input id="n{{ $nodes[0] }}fld1" value="N" type="radio" name="n{{ $nodes[0] }}fld" 
                 @if ($alreadyDescribed == 'N' || sizeof($vehicles) == 0) CHECKED @endif
-                autocomplete="off" onClick="checkNodeUp({{ $nodes[0] }}, 1, 1);" ></div> No
+                autocomplete="off" onClick="checkNodeUp('{{ $nodes[0] }}', 1, 1);" ></div> No
         </label>
     </div>
 </div> <!-- end #node{{ $nodes[0] }} -->
@@ -42,7 +42,8 @@
                     class=" @if ($whichVehic == $v[0]) fingerAct @else finger @endif ">
                     <div class="disIn mR5"><input id="n{{ $nodes[1] }}fld{{ $i }}" 
                         value="{!! $v[0] !!}" type="radio" name="n{{ $nodes[1] }}fld" autocomplete="off" 
-                        @if ($whichVehic == $v[0]) CHECKED @endif onClick="checkNodeUp();" ></div> 
+                        @if ($whichVehic == $v[0]) CHECKED @endif 
+                        onClick="checkNodeUp('{{ $nodes[1] }}', {{ $i }}, 1);" ></div> 
                     {!! $v[1] !!}
                 </label>
             @empty

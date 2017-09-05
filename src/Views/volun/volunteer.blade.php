@@ -90,13 +90,13 @@
                         <div class="col-md-8">
                             <fieldset class="form-group">
                                 <label for="deptNameID">Department Name</label>
-                                <input id="deptNameID" name="deptName" type="text" value="" class="form-control" >
+                                <input id="deptNameID" name="deptName" type="text" value="" class="form-control input-lg" >
                             </fieldset>
                         </div>
                         <div class="col-md-4">
                             <fieldset class="form-group">
                                 <label for="DeptAddressStateID">State</label>
-                                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" autocomplete="off" >
+                                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control input-lg" autocomplete="off" >
                                 {!! $GLOBALS['SL']->states->stateDrop('', true) !!}
                                 </select>
                             </fieldset>
@@ -151,7 +151,7 @@
                     </label>
                     <div class="mB20"><label>
                         What is your phone number? 
-                        <input name="newPhone" type="text" class="form-control" 
+                        <input name="newPhone" type="text" class="form-control input-lg" 
                         @if (isset($yourContact) && isset($yourContact->PrsnPhoneMobile))
                             value="{{ trim($yourContact->PrsnPhoneMobile) }}"
                         @else value="" @endif >
