@@ -16,7 +16,7 @@
         @endif
         <div class="row mT10 mB10">
             <div class="col-md-3 pT5 pB5">
-                <a href="javascript:void(0)" class="deptLoad btn btn-xl btn-primary btn-block taC" 
+                <a href="javascript:;" class="deptLoad btn btn-xl btn-primary btn-block taC" 
                     id="dept{{ $dept->DeptID }}">Select</a>
             </div>
             <div class="col-md-9 f16">
@@ -46,11 +46,11 @@
     </ul>
     <p>
         If you are not sure what police department was involved, 
-        <a href="javascript:void(0)" class="deptLoad" id="dept18124"
+        <a href="javascript:;" class="deptLoad" id="dept18124"
             >click here to select a department place holder</a>.
     </p><p>
         If you still can't find the right department, 
-        <a id="addNewDept" href="javascript:void(0);">click here to add it to our database</a>.
+        <a id="addNewDept" href="javascript:;;">click here to add it to our database</a>.
     </p>
 </div>
     

@@ -58,6 +58,7 @@ class OpenPoliceReport extends OpenPolice
     
     public function printFullReport($reportType = '', $isAdmin = false, $inForms = false)
     {
+        if ($this->treeID == 5) return $this->printFullReportCompliment($reportType, $isAdmin, $inForms);
         if (!$isAdmin && in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Hold'), 
             $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney')
@@ -71,6 +72,7 @@ class OpenPoliceReport extends OpenPolice
                 $this->v["view"] = 'Investigate';
             }
         }
+        $publicRead = (isset($this->v["isPublicRead"]) && $this->v["isPublicRead"]);
         if ($this->v["user"] && isset($this->v["user"]->id)) {
             $ret .= $this->processUserAccess();
         } elseif (isset($GLOBALS["idToken"]) && $GLOBALS["idToken"] != '') {
@@ -117,13 +119,10 @@ class OpenPoliceReport extends OpenPolice
         }
         
         $this->printwhatHaps = '<div class="reportSectHead2">What Happened?</div>';
-        if (isset($this->sessData->dataSets["Scenes"]) && sizeof($this->sessData->dataSets["Scenes"]) > 0
-            && isset($this->sessData->dataSets["Scenes"][0]->ScnID)) {
-            $this->printwhatHaps .= $this->printScene($this->sessData->dataSets["Scenes"][0]);
-        }
         if (isset($this->sessData->dataSets["AllegSilver"]) && sizeof($this->sessData->dataSets["AllegSilver"]) > 0
             && isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilID)) {
-            $this->printwhatHaps .= $this->printHapSilver($this->sessData->dataSets["AllegSilver"][0]);
+            $this->printwhatHaps .= $this->printHapSilver($this->sessData->dataSets["Scenes"][0],
+                $this->sessData->dataSets["AllegSilver"][0]);
         }
         if ($this->isGold()) {
             if (sizeof($this->whatHaps) > 0) {
@@ -139,7 +138,7 @@ class OpenPoliceReport extends OpenPolice
         }
         if ($complainantNameTop == $this->getNameTopAnon()) $complainantNameTop = 'Anonymous';
         
-        $uploads = $this->getUploads([280, 324, 413, 317, 371], $isAdmin, $this->v["isOwner"]);
+        $uploads = $this->getUploadsMultNodes([280, 324, 413, 317, 371], $isAdmin, $this->v["isOwner"]);
         
         if (!isset($GLOBALS["isPrintPDF"]) || !$GLOBALS["isPrintPDF"]) $this->loadRelatedArticles();
         $this->fillGlossary();
@@ -148,15 +147,22 @@ class OpenPoliceReport extends OpenPolice
             . ", " . trim(substr(strip_tags($this->deptList), 1)) . " | Open Police Complaints";
         $GLOBALS["SL"]->sysOpts["meta-desc"] = "Open Police Complaint #" 
             . $this->sessData->dataSets["Complaints"][0]->ComPublicID . strip_tags($this->deptList) 
-            . ", " . date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart)) 
+            . ((isset($this->sessData->dataSets["Incidents"][0]->IncDate)) 
+                ? ", " . date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncDate)) : '') 
             . " - " . substr($this->sessData->dataSets["Complaints"][0]->ComSummary, 0, 140) . " ...";
         $GLOBALS["SL"]->sysOpts["meta-keywords"] = strip_tags($this->deptList) . ", " . $this->commaAllegationList();
         //$GLOBALS["SL"]->sysOpts["meta-img"] = '';
         
+        $GLOBALS["SL"]->pageAJAX .= ' $(document).on("click", "#privInfoBtn", function() { '
+            . 'if (document.getElementById("privInfo")) { '
+            . 'if (document.getElementById("privInfo").style.display == "block") { '
+            . '$("#privInfo").slideUp("fast"); } else { $("#privInfo").slideDown("slow"); } } }); ';
+            
         return $ret . view('vendor.openpolice.complaint-report', [
             "isOwner"              => $this->v["isOwner"], 
             "isAdmin"              => $isAdmin,
             "view"                 => $this->v["view"], 
+            "isPublicRead"         => $publicRead,
             "complaintID"          => $this->coreID, 
             "comDate"              => $this->comDate, 
             "sessData"             => $this->sessData->dataSets, 
@@ -400,7 +406,7 @@ class OpenPoliceReport extends OpenPolice
                 }
             }
         }
-        if (trim($civ->CivCameraRecord) != '') $deets[] = ['Recorded Incident', $this->printYN($civ->CivCameraRecord)];
+        if (trim($civ->CivCameraRecord) != '') $deets[] = ['Recorded Incident?', $this->printYN($civ->CivCameraRecord)];
         if (isset($this->injuries[$civ->CivID])) {
             $injTxt = '';
             foreach ($this->injuries[$civ->CivID][1] as $i => $inj) {
@@ -422,11 +428,9 @@ class OpenPoliceReport extends OpenPolice
                             if ($type == 'Warnings') {
                                 $ret .= '<div class="pB10 f16">Written Warning</div>';
                             } else {
-                                if ($type == 'Arrests') {
-                                    $ret .= '<span>Arrest Charges:</span><div class="pL10 pB10 f16">';
-                                } else {
-                                    $ret .= '<span>Citation Charges:</span><div class="pL10 pB10 f16">';
-                                }
+                                if ($type == 'Arrests') $ret .= '<span>Arrest Charges:</span>';
+                                else $ret .= '<span>Citation Charges:</span>';
+                                $ret .= '<div class="pL10 pB10 f16">';
                                 foreach ($charges as $charge) $ret .= $charge . '<br />';
                                 $ret .= '</div>';
                             }
@@ -514,7 +518,7 @@ class OpenPoliceReport extends OpenPolice
         if ($this->v["view"] != 'Anon' && trim($phys->PhysClothesDesc) != '') {
             $deets[] = ['Physic Description', $phys->PhysClothesDesc];
         }
-        if (trim($off->OffBodyCam) != '') $deets[] = ['Had Body Camera', $this->printYN($off->OffBodyCam)];
+        if (trim($off->OffBodyCam) != '') $deets[] = ['Body Camera?', $this->printYN($off->OffBodyCam)];
         if (sizeof($vehic) > 0) {
             if (intVal($vehic->VehicTransportation) > 0) $deets[] = ['Transportation', 
                 $GLOBALS["SL"]->getDefValue('Transportation Officer', $vehic->VehicTransportation)];
@@ -560,124 +564,185 @@ class OpenPoliceReport extends OpenPolice
         return $ret;
     }
     
-    protected function printScene($scn = [])
+    protected function printHapSilver($scn = [], $silv = [])
     {
-        if (sizeof($scn) == 0) return '';
+        if (sizeof($silv) == 0) return '';
+        $didntHappen = '';
         $deets = [];
-        if (trim($scn->ScnIsVehicle) != '') {
-            $deets[] = ['Vehicle Stop', $this->printYN($scn->ScnIsVehicle)];
-        }
         if (trim($scn->ScnType) != '') {
             $scnType = $GLOBALS["SL"]->getDefValue('Scene Type', $scn->ScnType);
             if ($scnType == 'Outdoor public space (includes roads, sidewalks, parks, etc.)') {
                 $scnType = 'Outdoor public space';
-                $this->v["glossaryList"][] = ['Outdoor Public Space', 'Includes roads, sidewalks, parks, etc.'];
-            } elseif ($scnType == 'Home, private residence, or dorm (includes just outside the residence)') {
-                $scnType = 'Home, private residence, or dorm';
-                $this->v["glossaryList"][] = ['Home, Private Residence, or Dorm', 'Includes just outside the residence'];
+                //$this->v["glossaryList"][] = ['Outdoor Public Space', 'Includes roads, sidewalks, parks, etc.'];
+            } elseif ($scnType == 'Home or private residence (includes just outside the residence)') {
+                $scnType = 'Home or private residence';
+                //$this->v["glossaryList"][] = ['Home, Private Residence, or Dorm', 'Includes just outside the residence'];
             }
             $deets[] = ['Where It Began', $scnType];
         }
         if (trim($scn->ScnDescription) != '' && $this->v["view"] != 'Anon') {
             $deets[] = ['Describe Scene', $scn->ScnDescription];
         }
+        if (trim($scn->ScnIsVehicle) != '') {
+            if ($scn->ScnIsVehicle == 'N') $didntHappen .= ', Vehicle Stop';
+            else {
+                $deets[] = ['Vehicle Stop?', $this->printYN($scn->ScnIsVehicle)];
+            }
+        }
         if (trim($scn->ScnCCTV) != '') {
-            $deets[] = ['CCTV On The Scene', $this->printYN($scn->ScnCCTV)];
+            if ($scn->ScnCCTV == 'N') $didntHappen .= ', CCTV On Scene';
+            else {
+                $deets[] = ['CCTV On Scene?', $this->printYN($scn->ScnCCTV)];
+                if (trim($scn->ScnCCTVDesc) != '' && $this->v["view"] != 'Anon') {
+                    $deets[] = ['CCTV Description', $scn->ScnCCTVDesc];
+                }
+            }
         }
-        if (trim($scn->ScnCCTVDesc) != '' && $this->v["view"] != 'Anon') {
-            $deets[] = ['CCTV Description', $scn->ScnCCTVDesc];
-        }
-        return $this->printReportDeetsBlock($deets);
-    }
-    
-    protected function printHapSilver($silv = [])
-    {
-        if (sizeof($silv) == 0) return '';
-        $deets = [];
+        
         if (trim($silv->AlleSilStopYN) != '') {
-            $deets[] = ['Has Stop/Detention', $this->printYN($silv->AlleSilStopYN)];
-            if (trim($silv->AlleSilStopWrongful) != '') {
-                $deets[] = ['Wrongful Stop', $this->printYN($silv->AlleSilStopWrongful)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Detention', 
-                    'Officer[s] Detaining', 'Subject[s] Detained');
+            if ($silv->AlleSilStopYN == 'N') $didntHappen .= ', Stop or Detention';
+            else {
+                $deets[] = ['Stop or Detention?', $this->printYN($silv->AlleSilStopYN)];
+                if (trim($silv->AlleSilStopWrongful) != '') {
+                    if ($silv->AlleSilStopWrongful == 'N') $didntHappen .= ', Wrongful Stop';
+                    else {
+                        $deets[] = ['Wrongful Stop?', $this->printYN($silv->AlleSilStopWrongful)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Detention', 
+                            'Officer[s] Detaining', 'Subject[s] Detained');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilOfficerID) != '') {
-            $deets[] = ['Asked for Officer\'s ID', $this->printYN($silv->AlleSilOfficerID)];
-            if (trim($silv->AlleSilOfficerRefuseID) != '') {
-                $deets[] = ['Officer Refused to Provide ID', $this->printYN($silv->AlleSilOfficerRefuseID)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Officer Refused To Provide ID', 'Officer[s] Refusing');
+            if ($silv->AlleSilOfficerID == 'N') $didntHappen .= ', Asked for Officer\'s ID';
+            else {
+                $deets[] = ['Asked for Officer\'s ID?', $this->printYN($silv->AlleSilOfficerID)];
+                if (trim($silv->AlleSilOfficerRefuseID) != '') {
+                    if ($silv->AlleSilOfficerRefuseID == 'N') $didntHappen .= ', Officer Refused to Provide ID';
+                    else {
+                        $deets[] = ['Officer Refused to Provide ID?', $this->printYN($silv->AlleSilOfficerRefuseID)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Officer Refused To Provide ID', 'Officer[s] Refusing');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilSearchYN) != '') {
-            $deets[] = ['Has Search', $this->printYN($silv->AlleSilSearchYN)];
-            if (trim($silv->AlleSilSearchWrongful) != '') {
-                $deets[] = ['Wrongful Search', $this->printYN($silv->AlleSilSearchWrongful)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Search', 
-                    'Officer[s] Searching', 'Subject[s] Searched');
+            if ($silv->AlleSilSearchYN == 'N') $didntHappen .= ', Asked for Officer\'s ID';
+            else {
+                $deets[] = ['Search?', $this->printYN($silv->AlleSilSearchYN)];
+                if (trim($silv->AlleSilSearchWrongful) != '') {
+                    if ($silv->AlleSilSearchWrongful == 'N') $didntHappen .= ', Wrongful Search';
+                    else {
+                        $deets[] = ['Wrongful Search?', $this->printYN($silv->AlleSilSearchWrongful)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Search', 
+                            'Officer[s] Searching', 'Subject[s] Searched');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilPropertyYN) != '') {
-            $deets[] = ['Has Property Seizure/Damage', $this->printYN($silv->AlleSilPropertyYN)];
-            if (trim($silv->AlleSilPropertyWrongful) != '') {
-                $deets[] = ['Wrongful Property Seizure/Damage', $this->printYN($silv->AlleSilPropertyWrongful)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Property Seizure', 
-                    'Officer[s] Property', 'Subject[s] Property');
+            if ($silv->AlleSilPropertyYN == 'N') $didntHappen .= ', Property Seizure or Damage';
+            else {
+                $deets[] = ['Property Seizure or Damage?', $this->printYN($silv->AlleSilPropertyYN)];
+                if (trim($silv->AlleSilPropertyWrongful) != '') {
+                    if ($silv->AlleSilPropertyWrongful == 'N') $didntHappen .= ', Wrongful Property Seizure';
+                    else {
+                        $deets[] = ['Wrongful Property Seizure?', $this->printYN($silv->AlleSilPropertyWrongful)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Property Seizure', 
+                            'Officer[s] Property', 'Subject[s] Property');
+                    }
+                }
+                if (trim($silv->AlleSilPropertyDamage) != '') {
+                    if ($silv->AlleSilPropertyDamage == 'N') $didntHappen .= ', Wrongful Property Damage';
+                    else {
+                        $deets[] = ['Wrongful Property Damage?', $this->printYN($silv->AlleSilPropertyDamage)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Property Seizure', 
+                            'Officer[s] Property', 'Subject[s] Property');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilSexualHarass) != '') {
-            $deets[] = ['Has Sexual Harassment', $this->printYN($silv->AlleSilSexualHarass)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Sexual Harassment', 
-                'Officer[s] Harassing', 'Subject[s] Harassed');
+            if ($silv->AlleSilSexualHarass == 'N') $didntHappen .= ', Sexual Harassment';
+            else {
+                $deets[] = ['Sexual Harassment?', $this->printYN($silv->AlleSilSexualHarass)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Sexual Harassment', 
+                    'Officer[s] Harassing', 'Subject[s] Harassed');
+            }
         }
         if (trim($silv->AlleSilSexualAssault) != '') {
-            $deets[] = ['Has Sexual Assault', $this->printYN($silv->AlleSilSexualAssault)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Sexual Assault', 
-                'Officer[s] Assaulting', 'Subject[s] Assaulted');
+            if ($silv->AlleSilSexualAssault == 'N') $didntHappen .= ', Sexual Assault';
+            else {
+                $deets[] = ['Sexual Assault?', $this->printYN($silv->AlleSilSexualAssault)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Sexual Assault', 
+                    'Officer[s] Assaulting', 'Subject[s] Assaulted');
+            }
         }
         if (trim($silv->AlleSilForceYN) != '') {
-            $deets[] = ['Has Use of Force', $this->printYN($silv->AlleSilForceYN)];
-            if (trim($silv->AlleSilForceUnreason) != '') {
-                $deets[] = ['Unreasonable Use of Force', $this->printYN($silv->AlleSilForceUnreason)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Unreasonable Force', 
-                    'Force by Officer[s]', 'Force on Subject[s]');
+            if ($silv->AlleSilForceYN == 'N') $didntHappen .= ', Use of Force';
+            else {
+                $deets[] = ['Use of Force?', $this->printYN($silv->AlleSilForceYN)];
+                if (trim($silv->AlleSilForceUnreason) != '') {
+                    if ($silv->AlleSilForceUnreason == 'N') $didntHappen .= ', Unreasonable Use of Force';
+                    else {
+                        $deets[] = ['Unreasonable Use of Force?', $this->printYN($silv->AlleSilForceUnreason)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Unreasonable Force', 
+                            'Force by Officer[s]', 'Force on Subject[s]');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilArrestYN) != '') {
-            $deets[] = ['Has Arrest', $this->printYN($silv->AlleSilArrestYN)];
-            if (trim($silv->AlleSilArrestWrongful) != '') {
-                $deets[] = ['Wrongful Arrest', $this->printYN($silv->AlleSilArrestWrongful)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Arrest', 
-                    'Arresting Officer[s]', 'Arrested Subject[s]');
+            if ($silv->AlleSilArrestYN == 'N') $didntHappen .= ', Arrest';
+            else {
+                $deets[] = ['Arrest?', $this->printYN($silv->AlleSilArrestYN)];
+                if (trim($silv->AlleSilArrestWrongful) != '') {
+                    if ($silv->AlleSilArrestWrongful == 'N') $didntHappen .= ', Wrongful Arrest';
+                    else {
+                        $deets[] = ['Wrongful Arrest?', $this->printYN($silv->AlleSilArrestWrongful)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Wrongful Arrest', 
+                            'Arresting Officer[s]', 'Arrested Subject[s]');
+                    }
+                }
             }
         }
-        if (trim($silv->AlleSilArrestRetaliatory) != '') {
-            $deets[] = ['Has Retaliatory Charges', $this->printYN($silv->AlleSilArrestRetaliatory)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Retaliation: Unnecessary Charges', 
-                'Officer[s] Charging', 'Subject[s] Charged');
-        }
         if (trim($silv->AlleSilArrestMiranda) != '') {
-            $deets[] = ['No Miranda Rights Read', $this->printYN($silv->AlleSilArrestMiranda)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Miranda Rights', 'Arresting Officer[s]');
+            if ($silv->AlleSilArrestMiranda == 'N') $didntHappen .= ', No Miranda Rights Read';
+            else {
+                $deets[] = ['No Miranda Rights Read?', $this->printYN($silv->AlleSilArrestMiranda)];
+                    $deets = $this->addSilvAllePeepDeets($deets, 'Miranda Rights', 'Arresting Officer[s]');
+            }
         }
         if (trim($silv->AlleSilCitationYN) != '') {
-            $deets[] = ['Has Citation', $this->printYN($silv->AlleSilCitationYN)];
-            if (trim($silv->AlleSilCitationExcessive) != '') {
-                $deets[] = ['Excessive Citation', $this->printYN($silv->AlleSilCitationExcessive)];
-                $deets = $this->addSilvAllePeepDeets($deets, 'Excessive Citation', 
-                    'Officer[s] Charging', 'Subject[s] Charged');
+            if ($silv->AlleSilCitationYN == 'N') $didntHappen .= ', Citation';
+            else {
+                $deets[] = ['Citation?', $this->printYN($silv->AlleSilCitationYN)];
+                if (trim($silv->AlleSilCitationExcessive) != '') {
+                    if ($silv->AlleSilCitationExcessive == 'N') $didntHappen .= ', Excessive Citation';
+                    else {
+                        $deets[] = ['Excessive Citation?', $this->printYN($silv->AlleSilCitationExcessive)];
+                        $deets = $this->addSilvAllePeepDeets($deets, 'Excessive Citation', 
+                            'Officer[s] Charging', 'Subject[s] Charged');
+                    }
+                }
             }
         }
         if (trim($silv->AlleSilNeglectDuty) != '') {
-            $deets[] = ['Has Neglect of Duty', $this->printYN($silv->AlleSilNeglectDuty)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Neglect of Duty', 'Neglecting Officer[s]');
+            if ($silv->AlleSilNeglectDuty == 'N') $didntHappen .= ', Neglect of Duty';
+            else {
+                $deets[] = ['Neglect of Duty?', $this->printYN($silv->AlleSilNeglectDuty)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Neglect of Duty', 'Neglecting Officer[s]');
+            }
         }
         if (trim($silv->AlleSilProcedure) != '') {
-            $deets[] = ['Has Policy Violation', $this->printYN($silv->AlleSilProcedure)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Policy or Procedure Violation', 'Violating Officer[s]');
+            if ($silv->AlleSilProcedure == 'N') $didntHappen .= ', Policy Violation';
+            else {
+                $deets[] = ['Policy Violation?', $this->printYN($silv->AlleSilProcedure)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Policy or Procedure Violation', 'Violating Officer[s]');
+            }
         }
         if (isset($silv->AlleSilIntimidatingWeapon) && intVal($silv->AlleSilIntimidatingWeapon) > 0) {
-            $deets[] = ['Weapon Intimidation', 
+            $deets[] = ['Weapon Intimidation?', 
                 $GLOBALS["SL"]->getDefValue('Intimidating Displays Of Weapon', $silv->AlleSilIntimidatingWeapon)];
             if (trim($silv->AlleSilIntimidatingWeaponType ) != '') {
                 $deets[] = ['Type of Weapon', 
@@ -687,37 +752,56 @@ class OpenPoliceReport extends OpenPolice
                 'Officer[s] Intimidating', 'Subject[s] Intimidated');
         }
         if (trim($silv->AlleSilBias) != '') {
-            $deets[] = ['Has Bias-Based Policing', $this->printYN($silv->AlleSilBias)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Bias-Based Policing', 
-                'Discriminating Officer[s]', 'Discriminated Subject[s]');
+            if ($silv->AlleSilBias == 'N') $didntHappen .= ', Bias-Based Policing';
+            else {
+                $deets[] = ['Bias-Based Policing?', $this->printYN($silv->AlleSilBias)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Bias-Based Policing', 
+                    'Discriminating Officer[s]', 'Discriminated Subject[s]');
+            }
         }
         if (trim($silv->AlleSilRetaliation) != '') {
-            $deets[] = ['Has Retaliatory Arrest', $this->printYN($silv->AlleSilRetaliation)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Retaliation', 
-                'Retaliating Officer[s]', 'Retaliated Subject[s]');
+            if ($silv->AlleSilRetaliation == 'N') $didntHappen .= ', Retaliatory Arrest';
+            else {
+                $deets[] = ['Retaliatory Arrest?', $this->printYN($silv->AlleSilRetaliation)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Excessive Arrest Charges', 
+                    'Retaliating Officer[s]', 'Retaliated Subject[s]');
+            }
         }
         if (trim($silv->AlleSilDiscourteous) != '') {
-            $deets[] = ['Has Discourtesy', $this->printYN($silv->AlleSilDiscourteous)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Discourtesy', 
-                'Discourteous Officer[s]', 'Discourtesy Against Subject[s]');
+            if ($silv->AlleSilDiscourteous == 'N') $didntHappen .= ', Discourtesy';
+            else {
+                $deets[] = ['Discourtesy?', $this->printYN($silv->AlleSilDiscourteous)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Discourtesy', 
+                    'Discourteous Officer[s]', 'Discourtesy Against Subject[s]');
+            }
         }
         $profanity = '';
         if (isset($this->sessData->dataSets["Officers"]) && sizeof($this->sessData->dataSets["Officers"]) > 0) {
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
-                if ($off->OffUsedProfanity == 'Y') $profanity .= ', ' . $this->v["offNames"][$off->getKey()];
+                if ($off->OffUsedProfanity == 'Y') $profanity .= ', ' . $this->getOffReportName($off->getKey());
             }
         }
-        if (trim($profanity) != '') $deets[] = ['Officer Profanity', substr($profanity, 1)];
+        if (trim($profanity) != '') $deets[] = ['Officer Profanity?', substr($profanity, 1)];
         $profanity = '';
         if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
             foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
-                if ($civ->CivUsedProfanity == 'Y') $profanity .= ', ' . $this->v["civNames"][$civ->getKey()];
+                if ($civ->CivUsedProfanity == 'Y') $profanity .= ', ' . $this->getCivReportName($civ->getKey());
             }
         }
-        if (trim($profanity) != '') $deets[] = ['Subject Profanity', substr($profanity, 1)];
+        if (trim($profanity) != '') $deets[] = ['Subject Profanity?', substr($profanity, 1)];
         if (trim($silv->AlleSilUnbecoming) != '') {
-            $deets[] = ['Has Conduct Unbecoming', $this->printYN($silv->AlleSilUnbecoming)];
-            $deets = $this->addSilvAllePeepDeets($deets, 'Conduct Unbecoming an Officer', 'Unbecoming Officer[s]');
+            if ($silv->AlleSilUnbecoming == 'N') $didntHappen .= ', Conduct Unbecoming';
+            else {
+                $deets[] = ['Conduct Unbecoming?', $this->printYN($silv->AlleSilUnbecoming)];
+                $deets = $this->addSilvAllePeepDeets($deets, 'Conduct Unbecoming an Officer', 'Unbecoming Officer[s]');
+            }
+        }
+        if (trim($didntHappen) != '') {
+            // add link "(i) Hidden Fields", click to show this...
+            $deets[] = ['<a href="javascript:;" id="hidFldBtnSilvAlg" class="hidFldBtn slGrey">'
+                . '<i class="fa fa-info-circle"></i> Hidden Responses</a>'
+                . '<div id="hidFldSilvAlg" class="disNon slGrey"><i>The user responded "No" to these questions:</i> ' 
+                . substr($didntHappen, 1) . '</div>'];
         }
         return $this->printReportDeetsBlock($deets);
     }
@@ -1280,7 +1364,10 @@ class OpenPoliceReport extends OpenPolice
         $this->simpleAllegationList();
         if (sizeof($this->allegations) > 0) {
             foreach ($this->allegations as $i => $a) {
-                $this->v["glossaryList"][] = [$a[0], $GLOBALS["SL"]->getDefDesc('Allegation Type', $a[0])];
+                $this->v["glossaryList"][] = [
+                    $a[0] . ' (<a href="/allegations" target="_blank">Allegation</a>)',
+                    $GLOBALS["SL"]->getDefDesc('Allegation Type', $a[0])
+                ];
             }
         }
         return true;
@@ -1288,7 +1375,7 @@ class OpenPoliceReport extends OpenPolice
     
     protected function processUserAccess()
     {
-        if (!$this->v["user"] || !isset($this->v["user"]->id)) return '';
+        if (!$this->v["user"] || !isset($this->v["user"]->id) || $this->hideDisclaim) return '';
         $ret = '';
         if ($this->v["isOwner"]) {
             
@@ -1477,6 +1564,12 @@ class OpenPoliceReport extends OpenPolice
             . 'agency.<br /><br />The public version of this complaint can be found here:<br />'
             . '<a href="/complaint-read/' . $this->coreID . '">' . $GLOBALS["SL"]->sysOpts["app-url"] 
             . '/complaint-read/' . $this->coreID . '</a></h3></center>';
+    }
+    
+    
+    public function printFullReportCompliment($reportType = '', $isAdmin = false, $inForms = false)
+    {
+        return '';
     }
     
 }

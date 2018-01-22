@@ -51,7 +51,7 @@
             
                 <form action="/dashboard/complaint/{{ $complaintRec->ComPublicID }}/emails/type" method="post" 
                     onSubmit="return chkEmaForm();" >
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
                 <input type="hidden" name="emailID" value="{{ $emailID }}">
                 <a name="emailer"></a>
@@ -175,7 +175,7 @@
                 @if ($firstRevDone) disBlo @else disNon @endif " style="border-top: 0px none;">
                 <form name="comUpdate" action="/dashboard/complaint/{{ $complaintRec->ComPublicID }}/review/save" 
                     method="post" >
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="cID" value="{{ $cID }}">
                 <input type="hidden" name="revType" value="Update">
                 {!! view('vendor.openpolice.admin.complaints.complaint-review-status', [

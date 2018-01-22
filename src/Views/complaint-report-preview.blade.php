@@ -8,9 +8,9 @@
     <div class="col-md-5 pB10">
         <b class="fPerc125">Incident:</b><ul>
         @if (in_array($complaint->ComPrivacy, [306, 307]))
-            <li>{{ date('F Y', strtotime($incident->IncTimeStart)) }}</li>
+            <li>{{ date('F Y', strtotime($incident->IncDate)) }}</li>
         @else
-            <li>{{ date('n/j/Y', strtotime($incident->IncTimeStart)) }}</li>
+            <li>{{ date('n/j/Y', strtotime($incident->IncDate)) }}</li>
         @endif
         <li>{{ $incident->IncAddressCity }}, {{ $incident->IncAddressState }}</li>
         </ul>

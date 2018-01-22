@@ -10,7 +10,6 @@ class OPComplaints extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ComPublicID', 
 		'ComUserID', 
 		'ComStatus', 
 		'ComType', 
@@ -49,6 +48,7 @@ class OPComplaints extends Model
 		'ComIsMobile', 
 		'ComUniqueStr', 
 		'ComIPaddy', 
+		'ComPublicID', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -17,7 +17,7 @@
                     <div id="CivOverForm" class="disBlo">
                 @else 
                     <div id="CivOversightWrap" class="disBlo">
-                        <a id="CivOversightBtn" class="btn btn-default" href="javascript:void(0)"
+                        <a id="CivOversightBtn" class="btn btn-default" href="javascript:;"
                             ><i class="fa fa-plus-circle"></i> Add Civilian Oversight Agency</a>
                     </div>
                     <div id="CivOverForm" class="disNon">
@@ -106,7 +106,7 @@
     <div class="col-md-5 nobld gry9">
         @if (!$alreadyHascontact)
             <div id="{{ $overType }}ContactBtn" class="disBlo pT20">
-                <a href="javascript:void(0)" class="btn btn-default" id="{{ $overType }}OverContactBtn"
+                <a href="javascript:;" class="btn btn-default" id="{{ $overType }}OverContactBtn"
                     ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>
             </div>
             <div id="{{ $overType }}OverContactForm" class="disNon pT5">

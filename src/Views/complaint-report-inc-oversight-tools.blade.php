@@ -19,7 +19,7 @@
         </div>
     </div>
     <form method="post" name="accessCode" action="?overUpdate=1">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
     <div class="row">
         <div class="col-md-6">
             <div class="nFld mT0">

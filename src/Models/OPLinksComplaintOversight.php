@@ -15,7 +15,7 @@ class OPLinksComplaintOversight extends Model
 		'LnkComOverSubmitted', 
 		'LnkComOverStillNoResponse', 
 		'LnkComOverReceived', 
-		'LnkComOverInvestigating', 
+		'LnkComOverInvestigated', 
 		'LnkComOverReportDate', 
 		'LnkComOverOversightReportEvidenceID', 
 		'LnkComOverAgencyComplaintNumber', 

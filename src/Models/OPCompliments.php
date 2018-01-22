@@ -10,7 +10,6 @@ class OPCompliments extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'CompliPublicID', 
 		'CompliUserID', 
 		'CompliStatus', 
 		'CompliType', 
@@ -30,6 +29,7 @@ class OPCompliments extends Model
 		'CompliIsMobile', 
 		'CompliUniqueStr', 
 		'CompliIPaddy', 
+		'CompliPublicID', 
     ];
     
     // END SurvLoop auto-generated portion of Model

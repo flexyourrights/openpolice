@@ -65,7 +65,7 @@
                     <div class="gry9"><i>{{ $dept->DeptAddressCity }}, {{ $dept->DeptAddressState }}</i></div>
                 </a>
             @empty
-                <a class="list-group-item" href="javascript:void(0)">No departments found.</a>
+                <a class="list-group-item" href="javascript:;">No departments found.</a>
             @endforelse
             
         </div>
@@ -74,13 +74,13 @@
             {!! $deptRows->render() !!}
         @endif
         
-        <a href="javascript:void(0)" id="newDeptBtn" class="f16">Need to add a new police department to the database?</a>
+        <a href="javascript:;" id="newDeptBtn" class="f16">Need to add a new police department to the database?</a>
         <div id="newDeptForm" class="disNon">
             <div class="alert alert-danger" role="alert">
                 <b class="f14">Before adding a department, please search for ALL each words within the department name one at a time. Also make sure you are searching in the right state.</b>
             </div>
             <form name="volunAddNewDept" action="/dashboard/volunteer/newDept" method="post" onSubmit="return checkNewDept();">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
             <div class="panel panel-warning">
                 <div class="panel-heading taC">
                     <h2 class="m0">Add A Missing Police Department</h2>
@@ -139,7 +139,7 @@
             <form name="volunStateForm" method="post" action="/dashboard/volunteer/saveDefaultState" 
                 target="hidFrame" onSubmit="document.getElementById('volunState').style.display='none'; 
                             document.getElementById('stateID').value=document.getElementById('newStateID').value;">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
             <div id="volunState" class="panel panel-danger w100 mT20">
                 <div class="panel-heading taC"><h3 class="panel-title">Info About You</h3></div>
                 <div class="panel-body taC">

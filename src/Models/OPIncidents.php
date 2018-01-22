@@ -19,9 +19,11 @@ class OPIncidents extends Model
 		'IncAddressLat', 
 		'IncAddressLng', 
 		'IncLandmarks', 
+		'IncDate', 
 		'IncTimeStart', 
 		'IncTimeEnd', 
 		'IncDuration', 
+		'IncPublic', 
     ];
     
     // END SurvLoop auto-generated portion of Model

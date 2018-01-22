@@ -31,6 +31,7 @@ class OPSearches extends Model
 		'SrchDamageDesc', 
 		'SrchAllegWrongfulSearch', 
 		'SrchAllegWrongfulProperty', 
+		'SrchAllegPropertyDamage', 
     ];
     
     // END SurvLoop auto-generated portion of Model

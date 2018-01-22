@@ -16,6 +16,7 @@ class OPScenes extends Model
 		'ScnForcibleEntry', 
 		'ScnCCTV', 
 		'ScnCCTVDesc', 
+		'ScnIsVehicleAccident', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -9,7 +9,7 @@ class OPInjuries extends Model
     protected $primaryKey = 'InjID';
     public $timestamps    = true;
     protected $fillable   = 
-    [
+    [    
 		'InjSubjectID', 
 		'InjType', 
 		'InjHowManyTimes', 

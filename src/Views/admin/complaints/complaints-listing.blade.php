@@ -57,7 +57,7 @@
             {{ $comInfo[$com->ComID]["comDate"] }}
         </td>
         <td>
-            @if (trim($com->IncTimeStart) != '') {{ date("n/j/Y", strtotime($com->IncTimeStart)) }} @endif
+            @if (trim($com->IncDate) != '') {{ date("n/j/Y", strtotime($com->IncDate)) }} @endif
         </td>
         <td>{{ $com->IncAddressCity }}, {{ $com->IncAddressState }}</td>
         <td>{{ $com->PrsnNameFirst }} {{ $com->PrsnNameLast }}</td>

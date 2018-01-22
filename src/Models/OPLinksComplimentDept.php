@@ -10,7 +10,7 @@ class OPLinksComplimentDept extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'LnkCompliDeptComplaintID', 
+		'LnkCompliDeptComplimentID', 
 		'LnkCompliDeptDeptID', 
     ];
     

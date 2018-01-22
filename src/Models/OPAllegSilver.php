@@ -37,6 +37,7 @@ class OPAllegSilver extends Model
 		'AlleSilRetaliation', 
 		'AlleSilUnbecoming', 
 		'AlleSilDiscourteous', 
+		'AlleSilPropertyDamage', 
     ];
     
     // END SurvLoop auto-generated portion of Model

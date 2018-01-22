@@ -13,7 +13,7 @@ class OpenPoliceServiceProvider extends ServiceProvider
     public function boot()
     {
         require __DIR__ . '/routes.php';
-        $migFile = '2016_11_30_221418_OP_create_tables.php';
+        $migFile = '2017_09_05_224311_OP_create_tables';
         $this->publishes([
             __DIR__.'/Views'                         => base_path('resources/views/vendor/openpolice'),
             __DIR__.'/Public'                        => base_path('public/openpolice'),

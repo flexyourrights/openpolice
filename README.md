@@ -11,22 +11,22 @@ users to publish reports online, we aim to establish better public transparency 
 U.S.. Open Police is built using <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
-<a href="http://openpolicereport.org" target="_blank">OpenPolice.org</a><br />
+<a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
 
-It is currently in continued, heavy development, with much happening here in early 2017, almost ready to go live. 
+It is currently in continued, heavy development, with much happening here in early 2018, almost ready to go live. 
 I plan to provide more documentation in the coming weeks. Thank you for your interest and patience!
 
 The upcoming Open Police web app can be tested out here, 
 feedback welcome via the end of the <b>beta demo</b> submission process:<br />
-<a href="http://openpolicereport.org/test" target="_blank">http://openpolicereport.org/test</a><br />
+<a href="https://openpolice.org/test" target="_blank">https://openpolice.org/test</a><br />
 The resulting database designed using the engine, as well as the branching tree which specifies the user's experience: 
-<a href="http://openpolicereport.org/db/OP" target="_blank">/db/OP</a><br />
-<a href="http://openpolicereport.org/tree/complaint" target="_blank">/tree/complaint</a><br />
+<a href="https://openpolice.org/db/OP" target="_blank">/db/OP</a><br />
+<a href="https://openpolice.org/tree/complaint" target="_blank">/tree/complaint</a><br />
 Among other methods, the resulting data can also be provided as 
 XML included an automatically generated schema, eg.<br />
-<a href="http://openpolicereport.org/complaint-xml-schema" target="_blank">/complaint-xml-schema</a><br />
-<a href="http://openpolicereport.org/complaint-xml-example" target="_blank">/complaint-xml-example</a><br />
-<a href="http://openpolicereport.org/complaint-xml-all" target="_blank">/complaint-xml-all</a>
+<a href="https://openpolice.org/complaint-xml-schema" target="_blank">/complaint-xml-schema</a><br />
+<a href="https://openpolice.org/complaint-xml-example" target="_blank">/complaint-xml-example</a><br />
+<a href="https://openpolice.org/complaint-xml-all" target="_blank">/complaint-xml-all</a>
 
 # Table of Contents
 * [Requirements](#requirements)

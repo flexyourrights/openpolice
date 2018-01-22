@@ -15957,7 +15957,7 @@ Example: A complainant alleged that an officer searched his car without consent 
 			'DefSubset' => 'Allegation Type',
 			'DefOrder' => '8',
 			'DefIsActive' => '0',
-			'DefValue' => 'Retaliation: Unnecessary Charges',
+			'DefValue' => 'Retaliatory Charges',
 			'DefDescription' => 'Retaliation: Example: "Resisting Arrest" and "Interfering" are common "cover charges"/"contempt of cop".'
 		]);
 		DB::table('SL_Definitions')->insert([
@@ -24466,7 +24466,7 @@ $("#copyToClip").click(function(){
 </div>
 
 <div class="pT5 pB20 mB20">
-<a href="javascript:void(0)" class="btn btn-default btn-block f22" id="previewPublicBtn">Click here to see how your complaint will appear to the public</a> 
+<a href="javascript:;" class="btn btn-default btn-block f22" id="previewPublicBtn">Click here to see how your complaint will appear to the public</a> 
 <div id="previewPublicWrap" class="disNon">
     <div id="previewPublic" class="jumbotron mT20">
         <h2 class="pB20"><span class="slBlueDark">This is what visitors to OpenPolice.org will see:</span></h2>

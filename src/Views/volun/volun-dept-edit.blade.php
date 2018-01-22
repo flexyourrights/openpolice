@@ -5,7 +5,7 @@
 @section('content')
 
 <form name="deptEditor" action="/dashboard/volunteer/verify/{{ $deptRow->DeptSlug }}" method="post" onSubmit="formSub();" autocomplete="off">
-<input type="hidden" name="_token" value="{{ csrf_token() }}">
+<input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="formLoaded" value="<?= time() ?>">
 <input type="hidden" name="DeptID" value="{{ $deptRow->DeptID }}">
 <input type="hidden" id="ScoreOpen" name="DeptScoreOpenness" value="{{ intVal($deptRow->DeptScoreOpenness) }}" >

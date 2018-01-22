@@ -22,7 +22,7 @@
         {{ $GLOBALS["SL"]->getDefValById($complaint->ComStatus) }}
     @endif
     <form method="post" name="accessCode" action="?ownerUpdate=1">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
     <div class="row">
         <div class="col-md-6">
             <div class="nFld mT0">

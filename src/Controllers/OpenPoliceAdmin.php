@@ -87,55 +87,37 @@ class OpenPoliceAdmin extends AdminSubsController
                 ->select('StryID')
                 ->get();
             $flagged = sizeof($chk); */
-            $treeMenu = $this->loadAdmMenuBasics();
-            unset($treeMenu[3][4]);
+            $treeMenu = [];
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                return [
-                    [
-                        'javascript:;',
-                        '<i class="fa fa-star mR5"></i> Complaints',
-                        1,
-                        [
-                            $this->admMenuLnk('/dashboard/complaints/all',
-                                '<span class="label label-primary mR5">' . $published . '</span> All Published'), 
-                            $this->admMenuLnk('/dashboard/complaints/flagged', 
-                                (($flagged > 0) ? '<span class="label label-danger mR5">' . $flagged . '</span> ' : '') 
-                                    . 'Flagged For Review'), 
-                            $this->admMenuLnk('/dashboard/complaints/waiting', 'Complaints Awaiting Investigation'), 
-                            $this->admMenuLnk('/dashboard/complaints/incomplete', 'Incomplete Complaints'),
-                            $this->admMenuLnk('/dashboard/emails', 'Manage Email Templates'),
-                            $this->admMenuLnkContact(false)
-                        ]
-                    ], [
-                        'javascript:;',
-                        '<i class="fa fa-search mR5" aria-hidden="true"></i> Oversight',
-                        1,
-                        [
-                            $this->admMenuLnk('/dashboard/volunteer', 'Departments Dashboard'), 
-                            $this->admMenuLnk('/dashboard/officers', 'Police Officers'), 
-                            $this->admMenuLnk('/dashboard/overs', 'Oversight Agencies'), 
-                            $this->admMenuLnk('/dashboard/volunteer/legal', 'Attorneys'),
-                            $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Department')
-                        ]
-                    ], 
-                    $treeMenu
-                ];
+                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
+                    $this->admMenuLnk('/dashboard/complaints/all',
+                        '<span class="label label-primary mR5">' . $published . '</span> All Published'), 
+                    $this->admMenuLnk('/dashboard/complaints/flagged', 
+                        (($flagged > 0) ? '<span class="label label-danger mR5">' . $flagged . '</span> ' : '') 
+                            . 'Flagged For Review'), 
+                    $this->admMenuLnk('/dashboard/complaints/waiting', 'Complaints Awaiting Investigation'), 
+                    $this->admMenuLnk('/dashboard/complaints/incomplete', 'Incomplete Complaints'),
+                    $this->admMenuLnk('/dashboard/emails', 'Manage Email Templates'),
+                    $this->admMenuLnkContact(false)
+                    ]);
+                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Oversight', 
+                    '<i class="fa fa-search" aria-hidden="true"></i>', 1, [
+                    $this->admMenuLnk('/dashboard/volunteer', 'Departments Dashboard'), 
+                    $this->admMenuLnk('/dashboard/officers', 'Police Officers'), 
+                    $this->admMenuLnk('/dashboard/overs', 'Oversight Agencies'), 
+                    $this->admMenuLnk('/dashboard/volunteer/legal', 'Attorneys'),
+                    $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Department')
+                    ]);
+                return $this->addAdmMenuBasics($treeMenu);
             } elseif ($this->v["user"]->hasRole('volunteer')) {
-                return [
-                    $this->admMenuLnk('/dashboard/volunteer', 'Police Departments'), 
-                    $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Dept.'), 
-                    $this->admMenuLnk('/dashboard/volunteer/stars', 'You Have [[score]] Stars')
-                ];
+                $treeMenu[] = $this->admMenuLnk('/dashboard/volunteer', 'Police Departments');
+                $treeMenu[] = $this->admMenuLnk('/dashboard/volunteer/nextDept', 'Verify A Dept.');
+                $treeMenu[] = $this->admMenuLnk('/dashboard/volunteer/stars', 'You Have [[score]] Stars');
+                return $treeMenu;
             }
         }
-        return [
-            [
-                '/dashboard',
-                'Dashboard',
-                1,
-                []
-            ]
-        ];
+        $treeMenu = $this->addAdmMenuHome();
+        return $treeMenu;
     }
     
     protected function tweakAdmMenu($currPage = '')
@@ -145,59 +127,61 @@ class OpenPoliceAdmin extends AdminSubsController
             $volunteeringSubMenu = [
                 'javascript:;" id="navBtnContact0',
                 '<b>Verifying Department</b>',
+                '<i class="fa fa-eye" aria-hidden="true"></i>',
                 1,
                 [
                     [
                         'javascript:;" id="navBtnContact',
-                        '&nbsp;&nbsp;Contact Info <div id="currContact" class="disIn pull-right mL20">'
-                            . '<i class="fa fa-chevron-right"></i></div>',
+                        'Contact Info',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnWeb',
-                        '&nbsp;&nbsp;Web & Complaints <div id="currWeb" class="disNon pull-right mL20">'
-                             . '<i class="fa fa-chevron-right"></i></div>',
+                        'Web & Complaints',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnIA',
-                        '&nbsp;&nbsp;Internal Affairs <div id="currIA" class="disNon pull-right mL20">'
-                            . '<i class="fa fa-chevron-right"></i></div>',
+                        'Internal Affairs',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnOver',
-                        '&nbsp;&nbsp;Civilian Oversight <div id="currOver" class="disNon pull-right mL20">'
-                            . '<i class="fa fa-chevron-right"></i></div>',
+                        'Civilian Oversight',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnSave',
-                        '<span class="btn btn-lg btn-primary">Save All Changes <i class="fa fa-floppy-o"></i></span>', 
+                        '<span class="btn btn-lg btn-primary"><i class="fa fa-floppy-o"></i> Save All Changes</span>', 
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnEdits',
-                        '<span class="gry9">&nbsp;&nbsp;Past Edits:</span> ' 
-                            . ((isset($this->v["editsSummary"][1])) ? $this->v["editsSummary"][1]: '') . '<div id="currEdits" '
-                            . 'class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        '<span class="gry9">Past Edits:</span>',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnCheck',
-                        '<span class="gry9">&nbsp;&nbsp;Volunteer Checklist</span> <div id="currCheck" '
-                            . 'class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        '<span class="gry9">Volunteer Checklist</span>',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnPhone',
                         '<span class="gry9">&nbsp;&nbsp;Sample Phone Script</span>',
+                        '',
                         1,
                         []
                     ], [
                         'javascript:;" id="navBtnFAQ',
-                        '<span class="gry9">&nbsp;&nbsp;Frequently Asked <i class="fa fa-question"></i>s</span> <div '
-                            . 'id="currFAQ" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                        '<span class="gry9">Frequently Asked <i class="fa fa-question"></i>s</span></span>',
+                        '',
                         1,
                         []
                     ]
@@ -231,8 +215,8 @@ class OpenPoliceAdmin extends AdminSubsController
     {
         $this->CustReport = new OpenPoliceReport($request);
         
-        if (!isset($this->v["currPage"])) $this->v["currPage"] = '/dashboard';
-        if (trim($this->v["currPage"]) == '') $this->v["currPage"] = '/dashboard';
+        if (!isset($this->v["currPage"])) $this->v["currPage"] = ['/dashboard', ''];
+        if (trim($this->v["currPage"][0]) == '') $this->v["currPage"][0] = '/dashboard';
         $this->v["allowEdits"] = ($this->v["user"]->hasRole('administrator|staff'));
         
         $this->v["management"] = ($this->v["user"]->hasRole('administrator|staff'));
@@ -358,7 +342,7 @@ class OpenPoliceAdmin extends AdminSubsController
             LEFT OUTER JOIN `OP_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 
             LEFT OUTER JOIN `OP_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` 
             WHERE civ.`CivIsCreator` LIKE 'Y' ";
-        switch ($this->v["currPage"]) {
+        switch ($this->v["currPage"][0]) {
             case '/dashboard/complaints':         
                 $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["SL"]->getDefID('Complaint Status', 'New') . "' 
                     OR (c.`ComType` IN ('" . $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Unreviewed')
@@ -549,22 +533,17 @@ class OpenPoliceAdmin extends AdminSubsController
                     $allUserNames[$e->EmailedFromUser] = User::find($e->EmailedFromUser)
                         ->printUsername(true, '/dashboard/volun/user/');
                 }
-                $desc = '<a href="javascript:void(0)" id="emaSubj' . $e->EmailedID . '" class="emaSubj">' 
+                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">' 
                     . $e->EmailedSubject . '</a> <i>to ' . substr($e->EmailedTo, 0, strpos($e->EmailedTo, '<'))  
                     . '<span class="fPerc66">&lt; ' 
                     . str_replace('>', '', substr($e->EmailedTo, 1+strpos($e->EmailedTo, '<'))) . ' &gt;</span></i>'
-                    . '<div id="emaBody' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                    . '<div id="hidFldEma' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
                 $this->v["history"][] = [
                     "type" => 'Email', 
                     "date" => strtotime($e->created_at), 
                     "desc" => $desc, 
                     "who"  => $allUserNames[$e->EmailedFromUser]
                 ];
-                $GLOBALS["SL"]->pageAJAX .= ' $(document).on("click", ".emaSubj", function() { '
-                    . 'var emaID = $(this).attr("id").replace("emaSubj", "");'
-                    . 'if (document.getElementById("emaBody"+emaID+"")) $("#emaBody"+emaID+"").slideToggle("fast"); '
-                    . '}); ';
-                
             }
         }
         $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');

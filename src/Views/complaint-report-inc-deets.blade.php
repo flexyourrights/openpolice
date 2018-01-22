@@ -15,9 +15,15 @@
 <div class="reportMiniBlockDeets">
     @if ($isOwner || $isAdmin || ($view != 'Anon' && $sessData['Complaints'][0]->ComPrivacy 
         == $GLOBALS["SL"]->getDefID('Privacy Types', 'Submit Publicly')))
-        {{ date('n/j/Y g:ia', strtotime($sessData["Incidents"][0]->IncTimeStart)) }}
+        {{ date('n/j/Y', strtotime($sessData["Incidents"][0]->IncDate)) }} 
+        @if ($sessData["Incidents"][0]->IncTimeStart !== null) at
+            {{ date('g:ia', strtotime($sessData["Incidents"][0]->IncTimeStart)) }}
+        @endif
+        @if ($sessData["Incidents"][0]->IncTimeEnd !== null) until
+            {{ date('g:ia', strtotime($sessData["Incidents"][0]->IncTimeEnd)) }}
+        @endif
     @else
-        {{ date('F Y', strtotime($sessData["Incidents"][0]->IncTimeStart)) }}
+        {{ date('F Y', strtotime($sessData["Incidents"][0]->IncDate)) }}
     @endif
     @if ($view == 'Investigate' || $sessData["Incidents"][0]->IncPublic == 'Y')
         <br />{{ $sessData["Incidents"][0]->IncAddress }}
@@ -30,6 +36,6 @@
         <br />{{ $sessData["Incidents"][0]->IncAddressCity }}, {{ $sessData["Incidents"][0]->IncAddressState }}
     @endif
     @if ($view == 'Investigate' || trim($sessData["Incidents"][0]->IncLandmarks) != '')
-        <br />{{ $sessData["Incidents"][0]->IncLandmarks }}
+        <br />Landmark: {{ $sessData["Incidents"][0]->IncLandmarks }}
     @endif
 </div>

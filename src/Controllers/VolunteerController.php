@@ -200,6 +200,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard()
             . '<div class="taC p10 f16 gry9"><i>' . $GLOBALS["SL"]->dbRow->DbMission . '</i></div>';
         $GLOBALS["SL"]->pageAJAX .= '$( "#newDeptBtn" ).click(function() { $("#newDeptForm").slideToggle("fast"); }); ';
+        $GLOBALS["SL"]->loadStates();
         return view('vendor.openpolice.volun.volunteer', $this->v);
     }
     
@@ -211,11 +212,13 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["searchForm"] = $this->deptSearchForm();
         $this->v["deptRows"] = OPDepartments::orderBy('DeptName', 'asc')->paginate(50);
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
+        $GLOBALS["SL"]->loadStates();
         return view('vendor.openpolice.volun.volunteer', $this->v);
     }
     
     protected function deptSearchForm($state = '', $deptName = '')
     {
+        $GLOBALS["SL"]->loadStates();
         return view('vendor.openpolice.volun.volunEditSearch', [ 
             "deptName"  => $deptName, 
             "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
@@ -230,6 +233,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["searchForm"] = str_replace('<select', '<div class="p5"><select', 
             str_replace('class="w33"', 'class="w33 f22"', $this->deptSearchForm($state, $deptName) )) . '</div>';
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
+        $GLOBALS["SL"]->loadStates();
         return view('vendor.openpolice.volun.volunteer', $this->v);
     }
     
@@ -396,6 +400,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["volunChecklist"]       = $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist');
         $this->v["FAQs"]                 = $GLOBALS["SL"]->getBlurb('Volunteer Data Mining FAQs');
         $this->v["rightSide"]            = $this->getSidebarScript();
+        $GLOBALS["SL"]->loadStates();
         $this->v["stateDrop"]            = $GLOBALS["SL"]->states->stateDrop($this->v["deptRow"]->DeptAddressState);
         $this->v["iaRow"]                = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
                                              ->where('OverType', 303)
