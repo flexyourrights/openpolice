@@ -3,7 +3,7 @@
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.3-orange.svg?style=flat-square)](http://laravel.com)
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
+[![License](https://img.shields.io/aur/license/yaourt.svg?style=flat-square)](https://www.gnu.org/licenses/gpl.html)
 
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
@@ -45,9 +45,14 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="getting-started"></a>Getting Started
 
-Here are instructions if you are new to Laravel, or just want step-by-step instructions on how to install its development environment, Homestead: 
-<a href="https://OpenPoliceComplaints.org/how-to-install-laravel/" target="_blank">OpenPoliceComplaints.org/how-to-install-laravel/</a>.
+Instructions if you are new to Laravel, or just want to install its local development environment, Homestead: 
+<a href="http://wikiworldorder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/" 
+    target="_blank">WikiWorldOrder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/</a>.
 
+Instructions if you are new to Laravel, or just want to install it to an online server: 
+<a href="http://wikiworldorder.org/2018/03/15/how-to-install-the-laravel-php-framework-on-digital-ocean/" 
+    target="_blank">WikiWorldOrder.org/2018/03/15/how-to-install-the-laravel-php-framework-on-digital-ocean/</a>.
+    
 The instructions below include the needed steps to install SurvLoop, as well as the Open Police system.
 
 * Install Laravel's default user authentication, one required package, and SurvLoop:
@@ -78,6 +83,8 @@ $ nano composer.json
 		...
 		"SurvLoop\\": "vendor/wikiworldorder/survloop/src/",
 		"OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
+		"MatthiasMullie\\Minify\\": "vendor/matthiasmullie/minify/src/",
+		"MatthiasMullie\\PathConverter\\": "vendor/matthiasmullie/path-converter/src/",
 	}
 	...
 },

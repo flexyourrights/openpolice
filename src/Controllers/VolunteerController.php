@@ -88,10 +88,10 @@ class VolunteerController extends OpenPoliceAdmin
                 ]
             ];
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["adminNav"][2][3][3] = $volunteeringSubMenu;
+                //$this->admMenuData["adminNav"][2][3][3] = $volunteeringSubMenu;
             } else { // is Volunteer
-                $volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
-                $this->admMenuData["adminNav"][1] = $volunteeringSubMenu;
+                //$volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
+                //$this->admMenuData["adminNav"][1] = $volunteeringSubMenu;
             }
         }
         if (!$this->v["user"]->hasRole('administrator|staff|databaser')) {

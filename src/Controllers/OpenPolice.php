@@ -173,7 +173,7 @@ class OpenPolice extends SurvFormTree
         return false;
     }
     
-    protected function getAllPublicCoreIDs($coreTbl = '')
+    public function getAllPublicCoreIDs($coreTbl = '')
     {
         if (trim($coreTbl) == '') $coreTbl = $GLOBALS["SL"]->coreTbl;
         $this->allPublicCoreIDs = $list = [];
@@ -352,6 +352,20 @@ class OpenPolice extends SurvFormTree
                     && trim($this->sessData->dataSets["Scenes"][0]->ScnIsVehicleAccident) == 'Y') {
                     return 1;
                 }
+            }
+            return 0;
+        } elseif ($condition == '#LawyerInvolved') {
+            if ((isset($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas) 
+                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas), ['Y', '?']))
+                || (isset($this->sessData->dataSets["Complaints"][0]->ComAttorneyWant) 
+                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyWant), ['Y', '?']))) {
+                return 1;
+            }
+            if ((isset($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged) 
+                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged), ['Y', '?']))
+                && (!isset($this->sessData->dataSets["Complaints"][0]->ComAllChargesResolved) 
+                    || trim($this->sessData->dataSets["Complaints"][0]->ComAllChargesResolved) != 'Y')) {
+                return 1;
             }
             return 0;
         } elseif ($condition == '#NoSexualAllegation') {
@@ -717,15 +731,12 @@ class OpenPolice extends SurvFormTree
                 }
             }
             return false;
-        } elseif ($nID == 16) {
+        } elseif (in_array($nID, [16, 17])) {
             $time = $this->postFormTimeStr($nID);
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', (($time === null) ? null
-                : date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)) . ' ' . $time));
-            return true;
-        } elseif ($nID == 17) {
-            $time = $this->postFormTimeStr($nID);
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', (($time === null) ? null
-                : date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld)) . ' ' . $time));
+            $date = date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->n15fld));
+            if ($time === null) $date .= ' 00:00:00';
+            else $date .= ' ' . $time;
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', $date);
             return true;
         } elseif ($nID == 47) { // Complainant Recorded Incident?
             $this->sessData->dataSets["Civilians"][0]->CivCameraRecord = $GLOBALS["SL"]->REQ->input('n47fld');
@@ -961,7 +972,8 @@ class OpenPolice extends SurvFormTree
         } elseif ($nID == 39) {
             if ($currNodeSessionData == '') {
                 $user = Auth::user();
-                return [$user->email];
+                if ($user && isset($user->email)) return [$user->email];
+                return [''];
             }
         } elseif ($nID == 576) {
             $lnkRow = $this->sessData->sessChildRowFromParent('LinksCivilianVehicles');
@@ -971,7 +983,7 @@ class OpenPolice extends SurvFormTree
         } elseif ($nID == 671) { // Officers Used Profanity?
             $currVals = [];
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
-                if ($off->OffUsedProfanity == 'Y') $currVals[] = $off->getKey();
+                if (isset($off->OffUsedProfanity) && $off->OffUsedProfanity == 'Y') $currVals[] = $off->getKey();
             }
             return [';' . implode(';', $currVals) . ';'];
         } elseif ($nID == 674) { // Officer Used Profanity?
@@ -987,7 +999,7 @@ class OpenPolice extends SurvFormTree
             if ($civInd >= 0) {
                 return trim($this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity);
             }
-        } elseif ($nID == in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
+        } elseif (in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
             if (!isset($this->v["firstTimeGoGoldDeets"])) {
                 $chk = SLNodeSavesPage::where('PageSaveSession', $this->coreID)
                     ->where('PageSaveNode', 484)

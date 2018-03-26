@@ -38,7 +38,9 @@
                 document.getElementById("n{{ $nID }}FldID").value = $(this).attr("id").replace("dept", "");
                 document.getElementById("stepID").value="back";
                 //alert("New Dept: "+document.getElementById("n{{ $nID }}FldID").value);
-                return runFormSub(); 
+                otherFormSub = true;
+                return true;
+                //return runFormSub();
             });
             
             $(document).on("click", "#addNewDept", function() {
@@ -52,7 +54,9 @@
                 }
                 document.getElementById("n{{ $nID }}FldID").value = -3;
                 document.getElementById("stepID").value="back";
-                return runFormSub(); 
+                otherFormSub = true;
+                return true;
+                //return runFormSub();
             });
             
             $( "#deptNameInID" ).autocomplete({ 

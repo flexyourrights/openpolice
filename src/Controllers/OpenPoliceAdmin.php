@@ -124,78 +124,29 @@ class OpenPoliceAdmin extends AdminSubsController
     {
         //echo '<br /><br /><br />tweakAdmMenu(<pre>'; print_r($this->admMenuData["adminNav"]); echo '</pre>';
         if (isset($this->v["deptSlug"])) {
-            $volunteeringSubMenu = [
-                'javascript:;" id="navBtnContact0',
-                '<b>Verifying Department</b>',
-                '<i class="fa fa-eye" aria-hidden="true"></i>',
-                1,
-                [
-                    [
-                        'javascript:;" id="navBtnContact',
-                        'Contact Info',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnWeb',
-                        'Web & Complaints',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnIA',
-                        'Internal Affairs',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnOver',
-                        'Civilian Oversight',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnSave',
-                        '<span class="btn btn-lg btn-primary"><i class="fa fa-floppy-o"></i> Save All Changes</span>', 
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnEdits',
-                        '<span class="gry9">Past Edits:</span>',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnCheck',
-                        '<span class="gry9">Volunteer Checklist</span>',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnPhone',
-                        '<span class="gry9">&nbsp;&nbsp;Sample Phone Script</span>',
-                        '',
-                        1,
-                        []
-                    ], [
-                        'javascript:;" id="navBtnFAQ',
-                        '<span class="gry9">Frequently Asked <i class="fa fa-question"></i>s</span></span>',
-                        '',
-                        1,
-                        []
-                    ]
-                ]
-            ];
-            if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $this->admMenuData["adminNav"][1][] = $volunteeringSubMenu;
-                $this->admMenuData["currNavPos"] = [3, -1, -1, -1];
-            } else { // is Volunteer
-                $volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
-                $this->admMenuData["adminNav"][0] = $volunteeringSubMenu;
-                $this->admMenuData["currNavPos"] = [0, -1, -1, -1];
+            for ($j = sizeof($this->admMenuData["adminNav"]); $j--; $j > 0) {
+                $this->admMenuData["adminNav"][$j] = $this->admMenuData["adminNav"][$j-1];
             }
+            $this->admMenuData["adminNav"][0] = $this->admMenuLnk('javascript:;" id="navBtnContact0', 
+                '<b>Verifying Department</b>', '<i class="fa fa-eye" aria-hidden="true"></i>', 1, [
+                $this->admMenuLnk('javascript:;" id="navBtnContact', 'Contact Info'),
+                $this->admMenuLnk('javascript:;" id="navBtnWeb',     'Web & Complaints'),
+                $this->admMenuLnk('javascript:;" id="navBtnIA',      'Internal Affairs'),
+                $this->admMenuLnk('javascript:;" id="navBtnOver',    'Civilian Oversight'),
+                $this->admMenuLnk('javascript:;" id="navBtnSave',    'Save All Changes', 
+                    '<i class="fa fa-floppy-o"></i>'),
+                $this->admMenuLnk('javascript:;" id="navBtnEdits',
+                    '<span class="gry9">Past Edits</span>'),
+                $this->admMenuLnk('javascript:;" id="navBtnCheck',
+                    '<span class="gry9">Volunteer Checklist</span>'),
+                $this->admMenuLnk('javascript:;" id="navBtnPhone',
+                    '<span class="gry9">&nbsp;&nbsp;Sample Phone Script</span>'),
+                $this->admMenuLnk('javascript:;" id="navBtnFAQ',
+                    '<span class="gry9">Frequently Asked <i class="fa fa-question"></i>s</span></span>')
+            ]);
+            //$this->admMenuData["currNavPos"] = [0, -1, -1, -1];
         }
+        /*
         if (!$this->v["user"]->hasRole('administrator|staff|databaser')) {
             if (isset($this->admMenuData["adminNav"][1]) && isset($this->admMenuData["adminNav"][1][1])) {
                 if (!isset($this->v["yourUserInfo"]->UserInfoStars)) {
@@ -206,7 +157,7 @@ class OpenPoliceAdmin extends AdminSubsController
                 }
             }
         }
-        
+        */
         $this->getAdmMenuLoc($currPage);
         return true;
     }
