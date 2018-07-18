@@ -6,7 +6,7 @@
 
 <h1>
     <i class="fa fa-list-ul"></i> Journalists
-    @if ($journalists && sizeof($journalists) > 0)
+    @if ($journalists->isNotEmpty())
         <nobr><span class="f14">({{ number_format(sizeof($journalists)) }})</span></nobr>
     @endif
 </h1>

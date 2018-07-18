@@ -20,7 +20,7 @@ class OPPhysicalDesc extends Model
 		'PhysEyes', 
 		'PhysDistinguishingMarksDesc', 
 		'PhysVoiceDesc', 
-		'PhysClothesDesc', 
+		'PhysGeneralDesc', 
 		'PhysDisabilitiesDesc', 
     ];
     

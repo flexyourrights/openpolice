@@ -8,7 +8,7 @@
                     <h4 class="m0 gry9">
                         {{ $GLOBALS['SL']->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}
                         @if (intVal($loopItem->DeptType) > 0) 
-                            , {{ $GLOBALS['SL']->getDefValById($loopItem->DeptType) }}
+                            , {{ $GLOBALS['SL']->def->getValById($loopItem->DeptType) }}
                         @endif
                     </h4>
                     <h2 class="m0">{{ $loopItem->DeptName }}</h2>

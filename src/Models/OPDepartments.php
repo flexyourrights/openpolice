@@ -27,6 +27,13 @@ class OPDepartments extends Model
 		'DeptTotOfficers', 
 		'DeptJurisdictionPopulation', 
 		'DeptJurisdictionGPS', 
+		'DeptVersionAB', 
+		'DeptSubmissionProgress', 
+		'DeptIPaddy', 
+		'DeptTreeVersion', 
+		'DeptUniqueStr', 
+		'DeptUserID', 
+		'DeptIsMobile', 
     ];
     
     // END SurvLoop auto-generated portion of Model

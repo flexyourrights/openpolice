@@ -6,7 +6,7 @@
 
 <h1>
     <i class="fa fa-list-ul"></i> Academic
-    @if ($academic && sizeof($academic) > 0)
+    @if ($academic->isNotEmpty())
         <nobr><span class="f14">({{ number_format(sizeof($academic)) }})</span></nobr>
     @endif
 </h1>

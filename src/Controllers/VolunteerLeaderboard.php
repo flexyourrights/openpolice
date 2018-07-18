@@ -9,7 +9,7 @@ use App\Models\OPzVolunUserInfo;
 
 class VolunteerLeaderboard
 {
-    public $UserInfoStars = array();
+    public $UserInfoStars = [];
     
     function __construct()
     {
@@ -23,14 +23,14 @@ class VolunteerLeaderboard
         // First ensure all volunteers and staff have a corresponding OP_zVolunUserInfo record
         $volunteers = User::whereIn('id', function($query){
             $query->select('RoleUserUID')
-                    ->from('SL_UsersRoles')
-                    ->get();            
+                ->from('SL_UsersRoles')
+                ->get();
         })->get();
-        if ($volunteers && sizeof($volunteers) > 0) {
+        if ($volunteers->isNotEmpty()) {
             foreach ($volunteers as $u) {
                 $chk = OPzVolunUserInfo::where('UserInfoUserID', $u->id)
                 	->first();
-                if (!$chk || sizeof($chk) == 0) {
+                if (!$chk) {
                     $tmp = new OPzVolunUserInfo;
                     $tmp->UserInfoUserID = $u->id;
                     $tmp->save();
@@ -39,38 +39,38 @@ class VolunteerLeaderboard
         }
         
         // Now update all editing totals
-        $tally = $userTots = $uniqueDepts = array();
-        $edits = DB::table('OP_zVolunEditsOvers')
-            ->leftJoin('OP_zVolunEditsDepts', 'OP_zVolunEditsOvers.EditOverEditDeptID', 
-                '=', 'OP_zVolunEditsDepts.EditDeptID')
-            ->select('OP_zVolunEditsDepts.EditDeptPageTime', 
-                'OP_zVolunEditsOvers.EditOverUser', 
-                'OP_zVolunEditsOvers.EditOverDeptID', 
-                'OP_zVolunEditsOvers.EditOverOnlineResearch', 
-                'OP_zVolunEditsOvers.EditOverMadeDeptCall', 
-                'OP_zVolunEditsOvers.EditOverMadeIACall')
-            ->where('OP_zVolunEditsOvers.EditOverType', 303)
+        $tally = $userTots = $uniqueDepts = [];
+        $edits = DB::table('OP_Zedit_Oversight')
+            ->leftJoin('OP_Zedit_Departments', 'OP_Zedit_Oversight.ZedOverZedDeptID', 
+                '=', 'OP_Zedit_Departments.ZedDeptID')
+            ->select('OP_Zedit_Departments.ZedDeptDuration', 
+                'OP_Zedit_Departments.ZedDeptUserID', 
+                'OP_Zedit_Oversight.ZedOverOverDeptID', 
+                'OP_Zedit_Oversight.ZedOverOnlineResearch', 
+                'OP_Zedit_Oversight.ZedOverMadeDeptCall', 
+                'OP_Zedit_Oversight.ZedOverMadeIACall')
+            ->where('OP_Zedit_Oversight.ZedOverOverType', 303)
             ->get();
-        if ($edits && sizeof($edits) > 0) {
+        if ($edits->isNotEmpty()) {
             foreach ($edits as $edit) {
-                if (!isset($tally[$edit->EditOverUser])) {
-                    $userTots[$edit->EditOverUser] = array(0, 0, 0, 0, 0);
-                    $tally[$edit->EditOverUser] = array();
+                if (!isset($tally[$edit->ZedDeptUserID])) {
+                    $userTots[$edit->ZedDeptUserID] = array(0, 0, 0, 0, 0);
+                    $tally[$edit->ZedDeptUserID] = [];
                 }
-                if (!isset($tally[$edit->EditOverUser][$edit->EditOverDeptID])) {
-                    $tally[$edit->EditOverUser][$edit->EditOverDeptID] = array(0, 0, 0, 0);
+                if (!isset($tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID])) {
+                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID] = array(0, 0, 0, 0);
                 }
-                if ($edit->EditOverOnlineResearch && intVal($edit->EditOverOnlineResearch) > 0) {
-                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][0] = 1;
+                if ($edit->ZedOverOnlineResearch && intVal($edit->ZedOverOnlineResearch) > 0) {
+                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][0] = 1;
                 }
-                if ($edit->EditOverMadeDeptCall && intVal($edit->EditOverMadeDeptCall) > 0) {
-                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][1] = 1;
+                if ($edit->ZedOverMadeDeptCall && intVal($edit->ZedOverMadeDeptCall) > 0) {
+                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][1] = 1;
                 }
-                if ($edit->EditOverMadeIACall && intVal($edit->EditOverMadeIACall) > 0) {
-                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][2] = 1;
+                if ($edit->ZedOverMadeIACall && intVal($edit->ZedOverMadeIACall) > 0) {
+                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][2] = 1;
                 }
-                if ($edit->EditDeptPageTime && intVal($edit->EditDeptPageTime) > 0) {
-                    $tally[$edit->EditOverUser][$edit->EditOverDeptID][3] += intVal($edit->EditDeptPageTime);
+                if ($edit->ZedDeptDuration && intVal($edit->ZedDeptDuration) > 0) {
+                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][3] += intVal($edit->ZedDeptDuration);
                 }
             }
         }
@@ -90,12 +90,12 @@ class VolunteerLeaderboard
                 DB::table('OP_zVolunUserInfo')
                     ->where('UserInfoUserID', $uID)
                     ->update([
-                        'UserInfoStars1'         => $userTots[$uID][0], 
-                        'UserInfoStars2'         => $userTots[$uID][1], 
-                        'UserInfoStars3'         => $userTots[$uID][2], 
-                        'UserInfoStars'         => ($userTots[$uID][0]+(3*$userTots[$uID][1])+(3*$userTots[$uID][2])), 
-                        'UserInfoDepts'         => $userTots[$uID][3], 
-                        'UserInfoAvgTimeDept'     => $userTots[$uID][4]
+                        'UserInfoStars1'      => $userTots[$uID][0], 
+                        'UserInfoStars2'      => $userTots[$uID][1], 
+                        'UserInfoStars3'      => $userTots[$uID][2], 
+                        'UserInfoStars'       => ($userTots[$uID][0]+(3*$userTots[$uID][1])+(3*$userTots[$uID][2])), 
+                        'UserInfoDepts'       => $userTots[$uID][3], 
+                        'UserInfoAvgTimeDept' => $userTots[$uID][4]
                     ]);
             }
         }

@@ -26,7 +26,6 @@ class OPzComplaintReviews extends Model
         'ComRevConsistency', 
         'ComRevRealistic', 
         'ComRevOutrage', 
-        'ComRevMakeFeatured', 
         'ComRevExplicitLang', 
         'ComRevGraphicContent', 
         'ComRevComplaintType', 

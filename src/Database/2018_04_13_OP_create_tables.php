@@ -39,9 +39,6 @@ class OPCreateTables extends Migration
 			$table->char('ComAnyoneCharged', 1)->nullable();
 			$table->char('ComAllChargesResolved', 1)->nullable();
 			$table->integer('ComUnresolvedChargesActions')->unsigned()->default('0')->nullable();
-			$table->char('ComLegalAidHelp', 1)->nullable();
-			$table->char('ComGovtInvestigation', 1)->nullable();
-			$table->string('ComGovtInvestigationWhyNot')->nullable();
 			$table->string('ComHowHear')->nullable();
 			$table->longText('ComFeedback')->nullable();
 			$table->char('ComOfficerDisciplined', 1)->nullable();
@@ -124,6 +121,7 @@ class OPCreateTables extends Migration
 			$table->char('ScnForcibleEntry', 1)->nullable();
 			$table->char('ScnCCTV', 1)->nullable();
 			$table->longText('ScnCCTVDesc')->nullable();
+			$table->char('ScnIsVehicleAccident', 1)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_AllegSilver', function(Blueprint $table)
@@ -154,9 +152,9 @@ class OPCreateTables extends Migration
 			$table->char('AlleSilSexualAssault', 1)->nullable();
 			$table->integer('AlleSilIntimidatingWeapon')->unsigned()->nullable();
 			$table->integer('AlleSilIntimidatingWeaponType')->unsigned()->nullable();
-			$table->char('AlleSilRetaliation', 1)->nullable();
 			$table->char('AlleSilUnbecoming', 1)->nullable();
 			$table->char('AlleSilDiscourteous', 1)->nullable();
+			$table->char('AlleSilPropertyDamage', 1)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Allegations', function(Blueprint $table)
@@ -195,7 +193,7 @@ class OPCreateTables extends Migration
 			$table->foreign('EveComplaintID')->references('ComID')->on('OP_Complaints');
 			$table->integer('EveOrder')->nullable();
 			$table->string('EveType')->nullable();
-			$table->char('EveUserFinished', 1)->default('N')->nullable();
+			$table->char('EveUserFinished', 1)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Stops', function(Blueprint $table)
@@ -269,6 +267,7 @@ class OPCreateTables extends Migration
 			$table->longText('SrchDamageDesc')->nullable();
 			$table->char('SrchAllegWrongfulSearch', 1)->nullable();
 			$table->char('SrchAllegWrongfulProperty', 1)->nullable();
+			$table->char('SrchAllegPropertyDamage', 1)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_SearchContra', function(Blueprint $table)
@@ -511,6 +510,8 @@ class OPCreateTables extends Migration
 			$table->string('PrsnAddressZip', 10)->nullable();
 			$table->date('PrsnBirthday')->nullable();
 			$table->string('PrsnFacebook')->nullable();
+			$table->integer('PrsnUserID')->unsigned()->nullable();
+			$table->foreign('PrsnUserID')->references('id')->on('users');
 			$table->timestamps();
 		});
 		Schema::create('OP_PhysicalDesc', function(Blueprint $table)
@@ -526,7 +527,7 @@ class OPCreateTables extends Migration
 			$table->string('PhysEyes')->nullable();
 			$table->string('PhysDistinguishingMarksDesc')->nullable();
 			$table->string('PhysVoiceDesc')->nullable();
-			$table->string('PhysClothesDesc')->nullable();
+			$table->string('PhysGeneralDesc')->nullable();
 			$table->string('PhysDisabilitiesDesc')->nullable();
 			$table->timestamps();
 		});
@@ -556,7 +557,7 @@ class OPCreateTables extends Migration
 			$table->string('DeptName')->nullable();
 			$table->string('DeptSlug', 100)->nullable();
 			$table->integer('DeptType')->unsigned()->nullable();
-			$table->boolean('DeptStatus')->nullable();
+			$table->integer('DeptStatus')->unsigned()->nullable();
 			$table->dateTime('DeptVerified')->nullable();
 			$table->string('DeptEmail')->nullable();
 			$table->string('DeptPhoneWork', 20)->nullable();
@@ -570,6 +571,14 @@ class OPCreateTables extends Migration
 			$table->integer('DeptTotOfficers')->nullable();
 			$table->integer('DeptJurisdictionPopulation')->nullable();
 			$table->longText('DeptJurisdictionGPS')->nullable();
+			$table->string('DeptVersionAB')->nullable();
+			$table->integer('DeptSubmissionProgress')->nullable();
+			$table->string('DeptIPaddy')->nullable();
+			$table->string('DeptTreeVersion')->nullable();
+			$table->string('DeptUniqueStr')->nullable();
+			$table->integer('DeptUserID')->unsigned()->nullable();
+			$table->foreign('DeptUserID')->references('id')->on('users');
+			$table->string('DeptIsMobile')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Oversight', function(Blueprint $table)
@@ -790,6 +799,156 @@ class OPCreateTables extends Migration
 			$table->longText('AdmActNewData')->nullable();
 			$table->timestamps();
 		});
+		Schema::create('OP_Zedit_Departments', function(Blueprint $table)
+		{
+			$table->increments('ZedDeptID');
+			$table->integer('ZedDeptUserID')->nullable();
+			$table->integer('ZedDeptDuration')->nullable();
+			$table->integer('ZedDeptDeptID')->unsigned()->nullable();
+			$table->foreign('ZedDeptDeptID')->references('DeptID')->on('OP_Departments');
+			$table->string('ZedDeptDeptName')->nullable();
+			$table->string('ZedDeptDeptSlug', 100)->nullable();
+			$table->integer('ZedDeptDeptType')->unsigned()->nullable();
+			$table->integer('ZedDeptDeptStatus')->unsigned()->nullable();
+			$table->dateTime('ZedDeptDeptVerified')->nullable();
+			$table->string('ZedDeptDeptEmail')->nullable();
+			$table->string('ZedDeptDeptPhoneWork', 20)->nullable();
+			$table->string('ZedDeptDeptAddress')->nullable();
+			$table->string('ZedDeptDeptAddress2')->nullable();
+			$table->string('ZedDeptDeptAddressCity')->nullable();
+			$table->string('ZedDeptDeptAddressState', 2)->nullable();
+			$table->string('ZedDeptDeptAddressZip', 10)->nullable();
+			$table->string('ZedDeptDeptAddressCounty', 100)->nullable();
+			$table->string('ZedDeptDeptScoreOpenness', 11)->nullable();
+			$table->integer('ZedDeptDeptTotOfficers')->nullable();
+			$table->integer('ZedDeptDeptJurisdictionPopulation')->nullable();
+			$table->longText('ZedDeptDeptJurisdictionGPS')->nullable();
+			$table->integer('ZedDeptDeptUserID')->unsigned()->nullable();
+			$table->foreign('ZedDeptDeptUserID')->references('id')->on('users');
+			$table->integer('ZedDeptDeptSubmissionProgress')->nullable();
+			$table->string('ZedDeptDeptTreeVersion')->nullable();
+			$table->string('ZedDeptDeptVersionAB')->nullable();
+			$table->string('ZedDeptDeptUniqueStr')->nullable();
+			$table->string('ZedDeptDeptIPaddy')->nullable();
+			$table->string('ZedDeptDeptIsMobile')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_Zedit_Oversight', function(Blueprint $table)
+		{
+			$table->increments('ZedOverID');
+			$table->integer('ZedOverZedDeptID')->unsigned()->nullable();
+			$table->foreign('ZedOverZedDeptID')->references('ZedDeptID')->on('OP_Zedit_Departments');
+			$table->boolean('ZedOverOnlineResearch')->nullable();
+			$table->boolean('ZedOverMadeDeptCall')->nullable();
+			$table->boolean('ZedOverMadeIACall')->nullable();
+			$table->longText('ZedOverNotes')->nullable();
+			$table->integer('ZedOverOverID')->unsigned()->nullable();
+			$table->foreign('ZedOverOverID')->references('OverID')->on('OP_Oversight');
+			$table->integer('ZedOverOverType')->unsigned()->nullable();
+			$table->integer('ZedOverOverCivModel')->unsigned()->nullable();
+			$table->integer('ZedOverOverUserID')->unsigned()->nullable();
+			$table->foreign('ZedOverOverUserID')->references('id')->on('users');
+			$table->integer('ZedOverOverDeptID')->unsigned()->nullable();
+		$table->index('ZedOverOverDeptID');
+			$table->foreign('ZedOverOverDeptID')->references('DeptID')->on('OP_Departments');
+			$table->string('ZedOverOverAgncName')->nullable();
+			$table->dateTime('ZedOverOverVerified')->nullable();
+			$table->string('ZedOverOverNamePrefix', 20)->nullable();
+			$table->string('ZedOverOverNameFirst')->nullable();
+			$table->string('ZedOverOverNickname')->nullable();
+			$table->string('ZedOverOverNameMiddle', 100)->nullable();
+			$table->string('ZedOverOverNameLast')->nullable();
+			$table->string('ZedOverOverNameSuffix', 20)->nullable();
+			$table->string('ZedOverOverTitle')->nullable();
+			$table->string('ZedOverOverIDnumber', 50)->nullable();
+			$table->string('ZedOverOverWebsite')->nullable();
+			$table->string('ZedOverOverFacebook')->nullable();
+			$table->string('ZedOverOverTwitter')->nullable();
+			$table->string('ZedOverOverYouTube')->nullable();
+			$table->char('ZedOverOverHomepageComplaintLink', 1)->nullable();
+			$table->string('ZedOverOverWebComplaintInfo')->nullable();
+			$table->string('ZedOverOverComplaintPDF')->nullable();
+			$table->string('ZedOverOverComplaintWebForm')->nullable();
+			$table->string('ZedOverOverEmail')->nullable();
+			$table->string('ZedOverOverPhoneWork', 20)->nullable();
+			$table->string('ZedOverOverAddress')->nullable();
+			$table->string('ZedOverOverAddress2')->nullable();
+			$table->string('ZedOverOverAddressCity')->nullable();
+			$table->string('ZedOverOverAddressState', 2)->nullable();
+			$table->string('ZedOverOverAddressZip', 10)->nullable();
+			$table->integer('ZedOverOverSubmitDeadline')->nullable();
+			$table->boolean('ZedOverOverOfficialFormNotReq')->nullable();
+			$table->boolean('ZedOverOverOfficialAnon')->nullable();
+			$table->boolean('ZedOverOverWaySubOnline')->nullable();
+			$table->boolean('ZedOverOverWaySubEmail')->nullable();
+			$table->boolean('ZedOverOverWaySubVerbalPhone')->nullable();
+			$table->boolean('ZedOverOverWaySubPaperMail')->nullable();
+			$table->boolean('ZedOverOverWaySubPaperInPerson')->nullable();
+			$table->boolean('ZedOverOverWaySubNotary')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunStatDays', function(Blueprint $table)
+		{
+			$table->increments('VolunStatID');
+			$table->date('VolunStatDate')->nullable();
+			$table->integer('VolunStatSignups')->default('0')->nullable();
+			$table->integer('VolunStatLogins')->default('0')->nullable();
+			$table->integer('VolunStatUsersUnique')->default('0')->nullable();
+			$table->integer('VolunStatDeptsUnique')->default('0')->nullable();
+			$table->integer('VolunStatOnlineResearch')->default('0')->nullable();
+			$table->integer('VolunStatCallsDept')->default('0')->nullable();
+			$table->integer('VolunStatCallsIA')->default('0')->nullable();
+			$table->integer('VolunStatTot')->default('0')->nullable();
+			$table->integer('VolunStatTotalEdits')->default('0')->nullable();
+			$table->integer('VolunStatOnlineResearchV')->default('0')->nullable();
+			$table->integer('VolunStatCallsDeptV')->default('0')->nullable();
+			$table->integer('VolunStatCallsIAV')->default('0')->nullable();
+			$table->integer('VolunStatTotV')->default('0')->nullable();
+			$table->integer('VolunStatTotalEditsV')->default('0')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zVolunUserInfo', function(Blueprint $table)
+		{
+			$table->increments('UserInfoID');
+			$table->integer('UserInfoUserID')->unsigned()->nullable();
+			$table->foreign('UserInfoUserID')->references('id')->on('users');
+			$table->integer('UserInfoPersonContactID')->unsigned()->nullable();
+			$table->foreign('UserInfoPersonContactID')->references('PrsnID')->on('OP_PersonContact');
+			$table->integer('UserInfoStars')->default('0')->nullable();
+			$table->integer('UserInfoStars1')->default('0')->nullable();
+			$table->integer('UserInfoStars2')->default('0')->nullable();
+			$table->integer('UserInfoStars3')->default('0')->nullable();
+			$table->integer('UserInfoDepts')->default('0')->nullable();
+			$table->integer('UserInfoAvgTimeDept')->default('0')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_zComplaintReviews', function(Blueprint $table)
+		{
+			$table->increments('ComRevID');
+			$table->integer('ComRevComplaint')->unsigned()->nullable();
+			$table->foreign('ComRevComplaint')->references('ComID')->on('OP_Complaints');
+			$table->integer('ComRevUser')->unsigned()->nullable();
+			$table->foreign('ComRevUser')->references('id')->on('users');
+			$table->date('ComRevDate')->nullable();
+			$table->string('ComRevType', 10)->nullable();
+			$table->integer('ComRevComplaintType')->unsigned()->nullable();
+			$table->string('ComRevStatus', 50)->nullable();
+			$table->string('ComRevNext Action')->nullable();
+			$table->longText('ComRevNote')->nullable();
+			$table->boolean('ComRevOneIncident')->nullable();
+			$table->boolean('ComRevCivilianContact')->nullable();
+			$table->boolean('ComRevOneOfficer')->nullable();
+			$table->boolean('ComRevOneAllegation')->nullable();
+			$table->boolean('ComRevEvidenceUploaded')->nullable();
+			$table->integer('ComRevEnglishSkill')->nullable();
+			$table->integer('ComRevReadability')->nullable();
+			$table->integer('ComRevConsistency')->nullable();
+			$table->integer('ComRevRealistic')->nullable();
+			$table->integer('ComRevOutrage')->nullable();
+			$table->boolean('ComRevExplicitLang')->nullable();
+			$table->boolean('ComRevGraphicContent')->nullable();
+			$table->timestamps();
+		});
 	
     }
 
@@ -848,6 +1007,11 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_Visitors');
 		Schema::drop('OP_PrivilegeProfiles');
 		Schema::drop('OP_AdminActions');
+		Schema::drop('OP_Zedit_Departments');
+		Schema::drop('OP_Zedit_Oversight');
+		Schema::drop('OP_zVolunStatDays');
+		Schema::drop('OP_zVolunUserInfo');
+		Schema::drop('OP_zComplaintReviews');
 	
     }
 }

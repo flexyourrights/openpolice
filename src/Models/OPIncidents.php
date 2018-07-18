@@ -19,7 +19,6 @@ class OPIncidents extends Model
 		'IncAddressLat', 
 		'IncAddressLng', 
 		'IncLandmarks', 
-		'IncDate', 
 		'IncTimeStart', 
 		'IncTimeEnd', 
 		'IncDuration', 

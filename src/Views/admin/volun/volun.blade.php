@@ -6,7 +6,8 @@
 
 <div class="row">
     <div class="col-md-6 taL">
-        <h1><i class="fa fa-users"></i> Volunteers <i class="gry9 f16">( {{ number_format(sizeof($printVoluns[0])) }} )</i></h1>
+        <h1><i class="fa fa-users"></i> Volunteers 
+        <i class="gry9 f16">( {{ number_format(sizeof($printVoluns[0])) }} )</i></h1>
     </div>
     <div class="col-md-6 taR p20">
         <a href="/dashboard/users" class="btn btn-default">Manage Users</i></a>
@@ -90,12 +91,18 @@
             {{ number_format($volun[0]->UserInfoAvgTimeDept/60, 0) }}
         @endif
         min</nobr></td>
-    <td class="taC @if ($volun[0]->UserInfoStars1 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars1) }} @if ($volun[0]->UserInfoStars1 > 0) <i class="fa fa-laptop"></i> @endif </td>
-    <td class="taC @if ($volun[0]->UserInfoStars2 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars2) }} @if ($volun[0]->UserInfoStars2 > 0) <i class="fa fa-phone"></i> @endif </td>
-    <td class="taC @if ($volun[0]->UserInfoStars3 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars3) }} @if ($volun[0]->UserInfoStars3 > 0) <i class="fa fa-phone"></i> @endif </td>
-    <td class="taC @if ($volun[0]->UserInfoDepts == 0) gryC @endif "><b>{{ number_format($volun[0]->UserInfoDepts) }}</b></td>
-    <td> @if (isset($volun[2]->PrsnAddressState)) {{ $volun[2]->PrsnAddressState }} @else <span class="gryC">-</span> @endif </td>
-    <td> @if (isset($volun[2]->PrsnEmail)) <a href="mailto:{{ $volun[2]->PrsnEmail }}" class="f12 lH13">{{ $volun[2]->PrsnEmail }}</a> @endif </td>
+    <td class="taC @if ($volun[0]->UserInfoStars1 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars1) }} 
+        @if ($volun[0]->UserInfoStars1 > 0) <i class="fa fa-laptop"></i> @endif </td>
+    <td class="taC @if ($volun[0]->UserInfoStars2 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars2) }} 
+        @if ($volun[0]->UserInfoStars2 > 0) <i class="fa fa-phone"></i> @endif </td>
+    <td class="taC @if ($volun[0]->UserInfoStars3 == 0) gryC @endif ">{{ number_format($volun[0]->UserInfoStars3) }} 
+        @if ($volun[0]->UserInfoStars3 > 0) <i class="fa fa-phone"></i> @endif </td>
+    <td class="taC @if ($volun[0]->UserInfoDepts == 0) gryC @endif ">
+        <b>{{ number_format($volun[0]->UserInfoDepts) }}</b></td>
+    <td> @if (isset($volun[2]->PrsnAddressState)) {{ $volun[2]->PrsnAddressState }} 
+        @else <span class="gryC">-</span> @endif </td>
+    <td> @if (isset($volun[2]->PrsnEmail)) <a href="mailto:{{ $volun[2]->PrsnEmail }}" class="f12 lH13"
+        >{{ $volun[2]->PrsnEmail }}</a> @endif </td>
     <td> @if (isset($volun[2]->PrsnPhoneMobile)) {{ $volun[2]->PrsnPhoneMobile }} @endif </td>
     </tr>
 @empty

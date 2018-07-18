@@ -3,16 +3,15 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPBodyParts extends Model
+class OPInjuryBodyParts extends Model
 {
-    protected $table      = 'OP_BodyParts';
-    protected $primaryKey = 'BodyID';
+    protected $table      = 'OP_InjuryBodyParts';
+    protected $primaryKey = 'InjBdyID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'BodyForceID', 
-		'BodyInjuryID', 
-		'BodyPart', 
+		'InjBdyInjuryID', 
+		'InjBdyPart', 
     ];
     
     // END SurvLoop auto-generated portion of Model

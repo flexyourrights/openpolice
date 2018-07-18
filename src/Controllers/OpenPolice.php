@@ -5,17 +5,23 @@ use DB;
 use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Aws\Ses\SesClient;
 
 use App\Models\User;
 use App\Models\SLZips;
 use App\Models\SLEmailed;
 use App\Models\SLDefinitions;
+use App\Models\SLNode;
 use App\Models\SLNodeSavesPage;
+use App\Models\SLEmails;
 
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\OPIncidents;
 use App\Models\OPEventSequence;
+use App\Models\OPAllegSilver;
+use App\Models\OPAllegations;
 use App\Models\OPStops;
 use App\Models\OPSearches;
 use App\Models\OPArrests;
@@ -28,16 +34,21 @@ use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksOfficerEvents;
 use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
-use App\Models\OPzVolunUserInfo;
+use App\Models\OPPhysicalDesc;
 use App\Models\OPLinksComplaintOversight;
 
-use Illuminate\Support\Facades\Mail;
-use Aws\Ses\SesClient;
+use App\Models\OPzComplaintReviews;
+use App\Models\OPZeditDepartments;
+use App\Models\OPZeditOversight;
+use App\Models\OPzVolunTmp;
+use App\Models\OPzVolunUserInfo;
+use App\Models\OPzVolunStatDays;
 
+use OpenPolice\Controllers\OpenPoliceAdmin;
 use OpenPolice\Controllers\OpenPoliceReport;
-use OpenPolice\Controllers\VolunteerController;
+use OpenPolice\Controllers\VolunteerLeaderboard;
+    use OpenPolice\Controllers\VolunteerController;
 
-use SurvLoop\Controllers\DatabaseLookups;
 use SurvLoop\Controllers\SurvFormTree;
 
 class OpenPolice extends SurvFormTree
@@ -49,64 +60,78 @@ class OpenPolice extends SurvFormTree
     protected $allCivs         = [];
     protected $allegations     = [];
     public $worstAllegations   = [ // Allegations in descending order of severity, Definition IDs
-        [126, 'Sexual Assault'],
-        [115, 'Unreasonable Force'],
-        [116, 'Wrongful Arrest'], 
-        [120, 'Wrongful Property Seizure'],
-        [480, 'Sexual Harassment'], 
-        [125, 'Intimidating Display of Weapon'], 
-        [119, 'Wrongful Search'],
-        [118, 'Wrongful Entry'],
-        [117, 'Wrongful Detention'], 
-        [121, 'Bias-Based Policing'],
-        [122, 'Excessive Arrest Charges'],
-        [124, 'Excessive Citation'],
-        [128, 'Conduct Unbecoming an Officer'],
-        [129, 'Discourtesy'],
-        [127, 'Neglect of Duty'], 
-        [127, 'Policy or Procedure Violation'], 
-        [131, 'Miranda Rights'],
-        [130, 'Officer Refused To Provide ID']
-    ];
-    public $eventTypes         = ['Stops', 'Searches', 'Force', 'Arrests'];
+        [126, 'Sexual Assault',                 'AlleSilSexualAssault'],
+        [115, 'Unreasonable Force',             'AlleSilForceUnreason'],
+        [116, 'Wrongful Arrest',                'AlleSilArrestWrongful'], 
+        [480, 'Sexual Harassment',              'AlleSilSexualHarass'], 
+        [120, 'Wrongful Property Seizure',      'AlleSilPropertyWrongful'],
+        [496, 'Wrongful Property Damage',       'AlleSilPropertyDamage'],
+        [125, 'Intimidating Display of Weapon', 'AlleSilIntimidatingWeapon'], 
+        [119, 'Wrongful Search',                'AlleSilSearchWrongful'],
+        [118, 'Wrongful Entry',                 'AlleSilWrongfulEntry'],
+        [117, 'Wrongful Detention',             'AlleSilStopWrongful'], 
+        [121, 'Bias-Based Policing',            'AlleSilBias'],
+        [122, 'Excessive Arrest Charges',       'AlleSilArrestRetaliatory'],
+        [124, 'Excessive Citation',             'AlleSilCitationExcessive'],
+        [128, 'Conduct Unbecoming an Officer',  'AlleSilUnbecoming'],
+        [129, 'Discourtesy',                    'AlleSilDiscourteous'],
+        [127, 'Neglect of Duty',                'AlleSilNeglectDuty'], 
+        [127, 'Policy or Procedure Violation',  'AlleSilProcedure'], 
+        [131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
+        [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
+        ];
+    public $eventTypes         = [ 'Stops', 'Searches', 'Force', 'Arrests' ];
+    public $eveTypIDs          = [ 252 => 'Stops', 253 => 'Searches', 254 => 'Force', 255 => 'Arrests' ];
     protected $eventTypeLabel  = [
         'Stops'    => 'Stop/Questioning',
         'Searches' => 'Search/Seizure',
         'Force'    => 'Use of Force',
         'Arrests'  => 'Arrest'
-    ];
+        ];
+    protected $eventGoldAllegs = [
+        'Stops'    => [117, 118],
+        'Searches' => [119, 120, 496],
+        'Force'    => [115],
+        'Arrests'  => [116, 122]
+        ];
+    protected $cmplntUpNodes   = [280, 324, 317, 413, 371];
     protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))
+    
+    public function comStatus($defVal)
+    {
+        return $GLOBALS["SL"]->def->getID('Complaint Status', $defVal);
+    }
     
     protected function maxUserView()
     {
         if (isset($this->sessData->dataSets["Complaints"])) {
             if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                    != $GLOBALS["SL"]->getDefID('Privacy Types', 'Submit Publicly')
+                    != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
                 || in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
-                    $GLOBALS["SL"]->getDefID('Complaint Status', 'Reviewed'),
-                    $GLOBALS["SL"]->getDefID('Complaint Status', 'Pending Attorney'),
-                    $GLOBALS["SL"]->getDefID('Complaint Status', 'Attorney\'d'),
-                    $GLOBALS["SL"]->getDefID('Complaint Status', 'OK to Submit to Oversight')
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
                 ])) {
-                $this->v["view"] = 'Anon';
+                $GLOBALS["SL"]->x["pageView"] = 'public';
             }
         }
         if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
             if (isset($this->sessData->dataSets["Civilians"]) 
-                && $this->v["user"]->id == $this->sessData->dataSets["Civilians"][0]->CivUserID) {
-                $this->v["isOwner"] = true;
-                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) $this->v["view"] = 'Investigate';
+                && $this->v["uID"] == $this->sessData->dataSets["Civilians"][0]->CivUserID) {
+                //$this->v["isOwner"] = true;
+                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) $GLOBALS["SL"]->x["pageView"] = 'full';
             } elseif ($this->v["user"]->hasRole('administrator|staff')) {
-                $this->v["view"] = 'Investigate';
-            } elseif ($this->v["user"]->hasRole('thirdparty')) {
+                $GLOBALS["SL"]->x["pageView"] = 'full';
+            } elseif ($this->v["user"]->hasRole('partner') && $this->v["user"]->hasRole('oversight')) {
                 $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)->first();
                 if ($overRow && isset($overRow->OverDeptID)) {
                     $lnkChk = OPLinksComplaintDept::where('LnkComDeptComplaintID', $this->coreID)
                         ->where('LnkComDeptDeptID', $overRow->OverDeptID)
                         ->first();
                     if ($lnkChk && isset($lnkChk->LnkComDeptID)) {
-                        $this->v["view"] = 'Investigate';
+                        $GLOBALS["SL"]->x["pageView"] = 'full';
                     }
                 }
             }
@@ -137,7 +162,19 @@ class OpenPolice extends SurvFormTree
     {
         if (!isset($this->sessData->dataSets["Complaints"])) return false;
         return ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            == $GLOBALS["SL"]->getDefID('Privacy Types', 'Submit Publicly'));
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'));
+    }
+    
+    public function isPublished($coreTbl, $coreID, $coreRec = NULL)
+    {
+        if ($coreTbl == 'Complaints') {
+            if (!$coreRec) $coreRec = OPComplaints::find($coreID);
+            if ($coreRec && isset($coreRec->ComStatus)) {
+                return (in_array($coreRec->ComStatus, $this->getPublishedStatusList()));
+            }
+            return false;
+        }
+        return false;
     }
     
     protected function moreThan1Victim()
@@ -152,75 +189,104 @@ class OpenPolice extends SurvFormTree
         return (sizeof($this->sessData->loopItemIDs["Officers"]) > 1); 
     }
     
-    public function chkCoreRecEmpty($coreID = -3, $coreRec = [])
+    public function chkCoreRecEmpty($coreID = -3, $coreRec = NULL)
     {
         if ($coreID <= 0) $coreID = $this->coreID;
-        if (sizeof($coreRec) == 0 && $coreID > 0) $coreRec = OPComplaints::find($coreID);
+        if (!$coreRec && $coreID > 0) $coreRec = OPComplaints::find($coreID);
+        if (!$coreRec) return false;
         if (!isset($coreRec->ComSubmissionProgress) || intVal($coreRec->ComSubmissionProgress) <= 0) return true;
         if (!isset($coreRec->ComSummary) || trim($coreRec->ComSummary) == '') return true;
         return false;
     }
     
-    protected function recordIsEditable($coreTbl, $coreID, $coreRec = [])
+    protected function recordIsEditable($coreTbl, $coreID, $coreRec = NULL)
     {
-        if (sizeof($coreRec) == 0 && $coreID > 0) $coreRec = OPComplaints::find($coreID);
+        if (!$coreRec && $coreID > 0) $coreRec = OPComplaints::find($coreID);
         if (!isset($coreRec->ComStatus)) return true;
+        if (!$coreRec) return false;
         if ($this->treeID == 1) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete')) return true;
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) return true;
         } elseif ($this->treeID == 5) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->getDefID('Compliment Status', 'Incomplete')) return true;
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete')) return true;
         }
         return false;
     }
     
     public function getAllPublicCoreIDs($coreTbl = '')
     {
+        
         if (trim($coreTbl) == '') $coreTbl = $GLOBALS["SL"]->coreTbl;
         $this->allPublicCoreIDs = $list = [];
         if ($coreTbl == 'Complaints') {
-            $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList())
-                ->where('ComType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
-                ->select('ComID')
+            $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList($coreTbl))
+                //->where('ComType', $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
+                ->select('ComID', 'ComPublicID')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } elseif ($coreTbl == 'Compliments') {
-            $list = OPCompliments::whereIn('CompliStatus', $this->getPublishedStatusList())
-                ->where('CompliType', $GLOBALS["SL"]->getDefID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
-                ->select('CompliID')
+            $list = OPCompliments::whereIn('CompliStatus', $this->getPublishedStatusList($coreTbl))
+                //->where('CompliType', $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'))
+                ->select('CompliID') //, 'CompliPublicID')
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
-        if ($list && sizeof($list) > 0) {
-            foreach ($list as $l) {
-                if ($l->getKey() > 0) $this->allPublicCoreIDs[] = $l->getKey();
-            }
+        if ($list->isNotEmpty()) {
+            foreach ($list as $l) $this->allPublicCoreIDs[] = $l->ComPublicID;
         }
         //echo '<pre>'; print_r($this->allPublicCoreIDs); echo '</pre>';
         return $this->allPublicCoreIDs;
     }
     
-    protected function getPublishedStatusList()
+    protected function getPublishedStatusList($coreTbl = '')
     {
-        return [
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'Reviewed'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'Submitted to Oversight'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'Received by Oversight'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'OK to Submit to Oversight'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'Declined To Investigate (Closed)'), 
-            $GLOBALS["SL"]->getDefID('Complaint Status',  'Investigated (Closed)'), 
-            
-            $GLOBALS["SL"]->getDefID('Compliment Status', 'Reviewed'), 
-            $GLOBALS["SL"]->getDefID('Compliment Status', 'Submitted to Oversight'), 
-            $GLOBALS["SL"]->getDefID('Compliment Status', 'Received by Oversight'), 
-            $GLOBALS["SL"]->getDefID('Compliment Status', 'Closed')
-        ];
+        if (!isset($coreTbl)) $coreTbl = $GLOBALS["SL"]->coreTbl;
+        if ($coreTbl == 'Complaints') {
+            return [
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Submitted to Oversight'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Received by Oversight'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Declined To Investigate (Closed)'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)')
+            ];
+        } elseif ($coreTbl == 'Compliments') {
+            return [
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Reviewed'), 
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Submitted to Oversight'), 
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight')
+            ];
+        }
+        return [];
+    }
+    
+    protected function getUnPublishedStatusList($coreTbl = '')
+    {
+        if (!isset($coreTbl)) $coreTbl = $GLOBALS["SL"]->coreTbl;
+        if ($coreTbl == 'Complaints') {
+            return [
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Hold'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'New'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Pending Attorney'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Attorney\'d'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Reviewed'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight'), 
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Closed')
+            ];
+        } elseif ($coreTbl == 'Compliments') {
+            return [
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Hold'), 
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'New'),
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Closed')
+            ];
+        }
+        return [];
     }
     
     // Initializing a bunch of things which are not [yet] automatically determined by the software
     protected function initExtra(Request $request)
     {
         // Establishing Main Navigation Organization, with Node ID# and Section Titles
+        $this->loadYourContact();
         $this->majorSections = [];
+        if (!isset($GLOBALS["SL"]->treeID)) return true;
         if ($GLOBALS["SL"]->treeID == 1) {
             $this->majorSections[] = array(1,      'Your Story',        'active');
             $this->majorSections[] = array(4,      'Who\'s Involved',   'active');
@@ -276,6 +342,34 @@ class OpenPolice extends SurvFormTree
             $this->minorSections[3][] = array(957, 'Review Narrative');
             $this->minorSections[3][] = array(961, 'Feedback');
             $this->minorSections[3][] = array(964, 'Submit Complaint');
+        } elseif ($GLOBALS["SL"]->treeID == 36) {
+            if ($request->has('d') && trim($request->get('d')) != '') {
+                $chk = OPDepartments::where('DeptSlug', 'LIKE', trim($request->get('d')))
+                    ->first();
+                if ($chk && isset($chk->DeptID)) {
+                    $this->loadAllSessData($GLOBALS["SL"]->coreTbl, $chk->DeptID);
+                }
+            }
+        }
+        return true;
+    }
+    
+    protected function tblsInPackage()
+    {
+        if ($this->dbID == 1) return ['Departments', 'Oversight'];
+        return [];
+    }
+    
+    protected function loadYourContact()
+    {
+        if (Auth::user() && isset(Auth::user()->id) && Auth::user()->id > 0) {
+            $this->v["yourContact"] = OPPersonContact::where('PrsnUserID', Auth::user()->id)
+                ->first();
+            if (!$this->v["yourContact"] || !isset($this->v["yourContact"]->PrsnID)) {
+                $this->v["yourContact"] = new OPPersonContact;
+                $this->v["yourContact"]->PrsnUserID = Auth::user()->id;
+                $this->v["yourContact"]->save();
+            }
         }
         return true;
     }
@@ -283,20 +377,49 @@ class OpenPolice extends SurvFormTree
     // Initializing a bunch of things which are not [yet] automatically determined by the software
     protected function loadExtra()
     {
-        if ($GLOBALS["SL"]->treeID == 1 && $this->isGold()) $this->majorSections[3][2] = 'active';
-        if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
-            && isset($this->sessData->dataSets["Civilians"][0])
-            && (!isset($this->sessData->dataSets["Civilians"][0]->CivUserID) 
-                || intVal($this->sessData->dataSets["Civilians"][0]->CivUserID) <= 0)) {
-            $this->sessData->dataSets["Civilians"][0]->update([
-                'CivUserID' => $this->v["user"]->id
-            ]);
+        if ($this->treeID == 1 && $this->isGold()) $this->majorSections[3][2] = 'active';
+        if ($this->treeID == 1 || $GLOBALS["SL"]->getReportTreeID() == 1) {
+            if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
+                && isset($this->sessData->dataSets["Civilians"][0])
+                && (!isset($this->sessData->dataSets["Civilians"][0]->CivUserID) 
+                    || intVal($this->sessData->dataSets["Civilians"][0]->CivUserID) <= 0)) {
+                $this->sessData->dataSets["Civilians"][0]->update([
+                    'CivUserID' => $this->v["user"]->id
+                ]);
+            }
+            $this->chkPersonRecs();
+            if (isset($this->sessData->dataSets["Departments"]) && 
+                sizeof($this->sessData->dataSets["Departments"]) > 0) {
+                foreach ($this->sessData->dataSets["Departments"] as $i => $d) {
+                    $this->chkDeptLinks($d->DeptID);
+                }
+            }
+            if (isset($this->sessData->dataSets["Complaints"]) 
+                && !isset($this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted) 
+                && $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                    != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+                $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted 
+                    = $this->sessData->dataSets["Complaints"][0]->created_at;
+                $chk = DB::table('SL_NodeSavesPage')
+                    ->join('SL_Sess', 'SL_Sess.SessID', '=', 'SL_NodeSavesPage.PageSaveSession')
+                    ->where('SL_Sess.SessTree', 1)
+                    ->where('SL_Sess.SessCoreID', $this->coreID)
+                    ->select('SL_NodeSavesPage.created_at')
+                    ->orderBy('SL_NodeSavesPage.created_at', 'desc')
+                    ->first();
+                if ($chk && isset($chk->created_at)) {
+                    $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted = $chk->created_at;
+                }
+                $this->sessData->dataSets["Complaints"][0]->save();
+            }
         }
-        if ($this->treeID == 5 && isset($this->sessData->dataSets["Complaints"])
-            && (!isset($this->sessData->dataSets["Complaints"][0]->ComIsCompliment)
-                || intVal($this->sessData->dataSets["Complaints"][0]->ComIsCompliment) != 1)) {
-            $this->sessData->dataSets["Complaints"][0]->ComIsCompliment = 1;
-            $this->sessData->dataSets["Complaints"][0]->save();
+        if ($this->treeID == 5 || $GLOBALS["SL"]->getReportTreeID() == 5) {
+            if (isset($this->sessData->dataSets["Complaints"])
+                && (!isset($this->sessData->dataSets["Complaints"][0]->ComIsCompliment)
+                    || intVal($this->sessData->dataSets["Complaints"][0]->ComIsCompliment) != 1)) {
+                $this->sessData->dataSets["Complaints"][0]->ComIsCompliment = 1;
+                $this->sessData->dataSets["Complaints"][0]->save();
+            }
         }
         if (session()->has('opcDeptID') && intVal(session()->get('opcDeptID')) > 0) {
             if ($this->treeID == 1) {
@@ -305,7 +428,7 @@ class OpenPolice extends SurvFormTree
                     if (!isset($this->sessData->dataSets["LinksComplaintDept"])) {
                         $this->sessData->dataSets["LinksComplaintDept"] = [];
                     }
-                    if (sizeof($this->sessData->dataSets["LinksComplaintDept"]) == 0) {
+                    if (empty($this->sessData->dataSets["LinksComplaintDept"])) {
                         $newDept = new OPLinksComplaintDept;
                         $newDept->LnkComDeptComplaintID = $this->coreID;
                         $newDept->LnkComDeptDeptID      = intVal(session()->get('opcDeptID'));
@@ -319,7 +442,7 @@ class OpenPolice extends SurvFormTree
                     if (!isset($this->sessData->dataSets["LinksComplimentDept"])) {
                         $this->sessData->dataSets["LinksComplimentDept"] = [];
                     }
-                    if (sizeof($this->sessData->dataSets["LinksComplimentDept"]) == 0) {
+                    if (empty($this->sessData->dataSets["LinksComplimentDept"])) {
                         $newDept = new OPLinksComplimentDept;
                         $newDept->LnkCompliDeptComplimentID = $this->coreID;
                         $newDept->LnkCompliDeptDeptID       = intVal(session()->get('opcDeptID'));
@@ -333,10 +456,111 @@ class OpenPolice extends SurvFormTree
         return true;
     }
     
+    protected function chkPersonRecs()
+    {
+        // This should've been automated via the data table subset option
+        // but for now, I'm replacing that complication with this check...
+        $found = false;
+        foreach ([ ['Civilians', 'Civ'], ['Officers', 'Off'] ] as $type) {
+            if (isset($this->sessData->dataSets[$type[0]]) && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
+                foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
+                    if (!isset($civ->{ $type[1] . 'PersonID' }) || intVal($civ->{ $type[1] . 'PersonID' }) <= 0) {
+                        $new = new OPPersonContact;
+                        $new->save();
+                        $this->sessData->dataSets[$type[0]][$i]->update([
+                            $type[1] . 'PersonID' => $new->getKey() ]);
+                        $found = true;
+                    }
+                    if (!isset($civ->{ $type[1] . 'PhysDescID' }) 
+                        || intVal($civ->{ $type[1] . 'PhysDescID' }) <= 0) {
+                        $new = new OPPhysicalDesc;
+                        $new->save();
+                        $this->sessData->dataSets[$type[0]][$i]->update([
+                            $type[1] . 'PhysDescID' => $new->getKey() ]);
+                        $found = true;
+                    }
+                }
+            }
+        }
+        if ($found) $this->sessData->refreshDataSets();
+        // // // //
+        return true;
+    }
+    
+    protected function initBlnkAllegsSilv()
+    {
+        if (!isset($this->sessData->dataSets["AllegSilver"])) {
+            $this->sessData->dataSets["AllegSilver"] = new OPAllegSilver;
+            $this->sessData->dataSets["AllegSilver"]->AlleSilComplaintID = $this->coreID;
+            $this->sessData->dataSets["AllegSilver"]->save();
+        }
+        foreach ($this->worstAllegations as $alle) {
+            $found = false;
+            if (isset($this->sessData->dataSets["Allegations"]) 
+                && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
+                foreach ($this->sessData->dataSets["Allegations"] as $i => $alleRow) {
+                    if ($alle[0] == $alleRow->AlleType) $found = true;
+                }
+            }
+            if (!$found) {
+                $new = new OPAllegations;
+                $new->AlleComplaintID = $this->coreID;
+                $new->AlleType = $alle[0];
+                $new->save();
+            }
+        }
+        return true;
+    }
+    
+    protected function initBlnkAllegsGold()
+    {
+        if (isset($this->sessData->dataSets["EventSequence"]) 
+            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
+            foreach ($this->sessData->dataSets["EventSequence"] as $i => $eveSeq) {
+                foreach ($this->eventGoldAllegs[$eveSeq->EveType] as $alleID) {
+                    $found = false;
+                    if (isset($this->sessData->dataSets["Allegations"]) 
+                        && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
+                        foreach ($this->sessData->dataSets["Allegations"] as $i => $alleRow) {
+                            if ($alleRow->AlleEventSequenceID == $eveSeq->EveID 
+                                && $alleID == $alleRow->AlleType) $found = true;
+                        }
+                    }
+                    if (!$found) {
+                        $new = new OPAllegations;
+                        $new->AlleComplaintID = $this->coreID;
+                        $new->AlleEventSequenceID = $eveSeq->EveID;
+                        $new->AlleType = $alleID;
+                        $new->save();
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    protected function afterCreateNewDataLoopItem($tbl = '', $itemID = -3)
+    {
+        if (in_array($tbl, ['Civilians', 'Officers']) && $itemID > 0) $this->chkPersonRecs();
+        return true;
+    }
+    
     protected function overrideMinorSection($nID = -3, $majorSectInd = -3)
     {
         if (in_array($nID, [483, 484, 485])) return 148;
         return -1;
+    }
+    
+    protected function getTableRecLabelCustom($tbl, $rec = [], $ind = -3)
+    {
+        if ($tbl == 'Vehicles' && isset($rec->VehicTransportation)) {
+            return $GLOBALS["SL"]->def->getValById($rec->VehicTransportation)
+                . ((isset($rec->VehicVehicleMake))  ? ' ' . $rec->VehicVehicleMake : '')
+                . ((isset($rec->VehicVehicleModel)) ? ' ' . $rec->VehicVehicleModel : '')
+                . ((isset($rec->VehicVehicleDesc))  ? ' ' . $rec->VehicVehicleDesc : '');
+        }
+        return '';
     }
     
     // CUSTOM={OnlyIfNoAllegationsOtherThan:WrongStop,Miranda,PoliceRefuseID]
@@ -374,8 +598,8 @@ class OpenPolice extends SurvFormTree
                 && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
                 foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
                     if (in_array($alleg->AlleType, [
-                        $GLOBALS["SL"]->getDefID('Allegation Type', 'Sexual Assault'), 
-                        $GLOBALS["SL"]->getDefID('Allegation Type', 'Sexual Harassment')
+                        $GLOBALS["SL"]->def->getID('Allegation Type', 'Sexual Assault'), 
+                        $GLOBALS["SL"]->def->getID('Allegation Type', 'Sexual Harassment')
                         ])) {
                         $noSexAlleg = false;
                     }
@@ -401,7 +625,7 @@ class OpenPolice extends SurvFormTree
             ])) {
             return (sizeof($this->getPreviousEveSeqsOfType($GLOBALS["SL"]->closestLoop["itemID"])) > 0) ? 1 : 0;
         } elseif ($condition == '#HasForceHuman') {
-            if (!$this->sessData->dataHas('Force') || sizeof($this->sessData->dataSets["Force"]) == 0) return 0;
+            if (!$this->sessData->dataHas('Force') || empty($this->sessData->dataSets["Force"])) return 0;
             $foundHuman = false;
             foreach ($this->sessData->dataSets["Force"] as $force) {
                 if (trim($force->ForAgainstAnimal) != 'Y') $foundHuman = true;
@@ -445,11 +669,36 @@ class OpenPolice extends SurvFormTree
                     ->where('EmailedFromUser', $this->v["user"]->id)
                     ->where('created_at', '>', $cutoff)
                     ->get();
-                 if ($chk && sizeof($chk) > 0) {
-                     return 1;
+                 if ($chk->isNotEmpty()) {
+                     return 1;                
                  }
             }
             return 0;
+        } elseif ($condition == '#HasUploads') {
+            $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
+            if ($uploads && sizeof($uploads) > 0) return 1;
+            return 0;
+        } elseif ($condition == '#PrintAnonOnly') {
+            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
+                && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
+                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComStatus), 
+                    $this->getUnPublishedStatusList())) {
+                return 1;
+            }
+            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
+                && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)
+                && $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                    != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+                return 1;
+            }
+            return 0;
+        } elseif ($condition == '#PrintSensitiveReport') {
+            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['full', 'full-pdf'])) {
+                return 1;
+            }
+            return 0;
+        } elseif ($condition == '#IsOversightAgency') {
+            return (($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) ? 1 : 0);
         }
         return -1; 
     }
@@ -465,11 +714,11 @@ class OpenPolice extends SurvFormTree
             return (isset($this->sessData->dataSets["Complaints"]) 
                 && (in_array($this->sessData->dataSets["Complaints"][0]->ComUnresolvedCharges, ['Y', '?'])
                 || intVal($this->sessData->dataSets["Complaints"][0]->ComPrivacy) 
-                    == intVal($GLOBALS["SL"]->getDefID('Privacy Types', 'Completely Anonymous'))));
+                    == intVal($GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'))));
         } elseif ($this->treeID == 5) {
             return (isset($this->sessData->dataSets["Compliments"]) 
                 && intVal($this->sessData->dataSets["Compliments"][0]->CompliPrivacy)
-                    == intVal($GLOBALS["SL"]->getDefID('Privacy Types', 'Completely Anonymous')));
+                    == intVal($GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')));
         }
     }
     
@@ -481,16 +730,14 @@ class OpenPolice extends SurvFormTree
                 ->join('OP_Complaints', 'OP_Civilians.CivComplaintID', '=', 'OP_Complaints.ComID')
                 ->where('OP_Civilians.CivUserID', $this->v["user"]->id)
                 ->where('OP_Civilians.CivIsCreator', 'Y')
-                ->where('OP_Complaints.ComStatus', $GLOBALS["SL"]->getDefID('Complaint Status', 'Incomplete'))
+                ->where('OP_Complaints.ComStatus', $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
                 ->whereNotNull('OP_Complaints.ComSummary')
                 ->where('OP_Complaints.ComSummary', 'NOT LIKE', '')
                 ->select('OP_Complaints.*') //, 'OP_Civilians.CivID', 'OP_Civilians.CivRole'
                 ->orderBy('OP_Complaints.created_at', 'desc')
                 ->get();
-            if ($incompletes && sizeof($incompletes) > 0) {
-                foreach ($incompletes as $i => $com) {
-                    $this->coreIncompletes[] = [$com->ComID, $com];
-                }
+            if ($incompletes->isNotEmpty()) {
+                foreach ($incompletes as $i => $com) $this->coreIncompletes[] = [$com->ComID, $com];
                 return $this->coreIncompletes[0][0];
             }
         }
@@ -499,8 +746,8 @@ class OpenPolice extends SurvFormTree
     
     public function multiRecordCheckIntro($cnt = 1)
     {
-        $ret = '<a id="unfinishedBtn" class="btn btn-lg btn-default w100" href="javascript:;">'
-            . $this->v["user"]->name . ', You Have ';
+        $ret = '<a id="hidivBtnUnfinished' . $this->currNode() . '" class="btn btn-lg btn-default w100 hidivBtn" '
+            . 'href="javascript:;">' . $this->v["user"]->name . ', You Have ';
         if ($this->treeID == 1) {
             $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');
         } elseif ($this->treeID == 5) {
@@ -535,14 +782,14 @@ class OpenPolice extends SurvFormTree
             $incident = OPIncidents::find($coreRecord[1]->ComIncidentID);
             if ($incident && isset($incident->IncAddressCity)) {
                 $ret .= $incident->IncAddressCity . ', Incident Date: ' 
-                    . date('n/j/y', strtotime($incident->IncDate));
+                    . date('n/j/y', strtotime($incident->IncTimeStart));
             }
             $ret .= ' (Complaint #' . $coreRecord[1]->getKey() . ')';
         } elseif ($this->treeID == 5) {
             $incident = OPIncidents::find($coreRecord[1]->CompliIncidentID);
             if ($incident && isset($incident->IncAddressCity)) {
                 $ret .= $incident->IncAddressCity . ', Incident Date: ' 
-                    . date('n/j/y', strtotime($incident->IncDate));
+                    . date('n/j/y', strtotime($incident->IncTimeStart));
             }
             $ret .= ' (Compliment #' . $coreRecord[1]->getKey() . ')';
         }
@@ -559,10 +806,35 @@ class OpenPolice extends SurvFormTree
 // START Processes Which Override Basic Node Printing and $_POST Processing
 *****************************************************************************/
     
+    protected function tweakPageViewPerms()
+    {
+        if (isset($this->sessData->dataSets["Complaints"]) 
+            && $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
+            && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)
+            && $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+            if ($GLOBALS["SL"]->x["dataPerms"] == 'public') {
+                $GLOBALS["SL"]->x["dataPerms"] = 'private';
+            }
+        }
+        return true;
+    }
+    
     protected function rawOrderPercentTweak($nID, $rawPerc, $found = -3)
     { 
         if ($this->isGold() && !$this->isCompliment()) return $rawPerc;
         return round(100*($found/(sizeof($this->nodesRawOrder)-200)));
+    }
+    
+    protected function runPageExtra($nID = -3)
+    {
+        if ($nID == 148) {
+            $this->initBlnkAllegsGold();
+        } elseif ($nID == 1362) { // Loading Complaint Report: Check for oversight permissions
+            if (!isset($GLOBALS["SL"]->x["pageView"])) $this->maxUserView(); // shouldn't be needed?
+            if ($this->chkOverUserHasCore()) $GLOBALS["SL"]->x["dataPerms"] = 'sensitive';
+        }
+        return true;
     }
 
     protected function customNodePrint($nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
@@ -577,6 +849,8 @@ class OpenPolice extends SurvFormTree
                 . $this->sessData->dataSets["Incidents"][0]->IncAddressState . ' '
                 . ((isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) 
                     ? $this->sessData->dataSets["Incidents"][0]->IncAddressZip : '') . '</div>';
+        } elseif ($nID == 1436) {
+            $ret .= $this->printVehicleMatcher();
         } elseif (in_array($nID, [145, 920])) {
             $this->nextBtnOverride = 'Find & Select A Department';
             $searchSuggest = [];
@@ -584,7 +858,7 @@ class OpenPolice extends SurvFormTree
                 ->distinct()
                 ->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)
                 ->get();
-            if ($deptCitys && sizeof($deptCitys) > 0) {
+            if ($deptCitys->isNotEmpty()) {
                 foreach ($deptCitys as $dept) {
                     if (!in_array($dept->DeptAddressCity, $searchSuggest)) {
                         $searchSuggest[] = json_encode($dept->DeptAddressCity);
@@ -595,15 +869,16 @@ class OpenPolice extends SurvFormTree
                 ->distinct()
                 ->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)
                 ->get();
-            if ($deptCounties && sizeof($deptCounties) > 0) {
+            if ($deptCounties->isNotEmpty()) {
                 foreach ($deptCounties as $dept) {
                     if (!in_array($dept->DeptAddressCounty, $searchSuggest)) {
                         $searchSuggest[] = json_encode($dept->DeptAddressCounty);
                     }
                 }
             }
-            $deptFed = OPDepartments::select('DeptName')->where('DeptType', 366)->get();
-            if ($deptFed && sizeof($deptFed) > 0) {
+            $deptFed = OPDepartments::select('DeptName')->where('DeptType', 366)
+                ->get();
+            if ($deptFed->isNotEmpty()) {
                 foreach ($deptFed as $dept) {
                     if (!in_array($dept->DeptName, $searchSuggest)) {
                         $searchSuggest[] = json_encode($dept->DeptName);
@@ -621,29 +896,68 @@ class OpenPolice extends SurvFormTree
                 "stateDropstateDrop" => $GLOBALS["SL"]->states->stateDrop(
                     $this->sessData->dataSets["Incidents"][0]->IncAddressState, true) 
             ])->render();
+        } elseif ($nID == 203) {
+            $this->initBlnkAllegsSilv();
         } elseif (in_array($nID, [270, 973])) {
             $url = '';
             if ($nID == 270) {
-                $this->sessData->dataSets["Complaints"][0]->update([ 'ComPublicID' => $this->genNewCorePubID() ]);
-                $url = '/complaint-report/' . $this->sessData->dataSets["Complaints"][0]->ComPublicID;
+                $this->sessData->currSessData($nID, 'Complaints', 'ComStatus', 'update', 
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'New'));
+                $this->sessData->currSessData($nID, 'Complaints', 'ComRecordSubmitted', 'update', 
+                    date("Y-m-d H:i:s"));
+                $this->sessData->currSessData($nID, 'Complaints', 'ComAllegList', 'update', 
+                    $this->commaAllegationList());
+                $this->sessData->dataSets["Complaints"][0]->update([
+                    'ComPublicID' => $GLOBALS["SL"]->genNewCorePubID() ]);
+                $url = '/complaint/read-' . $this->sessData->dataSets["Complaints"][0]->ComPublicID;
             } else {
-                $this->sessData->dataSets["Compliments"][0]->update([ 'CompliPublicID' => $this->genNewCorePubID() ]);
-                $url = '/compliment-report/' . $this->sessData->dataSets["Compliments"][0]->ComPublicID;
+                $this->sessData->currSessData($nID, 'Compliments', 'CompliStatus', 'update', 
+                    $GLOBALS["SL"]->def->getID('Compliment Status', 'New'));
+                $this->sessData->currSessData($nID, 'Compliments', 'CompliRecordSubmitted', 'update', 
+                    date("Y-m-d H:i:s"));
+                //$this->sessData->currSessData($nID, 'Compliments', 'CompliAllegList', 'update', 
+                //    $this->commaAllegationList());
+                $this->sessData->dataSets["Compliments"][0]->update([ 
+                    'CompliPublicID' => $GLOBALS["SL"]->genNewCorePubID() ]);
+                $url = '/compliment-read/' . $this->sessData->dataSets["Compliments"][0]->ComPublicID;
             }
             /* if ($nID == 270 && trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
                 $url = '/report' . $this->sessData->dataSets["Complaints"][0]->ComSlug;
             } elseif ($nID == 973 && trim($this->sessData->dataSets["Compliments"][0]->CompliSlug) != '') {
                 $url = '/report' . $this->sessData->dataSets["Compliments"][0]->CompliSlug;
             } */
-            $ret .= '<br /><br /><center><h1>All Done! Taking you to <a href="' . $url . '">your finished '
+            $ret .= '<br /><br /><center><h1>All Done!<br />Taking you to <a href="' . $url . '">your finished '
                 . (($nID == 270) ? 'complaint' : 'compliment') 
-                . '</a>...</h1></center><script type="text/javascript"> setTimeout("window.location=\'' 
-                . $url . '\'", 1500); </script>';
+                . '</a> ...</h1>' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
+                . '</center><script type="text/javascript"> setTimeout("window.location=\'' 
+                . $url . '\'", 1500); </script><style> #nodeSubBtns, #sessMgmt, #dontWorry { display: none; } </style>';
             $this->restartSess($GLOBALS["SL"]->REQ);
             
-        // Custom Nodes on site pages
-        } elseif ($nID == 1099) {
             
+        // Custom Nodes on site pages
+        } elseif (in_array($nID, [859, 1454])) { // public departments overview
+            $deptScores = OPDepartments::where('DeptScoreOpenness', '>', 0)
+                ->orderBy('DeptScoreOpenness', 'desc')
+                ->get();
+            $ret .= view('vendor.openpolice.nodes.859-depts-overview-public', [
+                "nID"        => $nID,
+                "deptScores" => $deptScores
+                ])->render();
+        } elseif (in_array($nID, [1456])) { // public oversight overview
+            /*
+            $oversights = DB::table('OP_Oversight')
+                ->where('OP_Oversight.OverType', 302)
+                ->leftJoin('OP_Departments', 'OP_Departments.DeptID', '=', 'OP_Oversight.OverDeptID')
+                ->orderBy('OP_Oversight.OverAddressState', 'asc')
+                ->orderBy('OP_Oversight.OverAddressCounty', 'asc')
+                ->orderBy('OP_Departments.DeptName', 'asc')
+                ->get();
+            $ret .= view('vendor.openpolice.nodes.1456-oversight-overview-public', [
+                "nID"        => $nID,
+                "oversights" => $oversights
+                ])->render();
+            */
+        } elseif ($nID == 1099) {
             if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
                 if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
                     $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
@@ -652,10 +966,146 @@ class OpenPolice extends SurvFormTree
                 }
             }
             $this->loadDeptStuff($this->v["deptID"]);
-            $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", ".toggleScoreInfo", function() { $("#toggleScoreInfoDeets").slideToggle("fast"); });
-            $(document).on("click", ".toggleOPCcompat", function() { $("#toggleOPCcompatDeets").slideToggle("fast"); });';
-            $ret .= view('vendor.openpolice.dept-page', [ "deptStuff" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]] ])->render();
+            if ($this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
+                $GLOBALS["SL"]->addTopNavItem('pencil', 
+                    '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
+            }
+            $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", ".toggleScoreInfo", function() { '
+                . '$("#toggleScoreInfoDeets").slideToggle("fast"); }); $(document).on("click", ".toggleOPCcompat", '
+                . 'function() { $("#toggleOPCcompatDeets").slideToggle("fast"); });';
+            $ret .= view('vendor.openpolice.dept-page', [
+                "deptStuff" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]] ])->render();
+                
+        // User Profile Nodes
+        } elseif ($nID == 1437) {
+            $chk = OPComplaints::where('ComUserID', $this->v["uID"])
+                ->whereIn('ComStatus', $this->getUnPublishedStatusList())
+                ->orderBy('created_at', 'desc')
+                ->get();
+            if ($chk->isNotEmpty()) {
+                $ret .= '<h2>Your Complaints Waiting For Review</h2><div id="n' . $nID 
+                    . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
+                $loadURL = '/record-prevs/1?ids=';
+                foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->ComPublicID;
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("' . $loadURL . '");' . "\n";
+            } else {
+                $ret .= '<div class="p10"></div>';
+            }
+        } elseif ($nID == 1779) {
+            $this->setUserOversightFilt();
+            if (!isset($this->v["fltQry"])) $this->v["fltQry"] = '';
+            $this->v["fltQry"] .= " c.`ComStatus` IN ("
+                . $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight') . ", "
+                . $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight') . ", "
+                . $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight') . ", "
+                . $GLOBALS["SL"]->def->getID('Complaint Status', 'Declined To Investigate (Closed)') . ", "
+                . $GLOBALS["SL"]->def->getID('Complaint Status', 'Investigated (Closed)') . ") AND ";
+            $this->v["statusSkips"] = [
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'New'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
+                ];
+            return $this->printComplaintListing();
             
+        // Complaint Report Nodes
+        } elseif (in_array($nID, [1374, 1729])) {
+            return $this->reportAllegsWhy($nID);
+        } elseif ($nID == 1373) {
+            return $this->reportStory($nID);
+        } elseif (in_array($nID, [1466, 1728])) {
+            return $this->chkGetReportDept($this->sessData->getLatestDataBranchID());
+        } elseif (in_array($nID, [1382, 1734])) {
+            return $this->getReportDept($this->sessData->getLatestDataBranchID());
+        } elseif (in_array($nID, [1690, 1747])) {
+            return $this->getReportByLine();
+        } elseif (in_array($nID, [1687, 1731])) {
+            return $this->getReportWhenLine();
+        } elseif (in_array($nID, [1688, 1732])) {
+            return $this->getReportWhereLine($nID);
+        } elseif (in_array($nID, [1467, 1733])) {
+            return ['Privacy Setting', $this->getReportPrivacy($nID)];
+        } elseif ($nID == 1468) {
+            return $this->getCivReportNameHeader($nID);
+        } elseif ($nID == 1476) {
+            return $this->getOffReportNameHeader($nID);
+        } elseif ($nID == 1795) {
+            $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
+            return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
+                . view('vendor.survloop.inc-report-uploads', [ "uploads" => $uploads ])->render();
+        } elseif ($nID == 1478) {
+            return [ $this->getCivSnstvFldsNotPrinted($this->sessData->getLatestDataBranchID()) ];
+        } elseif ($nID == 1511) {
+            return $this->reportCivAddy($nID);
+        } elseif ($nID == 1519) {
+            return [ $this->getOffSnstvFldsNotPrinted($this->sessData->getLatestDataBranchID()) ];
+        } elseif ($nID == 1566) {
+            return $this->getOffProfan();
+        } elseif ($nID == 1567) {
+            return $this->getCivProfan();
+        } elseif ($nID == 1574) {
+            return $this->reportEventTitle($this->sessData->getLatestDataBranchID());
+        } elseif ($nID == 1710) {
+            return $this->printReportShare();
+        } elseif ($nID == 1707) {
+            return $this->printGlossary();
+        } elseif ($nID == 1708) {
+            return $this->printFlexArts();
+        } elseif ($nID == 1753) {
+            return $this->printFlexVids();
+        } elseif ($nID == 1712) {
+            return $this->printComplaintAdmin();
+        } elseif ($nID == 1713) {
+            return $this->printComplaintOversight();
+        } elseif ($nID == 1714) {
+            return $this->printComplaintOwner();
+        } elseif ($nID == 1780) {
+            return $this->printMfaInstruct();
+            
+        // Staff Area Nodes
+        } elseif ($nID == 1418) {
+            return $this->printComplaintListing();
+        } elseif ($nID == 1420) {
+            return $this->printComplaintListing('incomplete');
+        
+            
+        // Volunteer Area Nodes
+        } elseif ($nID == 1211) {
+            return $this->printVolunPriorityList();
+        } elseif ($nID == 1755) {
+            return $this->printVolunAllList();
+        } elseif ($nID == 1217) {
+            return $this->printVolunLocationForm();
+        } elseif ($nID == 1225) {
+            return $this->printDeptEditHeader();
+        } elseif ($nID == 1261) {
+            return view('vendor.openpolice.volun.volun-dept-edit-wiki-stats', $this->v)->render();
+        } elseif ($nID == 1227) {
+            return view('vendor.openpolice.volun.volun-dept-edit-search-complaint', $this->v)->render();
+        } elseif (in_array($nID, [1228, 1229])) {
+            return $this->printDeptEditContact($nID);
+        } elseif ($nID == 1231) {
+            return view('vendor.openpolice.volun.volun-dept-edit-history', $this->v)->render();
+        } elseif ($nID == 1338) {
+            return $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist');
+        } elseif ($nID == 1340) {
+            return $this->redirAfterDeptEdit();
+        } elseif ($nID == 1344) {
+            return $this->redirNextDeptEdit();
+        } elseif ($nID == 1346) {
+            return $this->volunStars();
+        } elseif ($nID == 1351) {
+            return $this->volunDepts();
+        } elseif ($nID == 1349) {
+            $this->v["isDash"] = true;
+            return $this->volunStatsDailyGraph();
+        } elseif ($nID == 1342) {
+            return $this->printDashSessGraph();
+        } elseif ($nID == 1361) {
+            return $this->printDashTopStats();
         }
         return $ret;
     }
@@ -681,7 +1131,7 @@ class OpenPolice extends SurvFormTree
                         $eveSeq = $this->getEventSequence($prevEveID);
                         $ret .= '<div class="nFld pT20" style="font-size: 125%;"><label for="eventMerge' . $i . '">
                             <input type="radio" name="eventMerge" id="eventMerge' . $i . '" value="' . $prevEveID . '">
-                            <span class="mL5">' . $this->printEventSequenceLine($eveSeq[0]) . '</span>
+                            <span class="mL5">' . $this->printEventSequenceLine($eveSeq) . '</span>
                         </label></div>' . "\n";
                     }
                 }
@@ -705,27 +1155,27 @@ class OpenPolice extends SurvFormTree
     }
     
     protected function postNodePublicCustom($nID = -3, $tmpSubTier = [])
-    { 
-        if (sizeof($tmpSubTier) == 0) $tmpSubTier = $this->loadNodeSubTier($nID);
+    {
+        if (empty($tmpSubTier)) $tmpSubTier = $this->loadNodeSubTier($nID);
         list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
         if (isset($this->sessData->dataSets["Complaints"])) {
-            $this->sessData->dataSets["Complaints"][0]->update(["updated_at" => date("Y-m-d H:i:s")]);
+            $this->sessData->dataSets["Complaints"][0]->update([ "updated_at" => date("Y-m-d H:i:s") ]);
         }
         if ($nID == 439) { // Unresolved criminal charges decision
             if ($GLOBALS["SL"]->REQ->has('n439fld')) {
-                $defID = $GLOBALS["SL"]->getDefID('Unresolved Charges Actions', 'Full complaint to print or save');
+                $defID = $GLOBALS["SL"]->def->getID('Unresolved Charges Actions', 'Full complaint to print or save');
                 if ($GLOBALS["SL"]->REQ->input('n439fld') == $defID) {
-                    $defID = $GLOBALS["SL"]->getDefID('Privacy Types', 'Anonymized');
+                    $defID = $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized');
                     if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == $defID) {
                         $this->sessData->dataSets["Complaints"][0]->update([
-                            "ComPrivacy" => $GLOBALS["SL"]->getDefID('Privacy Types', 'Submit Publicly')
+                            "ComPrivacy" => $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
                         ]);
                     }
                 } else {
-                    $defID = $GLOBALS["SL"]->getDefID('Unresolved Charges Actions', 'Anonymous complaint data only');
+                    $defID = $GLOBALS["SL"]->def->getID('Unresolved Charges Actions', 'Anonymous complaint data only');
                     if ($GLOBALS["SL"]->REQ->input('n439fld') == $defID) {
                         $this->sessData->dataSets["Complaints"][0]->update([
-                            "ComPrivacy" => $GLOBALS["SL"]->getDefID('Privacy Types', 'Anonymized')
+                            "ComPrivacy" => $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized')
                         ]);
                     }
                 }
@@ -742,34 +1192,19 @@ class OpenPolice extends SurvFormTree
             $this->sessData->dataSets["Civilians"][0]->CivCameraRecord = $GLOBALS["SL"]->REQ->input('n47fld');
             $this->sessData->dataSets["Civilians"][0]->save();
             return true;
+            
+        } elseif (in_array($nID, [1408, 1409, 1410, 1411, 1412])) {
+            if ($GLOBALS["SL"]->REQ->has('n1405fld') && $GLOBALS["SL"]->REQ->n1405fld == 'Y') return true;
+        } elseif (in_array($nID, [91, 92, 93, 94, 95])) {
+            if ($GLOBALS["SL"]->REQ->has('n576fld') && $GLOBALS["SL"]->REQ->n576fld == 'Y') return true;
+        } elseif (in_array($nID, [131, 132, 133, 134, 135])) {
+            if ($GLOBALS["SL"]->REQ->has('n571fld') && $GLOBALS["SL"]->REQ->n571fld == 'Y') return true;
+        } elseif (in_array($nID, [189, 615, 190, 191, 192])) {
+            if ($GLOBALS["SL"]->REQ->has('n584fld') && $GLOBALS["SL"]->REQ->n584fld == 'Y') return true;
+            
+            
         } elseif (in_array($nID, [145, 920])) { // Searched & Found Police Department
-            $newDeptID = -3;
-            if (intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
-                $newDeptID = intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
-                $this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', 
-                    $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
-            } elseif ($GLOBALS["SL"]->REQ->has('newDeptName') && trim($GLOBALS["SL"]->REQ->newDeptName) != '') {
-                $tmpVolunCtrl = new VolunteerController;
-                $newDept = $tmpVolunCtrl->newDeptAdd($GLOBALS["SL"]->REQ->newDeptName, 
-                    $GLOBALS["SL"]->REQ->newDeptAddressState);
-                $newDeptID = $newDept->DeptID;
-                $logTxt = 'ComplaintDeptLinks - !New Department Added!';
-                $this->sessData->logDataSave($nID, 'NEW', -3, $logTxt, $newDeptID);
-            }
-            if ($newDeptID > 0) {
-                $deptChk = OPLinksComplaintDept::where('LnkComDeptComplaintID', $this->coreID)
-                    ->where('LnkComDeptDeptID', $newDeptID)
-                    ->get();
-                if (!$deptChk || sizeof($deptChk) <= 0) {
-                    $newDeptLnk = new OPLinksComplaintDept;
-                    $newDeptLnk->LnkComDeptComplaintID = $this->coreID;
-                    $newDeptLnk->LnkComDeptDeptID = $newDeptID;
-                    $newDeptLnk->save();
-                    $this->sessData->refreshDataSets();
-                    $this->runLoopConditions();
-                }
-            }
-            return true;
+            return $this->saveNewDept($nID);
         } elseif ($nID == 671) { // Officers Used Profanity?
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
                 if (isset($GLOBALS["SL"]->REQ->n671fld) && in_array($off->getKey(), $GLOBALS["SL"]->REQ->n671fld)) {
@@ -836,23 +1271,22 @@ class OpenPolice extends SurvFormTree
         } elseif (in_array($nID, [738, 737, 739])) { // Gold Stops & Searches, Only One Victims
             $this->initGoldEventSingle($nID, ((in_array($nID, [738, 737])) ? 'Stops' : 'Searches'));
         } elseif ($nID == 740) { // Use of Force on Victims
-            $GLOBALS["SL"]->loadDefinitions('Force Type');
+            $GLOBALS["SL"]->def->loadDefs('Force Type');
             $loopRows = $this->sessData->getLoopRows('Victims');
             foreach ($loopRows as $i => $civ) {
                 $nIDtxt = 'n' . $nID . 'cyc' . $i . 'fld';
                 $nIDtxt2 = 'n742cyc' . $i . 'fld';
-                if ($GLOBALS["SL"]->REQ->has($nIDtxt) && sizeof($GLOBALS["SL"]->REQ->input($nIDtxt)) > 0 
-                    && trim($GLOBALS["SL"]->REQ->input($nIDtxt)[0]) == 'Y' && $GLOBALS["SL"]->REQ->has($nIDtxt2) 
-                    && sizeof($GLOBALS["SL"]->REQ->input($nIDtxt2)) > 0) {
-                    foreach ($GLOBALS["SL"]->REQ->input($nIDtxt2) as $forceType) {
-                        if ($GLOBALS["SL"]->REQ->n740cyc0fld == 'Y' 
-                            && $this->getCivForceEventID($nID, $civ->CivID, $forceType) <= 0) {
+                if ($GLOBALS["SL"]->REQ->has($nIDtxt) && trim($GLOBALS["SL"]->REQ->get($nIDtxt)) == 'Y'
+                    && $GLOBALS["SL"]->REQ->has($nIDtxt2) && is_array($GLOBALS["SL"]->REQ->get($nIDtxt2))
+                    && sizeof($GLOBALS["SL"]->REQ->get($nIDtxt2)) > 0) {
+                    foreach ($GLOBALS["SL"]->REQ->get($nIDtxt2) as $forceType) {
+                        if ($this->getCivForceEventID($nID, $civ->CivID, $forceType) <= 0) {
                             $this->addNewEveSeq('Force', $civ->CivID, $forceType);
                         }
                     }
                 }
                 foreach ($GLOBALS["SL"]->defValues["Force Type"] as $i => $def) {
-                    if ($GLOBALS["SL"]->REQ->n740cyc0fld == 'N' || !$GLOBALS["SL"]->REQ->has($nIDtxt2) 
+                    if ($GLOBALS["SL"]->REQ->get($nIDtxt) == 'N' || !$GLOBALS["SL"]->REQ->has($nIDtxt2) 
                         || !in_array($def->DefID, $GLOBALS["SL"]->REQ->input($nIDtxt2))) {
                         $this->deleteEventByID($nID, $this->getCivForceEventID($nID, $civ->CivID, $def->DefID));
                     }
@@ -862,16 +1296,16 @@ class OpenPolice extends SurvFormTree
             return true;
         } elseif ($nID == 743) { // Use of Force against Animal: Yes/No
             if (!$GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
-                || sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) == 0) {
+                || $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') == 'N') {
                 $animalsForce = $this->getCivAnimalForces();
                 if ($animalsForce && sizeof($animalsForce) > 0) {
                     foreach ($animalsForce as $force) $this->deleteEventByID($nID, $force->ForEventSequenceID);
                 }
             }
         } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
-            if ($GLOBALS["SL"]->REQ->has('n743fld') && sizeof($GLOBALS["SL"]->REQ->n743fld) > 0 
-                && $GLOBALS["SL"]->REQ->has('n744fld') && sizeof($GLOBALS["SL"]->REQ->n744fld) > 0 
-                && intVal($GLOBALS["SL"]->REQ->n743fld[0]) == 'Y') {
+            if ($GLOBALS["SL"]->REQ->has('n743fld') && $GLOBALS["SL"]->REQ->get('n743fld') == 'Y' 
+                && $GLOBALS["SL"]->REQ->has('n744fld') && is_array($GLOBALS["SL"]->REQ->n744fld) 
+                && sizeof($GLOBALS["SL"]->REQ->n744fld) > 0) {
                 $animalDesc = (($GLOBALS["SL"]->REQ->has('n746fld')) ? trim($GLOBALS["SL"]->REQ->n746fld) : '');
                 $animalsForce = $this->getCivAnimalForces();
                 foreach ($GLOBALS["SL"]->REQ->n744fld as $forceType) {
@@ -886,14 +1320,6 @@ class OpenPolice extends SurvFormTree
                         $newForce->ForAgainstAnimal = 'Y';
                         $newForce->ForAnimalDesc = $animalDesc;
                         $newForce->save();
-                    }
-                }
-                if ($animalsForce && sizeof($animalsForce) > 0) {
-                    foreach ($animalsForce as $force) {
-                        if (!$GLOBALS["SL"]->REQ->has('n743fld') 
-                            || !in_array($force->ForType, $GLOBALS["SL"]->REQ->n743fld)) {
-                            $this->deleteEventByID($nID, $force->ForEventSequenceID);
-                        }
                     }
                 }
             }
@@ -925,30 +1351,81 @@ class OpenPolice extends SurvFormTree
                     $loopRows[$i]->save();
                 }
             }
+            
         } elseif ($this->allNodes[$nID]->nodeRow->NodePromptNotes == '[[MergeVictimsEventSequence]]') {
             return $this->processEventMerge($nID);
         } elseif ($nID == 316) {
             return $this->processHandcuffInjury($nID);
-        } elseif ($nID == 391) { // Gold Victims without Arrests, but with Citations, from [[VictimsWithoutArrests]]
-            $this->postCivSetPossibilities('Arrests', 'Charges');
-            $this->sessData->logDataSave($nID, 'Charges', -3, 'New Records', 
-                (($GLOBALS["SL"]->REQ->has('Charges')) ? implode(';;', $GLOBALS["SL"]->REQ->Charges) : ''));
-        } elseif ($nID == 274) { // CONFIRM COMPLAINT SUBMISSION
-            $slug = $this->sessData->dataSets["Incidents"][0]->IncAddressCity . '-' 
-                . $this->sessData->dataSets["Incidents"][0]->IncAddressState;
-            if ($GLOBALS["SL"]->REQ->has('n274fld') && trim($GLOBALS["SL"]->REQ->n274fld) != '') {
-                $slug = $GLOBALS["SL"]->REQ->n274fld;
+        } elseif ($nID == 1285) {
+            /*
+            OPOversight::where('OverDeptID', $this->sessData->dataSets["Departments"][0]->DeptID)
+                ->where('OverType', $this->overWhichDefID('IA'))
+                ->update([
+                    'OverWaySubEmail' => (in_array('Email', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0)
+                ]);
+            */
+            if ($GLOBALS["SL"]->REQ->has('n1285fld') && is_array($GLOBALS["SL"]->REQ->n1285fld)
+                && is_array($GLOBALS["SL"]->REQ->n1285fld) && sizeof($GLOBALS["SL"]->REQ->n1285fld) > 0) {
+                $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubEmail', 'update', 
+                    ((in_array('Email', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubVerbalPhone', 'update', 
+                    ((in_array('VerbalPhone', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubPaperMail', 'update', 
+                    ((in_array('PaperMail', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubPaperInPerson', 'update', 
+                    ((in_array('PaperInPerson', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
             }
-            $slug = '/' . $this->sessData->dataSets["Complaints"][0]->ComID . '/' . Str::slug($slug);
-            $this->sessData->dataSets["Complaints"][0]->update(["ComSlug" => $slug]);
-        } elseif ($nID == 269) { // CONFIRM COMPLAINT SUBMISSION
-            if ($GLOBALS["SL"]->REQ->has('n269fld')) {
-                if ($GLOBALS["SL"]->REQ->n269fld == 'Y') {
-                    $this->sessData->currSessData($nID, 'Complaints', 'ComStatus', 'update', 
-                        $GLOBALS["SL"]->getDefID('Complaint Status', 'New')); // 'New'
-                    $this->sessData->currSessData($nID, 'Complaints', 'ComRecordSubmitted', 'update', 
-                        date("Y-m-d H:i:s"));
+        } elseif ($nID == 1287) {
+            if ($GLOBALS["SL"]->REQ->has('n1287fld') && is_array($GLOBALS["SL"]->REQ->n1287fld)
+                && sizeof($GLOBALS["SL"]->REQ->n1287fld) > 0) {
+                $this->sessData->currSessData($nID, 'Oversight', 'OverOfficialFormNotReq', 'update', 
+                    ((in_array('OfficialFormNotReq', $GLOBALS["SL"]->REQ->n1287fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverOfficialAnon', 'update', 
+                    ((in_array('OfficialAnon', $GLOBALS["SL"]->REQ->n1287fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubNotary', 'update', 
+                    ((in_array('Notary', $GLOBALS["SL"]->REQ->n1287fld) ) ? 1 : 0));
+                $this->sessData->currSessData($nID, 'Oversight', 'OverSubmitDeadline', 'update', 
+                    ((in_array('TimeLimit', $GLOBALS["SL"]->REQ->n1287fld) ) 
+                        ? (($GLOBALS["SL"]->REQ->has('n1288fld')) ? $GLOBALS["SL"]->REQ->n1288fld : 0) : 0));
+            }
+        } elseif ($nID == 1329) {
+            if ($GLOBALS["SL"]->REQ->get('step') != 'next') return true;
+            if ($GLOBALS["SL"]->REQ->has('n1329fld') && is_array($GLOBALS["SL"]->REQ->n1329fld)
+                && sizeof($GLOBALS["SL"]->REQ->n1329fld) > 0) {
+                if (in_array('IACall', $GLOBALS["SL"]->REQ->n1329fld)) {
+                    $this->sessData->currSessData($nID, 'Departments', 'DeptVerified', 'update', date("Y-m-d H:i:s"));
                 }
+            }
+            $this->sessData->createTblExtendFlds('Departments', $this->coreID, 'Zedit_Departments', [
+                'ZedDeptDeptID'   => $this->coreID,
+                'ZedDeptUserID'   => $this->v["uID"],
+                'ZedDeptDuration' => (time()-intVal($GLOBALS["SL"]->REQ->formLoaded)),
+                'ZedDeptDeptID'   => $this->coreID,
+                ]);
+            $over = $this->getOverRow('IA');
+            $this->sessData->createTblExtendFlds('Oversight', $over->getKey(), 'Zedit_Oversight', [
+                'ZedOverZedDeptID'      => $this->sessData->dataSets['Zedit_Departments'][0]->getKey(),
+                'ZedOverOnlineResearch' => (($GLOBALS["SL"]->REQ->has('n1329fld') 
+                    && in_array('Online', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
+                'ZedOverMadeDeptCall'   => (($GLOBALS["SL"]->REQ->has('n1329fld') 
+                    && in_array('DeptCall', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
+                'ZedOverMadeIACall'     => (($GLOBALS["SL"]->REQ->has('n1329fld') 
+                    && in_array('IACall', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
+                'ZedOverNotes'          => (($GLOBALS["SL"]->REQ->has('n1334fld')) ? $GLOBALS["SL"]->REQ->n1334fld : '')
+                ]);
+            $over = $this->getOverRow('Civ');
+            if ($over && isset($over->OverID)) {
+                $this->sessData->createTblExtendFlds('Oversight', $over->getKey(), 'Zedit_Oversight', [
+                    'ZedOverZedDeptID'      => $this->sessData->dataSets['Zedit_Departments'][0]->getKey()
+                    ]);
+            }
+        } elseif (in_array($nID, [976, 1090, 1175])) {
+            if ($GLOBALS["SL"]->REQ->get('step') != 'next') {
+                return true;
+            } elseif ($nID == 976) {
+                $this->sessData->dataSets['Complaints'][0]->ComStatus 
+                    = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
+                $this->sessData->dataSets['Complaints'][0]->save();
             }
         }
         return false; // false to continue standard post processing
@@ -957,7 +1434,7 @@ class OpenPolice extends SurvFormTree
     // returns an array of overrides for ($currNodeSessionData, ???... 
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $currNodeSessionData = '')
     {
-        if (sizeof($this->sessData->dataSets) == 0) return [];
+        if (empty($this->sessData->dataSets)) return [];
         if ($nID == 28) { // Complainant's Role
             return [trim($this->sessData->dataSets["Civilians"][0]->CivRole)];
         } elseif ($nID == 47) { // Complainant Recorded Incident?
@@ -974,11 +1451,6 @@ class OpenPolice extends SurvFormTree
                 $user = Auth::user();
                 if ($user && isset($user->email)) return [$user->email];
                 return [''];
-            }
-        } elseif ($nID == 576) {
-            $lnkRow = $this->sessData->sessChildRowFromParent('LinksCivilianVehicles');
-            if ($lnkRow && isset($lnkRow->LnkCivVehicVehicID) && intVal($lnkRow->LnkCivVehicVehicID) > 0) {
-                return ['Y'];
             }
         } elseif ($nID == 671) { // Officers Used Profanity?
             $currVals = [];
@@ -1026,15 +1498,16 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
                 if (in_array($civ, $this->eventCivLookup['Force'])) {
                     $ret[] = 'cyc' . $i . 'Y';
-                } elseif (!isset($this->v["firstTimeGoGoldDeets"]) || !$this->v["firstTimeGoGoldDeets"]) {
+                } elseif (!isset($this->v["firstTimeGoGoldDeets"]) || !$this->v["firstTimeGoGoldDeets"]
+                    || !in_array($civ, $this->eventCivLookup['Force'])) {
                     $ret[] = 'cyc' . $i . 'N';
                 }
             }
-            if (sizeof($ret) == 0) $ret = ['N'];
+            if (empty($ret)) $ret = ['N'];
             return $ret;
         } elseif ($nID == 742) { // Use of Force on Victims: Sub-Types
             $ret = [];
-            $GLOBALS["SL"]->loadDefinitions('Force Type');
+            $GLOBALS["SL"]->def->loadDefs('Force Type');
             foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
                 foreach ($GLOBALS["SL"]->defValues["Force Type"] as $j => $def) {
                     if ($this->getCivForceEventID($nID, $civ, $def->DefID) > 0) {
@@ -1048,10 +1521,9 @@ class OpenPolice extends SurvFormTree
             if ($animalsForce && sizeof($animalsForce) > 0) return ['Y'];
             elseif (!isset($this->v["firstTimeGoGoldDeets"]) || !$this->v["firstTimeGoGoldDeets"]) return ['N'];
         } elseif ($nID == 746) { // Use of Force against Animal: Description
-            if (isset($this->eventCivLookup["Force Animal"][0]) 
-                && intVal($this->eventCivLookup["Force Animal"][0]) > 0) {
-                $forceAnimal = $this->sessData->getRowById('Force', $this->eventCivLookup["Force Animal"][0]);
-                return [$forceAnimal->ForAnimalDesc];
+            $animalsForce = $this->getCivAnimalForces();
+            if ($animalsForce->isNotEmpty() && isset($animalsForce[0]->ForAnimalDesc)) {
+                return [$animalsForce[0]->ForAnimalDesc];
             }
         } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
             $ret = [];
@@ -1072,12 +1544,12 @@ class OpenPolice extends SurvFormTree
             return $ret;
         } elseif (in_array($nID, [401, 334, 409, 356, 384])) { // Gold Allegations: Pre-Load "Why" From Silver
             if (trim($currNodeSessionData) == '') {
-                $defID = $GLOBALS["SL"]->getDefID('Allegation Type', 'Wrongful Detention'); // 401
+                $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Detention'); // 401
                 switch ($nID) {
-                    case 334: $defID = $GLOBALS["SL"]->getDefID('Allegation Type', 'Wrongful Search'); break;
-                    case 409: $defID = $GLOBALS["SL"]->getDefID('Allegation Type', 'Wrongful Property Seizure'); break;
-                    case 356: $defID = $GLOBALS["SL"]->getDefID('Allegation Type', 'Unreasonable Force'); break;
-                    case 384: $defID = $GLOBALS["SL"]->getDefID('Allegation Type', 'Wrongful Arrest'); break;
+                    case 334: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Search'); break;
+                    case 409: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Property Seizure'); break;
+                    case 356: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Unreasonable Force'); break;
+                    case 384: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Arrest'); break;
                 }
                 if (isset($this->sessData->dataSets["Allegations"]) 
                     && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
@@ -1090,85 +1562,130 @@ class OpenPolice extends SurvFormTree
                 }
             }
         } elseif ($nID == 269) { // Confirm Submission, Complaint Completed!
-            return [(($this->sessData->dataSets["Complaints"][0]->ComStatus == 'New') ? 'Y' : '')];
+            return [(($this->sessData->dataSets["Complaints"][0]->ComStatus 
+                != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) ? 'Y' : '')];
+        
+        // Volunteer Research Departments
+        } elseif ($nID == 1285) {
+            $this->getOverRow('IA');
+            $currNodeSessionData = [];
+            if (isset($this->v["overRowIA"]->OverWaySubEmail) && intVal($this->v["overRowIA"]->OverWaySubEmail) > 0) {
+                $currNodeSessionData[] = 'Email';
+            }
+            if (isset($this->v["overRowIA"]->OverWaySubVerbalPhone) 
+                && intVal($this->v["overRowIA"]->OverWaySubVerbalPhone) > 0) {
+                $currNodeSessionData[] = 'VerbalPhone';
+            }
+            if (isset($this->v["overRowIA"]->OverWaySubPaperMail) 
+                && intVal($this->v["overRowIA"]->OverWaySubPaperMail) > 0) {
+                $currNodeSessionData[] = 'PaperMail';
+            }
+            if (isset($this->v["overRowIA"]->OverWaySubPaperInPerson) 
+                && intVal($this->v["overRowIA"]->OverWaySubPaperInPerson) > 0) {
+                $currNodeSessionData[] = 'PaperInPerson';
+            }
+            return $currNodeSessionData;
+        } elseif ($nID == 1287) {
+            $currNodeSessionData = [];
+            if (isset($this->v["overRowIA"]->OverOfficialFormNotReq) 
+                && intVal($this->v["overRowIA"]->OverOfficialFormNotReq) > 0) {
+                $currNodeSessionData[] = 'OfficialFormNotReq';
+            }
+            if (isset($this->v["overRowIA"]->OverOfficialAnon) 
+                && intVal($this->v["overRowIA"]->OverOfficialAnon) > 0) {
+                $currNodeSessionData[] = 'OfficialAnon';
+            }
+            if (isset($this->v["overRowIA"]->OverWaySubNotary) 
+                && intVal($this->v["overRowIA"]->OverWaySubNotary) > 0) {
+                $currNodeSessionData[] = 'Notary';
+            }
+            if (isset($this->v["overRowIA"]->OverSubmitDeadline) 
+                && intVal($this->v["overRowIA"]->OverSubmitDeadline) > 0) {
+                $currNodeSessionData[] = 'TimeLimit';
+            }
+            return $currNodeSessionData;
         }
         return [];
     }
     
-    protected function customLabels($nID = -3, $nodePromptText = '')
+    protected function customLabels($nIDtxt = '', $str = '')
     {
-        $event = [];
-        if ($GLOBALS["SL"]->closestLoop["loop"] == 'Events') {
-            $event = $this->getEventSequence($GLOBALS["SL"]->closestLoop["itemID"]);
-        }
-        if (isset($event[0]) && isset($event[0]["EveID"])) {
-            if (strpos($nodePromptText, '[LoopItemLabel]') !== false) {
-                $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
-                if (trim($civName) == '' && isset($event[0]["Civilians"])) {
-                    $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
+        if (in_array($this->treeID, [1, 5])) {
+            $event = [];
+            if ($GLOBALS["SL"]->closestLoop["loop"] == 'Events') {
+                $event = $this->getEventSequence($GLOBALS["SL"]->closestLoop["itemID"]);
+            }
+            if (isset($event[0]) && isset($event[0]["EveID"])) {
+                if (strpos($str, '[LoopItemLabel]') !== false) {
+                    $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
+                    if (trim($civName) == '' && isset($event[0]["Civilians"])) {
+                        $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
+                    }
+                    $str = str_replace('[LoopItemLabel]', 
+                        '<span class="slBlueDark"><b>' . $civName . '</b></span>', $str);
                 }
-                $nodePromptText = str_replace('[LoopItemLabel]', 
-                    '<span class="slBlueDark"><b>' . $civName . '</b></span>', $nodePromptText);
+                if (strpos($str, '[ForceType]') !== false) {
+                    $forceDesc = $GLOBALS["SL"]->def->getVal('Force Type', $event[0]["Event"]->ForType);
+                    if ($forceDesc == 'Other') $forceDesc = $event[0]["Event"]->ForTypeOther;
+                    $str = str_replace('[ForceType]', '<span class="slBlueDark"><b>'
+                        . $forceDesc . '</b></span>', $str);
+                }
             }
-            if (strpos($nodePromptText, '[ForceType]') !== false) {
-                $forceDesc = $GLOBALS["SL"]->getDefValue('Force Type', $event[0]["Event"]->ForType);
-                if ($forceDesc == 'Other') $forceDesc = $event[0]["Event"]->ForTypeOther;
-                $nodePromptText = str_replace('[ForceType]', '<span class="slBlueDark"><b>'
-                    . $forceDesc . '</b></span>', $nodePromptText);
+            if (strpos($str, '[InjuryType]') !== false) {
+                $inj = $this->sessData->getRowById('Injuries', $GLOBALS["SL"]->closestLoop["itemID"]);
+                if (sizeof($inj) > 0) {
+                    $str = str_replace('[InjuryType]', '<span class="slBlueDark"><b>'
+                        . $GLOBALS["SL"]->def->getVal('Injury Types', $inj->InjType) . '</b></span>', $str);
+                    $str = $this->cleanLabel(str_replace('[LoopItemLabel]', '<span class="slBlueDark"><b>'
+                        . $this->getCivilianNameFromID($inj->InjSubjectID) . '</b></span>', $str));
+                }
             }
-        }
-        if (strpos($nodePromptText, '[InjuryType]') !== false) {
-            $inj = $this->sessData->getRowById('Injuries', $GLOBALS["SL"]->closestLoop["itemID"]);
-            if ($inj && sizeof($inj) > 0) {
-                $nodePromptText = str_replace('[InjuryType]', '<span class="slBlueDark"><b>'
-                    . $GLOBALS["SL"]->getDefValue('Injury Types', $inj->InjType) . '</b></span>', $nodePromptText);
-                $nodePromptText = $this->cleanLabel(str_replace('[LoopItemLabel]', '<span class="slBlueDark"><b>'
-                    . $this->getCivilianNameFromID($inj->InjSubjectID) . '</b></span>', $nodePromptText));
+            if (strpos($str, '[[List of Allegations]]') !== false) {
+                $str = str_replace('[[List of Allegations]]', 
+                    $this->commaAllegationList(), $str);
             }
-        }
-        if (strpos($nodePromptText, '[[ListCitationCharges]]') !== false) {
-            $stop = $this->sessData->getRowById('Stops', $GLOBALS["SL"]->closestLoop["itemID"]);
-            $chargesType = 'Citation Charges Pedestrian';
-            $defID = $GLOBALS["SL"]->getDefID('Scene Type', 'Vehicle Stop');
-            if ($this->sessData->dataSets["Scenes"][0]->ScnType == $defID) $chargesType = 'Citation Charges';
-            $list = '';
-            if (isset($this->sessData->dataSets["Charges"]) && sizeof($this->sessData->dataSets["Charges"]) > 0) {
-                foreach ($this->sessData->dataSets["Charges"] as $chrg) {
-                    if ($chrg->ChrgStopID == $stop->StopID) {
-                        $list .= ', ' . $GLOBALS["SL"]->getDefValue($chargesType, $chrg->ChrgCharges);
+            if (strpos($str, '[[List of Events and Allegations]]') !== false) {
+                $str = str_replace('[[List of Events and Allegations]]', 
+                    $this->basicAllegationList(true), $str);
+            }
+            if (strpos($str, '[[List of Compliments]]') !== false) {
+                $str = str_replace('[[List of Compliments]]', 
+                    $this->commaComplimentList(), $str);
+            }
+            if (isset($this->sessData->dataSets["Civilians"])) {
+                $complainantVic = (isset($this->sessData->dataSets["Civilians"][0])
+                    && $this->sessData->dataSets["Civilians"][0]->CivRole == 'Victim');
+                $multipleVic = (sizeof($this->sessData->getLoopRows('Victims')) > 1);
+                if (in_array($nIDtxt, ['209', '212', '852', '248', '222', '227', '234', '243'])) {
+                    if ($complainantVic && !$multipleVic) {
+                        $str = str_replace('anybody', 'you', $str);
+                    } elseif ($complainantVic && $multipleVic) {
+                        $str = str_replace('anybody', 'you or anybody else', $str);
+                    }
+                } elseif (in_array($nIDtxt, ['204'])) {
+                    if ($complainantVic && !$multipleVic) {
+                        $str = str_replace('anybody', 'you', $str);
+                    } elseif ($complainantVic && $multipleVic) {
+                        $str = str_replace('anybody', 'you (or anybody else)', $str);
+                    }
+                } elseif (in_array($nIDtxt, ['205', '213'])) {
+                    if ($complainantVic && !$multipleVic) {
+                        $str = str_replace('anybody was', 'you were', $str);
+                    } elseif ($complainantVic && $multipleVic) {
+                        $str = str_replace('anybody was', 'anybody was', $str);
+                    }
+                } elseif (in_array($nIDtxt, ['591'])) {
+                    if ($complainantVic && !$multipleVic) {
+                        $str = str_replace('anybody', 'you', $str);
+                    }
+                } elseif (in_array($nIDtxt, ['228'])) {
+                    if ($complainantVic && !$multipleVic) {
+                        $str = str_replace('anybody was', 'you were', $str);
                     }
                 }
             }
-            if (trim($stop->StopChargesOther) != '') $list .= ', ' . $stop->StopChargesOther;
-            if (substr($list, 0, 2) == ', ') $list = trim(substr($list, 1));
-            $nodePromptText = str_replace('[[ListCitationCharges]]', $list, $nodePromptText);
         }
-        if (strpos($nodePromptText, '[[List of Allegations]]') !== false) {
-            $nodePromptText = str_replace('[[List of Allegations]]', 
-                $this->commaAllegationList(), $nodePromptText);
-        }
-        if (strpos($nodePromptText, '[[List of Events and Allegations]]') !== false) {
-            $nodePromptText = str_replace('[[List of Events and Allegations]]', 
-                $this->basicAllegationList(true), $nodePromptText);
-        }
-        if (strpos($nodePromptText, '[[List of Compliments]]') !== false) {
-            $nodePromptText = str_replace('[[List of Compliments]]', 
-                $this->commaComplimentList(), $nodePromptText);
-        }
-        return $nodePromptText;
-    }
-    
-    protected function jumpToNodeCustom($nID)
-    { 
-        $newID = -3;
-        // maybe needed?
-        return $newID; 
-    }
-    
-    protected function nodePrintJumpToCustom($nID = -3)
-    {
-       //if ($nID == 137 && intVal(session()->get('privacyJumpBackTo')) > 0) return session()->get('privacyJumpBackTo');
-        return -3; 
+        return $str;
     }
     
     protected function getLoopItemLabelCustom($loop, $itemRow = [], $itemInd = -3)
@@ -1186,7 +1703,7 @@ class OpenPolice extends SurvFormTree
             return $this->getEventLabel($itemRow->getKey());
         } elseif ($loop == 'Injuries') {
             return $this->getCivilianNameFromID($itemRow->InjSubjectID) . ': ' 
-                .  $GLOBALS["SL"]->getDefValue('Injury Types', $itemRow->InjType);
+                .  $GLOBALS["SL"]->def->getVal('Injury Types', $itemRow->InjType);
         } elseif ($loop == 'Medical Care') {
             return $this->getCivilianNameFromID($itemRow->InjCareSubjectID);
         } elseif ($loop == 'Citations') { // why isn't this working?!
@@ -1206,7 +1723,7 @@ class OpenPolice extends SurvFormTree
     
     protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
     {
-        if (in_array($nID, [143, 917]) && $loopItem && sizeof($loopItem) > 0) { // $tbl == 'Departments'
+        if (in_array($nID, [143, 917]) && $loopItem) { // $tbl == 'Departments'
             return view('vendor.openpolice.nodes.143-dept-loop-custom-row', [
                 "loopItem" => $this->sessData->getChildRow('LinksComplaintDept', $loopItem->getKey(), 'Departments'), 
                 "setIndex" => $setIndex, 
@@ -1215,6 +1732,99 @@ class OpenPolice extends SurvFormTree
         }
         return '';
     }
+    
+    protected function printVehicleMatcher()
+    {
+        $civNames = $offNames = [];
+        if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
+            foreach ($this->sessData->dataSets["Civilians"] as $civ) {
+                $civNames[$civ->CivID] = $this->getCivilianNameFromID($civ->CivID);
+            }
+        }
+        if (isset($this->sessData->dataSets["Officers"]) && sizeof($this->sessData->dataSets["Officers"]) > 0) {
+            foreach ($this->sessData->dataSets["Officers"] as $off) {
+                $offNames[$off->OffID] = $this->getOfficerNameFromID($off->OffID);
+            }
+        }
+        return view('vendor.openpolice.nodes.1436-vehicle-match', [
+            "vehicles" => $this->sessData->dataSets["Vehicles"],
+            "linksCiv" => ((isset($this->sessData->dataSets["LinksCivilianVehicles"]))
+                ? $this->sessData->dataSets["LinksCivilianVehicles"] : []),
+            "linksOff" => ((isset($this->sessData->dataSets["LinksOfficerVehicles"]))
+                ? $this->sessData->dataSets["LinksOfficerVehicles"] : []),
+            "civs"     => $this->sessData->dataSets["Civilians"],
+            "offs"     => $this->sessData->dataSets["Officers"],
+            "civNames" => $civNames,
+            "offNames" => $offNames
+        ])->render();
+    }
+    
+    public function printPreviewReport($isAdmin = false)
+    {
+        if (!isset($this->sessData->dataSets["Complaints"]) || !isset($this->sessData->dataSets["Incidents"])) {
+            return '';
+        }
+        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets["Complaints"][0]->ComSummary, 100);
+        $comDate = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+        if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["isAdmin"]) {
+            $comDate = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+        }
+        $where = $this->getReportWhereLine();
+        $deptList = '';
+        $depts = ((isset($this->sessData->dataSets["Departments"])) ? $this->sessData->dataSets["Departments"] : null);
+        if ($depts && sizeof($depts) > 0) {
+            foreach ($depts as $i => $d) {
+                if (isset($d->DeptName)) {
+                    $deptList .= ((trim($deptList) != '') ? ', ' : '') 
+                        . str_replace('Department', 'Dept', $d->DeptName);
+                }
+            }
+        }
+        return view('vendor.openpolice.complaint-report-preview', [
+            "storyPrev"   => $storyPrev,
+            "complaint"   => $this->sessData->dataSets["Complaints"][0], 
+            "incident"    => $this->sessData->dataSets["Incidents"][0], 
+            "comDate"     => $comDate, 
+            "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
+            "allegations" => $this->commaAllegationList(),
+            "featureImg"  => '',
+            "deptList"    => $deptList
+        ])->render();
+    }
+    
+    protected function printValCustom($nID, $val) {
+        if (in_array($nID, [1486, 1528])) {
+            return $GLOBALS["SL"]->printHeight(intVal($val));
+        }
+        return $val;
+    }
+    
+    protected function processTokenAccessRedirExtra()
+    {
+        return '<style> #blockWrap1758, #blockWrap1780 { display: none; } </style>';
+    }
+    
+    protected function loadUpDeetPrivacy($upRow = NULL)
+    {
+        if ($upRow && isset($upRow->UpPrivacy)) {
+            if ($upRow->UpTreeID == 1) {
+                if ($GLOBALS["SL"]->x["dataPerms"] == 'public') return 'Block';
+                if ($GLOBALS["SL"]->x["pageView"] == 'public') return 'Public';
+                if ($upRow->UpPrivacy == 'Private') {
+                    if (in_array($GLOBALS["SL"]->x["pageView"], 'sensitive', 'internal')) {
+                        return 'Public';
+                    } else {
+                        return 'Block';
+                    }
+                }
+            }
+            return $upRow->UpPrivacy;
+        }
+        return 'Block';
+    }
+    
+
+    
     
 /*****************************************************************************
 // END Processes Which Override Default Behaviors of SetNav LOOPS
@@ -1242,7 +1852,7 @@ class OpenPolice extends SurvFormTree
     
     public function simpleAllegationList()
     {
-        if (sizeof($this->allegations) == 0 && isset($this->sessData->dataSets["AllegSilver"]) 
+        if (empty($this->allegations) && isset($this->sessData->dataSets["AllegSilver"]) 
             && isset($this->sessData->dataSets["AllegSilver"][0])) {
             foreach ($this->worstAllegations as $i => $alleg) {
                 $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
@@ -1283,7 +1893,7 @@ class OpenPolice extends SurvFormTree
                         $allegInfo[1] .= $this->chkSilvAlleg('AlleSilBias', $alleg[1], $alleg[0]);
                         break;
                     case 'Excessive Arrest Charges':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilRetaliation', $alleg[1], $alleg[0]);
+                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilArrestRetaliatory', $alleg[1], $alleg[0]);
                         break;
                     case 'Conduct Unbecoming an Officer':
                         $allegInfo[1] .= $this->chkSilvAlleg('AlleSilUnbecoming', $alleg[1], $alleg[0]);
@@ -1335,6 +1945,18 @@ class OpenPolice extends SurvFormTree
         return $ret;
     }
     
+    public function commaTopThreeAllegationList()
+    {
+        $ret = '';
+        $this->simpleAllegationList();
+        if (sizeof($this->allegations) > 0) {
+            if (sizeof($this->allegations) == 1) return $this->allegations[0][0];
+            if (sizeof($this->allegations) == 2) return $this->allegations[0][0] . ' and ' . $this->allegations[1][0];
+            return $this->allegations[0][0] . ', ' . $this->allegations[1][0] . ', and ' . $this->allegations[2][0];
+        }
+        return $ret;
+    }
+    
     protected function commaComplimentList()
     {
         $types = [];
@@ -1382,9 +2004,9 @@ class OpenPolice extends SurvFormTree
     
     protected function checkAllegIntimidWeapon($alleg)
     {
-        $defA = $GLOBALS["SL"]->getDefID('Allegation Type', 'Intimidating Display of Weapon');
-        $defB = $GLOBALS["SL"]->getDefID('Intimidating Displays Of Weapon', 'N/A');
-        $defC = $GLOBALS["SL"]->getDefID('Intimidating Displays Of Weapon', 'Don\'t Know');
+        $defA = $GLOBALS["SL"]->def->getID('Allegation Type', 'Intimidating Display of Weapon');
+        $defB = $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'N/A');
+        $defC = $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'Don\'t Know');
         return ($alleg->AlleType != $defA || !in_array($alleg->AlleIntimidatingWeapon, [$defB, $defC]));
     }
     
@@ -1490,7 +2112,7 @@ class OpenPolice extends SurvFormTree
             }
             foreach ($this->worstAllegations as $allegType) { // printing Allegations in order of severity...
                 foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                    if ($alleg->AlleType == $GLOBALS["SL"]->getDefID('Allegation Type', $allegType)) {
+                    if ($alleg->AlleType == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
                         if ($this->checkAllegIntimidWeapon($alleg)) {
                             $ret .= '<div class="f18">' . $allegType;
                             if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->AlleID])) {
@@ -1622,6 +2244,15 @@ class OpenPolice extends SurvFormTree
     
     protected function addNewEveSeq($eventType, $civID = -3, $forceType = -3)
     {
+        if ($eventType != 'Force') {
+            $civLnk = DB::table('OP_LinksCivilianEvents')
+                ->join('OP_EventSequence', 'OP_EventSequence.EveID', '=', 'OP_LinksCivilianEvents.LnkCivEveEveID')
+                ->where('OP_EventSequence.EveType', $eventType)
+                ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
+                ->select('OP_EventSequence.*')
+                ->first();
+            if ($civLnk && isset($civLnk->EveID)) return $civLnk;
+        }
         $newEveSeq = new OPEventSequence;
         $newEveSeq->EveComplaintID = $this->coreID;
         $newEveSeq->EveType = $eventType;
@@ -1679,6 +2310,23 @@ class OpenPolice extends SurvFormTree
             ->get();
     }
     
+    protected function createCivAnimalForces()
+    {
+        $eve = new OPEventSequence;
+        $eve->EveComplaintID = $this->coreID;
+        $eve->EveType = 'Force';
+        $eve->save();
+        $frc = new OPForce;
+        $frc->ForEventSequenceID = $eve->getKey();
+        $frc->ForAgainstAnimal = 'Y';
+        $frc->save();
+        if (!isset($this->sessData->dataSets["Force"])) $this->sessData->dataSets["Force"] = [];
+        $this->sessData->dataSets["Force"][] = $frc;
+        if (!isset($this->sessData->dataSets["EventSequence"])) $this->sessData->dataSets["EventSequence"] = [];
+        $this->sessData->dataSets["EventSequence"][] = $eve;
+        return $eve;
+    }
+    
     protected function delCivEvent($nID, $eveType, $civID)
     {
         return $this->deleteEventByID($nID, $this->getCivEventID($nID, $eveType, $civID));
@@ -1708,7 +2356,7 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
+        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && is_array($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld'))
             && sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) > 0) {
             foreach ($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld') as $civ) {
                 if (!in_array($civ, $this->eventCivLookup[$eveType])) {
@@ -1723,7 +2371,8 @@ class OpenPolice extends SurvFormTree
     {
         $this->checkHasEventSeq($nID);
         $civ = $this->sessData->loopItemIDs["Victims"][0];
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) > 0
+        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && is_array($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) 
+            && sizeof($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')) > 0
             && trim($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld')[0]) == 'Y') {
             if (!in_array($civ, $this->eventCivLookup[$eveType])) {
                 $this->addNewEveSeq($eveType, $civ);
@@ -1761,7 +2410,7 @@ class OpenPolice extends SurvFormTree
     
     protected function processHandcuffInjury($nID)
     {
-        $handcuffDefID = $GLOBALS["SL"]->getDefID('Injury Types', 'Handcuff Injury');
+        $handcuffDefID = $GLOBALS["SL"]->def->getID('Injury Types', 'Handcuff Injury');
         $stopRow = $this->getEventSequence($GLOBALS["SL"]->closestLoop["itemID"]);
         if ($GLOBALS["SL"]->REQ->has('n316fld') && trim($GLOBALS["SL"]->REQ->n316fld) == 'Y') {
             if (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) <= 0) {
@@ -1784,7 +2433,536 @@ class OpenPolice extends SurvFormTree
 // END Processes Which Handle The Event Sequence
 *****************************************************************************/
     
+
+
+
+/*****************************************************************************
+// START Processes Which Print Chunks of The Report
+*****************************************************************************/
+
+    protected function reportAllegsWhyDeets($nID = -3)
+    {
+        $deets = [];
+        if (isset($this->sessData->dataSets["AllegSilver"]) && $this->sessData->dataSets["AllegSilver"][0]
+            && isset($this->sessData->dataSets["Allegations"]) && sizeof($this->sessData->dataSets["Allegations"]) > 0){
+            foreach ($this->worstAllegations as $i => $alleg) {
+                if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] })
+                    && trim($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] }) == 'Y') {
+                    $alle = '';
+                    if ($GLOBALS["SL"]->x["dataPerms"] != 'public') {
+                        $foundWhy = false;
+                        $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
+                        foreach ($this->sessData->dataSets["Allegations"] as $j => $all) {
+                            if (!$foundWhy && $all && isset($all->AlleType) && $all->AlleType == $alleg[0]
+                                && trim($all->AlleDescription) != '') {
+                                $alle .= $all->AlleDescription . '<br />';
+                                $foundWhy = true;
+                            }
+                        }
+                    } else {
+                        $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
+                    }
+                    $deets[] = [$alle];
+                }
+            }
+        }
+        return $deets;
+    }
+
+    protected function reportAllegsWhy($nID = -3)
+    {
+        return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 
+            'Allegations<div class="pT5 f12 slGrey">Including comments from the complainant</span> ');
+    }
+
+    protected function reportCivAddy($nID)
+    {
+        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
+            && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
+            $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->getLatestDataBranchRow(), 'Prsn');
+            if (trim($addy) != '') return [ 'Address', $addy ];
+        }
+        return [];
+    }
+
+    protected function reportStory($nID)
+    {
+        $ret = '';
+        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
+            && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
+            if (!in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf'])) {
+                $previewMax = 1800;
+                if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
+                    $brkPos = strpos($this->sessData->dataSets["Complaints"][0]->ComSummary, ' ', $previewMax);
+                    if ($brkPos > 0) {
+                        $ret = '<div id="hidivStoryLess" class="disBlo">' . str_replace("\n", '<br />', 
+                            substr($this->sessData->dataSets["Complaints"][0]->ComSummary, 0, $brkPos+1)) . ' ...<br />'
+                            . '<a id="hidivBtnStoryMore" class="btn btn-primary mT20" href="javascript:;">Read More</a>'
+                            . '</div>'
+                            . '<div id="hidivStoryMore" class="disNon">' . str_replace("\n", '<br />', 
+                            $this->sessData->dataSets["Complaints"][0]->ComSummary, $brkPos) 
+                            . '<br /><a id="hidivBtnStryLessBtn" class="btn btn-primary mT20" href="javascript:;">'
+                            . 'Read Less</a></div>';
+                        $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", "#hidivBtnStoryMore", function() { '
+                            . 'document.getElementById("hidivStoryMore").style.display="block"; setTimeout(function() { '
+                            . 'document.getElementById("hidivStoryLess").style.display="none"; }, 5); });'
+                            . '$(document).on("click", "#hidivBtnStryLessBtn", function() { '
+                            . 'document.getElementById("hidivStoryLess").style.display="block"; setTimeout(function() { '
+                            . 'document.getElementById("hidivStoryMore").style.display="none"; }, 5); });';
+                    }
+                }
+            }
+            if (trim($ret) == '') {
+                $ret = str_replace("\n", '<br />', $this->sessData->dataSets["Complaints"][0]->ComSummary);
+            }
+        }
+        return '<h3 class="slBlueDark mT0">Story</h3><p>' . $ret . '</p>';
+        
+    }
     
+    protected function queuePeopleSubsets($id, $type = 'Civilians')
+    {
+        $prsn = $this->sessData->getChildRow($type, $id, 'PersonContact');
+        $phys = $this->sessData->getChildRow($type, $id, 'PhysicalDesc');
+        return [$prsn, $phys];
+    }
+    
+    protected function chkGetReportDept($overLnkID)
+    {
+        if (!isset($this->v["reportDepts"])) $this->v["reportDepts"] = [];
+        $overLnk = $this->sessData->getRowById('LinksComplaintOversight', $overLnkID);
+        if ($overLnk && isset($overLnk->LnkComOverDeptID) && intVal($overLnk->LnkComOverDeptID) > 0
+            && !in_array($overLnk->LnkComOverDeptID, $this->v["reportDepts"])) {
+            $this->v["reportDepts"][] = $overLnk->LnkComOverDeptID;
+            return '';
+        }
+        return '<!-- skipping overLnk #' . $overLnkID . ' -->';
+    }
+    
+    protected function getReportDept($deptID)
+    {
+        $dept = $this->sessData->getRowById('Departments', $deptID);
+        if ($dept && isset($dept->DeptName)) {
+            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->DeptSlug . '" class="slBlueDark">' 
+                 . $dept->DeptName . '</a></h3><div class="mB10">Complaint #' 
+                . $this->sessData->dataSets["Complaints"][0]->ComPublicID . ': <b>' 
+                . $GLOBALS["SL"]->def->getVal('Complaint Status', 
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus) 
+                . '</b></div>';
+        }
+        $this->v["reportDepts"][] = $deptID;
+        return '';
+    }
+    
+    protected function getReportByLine()
+    {
+        $ret = '';
+        if ($this->sessData->dataSets['Complaints'][0]->ComPrivacy 
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
+            $ret = 'Anonymous';
+        } elseif (isset($this->sessData->dataSets["Civilians"]) 
+            && isset($this->sessData->dataSets["Civilians"][0]->CivID) 
+            && ($GLOBALS["SL"]->x["pageView"] == 'full'
+            || ($this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
+                && $this->sessData->dataSets['Complaints'][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')))) {
+            $ret = $this->getCivReportName($this->sessData->dataSets["Civilians"][0]->CivID);
+        }
+        if (trim($ret) != '') return ['Submitted By', $ret];
+        return [];
+    }
+    
+    protected function getReportWhenLine()
+    {
+        $date = '';
+        if ($this->v["isOwner"] || $this->v["isAdmin"] || ($GLOBALS["SL"]->x["pageView"] != 'public' 
+            && $this->sessData->dataSets['Complaints'][0]->ComPrivacy
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'))) {
+            $date = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+            if ($this->sessData->dataSets["Incidents"][0]->IncTimeStart !== null) {
+                $date .= ' at ' . date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+            }
+            if ($this->sessData->dataSets["Incidents"][0]->IncTimeEnd !== null) {
+                $date .= ' until ' . date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeEnd));
+            }
+        } else {
+            $date = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+        }
+        return ['When', $date];
+    }
+    
+    protected function chkPrintWhereLine($nID = -3)
+    {
+        $show = false;
+        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
+            && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
+            if ($GLOBALS["SL"]->x["pageView"] == 'full') {
+                $show = true;
+            } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncPublic) 
+                && $this->sessData->dataSets["Incidents"][0]->IncPublic == 'Y'
+                && $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])) {
+                $show = true;
+            }
+        }
+        return $show;
+    }
+    
+    protected function getReportWhereLine($nID = -3)
+    {
+        $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->dataSets["Incidents"][0], 'Inc');
+        if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
+            return ['Where', $addy];
+        }
+        if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressState)) {
+            $c = '';
+            $state = $this->sessData->dataSets["Incidents"][0]->IncAddressState;
+            if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) {
+                $c = $GLOBALS["SL"]->getZipProperty($this->sessData->dataSets["Incidents"][0]->IncAddressZip, 'County');
+            } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncAddressCity)) {
+                $c = $GLOBALS["SL"]->getCityCounty($this->sessData->dataSets["Incidents"][0]->IncAddressZip, $state);
+            }
+            if (trim($c) != '') return ['Where', $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state];
+        }
+        return [];
+    }
+    
+    protected function getReportPrivacy($nID)
+    {
+        switch ($this->sessData->dataSets["Complaints"][0]->ComPrivacy) {
+            case $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'): 
+                return 'Full Transparency';
+            case $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public'): 
+                return 'No Names Public';
+            case $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'): 
+                return 'Anonymous';
+        }
+        return '';
+    }
+    
+    protected function getCivReportNameHeader($nID)
+    {
+        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '</h3>';
+    }
+    
+    protected function getCivReportName($civID, $ind = 0, $type = 'Subject', $prsn = NULL)
+    {
+        if (!isset($this->v["civNames"])) $this->v["civNames"] = [];
+        if (!isset($this->v["civNames"][$civID]) || $this->v["civNames"][$civID] == '') {
+            if (!$prsn) list($prsn, $phys) = $this->queuePeopleSubsets($civID);
+            $name = '';
+            if ($GLOBALS["SL"]->x["pageView"] != 'public') {
+                if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
+                    && (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
+                    || $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306) ) {
+                    $name = $this->getNameTopAnon();
+                } elseif (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' 
+                    && ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 
+                    || $GLOBALS["SL"]->x["pageView"] == 'full')) {
+                    if (trim($prsn->PrsnNickname) != '') {
+                        $name = trim($prsn->PrsnNickname);
+                    } else {
+                        $name = '<span style="color: #2b3493;" title="This complainant wanted to publicly provide their'
+                            . ' name.">' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameLast 
+                            . '</span>'; // ' . $prsn->PrsnNameMiddle . ' 
+                    }
+                }
+            }
+            if ($type == 'Subject' && $this->sessData->dataSets["Civilians"][0]->CivID != $civID
+                && $this->sessData->dataSets["Civilians"][0]["CivRole"] == 'Victim') $ind++;
+            if ($type == 'Witness' && $this->sessData->dataSets["Civilians"][0]->CivID != $civID
+                && $this->sessData->dataSets["Civilians"][0]["CivRole"] == 'Witness') $ind++;
+            $this->v["civNames"][$civID] = $type . ' #' . (1+$ind) . ((trim($name) != '') ? ': ' . $name : '');
+        }
+        return $this->v["civNames"][$civID];
+    }
+    
+    protected function getOffReportNameHeader($nID)
+    {
+        list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('Officers');
+echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
+        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getOffReportName($this->sessData->getRowById('Officers', $this->sessData->getLatestDataBranchID()),
+                $itemInd)
+            . '</h3>';
+    }
+    
+    protected function getOffReportName($off, $ind = 0, $prsn = NULL)
+    {
+        if (!isset($this->v["offNames"])) $this->v["offNames"] = [];
+        if ($off && isset($off->OffID)) {
+            if (sizeof($this->v["offNames"]) == 0 || !isset($this->v["offNames"][$off->OffID]) 
+                || trim($this->v["offNames"][$off->OffID]) == '') {
+                if (!$prsn) list($prsn, $phys) = $this->queuePeopleSubsets($off->OffID, 'Officers');
+                $name = ' ';
+                if ($GLOBALS["SL"]->x["pageView"] != 'public') {
+                    if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 
+                        || $GLOBALS["SL"]->x["pageView"] == 'full') {
+                        if (trim($prsn->PrsnNickname) != '') {
+                            $name = trim($prsn->PrsnNickname);
+                        } else {
+                            $name = trim($prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast);
+                            if (trim($name) == '' && trim($off->OffBadgeNumber) != '' 
+                                && trim($off->OffBadgeNumber) != '0') {
+                                $name = 'Badge #' . $off->OffBadgeNumber;
+                            }
+                        }
+                    }
+                }
+                $this->v["offNames"][$off->OffID] = 'Officer #' . (1+$ind) . ((trim($name) != '') ? ': ' . $name : '');
+            }
+            return $this->v["offNames"][$off->OffID];
+        }
+        return '';
+    }
+    
+    protected function getCivSnstvFldsNotPrinted($civID)
+    {
+        $info = '';
+        $prsn = $this->sessData->getChildRow('Civilians', $civID, 'PersonContact');
+        if ((((isset($prsn->PrsnNameFirst) && trim($prsn->PrsnNameFirst) != '') 
+            || (isset($prsn->PrsnNameLast) && $prsn->PrsnNameLast != '')) ? ', Name' : '')
+            && $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 304) {
+            $info .= ', Name';
+        }
+        if (isset($prsn->PrsnAddress) && trim($prsn->PrsnAddress) != '')   $info .= ', Address';
+        if (isset($prsn->PrsnPhoneHome) && trim($prsn->PrsnPhoneHome) != '') $info .= ', Phone Number'; 
+        if (isset($prsn->PrsnEmail) && trim($prsn->PrsnEmail) != '')     $info .= ', Email'; 
+        if (isset($prsn->PrsnFacebook) && trim($prsn->PrsnFacebook) != '')  $info .= ', Facebook';
+        if (isset($prsn->PrsnBirthday) && trim($prsn->PrsnBirthday) != '' && trim($prsn->PrsnBirthday) != '0000-00-00' 
+            && trim($prsn->PrsnBirthday) != '1970-01-01') {
+            $info .= ', Birthday';
+        }
+        if (($civID != $this->sessData->dataSets["Civilians"][0]->CivID 
+            || $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 306) && trim($info) != '') {
+            return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
+        }
+        return '';
+    }
+    
+    protected function getOffSnstvFldsNotPrinted($offID)
+    {
+        $off = $this->sessData->getRowById('Officers', $offID);
+        $prsn = $this->sessData->getChildRow('Officers', $offID, 'PersonContact');
+        $info = (((isset($prsn->PrsnNameFirst) && trim($prsn->PrsnNameFirst) != '') 
+            || (isset($prsn->PrsnNameLast) && $prsn->PrsnNameLast != '')) ? ', Name' : '')
+            . ((isset($off->OffBadgeNumber) && intVal($off->OffBadgeNumber) > 0) ? ', Badge Number' : '');
+        if (trim($info) != '') return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
+        return '';
+    }
+    
+    protected function getOffProfan()
+    {
+        $profanity = '';
+        if (isset($this->sessData->dataSets["Officers"]) && sizeof($this->sessData->dataSets["Officers"]) > 0) {
+            foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
+                if ($off->OffUsedProfanity == 'Y') $profanity .= ', ' . $this->getOffReportName($off);
+            }
+        }
+        if (trim($profanity) != '') return ['Officer Profanity', substr($profanity, 1)];
+        return [];
+    }
+    
+    protected function getCivProfan()
+    {
+        $profanity = '';
+        if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
+            foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
+                if ($civ->CivUsedProfanity == 'Y') $profanity .= ', ' . $this->getCivReportName($civ->getKey());
+            }
+        }
+        if (trim($profanity) != '') return ['Subject Profanity', substr($profanity, 1)];
+        return [];
+    }
+    
+    protected function reportEventTitle($eveID)
+    {
+        $h3 = '<h3 class="slBlueDark mT0 mB20">';
+        switch ($this->getEveSeqRowType($eveID)) {
+            case 'Stops':    return $h3 . 'Stop</h3>';
+            case 'Searches': return $h3 . 'Search</h3>';
+            case 'Force':    return $h3 . 'Use of Force</h3>';
+            case 'Arrests':  return $h3 . 'Arrest</h3>';
+        }
+        return '';
+    }
+    
+    protected function printReportShare()
+    {
+        return view('vendor.openpolice.nodes.1710-report-inc-share', [
+            "pubID"     => $this->sessData->dataSets["Complaints"][0]->ComPublicID,
+            "emojiTags" => $this->printEmojiTags(),
+            "published" => $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0]),
+            "viewPrfx"  => (($GLOBALS["SL"]->x["pageView"] == 'full') ? 'full-' : '')
+            ])->render();
+    }
+    
+    protected function fillGlossary()
+    {
+        $this->v["glossaryList"] = [];
+        $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
+        if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+            $this->v["glossaryList"][] = ['<b>Full Transparency</b>', 
+                $prvLnk . 'User opts to publish the names of civilians and police officers on this website.'];
+        } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public')) {
+            $this->v["glossaryList"][] = ['<b>No Names Public</b>', 
+                $prvLnk . 'User doesn\'t want to publish any names on this website. 
+                This includes police officers\' names and badge numbers too.'];
+        } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
+            $this->v["glossaryList"][] = ['<b>Anonymous</b> ', 
+                $prvLnk . 'User needs complaint to be completely anonymous, even though it will be harder to '
+                    . 'investigate. No names will be published on this website. Neither OPC staff nor investigators '
+                    . 'will be able to contact them. Any details that could be used for personal identification '
+                    . 'may be deleted from the database.'];
+        }
+        if ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold') {
+            $this->v["glossaryList"][] = ['<b>Gold-Level Complaint</b>', 
+                '<a href="/frequently-asked-questions#what-is-gold-star">Optional</a>: This user opted '
+                    . 'to share more complete details about their police experience than a Basic Complaint.'];
+        }
+        $this->simpleAllegationList();
+        if (sizeof($this->allegations) > 0) {
+            foreach ($this->allegations as $i => $a) {
+                $this->v["glossaryList"][] = [
+                    '<b>' . $a[0] . '</b>', 
+                    '<a href="/allegations" target="_blank">Allegation</a>: ' 
+                        . $GLOBALS["SL"]->def->getDesc('Allegation Type', $a[0])
+                ];
+            }
+        }
+        return true;
+    }
+    
+    protected function printFlexArts()
+    {
+        $this->loadRelatedArticles();
+        return view('vendor.openpolice.nodes.1708-report-flex-articles', [
+            "allUrls" => $this->v["allUrls"] ])->render();
+    }
+    
+    protected function printFlexVids()
+    {
+        $this->loadRelatedArticles();
+        return view('vendor.openpolice.nodes.1753-report-flex-videos', [
+            "allUrls" => $this->v["allUrls"] ])->render();
+    }
+    
+    protected function printComplaintOversight()
+    {
+        $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)
+            ->first();
+        if ($this->chkOverUserHasCore() && $GLOBALS["SL"]->REQ->has('overUpdate') 
+            && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1) {
+            if ($overRow && isset($overRow->OverDeptID)) {
+                $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->OverID);
+                $newReview = new OPzComplaintReviews;
+                $newReview->ComRevComplaint  = $this->coreID;
+                $newReview->ComRevUser       = $this->v["user"]->id;
+                $newReview->ComRevDate       = date("Y-m-d H:i:s");
+                $newReview->ComRevType       = 'Oversight';
+                $newReview->ComRevNote       = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                    ? trim($GLOBALS["SL"]->REQ->overNote) : '');
+                if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
+                    if ($GLOBALS["SL"]->REQ->overStatus == 'Received by Oversight') {
+                        $this->logOverUpDate($this->coreID, $overRow->OverID, 'Received', $overUpdateRow);
+                    } elseif ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
+                        $this->logOverUpDate($this->coreID, $overRow->OverID, 'Investigated', $overUpdateRow);
+                    }
+                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', trim($GLOBALS["SL"]->REQ->overStatus));
+                    $this->sessData->dataSets["Complaints"][0]->update([ "ComStatus" => $statusID ]);
+                    $newReview->ComRevStatus = $GLOBALS["SL"]->REQ->overStatus;
+                }
+                $newReview->save();
+            }
+        }
+        return view('vendor.openpolice.nodes.1711-report-inc-oversight-tools', [
+            "user"        => $this->v["user"],
+            "complaint"   => $this->sessData->dataSets["Complaints"][0],
+            "overRow"     => $overRow
+            ])->render();
+    }
+    
+    protected function printComplaintOwner()
+    {
+        if ($this->v["isOwner"] && $GLOBALS["SL"]->REQ->has('ownerUpdate') 
+            && intVal($GLOBALS["SL"]->REQ->get('ownerUpdate')) == 1 && isset($this->sessData->dataSets["Oversight"])) {
+            $overID = $this->sessData->dataSets["Oversight"][0]->OverID;
+            if (isset($this->sessData->dataSets["Oversight"][1]) 
+                && $this->sessData->dataSets["Oversight"][1]->OverType == 303) {
+                $overID = $this->sessData->dataSets["Oversight"][1]->OverID;
+            }
+            $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overID);
+        
+            $newReview = new OPzComplaintReviews;
+            $newReview->ComRevComplaint  = $this->coreID;
+            $newReview->ComRevUser       = $this->v["user"]->id;
+            $newReview->ComRevDate       = date("Y-m-d H:i:s");
+            $newReview->ComRevType       = 'Owner';
+            $newReview->ComRevNote       = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                ? trim($GLOBALS["SL"]->REQ->overNote) : '');
+            $newReview->ComRevStatus     = $GLOBALS["SL"]->REQ->overStatus;
+            $newReview->save();
+            if ($GLOBALS["SL"]->REQ->has('overStatus')) {
+                if (trim($GLOBALS["SL"]->REQ->overStatus) == 'Received by Oversight') {
+                    $this->logOverUpDate($this->coreID, $overID, 'Received', $overUpdateRow);
+                    if ($this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        == $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')) {
+                        $this->sessData->dataSets["Complaints"][0]->update([ 
+                            "ComStatus" => $GLOBALS["SL"]->def->getID('Complaint Status', 
+                                'Submitted to Oversight') ]);
+                    }
+                } else {
+                    if ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
+                        $this->logOverUpDate($this->coreID, $overID, 'Investigated', $overUpdateRow);
+                    } elseif (in_array($GLOBALS["SL"]->REQ->overStatus, [
+                        'Submitted to Oversight', 'OK to Submit to Oversight'])) {
+                        if (isset($overUpdateRow->LnkComOverReceived) && $overUpdateRow->LnkComOverReceived != '') {
+                            $overUpdateRow->LnkComOverReceived = NULL;
+                            $overUpdateRow->save();
+                        }
+                    }
+                    $this->sessData->dataSets["Complaints"][0]->update([ 
+                        "ComStatus" => $GLOBALS["SL"]->def->getID('Complaint Status', 
+                            $GLOBALS["SL"]->REQ->overStatus) ]);
+                }
+            }
+        }
+        return view('vendor.openpolice.nodes.1714-report-inc-owner-tools', [
+            "user"        => $this->v["user"],
+            "complaint"   => $this->sessData->dataSets["Complaints"][0],
+            "depts"       => ((isset($this->sessData->dataSets["Departments"])) 
+                ? $this->sessData->dataSets["Departments"] : []),
+            "oversigts"   => ((isset($this->sessData->dataSets["Oversight"]))
+                ? $this->sessData->dataSets["Oversight"] : []),
+            "overUpdates" => ((isset($this->sessData->dataSets["LinksComplaintOversight"]))
+                ? $this->sessData->dataSets["LinksComplaintOversight"] : []),
+            "overList"    => $this->oversightList(),
+            ])->render();
+    }
+    
+    protected function printMfaInstruct()
+    {
+        if (isset($this->v["tokenUser"]) && $this->v["tokenUser"]) {
+            return view('vendor.openpolice.nodes.1780-mfa-instructions', [
+                "user" => $this->v["tokenUser"],
+                "mfa"  => $this->processTokenAccess(false)
+                ])->render();
+        }
+        return '';
+    }
+    
+    
+    
+/*****************************************************************************
+// END Processes Which Print Chunks of The Report
+*****************************************************************************/
+
+
+
+
     
     
 /*****************************************************************************
@@ -1832,19 +3010,19 @@ class OpenPolice extends SurvFormTree
     protected function getEveSeqRowType($eveSeqID = -3)
     {
         $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-        if ($eveSeq && sizeof($eveSeq) > 0) return $eveSeq->EveType;
+        if ($eveSeq) return $eveSeq->EveType;
         return '';
     }
     
     protected function isEventAnimalForce($eveSeqID = -3, $force = [])
     {
-        if (sizeof($force) == 0) {
+        if (empty($force)) {
             $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-            if ($eveSeq && sizeof($eveSeq) > 0 && $eveSeq->EveType == 'Force') {
+            if ($eveSeq && $eveSeq->EveType == 'Force') {
                 $force = $this->sessData->getChildRow('EventSequence', $eveSeq->EveID, $eveSeq->EveType);
             }
         }
-        if (sizeof($force) > 0 && isset($force->ForAgainstAnimal) && $force->ForAgainstAnimal == 'Y') {
+        if ($force && isset($force->ForAgainstAnimal) && $force->ForAgainstAnimal == 'Y') {
             return $force->ForAnimalDesc;
         }
         return '';
@@ -1882,15 +3060,14 @@ class OpenPolice extends SurvFormTree
     
     protected function printEventSequenceLine($eveSeq, $info = '')
     {
-        if (!isset($eveSeq["EveType"]) && sizeof($eveSeq) > 0) $eveSeq = $eveSeq[0];
-        if (!isset($eveSeq["EveType"]) || sizeof($eveSeq["Event"]) <= 0) return '';
+        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) $eveSeq = $eveSeq[0];
+        if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) return '';
         $ret = '<span class="slBlueDark">';
-        if ($eveSeq["EveType"] == 'Force' 
-            && isset($eveSeq["Event"]->ForType) && trim($eveSeq["Event"]->ForType) != '') {
-            if ($eveSeq["Event"]->ForType == $GLOBALS["SL"]->getDefID('Force Type', 'Other')) {
+        if ($eveSeq["EveType"] == 'Force' && isset($eveSeq["Event"]->ForType) && trim($eveSeq["Event"]->ForType) != ''){
+            if ($eveSeq["Event"]->ForType == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
                 $ret .= $eveSeq["Event"]->ForTypeOther . ' Force ';
             } else {
-                $ret .= $GLOBALS["SL"]->getDefValue('Force Type', $eveSeq["Event"]->ForType) . ' Force ';
+                $ret .= $GLOBALS["SL"]->def->getVal('Force Type', $eveSeq["Event"]->ForType) . ' Force ';
             }
         } elseif (isset($this->eventTypeLabel[$eveSeq["EveType"]])) {
             $ret .= $this->eventTypeLabel[$eveSeq["EveType"]] . ' ';
@@ -1946,7 +3123,7 @@ class OpenPolice extends SurvFormTree
 
     protected function shortRaceName($raceDefID)
     {
-        $race = $GLOBALS["SL"]->getDefValue('Races', $raceDefID);
+        $race = $GLOBALS["SL"]->def->getVal('Races', $raceDefID);
         if (in_array($race, ['Other', 'Decline or Unknown'])) return '';
         return str_replace('Asian American',         'Asian', 
             str_replace('Black or African American', 'Black', 
@@ -1959,16 +3136,16 @@ class OpenPolice extends SurvFormTree
         $name = '';
         $civ2 = [];
         $civ2 = $this->sessData->getChildRow($type, $id, 'PersonContact');
-        if (sizeof($civ2) > 0 && trim($civ2->PrsnNickname) != '') {
+        if ($civ2 && trim($civ2->PrsnNickname) != '') {
             $name = $civ2->PrsnNickname;
-        } elseif (sizeof($civ2) > 0 && (trim($civ2->PrsnNameFirst) != '' || trim($civ2->PrsnNameLast) != '')) {
+        } elseif ($civ2 && (trim($civ2->PrsnNameFirst) != '' || trim($civ2->PrsnNameLast) != '')) {
             $name = $civ2->PrsnNameFirst . ' ' . $civ2->PrsnNameLast . ' ' . $name;
         } else {
             if ($type == 'Officers' && isset($row->OffBadgeNumber) && intVal($row->OffBadgeNumber) > 0) {
                 $name = 'Badge #' . $row->OffBadgeNumber . ' ' . $name;
             } else {
                 $civ2 = $this->sessData->getChildRow($type, $id, 'PhysicalDesc');
-                if (sizeof($civ2) > 0) {
+                if ($civ2) {
                     if (trim($civ2->PhysGender) != '') $name = $this->getGenderLabel($civ2) . ' ' . $name;
                     if (intVal($civ2->PhysRace) > 0) $name = $this->shortRaceName($civ2->PhysRace) . ' ' . $name;
                 }
@@ -2051,6 +3228,41 @@ class OpenPolice extends SurvFormTree
         return $civInd;
     }
     
+    protected function saveNewDept($nID)
+    {
+        $newDeptID = -3;
+        if (intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
+            $newDeptID = intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
+            $this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', 
+                $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
+        } elseif ($GLOBALS["SL"]->REQ->has('newDeptName') && trim($GLOBALS["SL"]->REQ->newDeptName) != '') {
+            $newDept = $this->newDeptAdd($GLOBALS["SL"]->REQ->newDeptName, 
+                $GLOBALS["SL"]->REQ->newDeptAddressState);
+            $newDeptID = $newDept->DeptID;
+            $logTxt = 'ComplaintDeptLinks - !New Department Added!';
+            $this->sessData->logDataSave($nID, 'NEW', -3, $logTxt, $newDeptID);
+        }
+        if ($newDeptID > 0) $this->chkDeptLinks($newDeptID);
+        return true;   
+    }
+    
+    protected function chkDeptLinks($newDeptID)
+    {
+        $deptChk = OPLinksComplaintDept::where('LnkComDeptComplaintID', $this->coreID)
+            ->where('LnkComDeptDeptID', $newDeptID)
+            ->get();
+        if ($deptChk->isEmpty()) {
+            $newDeptLnk = new OPLinksComplaintDept;
+            $newDeptLnk->LnkComDeptComplaintID = $this->coreID;
+            $newDeptLnk->LnkComDeptDeptID = $newDeptID;
+            $newDeptLnk->save();
+        }
+        $this->getOverUpdateRow($this->coreID, $newDeptID);
+        $this->sessData->refreshDataSets();
+        $this->runLoopConditions();
+        return true;
+    }
+    
     protected function getDeptName($dept = [], $itemIndex = -3)
     {
         $name = ''; //(($itemIndex > 0) ? '<span class="fPerc66 gry9">(#'.$itemIndex.')</span>' : '');
@@ -2061,13 +3273,13 @@ class OpenPolice extends SurvFormTree
     protected function getDeptNameByID($deptID)
     {
         $dept = $this->sessData->getRowById('Departments', $deptID);
-        if (sizeof($dept) > 0) return $this->getDeptName($dept);
+        if ($dept) return $this->getDeptName($dept);
         return '';
     }
     
     protected function civRow2Set($civ)
     {
-        if (!$civ || sizeof($civ) == 0 || !isset($civ->CivIsCreator)) return '';
+        if (!$civ || !isset($civ->CivIsCreator)) return '';
         return (($civ->CivIsCreator == 'Y') ? '' : (($civ->CivRole == 'Victim') ? 'Victims' : 'Witnesses') );
     }
     
@@ -2132,7 +3344,7 @@ class OpenPolice extends SurvFormTree
     // Usage: ('Injuries', 'InjuryCare'), ('!Arrests', 'Charges')
     protected function formCivSetPossibilities($tbl1, $tbl2, $possible = [])
     {
-        if (sizeof($possible) == 0) $possible = $this->getCivSetPossibilities($tbl1, $tbl2);
+        if (empty($possible)) $possible = $this->getCivSetPossibilities($tbl1, $tbl2);
         $ret = '<div class="nFld pB20">';
         if (sizeof($possible["opts"]) > 0) { 
             foreach ($possible["opts"] as $i => $civID) {
@@ -2162,7 +3374,8 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
-        if ($GLOBALS["SL"]->REQ->has($tbl2) && sizeof($GLOBALS["SL"]->REQ->input($tbl2)) > 0) { 
+        if ($GLOBALS["SL"]->REQ->has($tbl2) && is_array($GLOBALS["SL"]->REQ->input($tbl2)) 
+            && sizeof($GLOBALS["SL"]->REQ->input($tbl2)) > 0) { 
             foreach ($GLOBALS["SL"]->REQ->input($tbl2) as $civID) {
                 if (!isset($possible["active"][$civID])) {
                     $injRow = $this->sessData->newDataRecord($tbl2, $activeFld, $civID);
@@ -2184,7 +3397,7 @@ class OpenPolice extends SurvFormTree
             
             print_r($request);
             $chk = User::where('email', $request->email)->get();
-            if ($chk && sizeof($chk) > 0) echo 'found';
+            if ($chk->isNotEmpty()) echo 'found';
             echo 'not found';
             exit;
             
@@ -2206,7 +3419,7 @@ class OpenPolice extends SurvFormTree
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes && sizeof($deptsRes) > 0) {
+                if ($deptsRes->isNotEmpty()) {
                     foreach ($deptsRes as $d) {
                         if (!in_array($d->DeptID, $deptIDs)) {
                             $deptIDs[] = $d->DeptID;
@@ -2220,7 +3433,7 @@ class OpenPolice extends SurvFormTree
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes && sizeof($deptsRes) > 0) {
+                if ($deptsRes->isNotEmpty()) {
                     foreach ($deptsRes as $d) $depts[] = $d;
                 }
                 $deptsRes = OPDepartments::where('DeptAddress', 'LIKE', '%' . $request->policeDept . '%')
@@ -2229,14 +3442,14 @@ class OpenPolice extends SurvFormTree
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes && sizeof($deptsRes) > 0) {
+                if ($deptsRes->isNotEmpty()) {
                     foreach ($deptsRes as $d) $depts[] = $d;
                 }
                 $zips = $counties = [];
                 $cityZips = SLZips::where('ZipCity', 'LIKE', '%' . $request->policeDept . '%')
                     ->where('ZipState', 'LIKE', $reqState)
                     ->get();
-                if ($cityZips && sizeof($cityZips) > 0) {
+                if ($cityZips->isNotEmpty()) {
                     foreach ($cityZips as $z) {
                         $zips[] = $z->ZipZip;
                         $counties[] = $z->ZipCounty;
@@ -2244,7 +3457,7 @@ class OpenPolice extends SurvFormTree
                     $deptsMore = OPDepartments::whereIn('DeptAddressZip', $zips)
                         ->orderBy('DeptName', 'asc')
                         ->get();
-                    if ($deptsMore && sizeof($deptsMore) > 0) {
+                    if ($deptsMore->isNotEmpty()) {
                         foreach ($deptsMore as $d) $depts[] = $d;
                     }
                     foreach ($counties as $c) {
@@ -2254,7 +3467,7 @@ class OpenPolice extends SurvFormTree
                             ->orderBy('DeptTotOfficers', 'desc')
                             ->orderBy('DeptName', 'asc')
                             ->get();
-                        if ($deptsMore && sizeof($deptsMore) > 0) {
+                        if ($deptsMore->isNotEmpty()) {
                             foreach ($deptsMore as $d) $depts[] = $d;
                         }
                         $deptsMore = OPDepartments::where('DeptAddressCounty', 'LIKE', '%' . $c . '%')
@@ -2263,7 +3476,7 @@ class OpenPolice extends SurvFormTree
                             ->orderBy('DeptTotOfficers', 'desc')
                             ->orderBy('DeptName', 'asc')
                             ->get();
-                        if ($deptsMore && sizeof($deptsMore) > 0) {
+                        if ($deptsMore->isNotEmpty()) {
                             foreach ($deptsMore as $d) $depts[] = $d;
                         }
                     }
@@ -2275,7 +3488,7 @@ class OpenPolice extends SurvFormTree
                 ->orderBy('DeptTotOfficers', 'desc')
                 ->orderBy('DeptName', 'asc')
                 ->get();
-            if ($deptsFed && sizeof($deptsFed) > 0) {
+            if ($deptsFed->isNotEmpty()) {
                 foreach ($deptsFed as $d) $depts[] = $d;
             }
             $GLOBALS["SL"]->loadStates();
@@ -2284,7 +3497,7 @@ class OpenPolice extends SurvFormTree
                 "search"           => $request->get('policeDept'), 
                 "stateName"        => $GLOBALS["SL"]->states->getState($request->get('policeState')), 
                 "newDeptStateDrop" => $GLOBALS["SL"]->states->stateDrop($request->get('policeState'), true)
-            ]);
+            ])->render();
             return '';
             
         }
@@ -2293,11 +3506,24 @@ class OpenPolice extends SurvFormTree
     
     public function allegationsList(Request $request)
     {
-        $this->v["content"] = view('vendor.openpolice.allegations');
-        return view('vendor.survloop.master', $this->v);
+        $this->v["content"] = view('vendor.openpolice.allegations')->render();
+        return view('vendor.survloop.master', $this->v)->render();
     }
     
-    
+    protected function oversightList()
+    {
+        $ret = '';
+        if (isset($this->sessData->dataSets["Oversight"]) && sizeof($this->sessData->dataSets["Oversight"]) > 0) {
+            $cnt = 0;
+            foreach ($this->sessData->dataSets["Oversight"] as $i => $o) {
+                if (isset($o->OverAgncName) && trim($o->OverAgncName) != '') {
+                    $ret .= (($cnt > 0) ? ' and ' : '') . $o->OverAgncName;
+                    $cnt++;
+                }
+            }
+        }
+        return $ret;
+    }
     
     public function sortableStart($nID)
     {
@@ -2318,7 +3544,7 @@ class OpenPolice extends SurvFormTree
     
     public function isOverCompatible($overRow)
     {
-        return (isset($overRow->OverEmail) && trim($overRow->OverEmail) != '' 
+        return ($overRow && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '' 
             && isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
             && isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) == 1);
     }
@@ -2329,22 +3555,40 @@ class OpenPolice extends SurvFormTree
             $GLOBALS["SL"]->x["depts"][$deptID] = [ "id" => $deptID ];
             $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] = OPDepartments::find($deptID);
             $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs'))
+                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
                 ->first();
             $GLOBALS["SL"]->x["depts"][$deptID]["civRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Civilian Oversight'))
+                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
                 ->first();
-            if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) || sizeof($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) == 0) {
+            if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) 
+                || !$GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) {
                 $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"] = new OPOversight;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverDeptID       = $deptID;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverType         = $GLOBALS["SL"]->getDefID('Oversight Agency Types', 'Internal Affairs');
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName     = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress      = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2     = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity  = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip   = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverPhoneWork    = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptPhoneWork;
+                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverDeptID = $deptID;
+                if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverType
+                        = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverPhoneWork
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptPhoneWork;
+                }
+                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
+            }
+            if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) 
+                || trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) == '') {
+                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
+                    = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                 $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
             }
             if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
@@ -2396,8 +3640,7 @@ class OpenPolice extends SurvFormTree
             if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]) 
                 && isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAgncName)) {
                 $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"] = $which = "civRow";
-            } elseif (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) 
-                && isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName)) {
+            } else {
                 $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"] = $which = "iaRow";
             }
             $GLOBALS["SL"]->x["depts"][$deptID]["overUser"] = [];
@@ -2407,40 +3650,45 @@ class OpenPolice extends SurvFormTree
                 $GLOBALS["SL"]->x["depts"][$deptID]["overUser"] = User::where('email', $email)->first();
             }
             
-            $overRow = $GLOBALS["SL"]->x["depts"][$deptID][$which];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"] = [];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 30, 'Has online complaint submission form', 
-                (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
-                && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 20, 'Has complaint information on website', 
-                (isset($overRow->OverWebComplaintInfo)) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Has complaint information linked from home page', 
-                (isset($overRow->OverHomepageComplaintLink) && trim($overRow->OverHomepageComplaintLink) == 'Y') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Has complaint form PDF on website', 
-                (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Investigates complaints sent via email', 
-                (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
-                && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Official dept. form not required for investigation', 
-                (isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) > 0) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Anonymous complaints investigated', 
-                (isset($overRow->OverOfficialAnon) && intVal($overRow->OverOfficialAnon) == 1) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a unique department website', 
-                (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Facebook page', 
-                (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Twitter account', 
-                (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a YouTube channel', 
-                (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 3, 'Investigates complaints sent via phone', 
-                (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 2, 'Investigates complaints sent via snail mail', 
-                (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 0, 'Requires complaints to be filed in person', 
-                (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ -10, 'Requires Notary (for any type of complaint)', 
-                (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) ];
+            if (isset($GLOBALS["SL"]->x["depts"]) && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                && isset($GLOBALS["SL"]->x["depts"][$deptID][$which])) {
+                $overRow = $GLOBALS["SL"]->x["depts"][$deptID][$which];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"] = [];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 30, 'Has online complaint submission form', 
+                    (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
+                    && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 20, 'Has complaint information on website', 
+                    (isset($overRow->OverWebComplaintInfo)) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 
+                    'Has complaint information linked from home page', 
+                    (isset($overRow->OverHomepageComplaintLink) && trim($overRow->OverHomepageComplaintLink) == 'Y') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Has complaint form PDF on website', 
+                    (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Investigates complaints sent via email', 
+                    (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
+                    && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 
+                    'Official dept. form not required for investigation', 
+                    (isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) > 0) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Anonymous complaints investigated', 
+                    (isset($overRow->OverOfficialAnon) && intVal($overRow->OverOfficialAnon) == 1) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a unique department website', 
+                    (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Facebook page', 
+                    (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Twitter account', 
+                    (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a YouTube channel', 
+                    (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 3, 'Investigates complaints sent via phone', 
+                    (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 2, 'Investigates complaints sent via snail mail', 
+                    (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 0, 'Requires complaints to be filed in person', 
+                    (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) ];
+                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ -10, 'Requires Notary (for any type of complaint)', 
+                    (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) ];
+            }
         }
         return true;
     }
@@ -2453,17 +3701,21 @@ class OpenPolice extends SurvFormTree
             foreach ($this->sessData->dataSets["LinksComplaintDept"] as $deptLnk) {
                 $deptID = $deptLnk->LnkComDeptDeptID;
                 $this->loadDeptStuff($deptID);
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) && (!isset($GLOBALS["SL"]->x["depts"][$deptID]["overUser"]) 
+                $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
+                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                    && (!isset($GLOBALS["SL"]->x["depts"][$deptID]["overUser"]) 
                     || !isset($GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->email)) 
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]])
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]]->OverEmail)) {
-                    $overRow = $GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]];
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr])
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]->OverEmail)) {
+                    $overRow = $GLOBALS["SL"]->x["depts"][$deptID][$wchOvr];
                     $GLOBALS["SL"]->x["depts"][$deptID]["overUser"] = new User;
                     $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->email = $overRow->OverEmail;
                     $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->name = $overRow->OverAgncName;
                     $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->password = $this->genTokenStr('pass', 100);
                     $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->save();
-                    $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->assignRole('thirdparty');
+                    $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->assignRole('oversight');
+                    $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->assignRole('partner');
+                    $GLOBALS["SL"]->x["depts"][$deptID]["overUser"]->assignRole('volunteer');
                 }
             }
         }
@@ -2480,7 +3732,7 @@ class OpenPolice extends SurvFormTree
         return [];
     }
     
-    protected function emailRecordSwap($emaTxt)
+    public function emailRecordSwap($emaTxt)
     {
         $deptID = -3;
         if (isset($this->sessData->dataSets["LinksComplaintDept"]) 
@@ -2496,7 +3748,7 @@ class OpenPolice extends SurvFormTree
     
     public function sendEmailBlurbsCustom($emailBody, $deptID = -3)
     {
-        if (!isset($GLOBALS["SL"]->x["depts"]) || sizeof($GLOBALS["SL"]->x["depts"]) == 0) {
+        if (!isset($GLOBALS["SL"]->x["depts"]) || empty($GLOBALS["SL"]->x["depts"])) {
             if ($deptID > 0) {
                 $this->loadDeptStuff($deptID);
             } elseif (isset($this->sessData->dataSets["LinksComplaintDept"]) 
@@ -2517,13 +3769,19 @@ class OpenPolice extends SurvFormTree
             }
         }
         if (strpos($emailBody, '[{ Complaint Oversight Agency }]') !== false) {
-            $overName = $GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]]->OverAgncName;
-            $forDept = (($overName != $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) 
-                ? ' (for the ' . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName . ')' : '');
-            $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Oversight Agency }]', $emailBody);
-            $emailBody = $splits[0] . $overName . $forDept;
-            for ($i=1; $i<sizeof($splits); $i++) {
-                $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
+            if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
+                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr])) {
+                    $overName = trim($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]->OverAgncName);
+                    if ($overName == '') $overName = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                    $forDept = (($overName != $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) 
+                        ? ' (for the ' . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName . ')' 
+                        : (($wchOvr == 'iaRow') ? ' Internal Affairs' : ''));
+                    $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Oversight Agency }]', $emailBody);
+                    $emailBody = $splits[0] . $overName . $forDept;
+                    if ($wchOvr == 'iaRow') $overName = 'Internal Affairs';
+                    for ($i = 1; $i < sizeof($splits); $i++) $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
+                }
             }
         }
         
@@ -2537,9 +3795,6 @@ class OpenPolice extends SurvFormTree
             '[{ Complaint URL JSON Link }]', 
             '[{ Complainant Name }]', 
             '[{ Confirmation URL }]', 
-            '[{ Go Gold Secure URL }]', 
-            '[{ Submit Silver Secure URL }]', 
-            '[{ Update Complaint Secure URL }]', 
             '[{ Days From Now: 7, mm/dd/yyyy }]', 
             '[{ Complaint Number of Weeks Old }]', 
             '[{ Analyst Name }]', 
@@ -2552,8 +3807,9 @@ class OpenPolice extends SurvFormTree
             '[{ Complaint Investigability Score & Description }]', 
             '[{ Complaint Allegation List }]', 
             '[{ Complaint Allegation List Lower Bold }]', 
+            '[{ Complaint Top Three Allegation List Lower Bold }]', 
             '[{ Complaint Worst Allegation }]', 
-            '[{ Oversight Complaint Secure URL }]', 
+            '[{ Oversight Complaint Token URL Link }]', 
             '[{ Oversight Complaint Secure MFA }]',
             '[{ Complaint Department Complaint PDF }]', 
             '[{ Complaint Department Complaint Web }]', 
@@ -2567,28 +3823,38 @@ class OpenPolice extends SurvFormTree
                 $dyCore = str_replace('[{ ', '', str_replace(' }]', '', $dy));
                 switch ($dy) {
                     case '[{ Complaint ID }]': 
-                        $swap = $this->coreID;
+                        $swap = $this->corePublicID;
                         break;
                     case '[{ Complaint URL }]':
-                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                            . $this->coreID);
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' 
+                            . $this->corePublicID);
                         break;
                     case '[{ Complaint URL Link }]':
-                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' . $this->coreID;
+                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID;
                         break;
                     case '[{ Complaint URL PDF }]':
-                        $swap = '<a href="' . $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                            . $this->coreID . '/pdf" target="_blank">Download full complaint as a PDF</a>';
+                        $swap = '<a href="' . $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' 
+                            . $this->corePublicID . '/pdf" target="_blank">Download full complaint as a PDF</a>';
                         break;
                     case '[{ Complaint URL PDF Link }]':
-                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' . $this->coreID . '/pdf';
+                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID . '/pdf';
                         break;
+                    case '[{ Complaint URL XML }]':
                     case '[{ Complaint URL JSON }]':
-                        $swap = '<a href="' . $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-report/' 
-                            . $this->coreID . '/xml" target="_blank">Download full complaint as an OPC Data File (XML)</a>';
+                        $swap = '<a href="' . $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' 
+                            . $this->corePublicID . '/xml" target="_blank">Download full complaint as a XML</a>';
                         break;
+                    case '[{ Complaint URL XML Link }]':
                     case '[{ Complaint URL JSON Link }]':
-                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-report/' . $this->coreID . '/xml';
+                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID . '/xml';
+                        break;
+                    case '[{ Complaint URL XML }]':
+                        $swap = '<a href="' . $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' 
+                            . $this->corePublicID . '/xml" target="_blank">Download full complaint as an OPC Data File '
+                            . '(XML)</a>';
+                        break;
+                    case '[{ Complaint URL XML Link }]':
+                        $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID . '/xml';
                         break;
                     case '[{ Complainant Name }]':
                         if (isset($this->sessData->dataSets["Civilians"][0]->CivPersonID) 
@@ -2599,18 +3865,6 @@ class OpenPolice extends SurvFormTree
                                 $swap = $contact->PrsnNameFirst;
                             }
                         }
-                        break;
-                    case '[{ Go Gold Secure URL }]':
-                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                            . $this->coreID . '/go-gold/goooobblygooook8923528350');
-                        break;
-                    case '[{ Submit Silver Secure URL }]':
-                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                            . $this->coreID . '/submit-silver/goooobblygooook8923528350');
-                        break;
-                    case '[{ Update Complaint Secure URL }]':
-                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                            . $this->coreID . '/update/goooobblygooook8923528350');
                         break;
                     case '[{ Days From Now: 7, mm/dd/yyyy }]':
                         $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
@@ -2638,22 +3892,23 @@ class OpenPolice extends SurvFormTree
                         $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                         break;
                     case '[{ Dear Primary Oversight Agency }]':
-                        $swap = 'Dear police oversight investigator,';
+                        $swap = 'To Whom It May Concern,';
                         break;
                     case '[{ Complaint Officers Reference }]':
-                        if (sizeof($this->sessData->dataSets["Officers"]) <= 0) $swap = 'no officers';
-                        elseif (sizeof($this->sessData->dataSets["Officers"]) == 1) $swap = 'an officer';
+                        if (empty($this->sessData->dataSets["Officers"])) $swap = 'no officers';
+                        elseif (sizeof($this->sessData->dataSets["Officers"]) == 1) $swap = 'one officer';
                         elseif (sizeof($this->sessData->dataSets["Officers"]) < 10) {
                             switch (sizeof($this->sessData->dataSets["Officers"])) {
-                                case 2: $swap = 'two'; break;   case 3: $swap = 'three'; break;
-                                case 4: $swap = 'four'; break;  case 5: $swap = 'five'; break;
-                                case 6: $swap = 'six'; break;   case 7: $swap = 'seven'; break;
-                                case 8: $swap = 'eight'; break; case 9: $swap = 'nine'; break;
+                                case 2: $swap = 'two'; break;
+                                case 3: $swap = 'three'; break;
                             }
                             $swap .= ' officers';
                         } else {
                             $swap = $f->format(sizeof($this->sessData->dataSets["Officers"])) . ' officers';
                         }
+                        break;
+                    case '[{ Complaint Officers Count }]':
+                        $swap = sizeof($this->sessData->dataSets["Officers"]);
                         break;
                     case '[{ Complaint Allegation List }]':
                         $swap = $this->commaAllegationList();
@@ -2661,29 +3916,23 @@ class OpenPolice extends SurvFormTree
                     case '[{ Complaint Allegation List Lower Bold }]':
                         $swap = '<b>' . strtolower($this->commaAllegationList()) . '</b>';
                         break;
+                    case '[{ Complaint Top Three Allegation List Lower Bold }]':
+                        $swap = '<b>' . strtolower($this->commaTopThreeAllegationList()) . '</b>';
+                        break;
                     case '[{ Complaint Worst Allegation }]':
                         $this->simpleAllegationList();
                         if (sizeof($this->allegations) > 0) $swap = $this->allegations[0][0];
                         break;
-                    case '[{ Oversight Complaint Secure URL }]':
-                        $deptUser = $this->getDeptUser($deptID);
-                        if (!isset($deptUser->id)) {
-                            $swap = '<span style="color: red;">* DEPARTMENT IS NOT OPC-COMPLIANT *</span>';
-                        } else {
-                            $token = $this->createToken('Sensitive', $this->treeID, $this->coreID, $deptUser->id);
-                            $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' 
-                                . $this->coreID . '/full/' . $token);
-                        }
-                        break;
-                    case '[{ Oversight Complaint Secure URL Link }]':
+                    case '[{ Oversight Complaint Token URL Link }]':
                         $deptUser = $this->getDeptUser($deptID);
                         if (!isset($deptUser->id)) {
                             $swap = '#';
                         } else {
                             $token = $this->createToken('Sensitive', $this->treeID, $this->coreID, $deptUser->id);
-                            $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint-read/' . $this->coreID 
-                                . '/full/' . $token;
+                            $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID 
+                                . '/full/t-' . $token;
                         }
+                        $swap = '<a href="' . $swap . '" target="_blank">' . $swap . '</a>';
                         break;
                     case '[{ Oversight Complaint Secure MFA }]':
                         $deptUser = $this->getDeptUser($deptID);
@@ -2736,7 +3985,7 @@ class OpenPolice extends SurvFormTree
                         break;
                     case '[{ Flex Article Suggestions Based On Responses }]':
                         $this->loadRelatedArticles();
-                        $swap = view('vendor.openpolice.complaint-report-flex-articles-email', [
+                        $swap = view('vendor.openpolice.nodes.1708-report-flex-articles-email', [
                             "allUrls"     => $this->v["allUrls"], 
                             "showVidUrls" => true
                             ])->render();
@@ -2788,26 +4037,1459 @@ class OpenPolice extends SurvFormTree
         return '';
     }
     
-    public function getOverUpdateRow($cid, $overID)
+    public function getOverUpdateRow($cid, $deptID)
     {
-        $row = OPLinksComplaintOversight::where('LnkComOverComplaintID', $cid)
-            ->where('LnkComOverOverID', $overID)
-            ->first();
-        if (!$row || !isset($row->LnkComOverID)) {
-            $row = new OPLinksComplaintOversight;
-            $row->LnkComOverComplaintID = $cid;
-            $row->LnkComOverOverID = $overID;
-            $row->save();
+        if (!isset($this->v["currOverRow"])) {
+            $this->v["currOverRow"] = NULL;
+            $overs = OPOversight::where('OverDeptID', $deptID)
+                ->get();
+            if ($overs->isNotEmpty()) {
+                if ($overs->count() == 1) {
+                    $this->v["currOverRow"] = $overs[0];
+                } else {
+                    foreach ($overs as $i => $ovr) {
+                        if ($ovr && isset($ovr->OverType) && $ovr->OverType 
+                            == $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight')) {
+                            $this->v["currOverRow"] = $ovr;
+                        }
+                    }
+                }
+            }
         }
-        return $row;
+        if ($this->v["currOverRow"] && isset($this->v["currOverRow"]->OverID)) {
+            $this->v["currOverUpdateRow"] = OPLinksComplaintOversight::where('LnkComOverComplaintID', $cid)
+                ->where('LnkComOverOverID', $this->v["currOverRow"]->OverID)
+                ->first();
+            if (!$this->v["currOverUpdateRow"]) {
+                $this->v["currOverUpdateRow"] = new OPLinksComplaintOversight;
+                $this->v["currOverUpdateRow"]->LnkComOverComplaintID = $cid;
+                $this->v["currOverUpdateRow"]->LnkComOverDeptID = $deptID;
+                $this->v["currOverUpdateRow"]->LnkComOverOverID = $this->v["currOverRow"]->OverID;
+                $this->v["currOverUpdateRow"]->save();
+            }
+        }
+        return $this->v["currOverUpdateRow"];
     }
     
-    public function logOverUpDate($cid, $overID, $type = 'Submitted', $row = [])
+    public function logOverUpDate($cid, $deptID, $type = 'Submitted', $row = [])
     {
-        if (!$row || !isset($row->LnkComOverID)) $row = $this->getOverUpdateRow($cid, $overID);
+        if (!$row || !isset($row->LnkComOverID)) $row = $this->getOverUpdateRow($cid, $deptID);
         $row->{ 'LnkComOver' . $type } = date("Y-m-d H:i:s");
         $row->save();
         return true;
+    }
+    
+    
+    
+    
+    // Volunteer Area
+    
+    protected function overWhichEng($which = 'IA')
+    {
+        return (($which == 'IA') ? 'Internal Affairs' : 'Civilian Oversight');
+    }
+    
+    protected function overWhichDefID($which = 'IA')
+    {
+        return $GLOBALS["SL"]->def->getID('Oversight Agency Types', $this->overWhichEng($which));
+    }
+    
+    protected function getOverRow($which = 'IA')
+    {
+        if (isset($this->v["overRow" . $which])) return $this->v["overRow" . $which];
+        $rows = $this->sessData->getRowIDsByFldVal('Oversight', [ 'OverType' => $this->overWhichDefID($which) ], true);
+        if (sizeof($rows) > 0) {
+            $this->v["overRow" . $which] = $rows[0];
+            return $this->v["overRow" . $which];
+        }
+        return [];
+    }
+    
+    protected function printSidebarLeaderboard() 
+    {
+        $this->v["leaderboard"] = new VolunteerLeaderboard;
+        return view('vendor.openpolice.volun.volun-sidebar-leaderboard', [
+            "leaderboard" => $this->v["leaderboard"]
+        ])->render();
+    }
+    
+    public function printVolunPriorityList()
+    {
+        $this->loadDeptPriorityRows();
+        return view('vendor.openpolice.nodes.1755-volun-home-priority-depts', $this->v)->render();
+    }
+    
+    public function printVolunAllList()
+    {
+        if ($GLOBALS["SL"]->REQ->has('newDept') && intVal($GLOBALS["SL"]->REQ->get('newDept')) == 1
+            && $GLOBALS["SL"]->REQ->has('deptName') && trim($GLOBALS["SL"]->REQ->get('deptName')) != '') {
+            $newDept = $this->newDeptAdd($GLOBALS["SL"]->REQ->get('deptName'), 
+                $GLOBALS["SL"]->REQ->get('DeptAddressState'));
+            return '<script type="text/javascript"> setTimeout("window.location=\'/dashboard/start-' . $newDept->DeptID 
+                . '/volunteers-research-departments\'", 10); </script>';
+        }
+        $this->v["viewType"] = (($GLOBALS["SL"]->REQ->has('sort')) ? $GLOBALS["SL"]->REQ->get('sort') : 'recent');
+        $this->v["deptRows"] = [];
+        $this->v["searchForm"] = $this->deptSearchForm();
+        $orderby = [ [ 'DeptVerified', 'desc' ], [ 'DeptName', 'asc' ] ];
+        switch ($this->v["viewType"]) {
+            case 'best': $orderby[0] = [ 'DeptScoreOpenness', 'desc' ]; break;
+            case 'name': $orderby[0] = [ 'DeptName', 'asc' ]; break;
+            case 'city': $orderby = [ [ 'DeptAddressState', 'asc' ], [ 'DeptAddressCity', 'asc' ] ]; break;
+        }
+        $this->v["state"] = $whrState = '';
+        if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
+            $this->v["state"] = trim($GLOBALS["SL"]->REQ->get('state'));
+            $whrState = "->where('DeptAddressState', '" . $this->v["state"] . "')";
+        }
+        if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+            $this->chkRecsPub($GLOBALS["SL"]->REQ, 36);
+            $searches = [];
+            if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+                $searches = $GLOBALS["SL"]->parseSearchWords($GLOBALS["SL"]->REQ->get('s'));
+            }
+            if (sizeof($searches) > 0) {
+                foreach ($searches as $s) {
+                    eval("\$rows = App\\Models\\OPDepartments::where('DeptName', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptEmail', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptPhoneWork', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptAddress', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptAddressCity', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptAddressZip', 'LIKE', '%' . \$s . '%')
+                        ->orWhere('DeptAddressCounty', 'LIKE', '%' . \$s . '%')
+                        " . $whrState . "->get();");
+                    $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                }
+            }
+            $this->v["deptRows"] = $GLOBALS["SL"]->x["srchRes"]["depts"];
+            unset($GLOBALS["SL"]->x["srchRes"]["depts"]);
+        } else {
+            eval("\$this->v['deptRows'] = App\\Models\\OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 
+                'DeptVerified', 'DeptAddressCity', 'DeptAddressState')
+                ->orderBy(\$orderby[0][0], \$orderby[0][1])
+                ->orderBy(\$orderby[1][0], \$orderby[1][1])
+                " . $whrState . "->get();");
+        }
+        $this->loadRecentDeptEdits();
+        $GLOBALS["SL"]->loadStates();
+        return view('vendor.openpolice.nodes.1211-volun-home-all-depts', $this->v)->render();
+    }
+    
+    protected function loadDeptPriorityRows()
+    {
+        $this->v["deptPriorityRows"] = $done = [];
+        $chk = DB::table('OP_Departments')
+            ->join('OP_LinksComplaintDept', 'OP_Departments.DeptID', 
+                '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
+            ->join('OP_Complaints', 'OP_LinksComplaintDept.LnkComDeptComplaintID', '=', 'OP_Complaints.ComID')
+            ->where('OP_Departments.DeptScoreOpenness', 0)
+            ->whereIn('OP_Complaints.ComStatus', [
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'New'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
+                ])
+            ->where('OP_Complaints.ComSummary', 'NOT LIKE', '')
+            ->select('OP_Departments.*')
+            ->orderBy('OP_Complaints.created_at', 'asc')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $dept) {
+                if (!in_array($dept->DeptID, $done)) {
+                    $this->v["deptPriorityRows"][] = $dept;
+                    $done[] = $dept->DeptID;
+                }
+            }
+        }
+        $this->v["yearold"] = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")-1);
+        $chk = DB::table('OP_Departments')
+            ->join('OP_LinksComplaintDept', 'OP_Departments.DeptID', 
+                '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
+            ->join('OP_Complaints', 'OP_LinksComplaintDept.LnkComDeptComplaintID', '=', 'OP_Complaints.ComID')
+            ->where('OP_Departments.DeptScoreOpenness', '>', 0)
+            ->where('OP_Departments.DeptVerified', '<', date("Y-m-d H:i:s", $this->v["yearold"]))
+            ->whereIn('OP_Complaints.ComStatus', [
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'New'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
+                ])
+            ->where('OP_Complaints.ComSummary', 'NOT LIKE', '')
+            ->select('OP_Departments.*')
+            ->orderBy('OP_Complaints.created_at', 'asc')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $dept) {
+                if (!in_array($dept->DeptID, $done)) {
+                    $this->v["deptPriorityRows"][] = $dept;
+                    $done[] = $dept->DeptID;
+                }
+            }
+        }
+        return $this->v["deptPriorityRows"];
+    }
+    
+    protected function loadRecentDeptEdits()
+    {
+        if (!isset($GLOBALS["SL"]->x["usernames"])) $GLOBALS["SL"]->x["usernames"] = [];
+        $GLOBALS["SL"]->x["recentDeptEdits"] = [];
+        $cutoff = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("n"), date("j")-7, date("Y")));
+        $rows = OPZeditDepartments::where('OP_Zedit_Departments.ZedDeptDeptVerified', '>', $cutoff)
+            ->leftJoin('users', 'users.id', '=', 'OP_Zedit_Departments.ZedDeptUserID')
+            ->select('OP_Zedit_Departments.ZedDeptDeptID', 'OP_Zedit_Departments.ZedDeptDeptVerified', 
+                'users.id', 'users.name')
+            ->orderBy('OP_Zedit_Departments.ZedDeptDeptVerified', 'desc')
+            ->get();
+        if ($rows->isNotEmpty()) {
+            foreach ($rows as $row) {
+                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID])) {
+                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID] = [];
+                }
+                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID][$row->id])) {
+                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID][$row->id] = $row->ZedDeptDeptVerified;
+                }
+                if (!isset($GLOBALS["SL"]->x["usernames"][$row->id])) {
+                    $GLOBALS["SL"]->x["usernames"][$row->id] = $row->name;
+                }
+            }
+        }
+        return $GLOBALS["SL"]->x["recentDeptEdits"];
+    }
+    
+    public function printVolunLocationForm()
+    {
+        $GLOBALS["SL"]->loadStates();
+        return view('vendor.openpolice.volun.volunteer-basic-info-form', $this->v)->render();
+    }
+    
+    public function saveDefaultState(Request $request)
+    {
+        $this->survLoopInit($request);
+        $this->loadYourContact();
+        if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->PrsnID)) {
+            if ($request->has('newState')) {
+                $this->v["yourContact"]->update([ "PrsnAddressState" => $request->get('newState') ]);
+            }
+            if ($request->has('newPhone')) {
+                $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $request->get('newPhone') ]);
+            }
+        }
+        exit;
+    }
+    
+    protected function deptSearchForm($state = '', $deptName = '')
+    {
+        $GLOBALS["SL"]->loadStates();
+        return view('vendor.openpolice.volun.volunEditSearch', [ 
+            "deptName"  => $deptName, 
+            "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
+        ])->render();
+    }
+    
+    public function deptIndexSearch($deptRows = [], $state = '', $deptName = '')
+    {
+        $this->v["viewType"] = 'search';
+        $this->v["deptRows"] = $deptRows;
+        $this->v["userTots"] = $this->getVolunEditsOverview();
+        $this->v["searchForm"] = str_replace('<select', '<div class="p5"><select', 
+            str_replace('class="w33"', 'class="w33 f22"', $this->deptSearchForm($state, $deptName) )) . '</div>';
+        $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
+        $GLOBALS["SL"]->loadStates();
+        return view('vendor.openpolice.volun.volunteer', $this->v)->render();
+    }
+    
+    public function deptIndexSearchS(Request $request, $state = '')
+    {
+        $this->survLoopInit($request, '/dashboard/volunteer');
+        $deptRows = OPDepartments::where('DeptAddressState', '=', $state)
+            ->orderBy('DeptName', 'asc')
+            ->paginate(50);
+        return $this->deptIndexSearch($deptRows, $state, '');
+    }
+    
+    public function deptIndexSearchD(Request $request, $deptName = '')
+    {
+        $this->survLoopInit($request, '/dashboard/volunteer');
+        $this->v["deptName"] = '';
+        if (trim($deptName) != '') $this->v["deptName"] = $deptName;
+        return $this->deptIndexSearch($this->processSearchDepts('', $deptName), '', $deptName);
+    }
+    
+    public function deptIndexSearchSD(Request $request, $state = '', $deptName = '')
+    {
+        $this->survLoopInit($request, '/dashboard/volunteer');
+        $this->v["deptName"] = '';
+        if (trim($deptName) != '') $this->v["deptName"] = $deptName;
+        return $this->deptIndexSearch($this->processSearchDepts($state, $deptName), $state, $deptName);
+    }
+    
+    protected function processSearchDepts($state = '', $deptName = '')
+    {
+        $deptName = str_replace('  ', ' ', str_replace('  ', ' ', str_replace('  ', ' ', $deptName)));
+        $searches = array('%'.$deptName.'%');
+        if (strpos($deptName, ' ') !== false) {
+            $words = explode(' ', $deptName);
+            foreach ($words as $w) {
+                if (!in_array(strtolower($w), ['city', 'county', 'sherrif\'s', 'police', 'department', 'dept'])) {
+                    $searches = '%'.$w.'%';
+                }
+            }
+        }
+        $deptRows = [];
+        $evalQry = "\$deptRows = App\\Models\\OPDepartments::"
+            . ((trim($state) != '') ? "where('DeptAddressState', '=', \$state)->" : "")
+            . "where(function(\$query) { return \$query->where('DeptName', 'LIKE', '" 
+            . addslashes($searches[0]) . "')";
+            for ($i = 1; $i < sizeof($searches); $i++) {
+                $evalQry .= "->orWhere('DeptName', 'LIKE', '" . addslashes($searches[$i]) . "')";
+            }
+        $evalQry .= "; })->orderBy('DeptName', 'asc')->paginate(50);";
+        eval($evalQry);
+        return $deptRows;
+    }
+    
+    protected function getNextDept()
+    {
+        $this->v["nextDept"] = array(0, '', '');
+        $recentDate = date("Y-m-d H:i:s", time(date("H")-3, date("i"), date("s"), date("n"), date("j"), date("Y")));
+        /*
+        OPzVolunTmp::where('TmpType', 'ZedDept')
+            ->where('TmpDate', '<', $recentDate)
+            ->delete();
+        // First check for department temporarily reserved for this user
+        $tmpReserve = OPzVolunTmp::where('TmpType', 'ZedDept')
+            ->where('TmpUser', Auth::user()->id)
+            ->first();
+        if ($tmpReserve && isset($tmpReserve->TmpVal) && intVal($tmpReserve->TmpVal) > 0) {
+            $nextRow = OPDepartments::where('DeptID', $tmpReserve->TmpVal)
+                ->first();
+            $this->v["nextDept"] = [ $nextRow->DeptID, $nextRow->DeptName, $nextRow->DeptSlug ];
+        } else { // no department reserved yet, find best next choice...
+        */
+            $this->loadDeptPriorityRows();
+            if (sizeof($this->v["deptPriorityRows"]) > 0) {
+                $nextRow = $this->v["deptPriorityRows"][0];
+                $this->v["nextDept"] = [ $nextRow->DeptID, $nextRow->DeptName, $nextRow->DeptSlug ];
+            } else {
+                $nextRow = NULL;
+                $qmen = [];
+                $qBase = "SELECT `DeptID`, `DeptName`, `DeptSlug` FROM `OP_Departments` WHERE ";
+                $qReserves = " AND `DeptID` NOT IN (SELECT `TmpVal` FROM `OP_zVolunTmp` WHERE "
+                    . "`TmpType` LIKE 'ZedDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
+                $qmen[] = $qBase . "(`DeptVerified` < '2015-01-01 00:00:00' OR `DeptVerified` IS NULL) " 
+                    . $qReserves . " ORDER BY RAND()";
+                $qmen[] = $qBase . "1 " . $qReserves . " ORDER BY `DeptVerified`";
+                $qmen[] = $qBase . "1 ORDER BY RAND()"; // worst-case backup
+                for ($i = 0; ($i < sizeof($qmen) && !$nextRow); $i++) {
+                    $nextRow = DB::select( DB::raw( $qmen[$i]." LIMIT 1" ) );
+                }
+                $this->v["nextDept"] = [
+                    $nextRow[0]->DeptID, 
+                    str_replace('Department', 'Dept', $nextRow[0]->DeptName), 
+                    $nextRow[0]->DeptSlug
+                ];
+                
+                // Temporarily reserve this department for this user
+                $newTmp = new OPzVolunTmp;
+                $newTmp->TmpUser = Auth::user()->id;
+                $newTmp->TmpDate = date("Y-m-d H:i:s");
+                $newTmp->TmpType = 'ZedDept';
+                $newTmp->TmpVal  = $this->v["nextDept"][0];
+                $newTmp->save();
+            }
+        //}
+        return $this->v["nextDept"];
+    }
+    
+    public function nextDept()
+    {
+        $this->getNextDept();
+        return $this->redir('/dashboard/volunteer/verify/' . $this->v["nextDept"][2]);
+    }
+    
+    public function newDeptAdd($deptName = '', $deptState = '') {
+        if (trim($deptName) != '' && trim($deptState) != '') {
+            $newDept = OPDepartments::where('DeptName', $deptName)->where('DeptAddressState', $deptState)->first();
+            if ($newDept && isset($newDept->DeptSlug)) return $this->redir('/dashboard/volunteer/verify/'.$newDept->DeptSlug);
+            $newDept = new OPDepartments;
+            $newIA   = new OPOversight;
+            $newIA->OverType           = $this->overWhichDefID('IA');
+            $newDept->DeptName         = $deptName;
+            $newDept->DeptAddressState = (($deptState != 'US') ? $deptState : '');
+            $newDept->DeptSlug         = $deptState . '-' . Str::slug($deptName);
+            $newDept->DeptType         = (($deptState == 'US') ? 366 : 0);
+            $newDept->DeptStatus       = 1;
+            $newDept->DeptUserID       = Auth::user()->id;
+            $newDept->save();
+            $newIA->OverDeptID         = $newDept->DeptID;
+            $newIA->OverType           = $this->overWhichDefID('IA');
+            $newIA->OverUserID         = Auth::user()->id;
+            $newIA->save();
+            return $newDept;
+        }
+        return [];
+    }
+    
+    public function loadDeptEditsSummary()
+    {
+        $this->v["editsSummary"] = [
+            '<b class="mL20">Last Verified: ' 
+            . (($this->v["neverEdited"]) ? 'Never' : date('n/j/y', strtotime($this->v["deptRow"]->DeptVerified))) 
+            . '</b> <span class="mL20"><nobr>' . intVal($this->v["editTots"]["online"]) 
+            . '<span class="fPerc80">x</span><i class="fa fa-laptop"></i> Online Research,</nobr></span> '
+            . '<span class="mL20"><nobr>' . intVal($this->v["editTots"]["callDept"]) 
+            . '<span class="fPerc80">x</span><i class="fa fa-phone"></i> Department Calls,</nobr></span> '
+            . '<span class="mL20"><nobr>' . intVal($this->v["editTots"]["callIA"]) 
+            . '<span class="fPerc80">x</span><i class="fa fa-phone"></i> Internal Affairs Calls</nobr></span>',
+            
+            (($this->v["neverEdited"]) ? '<span class="slGrey">' : '') 
+            . intVal($this->v["editTots"]["online"]) . '<i class="fa fa-laptop"></i>, ' 
+            . intVal($this->v["editTots"]["callDept"]) . '<i class="fa fa-phone"></i>, ' 
+            . intVal($this->v["editTots"]["callIA"]) . '<i class="fa fa-phone"></i>'
+            . (($this->v["neverEdited"]) ? '</span>' : '')
+            ];
+        return true;
+    }
+    
+    protected function genDeptAdmTopMenu()
+    {
+        $lnks = [
+            [ 'deptContact',   'Contact Info' ],
+            [ 'deptWeb',       'Web Presence' ],
+            [ 'deptIA',        'Internal Affairs' ],
+            [ 'deptCiv',       'Civilian Oversight' ],
+            [ 'deptSave',      '<i class="fa fa-floppy-o mR5" aria-hidden="true"></i> Save Changes' ],
+            [ 'deptEdits',     'Dept Edit History' ],
+            [ 'deptChecklist', 'Checklist & Scripts' ]
+            ];
+        foreach ($lnks as $lnk) $GLOBALS["SL"]->pageJAVA .= 'addHshoo("#' . $lnk[0] . '"); ';
+        return view('vendor.openpolice.volun.volun-dept-edit-adm-menu', [
+            "deptRow" => $this->v["deptRow"],
+            "lnks"    => $lnks
+            ])->render();
+    }
+    
+    protected function printDeptEditHeader()
+    {
+        $this->v["deptRow"]     = $this->sessData->dataSets["Departments"][0];
+        $this->v["deptSlug"]    = $this->v["deptRow"]->DeptSlug;
+        $this->v["editsIA"]     = $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = [];
+        $this->v["editTots"]    = ["notes" => 0, "online" => 0, "callDept" => 0, "callIA" => 0];
+        $this->v["user"]        = Auth::user();
+        $this->v["neverEdited"] = false;
+        $this->v["recentEdits"] = '';
+        
+        if (!isset($this->v["deptRow"]->DeptID) || intVal($this->v["deptRow"]->DeptID) <= 0) {
+            return $this->redir('/dashboard/volunteer');
+        }
+        
+        $this->v["editsDept"] = OPZeditDepartments::where('ZedDeptDeptID', $this->v["deptRow"]->DeptID)
+            ->orderBy('ZedDeptDeptVerified', 'desc')
+            ->get();
+        if ($this->v["editsDept"]->isNotEmpty()) {
+            foreach ($this->v["editsDept"] as $i => $edit) {
+                $this->v["editsIA"][$i]  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', $this->overWhichDefID('IA'))
+                    ->first();
+                $this->v["editsCiv"][$i] = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', $this->overWhichDefID('Civ'))
+                    ->first();
+                if ($this->v["editsIA"][$i]) {
+                    if (trim($this->v["editsIA"][$i]->ZedOverNotes) != '')           $this->v["editTots"]["notes"]++;
+                    if (intVal($this->v["editsIA"][$i]->ZedOverOnlineResearch) == 1) $this->v["editTots"]["online"]++;
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeDeptCall) == 1)   $this->v["editTots"]["callDept"]++;
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeIACall) == 1)     $this->v["editTots"]["callIA"]++;
+                }
+                if (!isset($this->v["userNames"][$edit->ZedDeptUserID])) {
+                    $this->v["userNames"][$edit->ZedDeptUserID] = $this->printUserLnk($edit->ZedDeptUserID);
+                }
+                if ($this->v["user"]->hasRole('administrator|staff')) {
+                    $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
+                        "user"     => $this->v["userNames"][$edit->ZedDeptUserID], 
+                        "deptRow"  => $this->v["deptRow"], 
+                        "deptEdit" => $edit, 
+                        "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $edit->DeptType),
+                        "iaEdit"   => $this->v["editsIA"][$i], 
+                        "civEdit"  => $this->v["editsCiv"][$i]
+                    ])->render();
+                }
+            }
+        } else {
+            $this->v["neverEdited"] = true;
+        }
+        $this->loadDeptEditsSummary();
+        $GLOBALS["SL"]->loadStates();
+        $GLOBALS["SL"]->x["admMenuCustom"] = $this->genDeptAdmTopMenu();
+        return view('vendor.openpolice.volun.volun-dept-edit-header', $this->v)->render();
+    }
+    
+    protected function printDeptEditContact($nID)
+    {
+        $this->getOverRow('IA');
+        $this->getOverRow('Civ');
+        $which = [ 'IA', 1305 ];
+        $hasCiv = false;
+        if ($nID == 1229) {
+            if (isset($this->v["overRowCiv"]->OverAgncName) && trim($this->v["overRowCiv"]->OverAgncName) != '') {
+                $hasCiv = true;
+            }
+            $which = [ 'Civ', 1267 ];
+        }
+        $overRow = $this->getOverRow($which[0]);
+        $hasC = ((isset($overRow->OverNameFirst) && trim($overRow->OverNameFirst) != '')
+            || (isset($overRow->OverNameLast) && trim($overRow->OverNameLast) != '') 
+            || (isset($overRow->OverTitle) && trim($overRow->OverTitle) != ''));
+        return view('vendor.openpolice.volun.volun-dept-edit-ia-contact', [
+            "type"   => $this->overWhichEng($which[0]),
+            "whch"   => $which[0],
+            "n"      => $which[1],
+            "hasCiv" => $hasCiv,
+            "hasC"   => $hasC
+            ])->render();
+    }
+    
+    protected function redirAfterDeptEdit()
+    {
+        $redir = '/dash/volunteer';
+        $msg = 'Back To The Department List...';
+        if ($GLOBALS["SL"]->REQ->has('n1335fld')) {
+            if (trim($GLOBALS["SL"]->REQ->get('n1335fld')) == 'again') {
+                $redir = '/dashboard/start-' . $this->sessData->dataSets["Departments"][0]->DeptID 
+                    . '/volunteers-research-departments';
+                $msg = 'Saving Changes...';
+            } elseif (trim($GLOBALS["SL"]->REQ->get('n1335fld')) == 'another') {
+                session()->forget('sessID36');
+                session()->forget('coreID36');
+                $this->getNextDept();
+                $redir = '/dashboard/start-' . $this->v["nextDept"][0] . '/volunteers-research-departments';
+                $msg = 'To The Next Department...';
+            }
+        }
+        $GLOBALS["SL"]->pageJAVA .= 'setTimeout("window.location=\'' . $redir . '\'", 10); ';
+        return '<center><h2 class="slBlueDark">' . $msg . '</h2>' . $GLOBALS["SL"]->sysOpts["spinner-code"]
+            . '</center><style> #nodeSubBtns, #sessMgmt { display: none; } </style>';
+    }
+
+    protected function redirNextDeptEdit()
+    {
+        session()->forget('sessID36');
+        session()->forget('coreID36');
+        $this->getNextDept();
+        $redir = '/dashboard/start-' . $this->v["nextDept"][0] . '/volunteers-research-departments';
+        $GLOBALS["SL"]->pageJAVA .= 'setTimeout("window.location=\'' . $redir . '\'", 10); ';
+        return '<center><h2 class="slBlueDark">To The Next Department...</h2>' . $GLOBALS["SL"]->sysOpts["spinner-code"]
+            . '</center><style> #nodeSubBtns, #sessMgmt { display: none; } </style>';
+    }
+    
+    protected function volunStars()
+    {
+        $this->v["leaderboard"] = new VolunteerLeaderboard;
+        $this->v["yourStats"] = [];
+        if ($this->v["leaderboard"]->UserInfoStars && sizeof($this->v["leaderboard"]->UserInfoStars) > 0) {
+            foreach ($this->v["leaderboard"]->UserInfoStars as $i => $volunUser) {
+                if ($volunUser->UserInfoUserID == $this->v["uID"]) $this->v["yourStats"] = $volunUser;
+            }
+        }
+        return view('vendor.openpolice.volun.stars', $this->v)->render();
+    }
+        
+    public function volunDeptsRecent()
+    {
+        $this->v["statTots"] = [];
+        $statRanges = [ [
+                'Last 24 Hours', 
+                date("Y-m-d H:i:s", mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y")))
+            ], [
+                'This Week', 
+                date("Y-m-d H:i:s", mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y")))
+            ], [
+                'All-Time Totals', 
+                date("Y-m-d H:i:s", mktime(0, 0, 0, 1, 1, 1000))
+            ],
+        ];
+        foreach ($statRanges as $i => $stat) {
+            $this->v["statTots"][$i] = [ $stat[0] ];
+            $this->v["statTots"][$i][] = OPZeditDepartments::distinct('ZedDeptUserID')
+                ->where('ZedDeptDeptVerified', '>', $stat[1])
+                ->count();
+            $this->v["statTots"][$i][] = OPZeditDepartments::select('ZedDeptID')
+                ->where('ZedDeptDeptVerified', '>', $stat[1])
+                ->count();
+            $overQry = ((strpos($stat[1], "WHERE") === false) 
+                ? " WHERE `ZedOverOverType` LIKE '303'" : " AND `ZedOverOverType` LIKE '303'");
+            $res = DB::select( DB::raw("SELECT SUM(`ZedOverOnlineResearch`) as `tot` FROM `OP_Zedit_Oversight` WHERE
+                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $this->v["statTots"][$i][] = $res[0]->tot;
+            $res = DB::select( DB::raw("SELECT SUM(`ZedOverMadeDeptCall`) as `tot` FROM `OP_Zedit_Oversight` WHERE
+                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $this->v["statTots"][$i][] = $res[0]->tot;
+            $res = DB::select( DB::raw("SELECT SUM(`ZedOverMadeIACall`) as `tot` FROM `OP_Zedit_Oversight` WHERE
+                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $this->v["statTots"][$i][] = $res[0]->tot;
+            $res = DB::select( DB::raw("SELECT DISTINCT `ZedDeptDeptID` FROM `OP_Zedit_Departments` WHERE 
+                ZedDeptDeptVerified > '" . $stat[1] . "'") );
+            $this->v["statTots"][$i][] = (($res) ? sizeof($res) : 0);
+        }
+        return true;
+    }
+        
+    public function volunDepts()
+    {
+        $this->volunDeptsRecent();
+        $deptEdits = [];
+        $recentEdits = OPZeditDepartments::take(100)
+            ->orderBy('ZedDeptDeptVerified', 'desc')
+            ->get();
+        if ($recentEdits->isNotEmpty()) {
+            foreach ($recentEdits as $i => $edit) {
+                $iaEdit  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 303)
+                    ->first();
+                $civEdit = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 302)
+                    ->first();
+                $userObj = User::find($edit->ZedDeptUserID);
+                $deptEdits[] = [ ($userObj) ? $userObj->printUsername() : '', $edit, $iaEdit, $civEdit ];
+            }
+        }
+        //echo '<pre>'; print_r($deptEdits); echo '</pre>';
+        $this->v["recentEdits"] = '';
+        foreach ($deptEdits as $deptEdit) {
+            $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
+                "user"     => $deptEdit[0], 
+                "deptRow"  => OPDepartments::find($deptEdit[1]->ZedDeptDeptID), 
+                "deptEdit" => $deptEdit[1], 
+                "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $deptEdit[1]->ZedDeptType),
+                "iaEdit"   => $deptEdit[2], 
+                "civEdit"  => $deptEdit[3]
+            ])->render();
+        }
+        $this->volunStatsDailyGraph();
+        return view('vendor.openpolice.nodes.1351-admin-volun-edit-history', $this->v)->render();
+    }
+    
+    public function volunStatsDailyGraph()
+    {
+        if (!isset($this->v["statTots"])) $this->volunDeptsRecent();
+        $this->recalcVolunStats();
+        $past = 60;
+        $startDate = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$past, date("Y")));
+        $this->v["statDays"] = OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+            ->orderBy('VolunStatDate', 'asc')
+            ->get();
+        $this->v["axisLabels"] = [];
+        foreach ($this->v["statDays"] as $i => $s) {
+            if ($i%5 == 0) {
+                $this->v["axisLabels"][] = date('n/j', strtotime($s->VolunStatDate));
+            } else {
+                $this->v["axisLabels"][] = '';
+            }
+        }
+        $lines = [];
+        $lines[0] = [
+            "label"     => 'Unique Departments', 
+            "brdColor"     => '#2b3493', 
+            "dotColor"     => 'rgba(75,192,192,1)', 
+            "data"         => [], 
+        ];
+        foreach ($this->v["statDays"] as $s) $lines[0]["data"][] = $s->VolunStatDeptsUnique;
+        $lines[1] = [
+            "label"     => 'Unique Users', 
+            "brdColor"     => '#63c6ff', 
+            "dotColor"     => 'rgba(75,192,192,1)', 
+            "data"         => [], 
+        ];
+        foreach ($this->v["statDays"] as $s) $lines[1]["data"][] = $s->VolunStatUsersUnique;
+        $lines[2] = [
+            "label"     => 'Total Edits', 
+            "brdColor"     => '#c3ffe1', 
+            "dotColor"     => 'rgba(75,192,192,1)', 
+            "data"         => [], 
+        ];
+        foreach ($this->v["statDays"] as $s) $lines[2]["data"][] = $s->VolunStatTotalEdits;
+        $lines[3] = [
+            "label"     => 'Total Calls', 
+            "brdColor"     => '#29B76F', 
+            "dotColor"     => 'rgba(75,192,192,1)', 
+            "data"         => [], 
+        ];
+        foreach ($this->v["statDays"] as $s) $lines[3]["data"][] = $s->VolunStatCallsTot;
+        $lines[4] = [
+            "label"     => 'Signups', 
+            "brdColor"     => '#ffd2c9', 
+            "dotColor"     => 'rgba(75,192,192,1)', 
+            "data"         => [], 
+        ];
+        foreach ($this->v["statDays"] as $s) $lines[4]["data"][] = $s->VolunStatSignups;
+        $this->v["dataLines"] = '';
+        foreach ($lines as $l) {
+            $this->v["dataLines"] .= view('vendor.survloop.graph-data-line', $l)->render();
+        }
+        $this->v["volunDataGraph"] = view('vendor.openpolice.nodes.1351-volun-graph', $this->v)->render();
+        $GLOBALS["SL"]->x["needsCharts"] = true;
+        return $this->v["volunDataGraph"];
+    }
+    
+    public function volunStatsInitDay()
+    {
+        return [
+            'signups'         => 0, 
+            'logins'          => 0, 
+            'usersUnique'     => 0, 
+            'deptsUnique'     => 0, 
+            'onlineResearch'  => 0, 
+            'callsDept'       => 0, 
+            'callsIA'         => 0, 
+            'callsTot'        => 0, 
+            'totalEdits'      => 0,
+            'onlineResearchV' => 0, 
+            'callsDeptV'      => 0, 
+            'callsIAV'        => 0, 
+            'callsTotV'       => 0, 
+            'totalEditsV'     => 0,
+            'users'           => [], 
+            'depts'           => []
+        ];
+    }
+    
+    public function recalcVolunStats()
+    {
+        $past = 100;
+        $startDate = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$past, date("Y")));
+        $days = [];
+        for ($i = 0; $i < $past; $i++) {
+            $day = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$i, date("Y")));
+            $days[$day] = $this->volunStatsInitDay();
+        }
+        
+        $volunteers = [];
+        $users = DB::table('users')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('SL_UsersRoles')
+                    ->where('SL_UsersRoles.RoleUserRID', 17) // 'volunteer'
+                    ->whereRaw('SL_UsersRoles.RoleUserUID = users.id');
+            })
+            ->get();
+        if ($users->isNotEmpty()) {
+            foreach ($users as $i => $u) {
+                $volunteers[] = $u->id;
+                if (strtotime($u->created_at) > strtotime($startDate)) {
+                    $dataInd = date("Y-m-d", strtotime($u->created_at));
+                    if (isset($days[$dataInd])) $days[$dataInd]["signups"]++;
+                }
+            }
+        }
+        
+        $edits  = OPZeditOversight::where('OP_Zedit_Oversight.ZedOverOverType', 303)
+            ->join('OP_Zedit_Departments', 'OP_Zedit_Departments.ZedDeptID', '=', 'OP_Zedit_Oversight.ZedOverZedDeptID')
+            ->where('OP_Zedit_Oversight.ZedOverOverVerified', '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
+            ->select('OP_Zedit_Oversight.*', 'OP_Zedit_Departments.ZedDeptUserID')
+            ->get();
+        if ($edits->isNotEmpty()) {
+            foreach ($edits as $i => $e) {
+                $day = date("Y-m-d", strtotime($e->ZedOverOverVerified));
+                if (!isset($days[$day])) $days[$day] = $this->volunStatsInitDay();
+                $days[$day]["totalEdits"]++;
+                $days[$day]["onlineResearch"] += intVal($e->ZedOverOnlineResearch);
+                $days[$day]["callsDept"]      += intVal($e->ZedOverMadeDeptCall);
+                $days[$day]["callsIA"]        += intVal($e->ZedOverMadeIACall);
+                $days[$day]["callsTot"]       += intVal($e->ZedOverMadeDeptCall) + intVal($e->ZedOverMadeIACall);
+                if (in_array($e->ZedDeptUserID, $volunteers)) {
+                    $days[$day]["totalEditsV"]++;
+                    $days[$day]["onlineResearchV"] += intVal($e->ZedOverOnlineResearch);
+                    $days[$day]["callsDeptV"]      += intVal($e->ZedOverMadeDeptCall);
+                    $days[$day]["callsIAV"]        += intVal($e->ZedOverMadeIACall);
+                    $days[$day]["callsTotV"]       += intVal($e->ZedOverMadeDeptCall) + intVal($e->ZedOverMadeIACall);
+                }
+                if (!in_array($e->ZedDeptUserID, $days[$day]["users"])) $days[$day]["users"][] = $e->ZedDeptUserID;
+                if (!in_array($e->ZedOverDeptID, $days[$day]["depts"])) $days[$day]["depts"][] = $e->ZedOverDeptID;
+            }
+        }
+        
+        OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+            ->delete();
+        foreach ($days as $day => $stats) {
+            $newDay = new OPzVolunStatDays;
+            $newDay->VolunStatDate            = $day;
+            $newDay->VolunStatSignups         = $stats["signups"];
+            $newDay->VolunStatLogins          = $stats["logins"];
+            $newDay->VolunStatUsersUnique     = sizeof($stats["users"]);
+            $newDay->VolunStatDeptsUnique     = sizeof($stats["depts"]);
+            $newDay->VolunStatOnlineResearch  = $stats["onlineResearch"];
+            $newDay->VolunStatCallsDept       = $stats["callsDept"];
+            $newDay->VolunStatCallsIA         = $stats["callsIA"];
+            $newDay->VolunStatCallsTot        = $stats["callsTot"];
+            $newDay->VolunStatTotalEdits      = $stats["totalEdits"];
+            $newDay->VolunStatOnlineResearchV = $stats["onlineResearchV"];
+            $newDay->VolunStatCallsDeptV      = $stats["callsDeptV"];
+            $newDay->VolunStatCallsIAV        = $stats["callsIAV"];
+            $newDay->VolunStatCallsTotV       = $stats["callsTotV"];
+            $newDay->VolunStatTotalEditsV     = $stats["totalEditsV"];
+            $newDay->save();
+        }
+        
+        return true;
+    }
+    
+    protected function printDashSessGraph()
+    {
+        $GLOBALS["SL"]->x["needsCharts"] = true;
+        $GLOBALS["SL"]->pageAJAX .= '$("#1342graph").load("/dashboard/surv-1/sessions/graph-daily"); '
+            . '$("#1342graph2").load("/dashboard/surv-1/sessions/graph-durations"); ';
+        return '<div id="1342graph" class="w100" style="height: 400px;"></div><div class="p10">&nbsp;</div>'
+            . '<div id="1342graph2" class="w100" style="height: 400px;"></div><div class="p10">&nbsp;</div>'
+            . '<div class="pT5"><a href="/dashboard/surv-1/sessions?refresh=1">Full Session Stats Report</a></div>'
+            . '<div class="p20"> </div>';
+    }
+    
+    protected function printDashTopStats()
+    {
+        $this->v["statRanges"] = [
+            ['Last 24 Hrs', mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))],
+            ['This Week', mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))],
+            ['All-Time Totals', mktime(0, 0, 0, 1, 1, 1900)]
+            ];
+        $this->v["statusDefs"] = $GLOBALS["SL"]->def->getSet('Complaint Status');
+        $this->v["dashTopStats"] = [];
+        foreach ($this->v["statRanges"] as $j => $range) {
+            $this->v["dashTopStats"][$j] = [];
+            foreach ($this->v["statusDefs"] as $def) $this->v["dashTopStats"][$j][$def->DefID] = 0;
+        }
+        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'created_at')
+            ->where('ComStatus', '>', 0)
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $i => $complaint) {
+                foreach ($this->v["statRanges"] as $j => $range) {
+                    if (strtotime($complaint->created_at) > $range[1]) {
+                        $this->v["dashTopStats"][$j][$complaint->ComStatus]++;
+                    }
+                }
+            }
+        }
+        return view('vendor.openpolice.nodes.1361-dash-top-stats', $this->v)->render();
+    }
+    
+    protected function setUserOversightFilt()
+    {
+        if (!isset($this->v["fltIDs"])) $this->v["fltIDs"] = [];
+        $this->v["fltDept"] = -3;
+        if ($this->v["user"]->hasRole('partner') && $this->v["user"]->hasRole('oversight')) {
+            $this->v["fltIDs"][0] = [];
+            $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)->first();
+            if ($overRow && isset($overRow->OverDeptID)) {
+                $this->v["fltDept"] = $overRow->OverDeptID;
+                $lnkChk = OPLinksComplaintDept::select('LnkComDeptComplaintID')
+                    ->where('LnkComDeptDeptID', $overRow->OverDeptID)
+                    ->get();
+                if ($lnkChk->isNotEmpty()) {
+                    foreach ($lnkChk as $lnk) $this->v["fltIDs"][0][] = $lnk->LnkComDeptComplaintID;
+                }
+            }
+        }
+        return true;
+    }
+    
+    protected function printComplaintListing($view = 'all')
+    {
+        $this->v["listView"] = $view;
+        if ($GLOBALS["SL"]->REQ->has('fltView')) $this->v["listView"] = $GLOBALS["SL"]->REQ->fltView;
+        $this->v["fltStatus"] = (($GLOBALS["SL"]->REQ->has('fltStatus')) ? $GLOBALS["SL"]->REQ->fltStatus : 0);
+        $sort = "date";
+        $qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, i.* 
+            FROM `OP_Complaints` c 
+            JOIN `OP_Incidents` i ON c.`ComIncidentID` LIKE i.`IncID` 
+            LEFT OUTER JOIN `OP_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 
+            LEFT OUTER JOIN `OP_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` WHERE "
+            . ((isset($this->v["fltQry"])) ? $this->v["fltQry"] : "");
+        if (isset($this->v["fltIDs"]) && sizeof($this->v["fltIDs"]) > 0) {
+            foreach ($this->v["fltIDs"] as $ids) $qman .= " c.`ComID` IN (" . implode(', ', $ids) . ") AND ";
+        }
+        $qman .= " civ.`CivIsCreator` LIKE 'Y' ";
+        if ($this->v["fltStatus"] > 0) $qman .= " AND c.`ComStatus` LIKE '" . $this->v["fltStatus"] . "' ";
+        switch ($this->v["listView"]) {
+            case 'review':         
+                $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["SL"]->def->getID('Complaint Status', 'New') . "' 
+                    OR (c.`ComType` IN ('" . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed')
+                    . "', '" . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure') 
+                    . "') AND c.`ComStatus` NOT LIKE '" . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') 
+                    . "') )"; 
+                break;
+            case 'mine':     
+                $qman .= " AND c.`ComAdminID` LIKE '" . $this->v["user"]->id . "' 
+                    AND c.`ComStatus` NOT LIKE '" . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') . "'";
+                break;
+            case 'flagged':
+                $qman .= " AND (c.`ComStatus` IN ('" . $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold') . "', '" 
+                    . $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney') . "') )"; 
+                break;
+            case 'waiting':
+                $qman .= " AND (c.`ComStatus` IN ('" . $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d') 
+                    . "', '" . $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight') . "', '" 
+                    . $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight') . "', '" 
+                    . $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Oversight Investigation') . "') )"; 
+                break;
+            case 'incomplete':     
+                $qman .= " AND c.`ComStatus` LIKE '" 
+                    . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') . "'";
+                break;
+            case 'all':     
+            default:
+                $qman .= " AND c.`ComStatus` NOT LIKE '" 
+                    . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') . "'";
+                break;
+        }
+        $this->v["complaints"] = $this->v["comInfo"] = $this->v["lastNodes"] = $this->v["ajaxRefreshs"] = [];
+        $compls = DB::select( DB::raw($qman) );
+        if ($compls && sizeof($compls) > 0) {
+            foreach ($compls as $com) {
+                $this->v["comInfo"][$com->ComPublicID] = [ '', '' ];
+                $dChk = DB::table('OP_LinksComplaintDept')
+                    ->where('OP_LinksComplaintDept.LnkComDeptComplaintID', $com->ComID)
+                    ->leftJoin('OP_Departments', 'OP_Departments.DeptID', '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
+                    ->select('OP_Departments.DeptName', 'OP_Departments.DeptSlug')
+                    ->orderBy('OP_Departments.DeptName', 'asc')
+                    ->get();
+                if ($dChk && sizeof($dChk) > 0) {
+                    foreach ($dChk as $i => $d) {
+                        $this->v["comInfo"][$com->ComPublicID][1] .= (($i > 0) ? ', ' : '') 
+                            . str_replace('Department' , 'Dept', $d->DeptName);
+                    }
+                }
+                $comTime = strtotime($com->updated_at);
+                if (trim($com->ComRecordSubmitted) != '' && $com->ComRecordSubmitted != '0000-00-00 00:00:00') {
+                    $comTime = strtotime($com->ComRecordSubmitted);
+                }
+                if (!isset($com->ComStatus) || intVal($com->ComStatus) <= 0) {
+                    $com->ComStatus = $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete');
+                    OPComplaints::find($com->ComID)->update([ "ComStatus" => $com->ComStatus ]);
+                }
+                if (!isset($com->ComType) || intVal($com->ComType) <= 0) {
+                    $com->ComType = $GLOBALS['SL']->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed');
+                    OPComplaints::find($com->ComID)->update([ "ComType" => $com->ComType ]);
+                }
+                $cutoffTime = mktime(date("H"), date("i"), date("s"), date("m"), date("d")-1, date("Y"));
+                if ($comTime < $cutoffTime) {
+                    if (!isset($com->ComSummary) || trim($com->ComSummary) == '') {
+                        OPComplaints::find($com->ComID)->delete();
+                        $comTime = false;
+                    }
+                }
+                if ($comTime !== false) {
+                    $sortInd = $comTime;
+                    $this->v["comInfo"][$com->ComPublicID][0] = date("n/j/Y", $comTime);
+                    if ($com->ComStatus == $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete')) {
+                        if ($com->ComSubmissionProgress > 0 
+                            && !isset($this->v["lastNodes"][$com->ComSubmissionProgress])) {
+                            $node = SLNode::find($com->ComSubmissionProgress);
+                            if ($node && isset($node->NodePromptNotes)) {
+                                $this->v["lastNodes"][$com->ComSubmissionProgress] = $node->NodePromptNotes;
+                            }
+                        }
+                    }
+                    $this->v["complaints"][$sortInd] = $com;
+                }
+                if (!isset($com->ComAllegList) || trim($com->ComAllegList) == '') {
+                    $this->v["ajaxRefreshs"][] = $com->ComPublicID;
+                }
+            }
+            krsort($this->v["complaints"]);
+        }
+        $GLOBALS["SL"]->pageAJAX 
+            .= view('vendor.openpolice.nodes.1418-admin-complaints-listing-ajax', $this->v)->render();
+        return view('vendor.openpolice.nodes.1418-admin-complaints-listing', $this->v)->render();
+    }
+    
+    protected function getNameTopAnon()
+    {
+        return '<span style="color: #2b3493;" title="This complainant did not provide their name to investigators.">'
+            . 'Complainant</span>';
+    }
+    
+    protected function sysUpdatesCust($apply = false)
+    {
+        $msgs = '';
+        // Template for adding more updates (for now)...
+        $updateID = [ 'OPC-2018-02-08', 'Complaint submission data moved to default IA record' ];
+        if (!$this->addSysUpdate($updateID) && $apply) {
+            $msgs .= '<b>' . $updateID[0] . ':</b> ' . $updateID[1] . '<br />';
+            $flds = [
+                'OverWebsite', 'OverFacebook', 'OverTwitter', 'OverYouTube', 'OverEmail', 'OverHomepageComplaintLink',
+                'OverWebComplaintInfo', 'OverComplaintPDF', 'OverComplaintWebForm', 'OverSubmitDeadline',
+                'OverWaySubEmail', 'OverWaySubVerbalPhone', 'OverWaySubPaperMail', 'OverWaySubPaperInPerson',
+                'OverOfficialFormNotReq', 'OverOfficialAnon', 'OverWaySubNotary'
+                ];
+            $ovrs = OPOversight::where('OverType', 
+                    $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                ->get();
+            if ($ovrs->isNotEmpty()) {
+                foreach ($ovrs as $ovr) {
+                    $ia = OPOversight::where('OverDeptID', $ovr->OverDeptID)
+                        ->where('OverType', 
+                            $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                        ->first();
+                    if ($ia) {
+                        foreach ($flds as $fld) {
+                            if ((!isset($ia->{ $fld }) || trim($ia->{ $fld }) == '') 
+                                && isset($ovr->{ $fld }) && trim($ovr->{ $fld }) != '') {
+                                $ia->{ $fld } = $ovr->{ $fld };
+                            }
+                        }
+                        $ia->save();
+                    }
+                }
+            }
+        } // end update 'OPC-2018-02-08'
+        
+        return $msgs;
+    }
+    
+    
+    
+    /******************************************
+    *
+    * ADMIN TOOLS
+    *
+    ******************************************/
+    
+    
+    protected function printComplaintAdmin()
+    {
+        $this->v["firstRevDone"] = false;
+        if ($this->v["user"]->hasRole('administrator|databaser|staff')) {
+            $GLOBALS["SL"]->addTopNavItem('All Complaints', '/dash/all-complete-complaints');
+        }
+        if ($GLOBALS["SL"]->REQ->has('firstReview') && intVal($GLOBALS["SL"]->REQ->firstReview) > 0) {
+            $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
+                $GLOBALS["SL"]->REQ->firstReview);
+            $newRev = new OPzComplaintReviews;
+            $newRev->ComRevComplaint = $this->coreID;
+            $newRev->ComRevUser      = $this->v["user"]->id;
+            $newRev->ComRevDate      = date("Y-m-d H:i:s");
+            $newRev->ComRevType      = 'First';
+            $newRev->ComRevStatus    = $newTypeVal;
+            $newRev->save();
+            $com = OPComplaints::find($this->coreID);
+            $com->comType = $GLOBALS["SL"]->REQ->firstReview;
+            $com->save();
+            $this->v["firstRevDone"] = true;
+        } elseif ($GLOBALS["SL"]->REQ->has('save')) {
+            $newRev = new OPzComplaintReviews;
+            $newRev->ComRevComplaint = $this->coreID;
+            $newRev->ComRevUser      = $this->v["user"]->id;
+            $newRev->ComRevDate      = date("Y-m-d H:i:s");
+            $newRev->ComRevType      = 'Update';
+            $newRev->ComRevNote      = (($GLOBALS["SL"]->REQ->has('revNote')) ? $GLOBALS["SL"]->REQ->revNote : '');
+            if ($GLOBALS["SL"]->REQ->has('revStatus')) {
+                $newRev->ComRevStatus = $GLOBALS["SL"]->REQ->revStatus;
+                if (in_array($GLOBALS["SL"]->REQ->revStatus, ['Hold: Go Gold', 'Hold: Not Sure'])) {
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        = $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold');
+                } elseif (in_array($GLOBALS["SL"]->REQ->revStatus, [
+                    'Pending Attorney: Needed', 'Pending Attorney: Hook-Up'])) {
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        = $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney');
+                } elseif (in_array($GLOBALS["SL"]->REQ->revStatus, ['Attorney\'d'])) {
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        = $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d');
+                } else {
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        = $GLOBALS["SL"]->def->getID('Complaint Status', $GLOBALS["SL"]->REQ->revStatus);
+                }
+            }
+            if ($GLOBALS["SL"]->REQ->has('revComplaintType')) {
+                $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
+                    $GLOBALS["SL"]->REQ->revComplaintType);
+                if ($newTypeVal != 'Police Complaint') $newRev->ComRevStatus = $newTypeVal;
+                $this->sessData->dataSets["Complaints"][0]->ComType = $GLOBALS["SL"]->REQ->revComplaintType;
+            }
+            $newRev->save();
+            $this->sessData->dataSets["Complaints"][0]->save();
+        }
+        $this->v["firstReview"]  = true;
+        $this->v["lastReview"]   = true;
+        $this->v["history"]      = [];
+        $allUserNames = [];
+        $reviews = OPzComplaintReviews::where('ComRevComplaint', '=', $this->coreID)
+            ->where('ComRevType', 'NOT LIKE', 'Draft')
+            ->orderBy('ComRevDate', 'desc')
+            ->get();
+        if ($reviews->isNotEmpty()) {
+            foreach ($reviews as $i => $r) {
+                if ($i == 0) $this->v["lastReview"] = $r;
+                $this->v["firstReview"] = false;
+                if (!isset($allUserNames[$r->ComRevUser])) {
+                    $allUserNames[$r->ComRevUser] = $this->printUserLnk($r->ComRevUser);
+                }
+                $desc = '<span class="slBlueDark">' 
+                    . ((isset($r->ComRevNextAction) && trim($r->ComRevNextAction) == 'Complaint Received'
+                        && $r->ComRevStatus == 'Submitted to Oversight') ? $r->ComRevNextAction : $r->ComRevStatus)
+                    . '</span>';
+                $this->v["history"][] = [
+                    "type" => 'Status', 
+                    "date" => strtotime($r->ComRevDate), 
+                    "desc" => $desc, 
+                    "who"  => $allUserNames[$r->ComRevUser],
+                    "note" => ((isset($r->ComRevNote)) ? trim($r->ComRevNote) : '')
+                ];
+            }
+        }
+        $this->v["emailList"] = SLEmails::orderBy('EmailName', 'asc')
+            ->orderBy('EmailType', 'asc')
+            ->get();
+        $emails = SLEmailed::where('EmailedTree', 1)
+            ->where('EmailedRecID', $this->coreID)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        if ($emails->isNotEmpty()) {
+            foreach ($emails as $i => $e) {
+                if (!isset($allUserNames[$e->EmailedFromUser])) {
+                    $allUserNames[$e->EmailedFromUser] = $this->printUserLnk($e->EmailedFromUser);
+                }
+                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">' 
+                    . $e->EmailedSubject . '</a> <i>to ' . substr($e->EmailedTo, 0, strpos($e->EmailedTo, '<'))  
+                    . '<span class="fPerc66">&lt; ' 
+                    . str_replace('>', '', substr($e->EmailedTo, 1+strpos($e->EmailedTo, '<'))) . ' &gt;</span></i>'
+                    . '<div id="hidFldEma' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                $this->v["history"][] = [
+                    "type" => 'Email', 
+                    "date" => strtotime($e->created_at), 
+                    "desc" => $desc, 
+                    "who"  => $allUserNames[$e->EmailedFromUser]
+                ];
+            }
+        }
+        $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');
+        $this->prepEmailComData();
+        $isOverCompatible = false;
+        if (isset($this->v["comDepts"][0])) {
+            $w = $this->v["comDepts"][0]["whichOver"];
+            if (isset($this->v["comDepts"][0][$w])) {
+                $isOverCompatible = $this->isOverCompatible($this->v["comDepts"][0][$w]);
+            }
+        }
+        $this->v["emailsTo"] = [ "To Complainant" => [], "To Oversight" => [] ];
+        $complainantUser = User::find($this->sessData->dataSets["Complaints"][0]->ComUserID);
+        if ($complainantUser && isset($complainantUser->email)) {
+            $name = $complainantUser->name;
+            if (isset($this->sessData->dataSets["PersonContact"])
+                && sizeof($this->sessData->dataSets["PersonContact"]) > 0
+                && isset($this->sessData->dataSets["PersonContact"][0]->PrsnNameFirst)) {
+                $name = $this->sessData->dataSets["PersonContact"][0]->PrsnNameFirst . ' '
+                    . $this->sessData->dataSets["PersonContact"][0]->PrsnNameLast;
+            }
+            $this->v["emailsTo"]["To Complainant"][] = [ $complainantUser->email, $name, true ];
+        }
+        if ($isOverCompatible) {
+            $this->v["emailsTo"]["To Oversight"][] = [
+                $this->v["comDepts"][0][$this->v["comDepts"][0]["whichOver"]]->OverEmail,
+                $this->v["comDepts"][0][$this->v["comDepts"][0]["whichOver"]]->OverAgncName,
+                true
+            ];
+        }
+        $this->v["emailMap"] = [ // 'Review Status' => Email ID#
+                'Submitted to Oversight'    => [7, 12], 
+                'Hold: Go Gold'             => [6],
+                'Pending Attorney: Needed'  => [17],
+                'Pending Attorney: Hook-Up' => [18]
+            ];
+        $this->v["emailID"] = ($GLOBALS["SL"]->REQ->has('email') ? $GLOBALS["SL"]->REQ->email : -3);
+        if ($this->v["emailID"] <= 0) {
+            switch ($this->sessData->dataSets["Complaints"][0]->ComStatus) {
+                case $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight'):
+                    if ($isOverCompatible) {
+                        $this->v["emailID"] = 12; // Send to oversight agency
+                    } else {
+                        $this->v["emailID"] = 9; // How to manually submit
+                    }
+                    break;
+                case $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'):
+                case $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'):
+                    $chk = SLEmailed::where('EmailedTree', 1)
+                        ->where('EmailedRecID', $this->coreID)
+                        ->where('EmailedEmailID', 7)
+                        ->first();
+                    if (!$chk || !isset($chk->created_at)) {
+                        $this->v["emailID"] = 7; // Sent to oversight agency
+                    }
+                    break;
+            }
+        }
+        
+        $this->v["currEmail"] = [];
+        if (isset($this->sessData->dataSets["LinksComplaintDept"]) 
+            && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
+            foreach ($this->sessData->dataSets["LinksComplaintDept"] as $deptLnk) {
+                $this->loadDeptStuff($deptLnk->LnkComDeptDeptID);
+                $this->v["currEmail"][] = $this->processEmail($this->v["emailID"], $deptLnk->LnkComDeptDeptID);
+            }
+        }
+        if (sizeof($this->v["currEmail"]) > 0) { 
+            foreach ($this->v["currEmail"] as $j => $email) {
+                $this->v["needsWsyiwyg"] = true;
+                $GLOBALS["SL"]->pageAJAX .= ' $("#emailBodyCust' . $j . 'ID").summernote({ height: 350 }); ';
+            }
+        }
+        
+        $emailSent = false;
+        $emaInd = 0;
+        while ($GLOBALS["SL"]->REQ->has('emailID') && $GLOBALS["SL"]->REQ->has('emailTo' . $emaInd . '') 
+            && trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . '')) != '') {
+            $userToID = -3;
+            $chk = User::where('email', trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . '')))->first();
+            if ($chk && isset($chk->id)) $userToID = $chk->id;
+            $coreID = ((isset($this->coreID)) ? $this->coreID : -3);
+            $emaTo = trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . ''));
+            if ($emaTo == '--CUSTOM--') {
+                $emaTo = trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . 'CustEmail'));
+                //trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . 'CustName'))
+            }
+            $this->sendNewEmailSimple(trim($GLOBALS["SL"]->REQ->get('emailBodyCust' . $emaInd . '')), 
+                trim($GLOBALS["SL"]->REQ->get('emailSubj' . $emaInd . '')), $emaTo, $GLOBALS["SL"]->REQ->get('emailID'), 
+                $GLOBALS["SL"]->treeID, $coreID, $userToID);
+            if (intVal($GLOBALS["SL"]->REQ->get('emailID')) == 12) {
+                $this->sessData->dataSets["Complaints"][0]->update([ 
+                    "ComStatus" => $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight') ]);
+                $deptID = $this->v["currEmail"][$emaInd]["deptID"];
+                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["whichOver"])) {
+                    $whichRow = $GLOBALS["SL"]->x["depts"][$deptID][$GLOBALS["SL"]->x["depts"][$deptID]["whichOver"]];
+                    if ($whichRow && isset($whichRow->OverID)) {
+                        $this->logOverUpDate($coreID, $deptID, 'Submitted');
+                    }
+                }
+                $newRev = new OPzComplaintReviews;
+                $newRev->ComRevComplaint = $this->coreID;
+                $newRev->ComRevUser      = $this->v["user"]->id;
+                $newRev->ComRevDate      = date("Y-m-d H:i:s");
+                $newRev->ComRevType      = 'Update';
+                $newRev->ComRevStatus    = 'Submitted to Oversight';
+                $newRev->save();
+            }
+            $emailSent = true;
+            $emaInd++;
+        }
+        if ($emailSent) {
+            return $this->redir('/complaint/read-' . $this->corePublicID, true);
+        }
+        $GLOBALS["SL"]->pageAJAX .= '$("#legitTypeBtn").click(function(){ $("#legitTypeDrop").slideToggle("fast"); });
+        $("#newStatusUpdate").click(function(){ $("#newStatusUpdateBlock").slideToggle("fast"); });
+        $("#newEmails").click(function(){ $("#analystEmailer").slideToggle("fast"); });
+        $(document).on("change", ".changeEmailTo", function() { 
+            var emaInd = $(this).attr("name").replace("emailTo", "");
+            if (document.getElementById("emailTo"+emaInd+"ID") && document.getElementById("emailTo"+emaInd+"ID").value == "--CUSTOM--") {
+                $("#emailTo"+emaInd+"CustID").slideDown("fast");
+            } else {
+                $("#emailTo"+emaInd+"CustID").slideUp("fast"); 
+            }
+        }); ' . (($this->v["view"] == 'update') ? 'window.location = "#new"; ' : '');
+        $this->v["needsWsyiwyg"] = true;
+        $this->v["complaintRec"] = $this->sessData->dataSets["Complaints"][0];
+        return view('vendor.openpolice.nodes.1712-report-inc-staff-tools', $this->v)->render();
+    }
+    
+    public function prepEmailComData()
+    {
+        $cnt = 0;
+        $this->v["comDepts"] = [];
+        if (isset($this->sessData->dataSets["LinksComplaintDept"]) 
+            && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
+            foreach ($this->sessData->dataSets["LinksComplaintDept"] as $i => $lnk) {
+                if (isset($lnk->LnkComDeptDeptID) && intVal($lnk->LnkComDeptDeptID) > 0) {
+                    $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
+                    $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID);
+                    $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                        ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                        ->first();
+                    $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                        ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                        ->first();
+                    if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
+                        $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverType
+                            = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
+                        $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
+                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
+                        $this->v["comDepts"][$cnt]["iaRow"]->save();
+                    }
+                    $this->v["comDepts"][$cnt]["whichOver"] = '';
+                    if (isset($this->v["comDepts"][0]["civRow"]) 
+                        && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)) {
+                        $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
+                    } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
+                        && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
+                        $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
+                    }
+                    $this->v["comDepts"][$cnt]["overInfo"] = '';
+                    if (isset($this->v["comDepts"][$cnt])) {
+                        $w = $this->v["comDepts"][$cnt]["whichOver"];
+                        if (isset($this->v["comDepts"][$cnt][$w])) {
+                            $this->v["comDepts"][$cnt]["overInfo"] 
+                                = $this->getOversightInfo($this->v["comDepts"][$cnt][$w]);
+                        }
+                    }
+                    $cnt++;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public function getOversightInfo($overRow)
+    {
+        $ret = '';
+        if ($overRow && isset($overRow->OverAgncName) && trim($overRow->OverAgncName) != '') {
+            $ret .= '<b>' . $overRow->OverAgncName . '</b><br />';
+            if (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') {
+                $ret .= '<a href="' . $overRow->OverWebsite . '" target="_blank">' . $overRow->OverWebsite 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') {
+                $ret .= '<a href="' . $overRow->OverFacebook . '" target="_blank">' . $overRow->OverFacebook 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') {
+                $ret .= '<a href="' . $overRow->OverTwitter . '" target="_blank">' . $overRow->OverTwitter 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') {
+                $ret .= '<a href="' . $overRow->OverYouTube . '" target="_blank">' . $overRow->OverYouTube 
+                    . '</a><br />';
+            }
+            if (isset($overRow->OverPhoneWork) && trim($overRow->OverPhoneWork) != '') {
+                $ret .= $overRow->OverPhoneWork . '<br />';
+            }
+            if (isset($overRow->OverAddress) && trim($overRow->OverAddress) != '') {
+                $ret .= $overRow->OverAddress . '<br />';
+                if (isset($overRow->OverAddress2) && trim($overRow->OverAddress2) != '') {
+                    $ret .= $overRow->OverAddress2 . '<br />';
+                }
+                $ret .= $overRow->OverAddressCity . ', ' . $overRow->OverAddressState . ' ' 
+                    . $overRow->OverAddressZip . '<br />';
+            }
+            $ret .= '<br />';
+            if (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
+                && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') {
+                $ret .= 'You can submit your complaint through your oversight agency\'s online complaint form. '
+                    . 'Pro Tip: Somewhere in their official form, include a link to your OPC complaint.<br /><a href="'
+                    . $overRow->OverComplaintWebForm . '" target="_blank">' . $overRow->OverComplaintWebForm 
+                    . '</a><br /><br />';
+            }
+            if (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
+                && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') {
+                $ret .= 'You can submit your complaint by emailing your oversight agency. We recommend you '
+                    . 'include a link to your OPC complaint in your email.<br />'
+                    . '<a href="mailto:' . $overRow->OverEmail . '">' . $overRow->OverEmail . '</a><br /><br />';
+            }
+            if (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') {
+                $ret .= 'You can print out and use your oversight agency\'s official complaint form online. '
+                    . 'We recommend you also print your full OPC complaint and submit it along with their '
+                    . 'official form.<br /><a href="' . $overRow->OverComplaintPDF . '" target="_blank">' 
+                    . $overRow->OverComplaintPDF . '</a><br /><br />';
+            }
+            $ret .= '<i>More about this complaint process:</i><br />';
+            if (isset($overRow->OverWebComplaintInfo) && trim($overRow->OverWebComplaintInfo) != '') {
+                $ret .= '<a href="' . $overRow->OverWebComplaintInfo . '" target="_blank">' 
+                    . $overRow->OverWebComplaintInfo . '</a><br />';
+            }
+            if (!isset($overRow->OverOfficialFormNotReq) || intVal($overRow->OverOfficialFormNotReq) == 0) {
+                $ret .= 'Only complaints submitted on official forms will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) {
+                $ret .= 'Submitted complaints may require a notary to be investigated.<br />'; 
+            }
+            if (!isset($overRow->OverOfficialAnon) || intVal($overRow->OverOfficialAnon) == 0) {
+                $ret .= 'Anonymous complaints will not be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) {
+                $ret .= 'Complaints submitted by phone will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) {
+                $ret .= 'Complaints submitted by snail mail will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) {
+                $ret .= 'Complaints submitted in person will be investigated.<br />'; 
+            }
+            if (isset($overRow->OverSubmitDeadline) && intVal($overRow->OverSubmitDeadline) > 0) {
+                $ret .= 'Complaints must be submitted within ' . number_format($overRow->OverSubmitDeadline) 
+                    . ' days of your incident to be investigated.<br />'; 
+            }
+        }
+        return $ret;
+    }
+    
+    public function processEmail($emailID, $deptID = -3)
+    {
+        $email = [ "rec" => false, "body" => '', "subject" => '', "deptID" => $deptID ];
+        if ($emailID > 0) {
+            if (sizeof($this->v["emailList"]) > 0) {
+                foreach ($this->v["emailList"] as $e) {
+                    if ($e->EmailID == $emailID) $email["rec"] = $e;
+                }
+                if ($email["rec"] !== false && isset($email["rec"]->EmailBody) 
+                    && trim($email["rec"]->EmailBody) != '') {
+                    $email["body"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailBody);
+                    $email["body"] = $this->sendEmailBlurbsCustom($email["body"], $deptID);
+                    $email["subject"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailSubject);
+                    $email["subject"] = $this->sendEmailBlurbsCustom($email["subject"], $deptID);
+                }
+            }
+        }
+        return $email;
+    }
+    
+    protected function processTokenAccessEmail()
+    {
+        $ret = '';
+        $deptID = -3;
+        $overRow = OPOversight::where('OverEmail', $user->email)->first();
+        if ($overRow && isset($overRow->OverDeptID)) $deptID = $overRow->OverDeptID;
+        $emailRow = SLEmails::where('EmailName', '21. Fresh MFA to Oversight Agency')->first();
+        if ($emailRow && isset($emailRow->EmailBody)) {
+            $body = $this->sendEmailBlurbsCustom($emailRow->EmailBody, $deptID);
+            $subject = $this->sendEmailBlurbsCustom($emailRow->EmailSubject, $deptID);
+            echo '<h2>' . $subject . '</h2><p>to ' . $user->email . '</p><p>' . $body . '</p>'; exit;
+            $this->sendNewEmailSimple($body, $subject, $user->email, $emailRow->EmailID, 
+                $this->treeID, $this->coreID, $user->id);
+            $ret .= '<div class="alert alert-success mB10" role="alert">'
+                . '<strong>Fresh Access Code Sent!</strong> '
+                . 'Check your email (and spam folder), and copy the access code there.</div>';
+        } else {
+            $ret .= '<div class="alert alert-danger mB10" role="alert"><strong>Email Problem!</strong> '
+                . 'Something went wrong trying to email you a fresh access code. '
+                . 'Please <a href="/contact">contact us</a>.</div>';
+        }
+        return $ret;
+    }
+    
+    protected function chkOverUserHasCore()
+    {
+        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
+            if (isset($this->sessData->dataSets["Oversight"]) && sizeof($this->sessData->dataSets["Oversight"]) > 0) {
+                foreach ($this->sessData->dataSets["Oversight"] as $i => $o) {
+                    if (isset($o->OverEmail) && $o->OverEmail == $this->v["user"]->email) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     
 }

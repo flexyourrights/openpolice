@@ -1,20 +1,20 @@
 <!-- resources/views/vendor/openpolice/ajax/search-police-dept.blade.php -->
 
-@if (sizeof($depts) == 0)
+@if (!isset($depts) || !$depts || sizeof($depts) == 0)
     <div class="alert alert-warning fPerc125" role="alert">
         <p><b>No police departments found by searching <span class="slBlueDark">"{{ $search }}"</span> in 
         <span class="slBlueDark">{{ $stateName }}</span>. Please type something else in the search bar above.</b></p>
     </div>
 @else
-    <div class="jumbotron">
-    @foreach($depts as $dept)
+    <div class="jumbotron" style="padding: 10px 20px;">
+    @foreach($depts as $i => $dept)
         @if ($dept->DeptType == 366) 
-            <h2>{{ $dept->DeptName }}</h2>
+            <h2 @if ($i == 0) class="mT0" @endif >{{ $dept->DeptName }}</h2>
             <div class="mTn10"><b><i>(Federal)</i></b></div>
         @else
             <h2>{{ str_replace('Department', 'Dept', ucwords(strtolower($dept->DeptName))) }}</h2>
         @endif
-        <div class="row mT10 mB10">
+        <div class="row mT10 mB10 @if ($i == 0) mT0 @endif ">
             <div class="col-md-3 pT5 pB5">
                 <a href="javascript:;" class="deptLoad btn btn-xl btn-primary btn-block taC" 
                     id="dept{{ $dept->DeptID }}">Select</a>
@@ -69,8 +69,9 @@
         <div class="col-md-3">
             <fieldset class="form-group">
                 <label for="newDeptAddressStateID">State <span class="red f12">* required</span></label>
-                <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control input-lg" autocomplete="off" >
-                {!! $newDeptStateDrop !!}
+                <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control input-lg" 
+                    autocomplete="off" >
+                    {!! $newDeptStateDrop !!}
                 </select>
             </fieldset>
         </div>

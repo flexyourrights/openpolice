@@ -3,7 +3,7 @@
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.3-orange.svg?style=flat-square)](http://laravel.com)
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
-[![License](https://img.shields.io/aur/license/yaourt.svg?style=flat-square)](https://www.gnu.org/licenses/gpl.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
@@ -35,6 +35,7 @@ XML included an automatically generated schema, eg.<br />
 * [Roadmap](#roadmap)
 * [Change Logs](#change-logs)
 * [Contribution Guidelines](#contribution-guidelines)
+* [Reporting a Security Vulnerability](#security-help)
 
 
 # <a name="requirements"></a>Requirements
@@ -174,3 +175,17 @@ Here's the TODO list for the next release (**1.0**). It's my first time building
 
 Please help educate me on best practices for sharing code in this community.
 Please report any issue you find in the issues page.
+
+# <a name="security-help"></a>Reporting a Security Vulnerability
+
+We want to ensure that Open Police Complaints is a secure HTTP open data platform for everyone. 
+If you've discovered a security vulnerability in OpenPolice.org, 
+we appreciate your help in disclosing it to us in a responsible manner.
+
+Publicly disclosing a vulnerability can put the entire community at risk. 
+If you've discovered a security concern, please email us at wikiworldorder *at* protonmail.com. 
+We'll work with you to make sure that we understand the scope of the issue, and that we fully address your concern. 
+We consider correspondence sent to wikiworldorder *at* protonmail.com our highest priority, 
+and work to address any issues that arise as quickly as possible.
+
+After a security vulnerability has been corrected, a release will be deployed as soon as possible.

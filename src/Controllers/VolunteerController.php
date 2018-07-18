@@ -12,8 +12,8 @@ use App\Models\SLDefinitions;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
 use App\Models\OPPersonContact;
-use App\Models\OPzVolunEditsDepts;
-use App\Models\OPzVolunEditsOvers;
+use App\Models\OPZeditDepartments;
+use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPzVolunUserInfo;
 
@@ -28,6 +28,38 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function tweakAdmMenu($currPage = '')
     {
+        $this->v["ways"] = [
+            'Online-Submittable Form', 
+            'Submit via Email Allowed', 
+            'Verbally on Phone Allowed', 
+            'Paper Form via Snail Mail Allowed', 
+            'Requires In-Person Visit', 
+            'Official Form NOT Required for Investigation', 
+            'Anonymous Complaints Investigated', 
+            'Requires Notary (for any type of complaint)', 
+        ];
+        $this->v["waysFlds"] = [
+            'OverWaySubOnline', 
+            'OverWaySubEmail', 
+            'OverWaySubVerbalPhone', 
+            'OverWaySubPaperMail', 
+            'OverWaySubPaperInPerson', 
+            'OverOfficialFormNotReq', 
+            'OverOfficialAnon', 
+            'OverWaySubNotary', 
+        ];
+        $this->v["wayPoints"] = [30, 15, 3, 2, 0, 15, 15, -10];
+        $this->v["deptPoints"] = [
+            "Website"              => 5, 
+            "FB"                   => 5, 
+            "Twit"                 => 5, 
+            "YouTube"              => 5, 
+            "ComplaintInfo"        => 20, 
+            "ComplaintInfoHomeLnk" => 15, 
+            "FormPDF"              => 15
+        ];
+        
+        
     	if (isset($this->v["deptSlug"])) {
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 $this->admMenuData["currNavPos"] = [2, 3, -1, -1];
@@ -120,11 +152,11 @@ class VolunteerController extends OpenPoliceAdmin
     {
         $this->v["nextDept"] = array(0, '', '');
         $recentDate = date("Y-m-d H:i:s", time(date("H")-6, date("i"), date("s"), date("n"), date("j"), date("Y")));
-        OPzVolunTmp::where('TmpType', 'EditDept')
+        OPzVolunTmp::where('TmpType', 'ZedDept')
             ->where('TmpDate', '<', $recentDate)
             ->delete();
         // First check for department temporarily reserved for this user
-        $tmpReserve = OPzVolunTmp::where('TmpType', 'EditDept')
+        $tmpReserve = OPzVolunTmp::where('TmpType', 'ZedDept')
             ->where('TmpUser', Auth::user()->id)
             ->first();
         if ($tmpReserve && isset($tmpReserve->TmpVal) && intVal($tmpReserve->TmpVal) > 0) {
@@ -136,15 +168,16 @@ class VolunteerController extends OpenPoliceAdmin
                 $nextRow->DeptSlug
             ];
         } else { // no department reserved yet, find best next choice...
-            $nextRow = $qmen = [];
+            $nextRow = NULL;
+            $qmen = [];
             $qBase = "SELECT `DeptID`, `DeptName`, `DeptSlug` FROM `OP_Departments` WHERE ";
             $qReserves = " AND `DeptID` NOT IN (SELECT `TmpVal` FROM `OP_zVolunTmp` WHERE "
-                . "`TmpType` LIKE 'EditDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
+                . "`TmpType` LIKE 'ZedDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
             $qmen[] = $qBase . "(`DeptVerified` < '2015-01-01 00:00:00' OR `DeptVerified` IS NULL) " 
                 . $qReserves . " ORDER BY RAND()";
             $qmen[] = $qBase . "1 " . $qReserves . " ORDER BY `DeptVerified`";
             $qmen[] = $qBase . "1 ORDER BY RAND()"; // worst-case backup
-            for ($i=0; ($i<sizeof($qmen) && sizeof($nextRow) == 0); $i++) {
+            for ($i = 0; ($i < sizeof($qmen) && !$nextRow); $i++) {
                 $nextRow = DB::select( DB::raw( $qmen[$i]." LIMIT 1" ) );
             }
             $this->v["nextDept"] = [
@@ -157,7 +190,7 @@ class VolunteerController extends OpenPoliceAdmin
             $newTmp = new OPzVolunTmp;
             $newTmp->TmpUser = Auth::user()->id;
             $newTmp->TmpDate = date("Y-m-d H:i:s");
-            $newTmp->TmpType = 'EditDept';
+            $newTmp->TmpType = 'ZedDept';
             $newTmp->TmpVal  = $this->v["nextDept"][0];
             $newTmp->save();
         }
@@ -167,15 +200,15 @@ class VolunteerController extends OpenPoliceAdmin
     public function getVolunEditsOverview()
     {
         $retArr = $userTots = $uNames = [];
-        $userEdits = DB::table('OP_zVolunEditsDepts')
-            ->join('users', 'users.id', '=', 'OP_zVolunEditsDepts.EditDeptUser')
-            ->select('users.id', 'users.name', 'OP_zVolunEditsDepts.EditDeptDeptID')
+        $userEdits = DB::table('OP_Zedit_Departments')
+            ->join('users', 'users.id', '=', 'OP_Zedit_Departments.ZedDeptUserID')
+            ->select('users.id', 'users.name', 'OP_Zedit_Departments.ZedDeptDeptID')
             ->get();
-        if (sizeof($userEdits) > 0) {
+        if ($userEdits->isNotEmpty()) {
             foreach ($userEdits as $row) {
                 if (!isset($userTots[$row->id])) $userTots[$row->id] = [];
                 if (!in_array($row->DeptID, $userTots[$row->id])) {
-                    $userTots[$row->id] = array($row->EditDeptDeptID);
+                    $userTots[$row->id] = array($row->ZedDeptDeptID);
                 }
                 if (!isset($uNames[$row->id])) {
                     $uNames[$row->id] = '<a href="/admin/user/' . $row->id . '">' . $row->name . '</a>';
@@ -199,9 +232,9 @@ class VolunteerController extends OpenPoliceAdmin
             . " ORDER BY `DeptScoreOpenness` DESC, `DeptVerified` DESC, `DeptName`, `DeptAddressState`") );
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard()
             . '<div class="taC p10 f16 gry9"><i>' . $GLOBALS["SL"]->dbRow->DbMission . '</i></div>';
-        $GLOBALS["SL"]->pageAJAX .= '$( "#newDeptBtn" ).click(function() { $("#newDeptForm").slideToggle("fast"); }); ';
+        $GLOBALS["SL"]->pageAJAX .= '$("#newDeptBtn").click(function() { $("#newDeptForm").slideToggle("fast"); }); ';
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.volun.volunteer', $this->v);
+        return view('vendor.openpolice.volun.volunteer', $this->v)->render();
     }
     
     public function indexAll(Request $request)
@@ -213,7 +246,7 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["deptRows"] = OPDepartments::orderBy('DeptName', 'asc')->paginate(50);
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.volun.volunteer', $this->v);
+        return view('vendor.openpolice.volun.volunteer', $this->v)->render();
     }
     
     protected function deptSearchForm($state = '', $deptName = '')
@@ -225,7 +258,7 @@ class VolunteerController extends OpenPoliceAdmin
         ])->render();
     }
     
-    public function indexSearch($deptRows = [], $state = '', $deptName = '')
+    public function deptIndexSearch($deptRows = [], $state = '', $deptName = '')
     {
         $this->v["viewType"] = 'search';
         $this->v["deptRows"] = $deptRows;
@@ -234,38 +267,38 @@ class VolunteerController extends OpenPoliceAdmin
             str_replace('class="w33"', 'class="w33 f22"', $this->deptSearchForm($state, $deptName) )) . '</div>';
         $this->v["belowAdmMenu"] = $this->printSidebarLeaderboard();
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.volun.volunteer', $this->v);
+        return view('vendor.openpolice.volun.volunteer', $this->v)->render();
     }
     
-    public function indexSearchS(Request $request, $state = '')
+    public function deptIndexSearchS(Request $request, $state = '')
     {
         $this->admControlInit($request, '/dashboard/volunteer');
         $deptRows = OPDepartments::where('DeptAddressState', '=', $state)
             ->orderBy('DeptName', 'asc')
             ->paginate(50);
-        return $this->indexSearch($deptRows, $state, '');
+        return $this->deptIndexSearch($deptRows, $state, '');
     }
     
-    public function indexSearchD(Request $request, $deptName = '')
+    public function deptIndexSearchD(Request $request, $deptName = '')
     {
         $this->admControlInit($request, '/dashboard/volunteer');
         $this->v["deptName"] = '';
         if (trim($deptName) != '') $this->v["deptName"] = $deptName;
-        return $this->indexSearch($this->processSearchDepts('', $deptName), '', $deptName);
+        return $this->deptIndexSearch($this->processSearchDepts('', $deptName), '', $deptName);
     }
     
-    public function indexSearchSD(Request $request, $state = '', $deptName = '')
+    public function deptIndexSearchSD(Request $request, $state = '', $deptName = '')
     {
         $this->admControlInit($request, '/dashboard/volunteer');
         $this->v["deptName"] = '';
         if (trim($deptName) != '') $this->v["deptName"] = $deptName;
-        return $this->indexSearch($this->processSearchDepts($state, $deptName), $state, $deptName);
+        return $this->deptIndexSearch($this->processSearchDepts($state, $deptName), $state, $deptName);
     }
     
     protected function processSearchDepts($state = '', $deptName = '')
     {
         $deptName = str_replace('  ', ' ', str_replace('  ', ' ', str_replace('  ', ' ', $deptName)));
-        $searches = array('%'.$deptName.'%');
+        $searches = ['%'.$deptName.'%'];
         if (strpos($deptName, ' ') !== false) {
             $words = explode(' ', $deptName);
             foreach ($words as $w) {
@@ -310,23 +343,23 @@ class VolunteerController extends OpenPoliceAdmin
             if ($newDept && isset($newDept->DeptSlug)) return $this->redir('/dashboard/volunteer/verify/'.$newDept->DeptSlug);
             $newDept = new OPDepartments;
             $newIA   = new OPOversight;
-            $newEdit = new OPzVolunEditsDepts;
-            $iaEdit  = new OPzVolunEditsOvers;
-            $newIA->OverType            = $iaEdit->EditOverType          = 303;
-            $newDept->DeptName          = $newEdit->EditDeptName         = $deptName;
-            $newDept->DeptAddressState  = $newEdit->EditDeptAddressState = (($deptState != 'US') ? $deptState : '');
-            $newDept->DeptSlug          = $newEdit->EditDeptSlug         = $deptState . '-' . Str::slug($deptName);
-            $newDept->DeptType          = $newEdit->EditDeptType         = (($deptState == 'US') ? 366 : 0);
+            $newEdit = new OPZeditDepartments;
+            $iaEdit  = new OPZeditOversight;
+            $newIA->OverType            = $iaEdit->ZedOverOverType          = 303;
+            $newDept->DeptName          = $newEdit->ZedDeptName         = $deptName;
+            $newDept->DeptAddressState  = $newEdit->ZedDeptAddressState = (($deptState != 'US') ? $deptState : '');
+            $newDept->DeptSlug          = $newEdit->ZedDeptSlug         = $deptState . '-' . Str::slug($deptName);
+            $newDept->DeptType          = $newEdit->ZedDeptType         = (($deptState == 'US') ? 366 : 0);
             $newDept->DeptStatus        = 1;
             $newDept->save();
-            $newIA->OverDeptID          = $newEdit->EditDeptDeptID       = $iaEdit->EditOverDeptID = $newDept->DeptID;
+            $newIA->OverDeptID          = $newEdit->ZedDeptDeptID       = $iaEdit->ZedOverDeptID = $newDept->DeptID;
             $newIA->save();
-            $iaEdit->EditOverOverID     = $newIA->OverID;
-            $newEdit->EditDeptUser      = $iaEdit->EditOverUser          = Auth::user()->id;
-            $newEdit->EditDeptVerified  = $iaEdit->EditOverVerified      = date("Y-m-d H:i:s");
+            $iaEdit->ZedOverOverID     = $newIA->OverID;
+            $newEdit->ZedDeptUserID      = $iaEdit->ZedOverUser          = Auth::user()->id;
+            $newEdit->ZedDeptDeptVerified  = $iaEdit->ZedOverOverVerified      = date("Y-m-d H:i:s");
             $newEdit->save();
-            $iaEdit->EditOverEditDeptID = $newEdit->EditDeptID;
-            $iaEdit->EditOverNotes      = 'NEW DEPARTMENT ADDED TO DATABASE!';
+            $iaEdit->ZedOverZedDeptID = $newEdit->ZedDeptID;
+            $iaEdit->ZedOverNotes      = 'NEW DEPARTMENT ADDED TO DATABASE!';
             $iaEdit->save();
             return $newDept;
         }
@@ -349,41 +382,41 @@ class VolunteerController extends OpenPoliceAdmin
             return $this->redir('/dashboard/volunteer');
         }
         
-        $recentEdits = OPzVolunEditsDepts::where('EditDeptDeptID', $this->v["deptRow"]->DeptID)
-            ->orderBy('EditDeptVerified', 'desc')
+        $recentEdits = OPZeditDepartments::where('ZedDeptDeptID', $this->v["deptRow"]->DeptID)
+            ->orderBy('ZedDeptDeptVerified', 'desc')
             ->get();
-        if ($recentEdits && sizeof($recentEdits) > 0) {
+        if ($recentEdits->isNotEmpty()) {
             foreach ($recentEdits as $i => $edit) {
-                $this->v["editsIA"][$i]  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('EditOverType', 303)
+                $this->v["editsIA"][$i]  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 303)
                     ->first();
-                $this->v["editsCiv"][$i] = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('EditOverType', 302)
+                $this->v["editsCiv"][$i] = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 302)
                     ->first();
                 if ($this->v["editsIA"][$i]) {
-                    if (trim($this->v["editsIA"][$i]->EditOverNotes) != '') {
+                    if (trim($this->v["editsIA"][$i]->ZedOverNotes) != '') {
                         $this->v["editTots"]["notes"]++;
                     }
-                    if (intVal($this->v["editsIA"][$i]->EditOverOnlineResearch) == 1) {
+                    if (intVal($this->v["editsIA"][$i]->ZedOverOnlineResearch) == 1) {
                         $this->v["editTots"]["online"]++;
                     }
-                    if (intVal($this->v["editsIA"][$i]->EditOverMadeDeptCall) == 1) {
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeDeptCall) == 1) {
                         $this->v["editTots"]["callDept"]++;
                     }
-                    if (intVal($this->v["editsIA"][$i]->EditOverMadeIACall) == 1) {
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeIACall) == 1) {
                         $this->v["editTots"]["callIA"]++;
                     }
                 }
-                if (!isset($this->v["userNames"][$edit->EditDeptUser])) {
-                    $this->v["userNames"][$edit->EditDeptUser] = User::find($edit->EditDeptUser)
+                if (!isset($this->v["userNames"][$edit->ZedDeptUserID])) {
+                    $this->v["userNames"][$edit->ZedDeptUserID] = User::find($edit->ZedDeptUserID)
                         ->printUsername(true, '/dashboard/volun/user/');
                 }
                 if ($this->v["user"]->hasRole('administrator|staff')) {
                     $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
-                        "user"     => $this->v["userNames"][$edit->EditDeptUser], 
+                        "user"     => $this->v["userNames"][$edit->ZedDeptUserID], 
                         "deptRow"  => $this->v["deptRow"], 
                         "deptEdit" => $edit, 
-                        "deptType" => $GLOBALS["SL"]->getDefValue('Types of Departments', $edit->DeptType),
+                        "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $edit->DeptType),
                         "iaEdit"   => $this->v["editsIA"][$i], 
                         "civEdit"  => $this->v["editsCiv"][$i]
                     ])->render();
@@ -405,14 +438,14 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["iaRow"]                = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
                                              ->where('OverType', 303)
                                              ->first();
-        if (!isset($this->v["iaRow"]) || sizeof($this->v["iaRow"]) == 0) {
+        if (!$this->v["iaRow"]) {
             $this->v["iaRow"]            = new OPOversight;
             $this->v["iaRow"]->OverType  = 303; // definition ID for Internal Affairs
         }
         $this->v["civRow"]  = OPOversight::where('OverDeptID', $this->v["deptRow"]->DeptID)
             ->where('OverType', 302)
             ->first();
-        if (!isset($this->v["civRow"]) || sizeof($this->v["civRow"]) == 0) {
+        if (!$this->v["civRow"]) {
             $this->v["civRow"]           = new OPOversight;
             $this->v["civRow"]->OverType = 302; // definition ID for Civilian Oversight
         }
@@ -421,12 +454,12 @@ class VolunteerController extends OpenPoliceAdmin
         $this->v["iaComplaints"]         = $this->deptEditPrintOverComplaints($this->v["deptRow"], $this->v["iaRow"]);
         $this->v["admTopMenu"]           = $this->genDeptAdmTopMenu($this->v["deptRow"]);
         $this->v["deptTypes"]            = SLDefinitions::where('DefSet', 'Value Ranges')
-                                             ->where('DefSubset', 'Types of Departments')
+                                             ->where('DefSubset', 'Department Types')
                                              ->orderBy('DefOrder')
                                              ->get();
         $GLOBALS["SL"]->pageJAVA .= view('vendor.openpolice.volun.volun-dept-edit-java', $this->v)->render();
         $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.volun.volun-dept-edit-ajax', $this->v)->render();
-        return view('vendor.openpolice.volun.volun-dept-edit', $this->v);
+        return view('vendor.openpolice.volun.volun-dept-edit', $this->v)->render();
     }
     
     public function deptEditPrintOver($overRow = [], $overType = 'IA') 
@@ -441,7 +474,7 @@ class VolunteerController extends OpenPoliceAdmin
             'stateDrop' => $this->v["stateDrop"], 
             'alreadyHascontact' => $alreadyHascontact, 
             'neverEdited' => $this->v["neverEdited"]
-        ]);
+        ])->render();
     }
     
     public function deptEditPrintOverComplaints($deptRow = [], $overRow = [], $overType = 'IA') 
@@ -462,7 +495,7 @@ class VolunteerController extends OpenPoliceAdmin
             'waysChecked' => $waysChecked, 
             'deptPoints' => $this->v["deptPoints"], 
             'neverEdited' => $this->v["neverEdited"]
-        ]);
+        ])->render();
     }
     
     public function loadDeptEditsSummary()
@@ -494,7 +527,7 @@ class VolunteerController extends OpenPoliceAdmin
         $ia = $civ = $deptEdit = $iaEdit = $civEdit = [];
         
         $this->v["deptRow"] = OPDepartments::find($request->DeptID);
-        $deptEdit = new OPzVolunEditsDepts;
+        $deptEdit = new OPZeditDepartments;
         if (!isset($request->OverID) || intVal($request->OverID) <= 0) {
             $ia = new OPOversight;
             $ia->OverDeptID = $request->DeptID;
@@ -502,72 +535,72 @@ class VolunteerController extends OpenPoliceAdmin
         } else {
             $ia = OPOversight::find($request->OverID);
         }
-        $iaEdit = new OPzVolunEditsOvers;
+        $iaEdit = new OPZeditOversight;
         
-        $deptEdit->EditDeptDeptID                          = $iaEdit->EditOverDeptID                         = $request->DeptID;
-        $deptEdit->EditDeptUser                            = $iaEdit->EditOverUser                           = Auth::user()->id;
-        $deptEdit->EditDeptPageTime                        = time()-intVal($request->formLoaded);
-        $iaEdit->EditOverType                              = 303;
+        $deptEdit->ZedDeptDeptID                          = $iaEdit->ZedOverDeptID                         = $request->DeptID;
+        $deptEdit->ZedDeptUserID                            = $iaEdit->ZedOverUser                           = Auth::user()->id;
+        $deptEdit->ZedDeptDuration                        = time()-intVal($request->formLoaded);
+        $iaEdit->ZedOverOverType                              = 303;
         
-        $this->v["deptRow"]->DeptVerified                  = $deptEdit->EditDeptVerified                     = date("Y-m-d H:i:s");
-        $this->v["deptRow"]->DeptName                      = $deptEdit->EditDeptName                         = $request->DeptName;
-        $this->v["deptRow"]->DeptSlug                      = $deptEdit->EditDeptSlug                         = $request->DeptSlug;
-        $this->v["deptRow"]->DeptType                      = $deptEdit->EditDeptType                         = intVal($request->DeptType);
-        $this->v["deptRow"]->DeptStatus                    = $deptEdit->EditDeptStatus                       = $request->DeptStatus;
-        $this->v["deptRow"]->DeptAddress                   = $deptEdit->EditDeptAddress                      = $request->DeptAddress;
-        $this->v["deptRow"]->DeptAddress2                  = $deptEdit->EditDeptAddress2                     = $request->DeptAddress2;
-        $this->v["deptRow"]->DeptAddressCity               = $deptEdit->EditDeptAddressCity                  = $request->DeptAddressCity;
-        $this->v["deptRow"]->DeptAddressState              = $deptEdit->EditDeptAddressState                 = $request->DeptAddressState;
-        $this->v["deptRow"]->DeptAddressZip                = $deptEdit->EditDeptAddressZip                   = $request->DeptAddressZip;
-        $this->v["deptRow"]->DeptAddressCounty             = $deptEdit->EditDeptAddressCounty                = $request->DeptAddressCounty;
-        $this->v["deptRow"]->DeptEmail                     = $deptEdit->EditDeptEmail                        = $request->DeptEmail;
-        $this->v["deptRow"]->DeptPhoneWork                 = $deptEdit->EditDeptPhoneWork                    = $request->DeptPhoneWork;
-        $this->v["deptRow"]->DeptTotOfficers               = $deptEdit->EditDeptTotOfficers                  = str_replace(',', '', $request->DeptTotOfficers);
-        $this->v["deptRow"]->DeptJurisdictionPopulation    = $deptEdit->EditDeptJurisdictionPopulation       = str_replace(',', '', $request->DeptJurisdictionPopulation);
-        $this->v["deptRow"]->DeptScoreOpenness             = $deptEdit->EditDeptScoreOpenness                = $request->DeptScoreOpenness;
+        $this->v["deptRow"]->DeptVerified                  = $deptEdit->ZedDeptDeptVerified                     = date("Y-m-d H:i:s");
+        $this->v["deptRow"]->DeptName                      = $deptEdit->ZedDeptName                         = $request->DeptName;
+        $this->v["deptRow"]->DeptSlug                      = $deptEdit->ZedDeptSlug                         = $request->DeptSlug;
+        $this->v["deptRow"]->DeptType                      = $deptEdit->ZedDeptType                         = intVal($request->DeptType);
+        $this->v["deptRow"]->DeptStatus                    = $deptEdit->ZedDeptStatus                       = $request->DeptStatus;
+        $this->v["deptRow"]->DeptAddress                   = $deptEdit->ZedDeptAddress                      = $request->DeptAddress;
+        $this->v["deptRow"]->DeptAddress2                  = $deptEdit->ZedDeptAddress2                     = $request->DeptAddress2;
+        $this->v["deptRow"]->DeptAddressCity               = $deptEdit->ZedDeptAddressCity                  = $request->DeptAddressCity;
+        $this->v["deptRow"]->DeptAddressState              = $deptEdit->ZedDeptAddressState                 = $request->DeptAddressState;
+        $this->v["deptRow"]->DeptAddressZip                = $deptEdit->ZedDeptAddressZip                   = $request->DeptAddressZip;
+        $this->v["deptRow"]->DeptAddressCounty             = $deptEdit->ZedDeptAddressCounty                = $request->DeptAddressCounty;
+        $this->v["deptRow"]->DeptEmail                     = $deptEdit->ZedDeptEmail                        = $request->DeptEmail;
+        $this->v["deptRow"]->DeptPhoneWork                 = $deptEdit->ZedDeptPhoneWork                    = $request->DeptPhoneWork;
+        $this->v["deptRow"]->DeptTotOfficers               = $deptEdit->ZedDeptTotOfficers                  = str_replace(',', '', $request->DeptTotOfficers);
+        $this->v["deptRow"]->DeptJurisdictionPopulation    = $deptEdit->ZedDeptJurisdictionPopulation       = str_replace(',', '', $request->DeptJurisdictionPopulation);
+        $this->v["deptRow"]->DeptScoreOpenness             = $deptEdit->ZedDeptScoreOpenness                = $request->DeptScoreOpenness;
         
-        $ia->OverVerified                 = $iaEdit->EditOverVerified                 = date("Y-m-d H:i:s");
-        $ia->OverAgncName                 = $iaEdit->EditOverAgncName                 = $request->DeptName;
-        $ia->OverAddress                  = $iaEdit->EditOverAddress                  = $request->IAOverAddress;
-        $ia->OverAddress2                 = $iaEdit->EditOverAddress2                 = $request->IAOverAddress2;
-        $ia->OverAddressCity              = $iaEdit->EditOverAddressCity              = $request->IAOverAddressCity;
-        $ia->OverAddressState             = $iaEdit->EditOverAddressState             = $request->IAOverAddressState;
-        $ia->OverAddressZip               = $iaEdit->EditOverAddressZip               = $request->IAOverAddressZip;
-        $ia->OverEmail                    = $iaEdit->EditOverEmail                    = $request->IAOverEmail;
-        $ia->OverPhoneWork                = $iaEdit->EditOverPhoneWork                = $request->IAOverPhoneWork;
-        $ia->OverNameFirst                = $iaEdit->EditOverNameFirst                = $request->IAOverNameFirst;
-        $ia->OverNameMiddle               = $iaEdit->EditOverNameMiddle               = $request->IAOverNameMiddle;
-        $ia->OverNameLast                 = $iaEdit->EditOverNameLast                 = $request->IAOverNameLast;
-        $ia->OverTitle                    = $iaEdit->EditOverTitle                    = $request->IAOverTitle;
-        $ia->OverIDnumber                 = $iaEdit->EditOverIDnumber                 = $request->IAOverIDnumber;
-        $ia->OverNickname                 = $iaEdit->EditOverNickname                 = $request->IAOverNickname;
-        $ia->OverWebsite                  = $iaEdit->EditOverWebsite                  = $this->fixURL($request->IAOverWebsite);
-        $ia->OverFacebook                 = $iaEdit->EditOverFacebook                 = $this->fixURL($request->IAOverFacebook);
-        $ia->OverTwitter                  = $iaEdit->EditOverTwitter                  = $this->fixURL($request->IAOverTwitter);
-        $ia->OverYouTube                  = $iaEdit->EditOverYouTube                  = $this->fixURL($request->IAOverYouTube);
-        $ia->OverWebComplaintInfo         = $iaEdit->EditOverWebComplaintInfo         = $this->fixURL($request->IAOverWebComplaintInfo);
-        $ia->OverComplaintPDF             = $iaEdit->EditOverComplaintPDF             = $this->fixURL($request->IAOverComplaintPDF);
-        $ia->OverComplaintWebForm         = $iaEdit->EditOverComplaintWebForm         = $this->fixURL($request->IAOverComplaintWebForm);
-        $ia->OverHomepageComplaintLink    = $iaEdit->EditOverHomepageComplaintLink    = $request->IAOverHomepageComplaintLink;
+        $ia->OverVerified                 = $iaEdit->ZedOverOverVerified                 = date("Y-m-d H:i:s");
+        $ia->OverAgncName                 = $iaEdit->ZedOverAgncName                 = $request->DeptName;
+        $ia->OverAddress                  = $iaEdit->ZedOverAddress                  = $request->IAOverAddress;
+        $ia->OverAddress2                 = $iaEdit->ZedOverAddress2                 = $request->IAOverAddress2;
+        $ia->OverAddressCity              = $iaEdit->ZedOverAddressCity              = $request->IAOverAddressCity;
+        $ia->OverAddressState             = $iaEdit->ZedOverAddressState             = $request->IAOverAddressState;
+        $ia->OverAddressZip               = $iaEdit->ZedOverAddressZip               = $request->IAOverAddressZip;
+        $ia->OverEmail                    = $iaEdit->ZedOverEmail                    = $request->IAOverEmail;
+        $ia->OverPhoneWork                = $iaEdit->ZedOverPhoneWork                = $request->IAOverPhoneWork;
+        $ia->OverNameFirst                = $iaEdit->ZedOverNameFirst                = $request->IAOverNameFirst;
+        $ia->OverNameMiddle               = $iaEdit->ZedOverNameMiddle               = $request->IAOverNameMiddle;
+        $ia->OverNameLast                 = $iaEdit->ZedOverNameLast                 = $request->IAOverNameLast;
+        $ia->OverTitle                    = $iaEdit->ZedOverTitle                    = $request->IAOverTitle;
+        $ia->OverIDnumber                 = $iaEdit->ZedOverIDnumber                 = $request->IAOverIDnumber;
+        $ia->OverNickname                 = $iaEdit->ZedOverNickname                 = $request->IAOverNickname;
+        $ia->OverWebsite                  = $iaEdit->ZedOverWebsite                  = $this->fixURL($request->IAOverWebsite);
+        $ia->OverFacebook                 = $iaEdit->ZedOverFacebook                 = $this->fixURL($request->IAOverFacebook);
+        $ia->OverTwitter                  = $iaEdit->ZedOverTwitter                  = $this->fixURL($request->IAOverTwitter);
+        $ia->OverYouTube                  = $iaEdit->ZedOverYouTube                  = $this->fixURL($request->IAOverYouTube);
+        $ia->OverWebComplaintInfo         = $iaEdit->ZedOverWebComplaintInfo         = $this->fixURL($request->IAOverWebComplaintInfo);
+        $ia->OverComplaintPDF             = $iaEdit->ZedOverComplaintPDF             = $this->fixURL($request->IAOverComplaintPDF);
+        $ia->OverComplaintWebForm         = $iaEdit->ZedOverComplaintWebForm         = $this->fixURL($request->IAOverComplaintWebForm);
+        $ia->OverHomepageComplaintLink    = $iaEdit->ZedOverHomepageComplaintLink    = $request->IAOverHomepageComplaintLink;
         foreach ($this->v["waysFlds"] as $fld) {
             eval("\$ia->" . $fld . " = \$iaEdit->Edit" . $fld . " = ((isset(\$request->IA"
                 . $fld . ") && \$request->IA" . $fld . " == 1) ? 1 : 0);");
         }
-        $ia->OverSubmitDeadline           = $iaEdit->EditOverSubmitDeadline           = intVal($request->IAOverSubmitDeadline);
+        $ia->OverSubmitDeadline           = $iaEdit->ZedOverSubmitDeadline           = intVal($request->IAOverSubmitDeadline);
         if ($request->has('IAOverSubmitAnytime') && intVal($request->IAOverSubmitAnytime) == -1) {
-            $ia->OverSubmitDeadline       = $iaEdit->EditOverSubmitDeadline           = -1;
+            $ia->OverSubmitDeadline       = $iaEdit->ZedOverSubmitDeadline           = -1;
         }
         
-        $iaEdit->EditOverOnlineResearch   = $request->EditOverOnlineResearch;
-        $iaEdit->EditOverMadeDeptCall     = $request->EditOverMadeDeptCall;
-        $iaEdit->EditOverMadeIACall       = $request->EditOverMadeIACall;
-        $iaEdit->EditOverNotes            = $request->EditOverNotes;
+        $iaEdit->ZedOverOnlineResearch   = $request->ZedOverOnlineResearch;
+        $iaEdit->ZedOverMadeDeptCall     = $request->ZedOverMadeDeptCall;
+        $iaEdit->ZedOverMadeIACall       = $request->ZedOverMadeIACall;
+        $iaEdit->ZedOverNotes            = $request->ZedOverNotes;
         
         $this->v["deptRow"]->save();
         $ia->save();
         $deptEdit->save();
-        $iaEdit->EditOverOverID           = $ia->OverID;
-        $iaEdit->EditOverEditDeptID       = $deptEdit->DeptEditID;
+        $iaEdit->ZedOverOverID           = $ia->OverID;
+        $iaEdit->ZedOverZedDeptID       = $deptEdit->DeptEditID;
         $iaEdit->save();
         
         if (trim($request->CivOverAgncName) != '' || trim($request->CivOverWebsite) != '' 
@@ -579,22 +612,22 @@ class VolunteerController extends OpenPoliceAdmin
             } else {
                 $civ = OPOversight::find($request->CivOverID);
             }
-            $civEdit = new OPzVolunEditsOvers;
-            $civEdit->EditOverDeptID      = $request->DeptID;
-            $civEdit->EditOverEditDeptID  = $deptEdit->EditDeptID;
-            $civEdit->EditOverUser        = Auth::user()->id;
-            $civEdit->EditOverType        = 302;
+            $civEdit = new OPZeditOversight;
+            $civEdit->ZedOverDeptID      = $request->DeptID;
+            $civEdit->ZedOverZedDeptID  = $deptEdit->ZedDeptID;
+            $civEdit->ZedOverUser        = Auth::user()->id;
+            $civEdit->ZedOverOverType        = 302;
             
-            $civ->OverVerified            = $civEdit->EditOverVerified = date("Y-m-d H:i:s");
-            $civ->OverAgncName            = $civEdit->EditOverAgncName = $request->CivOverAgncName;
+            $civ->OverVerified            = $civEdit->ZedOverOverVerified = date("Y-m-d H:i:s");
+            $civ->OverAgncName            = $civEdit->ZedOverAgncName = $request->CivOverAgncName;
             $this->collectCivOversightForm($civ, $civEdit, $request);
             
             $civ->save();
-            $civEdit->EditOverOverID      = $civ->OverID;
+            $civEdit->ZedOverOverID      = $civ->OverID;
             $civEdit->save();
         }
         
-        $tmpReserve = OPzVolunTmp::where('TmpType', 'EditDept')
+        $tmpReserve = OPzVolunTmp::where('TmpType', 'ZedDept')
             ->where('TmpUser', Auth::user()->id)
             ->where('TmpVal', $request->DeptID)
             ->delete();
@@ -614,32 +647,32 @@ class VolunteerController extends OpenPoliceAdmin
     
     protected function collectCivOversightForm(&$civ, &$civEdit, $request)
     {
-        $civ->OverAddress           = $civEdit->EditOverAddress          = $request->CivOverAddress;
-        $civ->OverAddress2          = $civEdit->EditOverAddress2         = $request->CivOverAddress2;
-        $civ->OverAddressCity       = $civEdit->EditOverAddressCity      = $request->CivOverAddressCity;
-        $civ->OverAddressState      = $civEdit->EditOverAddressState     = $request->CivOverAddressState;
-        $civ->OverAddressZip        = $civEdit->EditOverAddressZip       = $request->CivOverAddressZip;
-        $civ->OverEmail             = $civEdit->EditOverEmail            = $request->CivOverEmail;
-        $civ->OverPhoneWork         = $civEdit->EditOverPhoneWork        = $request->CivOverPhoneWork;
-        $civ->OverNameFirst         = $civEdit->EditOverNameFirst        = $request->CivOverNameFirst;
-        $civ->OverNameMiddle        = $civEdit->EditOverNameMiddle       = $request->CivOverNameMiddle;
-        $civ->OverNameLast          = $civEdit->EditOverNameLast         = $request->CivOverNameLast;
-        $civ->OverTitle             = $civEdit->EditOverTitle            = $request->CivOverTitle;
-        $civ->OverIDnumber          = $civEdit->EditOverIDnumber         = $request->CivOverIDnumber;
-        $civ->OverNickname          = $civEdit->EditOverNickname         = $request->CivOverNickname;
-        $civ->OverWebsite           = $civEdit->EditOverWebsite          = $request->CivOverWebsite;
+        $civ->OverAddress           = $civEdit->ZedOverAddress          = $request->CivOverAddress;
+        $civ->OverAddress2          = $civEdit->ZedOverAddress2         = $request->CivOverAddress2;
+        $civ->OverAddressCity       = $civEdit->ZedOverAddressCity      = $request->CivOverAddressCity;
+        $civ->OverAddressState      = $civEdit->ZedOverAddressState     = $request->CivOverAddressState;
+        $civ->OverAddressZip        = $civEdit->ZedOverAddressZip       = $request->CivOverAddressZip;
+        $civ->OverEmail             = $civEdit->ZedOverEmail            = $request->CivOverEmail;
+        $civ->OverPhoneWork         = $civEdit->ZedOverPhoneWork        = $request->CivOverPhoneWork;
+        $civ->OverNameFirst         = $civEdit->ZedOverNameFirst        = $request->CivOverNameFirst;
+        $civ->OverNameMiddle        = $civEdit->ZedOverNameMiddle       = $request->CivOverNameMiddle;
+        $civ->OverNameLast          = $civEdit->ZedOverNameLast         = $request->CivOverNameLast;
+        $civ->OverTitle             = $civEdit->ZedOverTitle            = $request->CivOverTitle;
+        $civ->OverIDnumber          = $civEdit->ZedOverIDnumber         = $request->CivOverIDnumber;
+        $civ->OverNickname          = $civEdit->ZedOverNickname         = $request->CivOverNickname;
+        $civ->OverWebsite           = $civEdit->ZedOverWebsite          = $request->CivOverWebsite;
         /*
-        $civ->OverFacebook          = $civEdit->EditOverFacebook         = $request->CivOverFacebook;
-        $civ->OverTwitter           = $civEdit->EditOverTwitter          = $request->OverTwitter;
-        $civ->OverWebComplaintInfo  = $civEdit->EditOverWebComplaintInfo = $request->CivOverWebComplaintInfo;
-        $civ->OverComplaintPDF      = $civEdit->EditOverComplaintPDF     = $request->CivOverComplaintPDF;
-        $civ->OverComplaintWebForm  = $civEdit->EditOverComplaintWebForm =$request->CivOverComplaintWebForm;
-        $civ->OverHomepageComplaintLink = $civEdit->EditOverHomepageComplaintLink = $request->CivOverHomepageComplaintLink;
+        $civ->OverFacebook          = $civEdit->ZedOverFacebook         = $request->CivOverFacebook;
+        $civ->OverTwitter           = $civEdit->ZedOverTwitter          = $request->OverTwitter;
+        $civ->OverWebComplaintInfo  = $civEdit->ZedOverWebComplaintInfo = $request->CivOverWebComplaintInfo;
+        $civ->OverComplaintPDF      = $civEdit->ZedOverComplaintPDF     = $request->CivOverComplaintPDF;
+        $civ->OverComplaintWebForm  = $civEdit->ZedOverComplaintWebForm =$request->CivOverComplaintWebForm;
+        $civ->OverHomepageComplaintLink = $civEdit->ZedOverHomepageComplaintLink = $request->CivOverHomepageComplaintLink;
         foreach ($this->v["waysFlds"] as $fld) {
             eval("\$civ->" . $fld . " = \$civEdit->Edit" . $fld . " = ((isset(\$request->Civ" 
                 . $fld . ") && \$request->Civ" . $fld . " == 1) ? 1 : 0);");
         }
-        $civ->OverSubmitDeadline    = $civEdit->EditOverSubmitDeadline  = intVal($request->CivOverSubmitDeadline);
+        $civ->OverSubmitDeadline    = $civEdit->ZedOverSubmitDeadline  = intVal($request->CivOverSubmitDeadline);
         */
         return true;
     }
@@ -651,7 +684,7 @@ class VolunteerController extends OpenPoliceAdmin
         return view('vendor.openpolice.volun.volunScript-cache', [
             'script1' => $script1, 
             'script2' => $script2
-        ]);
+        ])->render();
     }
     
     public function deptEditCheck()
@@ -660,7 +693,7 @@ class VolunteerController extends OpenPoliceAdmin
             <h1 class="slBlueDark" style="margin-bottom: 5px;">Department Info: Volunteer Checklist</h1>
             <a href="/dashboard/volunteer"><i class="fa fa-caret-left"></i> Back To Department List</a>' 
             . $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist') . '<div class="p20"></div>';
-        return view('vendor.survloop.master', $this->v);
+        return view('vendor.survloop.master', $this->v)->render();
     }
     
     
@@ -696,7 +729,7 @@ class VolunteerController extends OpenPoliceAdmin
                 }
             }
         }
-        return view('vendor.openpolice.volun.stars', $this->v);
+        return view('vendor.openpolice.volun.stars', $this->v)->render();
     }
     
     public function volunProfileAdm(Request $request, $uid)
@@ -714,18 +747,18 @@ class VolunteerController extends OpenPoliceAdmin
         	->first();
         $this->v["userInfo"] = OPPersonContact::find($this->v["userStats"]->UserInfoPersonContactID);
         $deptEdits = [];
-        $recentEdits = OPzVolunEditsDepts::where('EditDeptUser', $uid)
-            ->orderBy('EditDeptVerified', 'desc')
+        $recentEdits = OPZeditDepartments::where('ZedDeptUserID', $uid)
+            ->orderBy('ZedDeptDeptVerified', 'desc')
             ->get();
-        if ($recentEdits && sizeof($recentEdits) > 0) {
+        if ($recentEdits->isNotEmpty()) {
             foreach ($recentEdits as $i => $edit) {
-                $iaEdit  = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('EditOverType', 303)
+                $iaEdit  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 303)
                     ->first();
-                $civEdit = OPzVolunEditsOvers::where('EditOverEditDeptID', $edit->EditDeptID)
-                    ->where('EditOverType', 302)
+                $civEdit = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                    ->where('ZedOverOverType', 302)
                     ->first();
-                $userObj = User::find($edit->EditDeptUser);
+                $userObj = User::find($edit->ZedDeptUserID);
                 $deptEdits[] = [
                     $userObj->printUsername(true, '/dashboard/volun/user/'), 
                     $edit, 
@@ -735,19 +768,19 @@ class VolunteerController extends OpenPoliceAdmin
             }
         }
         $this->v["recentEdits"] = '';
-        if ($deptEdits && sizeof($deptEdits) > 0) {
+        if ($deptEdits->isNotEmpty()) {
 			foreach ($deptEdits as $deptEdit) {
 				$this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
 					"user"     => $deptEdit[0], 
-					"deptRow"  => OPDepartments::find($deptEdit[1]->EditDeptDeptID), 
+					"deptRow"  => OPDepartments::find($deptEdit[1]->ZedDeptDeptID), 
 					"deptEdit" => $deptEdit[1], 
-					"deptType" => $GLOBALS["SL"]->getDefValue('Types of Departments', $deptEdit[1]->EditDeptType),
+					"deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $deptEdit[1]->ZedDeptType),
 					"iaEdit"   => $deptEdit[2], 
 					"civEdit"  => $deptEdit[3]
 				])->render();
 			}
 		}
-        return view('vendor.openpolice.admin.volun.volunProfile', $this->v);
+        return view('vendor.openpolice.admin.volun.volunProfile', $this->v)->render();
     }
     
     

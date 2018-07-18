@@ -27,6 +27,7 @@ class OPPersonContact extends Model
 		'PrsnAddressZip', 
 		'PrsnBirthday', 
 		'PrsnFacebook', 
+		'PrsnUserID', 
     ];
     
     // END SurvLoop auto-generated portion of Model

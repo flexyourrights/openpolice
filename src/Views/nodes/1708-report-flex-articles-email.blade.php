@@ -1,6 +1,6 @@
-<!-- Stored in resources/views/openpolice/complaint-report-flex-articles-email.blade.php -->
+<!-- Stored in resources/views/openpolice/1708-report-flex-articles-email.blade.php -->
 
-@if ($allUrls && sizeof($allUrls) > 0)
+@if (isset($allUrls) && sizeof($allUrls) > 0)
     @if (isset($allUrls["txt"]) && sizeof($allUrls["txt"]) > 0)
         <h4>Flex Your Rights Articles Related To This Complaint</h4>
         <ul>
