@@ -18,6 +18,7 @@ class OPComplaints extends Model
 		'ComPrivacy', 
 		'ComAwardMedallion', 
 		'ComSummary', 
+		'ComAllegList', 
 		'ComTriedOtherWays', 
 		'ComTriedOtherWaysDesc', 
 		'ComOfficerInjured', 

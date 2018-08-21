@@ -17,12 +17,12 @@ class OPAllegSilver extends Model
 		'AlleSilOfficerRefuseID', 
 		'AlleSilSearchYN', 
 		'AlleSilSearchWrongful', 
-		'AlleSilWrongfulEntry', 
 		'AlleSilForceYN', 
 		'AlleSilForceUnreason', 
 		'AlleSilPropertyYN', 
 		'AlleSilPropertyWrongful', 
 		'AlleSilArrestYN', 
+		'AlleSilPropertyDamage', 
 		'AlleSilArrestWrongful', 
 		'AlleSilArrestRetaliatory', 
 		'AlleSilArrestMiranda', 
@@ -35,9 +35,9 @@ class OPAllegSilver extends Model
 		'AlleSilSexualAssault', 
 		'AlleSilIntimidatingWeapon', 
 		'AlleSilIntimidatingWeaponType', 
+		'AlleSilWrongfulEntry', 
 		'AlleSilUnbecoming', 
 		'AlleSilDiscourteous', 
-		'AlleSilPropertyDamage', 
     ];
     
     // END SurvLoop auto-generated portion of Model

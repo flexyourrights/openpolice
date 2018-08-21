@@ -15,13 +15,7 @@ class OPPhysicalDesc extends Model
 		'PhysAge', 
 		'PhysHeight', 
 		'PhysBodyType', 
-		'PhysHairDescription', 
-		'PhysHairFacialDesc', 
-		'PhysEyes', 
-		'PhysDistinguishingMarksDesc', 
-		'PhysVoiceDesc', 
 		'PhysGeneralDesc', 
-		'PhysDisabilitiesDesc', 
     ];
     
     // END SurvLoop auto-generated portion of Model

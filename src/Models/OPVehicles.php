@@ -10,6 +10,8 @@ class OPVehicles extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+		'VehicComplaintID', 
+		'VehicIsCivilian', 
 		'VehicTransportation', 
 		'VehicUnmarked', 
 		'VehicVehicleMake', 

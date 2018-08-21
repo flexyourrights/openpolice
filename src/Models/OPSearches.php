@@ -29,9 +29,6 @@ class OPSearches extends Model
 		'SrchSeizedDesc', 
 		'SrchDamage', 
 		'SrchDamageDesc', 
-		'SrchAllegWrongfulSearch', 
-		'SrchAllegWrongfulProperty', 
-		'SrchAllegPropertyDamage', 
     ];
     
     // END SurvLoop auto-generated portion of Model

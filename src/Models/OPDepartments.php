@@ -34,6 +34,8 @@ class OPDepartments extends Model
 		'DeptUniqueStr', 
 		'DeptUserID', 
 		'DeptIsMobile', 
+		'DeptAddressLat', 
+		'DeptAddressLng', 
     ];
     
     // END SurvLoop auto-generated portion of Model

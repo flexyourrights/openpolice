@@ -30,15 +30,15 @@
     </div>
 @endif
 
-<div class="w100 p5 slGrey">
-    <div class="pull-right taR">Accessibility Score,<br /><i>Last Verified</i></div>
+<div class="w100 slGrey" style="padding: 0px 15px 5px 15px;">
+    <div class="pull-right deptRgtCol"><nobr>Accessibility Score</nobr><br /><i>Last Verified</i></div>
     Police Department Name,<br /><i>City, State</i>
 </div>
 <div id="deptListGroup" class="list-group taL">
     @forelse ($deptRows as $i => $dept)
         @if ($i < 500)
             <a class="list-group-item" href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-                <div class="pull-right taR">
+                <div class="pull-right deptRgtCol">
                     @if (intVal($dept->DeptScoreOpenness) > 0)
                         <h3 class="m0">{{ $dept->DeptScoreOpenness }}</h3>
                         {!! view('vendor.openpolice.volun.volunteer-recent-edits', [

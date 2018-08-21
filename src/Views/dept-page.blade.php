@@ -6,24 +6,24 @@
 <div id="node1099" class="nodeWrap w100 taL">
 <div class="p20"></div>
 
-@if (isset($deptStuff["deptRow"]))
+@if (isset($d["deptRow"]))
     <div class="row w100">
         <div class="col-md-8">
             <div class="slCard">
-                <h2 class="m0 slBlueDark">{!! $deptStuff["deptRow"]->DeptName !!}</h2>
+                <h2 class="m0 slBlueDark">{!! $d["deptRow"]->DeptName !!}</h2>
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="/sharing-your-story/{{ $deptStuff['deptRow']->DeptSlug }}"
+                        <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}"
                             class="btn btn-primary btn-lg w100 mT20" >Share Your Story About The<br />
-                            {!! str_replace('Department', 'Dept', $deptStuff["deptRow"]->DeptName) !!}</a>
+                            {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
                     </div>
                     <div class="col-md-6 pT20">
-                        @if (isset($deptStuff["deptRow"]->DeptAddress) && trim($deptStuff["deptRow"]->DeptAddress) != '')
-                            <a href="{{ $GLOBALS['SL']->mapsURL($deptStuff['deptAddy']) }}" target="_blank"
-                                ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {{ $deptStuff["deptAddy"] }}</a>
+                        @if (isset($d["deptRow"]->DeptAddress) && trim($d["deptRow"]->DeptAddress) != '')
+                            <a href="{{ $GLOBALS['SL']->mapsURL($d['deptAddy']) }}" target="_blank"
+                                ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {{ $d["deptAddy"] }}</a>
                         @endif
-                        @if (isset($deptStuff["deptRow"]->DeptPhoneWork) && trim($deptStuff["deptRow"]->DeptPhoneWork) != '')
-                            <br /><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $deptStuff["deptRow"]->DeptPhoneWork }}
+                        @if (isset($d["deptRow"]->DeptPhoneWork) && trim($d["deptRow"]->DeptPhoneWork) != '')
+                            <br /><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["deptRow"]->DeptPhoneWork }}
                         @endif
                     </div>
                 </div>
@@ -31,78 +31,89 @@
             
             <div class="slCard mT20 mB20">
                 <h3 class="mT0">Recent Complaints & Compliments</h3>
-                <i>No complaints have been submitted for this deparment.</i>
+                {!! $previews !!}
+                <p><i class="slGrey">OpenPolice.org is currently beta testing with individual complainants,
+                and is not yet open to the public.</i></p>
             </div>
         </div>
         <div class="col-md-4">
             <div class="slCard">
-            <style> tr.scoreRowOn td { color: #63C6FF; } tr.scoreRowOff td { color: #CCC; } </style>
-            @if (isset($deptStuff["deptRow"]->DeptScoreOpenness) && intVal($deptStuff["deptRow"]->DeptScoreOpenness) > 0)
-                <a class="toggleScoreInfo btn btn-info btn-lg w100" href="javascript:;"
-                    >OPC Accessibility Score: <b class="mL5" style="font-weight: bold;">{{ 
-                    $deptStuff["deptRow"]->DeptScoreOpenness }}</b></a>
+            @if (isset($d["deptRow"]->DeptScoreOpenness) && intVal($d["deptRow"]->DeptScoreOpenness) > 0)
+                <div class="toggleScoreInfo round10 p20 taC fPerc133
+                    @if ($d['deptRow']->DeptScoreOpenness >= 70) btn-primary-simple 
+                    @else btn-danger-simple @endif w100 mB20">
+                    <div class="pT10 mBn20">Accessibility Grade:</div>
+                    <div class="icoHuge mBn5">{{ $GLOBALS["SL"]->calcGrade($d["deptRow"]->DeptScoreOpenness) }}</div>
+                </div>
+                
+                <a class="toggleScoreInfo btn btn-default btn-lg w100 taL" href="javascript:;"
+                    ><i id="scoreChev" class="fa fa-chevron-right" aria-hidden="true" style="width: 18px;"></i>
+                    OPC Accessibility Score: <b class="mL5" style="font-weight: bold;">{{ 
+                    $d["deptRow"]->DeptScoreOpenness }}</b></a>
                 <div id="toggleScoreInfoDeets" class="disNon">
-                    <table class="table table-striped mB0">
-                    <tbody>
-                    @if (isset($deptStuff["score"]) && sizeof($deptStuff["score"]) > 0)
-                        @foreach ($deptStuff["score"] as $i => $s)
+                    @if (isset($d["score"]) && sizeof($d["score"]) > 0)
+                        @foreach ($d["score"] as $i => $s)
                             @if ($s[2])
-                                <tr class="scoreRowOn">
-                                <td class="tR"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></td>
-                                <td class="tC" style="width: 40px;">{{ $s[0] }}</td><td>{{ $s[1] }}</td></tr>
+                                <div class=" @if ($i%2 == 0) row2 @endif scoreRowOn"><div class="row">
+                                <div class="col-md-1"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
                             @else
-                                <tr class="scoreRowOff"><td>&nbsp;</td>
-                                <td class="tC" style="width: 40px;">{{ $s[0] }}</td><td>{{ $s[1] }}</td></tr>
+                                <div class=" @if ($i%2 == 0) row2 @endif scoreRowOff"><div class="row">
+                                <div class="col-md-1">&nbsp;</div>
                             @endif
+                                <div class="col-md-1 taR">{{ $s[0] }}</div>
+                                <div class="col-md-9">{{ $s[1] }}</div>
+                            </div></div>
                         @endforeach
                     @endif
-                    </tbody>
-                    </table>
                     <div class="p5">
-                        Departments can earn a score of up to 150. 
-                        <a href="/how-we-rate-departments">More about how we rate departments.</a>
+                        Departments can earn a score of up to 100. 
+                        <a href="/departments">More about how we rate departments.</a>
                     </div>
                 </div>
+            @endif
+            @if (isset($d["deptRow"]->DeptVerified) && trim($d["deptRow"]->DeptVerified) != '')
+                <div class="mT10 slGrey">
+                Department info updated {{ date('n/j/y', strtotime($d["deptRow"]->DeptVerified)) }}</div>
             @endif
             </div>
             
             <div class="slCard mT20">
                 <h3 class="m0">Department Web Presence</h3>
-                @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWebsite) 
-                    && trim($deptStuff[$deptStuff["whichOver"]]->OverWebsite) != '')
-                    <a href="{{ $deptStuff[$deptStuff['whichOver']]->OverWebsite }}" target="_blank" 
+                @if (isset($d[$d["whichOver"]]->OverWebsite) 
+                    && trim($d[$d["whichOver"]]->OverWebsite) != '')
+                    <a href="{{ $d[$d['whichOver']]->OverWebsite }}" target="_blank" 
                     class="fPerc125 disBlo mB10">{{ 
-                    $GLOBALS["SL"]->urlClean($deptStuff[$deptStuff["whichOver"]]->OverWebsite) }}</a>
+                    $GLOBALS["SL"]->urlClean($d[$d["whichOver"]]->OverWebsite) }}</a>
                 @endif
-                @if (isset($deptStuff[$deptStuff["whichOver"]]->OverFacebook) 
-                    && trim($deptStuff[$deptStuff["whichOver"]]->OverFacebook) != '')
-                    <a href="{{ $deptStuff[$deptStuff['whichOver']]->OverFacebook }}" target="_blank"
+                @if (isset($d[$d["whichOver"]]->OverFacebook) 
+                    && trim($d[$d["whichOver"]]->OverFacebook) != '')
+                    <a href="{{ $d[$d['whichOver']]->OverFacebook }}" target="_blank"
                     ><i class="fa fa-facebook-square mR5" aria-hidden="true"></i> {{ 
-                    $GLOBALS["SL"]->urlClean($deptStuff[$deptStuff["whichOver"]]->OverFacebook) }}</a><br />
+                    $GLOBALS["SL"]->urlClean($d[$d["whichOver"]]->OverFacebook) }}</a><br />
                 @endif
-                @if (isset($deptStuff[$deptStuff["whichOver"]]->OverTwitter) 
-                    && trim($deptStuff[$deptStuff["whichOver"]]->OverTwitter) != '')
-                    <a href="{{ $deptStuff[$deptStuff['whichOver']]->OverTwitter }}" target="_blank"
+                @if (isset($d[$d["whichOver"]]->OverTwitter) 
+                    && trim($d[$d["whichOver"]]->OverTwitter) != '')
+                    <a href="{{ $d[$d['whichOver']]->OverTwitter }}" target="_blank"
                     ><i class="fa fa-twitter-square mR5" aria-hidden="true"></i> {{ 
-                    $GLOBALS["SL"]->urlClean($deptStuff[$deptStuff["whichOver"]]->OverTwitter) }}</a><br />
+                    $GLOBALS["SL"]->urlClean($d[$d["whichOver"]]->OverTwitter) }}</a><br />
                 @endif
-                @if (isset($deptStuff[$deptStuff["whichOver"]]->OverYouTube) 
-                    && trim($deptStuff[$deptStuff["whichOver"]]->OverYouTube) != '')
-                    <a href="{{ $deptStuff[$deptStuff['whichOver']]->OverYouTube }}" target="_blank"
+                @if (isset($d[$d["whichOver"]]->OverYouTube) 
+                    && trim($d[$d["whichOver"]]->OverYouTube) != '')
+                    <a href="{{ $d[$d['whichOver']]->OverYouTube }}" target="_blank"
                     ><i class="fa fa-youtube-play mR5" aria-hidden="true"></i> {{ 
-                    $GLOBALS["SL"]->urlClean($deptStuff[$deptStuff["whichOver"]]->OverYouTube) }}</a><br />
+                    $GLOBALS["SL"]->urlClean($d[$d["whichOver"]]->OverYouTube) }}</a><br />
                 @endif
             </div>
             
             <a name="how"></a>
             <div class="slCard mT20">
                 <h3 class="m0">How To File A Complaint</h3>
-                @if (isset($deptStuff[$deptStuff["whichOver"]]->OverOfficialFormNotReq) 
-                    && intVal($deptStuff[$deptStuff["whichOver"]]->OverOfficialFormNotReq) == 1
-                    && isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubEmail) 
-                    && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubEmail) == 1
-                    && isset($deptStuff[$deptStuff["whichOver"]]->OverEmail) 
-                    && trim($deptStuff[$deptStuff["whichOver"]]->OverEmail) != '')
+                @if (isset($d[$d["whichOver"]]->OverOfficialFormNotReq) 
+                    && intVal($d[$d["whichOver"]]->OverOfficialFormNotReq) == 1
+                    && isset($d[$d["whichOver"]]->OverWaySubEmail) 
+                    && intVal($d[$d["whichOver"]]->OverWaySubEmail) == 1
+                    && isset($d[$d["whichOver"]]->OverEmail) 
+                    && trim($d[$d["whichOver"]]->OverEmail) != '')
                     <div class="alert alert-success mT10" role="alert">
                         <h4 class="m0"><i class="fa fa-trophy mR5" aria-hidden="true"></i> OPC-Compatible Department</h4>
                     </div>
@@ -124,117 +135,117 @@
             </div>
             
             <div class="slCard mT20">
-            @if ($deptStuff["whichOver"] == 'civRow')
-                <h3 class="m0 slBlueDark">{{ $deptStuff[$deptStuff["whichOver"]]->OverAgncName }}</h3>
+            @if ($d["whichOver"] == 'civRow')
+                <h3 class="m0 slBlueDark">{{ $d[$d["whichOver"]]->OverAgncName }}</h3>
                 <p class="gry9">
-                This is the agency that collects complaints for the {!! $deptStuff["deptRow"]->DeptName !!}.
+                This is the agency that collects complaints for the {!! $d["deptRow"]->DeptName !!}.
                 This is where we recommend that OPC users file their complaints.
                 </p>
-                @if (isset($deptStuff["civAddy"]) && trim($deptStuff["civAddy"]) != '')
-                    <a href="{{ $GLOBALS['SL']->mapsURL($deptStuff['civAddy']) }}" target="_blank"
-                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $deptStuff["civAddy"] !!}</a><br />
+                @if (isset($d["civAddy"]) && trim($d["civAddy"]) != '')
+                    <a href="{{ $GLOBALS['SL']->mapsURL($d['civAddy']) }}" target="_blank"
+                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["civAddy"] !!}</a><br />
                 @endif
             @else
                 <h2 class="m0">Internal Affairs</h2>
                 <div class="mBn5">&nbsp;</div>
-                @if (isset($deptStuff["iaAddy"]) && trim($deptStuff["iaAddy"]) != '')
-                    <a href="{{ $GLOBALS['SL']->mapsURL($deptStuff['iaAddy']) }}" target="_blank"
-                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $deptStuff["iaAddy"] !!}</a><br />
+                @if (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
+                    <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
+                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a><br />
                 @endif
             @endif
                 
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverPhoneWork) 
-                        && trim($deptStuff[$deptStuff["whichOver"]]->OverPhoneWork) != '')
+                    @if (isset($d[$d["whichOver"]]->OverPhoneWork) 
+                        && trim($d[$d["whichOver"]]->OverPhoneWork) != '')
                         <i class="fa fa-phone mR5" aria-hidden="true"></i> 
-                        {{ $deptStuff[$deptStuff["whichOver"]]->OverPhoneWork }}<br />
+                        {{ $d[$d["whichOver"]]->OverPhoneWork }}<br />
                     @endif
                     <br />
                     
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubOnline) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubOnline) == 1
-                        && isset($deptStuff[$deptStuff["whichOver"]]->OverComplaintWebForm) 
-                        && trim($deptStuff[$deptStuff["whichOver"]]->OverComplaintWebForm) != '')
+                    @if (isset($d[$d["whichOver"]]->OverWaySubOnline) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubOnline) == 1
+                        && isset($d[$d["whichOver"]]->OverComplaintWebForm) 
+                        && trim($d[$d["whichOver"]]->OverComplaintWebForm) != '')
                         You can submit your complaint through this oversight agency's online complaint form. 
                         (TIP: Drop in a link to your OPC complaint too!)<br />
-                   {!! $GLOBALS["SL"]->swapURLwrap($deptStuff[$deptStuff["whichOver"]]->OverComplaintWebForm, false) !!}
+                   {!! $GLOBALS["SL"]->swapURLwrap($d[$d["whichOver"]]->OverComplaintWebForm, false) !!}
                         </a><br /><br />
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubEmail) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubEmail) == 1
-                        && isset($deptStuff[$deptStuff["whichOver"]]->OverEmail) 
-                        && trim($deptStuff[$deptStuff["whichOver"]]->OverEmail) != '')
+                    @if (isset($d[$d["whichOver"]]->OverWaySubEmail) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubEmail) == 1
+                        && isset($d[$d["whichOver"]]->OverEmail) 
+                        && trim($d[$d["whichOver"]]->OverEmail) != '')
                         You can submit your complaint by emailing this oversight agency. 
                         (We recommend you include a link to your OPC complaint in your email.)<br />
-                        <a href="mailto:{{ $deptStuff[$deptStuff['whichOver']]->OverEmail }}">{{ 
-                        $deptStuff[$deptStuff["whichOver"]]->OverEmail }}</a><br /><br />
+                        <a href="mailto:{{ $d[$d['whichOver']]->OverEmail }}">{{ 
+                        $d[$d["whichOver"]]->OverEmail }}</a><br /><br />
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverComplaintPDF) 
-                        && trim($deptStuff[$deptStuff["whichOver"]]->OverComplaintPDF) != '')
+                    @if (isset($d[$d["whichOver"]]->OverComplaintPDF) 
+                        && trim($d[$d["whichOver"]]->OverComplaintPDF) != '')
                         This oversight agency has a PDF form you can print out.<br />
-                       {!! $GLOBALS["SL"]->swapURLwrap($deptStuff[$deptStuff["whichOver"]]->OverComplaintPDF, false) !!}
+                       {!! $GLOBALS["SL"]->swapURLwrap($d[$d["whichOver"]]->OverComplaintPDF, false) !!}
                         <br /><br />
                     @endif
                     
                     If you submit your complaint on paper, we recommend that you staple a copy of your full OPC complaint together 
                     with the department form.<br /><br />
                     
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWebComplaintInfo) 
-                        && trim($deptStuff[$deptStuff["whichOver"]]->OverWebComplaintInfo) != '')
+                    @if (isset($d[$d["whichOver"]]->OverWebComplaintInfo) 
+                        && trim($d[$d["whichOver"]]->OverWebComplaintInfo) != '')
                             Complaint process information:<br />
-                   {!! $GLOBALS["SL"]->swapURLwrap($deptStuff[$deptStuff["whichOver"]]->OverWebComplaintInfo, false) !!}
+                   {!! $GLOBALS["SL"]->swapURLwrap($d[$d["whichOver"]]->OverWebComplaintInfo, false) !!}
                         <br /><br />
                     @endif
                 
                     <ul style="padding-left: 30px;">
-                    @if (!isset($deptStuff[$deptStuff["whichOver"]]->OverOfficialFormNotReq) 
-                        || intVal($deptStuff[$deptStuff["whichOver"]]->OverOfficialFormNotReq) == 0)
+                    @if (!isset($d[$d["whichOver"]]->OverOfficialFormNotReq) 
+                        || intVal($d[$d["whichOver"]]->OverOfficialFormNotReq) == 0)
                         <li>Only complaints submitted on department forms will be investigated.</li>
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubNotary) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubNotary) == 1)
+                    @if (isset($d[$d["whichOver"]]->OverWaySubNotary) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubNotary) == 1)
                         <li>Submitted complaints may require a notary to be investigated.</li>
                     @endif
-                    @if (!isset($deptStuff[$deptStuff["whichOver"]]->OverOfficialAnon) 
-                        || intVal($deptStuff[$deptStuff["whichOver"]]->OverOfficialAnon) == 0)
+                    @if (!isset($d[$d["whichOver"]]->OverOfficialAnon) 
+                        || intVal($d[$d["whichOver"]]->OverOfficialAnon) == 0)
                         <li>Anonymous complaints will not be investigated.</li>
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubVerbalPhone) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubVerbalPhone) == 1)
+                    @if (isset($d[$d["whichOver"]]->OverWaySubVerbalPhone) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubVerbalPhone) == 1)
                         <li>Complaints submitted by phone will be investigated.</li>
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubPaperMail) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubPaperMail) == 1)
+                    @if (isset($d[$d["whichOver"]]->OverWaySubPaperMail) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubPaperMail) == 1)
                         <li>Complaints submitted by snail mail will be investigated.</li>
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverWaySubPaperInPerson) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverWaySubPaperInPerson) == 1)
+                    @if (isset($d[$d["whichOver"]]->OverWaySubPaperInPerson) 
+                        && intVal($d[$d["whichOver"]]->OverWaySubPaperInPerson) == 1)
                         <li>Complaints submitted in person will be investigated.</li>
                     @endif
-                    @if (isset($deptStuff[$deptStuff["whichOver"]]->OverSubmitDeadline) 
-                        && intVal($deptStuff[$deptStuff["whichOver"]]->OverSubmitDeadline) > 0)
+                    @if (isset($d[$d["whichOver"]]->OverSubmitDeadline) 
+                        && intVal($d[$d["whichOver"]]->OverSubmitDeadline) > 0)
                         <li>Complaints must be submitted within {{ 
-                        number_format($deptStuff[$deptStuff["whichOver"]]->OverSubmitDeadline) 
+                        number_format($d[$d["whichOver"]]->OverSubmitDeadline) 
                         }} days of your incident to be investigated.</li>
                     @endif
                     </ul>
                     
-                @if ($deptStuff["whichOver"] == 'civRow')
+                @if ($d["whichOver"] == 'civRow')
                     <div class="mT20"></div>
                     <h3 class="m0">Internal Affairs Office</h3>
-                    @if (isset($deptStuff["iaAddy"]) && trim($deptStuff["iaAddy"]) != '')
-                        <a href="{{ $GLOBALS['SL']->mapsURL($deptStuff['iaAddy']) }}" target="_blank"
-                            ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $deptStuff["iaAddy"] !!}</a><br />
+                    @if (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
+                        <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
+                            ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a><br />
                     @endif
-                    @if (isset($deptStuff["iaRow"]->OverPhoneWork) 
-                        && trim($deptStuff["iaRow"]->OverPhoneWork) != '')
-                        <i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $deptStuff["iaRow"]->OverPhoneWork }}<br />
+                    @if (isset($d["iaRow"]->OverPhoneWork) 
+                        && trim($d["iaRow"]->OverPhoneWork) != '')
+                        <i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->OverPhoneWork }}<br />
                     @endif
                 @endif
             </div>
             
             <div class="slCard mT20">
                 <h4 class="m0">See something inaccurate? Please <a href="/contact">contact us</a> or 
-                <a href="/dashboard/volunteer">volunteer</a> to update these records.</h4>
+                <a href="/volunteer">volunteer</a> to update these records.</h4>
             </div>
             
         </div>
@@ -245,3 +256,19 @@
 </div> <!-- end #node1099 -->
 </div></center>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(document).on("click", ".toggleScoreInfo", function() {
+        if (document.getElementById("toggleScoreInfoDeets") && document.getElementById("scoreChev")) {
+            if (document.getElementById("toggleScoreInfoDeets").style.display != "block") {
+                document.getElementById("scoreChev").className = "fa fa-chevron-down";
+                $("#toggleScoreInfoDeets").slideDown("fast");
+            } else {
+                document.getElementById("scoreChev").className = "fa fa-chevron-right";
+                $("#toggleScoreInfoDeets").slideUp("fast");
+            }
+        }
+    });
+});
+</script>

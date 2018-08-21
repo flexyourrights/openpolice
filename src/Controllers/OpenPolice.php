@@ -48,8 +48,10 @@ use OpenPolice\Controllers\OpenPoliceAdmin;
 use OpenPolice\Controllers\OpenPoliceReport;
 use OpenPolice\Controllers\VolunteerLeaderboard;
     use OpenPolice\Controllers\VolunteerController;
+use OpenPolice\Controllers\DepartmentScores;
 
 use SurvLoop\Controllers\SurvFormTree;
+use SurvLoop\Controllers\SurvLoopStat;
 
 class OpenPolice extends SurvFormTree
 {
@@ -167,10 +169,11 @@ class OpenPolice extends SurvFormTree
     
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
     {
+//echo '<br /><br /><br />isPublished(' . $coreTbl . ', ' . $coreID . ', <pre>'; print_r($coreRec); echo '</pre>';
         if ($coreTbl == 'Complaints') {
             if (!$coreRec) $coreRec = OPComplaints::find($coreID);
             if ($coreRec && isset($coreRec->ComStatus)) {
-                return (in_array($coreRec->ComStatus, $this->getPublishedStatusList()));
+                return (in_array($coreRec->ComStatus, $this->getPublishedStatusList($coreTbl)));
             }
             return false;
         }
@@ -935,13 +938,81 @@ class OpenPolice extends SurvFormTree
             
             
         // Custom Nodes on site pages
-        } elseif (in_array($nID, [859, 1454])) { // public departments overview
-            $deptScores = OPDepartments::where('DeptScoreOpenness', '>', 0)
-                ->orderBy('DeptScoreOpenness', 'desc')
-                ->get();
+        
+        
+        // Home Page
+        } elseif ($nID == 1876) {
+            $ret .= '<div class="relDiv w100">'
+                . '<div id="photoCred" class="absDiv f8 wht opac80" style="top: -25px; right: 15px;">'
+                . '<a href="https://www.flickr.com/photos/fibonacciblue/26146967075/in/dateposted/" target="_blank" '
+                . 'class="fnt">Photo by Fibonacci Blue</a>, <a href="'
+                . 'https://creativecommons.org/licenses/by/2.0/" target="_blank" class="fnt">CC BY 2.0</a>'
+                . '</div></div>';
+                
+                
+        // FAQ
+        } elseif ($nID == 1884) {
+            $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
+                
+        // Public Departments Accessibility Overview
+        } elseif ($nID == 1858) {
+            if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
+            $ret .= $this->v["deptScores"]->printTotsBars();
+        } elseif ($nID == 1816) {
+            $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
+            if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
+            $ret .= $this->v["deptScores"]->printTotsBars();
+            /*
+            $statGrades = new SurvLoopStat;
+            $statGrades->addFilt('grade', 'Grade', 
+                ['A', 'B', 'C', 'D', 'F'],
+                ['A', 'B', 'C', 'D', 'F']); // a
+            $statGrades->addDataType('cnt', 'Departments', ' Departments'); // a
+            $statGrades->loadMap();
+            if ($this->v["deptScores"]->scoreDepts->isNotEmpty()) {
+                foreach ($this->v["deptScores"]->scoreDepts as $i => $dept) {
+                    $grade = trim($GLOBALS["SL"]->calcGrade($dept->DeptScoreOpenness));
+                    if (strlen($grade) > 1) $grade = substr($grade, 0, 1);
+                    $statGrades->resetRecFilt();
+                    $statGrades->addRecFilt('grade', $grade, $dept->DeptID);
+                    $statGrades->addRecDat('cnt', 1, $dept->DeptID);
+                }
+            }
+            $statGrades->calcStats();
+            $blue1 = $GLOBALS["SL"]->printColorFadeHex(0.6, '#FFFFFF', '#2B3493');
+            $blue2 = $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#2B3493');
+            $red2 = $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#EC2327');
+            $colors = [ '#2B3493', $blue1, $blue2, $red2, '#EC2327' ];
+            $ret = $statGrades->piePercCntCore('grade', 0.2, $colors);
+            */
+        } elseif ($nID == 1863) {
+            if (!isset($this->v["deptScores"])) {
+                $this->v["deptScores"] = new DepartmentScores;
+                $this->v["deptScores"]->loadAllDepts();
+            }
+            $GLOBALS["SL"]->loadStates();
+            $cnt = 0;
+            $limit = 10;
+            foreach ($this->v["deptScores"]->scoreDepts as $i => $dept) {
+                if ($cnt < $limit && (!isset($dept->DeptAddressLat) || intVal($dept->DeptAddressLat) == 0)) {
+                    list($lat, $lng) = $GLOBALS["SL"]->states->getLatLng($GLOBALS["SL"]->printRowAddy($dept, 'Dept'));
+                    $this->v["deptScores"]->scoreDepts[$i]->update([
+                        'DeptAddressLat' => $lat,
+                        'DeptAddressLng' => $lng
+                        ]);
+                    $cnt++;
+                }
+            }
+            $ret = $GLOBALS["SL"]->states->embedMap();
+        } elseif (in_array($nID, [859, 1454])) {
+            $GLOBALS["SL"]->addHshoo('/departments-accessibility#gradeDesc');
+            if (!isset($this->v["deptScores"])) {
+                $this->v["deptScores"] = new DepartmentScores;
+                $this->v["deptScores"]->loadAllDepts();
+            }
             $ret .= view('vendor.openpolice.nodes.859-depts-overview-public', [
                 "nID"        => $nID,
-                "deptScores" => $deptScores
+                "deptScores" => $this->v["deptScores"]
                 ])->render();
         } elseif (in_array($nID, [1456])) { // public oversight overview
             /*
@@ -966,15 +1037,25 @@ class OpenPolice extends SurvFormTree
                 }
             }
             $this->loadDeptStuff($this->v["deptID"]);
-            if ($this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
+            if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
                 $GLOBALS["SL"]->addTopNavItem('pencil', 
                     '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
             }
-            $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", ".toggleScoreInfo", function() { '
-                . '$("#toggleScoreInfoDeets").slideToggle("fast"); }); $(document).on("click", ".toggleOPCcompat", '
-                . 'function() { $("#toggleOPCcompatDeets").slideToggle("fast"); });';
+            $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
+                . '</div>';
+            $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' . $this->v["deptID"] 
+                . '&limit=20");' . "\n";
+            
+            /*
+
+            if (trim($previews) == '') {
+                $previews = '<p><i>No complaints have been submitted for this deparment.</i></p>';
+            }
+            */
             $ret .= view('vendor.openpolice.dept-page', [
-                "deptStuff" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]] ])->render();
+                "d"        => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]],
+                "previews" => $previews
+                ])->render();
                 
         // User Profile Nodes
         } elseif ($nID == 1437) {
@@ -1082,9 +1163,11 @@ class OpenPolice extends SurvFormTree
         } elseif ($nID == 1225) {
             return $this->printDeptEditHeader();
         } elseif ($nID == 1261) {
-            return view('vendor.openpolice.volun.volun-dept-edit-wiki-stats', $this->v)->render();
+            return view('vendor.openpolice.nodes.1261-volun-dept-edit-wiki-stats', $this->v)->render();
+        } elseif ($nID == 1809) {
+            return view('vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate', $this->v)->render();
         } elseif ($nID == 1227) {
-            return view('vendor.openpolice.volun.volun-dept-edit-search-complaint', $this->v)->render();
+            return view('vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', $this->v)->render();
         } elseif (in_array($nID, [1228, 1229])) {
             return $this->printDeptEditContact($nID);
         } elseif ($nID == 1231) {
@@ -1688,24 +1771,27 @@ class OpenPolice extends SurvFormTree
         return $str;
     }
     
-    protected function getLoopItemLabelCustom($loop, $itemRow = [], $itemInd = -3)
+    protected function getLoopItemLabelCustom($loop, $itemRow = null, $itemInd = -3)
     {
         //if ($itemIndex < 0) return '';
+        if (!$itemRow) return '';
         if (in_array($loop, ['Victims', 'Witnesses'])) {
             return $this->getCivName($loop, $itemRow, $itemInd);
         } elseif ($loop == 'Civilians') {
-            return $this->getCivilianNameFromID($itemRow->getKey());
+            if (isset($itemRow->CivID)) return $this->getCivilianNameFromID($itemRow->CivID);
         } elseif (in_array($loop, ['Officers', 'Excellent Officers'])) {
             return $this->getOfficerName($itemRow, $itemInd);
         } elseif ($loop == 'Departments') {
             return $this->getDeptName($itemRow, $itemInd);
         } elseif ($loop == 'Events') {
-            return $this->getEventLabel($itemRow->getKey());
+            if (isset($itemRow->EveID)) return $this->getEventLabel($itemRow->EveID);
         } elseif ($loop == 'Injuries') {
-            return $this->getCivilianNameFromID($itemRow->InjSubjectID) . ': ' 
-                .  $GLOBALS["SL"]->def->getVal('Injury Types', $itemRow->InjType);
+            if (isset($itemRow->InjSubjectID) && isset($itemRow->InjType)) {
+                return $this->getCivilianNameFromID($itemRow->InjSubjectID) . ': ' 
+                    .  $GLOBALS["SL"]->def->getVal('Injury Types', $itemRow->InjType);
+            }
         } elseif ($loop == 'Medical Care') {
-            return $this->getCivilianNameFromID($itemRow->InjCareSubjectID);
+            if (isset($itemRow->InjCareSubjectID)) return $this->getCivilianNameFromID($itemRow->InjCareSubjectID);
         } elseif ($loop == 'Citations') { // why isn't this working?!
             if (isset($itemRow->StopEventSequenceID) && intVal($itemRow->StopEventSequenceID) > 0) {
                 $eveID = $itemRow->StopEventSequenceID;
@@ -1797,6 +1883,30 @@ class OpenPolice extends SurvFormTree
             return $GLOBALS["SL"]->printHeight(intVal($val));
         }
         return $val;
+    }
+    
+    protected function processSearchFilt($key, $val)
+    {
+        if ($key == 'd') {
+            $deptComs = $both = [];
+            $chk = OPLinksComplaintDept::where('LnkComDeptDeptID', $val)
+                ->get();
+            if ($chk->isNotEmpty()) {
+                foreach ($chk as $com) $deptComs[] = $com->LnkComDeptComplaintID;
+                $chk = OPComplaints::whereIn('ComID', $deptComs)
+                    ->get();
+                $deptComs = [];
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $com) {
+                        if (in_array($com->ComPublicID, $this->allPublicFiltIDs)) {
+                            $both[] = $com->ComPublicID;
+                        }
+                    }
+                }
+            }
+            $this->allPublicFiltIDs = $both;
+        }
+        return true;
     }
     
     protected function processTokenAccessRedirExtra()
@@ -2680,7 +2790,6 @@ class OpenPolice extends SurvFormTree
     protected function getOffReportNameHeader($nID)
     {
         list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('Officers');
-echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
         return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
             . $this->getOffReportName($this->sessData->getRowById('Officers', $this->sessData->getLatestDataBranchID()),
                 $itemInd)
@@ -2753,25 +2862,37 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
     
     protected function getOffProfan()
     {
+        $cnt = 0;
         $profanity = '';
         if (isset($this->sessData->dataSets["Officers"]) && sizeof($this->sessData->dataSets["Officers"]) > 0) {
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
-                if ($off->OffUsedProfanity == 'Y') $profanity .= ', ' . $this->getOffReportName($off);
+                if ($off->OffUsedProfanity == 'Y') {
+                    $cnt++;
+                    $profanity .= ', ' . $this->getOffReportName($off);
+                }
             }
         }
-        if (trim($profanity) != '') return ['Officer Profanity', substr($profanity, 1)];
+        if (trim($profanity) != '') {
+            return ['Officer' . (($cnt > 1) ? 's' : '') . ' used profanity?', substr($profanity, 1)];
+        }
         return [];
     }
     
     protected function getCivProfan()
     {
+        $cnt = 0;
         $profanity = '';
         if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
             foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
-                if ($civ->CivUsedProfanity == 'Y') $profanity .= ', ' . $this->getCivReportName($civ->getKey());
+                if ($civ->CivUsedProfanity == 'Y') {
+                    $cnt++;
+                    $profanity .= ', ' . $this->getCivReportName($civ->getKey());
+                }
             }
         }
-        if (trim($profanity) != '') return ['Subject Profanity', substr($profanity, 1)];
+        if (trim($profanity) != '') {
+            return ['Civilian' . (($cnt > 1) ? 's' : '') . ' used profanity?', substr($profanity, 1)];
+        }
         return [];
     }
     
@@ -2854,16 +2975,16 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
     {
         $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)
             ->first();
-        if ($this->chkOverUserHasCore() && $GLOBALS["SL"]->REQ->has('overUpdate') 
-            && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1) {
-            if ($overRow && isset($overRow->OverDeptID)) {
+        if ($this->chkOverUserHasCore()) {
+            if ($GLOBALS["SL"]->REQ->has('overUpdate') && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1
+                && $overRow && isset($overRow->OverDeptID)) {
                 $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->OverID);
                 $newReview = new OPzComplaintReviews;
-                $newReview->ComRevComplaint  = $this->coreID;
-                $newReview->ComRevUser       = $this->v["user"]->id;
-                $newReview->ComRevDate       = date("Y-m-d H:i:s");
-                $newReview->ComRevType       = 'Oversight';
-                $newReview->ComRevNote       = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                $newReview->ComRevComplaint = $this->coreID;
+                $newReview->ComRevUser      = $this->v["user"]->id;
+                $newReview->ComRevDate      = date("Y-m-d H:i:s");
+                $newReview->ComRevType      = 'Oversight';
+                $newReview->ComRevNote      = (($GLOBALS["SL"]->REQ->has('overNote')) 
                     ? trim($GLOBALS["SL"]->REQ->overNote) : '');
                 if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
                     if ($GLOBALS["SL"]->REQ->overStatus == 'Received by Oversight') {
@@ -2876,6 +2997,8 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
                     $newReview->ComRevStatus = $GLOBALS["SL"]->REQ->overStatus;
                 }
                 $newReview->save();
+            } elseif ($GLOBALS["SL"]->REQ->has('upResult') && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
+                
             }
         }
         return view('vendor.openpolice.nodes.1711-report-inc-oversight-tools', [
@@ -3551,6 +3674,7 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
     
     public function loadDeptStuff($deptID = -3)
     {
+        if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
         if ($deptID > 0 && !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
             $GLOBALS["SL"]->x["depts"][$deptID] = [ "id" => $deptID ];
             $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] = OPDepartments::find($deptID);
@@ -3651,43 +3775,15 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
             }
             
             if (isset($GLOBALS["SL"]->x["depts"]) && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
-                && isset($GLOBALS["SL"]->x["depts"][$deptID][$which])) {
-                $overRow = $GLOBALS["SL"]->x["depts"][$deptID][$which];
+                && isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"])) {
                 $GLOBALS["SL"]->x["depts"][$deptID]["score"] = [];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 30, 'Has online complaint submission form', 
-                    (isset($overRow->OverWaySubOnline) && intVal($overRow->OverWaySubOnline) == 1
-                    && isset($overRow->OverComplaintWebForm) && trim($overRow->OverComplaintWebForm) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 20, 'Has complaint information on website', 
-                    (isset($overRow->OverWebComplaintInfo)) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 
-                    'Has complaint information linked from home page', 
-                    (isset($overRow->OverHomepageComplaintLink) && trim($overRow->OverHomepageComplaintLink) == 'Y') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Has complaint form PDF on website', 
-                    (isset($overRow->OverComplaintPDF) && trim($overRow->OverComplaintPDF) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Investigates complaints sent via email', 
-                    (isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
-                    && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 
-                    'Official dept. form not required for investigation', 
-                    (isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) > 0) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 15, 'Anonymous complaints investigated', 
-                    (isset($overRow->OverOfficialAnon) && intVal($overRow->OverOfficialAnon) == 1) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a unique department website', 
-                    (isset($overRow->OverWebsite) && trim($overRow->OverWebsite) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Facebook page', 
-                    (isset($overRow->OverFacebook) && trim($overRow->OverFacebook) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a Twitter account', 
-                    (isset($overRow->OverTwitter) && trim($overRow->OverTwitter) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 5, 'Has a YouTube channel', 
-                    (isset($overRow->OverYouTube) && trim($overRow->OverYouTube) != '') ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 3, 'Investigates complaints sent via phone', 
-                    (isset($overRow->OverWaySubVerbalPhone) && intVal($overRow->OverWaySubVerbalPhone) == 1) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 2, 'Investigates complaints sent via snail mail', 
-                    (isset($overRow->OverWaySubPaperMail) && intVal($overRow->OverWaySubPaperMail) == 1) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ 0, 'Requires complaints to be filed in person', 
-                    (isset($overRow->OverWaySubPaperInPerson) && intVal($overRow->OverWaySubPaperInPerson) == 1) ];
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [ -10, 'Requires Notary (for any type of complaint)', 
-                    (isset($overRow->OverWaySubNotary) && intVal($overRow->OverWaySubNotary) == 1) ];
+                foreach ($this->v["deptScores"]->vals as $type => $specs) {
+                    $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [
+                        $specs->score,
+                        $specs->label,
+                        ($this->v["deptScores"]->checkRecFld($specs, $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) != 0)
+                        ];
+                }
             }
         }
         return true;
@@ -4068,6 +4164,7 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
                 $this->v["currOverUpdateRow"]->save();
             }
         }
+        if (!isset($this->v["currOverUpdateRow"])) $this->v["currOverUpdateRow"] = null;
         return $this->v["currOverUpdateRow"];
     }
     
@@ -4121,6 +4218,10 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
     
     public function printVolunAllList()
     {
+        if ($GLOBALS["SL"]->REQ->has('refresh')) {
+            $this->v["deptScores"] = new DepartmentScores;
+            $this->v["deptScores"]->recalcAllDepts();
+        }
         if ($GLOBALS["SL"]->REQ->has('newDept') && intVal($GLOBALS["SL"]->REQ->get('newDept')) == 1
             && $GLOBALS["SL"]->REQ->has('deptName') && trim($GLOBALS["SL"]->REQ->get('deptName')) != '') {
             $newDept = $this->newDeptAdd($GLOBALS["SL"]->REQ->get('deptName'), 
@@ -4261,7 +4362,7 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
     public function printVolunLocationForm()
     {
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.volun.volunteer-basic-info-form', $this->v)->render();
+        return view('vendor.openpolice.nodes.1217-volun-home-your-info', $this->v)->render();
     }
     
     public function saveDefaultState(Request $request)
@@ -4522,7 +4623,8 @@ echo '<br /><br /><br />getOffReportNameHeader(itemInd: ' . $itemInd . '<br />';
         $this->loadDeptEditsSummary();
         $GLOBALS["SL"]->loadStates();
         $GLOBALS["SL"]->x["admMenuCustom"] = $this->genDeptAdmTopMenu();
-        return view('vendor.openpolice.volun.volun-dept-edit-header', $this->v)->render();
+        if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
+        return view('vendor.openpolice.nodes.1225-volun-dept-edit-header', $this->v)->render();
     }
     
     protected function printDeptEditContact($nID)

@@ -1,7 +1,7 @@
-<!-- resources/views/vendor/openpolice/volun/volun-dept-edit-header.blade.php -->
+<!-- resources/views/vendor/openpolice/nodes/1225-volun-dept-edit-header.blade.php -->
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
 <div id="fixedHeader" class="fixed">
-    <div class="row mTn5">
+    <div class="row mT5">
         <div class="col-md-9">
             <h2 class="slBlueDark m0">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h2>
         </div><div class="col-md-3 taR">
@@ -11,15 +11,15 @@
             <div class="fC"></div>
         </div>
     </div>
-    <div class="slGrey">
+    <div class="slGrey mB10">
         {{ $deptRow->DeptAddressCity }}, {{ $deptRow->DeptAddressState }} {{ $deptRow->DeptAddressZip }}
         {!! $editsSummary[0] !!}
     </div>
 </div>
-<div class="row" style="margin-top: 60px;">
+<div class="row" style="margin-top: 90px;">
     <div class="col-md-7">
         <h2 class="m0">Department Main Contact Info</h2>
-    </div><div class="col-md-5 taR">
+    </div><div class="col-md-5">
         <!-- <div id="ScoreDeet" class="disNon w100 row2 p15">
             
         </div> -->
@@ -37,48 +37,47 @@ $(document).ready(function(){
     function chkDeptScore() {
         if (document.getElementById("n1226FldID") && document.getElementById("opcScore")) {
             var score = 0;
-            
             if (document.getElementById("n1272FldID") && document.getElementById("n1272FldID").value.trim() != '') {
-                score+=5;
+                score+={{ $deptScores->vals["HasWebsite"]->score }};
             }
             if (document.getElementById("n1274FldID") && document.getElementById("n1274FldID").value.trim() != '') {
-                score+=5;
+                score+={{ $deptScores->vals["HasFace"]->score }};
             }
             if (document.getElementById("n1275FldID") && document.getElementById("n1275FldID").value.trim() != '') {
-                score+=5;
+                score+={{ $deptScores->vals["HasTwit"]->score }};
             }
             if (document.getElementById("n1276FldID") && document.getElementById("n1276FldID").value.trim() != '') {
-                score+=5;
+                score+={{ $deptScores->vals["HasYou"]->score }};
             }
             if (document.getElementById("n1278fld0") && document.getElementById("n1278fld0").checked) {
-                score+=15;
+                score+={{ $deptScores->vals["WebInfoHome"]->score }};
             }
             if (document.getElementById("n1279FldID") && document.getElementById("n1279FldID").value.trim() != '') {
-                score+=20;
+                score+={{ $deptScores->vals["WebInfo"]->score }};
             }
             if (document.getElementById("n1280FldID") && document.getElementById("n1280FldID").value.trim() != '') {
-                score+=15;
+                score+={{ $deptScores->vals["PdfForm"]->score }};
             }
             if (document.getElementById("n1286FldID") && document.getElementById("n1286FldID").value.trim() != '') {
-                score+=30;
+                score+={{ $deptScores->vals["WebForm"]->score }};
             }
             if (document.getElementById("n1285fld0") && document.getElementById("n1285fld0").checked) {
-                score+=15;
+                score+={{ $deptScores->vals["ByEmail"]->score }};
             }
             if (document.getElementById("n1285fld1") && document.getElementById("n1285fld1").checked) {
-                score+=3;
+                score+={{ $deptScores->vals["ByPhone"]->score }};
             }
             if (document.getElementById("n1285fld2") && document.getElementById("n1285fld2").checked) {
-                score+=2;
+                score+={{ $deptScores->vals["ByPostal"]->score }};
             }
             if (document.getElementById("n1287fld0") && document.getElementById("n1287fld0").checked) {
-                score+=15;
+                score+={{ $deptScores->vals["OfficForm"]->score }};
             }
             if (document.getElementById("n1287fld1") && document.getElementById("n1287fld1").checked) {
-                score+=15;
+                score+={{ $deptScores->vals["Anonymous"]->score }};
             }
             if (document.getElementById("n1287fld2") && document.getElementById("n1287fld2").checked) {
-                score-=10;
+                score{{ str_replace('-', '-=', $deptScores->vals["Notary"]->score) }};
             }
             document.getElementById("n1226FldID").value = score;
             document.getElementById("opcScore").innerHTML = score;

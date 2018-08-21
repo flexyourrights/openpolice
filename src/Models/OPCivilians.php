@@ -11,9 +11,6 @@ class OPCivilians extends Model
     protected $fillable   = 
     [    
 		'CivComplaintID', 
-		'CivVictimUseWeapon', 
-		'CivVictimHadWeapon', 
-		'CivVictimWhatWeapon', 
 		'CivUserID', 
 		'CivIsCreator', 
 		'CivRole', 
@@ -21,19 +18,21 @@ class OPCivilians extends Model
 		'CivPhysDescID', 
 		'CivGiveName', 
 		'CivGiveContactInfo', 
-		'CivGivePhysDesc', 
+		'CivOccupation', 
 		'CivHadVehicle', 
 		'CivChase', 
-		'CivInPreviousVehicle', 
 		'CivResident', 
 		'CivChaseType', 
+		'CivVictimHadWeapon', 
+		'CivVictimWhatWeapon', 
+		'CivVictimUseWeapon', 
 		'CivCameraRecord', 
 		'CivUsedProfanity', 
-		'CivOccupation', 
-		'CivGivenCitation', 
-		'CivGivenWarning', 
 		'CivHasInjury', 
 		'CivHasInjuryCare', 
+		'CivGivenCitation', 
+		'CivGivenWarning', 
+		'CivChargesOther', 
     ];
     
     // END SurvLoop auto-generated portion of Model

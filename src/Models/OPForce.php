@@ -22,7 +22,6 @@ class OPForce extends Model
 		'ForOrdersSubjectResponse', 
 		'ForWhileHandcuffed', 
 		'ForWhileHeldDown', 
-		'ForAllegUnreasonable', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -11,6 +11,7 @@ class OPLinksComplaintOversight extends Model
     protected $fillable   = 
     [    
 		'LnkComOverComplaintID', 
+		'LnkComOverDeptID', 
 		'LnkComOverOverID', 
 		'LnkComOverSubmitted', 
 		'LnkComOverStillNoResponse', 

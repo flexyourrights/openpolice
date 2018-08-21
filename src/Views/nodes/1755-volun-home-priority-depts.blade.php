@@ -7,7 +7,7 @@
 <div class="list-group taL">
     @forelse ($deptPriorityRows as $dept)
         <a class="list-group-item" href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-            <div class="pull-right taR">
+            <div class="pull-right deptRgtCol">
                 @if (intVal($dept->DeptScoreOpenness) > 0)
                     <h3 class="m0">{{ $dept->DeptScoreOpenness }}</h3>
                     {!! view('vendor.openpolice.volun.volunteer-recent-edits', [

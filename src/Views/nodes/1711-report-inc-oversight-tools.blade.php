@@ -1,7 +1,8 @@
 <!-- resources/views/vendor/openpolice/nodes/1711-report-inc-oversight-tools.blade.php -->
 <div class="alert alert-danger fade in alert-dismissible show" 
     style="padding: 10px 15px; margin: 20px 0px 20px 0px; color: #a94442;">
-    <b>NOTICE TO @if (isset($overRow->OverAgncName)) {{ strtoupper($overRow->OverAgncName) }} @else OVERSIGHT @endif STAFF:</b>
+    <b>NOTICE TO 
+    @if (isset($overRow->OverAgncName)) {{ strtoupper($overRow->OverAgncName) }} @else OVERSIGHT @endif STAFF:</b>
     This view may contain sensitive personal information. Please share with appropriate oversight staff only.
 </div>
 
@@ -130,9 +131,9 @@
                 @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Submitted to Oversight')
                     <label class="finger">
                         <input type="radio" id="overStatus5" name="overStatus" autocomplete="off" 
-                            value="Declined To Investigate (Closed)" 
+                            value="OK to Submit to Oversight" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
-                                == 'Declined To Investigate (Closed)') CHECKED @endif > 
+                                == 'OK to Submit to Oversight') CHECKED @endif > 
                         <span class="mL5" style="font-weight: normal;">
                         @if (isset($overRow->OverAgncName)) {{ $overRow->OverAgncName }} 
                         @else This oversight agency @endif cannot investigate this complaint as is</span>

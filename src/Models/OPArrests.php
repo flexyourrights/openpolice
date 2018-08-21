@@ -16,12 +16,9 @@ class OPArrests extends Model
 		'ArstStatedReasonDesc', 
 		'ArstMiranda', 
 		'ArstSITA', 
-		'ArstChargesOther', 
 		'ArstNoChargesFiled', 
 		'ArstStrip', 
 		'ArstStripSearchDesc', 
-		'ArstAllegWrongfulArrest', 
-		'ArstAllegRetaliatoryCharges', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -37,6 +37,8 @@ class OPZeditDepartments extends Model
 		'ZedDeptDeptUniqueStr', 
 		'ZedDeptDeptIPaddy', 
 		'ZedDeptDeptIsMobile', 
+		'ZedDeptDeptAddressLat', 
+		'ZedDeptDeptAddressLng', 
     ];
     
     // END SurvLoop auto-generated portion of Model
