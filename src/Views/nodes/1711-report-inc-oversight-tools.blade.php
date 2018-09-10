@@ -165,10 +165,10 @@
             
         <div class="slCard">
             <a href="/complaint-read/{{ $complaint->ComPublicID }}/full-pdf" target="_blank"
-                class="btn btn-lg btn-default disBlo taL"><nobr><i class="fa fa-print mR5" aria-hidden="true"></i> 
+                class="btn btn-lg btn-secondary disBlo taL"><nobr><i class="fa fa-print mR5" aria-hidden="true"></i> 
                 Print Complaint</nobr> / <nobr>Save as PDF</nobr></a>
             <div class="mT20"><a href="/complaint-read/{{ $complaint->ComPublicID }}/full-xml" target="_blank"
-                class="btn btn-lg btn-default disBlo taL"
+                class="btn btn-lg btn-secondary disBlo taL"
                 ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> Download Raw Data File</a></div>
             <?php /*
             <h4 class="mT20 pT20 mB5"><i class="fa fa-link mR3" aria-hidden="true"></i> Public Link To Share:</h4>

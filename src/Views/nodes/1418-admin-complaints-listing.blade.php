@@ -15,7 +15,7 @@
     <div class="row">
     @if (isset($fltDept) && intVal($fltDept) > 0)
         <div class="col-md-8">
-            <select name="fltStatus" id="fltStatusID" class="form-control input-lg" autocomplete="off">
+            <select name="fltStatus" id="fltStatusID" class="form-control form-control-lg" autocomplete="off">
                 <option value="0" @if (!isset($fltStatus) || intVal($fltStatus) <= 0) SELECTED @endif 
                     >Any Status</option>
                 {!! $GLOBALS["SL"]->def->getSetDrop('Complaint Status', $fltStatus,
@@ -23,11 +23,11 @@
             </select>
         </div>
         <div class="col-md-4">
-            <a id="applyFilts" class="btn btn-default btn-lg w100" href="javascript:;">Apply Filter</a>
+            <a id="applyFilts" class="btn btn-secondary btn-lg w100" href="javascript:;">Apply Filter</a>
         </div>
     @else
         <div class="col-md-4">
-            <select name="fltView" id="fltViewID" class="form-control input-lg" autocomplete="off">
+            <select name="fltView" id="fltViewID" class="form-control form-control-lg" autocomplete="off">
                 <option value="all" @if ($listView == 'all') SELECTED @endif 
                     >All Complete Complaints</option>
                 <option value="review" @if ($listView == 'review') SELECTED @endif 
@@ -41,7 +41,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <select name="fltStatus" id="fltStatusID" class="form-control input-lg" autocomplete="off">
+            <select name="fltStatus" id="fltStatusID" class="form-control form-control-lg" autocomplete="off">
                 <option value="0" @if (!isset($fltStatus) || intVal($fltStatus) <= 0) SELECTED @endif 
                     >Any Status</option>
                 {!! $GLOBALS["SL"]->def->getSetDrop('Complaint Status', $fltStatus,
@@ -49,7 +49,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <a id="applyFilts" class="btn btn-default btn-lg w100" href="javascript:;">Apply Filters</a>
+            <a id="applyFilts" class="btn btn-secondary btn-lg w100" href="javascript:;">Apply Filters</a>
         </div>
     @endif
     </div>

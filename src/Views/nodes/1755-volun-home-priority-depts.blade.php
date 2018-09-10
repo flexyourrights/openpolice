@@ -1,13 +1,13 @@
 <!-- resources/views/vendor/openpolice/nodes/1755-volun-home-priority-depts.blade.php -->
 @if (sizeof($deptPriorityRows) > 0) 
-    <h2 class="m0 slRedDark pull-right"><i class="fa fa-warning" aria-hidden"true"=""></i></h2>
+    <h2 class="m0 slRedDark float-right"><i class="fa fa-warning" aria-hidden"true"=""></i></h2>
 @endif
 <h2 class="mT0">Priority Departments</h2>
 <div class="pB5 gry6">Click a department below to verify it's information:</div>
 <div class="list-group taL">
     @forelse ($deptPriorityRows as $dept)
         <a class="list-group-item" href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-            <div class="pull-right deptRgtCol">
+            <div class="float-right deptRgtCol">
                 @if (intVal($dept->DeptScoreOpenness) > 0)
                     <h3 class="m0">{{ $dept->DeptScoreOpenness }}</h3>
                     {!! view('vendor.openpolice.volun.volunteer-recent-edits', [

@@ -10,8 +10,8 @@
         <i class="gry9 f16">( {{ number_format(sizeof($printVoluns[0])) }} )</i></h1>
     </div>
     <div class="col-md-6 taR p20">
-        <a href="/dashboard/users" class="btn btn-default">Manage Users</i></a>
-        <a href="/dashboard/volun/email" class="btn btn-default">Email Users</i></a>
+        <a href="/dashboard/users" class="btn btn-secondary">Manage Users</i></a>
+        <a href="/dashboard/volun/email" class="btn btn-secondary">Email Users</i></a>
     </div>
 </div>
 

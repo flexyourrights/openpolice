@@ -195,7 +195,7 @@
 @endif
 
 @if ((!isset($GLOBALS["SL"]->x["isPrintPDF"]) || !$GLOBALS["SL"]->x["isPrintPDF"]) && $isOwner && !$GLOBALS["SL"]->REQ->has('wdg'))
-    <div class="pull-right p10 mBn20">
+    <div class="float-right p10 mBn20">
         @if (!$GLOBALS["SL"]->REQ->has('publicView')) <a href="?publicView=public">Switch To Public View</a>
         @else <a href="?">Switch To Owner/Investigator View</a> @endif
         <a id="hidivBtnPrevPub" class="hidivBtn mL5 slGrey" href="javascript:;"

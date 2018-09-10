@@ -7,6 +7,6 @@
     </div><div class="col-md-5">
         <div class="p5"></div>
         <a href="https://www.google.com/search?as_q={{ urlencode($deptRow->DeptName . ' file complaint against') }}" 
-            class="btn btn-default" target="_blank">Complaints Search <i class="fa fa-google mL10"></i></a>
+            class="btn btn-secondary" target="_blank">Complaints Search <i class="fa fa-google mL10"></i></a>
     </div>
 </div>

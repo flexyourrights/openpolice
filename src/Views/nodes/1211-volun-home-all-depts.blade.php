@@ -8,14 +8,14 @@
     <div class="row mB10">
         <div class="col-md-4">
             <i class="fa fa-filter" aria-hidden="true"></i> Filter by<br />
-            <select name="deptState" id="deptStateID" class="form-control input-lg" onChange="runDeptSearch();">
+            <select name="deptState" id="deptStateID" class="form-control form-control-lg" onChange="runDeptSearch();">
                 <option value="" @if (!$GLOBALS["SL"]->REQ->has('state')) SELECTED @endif >select state</option>
                 {!! $GLOBALS["SL"]->states->stateDrop(($GLOBALS["SL"]->REQ->has('state')) 
                     ? $GLOBALS["SL"]->REQ->get('state') : '') !!}
             </select>
         </div><div class="col-md-4">
             <i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Sort by<br />
-            <select name="deptSort" id="deptSortID" class="form-control input-lg" onChange="runDeptSearch();">
+            <select name="deptSort" id="deptSortID" class="form-control form-control-lg" onChange="runDeptSearch();">
                 <option value="recent" @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
                     >Recently Verified</option>
                 <option value="best" @if (isset($viewType) && $viewType == 'best') SELECTED @endif 
@@ -31,14 +31,14 @@
 @endif
 
 <div class="w100 slGrey" style="padding: 0px 15px 5px 15px;">
-    <div class="pull-right deptRgtCol"><nobr>Accessibility Score</nobr><br /><i>Last Verified</i></div>
+    <div class="float-right deptRgtCol"><nobr>Accessibility Score</nobr><br /><i>Last Verified</i></div>
     Police Department Name,<br /><i>City, State</i>
 </div>
 <div id="deptListGroup" class="list-group taL">
     @forelse ($deptRows as $i => $dept)
         @if ($i < 500)
             <a class="list-group-item" href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-                <div class="pull-right deptRgtCol">
+                <div class="float-right deptRgtCol">
                     @if (intVal($dept->DeptScoreOpenness) > 0)
                         <h3 class="m0">{{ $dept->DeptScoreOpenness }}</h3>
                         {!! view('vendor.openpolice.volun.volunteer-recent-edits', [
@@ -78,13 +78,13 @@
         <div class="col-md-8">
             <fieldset class="form-group">
                 <label for="deptNameID">Department Name</label>
-                <input id="deptNameID" name="deptName" type="text" value="" class="form-control input-lg" >
+                <input id="deptNameID" name="deptName" type="text" value="" class="form-control form-control-lg" >
             </fieldset>
         </div>
         <div class="col-md-4">
             <fieldset class="form-group">
                 <label for="DeptAddressStateID">State</label>
-                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control input-lg" 
+                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control form-control-lg" 
                     autocomplete="off" >{!! $GLOBALS['SL']->states->stateDrop('', true) !!}
                 </select>
             </fieldset>

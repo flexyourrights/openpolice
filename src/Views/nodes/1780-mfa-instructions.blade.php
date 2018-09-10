@@ -16,7 +16,7 @@
                 new code sent to <b>{{ $user->email }}</b>.
                 </p>
                 <div class="pL10">
-                    <a href="?resend=access" class="btn btn-default" style="width: 190px;"
+                    <a href="?resend=access" class="btn btn-secondary" style="width: 190px;"
                         ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> Email New Key Code</a>
                 </div>
             </div>
@@ -58,7 +58,7 @@
 to view the full details of this record. To finished gaining full access, either enter the Key Code sent to you, or 
 <a href="/login">login</a> using <b>{{ $user->email }}</b>. 
 </p><p>
-<i class="fa fa-key fa-flip-horizontal icoHuge pull-right mL5 mB10" align="left" aria-hidden="true"></i>
+<i class="fa fa-key fa-flip-horizontal icoHuge float-right mL5 mB10" align="left" aria-hidden="true"></i>
 If the account for <span class="slBlueDark">{{ $user->email }}</span> has not really been setup yet, you can use the 
 <a href="/password/reset">reset password tool</a> to gain access to it by email.
 This will also make it easier for you to access full records in the future.
@@ -67,7 +67,7 @@ This will also make it easier for you to access full records in the future.
 <b class="slBlueDark">For security, your key code expires after 7 days.</b>
 Only the most recently emailed key code will work, only for the week after it is sent.
 </p><p>
-<a href="?resend=access" class="btn btn-default mL10 mT10 mB10 disBlo pull-right"
+<a href="?resend=access" class="btn btn-secondary mL10 mT10 mB10 disBlo float-right"
     ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> Email Fresh Key Code</a>
 If your key code has expired or does not work, please click this button 
 to have a fresh key code quickly sent to <span class="slBlueDark">{{ $user->email }}</span>.

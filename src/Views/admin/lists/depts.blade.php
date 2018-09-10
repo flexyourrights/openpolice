@@ -9,8 +9,8 @@
     <nobr><span class="f14">({{ number_format(sizeof($departments)) }})</span></nobr>
 </h1>
 
-<a href="javascript:;" class="btn btn-default mR10" disabled ><i class="fa fa-plus-circle"></i> Add New Department</a>
-<a href="/dashboard/volunteer/all" class="btn btn-default mR10">All Departments</a>
+<a href="javascript:;" class="btn btn-secondary mR10" disabled ><i class="fa fa-plus-circle"></i> Add New Department</a>
+<a href="/dashboard/volunteer/all" class="btn btn-secondary mR10">All Departments</a>
 
 <div class="p5"></div>
 

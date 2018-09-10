@@ -24,7 +24,7 @@
             
         </div> -->
         <a href="https://www.google.com/search?as_q={{ $deptRow->DeptName }}, {{ $deptRow->DeptAddressState }} {{ 
-            $deptRow->DeptAddressZip }}" class="btn btn-default" target="_blank"
+            $deptRow->DeptAddressZip }}" class="btn btn-secondary" target="_blank"
             >Begin Department Search <i class="fa fa-google mL10"></i></a>
     </div>
 </div>

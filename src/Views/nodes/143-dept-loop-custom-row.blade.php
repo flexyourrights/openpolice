@@ -23,10 +23,10 @@
                         >{{ $loopItem->DeptWebsite }}</a> @endif 
                     </p>
                 </div>
-                <a href="javascript:;" id="editLoopItem{{ $itemID }}" class="editLoopItem btn btn-default mL10 mR10 fR"
+                <a href="javascript:;" id="editLoopItem{{ $itemID }}" class="editLoopItem btn btn-secondary mL10 mR10 fR"
                     ><i class="fa fa-pencil fa-flip-horizontal"></i> Edit</a>
                 <a href="javascript:;" id="delLoopItem{{ $itemID }}" 
-                    class="delLoopItem nFormLnkDel nobld btn btn-default mL10 mR10 fR"
+                    class="delLoopItem nFormLnkDel nobld btn btn-secondary mL10 mR10 fR"
                     ><i class="fa fa-times"></i> Delete</a>
                 <input type="checkbox" class="disNon" 
                     name="delItem[]" id="delItem{{ $itemID }}" value="{{ $itemID }}" >

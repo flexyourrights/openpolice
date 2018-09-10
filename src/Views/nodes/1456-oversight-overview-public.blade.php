@@ -7,7 +7,7 @@
 <p>&nbsp;</p>
 
 <div class="slCard reportBlock">
-<h3 class="pull-right m0 slGrey">Found {{ $oversights->count() }}</h3>
+<h3 class="float-right m0 slGrey">Found {{ $oversights->count() }}</h3>
 <h2 class="mT0">Police Departments Oversight Agencies</h2>
 <p>The OPC Accessibility Score is calculated by the policies and online tools run by each department and the 
 oversight agency where we submit reports.</p>

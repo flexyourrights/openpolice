@@ -8,22 +8,22 @@
             <div class="col-md-6">
                 <a class="btn btn-lg btn-primary disBlo mT10 mB10" href="?firstReview=296" style="color: #FFF;">
                 Police Complaint</a>
-                <a class="btn btn-lg btn-default disBlo mT10" href="?firstReview=297">
+                <a class="btn btn-lg btn-secondary disBlo mT10" href="?firstReview=297">
                 Not About Police</a>
             </div><div class="col-md-6">
                 <div class="row mB0 pB0">
                     <div class="col-md-4">
-                        <a class="btn btn-lg btn-default disBlo mT10 mB10" href="?firstReview=298">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=298">
                         Abuse</a>
                     </div><div class="col-md-4">
-                        <a class="btn btn-lg btn-default disBlo mT10 mB10" href="?firstReview=299">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=299">
                         Spam</a>
                     </div><div class="col-md-4">
-                        <a class="btn btn-lg btn-default disBlo mT10 mB10" href="?firstReview=300">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=300">
                         Test Submission</a>
                     </div>
                 </div>
-                <a class="btn btn-lg btn-default disBlo" href="?firstReview=301">
+                <a class="btn btn-lg btn-secondary disBlo" href="?firstReview=301">
                 Not Sure</a>
             </div>
         </div>
@@ -62,7 +62,7 @@
                     @forelse ($currEmail as $j => $email)
                         @if ($j > 0) <div class="pT20"><hr></div> @else <div class="p5"></div> @endif
                         Send To
-                        <select class="form-control input-lg w100 changeEmailTo" autocomplete=off 
+                        <select class="form-control form-control-lg w100 changeEmailTo" autocomplete=off 
                             name="emailTo{{ $j }}" id="emailTo{{ $j }}ID">
                         @forelse ($emailsTo[$email["rec"]->EmailType] as $i => $ema)
                             <option value="{{ $ema[0] }}" @if ($ema[2]) SELECTED @endif 
@@ -75,17 +75,17 @@
                             <div class="col-md-6">
                                 Recipient Name
                                 <input type="text" name="emailTo{{ $j }}CustName" id="emailTo{{ $j }}CustNameID" 
-                                    class="form-control input-lg" autocomplete=off >
+                                    class="form-control form-control-lg" autocomplete=off >
                             </div>
                             <div class="col-md-6">
                                 Recipient Email
                                 <input type="text" name="emailTo{{ $j }}CustEmail" id="emailTo{{ $j }}CustEmailID" 
-                                    class="form-control input-lg" autocomplete=off >
+                                    class="form-control form-control-lg" autocomplete=off >
                             </div>
                         </div>
                         <div class="p10"></div>
                         Email Subject
-                        <input type="text" class="form-control input-lg w100" name="emailSubj{{ $j }}" 
+                        <input type="text" class="form-control form-control-lg w100" name="emailSubj{{ $j }}" 
                             id="emailSubj{{ $j }}ID" value="{{ $email['subject'] }}" autocomplete=off >
                         <div class="p10"></div>
                         Email Body
@@ -146,7 +146,7 @@
             
             <div class="slCard mB20">
                 <a id="hidivBtnStatus" href="javascript:;" 
-                    class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-default @endif disBlo taL" 
+                    class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-secondary @endif disBlo taL" 
                     @if ($firstRevDone) style="color: #FFF;" @endif >
                     <i class="fa fa-sign-in mR5" aria-hidden="true"></i>
                     @if ($firstRevDone) Next, Update Complaint Status: @else Update Complaint Status @endif
@@ -157,7 +157,7 @@
                     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
                     <input type="hidden" name="revType" value="Update">
-                    <div class="nFld"><select name="revStatus" class="form-control input-lg" autocomplete="off">
+                    <div class="nFld"><select name="revStatus" class="form-control form-control-lg" autocomplete="off">
                         {!! view('vendor.openpolice.nodes.1712-report-inc-status', [
                             "firstReview" => false, 
                             "lastReview"  => $lastReview, 
@@ -171,7 +171,7 @@
                             }} <i class="fa fa-pencil fPerc66"></i></a>
                     </div>
                     <div id="legitTypeDrop" class="disNon">
-                        <select name="revComplaintType" class="form-control input-lg" autocomplete=off >
+                        <select name="revComplaintType" class="form-control form-control-lg" autocomplete=off >
                             <option value="295" @if ($complaintRec->ComType == 295) SELECTED @endif >Unreviewed</option>
                             <option value="296" @if ($complaintRec->ComType == 296) SELECTED @endif >Complaint About Police</option>
                             <option value="297" @if ($complaintRec->ComType == 297) SELECTED @endif >Not About Police</option>
@@ -183,7 +183,7 @@
                     </div>
                         
                     <h3 class="mT20 mB0">Notes for other evaluators:</h3>
-                    <textarea name="revNote" class="form-control input-lg" style="height: 70px;" ></textarea>
+                    <textarea name="revNote" class="form-control form-control-lg" style="height: 70px;" ></textarea>
                     
                     <div class="w100 taC mT20">
                         <a class="btn btn-lg btn-primary" style="color: #FFF;" href="javascript:;" 
@@ -194,13 +194,13 @@
             </div>
             
             <div class="slCard">
-                <a id="hidivBtnEmails" class="btn btn-lg btn-default hidivBtn disBlo taL" href="javascript:;">
+                <a id="hidivBtnEmails" class="btn btn-lg btn-secondary hidivBtn disBlo taL" href="javascript:;">
                     <i class="fa fa-envelope mR5" aria-hidden="true"></i> Send Emails
                 </a>
                 <div id="hidivEmails" class=" @if ($emailID > 0) disBlo @else disNon @endif ">
                     <div class="nFld">
                         Select which email template you want to send:<br />
-                        <select name="email" id="emailID" class="form-control input-lg" autocomplete="off" >
+                        <select name="email" id="emailID" class="form-control form-control-lg" autocomplete="off" >
                             <option value="" > No email right now</option>
                             @forelse ($emailList as $i => $email)
                                 @if ($email->EmailType != 'Blurb')

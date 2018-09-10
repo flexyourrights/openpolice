@@ -5,5 +5,5 @@ For security, your key code expires after 7 days.
 </p><p>
 If your key code has expired or does not work, please click the following button 
 to have a fresh key code quickly sent to <b>{{ $user->email }}</b>: <br /><br />
-<a href="?resend=access" class="btn btn-sm btn-default mL10 mT20 pull-right">Send Fresh Key Code</a>
+<a href="?resend=access" class="btn btn-sm btn-secondary mL10 mT20 float-right">Send Fresh Key Code</a>
 </p>

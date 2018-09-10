@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/volun/volun-dept-edit-ia-contact.blade.php -->
 <div class="nodeAnchor"><a id="dept{{ $whch }}" name="dept{{ $whch }}"></a></div><hr>
 @if ($whch == 'Civ' && !$hasCiv)
-    <a id="hidnodeBtn1319" href="javascript:;" class="btn btn-xl btn-default hidnodeBtnSelf"
+    <a id="hidnodeBtn1319" href="javascript:;" class="btn btn-xl btn-secondary hidnodeBtnSelf"
         ><i class="fa fa-plus-circle"></i> Add Civilian Oversight Office</a>
 @endif
 <div id="overHead{{ $whch }}" class="row @if ($whch == 'IA' || $hasCiv) disBlo @else disNon @endif ">
@@ -9,7 +9,7 @@
         <h2 class="m0">{{ $type }} Office</h2>
     </div><div class="col-md-5">
         @if (!$hasC)
-            <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-default hidnodeBtnSelf"
+            <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-secondary hidnodeBtnSelf"
                 ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>
         @endif
         <h3 id="h3Btn{{ $n }}" class="mT5 @if ($hasC) disBlo @else disNon @endif ">Primary Contact:</h3>

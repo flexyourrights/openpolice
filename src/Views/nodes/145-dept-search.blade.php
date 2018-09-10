@@ -5,10 +5,10 @@
     <div class="row mB10">
         <div class="col-md-7 pT5">
             <input type="text" name="deptNameIn" id="deptNameInID" value="{{ $IncAddressCity }}" 
-                class="form-control input-lg">
+                class="form-control form-control-lg">
         </div>
         <div class="col-md-3 pT5">
-            <select name="deptState" id="deptStateID" class="form-control input-lg">
+            <select name="deptState" id="deptStateID" class="form-control form-control-lg">
                 <option value="">Select State</option>
                 {!! $stateDropstateDrop !!}
             </select>

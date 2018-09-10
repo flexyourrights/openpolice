@@ -9,7 +9,7 @@
     <nobr><span class="f14">({{ number_format(sizeof($oversights)) }})</span></nobr>
 </h1>
 
-<a href="javascript:;" class="btn btn-default mR10" disabled ><i class="fa fa-plus-circle"></i> Add Oversight Agency</a>
+<a href="javascript:;" class="btn btn-secondary mR10" disabled ><i class="fa fa-plus-circle"></i> Add Oversight Agency</a>
 
 <div class="p5"></div>
 

@@ -73,22 +73,22 @@ class VolunteerController extends OpenPoliceAdmin
                 [
                     [
                         'javascript:;" id="navBtnContact',
-                        '&nbsp;&nbsp;Contact Info <div id="currContact" class="disIn pull-right mL20">'
+                        '&nbsp;&nbsp;Contact Info <div id="currContact" class="disIn float-right mL20">'
                             . '<i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
                         'javascript:;" id="navBtnWeb',
-                        '&nbsp;&nbsp;Web & Complaints <div id="currWeb" class="disNon pull-right mL20">'
+                        '&nbsp;&nbsp;Web & Complaints <div id="currWeb" class="disNon float-right mL20">'
                             . '<i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
                         'javascript:;" id="navBtnIA',
-                        '&nbsp;&nbsp;Internal Affairs <div id="currIA" class="disNon pull-right mL20">'
+                        '&nbsp;&nbsp;Internal Affairs <div id="currIA" class="disNon float-right mL20">'
                             . '<i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
                         'javascript:;" id="navBtnOver',
-                        '&nbsp;&nbsp;Civilian Oversight <div id="currOver" class="disNon pull-right mL20">'
+                        '&nbsp;&nbsp;Civilian Oversight <div id="currOver" class="disNon float-right mL20">'
                             . '<i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
@@ -99,13 +99,13 @@ class VolunteerController extends OpenPoliceAdmin
                         'javascript:;" id="navBtnEdits',
                         '<span class="gry9">&nbsp;&nbsp;Past Edits:</span> ' 
                             . ((isset($this->v["editsSummary"][1])) ? $this->v["editsSummary"][1]: '') 
-                            . '<div id="currEdits" class="disNon pull-right mL20">'
+                            . '<div id="currEdits" class="disNon float-right mL20">'
                             . '<i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
                         'javascript:;" id="navBtnCheck',
                         '<span class="gry9">&nbsp;&nbsp;Volunteer Checklist</span> <div id="currCheck" '
-                            . 'class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                            . 'class="disNon float-right mL20"><i class="fa fa-chevron-right"></i></div>',
                         1,
                     ], [
                         'javascript:;" id="navBtnPhone',
@@ -114,7 +114,7 @@ class VolunteerController extends OpenPoliceAdmin
                     ], [
                         'javascript:;" id="navBtnFAQ',
                         '<span class="gry9">&nbsp;&nbsp;Frequently Asked <i class="fa fa-question"></i>s</span> <div '
-                            . 'id="currFAQ" class="disNon pull-right mL20"><i class="fa fa-chevron-right"></i></div>',
+                            . 'id="currFAQ" class="disNon float-right mL20"><i class="fa fa-chevron-right"></i></div>',
                         1,
                     ]
                 ]
@@ -122,7 +122,7 @@ class VolunteerController extends OpenPoliceAdmin
             if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
                 //$this->admMenuData["adminNav"][2][3][3] = $volunteeringSubMenu;
             } else { // is Volunteer
-                //$volunteeringSubMenu[1] .= ' <span class="pull-right"><i class="fa fa-check"></i></span>';
+                //$volunteeringSubMenu[1] .= ' <span class="float-right"><i class="fa fa-check"></i></span>';
                 //$this->admMenuData["adminNav"][1] = $volunteeringSubMenu;
             }
         }

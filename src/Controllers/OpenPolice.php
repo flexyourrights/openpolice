@@ -749,7 +749,7 @@ class OpenPolice extends SurvFormTree
     
     public function multiRecordCheckIntro($cnt = 1)
     {
-        $ret = '<a id="hidivBtnUnfinished' . $this->currNode() . '" class="btn btn-lg btn-default w100 hidivBtn" '
+        $ret = '<a id="hidivBtnUnfinished' . $this->currNode() . '" class="btn btn-lg btn-secondary w100 hidivBtn" '
             . 'href="javascript:;">' . $this->v["user"]->name . ', You Have ';
         if ($this->treeID == 1) {
             $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');

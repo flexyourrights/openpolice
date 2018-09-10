@@ -9,14 +9,14 @@
         <h3 class="m0 slBlueDark">Info About You</h3>
         <div class="nFld"><label>
             What State Do You Live In?
-            <select id="newStateID" name="newState" class="form-control input-lg mB20">
+            <select id="newStateID" name="newState" class="form-control form-control-lg mB20">
                 <option value="" SELECTED >select state</option>
                 {!! $GLOBALS['SL']->states->stateDrop() !!}
             </select>
         </label></div>
         <div class="nFld mT0"><label>
             What is your phone number? 
-            <input name="newPhone" type="text" class="form-control input-lg" 
+            <input name="newPhone" type="text" class="form-control form-control-lg" 
             @if (isset($yourContact) && isset($yourContact->PrsnPhoneMobile))
                 value="{{ trim($yourContact->PrsnPhoneMobile) }}"
             @else value="" @endif >

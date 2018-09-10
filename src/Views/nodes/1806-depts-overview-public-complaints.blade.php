@@ -7,7 +7,7 @@
 <p>&nbsp;</p>
 
 <div class="slCard reportBlock">
-<h3 class="pull-right m0 slGrey">Found 0</h3>
+<h3 class="float-right m0 slGrey">Found 0</h3>
 <h2 class="mT0">Police Departments' Complaints</h2>
 <table class="table table-striped">
 <tr><td><i>None found.</i></td></tr>

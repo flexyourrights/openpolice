@@ -63,10 +63,10 @@
             <div class="mTn5">&nbsp;</div>
     @endif        
             <div class="mT20"><a href="/complaint-read/{{ $complaint->ComPublicID }}/full-pdf" target="_blank"
-                class="btn btn-lg btn-default w100 taL"
+                class="btn btn-lg btn-secondary w100 taL"
                 ><i class="fa fa-print mR5" aria-hidden="true"></i> Print Complaint / Save as PDF</a></div>
             <div class="mT20"><a href="/complaint-read/{{ $complaint->ComPublicID }}/full-xml" target="_blank"
-                class="btn btn-lg btn-default w100 taL"
+                class="btn btn-lg btn-secondary w100 taL"
                 ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> Download Raw Data File</a></div>
         
             <h3 class="mT20 mB5">Email Complaint To:</h3>
@@ -74,12 +74,12 @@
                 <div class="col-md-8">
                     <input value="{{ $user->email }}" type="text" class="form-control w100">
                 </div><div class="col-md-4">
-                    <a class="btn btn-default w100" href="javascript:;"
+                    <a class="btn btn-secondary w100" href="javascript:;"
                         ><nobr><i class="fa fa-envelope" aria-hidden="true"></i> Send</nobr></a>
                 </div>
             </div>
                 
-            <div class="pull-right pT3">
+            <div class="float-right pT3">
                 <div class="disIn mL10">
                     {!! view('vendor.survloop.inc-social-simple-tweet', [
                         "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $complaint->ComPublicID,
