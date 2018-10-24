@@ -8,16 +8,16 @@
 
 @if (isset($d["deptRow"]))
     <div class="row w100">
-        <div class="col-md-8">
+        <div class="col-lg-8">
             <div class="slCard">
                 <h2 class="m0 slBlueDark">{!! $d["deptRow"]->DeptName !!}</h2>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-6">
                         <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}"
                             class="btn btn-primary btn-lg w100 mT20" >Share Your Story About The<br />
                             {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
                     </div>
-                    <div class="col-md-6 pT20">
+                    <div class="col-6 pT20">
                         @if (isset($d["deptRow"]->DeptAddress) && trim($d["deptRow"]->DeptAddress) != '')
                             <a href="{{ $GLOBALS['SL']->mapsURL($d['deptAddy']) }}" target="_blank"
                                 ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {{ $d["deptAddy"] }}</a>
@@ -36,7 +36,7 @@
                 and is not yet open to the public.</i></p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="slCard">
             @if (isset($d["deptRow"]->DeptScoreOpenness) && intVal($d["deptRow"]->DeptScoreOpenness) > 0)
                 <div class="toggleScoreInfo round10 p20 taC fPerc133
@@ -55,13 +55,13 @@
                         @foreach ($d["score"] as $i => $s)
                             @if ($s[2])
                                 <div class=" @if ($i%2 == 0) row2 @endif scoreRowOn"><div class="row">
-                                <div class="col-md-1"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
+                                <div class="col-1"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
                             @else
                                 <div class=" @if ($i%2 == 0) row2 @endif scoreRowOff"><div class="row">
-                                <div class="col-md-1">&nbsp;</div>
+                                <div class="col-1">&nbsp;</div>
                             @endif
-                                <div class="col-md-1 taR">{{ $s[0] }}</div>
-                                <div class="col-md-9">{{ $s[1] }}</div>
+                                <div class="col-1 taR">{{ $s[0] }}</div>
+                                <div class="col-9">{{ $s[1] }}</div>
                             </div></div>
                         @endforeach
                     @endif

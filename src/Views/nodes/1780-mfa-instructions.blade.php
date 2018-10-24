@@ -7,7 +7,7 @@
         </h3>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-6">
             <div id="keyOpt1" class="slCard mT20">
                 <h3 class="mT0">Option #1: Enter your emailed Key Code</h3>
                 <div class="pT5 mB10 pL10">{!! $mfa !!}</div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-6">
             <div id="keyOpt2" class="slCard mT20">
                 <h3 class="mT0">Option #2: Create an account</h3>
                 <p>

@@ -1,38 +1,50 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools.blade.php -->
-@if ($firstReview)
+@if (isset($complaintRec->ComStatus) || intVal($complaintRec->ComStatus) <= 0 || 
+    $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->ComStatus) == 'Incomplete')
+
+@elseif ($firstReview)
     
-    <div class="slCard mT10 mB20">
-        <h1 class="m0">Complaint #{{ $complaintRec->ComPublicID }}:&nbsp;&nbsp;&nbsp;
-        What Type Of Submission Is This?</h1>
+    <div class="slCard mT10">
+        <h2 class="m0">Complaint #{{ $complaintRec->ComPublicID }}:
+        What Type Of Submission Is This?</h2>
         <div class="row">
             <div class="col-md-6">
-                <a class="btn btn-lg btn-primary disBlo mT10 mB10" href="?firstReview=296" style="color: #FFF;">
+                <a class="btn btn-lg btn-primary disBlo mT10 mB10" href="?firstReview=296" id="stfBtn1">
                 Police Complaint</a>
-                <a class="btn btn-lg btn-secondary disBlo mT10" href="?firstReview=297">
+                <a class="btn btn-lg btn-secondary disBlo mT10" href="?firstReview=297" id="stfBtn2">
                 Not About Police</a>
             </div><div class="col-md-6">
                 <div class="row mB0 pB0">
-                    <div class="col-md-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=298">
+                    <div class="col-4">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=298" id="stfBtn3">
                         Abuse</a>
-                    </div><div class="col-md-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=299">
+                    </div><div class="col-4">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=299" id="stfBtn4">
                         Spam</a>
-                    </div><div class="col-md-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=300">
-                        Test Submission</a>
+                    </div><div class="col-4">
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=300" id="stfBtn5">
+                        Test</a>
                     </div>
                 </div>
-                <a class="btn btn-lg btn-secondary disBlo" href="?firstReview=301">
+                <a class="btn btn-lg btn-secondary disBlo" href="?firstReview=301" id="stfBtn6">
                 Not Sure</a>
             </div>
         </div>
     </div>
+    <div class="mB20">&nbsp;</div>
+    <style> 
+    a#stfBtn1:link, a#stfBtn1:active, a#stfBtn1:visited { color: #FFF; }
+    a#stfBtn1:hover { color: #2b3493; }
+    a#stfBtn2:link, a#stfBtn2:active, a#stfBtn2:visited, a#stfBtn3:link, a#stfBtn3:active, a#stfBtn3:visited,
+    a#stfBtn4:link, a#stfBtn4:active, a#stfBtn4:visited, a#stfBtn5:link, a#stfBtn5:active, a#stfBtn5:visited,
+    a#stfBtn6:link, a#stfBtn6:active, a#stfBtn6:visited { color: #2b3493; }
+    a#stfBtn2:hover, a#stfBtn3:hover, a#stfBtn4:hover, a#stfBtn5:hover, a#stfBtn6:hover { color: #FFF; }
+    </style>
     
 @elseif (in_array($view, ['', 'history', 'update', 'emails', 'emailsType']))
 
-    <div id="analystHistory" class="row disBlo mT10 mB10">
-        <div class="col-md-8">
+    <div id="analystHistory" class="row mT10 mB10">
+        <div class="col-8">
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             
@@ -72,12 +84,12 @@
                             <option value="--CUSTOM--">Type in custom email address:</option>
                         </select>
                         <div id="emailTo{{ $j }}CustID" class="row mT5 disNon">
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 Recipient Name
                                 <input type="text" name="emailTo{{ $j }}CustName" id="emailTo{{ $j }}CustNameID" 
                                     class="form-control form-control-lg" autocomplete=off >
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 Recipient Email
                                 <input type="text" name="emailTo{{ $j }}CustEmail" id="emailTo{{ $j }}CustEmailID" 
                                     class="form-control form-control-lg" autocomplete=off >
@@ -106,8 +118,8 @@
                         @endforelse
                     @endif
                     
-                    <div class="m20 taC"><input type="submit" class="btn btn-xl btn-primary w66" 
-                        value="Send Email" style="color: #FFF;"></div>
+                    <div class="m20 taC"><input type="submit" class="btn btn-xl btn-primary w66" id="stfBtn9"
+                        value="Send Email"></div>
                     
                 </div>
             </div>
@@ -134,8 +146,7 @@
             
         @endif
             
-        </div>
-        <div class="col-md-4">
+        </div><div class="col-4">
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             <div class="slCard mB20">
@@ -145,12 +156,12 @@
         @endif
             
             <div class="slCard mB20">
-                <a id="hidivBtnStatus" href="javascript:;" 
+                @if ($firstRevDone) <h3 class="mBn10"><span class="slRedDark">Next, Update Complaint Status:</span></h3>
+                @else <a id="hidivBtnStatus" href="javascript:;" 
                     class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-secondary @endif disBlo taL" 
                     @if ($firstRevDone) style="color: #FFF;" @endif >
-                    <i class="fa fa-sign-in mR5" aria-hidden="true"></i>
-                    @if ($firstRevDone) Next, Update Complaint Status: @else Update Complaint Status @endif
-                </a>
+                    <i class="fa fa-sign-in mR5" aria-hidden="true"></i> Update Complaint Status</a>
+                @endif
                 <div id="hidivStatus" class=" @if ($firstRevDone) disBlo @else disNon @endif ">
                     <form name="comUpdate" action="/complaint/read-{{ $complaintRec->ComPublicID }}?save=1" 
                         method="post" >
@@ -181,12 +192,12 @@
                             <option value="301" @if ($complaintRec->ComType == 301) SELECTED @endif >Not Sure</option>
                         </select>
                     </div>
-                        
-                    <h3 class="mT20 mB0">Notes for other evaluators:</h3>
+                    
+                    <h4 class="mT20 mB10">Notes for other evaluators:</h4>
                     <textarea name="revNote" class="form-control form-control-lg" style="height: 70px;" ></textarea>
                     
                     <div class="w100 taC mT20">
-                        <a class="btn btn-lg btn-primary" style="color: #FFF;" href="javascript:;" 
+                        <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" 
                             onClick="document.comUpdate.submit();" >Save Status Update</a>
                     </div>
                     </form>
@@ -211,14 +222,24 @@
                             @empty @endforelse
                         </select>
                     </div>
-                    <div class="mT20 taC"><a href="javascript:;" class="btn btn-lg btn-primary" style="color: #FFF;"
-                        onClick="window.location='/complaint/read-{{ $complaintRec->ComPublicID }}?email='+document.getElementById('emailID').value+'#emailer';"
+                    <div class="mT20 taC"><a href="javascript:;" class="btn btn-lg btn-primary" id="stfBtn8"
+                        onClick="window.location='/complaint/read-{{ $complaintRec->ComPublicID 
+                            }}?email='+document.getElementById('emailID').value+'#emailer';"
                         >Load Email Template</a>
                     </div>
                 </div>
             </div>
+            <div class="pB20">&nbsp;</div>
     
         </div>
     </div>
+    <style>
+    a#hidivBtnStatus:link, a#hidivBtnStatus:active, a#hidivBtnStatus:visited,
+    a#hidivBtnEmails:link, a#hidivBtnEmails:active, a#hidivBtnEmails:visited { color: #2b3493; }
+    a#hidivBtnStatus:hover, a#hidivBtnEmails:hover { color: #FFF; }
+    a#stfBtn7:link, a#stfBtn7:active, a#stfBtn7:visited,
+    a#stfBtn8:link, a#stfBtn8:active, a#stfBtn8:visited { color: #FFF; }
+    a#stfBtn7:hover, a#stfBtn8:hover, a#stfBtn9:hover { color: #2b3493; }
+    </style>
         
 @endif

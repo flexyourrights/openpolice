@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/volun/stars.blade.php -->
 <div class="row mB20 mT10">
-    <div class="col-md-8">
+    <div class="col-8">
         <h1><img id="saveStar1" src="/openpolice/star1.png" border=0 height=40 class="mTn10" > 
             Volunteering All-Stars!</h1>
         <table class="table table-striped taC mT20">
@@ -62,7 +62,7 @@
             @endforeach
         </table>
     </div>
-    <div class="col-md-4 taR pT20">
+    <div class="col-4 taR pT20">
         Online Research <img src="/openpolice/star1.png" border=0 height=20 class="mTn5" ><br />
         Called Department <img src="/openpolice/star1.png" border=0 height=20 class="mTn5" >
             <img src="/openpolice/star1.png" border=0 height=20 class="mTn5 mLn10" >

@@ -71,19 +71,19 @@ class DepartmentScores
                 'Requires notary (for one or more types of complaint)')
             ];
         $this->chartFlds = [ // column title, field name, trimmed fail value
-            ['<br />Complaint Web Form',   'WebForm',    '<i class="fa fa-cloud-upload" aria-hidden="true"></i>',
+            ['Complaint Web Form',   'WebForm',    '<i class="fa fa-cloud-upload" aria-hidden="true"></i>',
                 'Have an Online Form to Submit Complaints'],
             ['Complaint Info Unique Page',  'WebInfo',    '<i class="fa fa-info-circle" aria-hidden="true"></i>',
                 'Have Complaint Info on Unique Web Page'],
-            ['<br />Complaints Via Email', 'ByEmail',    '<i class="fa fa-at" aria-hidden="true"></i>',
+            ['Complaints Via Email', 'ByEmail',    '<i class="fa fa-at" aria-hidden="true"></i>',
                 'Investigate Complaints Sent Via Email'],
             ['Official Form Optional',     'OfficForm',  '<i class="fa fa-file-text" aria-hidden="true"></i>',
                 'Investigate Complaints Not on Official Form'],
-            ['<br />Anonymous Complaints', 'Anonymous',  '<i class="fa fa-user-secret" aria-hidden="true"></i>',
+            ['Anonymous Complaints', 'Anonymous',  '<i class="fa fa-user-secret" aria-hidden="true"></i>',
                 'Investigate Anonymous Complaints'],
-            ['<br />On Facebook',          'HasFace', '<i class="fa fa-facebook-official" aria-hidden="true"></i>',
+            ['On Facebook',          'HasFace', '<i class="fa fa-facebook-official" aria-hidden="true"></i>',
                 'Have a Facebook Page'],
-            ['<br /><br />On Twitter',     'HasTwit',    '<i class="fa fa-twitter" aria-hidden="true"></i>',
+            ['On Twitter',     'HasTwit',    '<i class="fa fa-twitter" aria-hidden="true"></i>',
                 'Have a Twitter Feed'],
             ['Never Requires Notary',      'Notary',     '<i class="fa fa-certificate" aria-hidden="true"></i>',
                 'Never Require Notary to Submit Complaint']

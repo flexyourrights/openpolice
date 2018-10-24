@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-8">
 
         <div class="slCard">
             <h2 class="mT0" style="color: #2B3493;">OpenPolice.org Complaint #{{ $complaint->ComPublicID }}</h2>
@@ -161,18 +161,18 @@
 
         <div class="p10"> </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-4">
             
         <div class="slCard">
-            <a href="/complaint-read/{{ $complaint->ComPublicID }}/full-pdf" target="_blank"
+            <a href="/complaint/read-{{ $complaint->ComPublicID }}/full-pdf" target="_blank"
                 class="btn btn-lg btn-secondary disBlo taL"><nobr><i class="fa fa-print mR5" aria-hidden="true"></i> 
                 Print Complaint</nobr> / <nobr>Save as PDF</nobr></a>
-            <div class="mT20"><a href="/complaint-read/{{ $complaint->ComPublicID }}/full-xml" target="_blank"
+            <div class="mT20"><a href="/complaint/read-{{ $complaint->ComPublicID }}/full-xml" target="_blank"
                 class="btn btn-lg btn-secondary disBlo taL"
                 ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> Download Raw Data File</a></div>
             <?php /*
             <h4 class="mT20 pT20 mB5"><i class="fa fa-link mR3" aria-hidden="true"></i> Public Link To Share:</h4>
-            <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-read/{{ $complaint->ComPublicID 
+            <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $complaint->ComPublicID 
                 }}" type="text" class="form-control w100 mB10">
             */ ?>
         </div>

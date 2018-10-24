@@ -15,11 +15,11 @@
             <h2>{{ str_replace('Department', 'Dept', ucwords(strtolower($dept->DeptName))) }}</h2>
         @endif
         <div class="row mT10 mB10 @if ($i == 0) mT0 @endif ">
-            <div class="col-md-3 pT5 pB5">
+            <div class="col-3 pT5 pB5">
                 <a href="javascript:;" class="deptLoad btn btn-xl btn-primary btn-block taC" 
                     id="dept{{ $dept->DeptID }}">Select</a>
             </div>
-            <div class="col-md-9 f16">
+            <div class="col-9 f16">
                 {{ $dept->DeptAddress }}
                 @if (trim($dept->DeptAddress2) != '')
                     <br />{{ $dept->DeptAddress2 }}
@@ -60,13 +60,13 @@
         Please type in the name of the new department you need to add, and select the appropriate state.
     </div>
     <div class="row mB20 f18">
-        <div class="col-md-6">
+        <div class="col-6">
             <fieldset class="form-group">
                 <label for="newDeptNameID">Department Name <span class="red f12">* required</span></label>
                 <input id="newDeptNameID" name="newDeptName" type="text" value="" class="form-control form-control-lg" >
             </fieldset>
         </div>
-        <div class="col-md-3">
+        <div class="col-3">
             <fieldset class="form-group">
                 <label for="newDeptAddressStateID">State <span class="red f12">* required</span></label>
                 <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control form-control-lg" 
@@ -75,7 +75,7 @@
                 </select>
             </fieldset>
         </div>
-        <div class="col-md-3 pT20">
+        <div class="col-3 pT20">
             <input id="newDeptSubmit" type="button" class="btn btn-lg btn-primary f20 mT5" value="Add New Department">
         </div>
     </div>

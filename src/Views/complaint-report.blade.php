@@ -55,7 +55,7 @@
 @if (isset($GLOBALS["SL"]->x["isPrintPDF"]) && $GLOBALS["SL"]->x["isPrintPDF"])
     <table border=0 class="table"><tr><td class="w66">
 @else
-    <div class="row mT20"><div class="col-md-7">
+    <div class="row mT20"><div class="col-7">
 @endif
     
     @if ($view != 'Anon')
@@ -70,7 +70,7 @@
 @if (isset($GLOBALS["SL"]->x["isPrintPDF"]) && $GLOBALS["SL"]->x["isPrintPDF"])
     </td><td class="w33">
 @else
-    </div><div class="col-md-1"></div><div class="col-md-4">
+    </div><div class="col-1"></div><div class="col-4">
 @endif
     
     @if ($view != 'Anon') <div class="slCard reportBlock">{!! $incDeets !!}</div> @endif
@@ -168,7 +168,7 @@
                     </label></div>
                 @endif
             @else
-                <p>{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint-read/{{ $sessData['Complaints'][0]->ComPublicID 
+                <p>{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $sessData['Complaints'][0]->ComPublicID 
                     }}</a></p>
                 <?php /* isPrintPDF */ ?>
             @endif
@@ -188,7 +188,7 @@
         <div class="row">
             @foreach ($uploads as $i => $up)
                 @if ($i > 0 && $i%3 == 0) </div><div class="row"> @endif
-                <div class="col-md-4">{!! $up !!}</div>
+                <div class="col-4">{!! $up !!}</div>
             @endforeach
         </div>
     </div>
@@ -216,25 +216,25 @@
     <div class="slCard reportBlock">
         <div class="reportSectHead">Share, Print, Save...</div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-6">
                 <div class="mB5"><a class="noUnd" style="padding: 12px 10px 0px 10px;" 
-                    href="/complaint-read/{{ $sessData['Complaints'][0]->ComPublicID }}" 
+                    href="/complaint/read-{{ $sessData['Complaints'][0]->ComPublicID }}" 
                     ><i class="fa fa-link mR5" aria-hidden="true"></i> {{ $GLOBALS['SL']->sysOpts['app-url'] 
-                    }}/complaint-read/{{ $sessData['Complaints'][0]->ComPublicID }}</a></div>
+                    }}/complaint/read-{{ $sessData['Complaints'][0]->ComPublicID }}</a></div>
                 <div class="mB5"><a class="noUnd" style="padding: 12px 10px 0px 10px;" target="_blank"
-                    href="/complaint-read/{{ $sessData['Complaints'][0]->ComPublicID }}/pdf"
+                    href="/complaint/read-{{ $sessData['Complaints'][0]->ComPublicID }}/pdf"
                     ><i class="fa fa-print mR5" aria-hidden="true"></i> Print Complaint or Save as PDF</a></div>
                 <div><a class="noUnd" style="padding: 12px 10px 0px 10px;" target="_blank"
-                    href="/complaint-read/{{ $sessData['Complaints'][0]->ComPublicID }}/xml"
+                    href="/complaint/read-{{ $sessData['Complaints'][0]->ComPublicID }}/xml"
                     ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> 
                     Download Raw Complaint Data As XML File</a></div>
             </div>
-            <div class="col-md-3">
+            <div class="col-3">
             @if (!in_array($sessData['Complaints'][0]->ComStatus, [294, 295, 298, 299]))
                 {!! view('vendor.openpolice.complaint-report-inc-social', [
                     "pubID" => $sessData['Complaints'][0]->ComPublicID ])->render() !!}
             </div>
-            <div class="col-md-3 taR">
+            <div class="col-3 taR">
                 @if (isset($emojiTags) && trim($emojiTags) != '') <div class="fR mTn5">{!! $emojiTags !!}</div> @endif
             @endif
             </div>

@@ -6,14 +6,14 @@
 @else
     <h2 class="mT0">All Departments</h2>
     <div class="row mB10">
-        <div class="col-md-4">
+        <div class="col-4">
             <i class="fa fa-filter" aria-hidden="true"></i> Filter by<br />
             <select name="deptState" id="deptStateID" class="form-control form-control-lg" onChange="runDeptSearch();">
                 <option value="" @if (!$GLOBALS["SL"]->REQ->has('state')) SELECTED @endif >select state</option>
                 {!! $GLOBALS["SL"]->states->stateDrop(($GLOBALS["SL"]->REQ->has('state')) 
                     ? $GLOBALS["SL"]->REQ->get('state') : '') !!}
             </select>
-        </div><div class="col-md-4">
+        </div><div class="col-4">
             <i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Sort by<br />
             <select name="deptSort" id="deptSortID" class="form-control form-control-lg" onChange="runDeptSearch();">
                 <option value="recent" @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
@@ -25,7 +25,7 @@
                 <option value="city" @if (isset($viewType) && $viewType == 'city') SELECTED @endif 
                     >State, City</option>
             </select>
-        </div><div class="col-md-4">
+        </div><div class="col-4">
         </div>
     </div>
 @endif
@@ -75,13 +75,13 @@
     <form name="volunAddNewDept" action="/dash/volunteer?newDept=1" method="post" onSubmit="return checkNewDept();">
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
     <div class="row mB20 f18">
-        <div class="col-md-8">
+        <div class="col-8">
             <fieldset class="form-group">
                 <label for="deptNameID">Department Name</label>
                 <input id="deptNameID" name="deptName" type="text" value="" class="form-control form-control-lg" >
             </fieldset>
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
             <fieldset class="form-group">
                 <label for="DeptAddressStateID">State</label>
                 <select id="DeptAddressStateID" name="DeptAddressState" class="form-control form-control-lg" 

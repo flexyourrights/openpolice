@@ -3,7 +3,7 @@
 <div class="wrapLoopItem"><a name="item{{ $setIndex }}"></a>
     <div id="wrapItem{{ $itemID }}On" class="brdLgt round20 mB20 pL20 pR20">
         <div class="row">
-            <div class="col-md-12 p20">
+            <div class="col-12 p20">
                 <div class="fL">
                     <h4 class="m0 gry9">
                         {{ $GLOBALS['SL']->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}

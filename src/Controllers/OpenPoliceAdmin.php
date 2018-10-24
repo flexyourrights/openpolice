@@ -94,7 +94,8 @@ class OpenPoliceAdmin extends AdminSubsController
                 $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
                     $this->admMenuLnk('/dash/all-complete-complaints', 'Complete Complaints'), 
                     $this->admMenuLnk('/dash/all-incomplete-complaints', 'Incomplete Complaints'), 
-                    $this->admMenuLnk('/dash/volunteer', 'Volunteer Dashboard', '', 1, [
+                    $this->admMenuLnk('javascript:;', 'Department Volunteers', '', 1, [
+                            $this->admMenuLnk('/dash/volunteer', 'Volunteer Dashboard'),
                             $this->admMenuLnk('/dash/verify-next-department', 'Verify Random Dept')
                             ]),
                     ]);

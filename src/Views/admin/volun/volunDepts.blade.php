@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-8">
     
         <h1><i class="fa fa-users"></i> Department Data Mining Stats</h1>
         
@@ -26,7 +26,7 @@
         </script>
         
     </div>
-    <div class="col-md-4">
+    <div class="col-4">
     
         <table class="table table-striped slBlueDark mT20">
         <tr class="f14">

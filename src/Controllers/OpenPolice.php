@@ -922,7 +922,7 @@ class OpenPolice extends SurvFormTree
                 //    $this->commaAllegationList());
                 $this->sessData->dataSets["Compliments"][0]->update([ 
                     'CompliPublicID' => $GLOBALS["SL"]->genNewCorePubID() ]);
-                $url = '/compliment-read/' . $this->sessData->dataSets["Compliments"][0]->ComPublicID;
+                $url = '/compliment/read-' . $this->sessData->dataSets["Compliments"][0]->ComPublicID;
             }
             /* if ($nID == 270 && trim($this->sessData->dataSets["Complaints"][0]->ComSlug) != '') {
                 $url = '/report' . $this->sessData->dataSets["Complaints"][0]->ComSlug;
@@ -1029,6 +1029,7 @@ class OpenPolice extends SurvFormTree
                 ])->render();
             */
         } elseif ($nID == 1099) {
+            /*
             if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
                 if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
                     $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
@@ -1037,6 +1038,7 @@ class OpenPolice extends SurvFormTree
                 }
             }
             $this->loadDeptStuff($this->v["deptID"]);
+            */
             if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
                 $GLOBALS["SL"]->addTopNavItem('pencil', 
                     '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
@@ -1058,19 +1060,35 @@ class OpenPolice extends SurvFormTree
                 ])->render();
                 
         // User Profile Nodes
-        } elseif ($nID == 1437) {
-            $chk = OPComplaints::where('ComUserID', $this->v["uID"])
-                ->whereIn('ComStatus', $this->getUnPublishedStatusList())
-                ->orderBy('created_at', 'desc')
-                ->get();
-            if ($chk->isNotEmpty()) {
-                $ret .= '<h2>Your Complaints Waiting For Review</h2><div id="n' . $nID 
-                    . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
-                $loadURL = '/record-prevs/1?ids=';
-                foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->ComPublicID;
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("' . $loadURL . '");' . "\n";
-            } else {
-                $ret .= '<div class="p10"></div>';
+        } elseif ($nID == 1893) {
+            if ($this->v["uID"] > 0) { // loading records for my own profile
+                $chk = OPComplaints::where('ComUserID', $this->v["uID"])
+                    ->where('ComStatus', '>', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    $loadURL = '/record-prevs/1?rawids=';
+                    foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->ComID;
+                    $ret .= '<h2 class="slBlueDark m0">Your Complaints</h2><div id="n' . $nID 
+                        . 'ajaxLoadA" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
+                    $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
+                } else {
+                    $ret .= '<div class="p10"><i>No Complaints</i></div>';
+                }
+                $ret .= '<div class="p20">&nbsp;</div>';
+                $chk = OPCompliments::where('CompliUserID', $this->v["uID"])
+                    ->where('CompliStatus', '>', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    $loadURL = '/record-prevs/5?rawids=';
+                    foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->CompliID;
+                    $ret .= '<h2 class="slBlueDark m0">Your Compliments</h2><div id="n' . $nID 
+                        . 'ajaxLoadB" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
+                    $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
+                } else {
+                    $ret .= '<div class="p10"><i>No Compliments</i></div>';
+                }
             }
         } elseif ($nID == 1779) {
             $this->setUserOversightFilt();
@@ -1368,7 +1386,7 @@ class OpenPolice extends SurvFormTree
                         }
                     }
                 }
-                foreach ($GLOBALS["SL"]->defValues["Force Type"] as $i => $def) {
+                foreach ($GLOBALS["SL"]->def->defValues["Force Type"] as $i => $def) {
                     if ($GLOBALS["SL"]->REQ->get($nIDtxt) == 'N' || !$GLOBALS["SL"]->REQ->has($nIDtxt2) 
                         || !in_array($def->DefID, $GLOBALS["SL"]->REQ->input($nIDtxt2))) {
                         $this->deleteEventByID($nID, $this->getCivForceEventID($nID, $civ->CivID, $def->DefID));
@@ -1592,7 +1610,7 @@ class OpenPolice extends SurvFormTree
             $ret = [];
             $GLOBALS["SL"]->def->loadDefs('Force Type');
             foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
-                foreach ($GLOBALS["SL"]->defValues["Force Type"] as $j => $def) {
+                foreach ($GLOBALS["SL"]->def->defValues["Force Type"] as $j => $def) {
                     if ($this->getCivForceEventID($nID, $civ, $def->DefID) > 0) {
                         $ret[] = 'cyc' . $i . $def->DefID;
                     }
@@ -1766,6 +1784,8 @@ class OpenPolice extends SurvFormTree
                         $str = str_replace('anybody was', 'you were', $str);
                     }
                 }
+                $str = str_replace('Did you who was not arrested get a ticket or citation?', 
+                    'Did you get a ticket or citation?', $str);
             }
         }
         return $str;
@@ -1845,14 +1865,18 @@ class OpenPolice extends SurvFormTree
         ])->render();
     }
     
-    public function printPreviewReport($isAdmin = false)
+    public function printPreviewReportCustom($isAdmin = false)
     {
-        if (!isset($this->sessData->dataSets["Complaints"]) || !isset($this->sessData->dataSets["Incidents"])) {
+        $coreAbbr = $GLOBALS["SL"]->tblAbbr[$GLOBALS["SL"]->coreTbl];
+        if (!isset($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl]) 
+            || !isset($this->sessData->dataSets["Incidents"])) {
             return '';
         }
-        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets["Complaints"][0]->ComSummary, 100);
+        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ 
+            $coreAbbr . 'Summary' }, 100);
         $comDate = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-        if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 || $this->v["isAdmin"]) {
+        if ($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ $coreAbbr . 'Privacy' } == 304 
+            || $this->v["isAdmin"]) {
             $comDate = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
         }
         $where = $this->getReportWhereLine();
@@ -1867,8 +1891,10 @@ class OpenPolice extends SurvFormTree
             }
         }
         return view('vendor.openpolice.complaint-report-preview', [
+            "uID"         => $this->v["uID"],
             "storyPrev"   => $storyPrev,
-            "complaint"   => $this->sessData->dataSets["Complaints"][0], 
+            "coreAbbr"    => $coreAbbr,
+            "complaint"   => $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0], 
             "incident"    => $this->sessData->dataSets["Incidents"][0], 
             "comDate"     => $comDate, 
             "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
@@ -3063,6 +3089,7 @@ class OpenPolice extends SurvFormTree
             "overUpdates" => ((isset($this->sessData->dataSets["LinksComplaintOversight"]))
                 ? $this->sessData->dataSets["LinksComplaintOversight"] : []),
             "overList"    => $this->oversightList(),
+            "warning"     => $this->multiRecordCheckDelWarn()
             ])->render();
     }
     
@@ -3542,32 +3569,21 @@ class OpenPolice extends SurvFormTree
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes->isNotEmpty()) {
-                    foreach ($deptsRes as $d) {
-                        if (!in_array($d->DeptID, $deptIDs)) {
-                            $deptIDs[] = $d->DeptID;
-                            $depts[] = $d;
-                        }
-                    }
-                }
+                list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
                 $deptsRes = OPDepartments::where('DeptAddressCity', 'LIKE', '%' . $request->policeDept . '%')
                     ->where('DeptAddressState', $reqState)
                     ->orderBy('DeptJurisdictionPopulation', 'desc')
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes->isNotEmpty()) {
-                    foreach ($deptsRes as $d) $depts[] = $d;
-                }
+                list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
                 $deptsRes = OPDepartments::where('DeptAddress', 'LIKE', '%' . $request->policeDept . '%')
                     ->where('DeptAddressState', $reqState)
                     ->orderBy('DeptJurisdictionPopulation', 'desc')
                     ->orderBy('DeptTotOfficers', 'desc')
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                if ($deptsRes->isNotEmpty()) {
-                    foreach ($deptsRes as $d) $depts[] = $d;
-                }
+                list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
                 $zips = $counties = [];
                 $cityZips = SLZips::where('ZipCity', 'LIKE', '%' . $request->policeDept . '%')
                     ->where('ZipState', 'LIKE', $reqState)
@@ -3580,9 +3596,7 @@ class OpenPolice extends SurvFormTree
                     $deptsMore = OPDepartments::whereIn('DeptAddressZip', $zips)
                         ->orderBy('DeptName', 'asc')
                         ->get();
-                    if ($deptsMore->isNotEmpty()) {
-                        foreach ($deptsMore as $d) $depts[] = $d;
-                    }
+                    list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                     foreach ($counties as $c) {
                         $deptsMore = OPDepartments::where('DeptName', 'LIKE', '%' . $c . '%')
                             ->where('DeptAddressState', $reqState)
@@ -3590,18 +3604,14 @@ class OpenPolice extends SurvFormTree
                             ->orderBy('DeptTotOfficers', 'desc')
                             ->orderBy('DeptName', 'asc')
                             ->get();
-                        if ($deptsMore->isNotEmpty()) {
-                            foreach ($deptsMore as $d) $depts[] = $d;
-                        }
+                        list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                         $deptsMore = OPDepartments::where('DeptAddressCounty', 'LIKE', '%' . $c . '%')
                             ->where('DeptAddressState', $reqState)
                             ->orderBy('DeptJurisdictionPopulation', 'desc')
                             ->orderBy('DeptTotOfficers', 'desc')
                             ->orderBy('DeptName', 'asc')
                             ->get();
-                        if ($deptsMore->isNotEmpty()) {
-                            foreach ($deptsMore as $d) $depts[] = $d;
-                        }
+                        list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                     }
                 }
             }
@@ -3611,9 +3621,7 @@ class OpenPolice extends SurvFormTree
                 ->orderBy('DeptTotOfficers', 'desc')
                 ->orderBy('DeptName', 'asc')
                 ->get();
-            if ($deptsFed->isNotEmpty()) {
-                foreach ($deptsFed as $d) $depts[] = $d;
-            }
+            list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsFed);
             $GLOBALS["SL"]->loadStates();
             echo view('vendor.openpolice.ajax.search-police-dept', [
                 "depts"            => $depts, 
@@ -3625,6 +3633,19 @@ class OpenPolice extends SurvFormTree
             
         }
         exit;
+    }
+    
+    protected function addDeptToResults($deptIDs, $depts, $deptsIn)
+    {
+        if ($deptsIn->isNotEmpty()) {
+            foreach ($deptsIn as $d) {
+                if (!in_array($d->DeptID, $deptIDs)) {
+                    $deptIDs[] = $d->DeptID;
+                    $depts[] = $d;
+                }
+            }
+        }
+        return [$deptIDs, $depts];
     }
     
     public function allegationsList(Request $request)
@@ -3709,54 +3730,57 @@ class OpenPolice extends SurvFormTree
                 }
                 $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
             }
-            if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) 
-                || trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) == '') {
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
-                    = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
-            }
-            if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
-                && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress)) {
-                $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                    = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress . ', ';
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) 
-                    && trim($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) != '') {
+            if (isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)
+                && trim($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) != '') {
+                if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) 
+                    || trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) == '') {
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
+                }
+                if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress)) {
                     $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                        .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2 . ', ';
-                }
-                $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                    .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity . ', ' 
-                    . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState . ' ' 
-                    . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] = '';
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) 
-                    && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) != '') {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress . ', ';
-                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) 
-                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) != '') {
+                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress . ', ';
+                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) 
+                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) != '') {
+                        $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
+                            .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2 . ', ';
+                    }
+                    $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
+                        .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity . ', ' 
+                        . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState . ' ' 
+                        . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
+                    $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] = '';
+                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) 
+                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) != '') {
                         $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                            .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2 . ', ';
+                            = $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress . ', ';
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) 
+                            && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) != '') {
+                            $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
+                                .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2 . ', ';
+                        }
+                        $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
+                            .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity . ', ' 
+                            . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState . ' ' 
+                            . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip;
                     }
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                        .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity . ', ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState . ' ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip;
-                }
-                $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"]  = '';
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) 
-                    && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) != '') {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress . ', ';
-                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) 
-                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) != '') {
+                    $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"]  = '';
+                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) 
+                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) != '') {
                         $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                            .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2 . ', ';
+                            = $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress . ', ';
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) 
+                            && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) != '') {
+                            $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
+                                .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2 . ', ';
+                        }
+                        $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
+                            .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressCity . ', ' 
+                            . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressState . ' ' 
+                            . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressZip;
                     }
-                    $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                        .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressCity . ', ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressState . ' ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressZip;
                 }
             }
             
@@ -3899,6 +3923,7 @@ class OpenPolice extends SurvFormTree
             '[{ Complaint Police Department }]', 
             '[{ Complaint Police Department URL }]', 
             '[{ Complaint Police Department URL Link }]', 
+            '[{ Police Department State Abbr }]',
             '[{ Dear Primary Oversight Agency }]', 
             '[{ Complaint Investigability Score & Description }]', 
             '[{ Complaint Allegation List }]', 
@@ -3986,6 +4011,9 @@ class OpenPolice extends SurvFormTree
                         break;
                     case '[{ Complaint Police Department URL Link }]':
                         $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                        break;
+                    case '[{ Police Department State Abbr }]':
+                        $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
                         break;
                     case '[{ Dear Primary Oversight Agency }]':
                         $swap = 'To Whom It May Concern,';
@@ -4106,7 +4134,10 @@ class OpenPolice extends SurvFormTree
             $request->d = $deptRow->DeptID;
         }
         $this->loadPageVariation($request, 1, 25, '/dept/' . $deptSlug);
-        if ($deptID > 0) $this->v["deptID"] = $deptRow->DeptID;
+        if ($deptID > 0) {
+            $this->v["deptID"] = $deptRow->DeptID;
+            $this->loadDeptStuff($deptID);
+        }
         return $this->index($request);
     }
     
@@ -5401,52 +5432,55 @@ class OpenPolice extends SurvFormTree
             && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
             foreach ($this->sessData->dataSets["LinksComplaintDept"] as $i => $lnk) {
                 if (isset($lnk->LnkComDeptDeptID) && intVal($lnk->LnkComDeptDeptID) > 0) {
-                    $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
-                    $this->v["comDepts"][$cnt]["deptRow"] = OPDepartments::find($lnk->LnkComDeptDeptID);
-                    $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                        ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
-                        ->first();
-                    $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                        ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
-                        ->first();
-                    if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
-                        $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverType
-                            = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
-                        $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
-                            = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
-                        $this->v["comDepts"][$cnt]["iaRow"]->save();
-                    }
-                    $this->v["comDepts"][$cnt]["whichOver"] = '';
-                    if (isset($this->v["comDepts"][0]["civRow"]) 
-                        && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)) {
-                        $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
-                    } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
-                        && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
-                        $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
-                    }
-                    $this->v["comDepts"][$cnt]["overInfo"] = '';
-                    if (isset($this->v["comDepts"][$cnt])) {
-                        $w = $this->v["comDepts"][$cnt]["whichOver"];
-                        if (isset($this->v["comDepts"][$cnt][$w])) {
-                            $this->v["comDepts"][$cnt]["overInfo"] 
-                                = $this->getOversightInfo($this->v["comDepts"][$cnt][$w]);
+                    $deptRow = OPDepartments::find($lnk->LnkComDeptDeptID);
+                    if ($deptRow && isset($deptRow->DeptName) && trim($deptRow->DeptName) != '') {
+                        $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
+                        $this->v["comDepts"][$cnt]["deptRow"] = $deptRow;
+                        $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                            ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                            ->first();
+                        $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+                            ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                            ->first();
+                        if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
+                            $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverType
+                                = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
+                            $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
+                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
+                            $this->v["comDepts"][$cnt]["iaRow"]->save();
                         }
+                        $this->v["comDepts"][$cnt]["whichOver"] = '';
+                        if (isset($this->v["comDepts"][0]["civRow"]) 
+                            && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)) {
+                            $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
+                        } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
+                            && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
+                            $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
+                        }
+                        $this->v["comDepts"][$cnt]["overInfo"] = '';
+                        if (isset($this->v["comDepts"][$cnt])) {
+                            $w = $this->v["comDepts"][$cnt]["whichOver"];
+                            if (isset($this->v["comDepts"][$cnt][$w])) {
+                                $this->v["comDepts"][$cnt]["overInfo"] 
+                                    = $this->getOversightInfo($this->v["comDepts"][$cnt][$w]);
+                            }
+                        }
+                        $cnt++;
                     }
-                    $cnt++;
                 }
             }
         }

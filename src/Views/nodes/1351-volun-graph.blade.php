@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1351-volun-graph.blade.php -->
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-8">
         <h1><i class="fa fa-users"></i> Department Data Mining Stats</h1>
         <canvas id="volunEditsGraph" class="w100"></canvas>
         <script>
@@ -21,7 +21,7 @@
             <div class="p20"> </div>
         @endif
     </div>
-    <div class="col-md-4">
+    <div class="col-4">
         <div class="p20 m20"></div>
         <table class="table table-striped">
         <tr class="slBlueDark">

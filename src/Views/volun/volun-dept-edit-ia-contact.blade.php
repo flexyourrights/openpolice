@@ -5,9 +5,9 @@
         ><i class="fa fa-plus-circle"></i> Add Civilian Oversight Office</a>
 @endif
 <div id="overHead{{ $whch }}" class="row @if ($whch == 'IA' || $hasCiv) disBlo @else disNon @endif ">
-    <div class="col-md-7">
+    <div class="col-7">
         <h2 class="m0">{{ $type }} Office</h2>
-    </div><div class="col-md-5">
+    </div><div class="col-5">
         @if (!$hasC)
             <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-secondary hidnodeBtnSelf"
                 ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>

@@ -2,9 +2,9 @@
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
 <div id="fixedHeader" class="fixed">
     <div class="row mT5">
-        <div class="col-md-9">
+        <div class="col-9">
             <h2 class="slBlueDark m0">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h2>
-        </div><div class="col-md-3 taR">
+        </div><div class="col-3 taR">
             <a href="javascript:;" id="hidivBtnScoreDeet" class="fR disBlo hidivBtn pT10">
                 <h3 class="m0 slGreenLight"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
                     intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3></a>
@@ -17,9 +17,9 @@
     </div>
 </div>
 <div class="row" style="margin-top: 90px;">
-    <div class="col-md-7">
+    <div class="col-7">
         <h2 class="m0">Department Main Contact Info</h2>
-    </div><div class="col-md-5">
+    </div><div class="col-5">
         <!-- <div id="ScoreDeet" class="disNon w100 row2 p15">
             
         </div> -->

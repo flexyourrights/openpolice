@@ -14,7 +14,7 @@
 @if ($listView != 'incomplete')
     <div class="row">
     @if (isset($fltDept) && intVal($fltDept) > 0)
-        <div class="col-md-8">
+        <div class="col-8">
             <select name="fltStatus" id="fltStatusID" class="form-control form-control-lg" autocomplete="off">
                 <option value="0" @if (!isset($fltStatus) || intVal($fltStatus) <= 0) SELECTED @endif 
                     >Any Status</option>
@@ -22,11 +22,11 @@
                     ((isset($statusSkips)) ? $statusSkips : [])) !!}
             </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
             <a id="applyFilts" class="btn btn-secondary btn-lg w100" href="javascript:;">Apply Filter</a>
         </div>
     @else
-        <div class="col-md-4">
+        <div class="col-4">
             <select name="fltView" id="fltViewID" class="form-control form-control-lg" autocomplete="off">
                 <option value="all" @if ($listView == 'all') SELECTED @endif 
                     >All Complete Complaints</option>
@@ -40,7 +40,7 @@
                     >Assigned To Me</option>
             </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
             <select name="fltStatus" id="fltStatusID" class="form-control form-control-lg" autocomplete="off">
                 <option value="0" @if (!isset($fltStatus) || intVal($fltStatus) <= 0) SELECTED @endif 
                     >Any Status</option>
@@ -48,7 +48,7 @@
                     ((isset($statusSkips)) ? $statusSkips : [])) !!}
             </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
             <a id="applyFilts" class="btn btn-secondary btn-lg w100" href="javascript:;">Apply Filters</a>
         </div>
     @endif
