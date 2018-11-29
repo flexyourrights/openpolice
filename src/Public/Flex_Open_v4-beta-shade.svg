@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="129mm"
+   height="16mm"
+   viewBox="0 0 457.0866 56.692913"
+   id="svg4457"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Flex_Open_v4-beta-shade.svg"
+   inkscape:export-filename="/Volumes/_MoData/zHomestead/OpenPolice/vendor/flexyourrights/openpolice/src/Public/Flex_Open_v4-beta-shade.png"
+   inkscape:export-xdpi="383.18182"
+   inkscape:export-ydpi="383.18182">
+  <defs
+     id="defs4459" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.2014722"
+     inkscape:cx="63.034028"
+     inkscape:cy="13.279879"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer5"
+     showgrid="false"
+     showguides="true"
+     inkscape:window-width="1440"
+     inkscape:window-height="855"
+     inkscape:window-x="0"
+     inkscape:window-y="125"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4462">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="BLACK"
+     style="display:none"
+     transform="translate(0,-995.66928)">
+    <rect
+       style="opacity:1;fill:#000000;fill-opacity:1"
+       id="rect5419"
+       width="470.39999"
+       height="66"
+       x="127.65716"
+       y="496.50504"
+       rx="10"
+       ry="10" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Layer 3"
+     style="display:inline"
+     transform="translate(0,-995.66928)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="143.5773"
+       y="1041.2039"
+       id="text5403"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="394.85001"
+       inkscape:export-ydpi="394.85001"><tspan
+         sodipodi:role="line"
+         id="tspan5405"
+         x="143.5773"
+         y="1041.2039"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:43.75px;font-family:cairo;-inkscape-font-specification:cairo;letter-spacing:-1.45000005px;fill:#000000;fill-opacity:1"
+         dx="0">Police Complaints</tspan></text>
+    <rect
+       style="opacity:1;fill:#0000ff;fill-opacity:0"
+       id="rect5416"
+       width="470.39999"
+       height="66"
+       x="-3.3672724"
+       y="992.44867"
+       rx="3"
+       ry="3" />
+  </g>
+  <g
+     style="display:inline"
+     inkscape:label="Layer 3 copy"
+     id="g5432"
+     inkscape:groupmode="layer"
+     transform="translate(0,-995.66928)">
+    <g
+       transform="matrix(1.2743554,0,0,1.2743554,-4.5172449,996.00777)"
+       id="g5434"
+       inkscape:export-xdpi="394.85001"
+       inkscape:export-ydpi="394.85001">
+      <title
+         id="title5436">Layer 1</title>
+      <g
+         id="g5438" />
+      <g
+         id="g5440">
+        <g
+           id="g5442">
+          <path
+             style="fill:none;stroke:#761113;stroke-width:4.5;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5444"
+             d="m 20.899998,33.599998 c 0,0 -6.799999,-1.199997 -6.799999,-5.499998 0,-4.300001 0,-1.200001 0,-9.700001 0,-8.5 16.700001,-8.699999 16.700001,0 0,7.900002 0,7.200001 0,9.799999 0,4.300001 -6.799999,5.4 -6.799999,5.4"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5446">
+          <path
+             style="fill:none;stroke:#761113;stroke-width:4.5;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5448"
+             d="m 36.599998,33.599998 c 0,0 0,-19.399998 0,-20.299997 0,-0.899999 0.599998,-1.199999 2.799999,-1.199999 2.200001,0 -0.399998,0 8.5,0 8.400002,0 8.800003,10.799997 0.1,10.799997 -6.199997,0 -6.299999,0 -6.299999,0"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5450">
+          <polyline
+             style="fill:none;stroke:#761113;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="polyline5452"
+             points="78.89999771118164,11.899999618530273 60.70000076293945,11.899999618530273 60.70000076293945,33.60000038146973 78.79999923706055,33.60000038146973 "
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5454">
+          <line
+             style="fill:none;stroke:#761113;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="line5456"
+             y2="22.700001"
+             x2="78.599998"
+             y1="22.700001"
+             x1="65"
+             stroke-miterlimit="10" />
+        </g>
+        <polyline
+           style="fill:none;stroke:#761113;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="polyline5458"
+           points="86.60000228881836,33.60000038146973 86.60000228881836,11.899999618530273 104.79999923706055,33.60000038146973 104.79999923706055,11.899999618530273 "
+           stroke-miterlimit="10" />
+      </g>
+      <g
+         id="g5460">
+        <g
+           id="g5462">
+          <path
+             style="fill:none;stroke:#ed1f24;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5464"
+             d="m 20.899998,33.599998 c 0,0 -6.799999,-1.199997 -6.799999,-5.499998 0,-4.300001 0,-1.200001 0,-9.700001 0,-8.5 16.700001,-8.699999 16.700001,0 0,7.900002 0,7.200001 0,9.799999 0,4.300001 -6.799999,5.4 -6.799999,5.4"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5466">
+          <path
+             style="fill:none;stroke:#ed1f24;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5468"
+             d="m 36.599998,33.599998 c 0,0 0,-19.399998 0,-20.299997 0,-0.899999 0.599998,-1.199999 2.799999,-1.199999 2.200001,0 -0.399998,0 8.5,0 8.400002,0 8.800003,10.799997 0.1,10.799997 -6.199997,0 -6.299999,0 -6.299999,0"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5470">
+          <polyline
+             style="fill:none;stroke:#ed1f24;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="polyline5472"
+             points="78.89999771118164,11.899999618530273 60.70000076293945,11.899999618530273 60.70000076293945,33.60000038146973 78.79999923706055,33.60000038146973 "
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5474">
+          <line
+             style="fill:none;stroke:#ed1f24;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="line5476"
+             y2="22.700001"
+             x2="78.599998"
+             y1="22.700001"
+             x1="65"
+             stroke-miterlimit="10" />
+        </g>
+        <polyline
+           style="fill:none;stroke:#ed1f24;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="polyline5478"
+           points="86.60000228881836,33.60000038146973 86.60000228881836,11.899999618530273 104.79999923706055,33.60000038146973 104.79999923706055,11.899999618530273 "
+           stroke-miterlimit="10" />
+      </g>
+      <g
+         id="g5480">
+        <g
+           id="g5482">
+          <path
+             style="fill:none;stroke:#f38c5f;stroke-width:1.75;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5484"
+             d="m 20.899998,33.599998 c 0,0 -6.799999,-1.199997 -6.799999,-5.499998 0,-4.300001 0,-1.200001 0,-9.700001 0,-8.5 16.700001,-8.699999 16.700001,0 0,7.900002 0,7.200001 0,9.799999 0,4.300001 -6.799999,5.4 -6.799999,5.4"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5486">
+          <path
+             style="fill:none;stroke:#f38c5f;stroke-width:1.75;stroke-linecap:round;stroke-miterlimit:10"
+             inkscape:connector-curvature="0"
+             id="path5488"
+             d="m 36.599998,33.599998 c 0,0 0,-19.399998 0,-20.299997 0,-0.899999 0.599998,-1.199999 2.799999,-1.199999 2.200001,0 -0.399998,0 8.5,0 8.400002,0 8.800003,10.799997 0.1,10.799997 -6.199997,0 -6.299999,0 -6.299999,0"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5490">
+          <polyline
+             style="fill:none;stroke:#f38c5f;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="polyline5492"
+             points="78.89999771118164,11.899999618530273 60.70000076293945,11.899999618530273 60.70000076293945,33.60000038146973 78.79999923706055,33.60000038146973 "
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5494">
+          <line
+             style="fill:none;stroke:#f38c5f;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="line5496"
+             y2="22.700001"
+             x2="78.599998"
+             y1="22.700001"
+             x1="65"
+             stroke-miterlimit="10" />
+        </g>
+        <g
+           id="g5498">
+          <polyline
+             style="fill:none;stroke:#f38c5f;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+             id="polyline5500"
+             points="86.60000228881836,33.60000038146973 86.60000228881836,11.899999618530273 104.79999923706055,33.60000038146973 104.79999923706055,11.899999618530273 "
+             stroke-miterlimit="10" />
+        </g>
+      </g>
+      <g
+         id="g5502">
+        <path
+           style="fill:none;stroke:#4c656d;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           inkscape:connector-curvature="0"
+           id="path5504"
+           d="m 108.90001,40.099998 -97.700011,0 c -2.799999,0 -5,-2.199997 -5,-5 l 0,-24.599998 c 0,-2.799999 2.200001,-5 5,-5 L 108.8,5.5 c 2.80001,0 5,2.200001 5,5 l 0,24.599998 c 0.10001,2.800003 -2.19999,5 -4.89999,5 z"
+           stroke-miterlimit="10" />
+        <path
+           style="fill:none;stroke:#2b3493;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           inkscape:connector-curvature="0"
+           id="path5506"
+           d="m 108.90001,40.099998 -97.700011,0 c -2.799999,0 -5,-2.199997 -5,-5 l 0,-24.599998 c 0,-2.799999 2.200001,-5 5,-5 L 108.8,5.5 c 2.80001,0 5,2.200001 5,5 l 0,24.599998 c 0.10001,2.800003 -2.19999,5 -4.89999,5 z"
+           stroke-miterlimit="10" />
+        <path
+           style="fill:none;stroke:#63c6ff;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           inkscape:connector-curvature="0"
+           id="path5508"
+           d="m 108.90001,40.099998 -97.700011,0 c -2.799999,0 -5,-2.199997 -5,-5 l 0,-24.599998 c 0,-2.799999 2.200001,-5 5,-5 L 108.8,5.5 c 2.80001,0 5,2.200001 5,5 l 0,24.599998 c 0.10001,2.800003 -2.19999,5 -4.89999,5 z"
+           stroke-miterlimit="10" />
+      </g>
+    </g>
+    <text
+       sodipodi:linespacing="125%"
+       id="text5510"
+       y="1039.2039"
+       x="145.5773"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-xdpi="394.85001"
+       inkscape:export-ydpi="394.85001"><tspan
+         dx="0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:43.75px;font-family:cairo;-inkscape-font-specification:cairo;letter-spacing:-1.45000005px;fill:#ffffff;fill-opacity:1"
+         y="1039.2039"
+         x="145.5773"
+         id="tspan5512"
+         sodipodi:role="line">Police Complaints</tspan></text>
+    <rect
+       ry="3"
+       rx="3"
+       y="992.44867"
+       x="-3.3672724"
+       height="66"
+       width="470.39999"
+       id="rect5514"
+       style="opacity:1;fill:#0000ff;fill-opacity:0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="Layer 4"
+     transform="translate(0,-995.66928)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#656565;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="421.98383"
+       y="1015.1119"
+       id="text5408"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="394.85001"
+       inkscape:export-ydpi="394.85001"><tspan
+         sodipodi:role="line"
+         x="421.98383"
+         y="1015.1119"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.25px;font-family:Cairo;-inkscape-font-specification:Cairo;letter-spacing:-0.57999998px"
+         id="tspan5412">BETA</tspan></text>
+  </g>
+</svg>

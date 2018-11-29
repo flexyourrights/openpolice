@@ -1,7 +1,7 @@
 
 # FlexYourRights/OpenPolice
 
-[![Laravel](https://img.shields.io/badge/Laravel-5.3-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-5.7-orange.svg?style=flat-square)](http://laravel.com)
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -40,25 +40,22 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="requirements"></a>Requirements
 
-* php: >=5.6.4
-* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.3.*
+* php: >=7.2.11
+* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.7.*
 * <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.*
 
 # <a name="getting-started"></a>Getting Started
 
-Instructions if you are new to Laravel, or just want to install its local development environment, Homestead: 
-<a href="http://wikiworldorder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/" 
-    target="_blank">WikiWorldOrder.org/2016/11/26/coding-with-laravel-installing-homestead-on-a-mac/</a>.
+The instructions below include the needed steps to install Laravel, SurvLoop, as well as the Open Police system.
+For more on creating environments to host Laravel, you can find more instructions on
+<a href="https://survloop.org/how-to-install-laravel-on-a-digital-ocean-server" target="_blank">SurvLoop.org</a>.
 
-Instructions if you are new to Laravel, or just want to install it to an online server: 
-<a href="http://wikiworldorder.org/2018/03/15/how-to-install-the-laravel-php-framework-on-digital-ocean/" 
-    target="_blank">WikiWorldOrder.org/2018/03/15/how-to-install-the-laravel-php-framework-on-digital-ocean/</a>.
-    
-The instructions below include the needed steps to install SurvLoop, as well as the Open Police system.
-
-* Install Laravel's default user authentication, one required package, and SurvLoop:
+* Use Composer to install Laravel with default user authentication, one required package:
 
 ```
+$ composer global require "laravel/installer"
+$ composer create-project laravel/laravel OpenPolice "5.7.*"
+$ cd OpenPolice
 $ php artisan make:auth
 $ php artisan vendor:publish --tag=laravel-notifications
 ```
@@ -73,7 +70,6 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "wikiworldorder/survloop": "0.*",
     "flexyourrights/openpolice": "0.*",
 	...
 },
@@ -82,10 +78,7 @@ $ nano composer.json
 	...
 	"psr-4": {
 		...
-		"SurvLoop\\": "vendor/wikiworldorder/survloop/src/",
 		"OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
-		"MatthiasMullie\\Minify\\": "vendor/matthiasmullie/minify/src/",
-		"MatthiasMullie\\PathConverter\\": "vendor/matthiasmullie/path-converter/src/",
 	}
 	...
 },
@@ -116,6 +109,7 @@ $ nano config/app.php
 'aliases' => [
 	...
 	'SurvLoop'	 => 'WikiWorldOrder\SurvLoop\SurvLoopFacade',
+	'OpenPolice' => 'FlexYourRights\OpenPolice\OpenPoliceFacade',
 	...
 ],
 ...
@@ -143,6 +137,16 @@ $ php artisan db:seed --class=SurvLoopSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
 $ php artisan db:seed --class=OpenPoliceDepartmentSeeder
 ```
+
+* For now, to apply database design changes to the same installation you are working in, depending on your server, 
+you might also need something like this...
+
+```
+$ chown -R www-data:33 app/Models
+$ chown -R www-data:33 database
+```
+
+* Browse to load the style sheets, etc.. /dashboard/css-reload
 
 * Log into Open Police admin dashboard...
 

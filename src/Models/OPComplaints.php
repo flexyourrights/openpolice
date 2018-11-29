@@ -29,6 +29,7 @@ class OPComplaints extends Model
 		'ComAnyoneCharged', 
 		'ComAllChargesResolved', 
 		'ComUnresolvedChargesActions', 
+		'ComFileLawsuit', 
 		'ComHowHear', 
 		'ComFeedback', 
 		'ComOfficerDisciplined', 

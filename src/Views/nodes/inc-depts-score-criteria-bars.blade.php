@@ -27,4 +27,8 @@
 }
 .barGood { background: {{ $colorG }}; }
 .barBad { background: {{ $colorB }}; }
+
+@media screen and (max-width: 480px) {
+.barLab { top: 5px; font-size: 13px; }
+}
 </style>

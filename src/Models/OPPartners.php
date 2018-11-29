@@ -11,11 +11,23 @@ class OPPartners extends Model
     protected $fillable   = 
     [    
 		'PartType', 
+		'PartStatus', 
 		'PartUserID', 
 		'PartPersonID', 
-		'PartTitle', 
+		'PartBio', 
+		'PartSlug', 
 		'PartCompanyName', 
+		'PartTitle', 
 		'PartCompanyWebsite', 
+		'PartBioUrl', 
+		'PartPhotoUrl', 
+		'PartAlerts', 
+		'PartVersionAB', 
+		'PartSubmissionProgress', 
+		'PartIPaddy', 
+		'PartTreeVersion', 
+		'PartUniqueStr', 
+		'PartIsMobile', 
     ];
     
     // END SurvLoop auto-generated portion of Model

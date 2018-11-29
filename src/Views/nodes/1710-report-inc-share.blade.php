@@ -19,15 +19,11 @@
         <h3 class="slBlueDark mT0 mB20">Share...</h3>
         <div class="disBlo">
             <div class="disIn mR10">
-                {!! view('vendor.survloop.inc-social-simple-tweet', [
-                    "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $pubID,
-                    "title" => 'Check out this police complaint!'
-                    ])->render() !!}
+                {!! $GLOBALS["SL"]->twitShareBtn($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID, 
+                    'Check out this police complaint!') !!}
             </div>
             <div class="disIn mR10">
-                {!! view('vendor.survloop.inc-social-simple-facebook', [
-                    "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $pubID
-                    ])->render() !!}
+                {!! $GLOBALS["SL"]->faceShareBtn($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID) !!}
             </div>
         </div>
         @if (isset($emojiTags) && trim($emojiTags) != '') <div class="mT5">{!! $emojiTags !!}</div> @endif

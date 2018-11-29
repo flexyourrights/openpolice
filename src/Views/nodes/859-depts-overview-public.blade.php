@@ -9,7 +9,11 @@
     <div class="deptScrHead1">
         <div class="deptScrMore" data-dept="chartHeaders">
             <div class="row">
-                <div class="col-4"></div>
+                <div class="col-3"><div id="fldLabA" class="mT0"></div>
+                    {{ $deptScores->scoreDepts->count() }} Departments 
+                    <span class="fPerc80 slGrey">(click for details)</span>
+                </div>
+                <div class="col-1"><div id="fldLabB" class="mT0"></div>Grade</div>
                 <div class="col-8"><div class="deptHeadWrap">
                 @foreach ($deptScores->chartFlds as $i => $fld) 
                     <div class="fldLab"><div id="fldLab{{ $i }}" class="mT0"></div>{!! $fld[0] !!}</div>
@@ -18,10 +22,13 @@
             </div>
             <div class="row mT5 mB10">
                 <div class="col-3">
-                    <div class="pL10">{{ $deptScores->scoreDepts->count() }} Departments 
-                        <span class="fPerc80 slGrey">(click for details)</span></div>
+                    <select id="deptStateDrop" class="form-control" 
+                        onChange="window.location='/department-accessibility?state='+this.value;">
+                        
+                    {!! $GLOBALS["SL"]->states->stateDrop($state, true) !!}
+                    </select>
                 </div>
-                <div class="col-1">Grade</div>
+                <div class="col-1"></div>
                 <div class="col-8"><div class="deptHeadWrap">
                 @foreach ($deptScores->chartFlds as $i => $fld) <div class="fldLabIco">{!! $fld[2] !!}</div> @endforeach
                 </div></div>
@@ -36,9 +43,10 @@
 @if ($deptScores->scoreDepts->isNotEmpty())
     @foreach ($deptScores->scoreDepts as $i => $dept)
         <div class="deptScrMore @if ($i%2 == 0) row2 @endif " data-dept="{{ $dept->DeptID }}">
-            <div class="row">
+            <div class="row @if ($i%2 == 0) row2 @endif ">
                 <div class="col-md-3 col-sm-12 
-                    @if (strlen($deptScores->deptNames[$dept->DeptID]) > 33) deptScrLab2 @else deptScrLab @endif ">
+                    <?php /* @if (strlen($deptScores->deptNames[$dept->DeptID]) > 33) deptScrLab2 @else */ ?> 
+                    deptScrLab <?php /* @endif */ ?> ">
                     <b>{{ $deptScores->deptNames[$dept->DeptID] }}</b>
                 </div>
                 <div class="col-md-1 col-sm-12 deptScrLab deptScrLabNum">
@@ -49,11 +57,9 @@
                     <?php
                     $good = false;
                     if ($fld[1] == 'Notary') {
-                        $good = !$deptScores->checkRecFld($deptScores->vals[$fld[1]], 
-                            $deptScores->deptOvers[$dept->DeptID]);
+                        $good = !$deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->DeptID);
                     } else {
-                        $good = $deptScores->checkRecFld($deptScores->vals[$fld[1]], 
-                            $deptScores->deptOvers[$dept->DeptID]);
+                        $good = $deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->DeptID);
                     }
                     ?>
                     @if (!$good)
@@ -70,7 +76,7 @@
                 @endforeach
                 </div>
             </div>
-            <div id="deptScrMore{{ $dept->DeptID }}" class="disNon p10">
+            <div id="deptScrMore{{ $dept->DeptID }}" class="disNon p10 @if ($i%2 == 0) row2 @endif ">
                 <a href="/dept/{{ $dept->DeptSlug }}" class="deptScrLnk"><h4 class="mB0">{{ 
                         str_replace('Department', 'Dept', $dept->DeptName) }}</h4></a>
                 <div class="row">
@@ -79,9 +85,10 @@
                         {{ $dept->DeptAddressCounty }} County
                     </div><div class="col-6">
                         OPC Accessibility Score: <b class="slBlueDark">{{ $dept->DeptScoreOpenness }}</b><br />
-                        {{ $GLOBALS["SL"]->def->getVal('Department Types', $dept->DeptType) }},
-                        @if ($dept->DeptTotOfficers > 0) {{ number_format($dept->DeptTotOfficers) }} 
-                        @else <a href="/volunteer" class="slGrey">?</a> @endif officers
+                        @if (isset($dept->DeptType) && intVal($dept->DeptType) > 0)
+                            {{ $GLOBALS["SL"]->def->getVal('Department Types', $dept->DeptType) }},
+                        @endif
+                        @if ($dept->DeptTotOfficers > 0) {{ number_format($dept->DeptTotOfficers) }} officers @endif
                         @if (isset($dept->DeptVerified) && trim($dept->DeptVerified) != '')
                             <div class="slGrey">updated {{ date('n/j/y', strtotime($dept->DeptVerified)) }}</div>
                         @endif
@@ -91,7 +98,7 @@
                 <?php $cnt = 0; ?>
                 @foreach ($deptScores->vals as $type => $specs)
                     @if ($cnt == floor(sizeof($deptScores->vals)/2)) </div><div class="col-lg-6 col-md-12"> @endif
-                    @if ($deptScores->checkRecFld($specs, $deptScores->deptOvers[$dept->DeptID]) != 0)
+                    @if ($deptScores->checkRecFld($specs, $dept->DeptID) != 0)
                         <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOn"><div class="row">
                         <div class="col-1 taR"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
                     @else
@@ -112,6 +119,16 @@
             
         </div>
     @endforeach
+@else
+    <p>&nbsp;</p><p><i>No departments found.</i></p><p>&nbsp;</p>
+@endif
+
+@if (isset($deptScores->stats["scoreAvg"]) && intVal($deptScores->stats["scoreAvg"]) > 0)
+    <p>&nbsp;</p><p>&nbsp;</p>
+    <h1 class="slBlueDark">Average
+    @if (isset($state) && trim($state) != '') {{ $GLOBALS["SL"]->getState($state) }} @endif
+    Accessibility Score: {{ round($deptScores->stats["scoreAvg"]) }}</h1>
+    <span class="slGrey">(out of 100)</span>
 @endif
 
 </div> <!-- end #node{{ $nID }} -->
@@ -128,9 +145,9 @@
 .deptScrHeadScroll {
     position: fixed;
     z-index: 100;
-    padding: 10px 20px 0px 0px;
-    width: 1130px;
-    margin-top: -510px;
+    padding: 10px 20px 0px 20px;
+    width: 1150px;
+    margin: @if (isset($state) && trim($state) != '') -509px @else -972px @endif 0px 0px -20px;
     background: #FFF;
 }
 .deptScrHead1, .deptScrHead2 { background: #FFF; width: 100%; margin-left: -6px; }
@@ -154,17 +171,17 @@
 .fldGood div, .fldBad div { padding: 2px 0px; }
 .fldLab { font-size: 14px; padding: 0px 2px; }
 #fldLab0, #fldLab2, #fldLab3, #fldLab4 { margin-top: 19px; }
-#fldLab5, #fldLab6 { margin-top: 39px; }
+#fldLabA, #fldLabB, #fldLab5, #fldLab6 { margin-top: 39px; }
 .chrtIco { display: none; margin-left: 20px; }
 .deptScrScr { display: block; }
 a.deptScrLnk:link, a.deptScrLnk:visited, a.deptScrLnk:active, a.deptScrLnk:hover { font-size: 14pt; }
     
 @media screen and (max-width: 1200px) {
-    .deptScrHeadScroll { width: 943px; margin-top: -565px; }
+    .deptScrHeadScroll { width: 963px; margin-top: @if (isset($state) && trim($state) != '') -535px; @else -990px; @endif }
     .deptScrHeadScroll .deptScrHead1 .deptScrMore .row .col-8 .deptHeadWrap { padding-left: 3px; }
     @-moz-document url-prefix() {
         .deptScrHeadScroll .deptScrHead1 .deptScrMore .row .col-8 .deptHeadWrap {
-            padding-left: 8px; margin-right: -4px;
+            padding-left: 28px; margin-right: -4px;
         }
     }
     .fldGood, .fldBad, .fldLab, .fldLabIco { width: 74px; }
@@ -177,7 +194,7 @@ a.deptScrLnk:link, a.deptScrLnk:visited, a.deptScrLnk:active, a.deptScrLnk:hover
     #node1815kids { margin-bottom: 40px; }
     .deptScrHeadScroll {
         position: relative;
-        margin: 10px 0px 0px 0px; 
+        margin: 10px 0px 0px -20px; 
         width: 100%;
     }
     .deptScrHead1 { display: none; }
@@ -223,17 +240,23 @@ a.deptScrLnk:link, a.deptScrLnk:visited, a.deptScrLnk:active, a.deptScrLnk:hover
     .opcAccScr { font-size: 133%; }
     
 }
+
+@if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '')
+    #blockWrap1864 { display: none; }
+@endif
 </style>
 <script type="text/javascript">
 function bodyOnScroll() {
-    var currScroll = window.pageYOffset;
-    if (document.getElementById("deptScrHead")) {
-        if (currScroll < 300 || currScroll > 5200) {
-            document.getElementById("deptScrHead").className="deptScrHead";
-        } else {
-            document.getElementById("deptScrHead").className="deptScrHeadScroll";
+    @if (!$GLOBALS["SL"]->REQ->has('state') || trim($GLOBALS["SL"]->REQ->get('state')) == '')
+        var currScroll = window.pageYOffset;
+        if (document.getElementById("deptScrHead")) {
+            if (currScroll < 630) {
+                document.getElementById("deptScrHead").className="deptScrHead";
+            } else {
+                document.getElementById("deptScrHead").className="deptScrHeadScroll";
+            }
         }
-    }
+    @endif
     return true;
 }
 

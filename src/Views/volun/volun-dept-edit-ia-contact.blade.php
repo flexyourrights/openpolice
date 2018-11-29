@@ -12,7 +12,6 @@
             <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-secondary hidnodeBtnSelf"
                 ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>
         @endif
-        <h3 id="h3Btn{{ $n }}" class="mT5 @if ($hasC) disBlo @else disNon @endif ">Primary Contact:</h3>
     </div>
 </div>
 <style>
@@ -25,7 +24,6 @@ $(document).ready(function(){
 	    setNodeVisib({{ $n }}, "", true);
 	    setNodeVisib(1312, "", true);
 	    setNodeVisib(1341, "", true);
-        setTimeout(function() { $("#h3Btn{{ $n }}").slideDown("fast"); }, 350);
 	});
 @if ($whch == 'Civ' && !$hasCiv)
     setTimeout(function() {

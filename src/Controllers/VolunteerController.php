@@ -542,7 +542,7 @@ class VolunteerController extends OpenPoliceAdmin
         $deptEdit->ZedDeptDuration                        = time()-intVal($request->formLoaded);
         $iaEdit->ZedOverOverType                              = 303;
         
-        $this->v["deptRow"]->DeptVerified                  = $deptEdit->ZedDeptDeptVerified                     = date("Y-m-d H:i:s");
+        $this->v["deptRow"]->DeptVerified                  = $deptEdit->ZedDeptDeptVerified                 = date("Y-m-d H:i:s");
         $this->v["deptRow"]->DeptName                      = $deptEdit->ZedDeptName                         = $request->DeptName;
         $this->v["deptRow"]->DeptSlug                      = $deptEdit->ZedDeptSlug                         = $request->DeptSlug;
         $this->v["deptRow"]->DeptType                      = $deptEdit->ZedDeptType                         = intVal($request->DeptType);

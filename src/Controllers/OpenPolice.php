@@ -36,6 +36,8 @@ use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
 use App\Models\OPPhysicalDesc;
 use App\Models\OPLinksComplaintOversight;
+use App\Models\OPPartners;
+use App\Models\OPPartnerCaseTypes;
 
 use App\Models\OPzComplaintReviews;
 use App\Models\OPZeditDepartments;
@@ -455,6 +457,12 @@ class OpenPolice extends SurvFormTree
                 }
             }
         }
+        if ($this->treeID == 1 && session()->has('opcPartID') && intVal(session()->get('opcPartID')) > 0
+            && isset($this->sessData->dataSets["Complaints"]) 
+            && intVal($this->sessData->dataSets["Complaints"][0]->ComSubmissionProgress) > 0) {
+            $this->sessData->dataSets["Complaints"][0]->ComAttID = intVal(session()->get('opcPartID'));
+            $this->sessData->dataSets["Complaints"][0]->save();
+        }
         $this->v["isPublic"] = $this->isPublic();
         return true;
     }
@@ -592,6 +600,12 @@ class OpenPolice extends SurvFormTree
                 && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged), ['Y', '?']))
                 && (!isset($this->sessData->dataSets["Complaints"][0]->ComAllChargesResolved) 
                     || trim($this->sessData->dataSets["Complaints"][0]->ComAllChargesResolved) != 'Y')) {
+                return 1;
+            }
+            if (isset($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged) 
+                && trim($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged) == 'N'
+                && isset($this->sessData->dataSets["Complaints"][0]->ComFileLawsuit) 
+                && trim($this->sessData->dataSets["Complaints"][0]->ComFileLawsuit) == 'Y') {
                 return 1;
             }
             return 0;
@@ -749,14 +763,13 @@ class OpenPolice extends SurvFormTree
     
     public function multiRecordCheckIntro($cnt = 1)
     {
-        $ret = '<a id="hidivBtnUnfinished' . $this->currNode() . '" class="btn btn-lg btn-secondary w100 hidivBtn" '
-            . 'href="javascript:;">' . $this->v["user"]->name . ', You Have ';
+        $ret = '<h3 class="slBlueDark">' . $this->v["user"]->name . ', You Have ';
         if ($this->treeID == 1) {
             $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');
         } elseif ($this->treeID == 5) {
             $ret .= (($cnt == 1) ? 'An Unfinished Compliment' : 'Unfinished Compliments');
         }
-        return $ret . '</a>';
+        return $ret . '</h3>';
     }
     
     public function multiRecordCheckRowTitle($coreRecord)
@@ -942,25 +955,42 @@ class OpenPolice extends SurvFormTree
         
         // Home Page
         } elseif ($nID == 1876) {
-            $ret .= '<div class="relDiv w100">'
-                . '<div id="photoCred" class="absDiv f8 wht opac80" style="top: -25px; right: 15px;">'
-                . '<a href="https://www.flickr.com/photos/fibonacciblue/26146967075/in/dateposted/" target="_blank" '
-                . 'class="fnt">Photo by Fibonacci Blue</a>, <a href="'
-                . 'https://creativecommons.org/licenses/by/2.0/" target="_blank" class="fnt">CC BY 2.0</a>'
-                . '</div></div>';
+            $ret .= '<div class="relDiv w100">
+                <div id="photoCred" class="absDiv taR f8 wht opac80" style="top: -50px; right: 15px;">
+                <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" class="fnt"
+                    style="color: #999;">Photo: CC BY 2.0</a><br />
+                <a href="https://www.flickr.com/photos/fibonacciblue/26146967075/in/dateposted/" target="_blank" 
+                    class="fnt">by Fibonacci Blue</a>
+                </div></div>';
+        } elseif ($nID == 1848) {
+            $ret .= '<div id="releaseNote" class="alert alert-danger w100 taC fPerc125" style="padding: 15px 15px;"><b>
+                RELEASE NOTE: We are only accepting a limited number of complaints through our pilot program.
+                But everyone will be able to publish complaints soon!</b></div>
+                <style> @media screen and (max-width: 768px) { #releaseNote { padding: 30px 15px; } } </style>';
                 
                 
         // FAQ
         } elseif ($nID == 1884) {
             $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
-                
+            
         // Public Departments Accessibility Overview
-        } elseif ($nID == 1858) {
-            if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
-            $ret .= $this->v["deptScores"]->printTotsBars();
+        } elseif ($nID == 1968) {
+            $this->getSearchFilts();
+            if (!isset($this->v["deptScores"])) {
+                $this->v["deptScores"] = new DepartmentScores;
+                $this->v["deptScores"]->loadAllDepts($this->searchOpts);
+            }
+            $ret .= view('vendor.openpolice.nodes.1968-accss-grades-title-desc', [
+                "nID"   => $nID,
+                "state" => (($GLOBALS["SL"]->REQ->has('state')) ? $GLOBALS["SL"]->REQ->state : '')
+                ])->render();
+        //} elseif ($nID == 1858) {
+        //    $this->v["deptScores"] = new DepartmentScores;
+        //    $ret .= $this->v["deptScores"]->printTotsBars();
         } elseif ($nID == 1816) {
-            $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
-            if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
+            if (!$GLOBALS["SL"]->REQ->has('state') || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
+                $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
+            }
             $ret .= $this->v["deptScores"]->printTotsBars();
             /*
             $statGrades = new SurvLoopStat;
@@ -985,34 +1015,21 @@ class OpenPolice extends SurvFormTree
             $colors = [ '#2B3493', $blue1, $blue2, $red2, '#EC2327' ];
             $ret = $statGrades->piePercCntCore('grade', 0.2, $colors);
             */
-        } elseif ($nID == 1863) {
-            if (!isset($this->v["deptScores"])) {
-                $this->v["deptScores"] = new DepartmentScores;
-                $this->v["deptScores"]->loadAllDepts();
-            }
-            $GLOBALS["SL"]->loadStates();
-            $cnt = 0;
-            $limit = 10;
-            foreach ($this->v["deptScores"]->scoreDepts as $i => $dept) {
-                if ($cnt < $limit && (!isset($dept->DeptAddressLat) || intVal($dept->DeptAddressLat) == 0)) {
-                    list($lat, $lng) = $GLOBALS["SL"]->states->getLatLng($GLOBALS["SL"]->printRowAddy($dept, 'Dept'));
-                    $this->v["deptScores"]->scoreDepts[$i]->update([
-                        'DeptAddressLat' => $lat,
-                        'DeptAddressLng' => $lng
-                        ]);
-                    $cnt++;
-                }
-            }
-            $ret = $GLOBALS["SL"]->states->embedMap();
+        } elseif (in_array($nID, [1863, 1858]) || $nID == 2013) {
+            return $this->publicDeptAccessMap($nID);
+        } elseif ($nID == 1896) {
+            return $this->printAttorneyReferrals($nID);
+        } elseif ($nID == 1961) {
+            return $this->publicAttorneyHeader($nID);
+        } elseif ($nID == 1898) {
+            return $this->publicAttorneyPage($nID);
+        } elseif ($nID == 1907) { // Donate Social Media Buttons
+            return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif (in_array($nID, [859, 1454])) {
-            $GLOBALS["SL"]->addHshoo('/departments-accessibility#gradeDesc');
-            if (!isset($this->v["deptScores"])) {
-                $this->v["deptScores"] = new DepartmentScores;
-                $this->v["deptScores"]->loadAllDepts();
-            }
             $ret .= view('vendor.openpolice.nodes.859-depts-overview-public', [
                 "nID"        => $nID,
-                "deptScores" => $this->v["deptScores"]
+                "deptScores" => $this->v["deptScores"],
+                "state"      => ((isset($this->searchOpts["state"])) ? $this->searchOpts["state"] : '')
                 ])->render();
         } elseif (in_array($nID, [1456])) { // public oversight overview
             /*
@@ -1049,16 +1066,34 @@ class OpenPolice extends SurvFormTree
                 . '&limit=20");' . "\n";
             
             /*
-
             if (trim($previews) == '') {
                 $previews = '<p><i>No complaints have been submitted for this deparment.</i></p>';
             }
             */
             $ret .= view('vendor.openpolice.dept-page', [
+                "nID"      => $nID,
                 "d"        => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]],
                 "previews" => $previews
                 ])->render();
                 
+        // How We Rate Departments Page
+        } elseif ($nID == 1127) {
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1827');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1825');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1829');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1831');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1833');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1837');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1806');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1835');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n1');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n2');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n3');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n4');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n5');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n6');
+            $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n7');
+               
         // User Profile Nodes
         } elseif ($nID == 1893) {
             if ($this->v["uID"] > 0) { // loading records for my own profile
@@ -1169,7 +1204,18 @@ class OpenPolice extends SurvFormTree
             return $this->printComplaintListing();
         } elseif ($nID == 1420) {
             return $this->printComplaintListing('incomplete');
-        
+        } elseif ($nID == 1939) {
+            return $this->printManageAttorneys();
+        } elseif ($nID == 1924) {
+            if (!isset($this->sessData->dataSets["PartnerCaseTypes"])
+                || sizeof($this->sessData->dataSets["PartnerCaseTypes"]) == 0) {
+                $this->sessData->dataSets["PartnerCaseTypes"] = [];
+                for ($i = 0; $i < 3; $i++) {
+                    $this->sessData->dataSets["PartnerCaseTypes"][$i] = new OPPartnerCaseTypes;
+                    $this->sessData->dataSets["PartnerCaseTypes"][$i]->PrtCasPartnerID = $this->coreID;
+                    $this->sessData->dataSets["PartnerCaseTypes"][$i]->save();
+                }
+            }
             
         // Volunteer Area Nodes
         } elseif ($nID == 1211) {
@@ -1528,8 +1574,50 @@ class OpenPolice extends SurvFormTree
                     = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
                 $this->sessData->dataSets['Complaints'][0]->save();
             }
+            
+        // Page Nodes
+        } elseif ($nID == 1007) {
+            return $this->postContactEmail($nID);
         }
         return false; // false to continue standard post processing
+    }
+    
+    protected function postContactEmail($nID)
+    {
+        $this->postNodeLoadEmail($nID);
+        if ($GLOBALS["SL"]->REQ->has('n831fld') && trim($GLOBALS["SL"]->REQ->n831fld) != '') return true;
+        $emaSubject = $this->postDumpFormEmailSubject();
+        $emaContent = view('vendor.openpolice.contact-form-email-admin')->render();
+        if ($GLOBALS["SL"]->isHomestead()) {
+            $this->sendFakeEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"]);
+        } else {
+            $this->sendEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"], $this->v["emaBCC"],
+                ['noreply@openpolice.org', 'OPC Contact']);
+        }
+        $emaID = ((isset($currEmail->EmailID)) ? $currEmail->EmailID : -3);
+        $this->logEmailSent($emaContent, $emaSubject, $this->v["toList"], $emaID, $this->treeID, $this->coreID,
+            $this->v["uID"]);
+        $this->manualLogContact($nID, $emaContent, $emaSubject, $this->v["toList"], $GLOBALS["SL"]->REQ->n829fld);
+        return true;
+    }
+    
+    protected function postEmailFrom()
+    {
+        if ($this->treeID == 13) return ['', 'OPC Contact'];
+        return [];
+    }
+    
+    protected function postDumpFormEmailSubject()
+    {
+        if ($this->treeID == 13 && $GLOBALS["SL"]->REQ->has('n829fld')) {
+            return $GLOBALS["SL"]->REQ->n829fld 
+                . (($GLOBALS["SL"]->REQ->has('n1879fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1879fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1880fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1880fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1881fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1881fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1873fld')) ? ': ' . implode(', ', $GLOBALS["SL"]->REQ->n1873fld) : '')
+                . (($GLOBALS["SL"]->REQ->has('n1872fld')) ? ' -' . $GLOBALS["SL"]->REQ->n1872fld : '');
+        }
+        return $GLOBALS["SL"]->sysOpts["site-name"] . ': ' . $GLOBALS["SL"]->treeRow->TreeName;
     }
     
     // returns an array of overrides for ($currNodeSessionData, ???... 
@@ -1867,7 +1955,7 @@ class OpenPolice extends SurvFormTree
     
     public function printPreviewReportCustom($isAdmin = false)
     {
-        $coreAbbr = $GLOBALS["SL"]->tblAbbr[$GLOBALS["SL"]->coreTbl];
+        $coreAbbr = $GLOBALS["SL"]->coreTblAbbr();
         if (!isset($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl]) 
             || !isset($this->sessData->dataSets["Incidents"])) {
             return '';
@@ -2947,37 +3035,39 @@ class OpenPolice extends SurvFormTree
     protected function fillGlossary()
     {
         $this->v["glossaryList"] = [];
-        $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
-        if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
-            $this->v["glossaryList"][] = ['<b>Full Transparency</b>', 
-                $prvLnk . 'User opts to publish the names of civilians and police officers on this website.'];
-        } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public')) {
-            $this->v["glossaryList"][] = ['<b>No Names Public</b>', 
-                $prvLnk . 'User doesn\'t want to publish any names on this website. 
-                This includes police officers\' names and badge numbers too.'];
-        } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
-            $this->v["glossaryList"][] = ['<b>Anonymous</b> ', 
-                $prvLnk . 'User needs complaint to be completely anonymous, even though it will be harder to '
-                    . 'investigate. No names will be published on this website. Neither OPC staff nor investigators '
-                    . 'will be able to contact them. Any details that could be used for personal identification '
-                    . 'may be deleted from the database.'];
-        }
-        if ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold') {
-            $this->v["glossaryList"][] = ['<b>Gold-Level Complaint</b>', 
-                '<a href="/frequently-asked-questions#what-is-gold-star">Optional</a>: This user opted '
-                    . 'to share more complete details about their police experience than a Basic Complaint.'];
-        }
-        $this->simpleAllegationList();
-        if (sizeof($this->allegations) > 0) {
-            foreach ($this->allegations as $i => $a) {
-                $this->v["glossaryList"][] = [
-                    '<b>' . $a[0] . '</b>', 
-                    '<a href="/allegations" target="_blank">Allegation</a>: ' 
-                        . $GLOBALS["SL"]->def->getDesc('Allegation Type', $a[0])
-                ];
+        if ($this->treeID == 1) {
+            $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
+            if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+                $this->v["glossaryList"][] = ['<b>Full Transparency</b>', 
+                    $prvLnk . 'User opts to publish the names of civilians and police officers on this website.'];
+            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public')) {
+                $this->v["glossaryList"][] = ['<b>No Names Public</b>', 
+                    $prvLnk . 'User doesn\'t want to publish any names on this website. 
+                    This includes police officers\' names and badge numbers too.'];
+            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
+                $this->v["glossaryList"][] = ['<b>Anonymous</b> ', 
+                    $prvLnk . 'User needs complaint to be completely anonymous, even though it will be harder to '
+                        . 'investigate. No names will be published on this website. Neither OPC staff nor investigators '
+                        . 'will be able to contact them. Any details that could be used for personal identification '
+                        . 'may be deleted from the database.'];
+            }
+            if ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold') {
+                $this->v["glossaryList"][] = ['<b>Gold-Level Complaint</b>', 
+                    '<a href="/frequently-asked-questions#what-is-gold-star">Optional</a>: This user opted '
+                        . 'to share more complete details about their police experience than a Basic Complaint.'];
+            }
+            $this->simpleAllegationList();
+            if (sizeof($this->allegations) > 0) {
+                foreach ($this->allegations as $i => $a) {
+                    $this->v["glossaryList"][] = [
+                        '<b>' . $a[0] . '</b>', 
+                        '<a href="/allegations" target="_blank">Allegation</a>: ' 
+                            . $GLOBALS["SL"]->def->getDesc('Allegation Type', $a[0])
+                    ];
+                }
             }
         }
         return true;
@@ -3635,6 +3725,27 @@ class OpenPolice extends SurvFormTree
         exit;
     }
     
+    public function ajaxChecksCustom(Request $request, $type = '')
+    {
+        if ($type == 'dept-kml-desc') {
+            return $this->ajaxDeptKmlDesc($request);
+        }
+        return '';
+    }
+    
+    public function ajaxDeptKmlDesc(Request $request)
+    {
+        if ($request->has('deptID') && intVal($request->deptID) > 0) {
+            $deptID = intVal($request->deptID);
+            
+// check cache!
+                $this->loadDeptStuff($deptID);
+                return $this->v["deptScores"]->printMapScoreDesc($deptID);
+            
+        }
+        return '';
+    }
+    
     protected function addDeptToResults($deptIDs, $depts, $deptsIn)
     {
         if ($deptsIn->isNotEmpty()) {
@@ -3696,120 +3807,7 @@ class OpenPolice extends SurvFormTree
     public function loadDeptStuff($deptID = -3)
     {
         if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
-        if ($deptID > 0 && !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
-            $GLOBALS["SL"]->x["depts"][$deptID] = [ "id" => $deptID ];
-            $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] = OPDepartments::find($deptID);
-            $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
-                ->first();
-            $GLOBALS["SL"]->x["depts"][$deptID]["civRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
-                ->first();
-            if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) 
-                || !$GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) {
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"] = new OPOversight;
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverDeptID = $deptID;
-                if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverType
-                        = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverPhoneWork
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptPhoneWork;
-                }
-                $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
-            }
-            if (isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)
-                && trim($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) != '') {
-                if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) 
-                    || trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName) == '') {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAgncName
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->save();
-                }
-                if ($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"] 
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress)) {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                        = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress . ', ';
-                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) 
-                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2) != '') {
-                        $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                            .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddress2 . ', ';
-                    }
-                    $GLOBALS["SL"]->x["depts"][$deptID]["deptAddy"] 
-                        .= $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressCity . ', ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState . ' ' 
-                        . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
-                    $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] = '';
-                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) 
-                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress) != '') {
-                        $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                            = $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress . ', ';
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) 
-                            && trim($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2) != '') {
-                            $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                                .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddress2 . ', ';
-                        }
-                        $GLOBALS["SL"]->x["depts"][$deptID]["iaAddy"] 
-                            .= $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressCity . ', ' 
-                            . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressState . ' ' 
-                            . $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]->OverAddressZip;
-                    }
-                    $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"]  = '';
-                    if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) 
-                        && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress) != '') {
-                        $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                            = $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress . ', ';
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) 
-                            && trim($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2) != '') {
-                            $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                                .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddress2 . ', ';
-                        }
-                        $GLOBALS["SL"]->x["depts"][$deptID]["civAddy"] 
-                            .= $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressCity . ', ' 
-                            . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressState . ' ' 
-                            . $GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAddressZip;
-                    }
-                }
-            }
-            
-            $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"] = $which = '';
-            if (isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]) 
-                && isset($GLOBALS["SL"]->x["depts"][$deptID]["civRow"]->OverAgncName)) {
-                $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"] = $which = "civRow";
-            } else {
-                $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"] = $which = "iaRow";
-            }
-            $GLOBALS["SL"]->x["depts"][$deptID]["overUser"] = [];
-            if (isset($GLOBALS["SL"]->x["depts"][$deptID][$which])
-                && isset($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverEmail)) {
-                $email = $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverEmail;
-                $GLOBALS["SL"]->x["depts"][$deptID]["overUser"] = User::where('email', $email)->first();
-            }
-            
-            if (isset($GLOBALS["SL"]->x["depts"]) && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
-                && isset($GLOBALS["SL"]->x["depts"][$deptID]["iaRow"])) {
-                $GLOBALS["SL"]->x["depts"][$deptID]["score"] = [];
-                foreach ($this->v["deptScores"]->vals as $type => $specs) {
-                    $GLOBALS["SL"]->x["depts"][$deptID]["score"][] = [
-                        $specs->score,
-                        $specs->label,
-                        ($this->v["deptScores"]->checkRecFld($specs, $GLOBALS["SL"]->x["depts"][$deptID]["iaRow"]) != 0)
-                        ];
-                }
-            }
-        }
+        $this->v["deptScores"]->loadDeptStuff($deptID);
         return true;
     }
     
@@ -5136,6 +5134,27 @@ class OpenPolice extends SurvFormTree
         return view('vendor.openpolice.nodes.1418-admin-complaints-listing', $this->v)->render();
     }
     
+    protected function printManageAttorneys()
+    {
+        $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
+        if ($GLOBALS["SL"]->REQ->has('add')) {
+            $newAtt = new OPPartners;
+            $newAtt->PartType = $defAtt;
+            $newAtt->save();
+            $this->redir('/dashboard/start-' . $newAtt->PartID . '/attorney-profile', true);
+        }
+        $this->v["partners"] = DB::table('OP_Partners')
+            ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
+            ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
+            ->where('OP_Partners.PartType', $defAtt)
+            ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
+                'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
+                'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
+            ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
+            ->get();
+        return view('vendor.openpolice.nodes.1939-manage-attorneys', $this->v)->render();
+    }
+    
     protected function getNameTopAnon()
     {
         return '<span style="color: #2b3493;" title="This complainant did not provide their name to investigators.">'
@@ -5627,5 +5646,134 @@ class OpenPolice extends SurvFormTree
         }
         return false;
     }
+    
+    protected function printAttorneyReferrals($nID = -3)
+    {
+        
+        return view('vendor.openpolice.nodes.1896-attorney-referral-listings', [
+            "nID"        => $nID
+            ])->render();
+    }
+    
+    public function attorneyPage(Request $request, $prtnSlug = '')
+    {
+        $partID = -3;
+        $partRow = OPPartners::where('PartSlug', $prtnSlug)
+            ->first();
+        if ($partRow && isset($partRow->PartID)) {
+            $partID = $partRow->PartID;
+            $request->atr = $partRow->PartID;
+        }
+        $this->loadPageVariation($request, 1, 56, '/attorney/' . $prtnSlug);
+        if ($partID > 0) {
+            $this->coreID = $partRow->PartID;
+            $this->loadAllSessData($GLOBALS["SL"]->coreTbl, $this->coreID);
+        }
+        return $this->index($request);
+    }
+    
+    public function shareStoryAttorney(Request $request, $prtnSlug = '')
+    {
+        $this->loadPageVariation($request, 1, 62, '/preparing-your-complaint-for-an-attorney/' . $prtnSlug);
+        $partRow = OPPartners::where('PartSlug', $prtnSlug)
+            ->first();
+        if ($partRow && isset($partRow->PartID)) session()->put('opcPartID', $partRow->PartID);
+        return $this->index($request);
+    }
+    
+    protected function publicAttorneyHeader($nID = -3)
+    {
+        $coreID = (($this->coreID > 0) ? $this->coreID : 1);
+        $this->loadSessionData('Partners', $coreID);
+        if (!isset($this->sessData->dataSets["Partners"])) return '';
+        return view('vendor.openpolice.nodes.1961-public-attorney-header', [
+            "nID" => $nID,
+            "dat" => $this->sessData->dataSets
+            ])->render();
+    }
+    
+    protected function publicAttorneyPage($nID = -3)
+    {
+        if (!isset($this->sessData->dataSets["Partners"])) return '';
+        return view('vendor.openpolice.nodes.1898-public-attorney-page', [
+            "nID" => $nID,
+            "dat" => $this->sessData->dataSets
+            ])->render();
+    }
+    
+    protected function publicDeptAccessMap($nID = -3)
+    {
+        if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
+            return '<!-- no state map yet -->';
+        }
+        $ret = '';
+        if ($GLOBALS["SL"]->REQ->has('colorMarker')) {
+            $colors = [];
+            for ($i = 0; $i < 5; $i++) {
+                $colors[$i] = $GLOBALS["SL"]->printColorFadeHex($i/7, '#EC2327', '#FFFFFF');
+            }
+                
+            for ($i = 5; $i < 11; $i++) {
+                $colors[$i] = $GLOBALS["SL"]->printColorFadeHex((11-$i)/7, '#2B3493', '#FFFFFF');
+            }
+            echo '<br /><br /><br /><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
+            foreach ($colors as $i => $c) {
+                echo '<td><img src="/survloop/uploads/template-map-marker.png" border=0 '
+                    . 'style="width: 80px; background: ' . $c . ';"><br /><br />' . $c . '</td>';
+            }
+            echo '</tr></table><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
+            foreach ($colors as $i => $c) {
+                echo '<td><img src="/openpolice/uploads/map-marker-redblue-' . $i . '.png" border=0 ></td>';
+            }
+            echo '</tr></table>';
+        }
+        
+        $GLOBALS["SL"]->loadStates();
+        if (!isset($this->v["deptScores"])) {
+            $this->v["deptScores"] = new DepartmentScores;
+            $this->v["deptScores"]->loadAllDepts($this->searchOpts);
+        }
+        if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
+            $ret .= '<!-- not yet for state filter -->';
+        } else {
+            $cnt = 0;
+            $limit = 10;
+//echo '<pre>'; print_r($this->v["deptScores"]->scoreDepts); echo '</pre>';
+            for ($i = sizeof($this->v["deptScores"]->scoreDepts)-1; $i >= 0; $i--) {
+                $dept = $this->v["deptScores"]->scoreDepts[$i];
+//echo $dept->DeptID . ' - ' . $GLOBALS["SL"]->printRowAddy($dept, 'Dept') . ' - ' . $dept->DeptAddressLat . ', ' . $dept->DeptAddressLng . '<br />';
+                if ($cnt < $limit && !isset($dept->DeptAddressLat) || intVal($dept->DeptAddressLat) == 0) {
+                    $addy = $GLOBALS["SL"]->printRowAddy($dept, 'Dept');
+                    if (trim($addy) != '') {
+                        list($this->v["deptScores"]->scoreDepts[$i]->DeptAddressLat, 
+                            $this->v["deptScores"]->scoreDepts[$i]->DeptAddressLng) 
+                            = $GLOBALS["SL"]->states->getLatLng($addy);
+                        $this->v["deptScores"]->scoreDepts[$i]->save();
+                        $cnt++;
+                    }
+                }
+                if (isset($dept->DeptAddressLat) && $dept->DeptAddressLat != 0 && isset($dept->DeptAddressLng) 
+                    && $dept->DeptAddressLng != 0 && $dept->DeptScoreOpenness > 0) {
+                    $GLOBALS["SL"]->states->addMapMarker($dept->DeptAddressLat, $dept->DeptAddressLng, 
+                        'RBgradient' . round($dept->DeptScoreOpenness/10), 
+                        $dept->DeptName . ': ' . $dept->DeptScoreOpenness, '',
+                        '/ajax/dept-kml-desc?deptID=' . $dept->DeptID);
+                }
+            }
+            for ($g = 0; $g < 11; $g++) {
+                $GLOBALS["SL"]->states->addMarkerType('RBgradient' . $g,
+                    $GLOBALS["SL"]->sysOpts["app-url"] . '/openpolice/uploads/map-marker-redblue-' . $g . '.png');
+            }
+            $ret = $GLOBALS["SL"]->states->embedMap($nID, 'dept-access-scores-all' . time(), 
+                'All Department Accessibility Scores');
+            if ($ret == '') $ret = "\n\n <!-- no map markers found --> \n\n";
+            elseif ($nID == 2013 && $GLOBALS["SL"]->REQ->has('test')) {
+                $GLOBALS["SL"]->pageAJAX .= '$("#map' . $nID . 'ajax").load("/ajax/dept-kml-desc?deptID=13668");';
+            }
+        }
+        return $ret;
+    }
+    
+    
     
 }
