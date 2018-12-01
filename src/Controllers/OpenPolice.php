@@ -1588,12 +1588,8 @@ class OpenPolice extends SurvFormTree
         if ($GLOBALS["SL"]->REQ->has('n831fld') && trim($GLOBALS["SL"]->REQ->n831fld) != '') return true;
         $emaSubject = $this->postDumpFormEmailSubject();
         $emaContent = view('vendor.openpolice.contact-form-email-admin')->render();
-        if ($GLOBALS["SL"]->isHomestead()) {
-            $this->sendFakeEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"]);
-        } else {
-            $this->sendEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"], $this->v["emaBCC"],
-                ['noreply@openpolice.org', 'OPC Contact']);
-        }
+        $this->sendEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"], $this->v["emaBCC"],
+            ['noreply@openpolice.org', 'OPC Contact']);
         $emaID = ((isset($currEmail->EmailID)) ? $currEmail->EmailID : -3);
         $this->logEmailSent($emaContent, $emaSubject, $this->v["toList"], $emaID, $this->treeID, $this->coreID,
             $this->v["uID"]);
@@ -1989,7 +1985,7 @@ class OpenPolice extends SurvFormTree
             "allegations" => $this->commaAllegationList(),
             "featureImg"  => '',
             "deptList"    => $deptList
-        ])->render();
+            ])->render();
     }
     
     protected function printValCustom($nID, $val) {

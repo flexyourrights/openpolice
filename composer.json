@@ -1,19 +1,19 @@
 {
     "name": "flexyourrights/openpolice",
-    "description": "The purpose of the Open Police database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States. Open Police is built using SurvLoop, atop Laravel.",
+    "description": "The purpose of the Open Police database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States.",
     "keywords": [
     	"Open Police",
     	"Open Police Complaints",
-    	"laravel", 
-    	"SurvLoop", 
+    	"Flex Your Rights", 
     	"survey", 
-    	"database designer", 
-    	"user experience", 
-    	"forms", 
-    	"mobile friendly", 
-    	"mobile first", 
-    	"branching tree",
-    	"nodes"
+    	"misconduct", 
+    	"compliments", 
+    	"commendations", 
+    	"police departments", 
+    	"oversight", 
+    	"accountability",
+    	"laravel", 
+    	"SurvLoop"
     ],
     "license": "GPL-3.0-or-later",
     "authors": [
