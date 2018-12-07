@@ -19,6 +19,7 @@ class OPArrests extends Model
 		'ArstNoChargesFiled', 
 		'ArstStrip', 
 		'ArstStripSearchDesc', 
+		'ArstChargesOther', 
     ];
     
     // END SurvLoop auto-generated portion of Model

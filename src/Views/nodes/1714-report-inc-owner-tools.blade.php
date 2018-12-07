@@ -18,6 +18,7 @@
                     Received by Oversight
                 @else {{ $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) }} @endif </h4>
             @endif
+            
 @if (in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), ['Hold', 'New', 'Reviewed']))
     <h2 class="mT0">Congratulations, {{ $user->name }}!</h2>
     <p>Within the next week, we will review your complaint. 
@@ -78,24 +79,21 @@
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Received by Oversight')
     <p><b>Hi, {{ $user->name }},</b></p>
     The {{ $overList }} received your complaint! But this shouldn't be the end of the road for you. 
-    As the investigation progresses, please update the community here.
+    As the investigation progresses, please update the community here.    
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Declined To Investigate (Closed)')
     <p><b>Hi, {{ $user->name }},</b></p>
-    
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Investigated (Closed)')
     <p><b>Hi, {{ $user->name }},</b></p>
-    
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Closed')
     <p><b>Hi, {{ $user->name }},</b></p>
-    
 @endif
-        </div>
 
+        </div>
         <div class="p10"></div>
     </div>
     <div class="col-xl-4 col-lg-6">
-            
         <div class="slCard">
+        
     @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
         $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
             <a href="/switch/1/{{ $complaint->ComID }}" class="btn btn-lg btn-primary w100 mB10 taL" id="ownBtnCont"

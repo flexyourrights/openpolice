@@ -18,12 +18,11 @@ class OPCivilians extends Model
 		'CivPhysDescID', 
 		'CivGiveName', 
 		'CivGiveContactInfo', 
+		'CivResident', 
 		'CivOccupation', 
 		'CivHadVehicle', 
 		'CivChase', 
-		'CivResident', 
 		'CivChaseType', 
-		'CivVictimHadWeapon', 
 		'CivVictimWhatWeapon', 
 		'CivVictimUseWeapon', 
 		'CivCameraRecord', 
@@ -32,6 +31,7 @@ class OPCivilians extends Model
 		'CivHasInjuryCare', 
 		'CivGivenCitation', 
 		'CivGivenWarning', 
+		'CivCitationNumber', 
 		'CivChargesOther', 
     ];
     

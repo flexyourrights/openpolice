@@ -15,39 +15,32 @@
         <div class="col-lg-8">
             
             <div class="slCard">
-                <h2 class="m0 slBlueDark">{!! $d["deptRow"]->DeptName !!}</h2>
-                @if (!isset($d["deptRow"]->DeptAddress) || trim($d["deptRow"]->DeptAddress) == '')
-                    @if (isset($d["deptRow"]->DeptPhoneWork) && trim($d["deptRow"]->DeptPhoneWork) != '')
-                        <br /><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["deptRow"]->DeptPhoneWork }}
-                    @endif
-                @else
-                    <div class="row mB5">
-                        <div class="col-md-6">
-                            @if (isset($d["deptRow"]->DeptAddress) && trim($d["deptRow"]->DeptAddress) != '')
-                                <a href="{{ $GLOBALS['SL']->mapsURL($d['deptAddy']) }}" target="_blank"
-                                    ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {{ $d["deptAddy"] }}</a>
-                            @endif
-                        </div>
-                        <div class="col-md-6 taR">
-                            @if (isset($d["deptRow"]->DeptPhoneWork) && trim($d["deptRow"]->DeptPhoneWork) != '')
-                                {{ $d["deptRow"]->DeptPhoneWork }} <i class="fa fa-phone mL5" aria-hidden="true"></i>
-                            @endif
-                        </div>
-                    </div>{!! 
-                    $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $d["deptRow"], 'Dept', $d["deptRow"]->DeptName, 250) !!}
+                <h2 class="mT0">{!! $d["deptRow"]->DeptName !!}</h2>
+                <p>
+                @if (isset($d["deptRow"]->DeptAddress) && trim($d["deptRow"]->DeptAddress) != '')
+                    <a href="{{ $GLOBALS['SL']->mapsURL($d['deptAddy']) }}" target="_blank" class="mR20"
+                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {{ $d["deptAddy"] }}</a>
                 @endif
+                @if (isset($d["deptRow"]->DeptPhoneWork) && trim($d["deptRow"]->DeptPhoneWork) != '')
+                    <br /><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["deptRow"]->DeptPhoneWork }}
+                @endif
+                </p>
+                <div class="mT3">{!! 
+                    $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $d["deptRow"], 'Dept', $d["deptRow"]->DeptName, 250)
+                !!}</div>
             </div>
             
             <div class="slCard mT20 mB20">
                 <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}" class="btn btn-primary btn-lg w100"
-                    >Share Your Story About The {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
+                    >Share Your Complaint or Compliment with the 
+                    {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
             </div>
             
             <div class="slCard mT20 mB20">
                 <h3 class="mT0">Recent Complaints & Compliments</h3>
                 {!! $previews !!}
-                <p><i class="slGrey">OpenPolice.org is currently beta testing with individual complainants,
-                and is not yet open to the public.</i></p>
+                <div class="mBn5"><p><i class="slGrey">OpenPolice.org is currently beta testing with individual complainants,
+                and is not yet open to the public.</i></p></div>
             </div>
             
         </div>
@@ -85,30 +78,27 @@
             <div class="slCard mT20">
                 <h3 class="mT0">Web Presence</h3>
                 @if (isset($d["iaRow"]->OverWebsite) && trim($d["iaRow"]->OverWebsite) != '')
-                    <a href="{{ $d['iaRow']->OverWebsite }}" target="_blank" 
+                    <p><a href="{{ $d['iaRow']->OverWebsite }}" target="_blank" 
                         ><i class="fa fa-home mR5" aria-hidden="true"></i> {{ 
-                        $GLOBALS["SL"]->urlCleanIfShort($d["iaRow"]->OverWebsite, 'Department Website') }}</a><br />
+                        $GLOBALS["SL"]->urlCleanIfShort($d["iaRow"]->OverWebsite, 'Department Website') }}</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverFacebook) && trim($d["iaRow"]->OverFacebook) != '')
-                    <a href="{{ $d['iaRow']->OverFacebook }}" target="_blank"
-                        ><i class="fa fa-facebook-square mR5" aria-hidden="true"></i> {{ 
-                        $GLOBALS["SL"]->urlCleanIfShort($d["iaRow"]->OverFacebook, 'On Facebook') }}</a><br />
+                    <p><a href="{{ $d['iaRow']->OverFacebook }}" target="_blank"
+                        ><i class="fa fa-facebook-square mR5" aria-hidden="true"></i> Facebook</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverTwitter) && trim($d["iaRow"]->OverTwitter) != '')
-                    <a href="{{ $d['iaRow']->OverTwitter }}" target="_blank"
-                        ><i class="fa fa-twitter-square mR5" aria-hidden="true"></i> {{ 
-                        $GLOBALS["SL"]->urlCleanIfShort($d["iaRow"]->OverTwitter, 'On Twitter') }}</a><br />
+                    <p><a href="{{ $d['iaRow']->OverTwitter }}" target="_blank"
+                        ><i class="fa fa-twitter-square mR5" aria-hidden="true"></i> Twitter</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverYouTube) && trim($d["iaRow"]->OverYouTube) != '')
-                    <a href="{{ $d['iaRow']->OverYouTube }}" target="_blank"
-                        ><i class="fa fa-youtube-play mR5" aria-hidden="true"></i> {{ 
-                        $GLOBALS["SL"]->urlCleanIfShort($d["iaRow"]->OverYouTube, 'On YouTube') }}</a><br />
+                    <p><a href="{{ $d['iaRow']->OverYouTube }}" target="_blank"
+                        ><i class="fa fa-youtube-play mR5" aria-hidden="true"></i> YouTube</a></p>
                 @endif
             </div>
             
             <a name="how"></a>
             <div class="slCard mT20">
-                <h3 class="m0">How To File A Complaint</h3>
+                <h3 class="mT0">How to File Complaints with the {!! $d["deptRow"]->DeptName !!}</h3>
                 @if (isset($d["iaRow"]->OverOfficialFormNotReq) && intVal($d["iaRow"]->OverOfficialFormNotReq) == 1
                     && isset($d["iaRow"]->OverWaySubEmail) && intVal($d["iaRow"]->OverWaySubEmail) == 1
                     && isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '')
@@ -118,68 +108,72 @@
                     <p class="mB20">
                         This police department's policy permits them to investigate complaints sent via email. 
                         They also accept complaints filed on non-department forms. 
-                        <b class="bld">That means OPC will automically file your report after you share your story!</b>
+                        <b class="bld">That means OPC will automically file your report after you 
+                        <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}">share your story</a>!</b>
                     </p><p>
-                        The information below includes other ways to submit a formal complaint or compliment to the 
-                        oversight agency.
+                        The information below includes other ways to submit a formal complaint to the 
+                        {{ $d[$d["whichOver"]]->OverAgncName }}.
                     </p>
                 @else
-                    <p class="mB20">
-                        This department does not investigate OPC reports sent by email. We recommend you share your story 
-                        here on OpenPolice.org. Then use the information below to submit a formal complaint or compliment 
-                        to the oversight agency for investigation.
+                    <p>
+                        This department does not investigate OPC reports sent by email. We recommend you 
+                        <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}">share your story on OpenPolice.org</a>.
+                        Then use the information below to submit a formal complaint 
+                        to the {{ $d[$d["whichOver"]]->OverAgncName }}.
                     </p>
                 @endif
             </div>
             
             <div class="slCard mT20">
             @if ($d["whichOver"] == 'civRow')
-                <h3 class="m0 slBlueDark">{{ $d[$d["whichOver"]]->OverAgncName }}</h3>
-                <p class="gry9">
+                <h3 class="mT0">{{ $d[$d["whichOver"]]->OverAgncName }}</h3>
+                <p>
                 This is the agency that collects complaints for the {!! $d["deptRow"]->DeptName !!}.
                 This is where we recommend that OPC users file their complaints.
                 </p>
                 @if (isset($d["civAddy"]) && trim($d["civAddy"]) != '')
-                    <a href="{{ $GLOBALS['SL']->mapsURL($d['civAddy']) }}" target="_blank"
-                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["civAddy"] !!}</a><br />
+                    <p><a href="{{ $GLOBALS['SL']->mapsURL($d['civAddy']) }}" target="_blank"
+                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["civAddy"] !!}</a></p>
                 @endif
             @elseif (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-                <h2 class="m0">Internal Affairs</h2>
-                <div class="mBn5">&nbsp;</div>
-                <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
-                    ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a><br />
+                <h2 class="mT0">Internal Affairs</h2>
+                <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
+                    ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
             @endif
                 
                 @if (isset($d[$d["whichOver"]]->OverPhoneWork) && trim($d[$d["whichOver"]]->OverPhoneWork) != '')
-                    <i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d[$d["whichOver"]]->OverPhoneWork }}<br />
+                    <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d[$d["whichOver"]]->OverPhoneWork }}</p>
                 @endif
-                <br />
                 
                 @if (isset($d["iaRow"]->OverWaySubOnline) && intVal($d["iaRow"]->OverWaySubOnline) == 1
                     && isset($d["iaRow"]->OverComplaintWebForm) && trim($d["iaRow"]->OverComplaintWebForm) != '')
-                    You can submit your complaint through this oversight agency's online complaint form. 
+                    <p>You can submit your complaint through this oversight agency's online complaint form. 
                     (TIP: Drop in a link to your OPC complaint too!)<br />
-                    {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintWebForm, false) !!}</a><br /><br />
+                    {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintWebForm, false) !!}</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverWaySubEmail) && intVal($d["iaRow"]->OverWaySubEmail) == 1
                     && isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '')
-                    You can submit your complaint by emailing this oversight agency. 
+                    <p>You can submit your complaint by emailing this oversight agency. 
                     (We recommend you include a link to your OPC complaint in your email.)<br />
                     <a href="mailto:{{ $d[$d['whichOver']]->OverEmail }}">{{ 
-                    $d[$d["whichOver"]]->OverEmail }}</a><br /><br />
+                    $d[$d["whichOver"]]->OverEmail }}</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverComplaintPDF) && trim($d["iaRow"]->OverComplaintPDF) != '')
-                    This oversight agency has a PDF form you can print out.<br />
-                   {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintPDF, false) !!}
-                    <br /><br />
+                    <p>This oversight agency has a PDF form you can print 
+                    
+                    @if (isset($d["iaRow"]->OverWaySubPaperMail) && intVal($d["iaRow"]->OverWaySubPaperMail) == 1)
+                        out and mail.
+                    @else out. @endif
+                    <br />
+                    {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintPDF, false) !!}</p>
                 @endif
                 
-                If you submit your complaint on paper, we recommend that you staple a copy of your full OPC complaint 
-                together with the department form.<br /><br />
+                <p>If you submit your complaint on paper, we recommend that you staple a copy of your full OPC complaint 
+                together with the department form.</p>
                 
                 @if (isset($d["iaRow"]->OverWebComplaintInfo) && trim($d["iaRow"]->OverWebComplaintInfo) != '')
-                    Complaint process information:<br />
-                    {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverWebComplaintInfo, false) !!}<br /><br />
+                    <p>Complaint process information:<br />
+                    {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverWebComplaintInfo, false) !!}</p>
                 @endif
             
                 <ul style="padding-left: 30px;">
@@ -206,17 +200,19 @@
                     }} days of your incident to be investigated.</li>
                 @endif
                 </ul>
+            </div>
+            
                 
             @if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-                <div class="mT20"></div>
-                <h3 class="m0">Internal Affairs Office</h3>
-                <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
-                    ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a><br />
-                @if (isset($d["iaRow"]->OverPhoneWork) && trim($d["iaRow"]->OverPhoneWork) != '')
-                    <i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->OverPhoneWork }}<br />
-                @endif
+                 <div class="slCard mT20">
+                    <h3>Internal Affairs Office</h3>
+                    <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
+                        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
+                    @if (isset($d["iaRow"]->OverPhoneWork) && trim($d["iaRow"]->OverPhoneWork) != '')
+                        <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->OverPhoneWork }}</p>
+                    @endif
+                </div>
             @endif
-            </div>
             
         </div>
     </div>

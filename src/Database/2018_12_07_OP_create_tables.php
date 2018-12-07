@@ -179,9 +179,7 @@ class OPCreateTables extends Migration
 			$table->increments('EveID');
 			$table->integer('EveComplaintID')->unsigned()->nullable();
 		$table->index('EveComplaintID');
-			$table->integer('EveOrder')->nullable();
 			$table->string('EveType')->nullable();
-			$table->char('EveUserFinished', 1)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Stops', function(Blueprint $table)
@@ -198,7 +196,6 @@ class OPCreateTables extends Migration
 			$table->char('StopRequestID', 1)->nullable();
 			$table->char('StopRefuseID', 1)->nullable();
 			$table->char('StopRequestOfficerID', 1)->nullable();
-			$table->string('StopCitationNumber', 25)->nullable();
 			$table->char('StopOfficerRefuseID', 1)->nullable();
 			$table->char('StopSubjectFrisk', 1)->nullable();
 			$table->char('StopSubjectHandcuffed', 1)->nullable();
@@ -271,6 +268,7 @@ class OPCreateTables extends Migration
 			$table->char('ArstNoChargesFiled', 1)->nullable();
 			$table->char('ArstStrip', 1)->nullable();
 			$table->string('ArstStripSearchDesc')->nullable();
+			$table->longText('ArstChargesOther')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Force', function(Blueprint $table)
@@ -308,14 +306,13 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('CivWeapID');
 			$table->integer('CivWeapComID')->unsigned()->nullable();
-			$table->integer('CivWeapBodyWeapon')->nullable();
+			$table->integer('CivWeapBodyWeapon')->unsigned()->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Charges', function(Blueprint $table)
 		{
 			$table->increments('ChrgID');
 			$table->integer('ChrgCivID')->unsigned()->nullable();
-			$table->integer('ChrgEventID')->unsigned()->nullable();
 			$table->integer('ChrgCharges')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -388,12 +385,11 @@ class OPCreateTables extends Migration
 			$table->integer('CivPhysDescID')->unsigned()->nullable();
 			$table->char('CivGiveName', 1)->nullable();
 			$table->char('CivGiveContactInfo', 1)->nullable();
+			$table->char('CivResident', 1)->nullable();
 			$table->string('CivOccupation')->nullable();
 			$table->char('CivHadVehicle', 1)->nullable();
 			$table->char('CivChase', 1)->nullable();
-			$table->char('CivResident', 1)->nullable();
-			$table->integer('CivChaseType')->nullable();
-			$table->char('CivVictimHadWeapon', 1)->nullable();
+			$table->integer('CivChaseType')->unsigned()->nullable();
 			$table->integer('CivVictimWhatWeapon')->unsigned()->nullable();
 			$table->integer('CivVictimUseWeapon')->unsigned()->nullable();
 			$table->char('CivCameraRecord', 1)->nullable();
@@ -402,6 +398,7 @@ class OPCreateTables extends Migration
 			$table->char('CivHasInjuryCare', 1)->nullable();
 			$table->char('CivGivenCitation', 1)->nullable();
 			$table->char('CivGivenWarning', 1)->nullable();
+			$table->string('CivCitationNumber', 25)->nullable();
 			$table->longText('CivChargesOther')->nullable();
 			$table->timestamps();
 		});

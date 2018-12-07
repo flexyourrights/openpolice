@@ -11,9 +11,7 @@ class OPEventSequence extends Model
     protected $fillable   = 
     [    
 		'EveComplaintID', 
-		'EveOrder', 
 		'EveType', 
-		'EveUserFinished', 
     ];
     
     // END SurvLoop auto-generated portion of Model

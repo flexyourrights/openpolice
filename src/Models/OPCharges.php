@@ -11,7 +11,6 @@ class OPCharges extends Model
     protected $fillable   = 
     [    
 		'ChrgCivID', 
-		'ChrgEventID', 
 		'ChrgCharges', 
     ];
     

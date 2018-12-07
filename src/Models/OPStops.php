@@ -21,7 +21,6 @@ class OPStops extends Model
 		'StopRequestID', 
 		'StopRefuseID', 
 		'StopRequestOfficerID', 
-		'StopCitationNumber', 
 		'StopOfficerRefuseID', 
 		'StopSubjectFrisk', 
 		'StopSubjectHandcuffed', 

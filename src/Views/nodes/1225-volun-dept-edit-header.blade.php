@@ -109,7 +109,7 @@ $(document).ready(function(){
             var newHgt = Math.round($(window).height())-335;
             document.getElementById("admMenuCustBot").style.height=""+newHgt+"px";
         }
-        setTimeout(function() { chkDeptScore(); }, 500);
+        setTimeout(function() { chkDeptScore(); }, 3000);
     }
     setTimeout(function() { chkDeptScore(); }, 100);
     

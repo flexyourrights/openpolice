@@ -46,8 +46,6 @@
                         @if (trim($dept->DeptVerified) != '' && trim($dept->DeptVerified) != '0000-00-00 00:00:00')
                             <span class="gryA"><i>{{ date("n/j/y", strtotime($dept->DeptVerified)) }}</i></span>
                         @endif
-                    @else
-                        <div class="gryA"><i class="fa fa-star"></i></div>
                     @endif
                 </div>
                 <h3 class="m0">{{ str_replace('Department', 'Dept', $dept->DeptName) }}</h3>
