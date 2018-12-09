@@ -481,12 +481,7 @@ class OpenPolice extends OpenPoliceUtils
             return $this->printDeptAccScoreBars($nID);
         } elseif (in_array($nID, [1863, 1858]) || $nID == 2013) {
             return $this->publicDeptAccessMap($nID);
-        } elseif ($nID == 1896) {
-            return $this->printAttorneyReferrals($nID);
-        } elseif ($nID == 1961) {
-            return $this->publicAttorneyHeader($nID);
-        } elseif ($nID == 1898) {
-            return $this->publicAttorneyPage($nID);
+            
         } elseif ($nID == 1907) { // Donate Social Media Buttons
             return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif (in_array($nID, [859, 1454])) {
@@ -509,6 +504,16 @@ class OpenPolice extends OpenPoliceUtils
             return $this->printDeptComplaints($nID);
         } elseif ($nID == 1099) {
             return $this->printDeptPage1099($nID);
+            
+        // Partner Profiles
+        } elseif ($nID == 1896) {
+            return $this->printAttorneyReferrals($nID);
+        } elseif (in_array($nID, [1961, 2062])) {
+            return $this->publicPartnerHeader($nID);
+        } elseif (in_array($nID, [1898, 2060])) {
+            return $this->publicPartnerPage($nID);
+        } elseif ($nID == 2069) {
+            return $this->printPreparePartnerHeader($nID);
                
         // User Profile
         } elseif ($nID == 1893) {
@@ -3757,23 +3762,31 @@ class OpenPolice extends OpenPoliceUtils
     
     protected function printManageAttorneys()
     {
+        $ret = '';
+        $this->loadPartnerTypes();
         $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
         if ($GLOBALS["SL"]->REQ->has('add')) {
             $newAtt = new OPPartners;
-            $newAtt->PartType = $defAtt;
+            $newAtt->PartType = (($GLOBALS["SL"]->REQ->has('type')) 
+                ? $this->loadPrtnDefID($GLOBALS["SL"]->REQ->get('type')) : null);
             $newAtt->save();
-            $this->redir('/dashboard/start-' . $newAtt->PartID . '/attorney-profile', true);
+            $this->redir('/dashboard/start-' . $newAtt->PartID . '/partner-profile', true);
         }
-        $this->v["partners"] = DB::table('OP_Partners')
-            ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
-            ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
-            ->where('OP_Partners.PartType', $defAtt)
-            ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
-                'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
-                'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
-            ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
-            ->get();
-        return view('vendor.openpolice.nodes.1939-manage-attorneys', $this->v)->render();
+        foreach ($this->v["prtnTypes"] as $p) {
+            $this->v["partners"] = DB::table('OP_Partners')
+                ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
+                ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
+                ->where('OP_Partners.PartType', $p["defID"])
+                ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
+                    'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
+                    'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
+                ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
+                ->get();
+            $this->v["prtnType"] = $p;
+            $ret .= view('vendor.openpolice.nodes.1939-manage-attorneys', $this->v)->render();
+            
+        }
+        return $ret;
     }
     
     protected function initPartnerCaseTypes($nID)
@@ -4148,6 +4161,66 @@ class OpenPolice extends OpenPoliceUtils
         return $ret;
     }
     
+    protected function loadPartnerPage(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 56)
+    {
+        $partID = -3;
+        $partRow = OPPartners::where('PartSlug', $prtnSlug)
+            ->first();
+        if ($partRow && isset($partRow->PartID)) {
+            $partID = $partRow->PartID;
+            $request->atr = $partRow->PartID;
+        }
+        $this->loadPageVariation($request, 1, $tree, '/' . $type . '/' . $prtnSlug);
+        if ($partID > 0) {
+            $this->coreID = $partRow->PartID;
+            $this->loadAllSessData($GLOBALS["SL"]->coreTbl, $this->coreID);
+        }
+        return $this->index($request);
+    }
+    
+    protected function publicPartnerHeader($nID = -3)
+    {
+        $coreID = (($this->coreID > 0) ? $this->coreID : 1);
+        $this->loadSessionData('Partners', $coreID);
+        if (!isset($this->sessData->dataSets["Partners"])) return '';
+        return view('vendor.openpolice.nodes.1961-public-attorney-header', [
+            "nID" => $nID,
+            "dat" => $this->sessData->dataSets,
+            "slg" => (($this->sessData->dataSets['Partners'][0]->PartType 
+                == $GLOBALS['SL']->def->getID('Partner Types', 'Attorney')) ? 'attorney' : 'org')
+            ])->render();
+    }
+    
+    protected function partnerShareStory(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 62)
+    {
+        $this->loadPageVariation($request, 1, $tree, '/preparing-complaint-for-org-' . $type . '/' . $prtnSlug);
+        $partRow = OPPartners::where('PartSlug', $prtnSlug)
+            ->first();
+        if ($partRow && isset($partRow->PartID)) session()->put('opcPartID', $partRow->PartID);
+        return $this->index($request);
+    }
+    
+    protected function printPreparePartnerHeader($nID = -3)
+    {
+        $coreID = (($this->coreID > 0) ? $this->coreID : -3);
+        if (session()->has('opcPartID')) $coreID = session()->get('opcPartID');
+        if ($GLOBALS["SL"]->REQ->has('atr') && intVal($GLOBALS["SL"]->REQ->get('atr'))) {
+            $coreID = intVal($GLOBALS["SL"]->REQ->get('atr'));
+        }
+        // link partner with [new] complaint record
+        
+        $this->loadSessionData('Partners', $coreID);
+        if (!isset($this->sessData->dataSets["Partners"]) 
+            || !isset($this->sessData->dataSets["PersonContact"][0]->PrsnNickname) 
+            || trim($this->sessData->dataSets["PersonContact"][0]->PrsnNickname) == '') {
+            return '';
+        }
+        return view('vendor.openpolice.nodes.2069-prepare-complaint-org', [
+            "nID" => $nID,
+            "dat" => $this->sessData->dataSets
+            ])->render();
+    }
+    
     protected function printAttorneyReferrals($nID = -3)
     {
         
@@ -4158,47 +4231,31 @@ class OpenPolice extends OpenPoliceUtils
     
     public function attorneyPage(Request $request, $prtnSlug = '')
     {
-        $partID = -3;
-        $partRow = OPPartners::where('PartSlug', $prtnSlug)
-            ->first();
-        if ($partRow && isset($partRow->PartID)) {
-            $partID = $partRow->PartID;
-            $request->atr = $partRow->PartID;
-        }
-        $this->loadPageVariation($request, 1, 56, '/attorney/' . $prtnSlug);
-        if ($partID > 0) {
-            $this->coreID = $partRow->PartID;
-            $this->loadAllSessData($GLOBALS["SL"]->coreTbl, $this->coreID);
-        }
-        return $this->index($request);
+        return $this->loadPartnerPage($request, $prtnSlug, 'attorney', 56);
     }
     
     public function shareStoryAttorney(Request $request, $prtnSlug = '')
     {
-        $this->loadPageVariation($request, 1, 62, '/preparing-your-complaint-for-an-attorney/' . $prtnSlug);
-        $partRow = OPPartners::where('PartSlug', $prtnSlug)
-            ->first();
-        if ($partRow && isset($partRow->PartID)) session()->put('opcPartID', $partRow->PartID);
-        return $this->index($request);
+        return $this->partnerShareStory($request, $prtnSlug, 'attorney', 62);
     }
     
-    protected function publicAttorneyHeader($nID = -3)
+    public function orgPage(Request $request, $prtnSlug = '')
     {
-        $coreID = (($this->coreID > 0) ? $this->coreID : 1);
-        $this->loadSessionData('Partners', $coreID);
-        if (!isset($this->sessData->dataSets["Partners"])) return '';
-        return view('vendor.openpolice.nodes.1961-public-attorney-header', [
-            "nID" => $nID,
-            "dat" => $this->sessData->dataSets
-            ])->render();
+        return $this->loadPartnerPage($request, $prtnSlug, 'org', 65);
     }
     
-    protected function publicAttorneyPage($nID = -3)
+    public function shareStoryOrg(Request $request, $prtnSlug = '')
+    {
+        return $this->partnerShareStory($request, $prtnSlug, 'org', 66);
+    }
+    
+    protected function publicPartnerPage($nID = -3)
     {
         if (!isset($this->sessData->dataSets["Partners"])) return '';
         return view('vendor.openpolice.nodes.1898-public-attorney-page', [
-            "nID" => $nID,
-            "dat" => $this->sessData->dataSets
+            "nID"  => $nID,
+            "dat"  => $this->sessData->dataSets,
+            "type" => $this->sessData->dataSets["Partners"][0]->PartType
             ])->render();
     }
     

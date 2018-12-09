@@ -571,7 +571,8 @@ class OPCreateTables extends Migration
 			$table->string('PartCompanyName')->nullable();
 			$table->string('PartTitle')->nullable();
 			$table->string('PartCompanyWebsite')->nullable();
-			$table->string('PartBioUrl')->nullable();
+			$table->longText('PartBioUrl')->nullable();
+			$table->longText('PartHelpReqs')->nullable();
 			$table->string('PartPhotoUrl')->nullable();
 			$table->integer('PartAlerts')->unsigned()->nullable();
 			$table->string('PartVersionAB')->nullable();
@@ -580,6 +581,20 @@ class OPCreateTables extends Migration
 			$table->string('PartTreeVersion')->nullable();
 			$table->string('PartUniqueStr')->nullable();
 			$table->string('PartIsMobile')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_PartnerStates', function(Blueprint $table)
+		{
+			$table->increments('PrtStaID');
+			$table->integer('PrtStaPartID')->unsigned()->nullable();
+			$table->string('PrtStaState', 2)->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_PartnerCapac', function(Blueprint $table)
+		{
+			$table->increments('PrtCapID');
+			$table->integer('PrtCapPartID')->unsigned()->nullable();
+			$table->integer('PrtCapCapacity')->unsigned()->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_PartnerCaseTypes', function(Blueprint $table)
@@ -593,13 +608,6 @@ class OPCreateTables extends Migration
 			$table->increments('PrtFltID');
 			$table->integer('PrtFltCaseID')->unsigned()->nullable();
 			$table->integer('PrtFltFilter')->unsigned()->nullable();
-			$table->timestamps();
-		});
-		Schema::create('OP_PartnerStates', function(Blueprint $table)
-		{
-			$table->increments('PrtStaID');
-			$table->integer('PrtStaPartID')->unsigned()->nullable();
-			$table->string('PrtStaState', 2)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Administrators', function(Blueprint $table)
@@ -903,9 +911,10 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_Departments');
 		Schema::drop('OP_Oversight');
 		Schema::drop('OP_Partners');
+		Schema::drop('OP_PartnerStates');
+		Schema::drop('OP_PartnerCapac');
 		Schema::drop('OP_PartnerCaseTypes');
 		Schema::drop('OP_PartnerFilters');
-		Schema::drop('OP_PartnerStates');
 		Schema::drop('OP_Administrators');
 		Schema::drop('OP_LinksComplaintDept');
 		Schema::drop('OP_LinksComplaintOversight');

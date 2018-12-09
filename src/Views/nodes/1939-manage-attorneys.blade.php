@@ -1,23 +1,26 @@
 <!-- resources/views/vendor/openpolice/nodes/1939-manage-attorneys.blade.php -->
 <p>&nbsp;</p>
-<a href="?add=1" class="btn btn-primary pull-right"><i class="fa fa-plus-circle"></i> Add Attorney</a>
-<h2>Manage Attorneys</h2>
+<a href="?add=1&type={{ $prtnType['abbr'] }}" class="btn btn-primary pull-right"
+    ><i class="fa fa-plus-circle"></i> Add {{ $prtnType["sing"] }}</a>
+<h2>Manage {{ $prtnType["plur"] }}</h2>
 <div class="p10"><div class="row">
-    <div class="col-md-3"><b>Attorney Name</b></div>
-    <div class="col-md-5"><b>Location - Firm Name</b></div>
+    <div class="col-md-4"><b>{{ $prtnType["sing"] }} Name</b></div>
+    <div class="col-md-4"><b>Location @if ($prtnType["abbr"] == 'attorney') - Firm Name @endif </b></div>
     <div class="col-md-4"><b>User</b></div>
 </div></div>
 @forelse ($partners as $i => $p)
     <div class="p10 @if ($i%2 == 0) row2 @endif "><div class="row">
-        <div class="col-md-3">
-            <a href="/dashboard/start-{{ $p->PartID }}/attorney-profile">
+        <div class="col-md-4">
+            <a href="/dashboard/start-{{ $p->PartID }}/partner-profile">
                 @if (isset($p->PrsnNickname)) {{ $p->PrsnNickname }} 
                 @else <span class="slGrey">(empty)</span> @endif </a>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             @if (isset($p->PrsnAddressState)) {{ $p->PrsnAddressState }} @endif
             @if (isset($p->PrsnAddressCity)) {{ $p->PrsnAddressCity }} @endif
-            @if (isset($p->PartCompanyName)) - {{ $p->PartCompanyName }} @endif
+            @if ($prtnType["abbr"] == 'attorney') 
+                @if (isset($p->PartCompanyName)) - {{ $p->PartCompanyName }} @endif
+            @endif
         </div>
         <div class="col-md-4">
             @if (isset($p->name) && isset($p->email)) 

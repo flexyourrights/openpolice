@@ -5,35 +5,66 @@
 <div class="fC"></div><div class="nodeAnchor"><a id="n{{ $nID }}" name="n{{ $nID }}"></a></div>
 
 <div class="row">
-    <div class="col-md-3">
-        <div style="height: 55px;"></div>
+    <div class="col-lg-3 col-md-4"><div id="partLft">
         <p>
-            @if (isset($dat["Partners"][0]->PartTitle)) {!! $dat["Partners"][0]->PartTitle !!}<br /> @endif
-            @if (isset($dat["Partners"][0]->PartCompanyName)) 
-                @if (isset($dat["Partners"][0]->PartCompanyWebsite)) <a href="{!! $dat['Partners'][0]->PartCompanyWebsite 
-                    !!}" target="_blank">{!! $dat["Partners"][0]->PartCompanyName !!}</a><br />
-                @else {!! $dat["Partners"][0]->PartCompanyName !!}<br />
-                @endif
-            @elseif (isset($dat["Partners"][0]->PartCompanyWebsite)) <a href="{!! $dat['Partners'][0]->PartCompanyWebsite 
-                !!}" target="_blank">{!! $dat["Partners"][0]->PartCompanyWebsite !!}</a><br />
+    @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
+        @if (isset($dat["Partners"][0]->PartTitle)) {!! $dat["Partners"][0]->PartTitle !!}<br /> @endif
+        @if (isset($dat["Partners"][0]->PartCompanyName) && trim($dat["Partners"][0]->PartCompanyName) != '') 
+            @if (isset($dat["Partners"][0]->PartCompanyWebsite)) <a href="{!! $dat['Partners'][0]->PartCompanyWebsite 
+                !!}" target="_blank">{!! $dat["Partners"][0]->PartCompanyName !!}</a><br />
+            @else {!! $dat["Partners"][0]->PartCompanyName !!}<br />
             @endif
-            @if (isset($dat["Partners"][0]->PartBioUrl))
-                <a href="{!! $dat['Partners'][0]->PartBioUrl !!}" target="_blank">Full Bio</a><br />
-            @endif
+        @elseif (isset($dat["Partners"][0]->PartCompanyWebsite)) <a href="{!! $dat['Partners'][0]->PartCompanyWebsite 
+            !!}" target="_blank">{!! $dat["Partners"][0]->PartCompanyWebsite !!}</a><br />
+        @endif
+        @if (isset($dat["Partners"][0]->PartBioUrl))
+            <a href="{!! $dat['Partners'][0]->PartBioUrl !!}" target="_blank">Full Bio</a><br />
+        @endif
+    @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
+        @if (isset($dat["Partners"][0]->PartCompanyWebsite)) <a href="{!! $dat['Partners'][0]->PartCompanyWebsite 
+            !!}" target="_blank">{!! $dat["Partners"][0]->PartCompanyWebsite !!}</a><br />
+        @endif
+        @if (isset($dat["Partners"][0]->PartBioUrl))
+            <a href="{!! $dat['Partners'][0]->PartBioUrl !!}" target="_blank"
+                ><i class="fa fa-external-link" aria-hidden="true"></i> About Us</a><br />
+        @endif
+    @endif
         </p>
-        <p>
-        <b>Licensed In</b>
-        @forelse ($dat["PartnerStates"] as $state)
+    @if (isset($dat["PartnerStates"]) && sizeof($dat["PartnerStates"]) > 0)
+        <p class="slBlueDark">
+        @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) Licensed In
+        @else Operating In @endif <br /><b>
+        @if (isset($dat["Partners"][0]->PartGeoDesc) && trim($dat["Partners"][0]->PartGeoDesc) != '')
+            {!! $dat["Partners"][0]->PartGeoDesc !!}<br />
+        @endif
+        @foreach ($dat["PartnerStates"] as $state)
             @if (isset($state->PrtStaState) && trim($state->PrtStaState) != '')
-                <br />{!! $GLOBALS["SL"]->getState($state->PrtStaState) !!}
+                {!! $GLOBALS["SL"]->getState($state->PrtStaState) !!}<br />
             @endif
-        @empty @endforelse
-        </p>
-    </div>
-    <div class="col-md-7">
-        <div style="height: 15px;"></div>
-        <h3>Meet the attorney</h3>
-        <p>
+        @endforeach
+        </b></p>
+    @endif
+    @if (isset($dat["Partners"][0]->PartHelpReqs))
+        <div class="row"><div class="col-lg-8">
+        <p>{!! str_replace("\n", "</p><p>", $dat["Partners"][0]->PartHelpReqs) !!}</p>
+        </div></div>
+    @endif
+    </div></div>
+    <div class="col-lg-7 col-md-8">
+        <div style="height: 20px;"> </div>
+        <h3>
+            @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) Meet the attorney
+            @else About the organization @endif
+        </h3>
+        @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
+            @if (isset($dat["PartnerCapac"]) && sizeof($dat["PartnerCapac"]) > 0)
+                <h5 class="slBlueDark"> @foreach ($dat["PartnerCapac"] as $i => $cap)
+                    @if ($i > 0) <span class="mLn3">,</span> @endif
+                    {!! $GLOBALS["SL"]->def->getVal('Organization Capacities', $cap->PrtCapCapacity) !!}
+                @endforeach </h5>
+            @endif
+        @endif
+        <p><br />
         @if (isset($dat["Partners"][0]->PartBio))
             {!! str_replace("\n", "</p><p>", $dat["Partners"][0]->PartBio) !!}
         @endif
@@ -50,18 +81,48 @@
             <h4>Contact</h4>
             <p><a href="{{ $GLOBALS['SL']->rowAddyMapsURL($dat['PersonContact'][0], 'Prsn')
                 }}" target="_blank">
-            @if (isset($dat["Partners"][0]->PartCompanyName)) {!! $dat["Partners"][0]->PartCompanyName !!}<br /> @endif
+            @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
+                @if (isset($dat["Partners"][0]->PartCompanyName))
+                    {!! $dat["Partners"][0]->PartCompanyName !!}<br />
+                @endif
+            @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
+                @if (isset($dat["PersonContact"][0]->PrsnNickname))
+                    {!! $dat["PersonContact"][0]->PrsnNickname !!}<br />
+                @endif
+            @endif
             {!! $GLOBALS['SL']->printRowAddy($dat['PersonContact'][0], 'Prsn', true) !!}</a><br />
             @if (isset($dat["PersonContact"][0]->PrsnPhoneWork))
                 {!! $dat["PersonContact"][0]->PrsnPhoneWork !!}<br />
             @endif
             </p>
         </div><div class="col-md-9">
+        @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
             {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['PersonContact'][0], 'Prsn',
                 ((isset($dat["Partners"][0]->PartCompanyName)) ? $dat["Partners"][0]->PartCompanyName : '')) !!}
+        @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
+            {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['PersonContact'][0], 'Prsn',
+                ((isset($dat["PersonContact"][0]->PrsnNickname)) ? $dat["PersonContact"][0]->PrsnNickname : '')) !!}
+        @endif
         </div>
     </div>
 </div>
 
 </div>
 </div>
+<style>
+#partImg { margin: -10px 0px -40px 15px; }
+#partTtl { margin-top: -10px; }
+#partLft { margin: 60px 0px 0px 18px; }
+@media screen and (max-width: 992px) {
+#partLft { margin: 40px 0px 0px 0px; }
+#partImg { margin: 0px 0px -25px 0px; width: 145px; height: 145px; -moz-border-radius: 73px; border-radius: 73px; }
+#partImg img { width: 145px; min-height: 145px; }
+#partSharBtn { margin-top: -10px; }
+}
+@media screen and (max-width: 768px) {
+#partImg { margin: -10px 0px -40px 15px; width: 125px; height: 125px; -moz-border-radius: 63px; border-radius: 63px; }
+#partImg img { width: 125px; min-height: 125px; }
+#partLft { margin: 20px 0px 0px 0px; }
+#partTtl { padding: 0px 0px 0px 155px; margin: -90px -10px 30px 0px; }
+}
+</style>

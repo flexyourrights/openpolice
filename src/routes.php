@@ -16,8 +16,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/dept/{deptSlug}',               'OpenPolice\Controllers\OpenPolice@deptPage');
     Route::get( '/sharing-your-story/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
     
-    Route::get( '/attorney/{prtnSlug}',               'OpenPolice\Controllers\OpenPolice@attorneyPage');
+    Route::get( '/attorney/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@attorneyPage');
     Route::get( '/prepare-complaint-for-attorney/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryAttorney');
+
+    Route::get( '/org/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@orgPage');
+    Route::get( '/prepare-complaint-for-org/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryOrg');
 
     Route::get('/evidence/{cid}/{upID}',     [
         'uses' => 'OpenPolice\Controllers\OpenPoliceReport@retrieveUpload',

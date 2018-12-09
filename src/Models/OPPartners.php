@@ -20,6 +20,8 @@ class OPPartners extends Model
 		'PartTitle', 
 		'PartCompanyWebsite', 
 		'PartBioUrl', 
+		'PartHelpReqs', 
+		'PartGeoDesc',
 		'PartPhotoUrl', 
 		'PartAlerts', 
 		'PartVersionAB', 

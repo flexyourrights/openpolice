@@ -1184,9 +1184,51 @@ class OpenPoliceUtils extends SurvFormTree
         return $civs;
     }
     
+    protected function loadPartnerTypes()
+    {
+        $this->v["prtnTypes"] = [
+            [
+                "abbr" => 'attorney',
+                "sing" => 'Attorney',
+                "plur" => 'Attorneys', 
+                "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')
+            ], [
+                "abbr" => 'org',
+                "sing" => 'Organization',
+                "plur" => 'Organizations', 
+                "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')
+            ]
+        ];
+        return true;
+    }
+    
+    protected function loadPrtnAbbr($defID)
+    {
+        if (!isset($this->v["prtnTypes"])) $this->loadPartnerTypes();
+        foreach ($this->v["prtnTypes"] as $p) {
+            if ($p["defID"] == $defID) return $p["abbr"];
+        }
+        return '';
+    }
+    
+    protected function loadPrtnDefID($abbr)
+    {
+        if (!isset($this->v["prtnTypes"])) $this->loadPartnerTypes();
+        foreach ($this->v["prtnTypes"] as $p) {
+            if ($p["abbr"] == $abbr) return $p["defID"];
+        }
+        return '';
+    }
+    
 /*****************************************************************************
 // END Processes Which Manage Lists of People
 *****************************************************************************/
+
+
+
+
+
+    
 
 
 
