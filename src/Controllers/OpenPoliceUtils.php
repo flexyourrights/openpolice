@@ -3,7 +3,6 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\OPIncidents;
@@ -17,10 +16,9 @@ use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksOfficerEvents;
 use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
+use SurvLoop\Controllers\TreeSurvForm;
 
-use SurvLoop\Controllers\SurvFormTree;
-
-class OpenPoliceUtils extends SurvFormTree
+class OpenPoliceUtils extends TreeSurvForm
 {
     public $classExtension     = 'OpenPoliceUtils';
     public $treeID             = 1;
@@ -1082,7 +1080,7 @@ class OpenPoliceUtils extends SurvFormTree
             $name = $this->getPersonLabel('Civilians', $civ->CivID, $civ);
         }
         $name = trim($name);
-        if ($name != '') {
+        if ($name != '' && $name != 'You') {
             $name .= ' (' . $civ->CivRole . ' #' . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) . ')';
         }
         return trim($name);
@@ -1272,6 +1270,20 @@ class OpenPoliceUtils extends SurvFormTree
         } // end update 'OPC-2018-02-08'
         
         return $msgs;
+    }
+    
+    public function userFormalName($uID)
+    {
+        $userInfo = OPzVolunUserInfo::where('UserInfoUserID', $uID)->first();
+        if ($userInfo && isset($userInfo->UserInfoPersonContactID)) {
+            $personContact = OPPersonContact::find($userInfo->UserInfoPersonContactID);
+            if ($personContact && (isset($personContact->PrsnNameFirst) || isset($personContact->PrsnNameLast))) {
+                return trim($personContact->PrsnNameFirst . ' ' . $personContact->PrsnNameLast);
+            }
+        }
+        $usr = User::find($uID);
+        if ($usr && isset($usr->name)) return $usr->name;
+        return '';
     }
     
     

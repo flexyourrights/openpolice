@@ -4,11 +4,9 @@ namespace OpenPolice\Controllers;
 use DB;
 use Auth;
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use App\Models\SLDefinitions;
 use App\Models\SLNode;
-
 use App\Models\OPComplaints;
 use App\Models\OPAllegations;
 use App\Models\OPOfficers;
@@ -16,26 +14,29 @@ use App\Models\OPPersonContact;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
-use App\Models\OPCustomers;             
-
+use App\Models\OPCustomers;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunStatDays;
 use App\Models\OPzVolunUserInfo;
-
 use App\Models\SLEmails;
 use App\Models\SLEmailed;
 use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
-
-use OpenPolice\Controllers\OpenPoliceReport;
+use OpenPolice\Controllers\OpenPolice;
 use OpenPolice\Controllers\VolunteerLeaderboard;
-use SurvLoop\Controllers\AdminSubsController;
+use SurvLoop\Controllers\AdminMenu;
 
-class OpenPoliceAdmin extends AdminSubsController
+class OpenPoliceAdmin extends AdminMenu
 {
-    public $classExtension     = 'OpenPoliceAdmin';
-    public $treeID             = 1;
+    private $currUser = null;
+    private $currPage = '';
+    
+    function __construct($currUser = null, $currPage = '')
+    {
+        $this->currUser = $currUser;
+        $this->currPage = $currPage;
+    }
     
     public function initPowerUser($uID = -3)
     {
@@ -66,77 +67,6 @@ class OpenPoliceAdmin extends AdminSubsController
         return [ $this->v["yourUserInfo"], $this->v["yourUserContact"] ];
     }
     
-    public function loadAdmMenu()
-    {
-        if (isset($this->v["user"])) {
-            $published = $flagged = 0;
-            /* $chk = DSStories::where('StryStatus', $GLOBALS["SL"]->def->getID('Story Status', 'Published'))
-                ->select('StryID')
-                ->get();
-            $published = $chk->isEmpty();
-            $flagIDs = [];
-            $flags = SLSessEmojis::where('SessEmoTreeID', 1)
-                ->where('SessEmoDefID', 194)
-                ->select('SessEmoRecID')
-                ->get();
-            if ($flags->isNotEmpty()) {
-                foreach ($flags as $f) {
-                    if (!in_array($f->SessEmoRecID, $flagIDs)) $flagIDs[] = $f->SessEmoRecID;
-                }
-            }
-            $chk = DSStories::whereIn('StryID', $flagIDs)
-                ->where('StryStatus', $GLOBALS["SL"]->def->getID('Story Status', 'Published'))
-                ->select('StryID')
-                ->get();
-            $flagged = $chk->count(); */
-            $treeMenu = [];
-            if ($this->v["user"]->hasRole('administrator|staff|databaser')) {
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
-                    $this->admMenuLnk('/dash/all-complete-complaints', 'Complete Complaints'), 
-                    $this->admMenuLnk('/dash/all-incomplete-complaints', 'Incomplete Complaints'), 
-                    $this->admMenuLnk('/dash/volunteer', 'Department List'),
-                    $this->admMenuLnk('/dash/manage-partners', 'Manage Partners'),
-                    $this->admMenuLnk('/dash/team-resources',   'Team Resources')
-                    ]);
-                /* $treeMenu[] = $this->admMenuLnk('javascript:;', 'Oversight', 
-                    '<i class="fa fa-eye" aria-hidden="true"></i>', 1, [
-                    $this->admMenuLnk('/dash/departments', 'Departments'), 
-                    $this->admMenuLnk('/dash/oversight',   'Oversight Agencies'), 
-                    $this->admMenuLnk('/dash/officers',    'Police Officers'), 
-                    $this->admMenuLnk('/dash/attorneys',   'Attorneys')
-                    ]); */
-                if (!$this->v["user"]->hasRole('staff')) {
-                    $treeMenu[0][4][] = $this->admMenuLnkContact(false);
-                    $treeMenu = $this->addAdmMenuBasics($treeMenu);
-                    $treeMenu[4][4][] = $this->admMenuLnk('/dash/volunteer-edits-history', 'Volunteer History');
-                } else {
-                    $treeMenu[0][4][] = $this->admMenuLnk('/dash/volunteer-edits-history', 'Volunteer History');
-                }
-                return $treeMenu;
-            } elseif ($this->v["user"]->hasRole('volunteer')) {
-                $treeMenu[] = $this->admMenuLnk('/dash/volunteer', 'Police Departments List');
-                $treeMenu[] = $this->admMenuLnk('/dash/verify-next-department', 'Verify A Dept.');
-                $this->initPowerUser();
-                if ($this->v["yourUserInfo"] && isset($this->v["yourUserInfo"]->UserInfoStars)) {
-                    $stars = '<div class="mT10 mB5"><div class="disIn mL5"><nobr>';
-                    for ($s = 0; $s < $this->v["yourUserInfo"]->UserInfoStars; $s++) {
-                        if ($s > 0 && $s%5 == 0) {
-                            $stars .= '</nobr></div>' . (($s > 0 && $s%20 == 0) ? '</div><div>' : '') 
-                                . '<div class="mL10 disIn"><nobr>';
-                        }
-                        $stars .= '<img src="/openpolice/star1.png" border=0 height=15 class="mLn10" >';
-                    }
-                    $stars .= '</nobr></div></div>';
-                    $treeMenu[] = $this->admMenuLnk('/dash/volunteer-stars', 
-                        $stars . 'You Have ' . number_format($this->v["yourUserInfo"]->UserInfoStars) . ' Stars');
-                }
-                return $treeMenu;
-            }
-        }
-        $treeMenu = $this->addAdmMenuHome();
-        return $treeMenu;
-    }
-    
     protected function initExtra(Request $request)
     {
         if (!isset($this->v["currPage"])) $this->v["currPage"] = ['/dashboard', ''];
@@ -161,18 +91,8 @@ class OpenPoliceAdmin extends AdminSubsController
         return true;
     }
     
-    public function dashboardDefault(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user->hasRole('administrator|staff|databaser')) {
-            if ($user->hasRole('volunteer')) return $this->redir('/dash/volunteer');
-            return $this->redir('/');
-        }
-        return $this->redir( '/dashboard/complaints' );
-    }
-    
     protected function loadSearchSuggestions()
-    {    
+    {
         $this->v["searchSuggest"] = [];
         $deptCitys = OPDepartments::select('DeptAddressCity')
             ->distinct()

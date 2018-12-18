@@ -31,8 +31,9 @@
             </div>
             
             <div class="slCard mT20 mB20">
-                <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}" class="btn btn-primary btn-lg w100"
-                    >Share Your Complaint or Compliment with the 
+                <a href="/share-complaint-or-compliment"
+                    <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                    class="btn btn-primary btn-lg w100">Share Your Complaint or Compliment with the 
                     {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
             </div>
             
@@ -102,14 +103,16 @@
                 @if (isset($d["iaRow"]->OverOfficialFormNotReq) && intVal($d["iaRow"]->OverOfficialFormNotReq) == 1
                     && isset($d["iaRow"]->OverWaySubEmail) && intVal($d["iaRow"]->OverWaySubEmail) == 1
                     && isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '')
-                    <div class="alert alert-success mT10" role="alert">
-                        <h4 class="m0"><i class="fa fa-trophy mR5" aria-hidden="true"></i> OPC-Compatible Department</h4>
-                    </div>
+                    <div class="alert alert-success mT10" role="alert"><h4 class="m0">
+                        <i class="fa fa-trophy mR5" aria-hidden="true"></i> OPC-Compatible Department
+                    </h4></div>
                     <p class="mB20">
                         This police department's policy permits them to investigate complaints sent via email. 
                         They also accept complaints filed on non-department forms. 
                         <b class="bld">That means OPC will automically file your report after you 
-                        <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}">share your story</a>!</b>
+                        <a href="/share-complaint-or-compliment"
+                            <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                            >share your story</a>!</b>
                     </p><p>
                         The information below includes other ways to submit a formal complaint to the 
                         {{ $d[$d["whichOver"]]->OverAgncName }}.
@@ -117,7 +120,9 @@
                 @else
                     <p>
                         This department does not investigate OPC reports sent by email. We recommend you 
-                        <a href="/sharing-your-story/{{ $d['deptRow']->DeptSlug }}">share your story on OpenPolice.org</a>.
+                        <a href="/share-complaint-or-compliment"
+                            <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                            >share your story on OpenPolice.org</a>.
                         Then use the information below to submit a formal complaint 
                         to the {{ $d[$d["whichOver"]]->OverAgncName }}.
                     </p>

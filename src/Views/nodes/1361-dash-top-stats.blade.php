@@ -1,5 +1,4 @@
 <!-- resources/views/vendor/openpolice/nodes/1361-dash-top-stats.blade.php -->
-<div class="p20"></div>
 <table class="table table-striped w100">
 <tr class="slBlueDark">
     @foreach ($statRanges as $j => $range)

@@ -14,7 +14,7 @@
 Route::group(['middleware' => ['web']], function () {
 
     Route::get( '/dept/{deptSlug}',               'OpenPolice\Controllers\OpenPolice@deptPage');
-    Route::get( '/sharing-your-story/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
+    Route::get( '/complaint-or-compliment/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
     
     Route::get( '/attorney/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@attorneyPage');
     Route::get( '/prepare-complaint-for-attorney/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryAttorney');
@@ -23,7 +23,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/prepare-complaint-for-org/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryOrg');
 
     Route::get('/evidence/{cid}/{upID}',     [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceReport@retrieveUpload',
+        'uses' => 'OpenPolice\Controllers\OpenPolice@retrieveUpload',
         'middleware' => ['auth']
     ]);
     
@@ -113,23 +113,6 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/dashboard/media', [
         'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@listMedia', 
-        'middleware' => ['auth']
-    ]);
-    
-    
-    
-    /********************************************************/
-    
-    
-    
-    
-    Route::get('/admin', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@dashHome', 
-        'middleware' => ['auth']
-    ]);
-    
-    Route::get('/dashboard', [
-        'uses' => 'OpenPolice\Controllers\OpenPoliceAdmin@dashHome', 
         'middleware' => ['auth']
     ]);
 

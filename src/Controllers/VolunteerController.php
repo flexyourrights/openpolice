@@ -5,10 +5,8 @@ use DB;
 use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use App\Models\SLDefinitions;
-
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
 use App\Models\OPPersonContact;
@@ -16,7 +14,6 @@ use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPzVolunUserInfo;
-
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenPoliceAdmin;
 

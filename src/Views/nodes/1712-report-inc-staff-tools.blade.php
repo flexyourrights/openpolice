@@ -1,5 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools.blade.php -->
-@if (isset($complaintRec->ComStatus) || intVal($complaintRec->ComStatus) <= 0 || 
+@if (!isset($complaintRec->ComStatus) || intVal($complaintRec->ComStatus) <= 0 || 
     $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->ComStatus) == 'Incomplete')
 
 @elseif ($firstReview)
