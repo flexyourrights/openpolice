@@ -2,7 +2,10 @@
 namespace OpenPolice\Controllers;
 
 use DB;
+use Illuminate\Http\Request;
 use App\Models\OPPartners;
+use App\Models\OPOversight;
+use App\Models\OPLinksComplaintDept;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 
 class OpenPartners extends OpenVolunteers

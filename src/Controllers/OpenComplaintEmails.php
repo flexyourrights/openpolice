@@ -4,6 +4,8 @@ namespace OpenPolice\Controllers;
 use DB;
 use Auth;
 use App\Models\OPAllegSilver;
+use App\Models\OPDepartments;
+use App\Models\OPOversight;
 
 class OpenComplaintEmails extends OpenPoliceUtils
 {
@@ -24,7 +26,9 @@ class OpenComplaintEmails extends OpenPoliceUtils
     
     protected function postEmailFrom()
     {
-        if ($this->treeID == 13) return ['', 'OPC Contact'];
+        if ($this->treeID == 13) {
+            return ['', 'OPC Contact'];
+        }
         return [];
     }
     

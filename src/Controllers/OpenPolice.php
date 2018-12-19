@@ -489,15 +489,7 @@ class OpenPolice extends OpenPartners
         } elseif ($nID == 1907) { // Donate Social Media Buttons
             return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif (in_array($nID, [859, 1454])) {
-            $state = '';
-            if (isset($this->searcher->searchOpts["state"])) {
-                $state = $this->searcher->searchOpts["state"];
-            }
-            return view('vendor.openpolice.nodes.859-depts-overview-public', [
-                "nID"        => $nID,
-                "deptScores" => $this->v["deptScores"],
-                "state"      => $state
-                ])->render();
+            return $this->printDeptOverPublic($nID);
                 
         // How We Rate Departments Page
         } elseif ($nID == 1127) {
@@ -623,21 +615,33 @@ class OpenPolice extends OpenPartners
             
         // Admin Dashboard Page
         } elseif ($nID == 1359) {
-            $this->v["isDash"] = true;
-            $this->v["openDash"] = new OpenDashAdmin;
+            $this->initAdmDash();
             return $this->v["openDash"]->printDashSessGraph();
         } elseif ($nID == 1342) {
+            $this->initAdmDash();
             return $this->v["openDash"]->printDashPercCompl();
         } elseif ($nID == 1361) {
+            $this->initAdmDash();
             return $this->v["openDash"]->printDashTopStats();
         } elseif ($nID == 1349) {
+            $this->initAdmDash();
             return $this->v["openDash"]->volunStatsDailyGraph();
         } elseif ($nID == 2100) {
+            $this->initAdmDash();
             return $this->v["openDash"]->volunStatsTable();
         }
         return $ret;
     }
     
+    protected function initAdmDash()
+    {
+        $this->v["isDash"] = true;
+        if (!isset($this->v["openDash"])) {
+            $this->v["openDash"] = new OpenDashAdmin;
+        }
+        return true;
+    }
+            
     protected function customNodePrintButton($nID = -3, $promptNotes = '')
     { 
         if (in_array($nID, [270, 973])) return '<!-- no buttons, all done! -->';

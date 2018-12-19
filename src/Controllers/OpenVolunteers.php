@@ -2,6 +2,7 @@
 namespace OpenPolice\Controllers;
 
 use DB;
+use Illuminate\Http\Request;
 use App\Models\OPPartners;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 

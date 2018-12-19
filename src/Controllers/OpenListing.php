@@ -2,6 +2,9 @@
 namespace OpenPolice\Controllers;
 
 use DB;
+use App\Models\OPComplaints;
+use App\Models\OPCompliments;
+use App\Models\SLNode;
 
 class OpenListing extends OpenAjax
 {
@@ -166,7 +169,9 @@ class OpenListing extends OpenAjax
                 ->get();
             if ($chk->isNotEmpty()) {
                 $loadURL = '/record-prevs/1?rawids=';
-                foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->ComID;
+                foreach ($chk as $i => $rec) {
+                    $loadURL .= (($i > 0) ? ',' : '') . $rec->ComID;
+                }
                 $ret .= '<h2 class="slBlueDark m0">Your Complaints</h2><div id="n' . $nID 
                     . 'ajaxLoadA" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
                 $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
@@ -180,7 +185,9 @@ class OpenListing extends OpenAjax
                 ->get();
             if ($chk->isNotEmpty()) {
                 $loadURL = '/record-prevs/5?rawids=';
-                foreach ($chk as $i => $rec) $loadURL .= (($i > 0) ? ',' : '') . $rec->CompliID;
+                foreach ($chk as $i => $rec) {
+                    $loadURL .= (($i > 0) ? ',' : '') . $rec->CompliID;
+                }
                 $ret .= '<h2 class="slBlueDark m0">Your Compliments</h2><div id="n' . $nID 
                     . 'ajaxLoadB" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
                 $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";

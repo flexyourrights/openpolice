@@ -3,14 +3,14 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
+use Illuminate\Http\Request;
 use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
+use App\Models\OPLinksComplaintOversight;
 use OpenPolice\Controllers\DepartmentScores;
-
-use OpenPolice\Controllers\VolunteerLeaderboard;
 
 class OpenDepts extends OpenListing
 {
@@ -479,8 +479,9 @@ class OpenDepts extends OpenListing
             }
             $ret = $GLOBALS["SL"]->states->embedMap($nID, 'dept-access-scores-all-' . date("Ymd"), 
                 'All Department Accessibility Scores', $this->embedMapDeptLegend());
-            if ($ret == '') $ret = "\n\n <!-- no map markers found --> \n\n";
-            elseif ($nID == 2013 && $GLOBALS["SL"]->REQ->has('test')) {
+            if ($ret == '') {
+                $ret = "\n\n <!-- no map markers found --> \n\n";
+            } elseif ($nID == 2013 && $GLOBALS["SL"]->REQ->has('test')) {
                 $GLOBALS["SL"]->pageAJAX .= '$("#map' . $nID . 'ajax").load("/ajax/dept-kml-desc?deptID=13668");';
             }
         }
@@ -490,6 +491,19 @@ class OpenDepts extends OpenListing
     protected function embedMapDeptLegend()
     {
         return view('vendor.openpolice.inc-map-dept-access-legend')->render();
+    }
+    
+    protected function printDeptOverPublic($nID)
+    {
+        $state = '';
+        if (isset($this->searcher->searchOpts["state"])) {
+            $state = $this->searcher->searchOpts["state"];
+        }
+        return view('vendor.openpolice.nodes.859-depts-overview-public', [
+            "nID"        => $nID,
+            "deptScores" => $this->v["deptScores"],
+            "state"      => $state
+            ])->render();
     }
     
     protected function printDeptAccScoreTitleDesc($nID)
@@ -511,7 +525,7 @@ class OpenDepts extends OpenListing
         if (!$GLOBALS["SL"]->REQ->has('state') || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
             $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
         }
-        return $this->v["deptScores"]->printTotsBars();
+        return $GLOBALS["SL"]->extractStyle($this->v["deptScores"]->printTotsBars(), $nID);
         /*
         $statGrades = new SurvStatsGraph;
         $statGrades->addFilt('grade', 'Grade', 

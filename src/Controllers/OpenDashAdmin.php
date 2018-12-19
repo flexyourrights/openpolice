@@ -23,6 +23,7 @@ class OpenDashAdmin
     
     public function printDashPercCompl()
     {
+        $this->v["isDash"] = true;
         $GLOBALS["SL"]->x["needsCharts"] = true;
         $GLOBALS["SL"]->pageAJAX .= '$("#1342graph").load("/dashboard/surv-1/sessions/graph-durations"); ';
         return '<div id="1342graph" class="w100" style="height: 420px;"></div><div class="p10">&nbsp;</div>'
@@ -31,6 +32,7 @@ class OpenDashAdmin
     
     public function printDashTopStats()
     {
+        $this->v["isDash"] = true;
         $this->v["statRanges"] = [
             ['Last 24 Hrs', mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))],
             ['This Week', mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))],
@@ -59,6 +61,7 @@ class OpenDashAdmin
     
     public function volunDeptsRecent()
     {
+        $this->v["isDash"] = true;
         $this->v["statTots"] = [];
         $statRanges = [ [
                 'Last 24 Hours', 
@@ -134,6 +137,7 @@ class OpenDashAdmin
     
     public function volunStatsDailyGraph()
     {
+        $this->v["isDash"] = true;
         if (!isset($this->v["statTots"])) {
             $this->volunDeptsRecent();
         }
