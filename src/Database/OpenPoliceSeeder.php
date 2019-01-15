@@ -32137,7 +32137,6 @@ are provided in exchange for this contribution.</p>'
 			'NodePromptAfter' => '<style> #skinnySurv { margin-top: -33px; } #nLabel1924 { margin-bottom: -30px; } </style>
 <script type="text/javascript"> 
 function loadAttProf() {
-  document.getElementById(\'skinnySurv\').className=\'container taL\';
   document.getElementById(\'nFormNextBtn\').innerHTML=\'Save Profile\';
 }
 setTimeout("loadAttProf()", 1);

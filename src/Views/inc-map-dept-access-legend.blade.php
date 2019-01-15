@@ -1,6 +1,7 @@
 <!-- resources/views/vendor/openpolice/inc-map-dept-access-legend.blade.php -->
 <div id="legendScoreWrap">
-    <h4>Click a police department on the map for more details about its <nobr>Accessibility Score.</nobr></h4>
+    <h4>Click a police department on the map for more details about its <nobr>Accessibility Score.</nobr>
+    (Higher is better.)</h4>
     <div id="legendScoreTxt" class="row slBlueDark">
         <div class="col-2">0</div>
         <div class="col-3 taC">-</div>

@@ -11,6 +11,7 @@ use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
 use OpenPolice\Controllers\DepartmentScores;
+use OpenPolice\Controllers\OpenListing;
 
 class OpenDepts extends OpenListing
 {

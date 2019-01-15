@@ -6,6 +6,7 @@ use Auth;
 use App\Models\OPStops;
 use App\Models\OPInjuries;
 use App\Models\OPLinksCivilianEvents;
+use OpenPolice\Controllers\OpenComplaintPrints;
 
 class OpenComplaintSaves extends OpenComplaintPrints
 {

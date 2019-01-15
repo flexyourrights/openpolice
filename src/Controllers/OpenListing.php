@@ -5,6 +5,7 @@ use DB;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\SLNode;
+use OpenPolice\Controllers\OpenAjax;
 
 class OpenListing extends OpenAjax
 {
@@ -15,7 +16,7 @@ class OpenListing extends OpenAjax
             || !isset($this->sessData->dataSets["Incidents"])) {
             return '';
         }
-        $storyPrev = $this->wordLimitDotDotDot($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ 
+        $storyPrev = $GLOBALS["SL"]->wordLimitDotDotDot($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ 
             $coreAbbr . 'Summary' }, 100);
         $comDate = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
         if ($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ $coreAbbr . 'Privacy' } == 304 

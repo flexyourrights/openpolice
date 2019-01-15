@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\OPDepartments;
 use App\Models\SLZips;
+use OpenPolice\Controllers\OpenComplaintSaves;
 
 class OpenAjax extends OpenComplaintSaves
 {

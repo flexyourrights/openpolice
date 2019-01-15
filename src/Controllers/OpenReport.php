@@ -9,6 +9,7 @@ use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
 use OpenPolice\Controllers\DepartmentScores;
+use OpenPolice\Controllers\OpenDepts;
 
 use OpenPolice\Controllers\VolunteerLeaderboard;
 

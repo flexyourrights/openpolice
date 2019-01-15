@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\SLEmails;
 use App\Models\SLEmailed;
 use App\Models\OPzComplaintReviews;
+use OpenPolice\Controllers\OpenReport;
 
 class OpenReportTools extends OpenReport
 {

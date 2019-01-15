@@ -39,7 +39,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                 ->select('StryID')
                 ->get();
             $flagged = $chk->count(); */
-            if ($this->currUser->hasRole('administrator|staff|databaser')) {
+            if ($this->currUser->hasRole('administrator|staff|databaser|brancher')) {
                 $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
                     $this->admMenuLnk('/dash/all-complete-complaints', 'Complete Complaints'), 
                     $this->admMenuLnk('/dash/all-incomplete-complaints', 'Incomplete Complaints'), 
@@ -48,13 +48,20 @@ class OpenPoliceAdminMenu extends AdminMenu
                     $this->admMenuLnk('/dash/team-resources',   'Team Resources'),
                     $this->admMenuLnk('/dash/volunteer-edits-history', 'Volunteer History')
                     ]);
+            } elseif ($this->currUser->hasRole('partner')) {
+                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
+                    $this->admMenuLnk('/dash/all-complete-complaints', 'Complete Complaints'), 
+                    $this->admMenuLnk('/dash/all-incomplete-complaints', 'Incomplete Complaints'), 
+                    $this->admMenuLnk('/dash/volunteer', 'Department List'),
+                    $this->admMenuLnk('/dash/team-resources',   'Team Resources')
+                    ]);
             } elseif ($this->currUser->hasRole('volunteer')) {
                 $treeMenu[] = $this->admMenuLnk('/dash/volunteer', 'Police Departments List');
                 $treeMenu[] = $this->admMenuLnk('/dash/verify-next-department', 'Verify A Dept.');
-                $this->initPowerUser();
-                if ($this->v["yourUserInfo"] && isset($this->v["yourUserInfo"]->UserInfoStars)) {
+                if (isset($GLOBALS["SL"]->x["yourUserInfo"]) 
+                    && isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars)) {
                     $stars = '<div class="mT10 mB5"><div class="disIn mL5"><nobr>';
-                    for ($s = 0; $s < $this->v["yourUserInfo"]->UserInfoStars; $s++) {
+                    for ($s = 0; $s < $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars; $s++) {
                         if ($s > 0 && $s%5 == 0) {
                             $stars .= '</nobr></div>' . (($s > 0 && $s%20 == 0) ? '</div><div>' : '') 
                                 . '<div class="mL10 disIn"><nobr>';
@@ -63,7 +70,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                     }
                     $stars .= '</nobr></div></div>';
                     $treeMenu[] = $this->admMenuLnk('/dash/volunteer-stars', 
-                        $stars . 'You Have ' . number_format($this->v["yourUserInfo"]->UserInfoStars) . ' Stars');
+                        $stars . 'You Have ' . number_format($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars) . ' Stars');
                 }
             }
         }

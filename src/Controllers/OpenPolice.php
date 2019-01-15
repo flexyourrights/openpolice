@@ -49,6 +49,7 @@ use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenDashAdmin;
 use SurvLoop\Controllers\SurvStatsGraph;
+use OpenPolice\Controllers\OpenPartners;
 
 class OpenPolice extends OpenPartners
 {
@@ -149,7 +150,9 @@ class OpenPolice extends OpenPartners
     // Initializing a bunch of things which are not [yet] automatically determined by the software
     protected function loadExtra()
     {
-        if ($this->treeID == 1 && $this->isGold()) $this->majorSections[3][2] = 'active';
+        if ($this->treeID == 1 && $this->isGold()) {
+            $this->majorSections[3][2] = 'active';
+        }
         if ($this->treeID == 1 || $GLOBALS["SL"]->getReportTreeID() == 1) {
             if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
                 && isset($this->sessData->dataSets["Civilians"][0])
@@ -232,7 +235,56 @@ class OpenPolice extends OpenPartners
             $this->sessData->dataSets["Complaints"][0]->save();
         }
         $this->v["isPublic"] = $this->isPublic();
+        
+        // used to be admin initializations:
+        $this->v["allowEdits"] = ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff'));
+        $this->v["management"] = ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff'));
+        $this->v["volunOpts"] = 1;
+        if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
+            $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
+        }
+        if ((!session()->has('opcChks') || !session()->get('opcChks') || $GLOBALS["SL"]->REQ->has('refresh'))
+            && $this->treeID == 1) {
+            $chk = OPComplaints::where('ComPublicID', null)
+                ->where('ComStatus', 'NOT LIKE', $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
+                ->get();
+            if ($chk->isNotEmpty()) {
+                foreach ($chk as $i => $complaint) {
+                    $complaint->update([ 'ComPublicID' => $GLOBALS["SL"]->genNewCorePubID('Complaints') ]);
+                }
+            }
+            session()->put('opcChks', true);
+        }
         return true;
+    }
+    
+    public function initPowerUser($uID = -3)
+    {
+        if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0
+            || !$this->v["user"]->hasRole('administrator|staff|databaser|volunteer')) {
+            return $this->redir('/');
+        }
+        if ($uID <= 0) $uID = $this->v["uID"];
+        $GLOBALS["SL"]->x["yourUserInfo"] = OPzVolunUserInfo::where('UserInfoUserID', $uID)
+            ->first();
+        if (!$GLOBALS["SL"]->x["yourUserInfo"]) {
+            $GLOBALS["SL"]->x["yourUserInfo"] = new OPzVolunUserInfo;
+            $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoUserID = $uID;
+            $GLOBALS["SL"]->x["yourUserInfo"]->save();
+        }
+        $this->v["yourUserContact"] = [];
+        if (!isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID) 
+            || intVal($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID) <= 0) {
+            $thisUser = User::select('email')->find($uID);
+            $this->v["yourUserContact"] = new OPPersonContact;
+            $this->v["yourUserContact"]->PrsnEmail = $thisUser->email;
+            $this->v["yourUserContact"]->save();
+            $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID = $this->v["yourUserContact"]->PrsnID;
+            $GLOBALS["SL"]->x["yourUserInfo"]->save();
+        } else {
+            $this->v["yourUserContact"] = OPPersonContact::find($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID);
+        }
+        return [ $GLOBALS["SL"]->x["yourUserInfo"], $this->v["yourUserContact"] ];
     }
     
     protected function ajaxContentWrapCustom($str, $nID = -3)

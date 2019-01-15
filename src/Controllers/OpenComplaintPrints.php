@@ -5,6 +5,7 @@ use DB;
 use Auth;
 use App\Models\OPAllegations;
 use App\Models\OPAllegSilver;
+use OpenPolice\Controllers\OpenComplaintEmails;
 
 class OpenComplaintPrints extends OpenComplaintEmails
 {

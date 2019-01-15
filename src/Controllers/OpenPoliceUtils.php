@@ -157,13 +157,13 @@ class OpenPoliceUtils extends TreeSurvForm
         $ret = '';
         if ($this->treeID == 1) {
             if (isset($coreRecord[1]->ComSummary) && trim($coreRecord[1]->ComSummary) != '') {
-                $ret .= $this->wordLimitDotDotDot($coreRecord[1]->ComSummary, 10);
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->ComSummary, 10);
             } else {
                 $ret .= '(empty)';
             }
         } elseif ($this->treeID == 5) {
             if (isset($coreRecord[1]->CompliSummary) && trim($coreRecord[1]->CompliSummary) != '') {
-                $ret .= $this->wordLimitDotDotDot($coreRecord[1]->CompliSummary, 10);
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->CompliSummary, 10);
             } else {
                 $ret .= '(empty)';
             }
@@ -288,7 +288,7 @@ class OpenPoliceUtils extends TreeSurvForm
         return [];
     }
     
-    protected function tblsInPackage()
+    public function tblsInPackage()
     {
         if ($this->dbID == 1) return ['Departments', 'Oversight'];
         return [];
@@ -1285,6 +1285,32 @@ class OpenPoliceUtils extends TreeSurvForm
         $usr = User::find($uID);
         if ($usr && isset($usr->name)) return $usr->name;
         return '';
+    }
+    
+    protected function loadSearchSuggestions()
+    {
+        $this->v["searchSuggest"] = [];
+        $deptCitys = OPDepartments::select('DeptAddressCity')
+            ->distinct()
+            ->get();
+        if ($deptCitys->isNotEmpty()) {
+            foreach ($deptCitys as $dept) {
+                if (!in_array($dept->DeptAddressCity, $this->v["searchSuggest"]) && $dept->DeptAddressCounty) {
+                    $this->v["searchSuggest"][] = json_encode($dept->DeptAddressCity);
+                }
+            }
+        }
+        $deptCounties = OPDepartments::select('DeptAddressCounty')
+            ->distinct()
+            ->get();
+        if ($deptCounties->isNotEmpty()) {
+            foreach ($deptCounties as $dept) {
+                if (!in_array($dept->DeptAddressCounty, $this->v["searchSuggest"]) && $dept->DeptAddressCounty) {
+                    $this->v["searchSuggest"][] = json_encode($dept->DeptAddressCounty);
+                }
+            }
+        }
+        return true;
     }
     
     

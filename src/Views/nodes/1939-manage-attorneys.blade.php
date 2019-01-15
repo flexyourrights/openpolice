@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1939-manage-attorneys.blade.php -->
 <p>&nbsp;</p>
-<a href="?add=1&type={{ $prtnType['abbr'] }}" class="btn btn-primary pull-right"
+<a href="/dashboard/start/partner-profile/?nv2074={{ $prtnType['defID'] }}" class="btn btn-primary pull-right"
     ><i class="fa fa-plus-circle"></i> Add {{ $prtnType["sing"] }}</a>
 <h2>Manage {{ $prtnType["plur"] }}</h2>
 <div class="p10"><div class="row">
@@ -29,5 +29,5 @@
             @endif
         </div>
     </div></div>
-@empty <div class="pT20"><i>No Attorneys Found.</i></div>
+@empty <div class="pT20"><i>No {{ $prtnType["plur"] }} Found.</i></div>
 @endforelse

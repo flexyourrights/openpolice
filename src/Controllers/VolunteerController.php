@@ -125,8 +125,8 @@ class VolunteerController extends OpenPoliceAdmin
         }
         if (!$this->v["user"]->hasRole('administrator|staff|databaser')) {
             $score = 0;
-            if (isset($this->v["yourUserInfo"]->UserInfoStars)) {
-                $score = intVal($this->v["yourUserInfo"]->UserInfoStars);
+            if (isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars)) {
+                $score = intVal($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars);
             }
             $this->admMenuData["adminNav"][2][1] = str_replace('[[score]]', $score, 
                 $this->admMenuData["adminNav"][2][1]);

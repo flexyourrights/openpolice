@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\OPPartners;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
+use App\Models\OPPartnerCaseTypes;
 use OpenPolice\Controllers\VolunteerLeaderboard;
+use OpenPolice\Controllers\OpenVolunteers;
 
 class OpenPartners extends OpenVolunteers
 {
@@ -16,6 +18,7 @@ class OpenPartners extends OpenVolunteers
         $this->loadPartnerTypes();
         $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
         if ($GLOBALS["SL"]->REQ->has('add')) {
+            
             $newAtt = new OPPartners;
             $newAtt->PartType = (($GLOBALS["SL"]->REQ->has('type')) 
                 ? $this->loadPrtnDefID($GLOBALS["SL"]->REQ->get('type')) : null);
@@ -50,7 +53,11 @@ class OpenPartners extends OpenVolunteers
                 $this->sessData->dataSets["PartnerCaseTypes"][$i]->save();
             }
         }
-        return true;
+        if ($GLOBALS["SL"]->REQ->has('nv2074') && intVal($GLOBALS["SL"]->REQ->get('nv2074')) > 0
+            && isset($this->sessData->dataSets["Partners"])) {
+            $this->sessData->dataSets["Partners"][0]->PartType = intVal($GLOBALS["SL"]->REQ->get('nv2074'));
+        }
+        return '';
     }
 
     protected function loadPartnerPage(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 56)
@@ -74,7 +81,9 @@ class OpenPartners extends OpenVolunteers
     {
         $coreID = (($this->coreID > 0) ? $this->coreID : 1);
         $this->loadSessionData('Partners', $coreID);
-        if (!isset($this->sessData->dataSets["Partners"])) return '';
+        if (!isset($this->sessData->dataSets["Partners"])) {
+            return '';
+        }
         return view('vendor.openpolice.nodes.1961-public-attorney-header', [
             "nID" => $nID,
             "dat" => $this->sessData->dataSets,
@@ -143,7 +152,9 @@ class OpenPartners extends OpenVolunteers
     
     protected function publicPartnerPage($nID = -3)
     {
-        if (!isset($this->sessData->dataSets["Partners"])) return '';
+        if (!isset($this->sessData->dataSets["Partners"])) {
+            return '';
+        }
         return view('vendor.openpolice.nodes.1898-public-attorney-page', [
             "nID"  => $nID,
             "dat"  => $this->sessData->dataSets,

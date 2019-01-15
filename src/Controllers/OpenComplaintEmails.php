@@ -6,6 +6,7 @@ use Auth;
 use App\Models\OPAllegSilver;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
+use OpenPolice\Controllers\OpenPoliceUtils;
 
 class OpenComplaintEmails extends OpenPoliceUtils
 {

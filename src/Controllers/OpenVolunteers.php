@@ -4,7 +4,9 @@ namespace OpenPolice\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\OPPartners;
+use App\Models\OPZeditDepartments;
 use OpenPolice\Controllers\VolunteerLeaderboard;
+use OpenPolice\Controllers\OpenReportTools;
 
 class OpenVolunteers extends OpenReportTools
 {
