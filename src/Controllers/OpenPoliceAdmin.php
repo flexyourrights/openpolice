@@ -25,9 +25,9 @@ use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
 use OpenPolice\Controllers\OpenPolice;
 use OpenPolice\Controllers\VolunteerLeaderboard;
-use SurvLoop\Controllers\AdminMenu;
+use SurvLoop\Controllers\AdminController;
 
-class OpenPoliceAdmin extends AdminMenu
+class OpenPoliceAdmin extends AdminController
 {
     private $currUser = null;
     private $currPage = '';
