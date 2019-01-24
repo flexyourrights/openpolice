@@ -62,7 +62,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $this->restartSess($GLOBALS["SL"]->REQ);
         return '<br /><br /><center><h1>All Done!<br />Taking you to <a href="' . $url . '">your finished '
             . (($nID == 270) ? 'complaint' : 'compliment') . '</a> ...</h1>' . $spin 
-            . '</center><script type="text/javascript"> setTimeout("window.location=\'' . $url 
+            . '</center><script id="noExtract" type="text/javascript"> setTimeout("window.location=\'' . $url 
             . '\'", 1500); </script><style> #nodeSubBtns, #sessMgmt, #dontWorry { display: none; } </style>';
     }
     

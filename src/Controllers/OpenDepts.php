@@ -431,11 +431,13 @@ class OpenDepts extends OpenListing
             echo '<br /><br /><br /><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
             foreach ($colors as $i => $c) {
                 echo '<td><img src="/survloop/uploads/template-map-marker.png" border=0 '
-                    . 'style="width: 80px; background: ' . $c . ';"><br /><br />' . $c . '</td>';
+                    . 'style="width: 80px; background: ' . $c . ';"
+                    alt="Accessibility Score ' . (($i == 0) ? 0 : $i . '0') . ' out of 10"><br /><br />' . $c . '</td>';
             }
             echo '</tr></table><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
             foreach ($colors as $i => $c) {
-                echo '<td><img src="/openpolice/uploads/map-marker-redblue-' . $i . '.png" border=0 ></td>';
+                echo '<td><img src="/openpolice/uploads/map-marker-redblue-' . $i . '.png" border=0
+                    alt="Accessibility Score ' . (($i == 0) ? 0 : $i . '0') . ' out of 10"></td>';
             }
             echo '</tr></table>';
         }

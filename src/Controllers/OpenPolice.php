@@ -755,13 +755,22 @@ class OpenPolice extends OpenPartners
     // returns an array of overrides for ($currNodeSessionData, ???... 
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $nIDtxt = '', $currNodeSessionData = '')
     {
-        if (empty($this->sessData->dataSets)) return [];
+        if (empty($this->sessData->dataSets)) {
+            return [];
+        }
         if ($nID == 28) { // Complainant's Role
-            return [trim($this->sessData->dataSets["Civilians"][0]->CivRole)];
+            if (isset($this->sessData->dataSets["Civilians"])) {
+                return [trim($this->sessData->dataSets["Civilians"][0]->CivRole)];
+            }
+            return [];
         } elseif ($nID == 47) { // Complainant Recorded Incident?
-            return [trim($this->sessData->dataSets["Civilians"][0]->CivCameraRecord)];
+            if (isset($this->sessData->dataSets["Civilians"])) {
+                return [trim($this->sessData->dataSets["Civilians"][0]->CivCameraRecord)];
+            }
+            return [];
         } elseif ($nID == 19) { // Would you like to provide the GPS location?
-            if (intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLat) != 0 
+            if (isset($this->sessData->dataSets["Incidents"]) 
+                && intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLat) != 0 
                 || intVal($this->sessData->dataSets["Incidents"][0]->IncAddressLng) != 0) {
                 return ['Yes'];
             } else {

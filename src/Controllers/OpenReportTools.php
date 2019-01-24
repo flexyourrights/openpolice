@@ -194,7 +194,9 @@ class OpenReportTools extends OpenReport
             ->get();
         if ($reviews->isNotEmpty()) {
             foreach ($reviews as $i => $r) {
-                if ($i == 0) $this->v["lastReview"] = $r;
+                if ($i == 0) {
+                    $this->v["lastReview"] = $r;
+                }
                 $this->v["firstReview"] = false;
                 if (!isset($allUserNames[$r->ComRevUser])) {
                     $allUserNames[$r->ComRevUser] = $this->printUserLnk($r->ComRevUser);
@@ -209,7 +211,7 @@ class OpenReportTools extends OpenReport
                     "desc" => $desc, 
                     "who"  => $allUserNames[$r->ComRevUser],
                     "note" => ((isset($r->ComRevNote)) ? trim($r->ComRevNote) : '')
-                ];
+                    ];
             }
         }
         $this->v["emailList"] = SLEmails::orderBy('EmailName', 'asc')
@@ -234,7 +236,7 @@ class OpenReportTools extends OpenReport
                     "date" => strtotime($e->created_at), 
                     "desc" => $desc, 
                     "who"  => $allUserNames[$e->EmailedFromUser]
-                ];
+                    ];
             }
         }
         $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');

@@ -66,7 +66,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                             $stars .= '</nobr></div>' . (($s > 0 && $s%20 == 0) ? '</div><div>' : '') 
                                 . '<div class="mL10 disIn"><nobr>';
                         }
-                        $stars .= '<img src="/openpolice/star1.png" border=0 height=15 class="mLn10" >';
+                        $stars .= '<img src="/openpolice/star1.png" border=0 height=15 class="mLn10" alt="Gold Star" >';
                     }
                     $stars .= '</nobr></div></div>';
                     $treeMenu[] = $this->admMenuLnk('/dash/volunteer-stars', 

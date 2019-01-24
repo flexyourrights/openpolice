@@ -10,7 +10,8 @@
         <div class="col-2 taR">100</div>
     </div>
     @for ($i = 0; $i <= 10; $i++)
-        <div class="legendScore"><img src="/openpolice/uploads/map-marker-redblue-{{ $i }}.png" ></div>
+        <div class="legendScore"><img src="/openpolice/uploads/map-marker-redblue-{{ $i }}.png"
+            alt="Accessibility Score {{ (($i == 0) ? 0 : $i . '0') }} out of 100" ></div>
     @endfor
 </div>
 <style>

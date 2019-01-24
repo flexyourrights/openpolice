@@ -97,14 +97,18 @@ class OpenPartners extends OpenVolunteers
         $this->loadPageVariation($request, 1, $tree, '/preparing-complaint-for-org-' . $type . '/' . $prtnSlug);
         $partRow = OPPartners::where('PartSlug', $prtnSlug)
             ->first();
-        if ($partRow && isset($partRow->PartID)) session()->put('opcPartID', $partRow->PartID);
+        if ($partRow && isset($partRow->PartID)) {
+            session()->put('opcPartID', $partRow->PartID);
+        }
         return $this->index($request);
     }
     
     protected function printPreparePartnerHeader($nID = -3)
     {
         $coreID = (($this->coreID > 0) ? $this->coreID : -3);
-        if (session()->has('opcPartID')) $coreID = session()->get('opcPartID');
+        if (session()->has('opcPartID')) {
+            $coreID = session()->get('opcPartID');
+        }
         if ($GLOBALS["SL"]->REQ->has('atr') && intVal($GLOBALS["SL"]->REQ->get('atr'))) {
             $coreID = intVal($GLOBALS["SL"]->REQ->get('atr'));
         }
@@ -126,7 +130,7 @@ class OpenPartners extends OpenVolunteers
     {
         
         return view('vendor.openpolice.nodes.1896-attorney-referral-listings', [
-            "nID"        => $nID
+            "nID" => $nID
             ])->render();
     }
     
@@ -168,7 +172,9 @@ class OpenPartners extends OpenVolunteers
         $this->v["yourStats"] = [];
         if ($this->v["leaderboard"]->UserInfoStars && sizeof($this->v["leaderboard"]->UserInfoStars) > 0) {
             foreach ($this->v["leaderboard"]->UserInfoStars as $i => $volunUser) {
-                if ($volunUser->UserInfoUserID == $this->v["uID"]) $this->v["yourStats"] = $volunUser;
+                if ($volunUser->UserInfoUserID == $this->v["uID"]) {
+                    $this->v["yourStats"] = $volunUser;
+                }
             }
         }
         return view('vendor.openpolice.volun.stars', $this->v)->render();
@@ -176,7 +182,9 @@ class OpenPartners extends OpenVolunteers
     
     protected function setUserOversightFilt()
     {
-        if (!isset($this->v["fltIDs"])) $this->v["fltIDs"] = [];
+        if (!isset($this->v["fltIDs"])) {
+            $this->v["fltIDs"] = [];
+        }
         $this->v["fltDept"] = -3;
         if ($this->v["user"]->hasRole('partner') && $this->v["user"]->hasRole('oversight')) {
             $this->v["fltIDs"][0] = [];
@@ -187,12 +195,13 @@ class OpenPartners extends OpenVolunteers
                     ->where('LnkComDeptDeptID', $overRow->OverDeptID)
                     ->get();
                 if ($lnkChk->isNotEmpty()) {
-                    foreach ($lnkChk as $lnk) $this->v["fltIDs"][0][] = $lnk->LnkComDeptComplaintID;
+                    foreach ($lnkChk as $lnk) {
+                        $this->v["fltIDs"][0][] = $lnk->LnkComDeptComplaintID;
+                    }
                 }
             }
         }
         return true;
     }
-    
     
 }
