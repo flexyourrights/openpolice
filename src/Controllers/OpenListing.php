@@ -103,7 +103,7 @@ class OpenListing extends OpenAjax
         $compls = DB::select( DB::raw($qman) );
         if ($compls && sizeof($compls) > 0) {
             foreach ($compls as $com) {
-                $this->v["comInfo"][$com->ComPublicID] = [ '', '' ];
+                $this->v["comInfo"][$com->ComPublicID] = [ "depts" => '', "submitted" => '' ];
                 $dChk = DB::table('OP_LinksComplaintDept')
                     ->where('OP_LinksComplaintDept.LnkComDeptComplaintID', $com->ComID)
                     ->leftJoin('OP_Departments', 'OP_Departments.DeptID', '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
@@ -112,7 +112,7 @@ class OpenListing extends OpenAjax
                     ->get();
                 if ($dChk && sizeof($dChk) > 0) {
                     foreach ($dChk as $i => $d) {
-                        $this->v["comInfo"][$com->ComPublicID][1] .= (($i > 0) ? ', ' : '') 
+                        $this->v["comInfo"][$com->ComPublicID]["depts"] .= (($i > 0) ? ', ' : '') 
                             . str_replace('Department' , 'Dept', $d->DeptName);
                     }
                 }
@@ -122,22 +122,25 @@ class OpenListing extends OpenAjax
                 }
                 if (!isset($com->ComStatus) || intVal($com->ComStatus) <= 0) {
                     $com->ComStatus = $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete');
-                    OPComplaints::find($com->ComID)->update([ "ComStatus" => $com->ComStatus ]);
+                    OPComplaints::find($com->ComID)
+                        ->update([ "ComStatus" => $com->ComStatus ]);
                 }
                 if (!isset($com->ComType) || intVal($com->ComType) <= 0) {
                     $com->ComType = $GLOBALS['SL']->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed');
-                    OPComplaints::find($com->ComID)->update([ "ComType" => $com->ComType ]);
+                    OPComplaints::find($com->ComID)
+                        ->update([ "ComType" => $com->ComType ]);
                 }
                 $cutoffTime = mktime(date("H"), date("i"), date("s"), date("m"), date("d")-1, date("Y"));
                 if ($comTime < $cutoffTime) {
                     if (!isset($com->ComSummary) || trim($com->ComSummary) == '') {
-                        OPComplaints::find($com->ComID)->delete();
+                        OPComplaints::find($com->ComID)
+                            ->delete();
                         $comTime = false;
                     }
                 }
                 if ($comTime !== false) {
                     $sortInd = $comTime;
-                    $this->v["comInfo"][$com->ComPublicID][0] = date("n/j/Y", $comTime);
+                    $this->v["comInfo"][$com->ComPublicID]["submitted"] = date("n/j/Y", $comTime);
                     if ($com->ComStatus == $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete')) {
                         if ($com->ComSubmissionProgress > 0 
                             && !isset($this->v["lastNodes"][$com->ComSubmissionProgress])) {

@@ -417,13 +417,13 @@ class OpenReport extends OpenDepts
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
                 $this->v["glossaryList"][] = ['<b>Anonymous</b> ', 
                     $prvLnk . 'User needs complaint to be completely anonymous, even though it will be harder to '
-                        . 'investigate. No names will be published on this website. Neither OPC staff nor investigators '
-                        . 'will be able to contact them. Any details that could be used for personal identification '
+                        . 'investigate. No names will be published on this website. Neither OPC staff nor investigators'
+                        . ' will be able to contact them. Any details that could be used for personal identification '
                         . 'may be deleted from the database.'];
             }
             if ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold') {
                 $this->v["glossaryList"][] = ['<b>Gold-Level Complaint</b>', 
-                    '<a href="/frequently-asked-questions#what-is-gold-star">Optional</a>: This user opted '
+                    '<a href="/go-gold-make-your-complaint-strong">Optional</a>: This user opted '
                         . 'to share more complete details about their police experience than a Basic Complaint.'];
             }
             $this->simpleAllegationList();

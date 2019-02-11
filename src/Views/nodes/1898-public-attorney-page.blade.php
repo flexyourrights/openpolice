@@ -56,19 +56,19 @@
             @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) Meet the attorney
             @else About the organization @endif
         </h3>
-        @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
-            @if (isset($dat["PartnerCapac"]) && sizeof($dat["PartnerCapac"]) > 0)
-                <h5 class="slBlueDark"> @foreach ($dat["PartnerCapac"] as $i => $cap)
-                    @if ($i > 0) <span class="mLn3">,</span> @endif
-                    {!! $GLOBALS["SL"]->def->getVal('Organization Capacities', $cap->PrtCapCapacity) !!}
-                @endforeach </h5>
-            @endif
-        @endif
-        <p><br />
+        <p>
         @if (isset($dat["Partners"][0]->PartBio))
             {!! str_replace("\n", "</p><p>", $dat["Partners"][0]->PartBio) !!}
         @endif
         </p>
+        @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
+            <h4>Organization Capabilities</h4><ul>
+            @if (isset($dat["PartnerCapac"]) && sizeof($dat["PartnerCapac"]) > 0)
+                @foreach ($dat["PartnerCapac"] as $i => $cap)
+                    <li>{!! $GLOBALS["SL"]->def->getVal('Organization Capacities', $cap->PrtCapCapacity) !!}</li>
+                @endforeach
+            @endif </ul>
+        @endif
     </div>
     <div class="col-md-2"></div>
 </div>

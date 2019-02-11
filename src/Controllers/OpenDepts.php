@@ -3,6 +3,7 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
@@ -246,6 +247,12 @@ class OpenDepts extends OpenListing
             $this->v["deptScores"] = new DepartmentScores;
         }
         return view('vendor.openpolice.nodes.1225-volun-dept-edit-header', $this->v)->render();
+    }
+    
+    protected function printDeptEditHeader2()
+    {
+        return view('vendor.openpolice.nodes.2162-volun-dept-edit-header2', 
+            [ "deptRow" => $this->sessData->dataSets["Departments"][0] ])->render();
     }
     
     protected function printDeptEditContact($nID)

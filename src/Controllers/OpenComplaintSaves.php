@@ -6,10 +6,68 @@ use Auth;
 use App\Models\OPStops;
 use App\Models\OPInjuries;
 use App\Models\OPLinksCivilianEvents;
-use OpenPolice\Controllers\OpenComplaintPrints;
+use App\Models\OPLinksCivilianVehicles;
+use App\Models\OPLinksOfficerVehicles;
+use OpenPolice\Controllers\OpenComplaintConditions;
 
-class OpenComplaintSaves extends OpenComplaintPrints
+class OpenComplaintSaves extends OpenComplaintConditions
 {
+    protected function postNodePublicCustom($nID = -3, $tmpSubTier = [])
+    {
+        if (empty($tmpSubTier)) {
+            $tmpSubTier = $this->loadNodeSubTier($nID);
+        }
+        list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
+        if ($this->treeID == 1 && isset($this->sessData->dataSets["Complaints"])) {
+            $this->sessData->dataSets["Complaints"][0]->update([ "updated_at" => date("Y-m-d H:i:s") ]);
+        }
+        // Main Complaint Survey...
+        if ($nID == 439) {
+            return $this->saveUnresolvedCharges($nID);
+        } elseif (in_array($nID, [16, 17])) {
+            return $this->saveStartTime($nID, $tbl, $fld);
+        } elseif (in_array($nID, [145, 920])) {
+            return $this->saveNewDept($nID);
+        } elseif ($nID == 234) {
+            return $this->saveCitationVictim($nID);
+        } elseif ($nID == 237) {
+            return $this->saveCitationVictims($nID);
+        } elseif ($nID == 671) {
+            return $this->saveProfanePersons($nID);
+        } elseif ($nID == 674) {
+            return $this->saveProfanePerson($nID);
+        } elseif ($nID == 670) {
+            return $this->saveProfanePersons($nID, 'Civ');
+        } elseif ($nID == 676) {
+            return $this->saveProfanePerson($nID, 'Civ');
+        } elseif (in_array($nID, [742, 2044])) {
+            return $this->saveForceTypes($nID);
+        } elseif ($nID == 743) {
+            return $this->saveForceAnimYN($nID);
+        } elseif ($nID == 744) {
+            return $this->saveForceTypesAnim($nID, 743, 746);
+        } elseif ($nID == 316) {
+            return $this->saveHandcuffInjury($nID);
+        } elseif ($nID == 976) {
+            return $this->saveStatusCompletion($nID);
+            
+        // Department Editor Survey ...
+        } elseif ($nID == 1285) {
+            return $this->saveDeptSubWays1($nID);
+        } elseif ($nID == 1287) {
+            return $this->saveDeptSubWays2($nID);
+        } elseif ($nID == 1329) {
+            return $this->saveEditLog($nID);
+        } elseif ($nID == 1229) {
+            return $this->saveInitDeptOversight($nID);
+            
+        // Page Nodes ...
+        } elseif ($nID == 1007) {
+            return $this->postContactEmail($nID);
+        }
+        return false; // false to continue standard post processing
+    }
+    
     protected function saveUnresolvedCharges($nID)
     {
         if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld')) {
@@ -44,6 +102,18 @@ class OpenComplaintSaves extends OpenComplaintPrints
         }
         $this->sessData->currSessData($nID, $tbl, $fld, 'update', $date);
         return true;
+    }
+    
+    protected function saveCitationVictim($nID)
+    {
+        if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) == 1) {
+            if ($GLOBALS["SL"]->REQ->has('n234fld') && trim($GLOBALS["SL"]->REQ->get('n234fld')) == 'Y') {
+                $this->sessData->dataSets["Civilians"][0]->update([ 'CivGivenCitation' => 'Y' ]);
+            } else {
+                $this->sessData->dataSets["Civilians"][0]->update([ 'CivGivenCitation' => 'N' ]);
+            }
+        }
+        return false;
     }
     
     protected function saveCitationVictims($nID)
@@ -160,7 +230,9 @@ class OpenComplaintSaves extends OpenComplaintPrints
         if (!$GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') || $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') == 'N') {
             $animalsForce = $this->getCivAnimalForces();
             if ($animalsForce && sizeof($animalsForce) > 0) {
-                foreach ($animalsForce as $force) $this->deleteEventByID($force->ForEventSequenceID);
+                foreach ($animalsForce as $force) {
+                    $this->deleteEventByID($force->ForEventSequenceID);
+                }
             }
         }
         return false;
@@ -179,7 +251,9 @@ class OpenComplaintSaves extends OpenComplaintPrints
                     $foundType = false;
                     if ($animalsForce && sizeof($animalsForce) > 0) {
                         foreach ($animalsForce as $force) {
-                            if ($force->ForType == $forceType) $foundType = true;
+                            if ($force->ForType == $forceType) {
+                                $foundType = true;
+                            }
                         }
                     }
                     if (!$foundType) {
@@ -223,7 +297,9 @@ class OpenComplaintSaves extends OpenComplaintPrints
     
     protected function saveStatusCompletion($nID)
     {
-        if ($GLOBALS["SL"]->REQ->get('step') != 'next') return true;
+        if ($GLOBALS["SL"]->REQ->get('step') != 'next') {
+            return true;
+        }
         $this->sessData->dataSets['Complaints'][0]->ComStatus = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
         $this->sessData->dataSets['Complaints'][0]->save();
         return false;

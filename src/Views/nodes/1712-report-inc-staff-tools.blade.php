@@ -87,7 +87,7 @@
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             
-            <div class="slCard mB20">
+            <div class="slCard nodeWrap">
                 <form action="/complaint/read-{{ $complaintRec->ComPublicID }}?view=emails" method="post" 
                     onSubmit="return chkEmaForm();" >
                 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
@@ -188,13 +188,13 @@
         </div><div class="col-4">
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
-            <div class="slCard mB20">
+            <div class="slCard nodeWrap">
                 <h2 class="mT0">History</h2>
                 {!! view('vendor.openpolice.nodes.1712-report-inc-history', [ "history" => $history ])->render() !!}
             </div>
         @endif
             
-            <div class="slCard mB20">
+            <div class="slCard nodeWrap">
                 @if ($firstRevDone) <h3 class="mBn10"><span class="slRedDark">Next, Update Complaint Status:</span></h3>
                 @else <a id="hidivBtnStatus" href="javascript:;" 
                     class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-secondary @endif disBlo taL" 

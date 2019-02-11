@@ -1,67 +1,47 @@
 <!-- resources/views/vendor/openpolice/nodes/1211-volun-home-all-depts.blade.php -->
-@if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '')
-    <h2 class="m0">Department Search: 
-    <a href="javascript:;" class="admSrchFldFocus slBlueDark">{{ $GLOBALS["SL"]->REQ->get('s') }}</a></h2>
-    <a href="/dash/volunteer">Clear Search & Show All Departments</a>
-@else
-    <h2 class="mT0">All Departments</h2>
-    <div class="row mB10">
-        <div class="col-4">
-            <i class="fa fa-filter" aria-hidden="true"></i> Filter by<br />
-            <select name="deptState" id="deptStateID" class="form-control form-control-lg" onChange="runDeptSearch();">
-                <option value="" @if (!$GLOBALS["SL"]->REQ->has('state')) SELECTED @endif >select state</option>
-                {!! $GLOBALS["SL"]->states->stateDrop(($GLOBALS["SL"]->REQ->has('state')) 
-                    ? $GLOBALS["SL"]->REQ->get('state') : '') !!}
-            </select>
-        </div><div class="col-4">
-            <i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Sort by<br />
-            <select name="deptSort" id="deptSortID" class="form-control form-control-lg" onChange="runDeptSearch();">
-                <option value="recent" @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
-                    >Recently Verified</option>
-                <option value="best" @if (isset($viewType) && $viewType == 'best') SELECTED @endif 
-                    >Best Departments</option>
-                <option value="name" @if (isset($viewType) && $viewType == 'name') SELECTED @endif 
-                    >Department Name</option>
-                <option value="city" @if (isset($viewType) && $viewType == 'city') SELECTED @endif 
-                    >State, City</option>
-            </select>
-        </div><div class="col-4">
-        </div>
+<h2 class="mT0">All Departments</h2>
+<div class="row mB10">
+    <div class="col-4">
+        <i class="fa fa-search" aria-hidden="true"></i> Search Phrase<br />
+        <input type="text" name="deptSearch" id="deptSearchID" class="form-control slTab"
+            {!! $GLOBALS["SL"]->tabInd() !!}
+            @if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '')
+                value="{!! trim($GLOBALS["SL"]->REQ->get('s')) !!}" @else value="" @endif >
+    </div><div class="col-3">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter by<br />
+        <select name="deptState" id="deptStateID" class="form-control slTab" {!! $GLOBALS["SL"]->tabInd() !!}
+            onChange="return runVolunDeptSearch();">
+        <option value="" @if (trim($state) == '') SELECTED @endif >All States</option>
+        <option value="US" @if (trim($state) == 'US') SELECTED @endif >Federal</option>
+        {!! $GLOBALS["SL"]->states->stateDrop($state) !!}
+        </select>
+    </div><div class="col-3">
+        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Sort by<br />
+        <select name="deptSort" id="deptSortID" class="form-control slTab" {!! $GLOBALS["SL"]->tabInd() !!}
+            onChange="return runVolunDeptSearch();">
+            <option value="recent" @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
+                >Recently Verified</option>
+            <option value="best" @if (isset($viewType) && $viewType == 'best') SELECTED @endif 
+                >Best Departments</option>
+            <option value="name" @if (isset($viewType) && $viewType == 'name') SELECTED @endif 
+                >Department Name</option>
+            <option value="city" @if (isset($viewType) && $viewType == 'city') SELECTED @endif 
+                >State, City</option>
+        </select>
+    </div><div class="col-2">
+        &nbsp;<br />
+        <a class="btn btn-primary w100 slTab" {!! $GLOBALS["SL"]->tabInd() !!}
+            onClick="return runVolunDeptSearch();" href="javascript:;">Search</a>
     </div>
+</div>
+
+@if (sizeof($deptPriorityRows) > 0)
+    {!! view('vendor.openpolice.volun.dept-rows', [ "deptRows" => $deptRows ])->render() !!}
+@else
+    <a class="list-group-item" href="javascript:;">No departments found.</a>
 @endif
 
-<div class="w100 slGrey" style="padding: 0px 15px 5px 15px;">
-    <div class="float-right deptRgtCol"><nobr>Accessibility Score</nobr><br /><i>Last Verified</i></div>
-    Police Department Name,<br /><i>City, State</i>
-</div>
-<div id="deptListGroup" class="list-group taL">
-    @forelse ($deptRows as $i => $dept)
-        @if ($i < 500)
-            <a class="list-group-item" href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-                <div class="float-right deptRgtCol">
-                    @if (intVal($dept->DeptScoreOpenness) > 0)
-                        <h3 class="m0">{{ $dept->DeptScoreOpenness }}</h3>
-                        {!! view('vendor.openpolice.volun.volunteer-recent-edits', [
-                            "deptID" => $dept->DeptID ])->render() !!}
-                        @if (trim($dept->DeptVerified) != '' && trim($dept->DeptVerified) != '0000-00-00 00:00:00')
-                            <span class="gryA"><i>{{ date("n/j/y", strtotime($dept->DeptVerified)) }}</i></span>
-                        @endif
-                    @endif
-                </div>
-                <h3 class="m0">{{ str_replace('Department', 'Dept', $dept->DeptName) }}</h3>
-                <div class="gry9"><i>
-                @if (!isset($dept->DeptAddressState) || trim($dept->DeptAddressState) == '' 
-                    || $dept->DeptAddressState == 'US') Federal
-                @else {{ $dept->DeptAddressCity }}, {{ $dept->DeptAddressState }} @endif
-                </i></div>
-            </a>
-        @endif
-    @empty
-        <a class="list-group-item" href="javascript:;">No departments found.</a>
-    @endforelse
-</div>
-
-<div class="row2 p15">
+<div class="row2 p15 mT20">
 <a href="javascript:;" id="hidivBtnNewDept" class="hidivBtn"><h3 class="m0">
     Need to add a new police department to the database?</h3></a>
 <div id="hidivNewDept" class="disNon pT20 pB20">
@@ -76,13 +56,13 @@
         <div class="col-8">
             <fieldset class="form-group">
                 <label for="deptNameID">Department Name</label>
-                <input id="deptNameID" name="deptName" type="text" value="" class="form-control form-control-lg" >
+                <input id="deptNameID" name="deptName" type="text" value="" class="form-control" >
             </fieldset>
         </div>
         <div class="col-4">
             <fieldset class="form-group">
                 <label for="DeptAddressStateID">State</label>
-                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control form-control-lg" 
+                <select id="DeptAddressStateID" name="DeptAddressState" class="form-control" 
                     autocomplete="off" >{!! $GLOBALS['SL']->states->stateDrop('', true) !!}
                 </select>
             </fieldset>
@@ -91,7 +71,7 @@
     <center><input type="submit" class="btn btn-lg btn-primary" value="Add New Department"></center>
 </div>
 </div>
-<script type="text/javascript">
+<script id="noExtractDepts" type="text/javascript">
 function checkNewDept() {
     if (document.getElementById('deptNameID').value.trim() == '' || document.getElementById('DeptAddressStateID').value.trim() == '') {
         alert('Please type in a police department name and its state.');
@@ -107,7 +87,19 @@ function tweakSearchForm() {
 }
 setTimeout("tweakSearchForm()", 10);
 */
-function runDeptSearch() {
-    window.location='?state='+document.getElementById('deptStateID').value+'&sort='+document.getElementById('deptSortID').value;
+function runVolunDeptSearch() {
+    window.location='?s='+encodeURI(document.getElementById('deptSearchID').value)+'&state='+document.getElementById('deptStateID').value+'&sort='+document.getElementById('deptSortID').value+'#n1757';
+    return false;
 }
+$(document).ready(function(){
+	$(document).on("keyup", "#deptSearchID", function(e) {
+        if (e.keyCode == 13) {
+            runVolunDeptSearch();
+            return false; 
+        }
+    });
+});
+@if ($GLOBALS["SL"]->REQ->has('s') && strpos($_SERVER["REQUEST_URI"], '#n1757') === false)
+    setTimeout("window.location+='#n1757'", 1);
+@endif
 </script>

@@ -1,8 +1,7 @@
 /* resources/views/openpolice/nodes/145-ajax-dept-search.blade.php */
 
 if (document.getElementById('nFormNext')) {
-    document.getElementById('nFormNext').disabled=true;
-    $("#nFormNext").removeClass("btn-primary");
+    document.getElementById('nFormNext').style.display='none';
 }
 function submitAjaxSearch() {
     setTimeout(function() {
@@ -59,7 +58,7 @@ $(document).on("click", "#newDeptSubmit", function() {
     //return runFormSub();
 });
 
-$( "#deptNameInID" ).autocomplete({ 
+$( "#deptNameInID" ).autocomplete({
     select: function(e) { submitAjaxSearch(); }, 
     source: [
         {!! implode(', ', $searchSuggest) !!}

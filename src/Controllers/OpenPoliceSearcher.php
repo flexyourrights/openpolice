@@ -19,17 +19,20 @@ class OpenPoliceSearcher extends Searcher
     {
         if ($key == 'd') {
             $deptComs = $both = [];
-            $chk = OPLinksComplaintDept::where('LnkComDeptDeptID', $val)
+            $chk = OPLinksComplaintDept::whereIn('LnkComDeptDeptID', $val)
                 ->get();
             if ($chk->isNotEmpty()) {
-                foreach ($chk as $com) $deptComs[] = $com->LnkComDeptComplaintID;
+                foreach ($chk as $com) {
+                    $deptComs[] = $com->LnkComDeptComplaintID;
+                }
                 $chk = OPComplaints::whereIn('ComID', $deptComs)
+                    ->select('ComID')
                     ->get();
                 $deptComs = [];
                 if ($chk->isNotEmpty()) {
                     foreach ($chk as $com) {
-                        if (in_array($com->ComPublicID, $this->allPublicFiltIDs)) {
-                            $both[] = $com->ComPublicID;
+                        if (in_array($com->ComID, $this->allPublicFiltIDs)) {
+                            $both[] = $com->ComID;
                         }
                     }
                 }

@@ -4,10 +4,12 @@ namespace OpenPolice\Controllers;
 use DB;
 use App\Models\User;
 use App\Models\OPComplaints;
+use App\Models\OPLinksComplaintOversight;
 use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunStatDays;
+use SurvLoop\Controllers\SurvTrends;
 
 class OpenDashAdmin
 {
@@ -16,9 +18,34 @@ class OpenDashAdmin
     public function printDashSessGraph()
     {
         $this->v["isDash"] = true;
-        $GLOBALS["SL"]->x["needsCharts"] = true;
-        $GLOBALS["SL"]->pageAJAX .= '$("#1359graph").load("/dashboard/surv-1/sessions/graph-daily"); ';
-        return '<div id="1359graph" class="w100" style="height: 420px;"></div>';
+        $grapher = new SurvTrends('' . rand(1000000, 10000000) . '');
+        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#2b3493', '#2b3493');
+        $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
+        $recentAttempts = OPComplaints::whereNotNull('ComSummary')
+            ->where('ComSummary', 'NOT LIKE', '')
+            ->where('created_at', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->select('ComStatus', 'created_at')
+            ->get();
+        if ($recentAttempts->isNotEmpty()) {
+            foreach ($recentAttempts as $i => $rec) {
+                if ($GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+                    $grapher->addDayTally('incomplete', $rec->created_at);
+                } else {
+                    $grapher->addDayTally('complete', $rec->created_at);
+                }
+            }
+        }
+        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#c3ffe1', '#c3ffe1');
+        $recentAttempts = OPLinksComplaintOversight::select('LnkComOverSubmitted')
+            ->where('LnkComOverSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->get();
+        if ($recentAttempts->isNotEmpty()) {
+            foreach ($recentAttempts as $i => $rec) {
+                $grapher->addDayTally('submitted', $rec->LnkComOverSubmitted);
+            }
+        }
+        //$grapher->addDataLineType('attorneyd', 'Attorney\'d', '', '#63c6ff', '#63c6ff');
+        return $grapher->printDailyGraph(350);
     }
     
     public function printDashPercCompl()
@@ -63,7 +90,8 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $this->v["statTots"] = [];
-        $statRanges = [ [
+        $statRanges = [
+            [
                 'Last 24 Hours', 
                 date("Y-m-d H:i:s", mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y")))
             ], [
@@ -72,7 +100,7 @@ class OpenDashAdmin
             ], [
                 'All-Time Totals', 
                 date("Y-m-d H:i:s", mktime(0, 0, 0, 1, 1, 1000))
-            ],
+            ]
         ];
         foreach ($statRanges as $i => $stat) {
             $this->v["statTots"][$i] = [ $stat[0] ];
@@ -129,9 +157,9 @@ class OpenDashAdmin
                 "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $deptEdit[1]->ZedDeptType),
                 "iaEdit"   => $deptEdit[2], 
                 "civEdit"  => $deptEdit[3]
-            ])->render();
+                ])->render();
         }
-        $this->volunStatsDailyGraph();
+        $this->v["volunDataGraph"] = $this->volunStatsDailyGraph();
         return view('vendor.openpolice.nodes.1351-admin-volun-edit-history', $this->v)->render();
     }
     
@@ -142,72 +170,16 @@ class OpenDashAdmin
             $this->volunDeptsRecent();
         }
         $this->recalcVolunStats();
-        $past = 60;
-        $startDate = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$past, date("Y")));
-        $this->v["statDays"] = OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+        $grapher = new SurvTrends('1349', 'VolunStatDate');
+        $grapher->addDataLineType('depts', 'Unique Depts', 'VolunStatDeptsUnique', '#2b3493', '#2b3493');
+        $grapher->addDataLineType('users', 'Unique Users', 'VolunStatUsersUnique', '#63c6ff', '#63c6ff');
+        $grapher->addDataLineType('edits', 'Total Edits', 'VolunStatTotalEdits', '#c3ffe1', '#c3ffe1');
+        $grapher->addDataLineType('calls', 'Total Calls', 'VolunStatCallsTot', '#29B76F', '#29B76F');
+        $grapher->addDataLineType('signup', 'Signups', 'VolunStatSignups', '#ffd2c9', '#ffd2c9');
+        $grapher->processRawDataResults(OPzVolunStatDays::where('VolunStatDate', '>=', $grapher->getPastStartDate())
             ->orderBy('VolunStatDate', 'asc')
-            ->get();
-        $this->v["axisLabels"] = [];
-        foreach ($this->v["statDays"] as $i => $s) {
-            if ($i%5 == 0) {
-                $this->v["axisLabels"][] = date('n/j', strtotime($s->VolunStatDate));
-            } else {
-                $this->v["axisLabels"][] = '';
-            }
-        }
-        $lines = [];
-        $lines[0] = [
-            "label"    => 'Unique Departments', 
-            "brdColor" => '#2b3493', 
-            "dotColor" => 'rgba(75,192,192,1)', 
-            "data"     => [], 
-        ];
-        foreach ($this->v["statDays"] as $s) {
-            $lines[0]["data"][] = $s->VolunStatDeptsUnique;
-        }
-        $lines[1] = [
-            "label"    => 'Unique Users', 
-            "brdColor" => '#63c6ff', 
-            "dotColor" => 'rgba(75,192,192,1)', 
-            "data"     => [], 
-        ];
-        foreach ($this->v["statDays"] as $s) {
-            $lines[1]["data"][] = $s->VolunStatUsersUnique;
-        }
-        $lines[2] = [
-            "label"    => 'Total Edits', 
-            "brdColor" => '#c3ffe1', 
-            "dotColor" => 'rgba(75,192,192,1)', 
-            "data"     => [], 
-        ];
-        foreach ($this->v["statDays"] as $s) {
-            $lines[2]["data"][] = $s->VolunStatTotalEdits;
-        }
-        $lines[3] = [
-            "label"    => 'Total Calls', 
-            "brdColor" => '#29B76F', 
-            "dotColor" => 'rgba(75,192,192,1)', 
-            "data"     => [], 
-        ];
-        foreach ($this->v["statDays"] as $s) {
-            $lines[3]["data"][] = $s->VolunStatCallsTot;
-        }
-        $lines[4] = [
-            "label"    => 'Signups', 
-            "brdColor" => '#ffd2c9', 
-            "dotColor" => 'rgba(75,192,192,1)', 
-            "data"     => [], 
-        ];
-        foreach ($this->v["statDays"] as $s) {
-            $lines[4]["data"][] = $s->VolunStatSignups;
-        }
-        $this->v["dataLines"] = '';
-        foreach ($lines as $l) {
-            $this->v["dataLines"] .= view('vendor.survloop.graph-data-line', $l)->render();
-        }
-        $volunDataGraph = view('vendor.openpolice.nodes.1351-volun-graph', $this->v)->render();
-        $GLOBALS["SL"]->x["needsCharts"] = true;
-        return $volunDataGraph;
+            ->get());
+        return $grapher->printDailyGraph(350);
     }
     
     public function volunStatsTable()

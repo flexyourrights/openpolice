@@ -16,23 +16,8 @@ $("#applyFilts").on('click', function(event) {
     return true;
 });
 
-$(document).on({
-    mouseenter: function () {
-        var cid = $(this).attr("data-cid");
-        $("#clkBox"+cid+"a").css("background-color", "#EDF8FF");
-        $("#clkBox"+cid+"b").css("background-color", "#EDF8FF");
-    },
-    mouseleave: function () {
-        var cid = $(this).attr("data-cid");
-        $("#clkBox"+cid+"a").css("background-color", "#FFF");
-        $("#clkBox"+cid+"b").css("background-color", "#FFF");
-    }
-}, ".clkBox");
-
 @forelse ($ajaxRefreshs as $i => $c)
-
     setTimeout(function() {
         document.getElementById('hidFrameID').src="/complaint/read-{{ $c }}?refresh=1";
     }, {{ (3000*$i) }});
-@empty
-@endforelse
+@empty @endforelse

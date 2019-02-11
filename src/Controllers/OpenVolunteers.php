@@ -4,6 +4,7 @@ namespace OpenPolice\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\OPPartners;
+use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenReportTools;
@@ -40,16 +41,21 @@ class OpenVolunteers extends OpenReportTools
         $this->v["viewType"] = (($GLOBALS["SL"]->REQ->has('sort')) ? $GLOBALS["SL"]->REQ->get('sort') : 'recent');
         $this->v["deptRows"] = [];
         $this->v["searchForm"] = $this->deptSearchForm();
-        $orderby = [ [ 'DeptVerified', 'desc' ], [ 'DeptName', 'asc' ] ];
+        $orderby = [
+            [ 'DeptVerified', 'desc' ],
+            [ 'DeptName', 'asc' ]
+        ];
         switch ($this->v["viewType"]) {
             case 'best': $orderby[0] = [ 'DeptScoreOpenness', 'desc' ]; break;
             case 'name': $orderby[0] = [ 'DeptName', 'asc' ]; break;
             case 'city': $orderby = [ [ 'DeptAddressState', 'asc' ], [ 'DeptAddressCity', 'asc' ] ]; break;
         }
-        $this->v["state"] = $whrState = '';
-        if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
+        $this->v["state"] = '';
+        if ($GLOBALS["SL"]->REQ->has('state')) {
             $this->v["state"] = trim($GLOBALS["SL"]->REQ->get('state'));
-            $whrState = "->where('DeptAddressState', '" . $this->v["state"] . "')";
+        } elseif (isset($this->v["yourContact"]->PrsnAddressState) 
+            && trim($this->v["yourContact"]->PrsnAddressState) != '') {
+            $this->v["state"] = trim($this->v["yourContact"]->PrsnAddressState);
         }
         if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
             $this->chkRecsPub($GLOBALS["SL"]->REQ, 36);
@@ -58,26 +64,49 @@ class OpenVolunteers extends OpenReportTools
                 $searches = $GLOBALS["SL"]->parseSearchWords($GLOBALS["SL"]->REQ->get('s'));
             }
             if (sizeof($searches) > 0) {
-                foreach ($searches as $s) {
-                    eval("\$rows = App\\Models\\OPDepartments::where('DeptName', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptEmail', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptPhoneWork', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptAddress', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptAddressCity', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptAddressZip', 'LIKE', '%' . \$s . '%')
-                        ->orWhere('DeptAddressCounty', 'LIKE', '%' . \$s . '%')
-                        " . $whrState . "->get();");
-                    $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                $rows = null;
+                if ($this->v["state"] == '') {
+                    foreach ($searches as $s) {
+                        $rows = OPDepartments::where('DeptName', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptEmail', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptPhoneWork', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptAddress', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptAddressCity', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptAddressZip', 'LIKE', '%' . $s . '%')
+                            ->orWhere('DeptAddressCounty', 'LIKE', '%' . $s . '%')
+                            ->get();
+                        $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                    }
+                } else {
+                    foreach ($searches as $s) {
+                        $rows = OPDepartments::where('DeptAddressState', $this->v["state"])
+                            ->where(function ($query) use ($s) {
+                                $query->where('DeptName', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptEmail', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptPhoneWork', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptAddress', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptAddressCity', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptAddressZip', 'LIKE', '%' . $s . '%')
+                                    ->orWhere('DeptAddressCounty', 'LIKE', '%' . $s . '%');
+                                })
+                            ->get();
+                        $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                    }
                 }
             }
             $this->v["deptRows"] = $GLOBALS["SL"]->x["srchRes"]["depts"];
             unset($GLOBALS["SL"]->x["srchRes"]["depts"]);
+        } elseif ($this->v["state"] != '') {
+            $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 'DeptVerified', 
+                'DeptAddressCity', 'DeptAddressState')
+                ->where('DeptAddressState', $this->v["state"])
+                ->orderBy($orderby[0][0], $orderby[0][1])
+                ->get();
         } else {
-            eval("\$this->v['deptRows'] = App\\Models\\OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 
-                'DeptVerified', 'DeptAddressCity', 'DeptAddressState')
-                ->orderBy(\$orderby[0][0], \$orderby[0][1])
-                ->orderBy(\$orderby[1][0], \$orderby[1][1])
-                " . $whrState . "->get();");
+            $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 'DeptVerified', 
+                'DeptAddressCity', 'DeptAddressState')
+                ->orderBy($orderby[0][0], $orderby[0][1])
+                ->get();
         }
         $this->loadRecentDeptEdits();
         $GLOBALS["SL"]->loadStates();
@@ -140,6 +169,15 @@ class OpenVolunteers extends OpenReportTools
         return $this->v["deptPriorityRows"];
     }
     
+    protected function deptSearchForm($state = '', $deptName = '')
+    {
+        $GLOBALS["SL"]->loadStates();
+        return view('vendor.openpolice.volun.volunEditSearch', [ 
+            "deptName"  => $deptName, 
+            "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
+            ])->render();
+    }
+    
     protected function loadRecentDeptEdits()
     {
         if (!isset($GLOBALS["SL"]->x["usernames"])) $GLOBALS["SL"]->x["usernames"] = [];
@@ -170,22 +208,18 @@ class OpenVolunteers extends OpenReportTools
     public function printVolunLocationForm()
     {
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.nodes.1217-volun-home-your-info', $this->v)->render();
-    }
-    
-    public function saveDefaultState(Request $request)
-    {
-        $this->survLoopInit($request);
         $this->loadYourContact();
-        if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->PrsnID)) {
-            if ($request->has('newState')) {
-                $this->v["yourContact"]->update([ "PrsnAddressState" => $request->get('newState') ]);
-            }
-            if ($request->has('newPhone')) {
-                $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $request->get('newPhone') ]);
+        if ($GLOBALS["SL"]->REQ->has('saveDefaultState')) {
+            if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->PrsnID)) {
+                if ($GLOBALS["SL"]->REQ->has('newState')) {
+                    $this->v["yourContact"]->update([ "PrsnAddressState" => $GLOBALS["SL"]->REQ->get('newState') ]);
+                }
+                if ($GLOBALS["SL"]->REQ->has('newPhone')) {
+                    $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $GLOBALS["SL"]->REQ->get('newPhone') ]);
+                }
             }
         }
-        exit;
+        return view('vendor.openpolice.nodes.1217-volun-home-your-info', $this->v)->render();
     }
     
     

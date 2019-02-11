@@ -21,8 +21,8 @@ class OPSeeder extends Seeder
 			'DbName' => 'Open Police Complaints',
 			'DbDesc' => 'The nation\'s most trusted police complaints service',
 			'DbMission' => 'The purpose of the Open Police Complaints (OPC) database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States.',
-			'DbTables' => '55',
-			'DbFields' => '584'
+			'DbTables' => '56',
+			'DbFields' => '579'
 		]);
 	
 	DB::table('SL_Tables')->insert([
@@ -76,7 +76,7 @@ class OPSeeder extends Seeder
 			'TblEng' => 'Administrators',
 			'TblDesc' => 'OPC staff and volunteers with special access permission to review and manage Complaints. This information allows OPC management to measure the performance of individual Administrators.',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
-			'TblOrd' => '36',
+			'TblOrd' => '37',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
 			'TblNumForeignKeys' => '2',
@@ -93,9 +93,9 @@ class OPSeeder extends Seeder
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
 			'TblOrd' => '32',
 			'TblExtend' => '0',
-			'TblNumFields' => '18',
+			'TblNumFields' => '20',
 			'TblNumForeignKeys' => '2',
-			'TblNumForeignIn' => '3'
+			'TblNumForeignIn' => '4'
 		]);
 		DB::table('SL_Tables')->insert([
 			'TblID' => 111,
@@ -214,7 +214,7 @@ http://www.sanjoseca.gov/DocumentCenter/View/29599',
 			'TblGroup' => 'Complaint Data Tables',
 			'TblOrd' => '8',
 			'TblExtend' => '0',
-			'TblNumFields' => '25',
+			'TblNumFields' => '24',
 			'TblNumForeignKeys' => '2',
 			'TblNumForeignIn' => '1'
 		]);
@@ -247,7 +247,7 @@ If there is a Property record associated with a Search record, then property was
 			'TblGroup' => 'Complaint Data Tables',
 			'TblOrd' => '13',
 			'TblExtend' => '0',
-			'TblNumFields' => '9',
+			'TblNumFields' => '10',
 			'TblNumForeignKeys' => '1'
 		]);
 		DB::table('SL_Tables')->insert([
@@ -259,7 +259,7 @@ If there is a Property record associated with a Search record, then property was
 			'TblDesc' => 'Beyond default privileges for various types of system users, this table includes explicit privileges to enable access to specific system data. This is vital in allowing User IDs (which are associated with different user types) to be granted access to specific complaints or sets of complaints.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Internal Infrastructure',
-			'TblOrd' => '47',
+			'TblOrd' => '48',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '4',
@@ -275,7 +275,7 @@ If there is a Property record associated with a Search record, then property was
 			'TblNotes' => '(*This is just how Morgan might implement this need, but the details of its implementation should not effect the core OPC data structures*)',
 			'TblType' => 'Validation',
 			'TblGroup' => 'Logging Data Tables',
-			'TblOrd' => '48',
+			'TblOrd' => '49',
 			'TblExtend' => '0',
 			'TblNumFields' => '6',
 			'TblNumForeignKeys' => '1'
@@ -320,9 +320,9 @@ Question list and fields coming soon...',
 			'TblGroup' => 'Complaint Data Tables',
 			'TblOrd' => '7',
 			'TblExtend' => '0',
-			'TblNumFields' => '4',
+			'TblNumFields' => '2',
 			'TblNumForeignKeys' => '1',
-			'TblNumForeignIn' => '8'
+			'TblNumForeignIn' => '7'
 		]);
 		DB::table('SL_Tables')->insert([
 			'TblID' => 138,
@@ -334,8 +334,8 @@ Question list and fields coming soon...',
 			'TblGroup' => 'Complaint Data Tables',
 			'TblOrd' => '18',
 			'TblExtend' => '0',
-			'TblNumFields' => '3',
-			'TblNumForeignKeys' => '2'
+			'TblNumFields' => '2',
+			'TblNumForeignKeys' => '1'
 		]);
 		DB::table('SL_Tables')->insert([
 			'TblID' => 144,
@@ -346,7 +346,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Includes linkages between Police Departments and Complaints. This allows a single Complaint to be associated with more than one Police Department.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '37',
+			'TblOrd' => '38',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
@@ -361,7 +361,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Includes linkages between Oversight Agencies involved in a Complaint. This allows us to track the progress of Complaints being investigated by more than one Oversight Agency.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '38',
+			'TblOrd' => '39',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '10',
@@ -506,9 +506,9 @@ Question list and fields coming soon...',
 			'TblDesc' => 'This table includes linkages between vehicles and people. This allows a single vehicle to be associated with one or more Officer.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '42',
+			'TblOrd' => '43',
 			'TblExtend' => '0',
-			'TblNumFields' => '2',
+			'TblNumFields' => '3',
 			'TblNumForeignKeys' => '2'
 		]);
 		DB::table('SL_Tables')->insert([
@@ -532,7 +532,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Civilian-Allegation Links',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '43',
+			'TblOrd' => '44',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
@@ -546,7 +546,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Officer-Allegation Links',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '40',
+			'TblOrd' => '41',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
@@ -561,7 +561,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Includes linkages between Officers involved in an Incident with key events that happened during an Incident. Each record links one Officer with one Event (a Stop, Search, Property, or Use of Force).',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '41',
+			'TblOrd' => '42',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
@@ -575,7 +575,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Civilian-Event Links',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '44',
+			'TblOrd' => '45',
 			'TblOpts' => '3',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
@@ -590,7 +590,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'This table includes linkages between vehicles and people. This allows a single vehicle to be associated with one or more Civilian.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '45',
+			'TblOrd' => '46',
 			'TblExtend' => '0',
 			'TblNumFields' => '3',
 			'TblNumForeignKeys' => '2'
@@ -631,7 +631,7 @@ Question list and fields coming soon...',
 			'TblName' => 'users',
 			'TblEng' => 'Users',
 			'TblDesc' => 'This represents the Laravel Users table, but will not actually be implemented by SurvLoop as part of the database installation.',
-			'TblOrd' => '49',
+			'TblOrd' => '50',
 			'TblExtend' => '0',
 			'TblNumForeignIn' => '15'
 		]);
@@ -643,7 +643,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Site Visitors',
 			'TblDesc' => 'Represent user sessions while visiting the web site. This is useful for tracking visitor responses, searches, etc.',
 			'TblGroup' => 'Internal Infrastructure',
-			'TblOrd' => '46',
+			'TblOrd' => '47',
 			'TblExtend' => '0',
 			'TblNumFields' => '7',
 			'TblNumForeignKeys' => '1'
@@ -684,7 +684,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Includes linkages between Police Departments and Complaints. This allows a single Complaint to be associated with more than one Police Department.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
-			'TblOrd' => '39',
+			'TblOrd' => '40',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
 			'TblNumForeignKeys' => '2'
@@ -698,7 +698,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Each record stores a copy of individual edits made to unique records in the Departments table.',
 			'TblType' => 'Validation',
 			'TblGroup' => 'Record Edit Histories',
-			'TblOrd' => '50',
+			'TblOrd' => '51',
 			'TblExtend' => '111',
 			'TblNumFields' => '2',
 			'TblNumForeignIn' => '1'
@@ -712,7 +712,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Each record stores a copy of individual edits made to unique records in the Oversight table.',
 			'TblType' => 'Validation',
 			'TblGroup' => 'Record Edit Histories',
-			'TblOrd' => '51',
+			'TblOrd' => '52',
 			'TblExtend' => '106',
 			'TblNumFields' => '5',
 			'TblNumForeignKeys' => '1'
@@ -726,7 +726,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Each record stores daily statistics for volunteer activity.',
 			'TblType' => 'Validation',
 			'TblGroup' => 'Internal Volunteer Data',
-			'TblOrd' => '52',
+			'TblOrd' => '53',
 			'TblExtend' => '0',
 			'TblNumFields' => '15'
 		]);
@@ -738,7 +738,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Volunteers: User Info',
 			'TblDesc' => 'Each record stores extra information related to one volunteer User.',
 			'TblGroup' => 'Internal Volunteer Data',
-			'TblOrd' => '53',
+			'TblOrd' => '54',
 			'TblExtend' => '0',
 			'TblNumFields' => '8',
 			'TblNumForeignKeys' => '2'
@@ -751,7 +751,7 @@ Question list and fields coming soon...',
 			'TblEng' => 'Complaint Review',
 			'TblDesc' => 'Each record stores feedback from a system admin, the complaint owner, or the department.',
 			'TblGroup' => 'Internal Volunteer Data',
-			'TblOrd' => '54',
+			'TblOrd' => '55',
 			'TblExtend' => '0',
 			'TblNumFields' => '20',
 			'TblNumForeignKeys' => '2'
@@ -779,7 +779,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Partners can specify one or more sets of filters to define one type of case.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
-			'TblOrd' => '34',
+			'TblOrd' => '36',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
 			'TblNumForeignKeys' => '1'
@@ -793,7 +793,7 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Partners can specify one or more sets of filters for types of complaints that match their needs. Each record links one complaint case profile to as many complaint filters as needed. Information in this table enables us to alert Partners to the best matches.',
 			'TblType' => 'Subset',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
-			'TblOrd' => '33',
+			'TblOrd' => '35',
 			'TblExtend' => '0',
 			'TblNumFields' => '1',
 			'TblNumForeignKeys' => '1',
@@ -808,7 +808,21 @@ Question list and fields coming soon...',
 			'TblDesc' => 'Partners can specify one or more states where there currently work. Information in this table enables us to alert Partners to the best matches they can actually work with.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
-			'TblOrd' => '35',
+			'TblOrd' => '33',
+			'TblExtend' => '0',
+			'TblNumFields' => '2',
+			'TblNumForeignKeys' => '1'
+		]);
+		DB::table('SL_Tables')->insert([
+			'TblID' => 182,
+			'TblDatabase' => '1',
+			'TblAbbr' => 'PrtCap',
+			'TblName' => 'PartnerCapac',
+			'TblEng' => 'Partner Capacities',
+			'TblDesc' => 'Partners can specify one or more sets of Capacities to list for their organization. These are important for site visitors and power users to filter for the most helpful organizations for a given situation.',
+			'TblType' => 'Subset',
+			'TblGroup' => 'People & Groups Involved In Complaint Process',
+			'TblOrd' => '34',
 			'TblExtend' => '0',
 			'TblNumFields' => '2',
 			'TblNumForeignKeys' => '1'
@@ -2409,7 +2423,7 @@ Q. Do we want mere frisks to trigger wrongful search Allegations? Because frisks
 			'FldID' => 369,
 			'FldDatabase' => '1',
 			'FldTable' => '123',
-			'FldOrd' => '7',
+			'FldOrd' => '6',
 			'FldSpecSource' => '0',
 			'FldName' => 'NoChargesFiled',
 			'FldEng' => 'Were all charges dropped upon release?',
@@ -3820,10 +3834,9 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecType' => 'Replica',
 			'FldSpecSource' => '868',
 			'FldName' => 'Age',
-			'FldEng' => 'Age',
+			'FldEng' => 'Age Range',
 			'FldDesc' => 'Estimated age in years of a Civilian or Officer. This information is used to verify a Civilian or Officer\'s identity.',
 			'FldNotes' => 'Because the "Date of Birth" field will determine Complainant\'s age. This field should become visible only if a Civilian\'s age is unknown. The "Harmonised Standard 3" age ranges presented here: https://meta.wikimedia.org/wiki/Survey_best_practices#Age',
-			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
 			'FldForeign2Min' => '0',
@@ -3833,8 +3846,8 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldDataType' => 'Numeric',
 			'FldDataLength' => '3',
 			'FldCharSupport' => ',Numbers,',
-			'FldKeyStruct' => 'Simple',
-			'FldCompareSame' => '130'
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 632,
@@ -4304,7 +4317,7 @@ If selected, we might want to email user article on How to Track Down CCTV Foota
 			'FldID' => 785,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '16',
+			'FldOrd' => '15',
 			'FldSpecType' => 'Replica',
 			'FldSpecSource' => '918',
 			'FldName' => 'CameraRecord',
@@ -4641,29 +4654,6 @@ NULL if No',
 			'FldValuesEnteredBy' => 'System',
 			'FldRequired' => '1',
 			'FldCompareSame' => '130',
-			'FldOpts' => '13'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 818,
-			'FldDatabase' => '1',
-			'FldTable' => '137',
-			'FldOrd' => '1',
-			'FldSpecSource' => '0',
-			'FldName' => 'Order',
-			'FldEng' => 'Event Order',
-			'FldDesc' => 'The is the chronological rank of events within an incident, identifying the order in which they occurred. This is vital to presenting the Stops, Searches, Uses of Force, and Arrests in the order they occurred during the Incident.',
-			'FldForeignTable' => '0',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldType' => 'INT',
-			'FldDataType' => 'Numeric',
-			'FldDataLength' => '11',
-			'FldCharSupport' => ',Numbers,',
-			'FldKeyStruct' => 'Simple',
-			'FldEditRule' => 'NowAllowed',
-			'FldCompareSame' => '6',
 			'FldOpts' => '13'
 		]);
 		DB::table('SL_Fields')->insert([
@@ -6509,16 +6499,15 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldName' => 'Nickname',
 			'FldEng' => 'Nickname',
 			'FldDesc' => 'Preferred first name of persons that we may use in less-formal communications with them. Important for maintaining cordial relationships with these key contacts.',
-			'FldNotes' => 'Use only if selected. Field may otherwise be left blank',
-			'FldForeignTable' => '0',
+			'FldNotes' => 'Use only if selected. Field may otherwise be left blank. For people directly involved in a police incident (Victims, Witnesses, Officers), the Nickname field is really for the sake of user experience while taking the survey.',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
 			'FldForeign2Min' => '0',
 			'FldForeign2Max' => '0',
 			'FldDataLength' => '0',
-			'FldCharSupport' => ',Letters,Keyboard,Numbers,',
-			'FldCompareSame' => '6',
-			'FldOpts' => '7'
+			'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '6'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 977,
@@ -7215,7 +7204,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1029,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '8',
+			'FldOrd' => '9',
 			'FldSpecSource' => '0',
 			'FldName' => 'Occupation',
 			'FldEng' => 'Occupation',
@@ -8010,7 +7999,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1078,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '11',
+			'FldOrd' => '8',
 			'FldSpecSource' => '0',
 			'FldName' => 'Resident',
 			'FldEng' => 'Civilian resident of jurisdiction?',
@@ -8029,8 +8018,8 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1079,
 			'FldDatabase' => '1',
-			'FldTable' => '121',
-			'FldOrd' => '11',
+			'FldTable' => '102',
+			'FldOrd' => '21',
 			'FldSpecSource' => '0',
 			'FldName' => 'CitationNumber',
 			'FldEng' => 'Citation ID#',
@@ -8087,30 +8076,10 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldCompareSame' => '130'
 		]);
 		DB::table('SL_Fields')->insert([
-			'FldID' => 1083,
-			'FldDatabase' => '1',
-			'FldTable' => '138',
-			'FldOrd' => '1',
-			'FldSpecSource' => '0',
-			'FldName' => 'EventID',
-			'FldEng' => 'Event Sequence ID',
-			'FldDesc' => 'The unique number of the Event Sequence record related to this Arrest or Stop Charge.',
-			'FldForeignTable' => '137',
-			'FldForeignMin' => '0',
-			'FldForeignMax' => 'N',
-			'FldType' => 'INT',
-			'FldDataType' => 'Numeric',
-			'FldDataLength' => '0',
-			'FldCharSupport' => ',Numbers,',
-			'FldKeyType' => ',Foreign,',
-			'FldNullSupport' => '0',
-			'FldCompareSame' => '878800'
-		]);
-		DB::table('SL_Fields')->insert([
 			'FldID' => 1084,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '20',
+			'FldOrd' => '19',
 			'FldSpecSource' => '0',
 			'FldName' => 'GivenCitation',
 			'FldEng' => 'Given Citation (Not Arrested)',
@@ -8129,7 +8098,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1085,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '21',
+			'FldOrd' => '20',
 			'FldSpecSource' => '0',
 			'FldName' => 'GivenWarning',
 			'FldEng' => 'Given Written Warning',
@@ -8152,15 +8121,14 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'ChargesOther',
 			'FldEng' => 'Other charges filed?',
-			'FldDesc' => 'Citation or arrest charge(s) an Officer issued a Subject as a result of this Stop. Important for evaluating wrongful citation Allegations and tracking citation trends.',
+			'FldDesc' => 'Citation charge(s) an Officer issued a Subject as a result of this Stop. Important for evaluating wrongful citation Allegations and tracking citation trends.',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
 			'FldForeign2Min' => 'N',
 			'FldForeign2Max' => 'N',
 			'FldType' => 'TEXT',
 			'FldDataLength' => '0',
-			'FldCharSupport' => ',Letters,Numbers,Keyboard,',
-			'FldNullSupport' => '0'
+			'FldCharSupport' => ',Letters,Numbers,Keyboard,'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1087,
@@ -8878,7 +8846,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1126,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '9',
+			'FldOrd' => '10',
 			'FldSpecSource' => '0',
 			'FldName' => 'HadVehicle',
 			'FldEng' => 'Using Vehicle at Start',
@@ -9208,15 +9176,17 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldName' => 'Role',
 			'FldEng' => 'Vehicle Role',
 			'FldDesc' => 'When a Vehicle is associated with multiple Civilians, this information is important for identifier for which person was driving a Vehicle.',
-			'FldForeignTable' => '0',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
 			'FldForeign2Min' => 'N',
 			'FldForeign2Max' => 'N',
-			'FldValues' => 'Driver;Passenger',
-			'FldDataLength' => '10',
-			'FldCharSupport' => ',Letters,',
-			'FldCompareSame' => '130'
+			'FldValues' => 'Def::Vehicle Roles',
+			'FldType' => 'INT',
+			'FldDataType' => 'Numeric',
+			'FldDataLength' => '0',
+			'FldCharSupport' => ',Numbers,',
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1148,
@@ -9296,25 +9266,6 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
-			'FldID' => 1155,
-			'FldDatabase' => '1',
-			'FldTable' => '137',
-			'FldOrd' => '3',
-			'FldSpecSource' => '0',
-			'FldName' => 'UserFinished',
-			'FldEng' => 'User Finished Event',
-			'FldDesc' => 'Internally indicates whether or not the Complainant completed the final questions related to a Stop, Search, Use of Force, or Arrest. This is important for determining when the Complainant has completed all dynamically generated sections describing \'What Happened\'.',
-			'FldForeignMin' => '0',
-			'FldForeignMax' => '0',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldValues' => 'Y;N',
-			'FldDataLength' => '1',
-			'FldCharSupport' => ',Letters,',
-			'FldNullSupport' => '0',
-			'FldCompareSame' => '878800'
-		]);
-		DB::table('SL_Fields')->insert([
 			'FldID' => 1157,
 			'FldDatabase' => '1',
 			'FldTable' => '156',
@@ -9375,7 +9326,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1166,
 			'FldDatabase' => '1',
 			'FldTable' => '123',
-			'FldOrd' => '8',
+			'FldOrd' => '7',
 			'FldSpecSource' => '0',
 			'FldName' => 'Strip',
 			'FldEng' => 'Strip search done at station?',
@@ -9394,7 +9345,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1167,
 			'FldDatabase' => '1',
 			'FldTable' => '123',
-			'FldOrd' => '9',
+			'FldOrd' => '8',
 			'FldSpecSource' => '0',
 			'FldName' => 'StripSearchDesc',
 			'FldEng' => 'Strip search description',
@@ -9513,7 +9464,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1173,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '10',
+			'FldOrd' => '11',
 			'FldSpecSource' => '0',
 			'FldName' => 'Chase',
 			'FldEng' => 'Was subject chased by police?',
@@ -9537,15 +9488,16 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldName' => 'ChaseType',
 			'FldEng' => 'Type of chase',
 			'FldDesc' => 'Indicates whether the Subject\'s chase took place on foot, in vehicles, or both. Important for evaluating Allegations of Excessive Force and tracking Force trends.',
-			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
 			'FldForeign2Min' => '0',
 			'FldForeign2Max' => '0',
+			'FldValues' => 'Def::Chase Types',
 			'FldType' => 'INT',
 			'FldDataType' => 'Numeric',
 			'FldDataLength' => '0',
 			'FldCharSupport' => ',Numbers,',
+			'FldNullSupport' => '0',
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
@@ -9635,46 +9587,27 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldName' => 'BodyWeapon',
 			'FldEng' => 'Civilian body weapon use against officer',
 			'FldDesc' => 'The Definition ID number of the type of Body Weapon used by the Civilian against the Officer. Vital for associating multiple Body Weapons with a single Use of Force during an Incident.',
-			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
 			'FldForeign2Min' => '0',
 			'FldForeign2Max' => '0',
+			'FldValues' => 'Def::Force Type - Body Weapons',
 			'FldType' => 'INT',
 			'FldDataType' => 'Numeric',
 			'FldDataLength' => '0',
 			'FldCharSupport' => ',Numbers,',
-			'FldCompareSame' => '878800'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1180,
-			'FldDatabase' => '1',
-			'FldTable' => '102',
-			'FldOrd' => '13',
-			'FldSpecSource' => '0',
-			'FldName' => 'VictimHadWeapon',
-			'FldEng' => 'Did subject have weapon?',
-			'FldDesc' => 'Indicates whether or not the Victim of this Use of Force seemed to have a weapon at the time of the Incident. This is important for determining if the Officer used Unreasonable Force.',
-			'FldForeignTable' => '0',
-			'FldForeignMin' => '0',
-			'FldForeignMax' => '0',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldValues' => 'Y;N;?',
-			'FldDataLength' => '1',
-			'FldCharSupport' => ',Letters,Keyboard,',
+			'FldNullSupport' => '0',
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1181,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '14',
+			'FldOrd' => '13',
 			'FldSpecSource' => '0',
 			'FldName' => 'VictimWhatWeapon',
-			'FldEng' => 'Weapon Type',
-			'FldDesc' => 'Indicates what type of weapon the Victim of this Use of Force had at the time of the Incident. This is important for determining if the Officer used Unreasonable Force.',
-			'FldForeignTable' => '0',
+			'FldEng' => 'Did subject have weapon?',
+			'FldDesc' => 'Indicates what type of weapon the Victim of this Use of Force had at the time of the Incident (including \'No weapon\' and \'Not sure\'). This is important for determining if the Officer used Unreasonable Force.',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
 			'FldForeign2Min' => '0',
@@ -9684,13 +9617,14 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldDataType' => 'Numeric',
 			'FldDataLength' => '0',
 			'FldCharSupport' => ',Numbers,',
+			'FldNullSupport' => '0',
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1182,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '15',
+			'FldOrd' => '14',
 			'FldSpecSource' => '0',
 			'FldName' => 'VictimUseWeapon',
 			'FldEng' => 'Did subject use the weapon?',
@@ -10130,7 +10064,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1373,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '17',
+			'FldOrd' => '16',
 			'FldSpecSource' => '0',
 			'FldName' => 'UsedProfanity',
 			'FldEng' => 'Civilian used profanity?',
@@ -11173,7 +11107,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1436,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '18',
+			'FldOrd' => '17',
 			'FldSpecSource' => '0',
 			'FldName' => 'HasInjury',
 			'FldEng' => 'Did civilian receive injuries from use of force?',
@@ -11193,7 +11127,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1437,
 			'FldDatabase' => '1',
 			'FldTable' => '102',
-			'FldOrd' => '19',
+			'FldOrd' => '18',
 			'FldSpecSource' => '0',
 			'FldName' => 'HasInjuryCare',
 			'FldEng' => 'Received medical care?',
@@ -12611,112 +12545,6 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldCompareSame' => '878800'
 		]);
 		DB::table('SL_Fields')->insert([
-			'FldID' => 1514,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'UserID',
-			'FldEng' => 'User ID',
-			'FldDesc' => 'Indicates the unique User ID number of the User owning the data stored in this record for this Experience.',
-			'FldForeignTable' => '167',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldType' => 'INT',
-			'FldDataType' => 'Numeric',
-			'FldCharSupport' => ',Numbers,',
-			'FldKeyType' => ',Foreign,',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1515,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'SubmissionProgress',
-			'FldEng' => 'Experience Node Progress',
-			'FldDesc' => 'Indicates the unique Node ID number of the last Experience Node loaded during this User\'s Experience.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldType' => 'INT',
-			'FldDataType' => 'Numeric',
-			'FldCharSupport' => ',Numbers,',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1516,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'TreeVersion',
-			'FldEng' => 'Tree Version Number',
-			'FldDesc' => 'Stores the current version number of this User Experience, important for tracking bugs.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1517,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'VersionAB',
-			'FldEng' => 'A/B Testing Version',
-			'FldDesc' => 'Stores a complex string reflecting all A/B Testing variations in effect at the time of this User\'s Experience of this Node.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1518,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'UniqueStr',
-			'FldEng' => 'Unique String For Record',
-			'FldDesc' => 'This unique string is for cases when including the record ID number is not appropriate.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1519,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'IPaddy',
-			'FldEng' => 'IP Address',
-			'FldDesc' => 'Encrypted IP address of the current user.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 1520,
-			'FldDatabase' => '1',
-			'FldTable' => '3',
-			'FldSpecType' => 'Replica',
-			'FldName' => 'IsMobile',
-			'FldEng' => 'Using Mobile Device',
-			'FldDesc' => 'Indicates whether or not the current user is interacting via a mobile deviced.',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '11',
-			'FldForeign2Max' => '11',
-			'FldOpts' => '39'
-		]);
-		DB::table('SL_Fields')->insert([
 			'FldID' => 1521,
 			'FldDatabase' => '1',
 			'FldTable' => '111',
@@ -12842,7 +12670,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1539,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '13',
+			'FldOrd' => '15',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'SubmissionProgress',
 			'FldEng' => 'Experience Node Progress',
@@ -12860,7 +12688,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1540,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '15',
+			'FldOrd' => '17',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'TreeVersion',
 			'FldEng' => 'Tree Version Number',
@@ -12875,7 +12703,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1541,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '12',
+			'FldOrd' => '14',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'VersionAB',
 			'FldEng' => 'A/B Testing Version',
@@ -12890,7 +12718,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1542,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '16',
+			'FldOrd' => '18',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'UniqueStr',
 			'FldEng' => 'Unique String For Record',
@@ -12905,7 +12733,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1543,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '14',
+			'FldOrd' => '16',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'IPaddy',
 			'FldEng' => 'IP Address',
@@ -12920,7 +12748,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1544,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '17',
+			'FldOrd' => '19',
 			'FldSpecType' => 'Replica',
 			'FldName' => 'IsMobile',
 			'FldEng' => 'Using Mobile Device',
@@ -12967,8 +12795,8 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldForeignMax' => 'N',
 			'FldForeign2Min' => 'N',
 			'FldForeign2Max' => 'N',
+			'FldType' => 'TEXT',
 			'FldDataLength' => '0',
-			'FldCharSupport' => ',Letters,Numbers,Keyboard,',
 			'FldKeyType' => ',',
 			'FldNullSupport' => '0'
 		]);
@@ -12995,7 +12823,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1548,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '11',
+			'FldOrd' => '13',
 			'FldSpecSource' => '0',
 			'FldName' => 'Alerts',
 			'FldEng' => 'Referral Alert Perference',
@@ -13054,7 +12882,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldID' => 1551,
 			'FldDatabase' => '1',
 			'FldTable' => '110',
-			'FldOrd' => '10',
+			'FldOrd' => '12',
 			'FldSpecSource' => '0',
 			'FldName' => 'PhotoUrl',
 			'FldEng' => 'Photo Url',
@@ -13085,6 +12913,122 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldValues' => 'Y;N;?',
 			'FldDataLength' => '1',
 			'FldCharSupport' => ',Letters,Keyboard,',
+			'FldKeyType' => ',',
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '878800'
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1554,
+			'FldDatabase' => '1',
+			'FldTable' => '123',
+			'FldOrd' => '9',
+			'FldSpecSource' => '0',
+			'FldName' => 'ChargesOther',
+			'FldEng' => 'Other charges filed?',
+			'FldDesc' => 'Arrest charge(s) an Officer issued a Subject as a result of this Stop. Important for evaluating wrongful arrest and retaliatory Allegations and tracking citation trends.',
+			'FldForeignMin' => 'N',
+			'FldForeignMax' => 'N',
+			'FldForeign2Min' => 'N',
+			'FldForeign2Max' => 'N',
+			'FldType' => 'TEXT',
+			'FldDataLength' => '0',
+			'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+			'FldEditRule' => ''
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1555,
+			'FldDatabase' => '1',
+			'FldTable' => '110',
+			'FldOrd' => '10',
+			'FldSpecSource' => '0',
+			'FldName' => 'HelpReqs',
+			'FldEng' => 'Assistance Requirements',
+			'FldDesc' => 'A brief description of the organization\'s requirements for requesting assistance. This is an integral component of a Customer\'s profile and intake process.',
+			'FldForeignMin' => 'N',
+			'FldForeignMax' => 'N',
+			'FldForeign2Min' => 'N',
+			'FldForeign2Max' => 'N',
+			'FldType' => 'TEXT',
+			'FldDataLength' => '0',
+			'FldKeyType' => ',',
+			'FldNullSupport' => '0'
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1556,
+			'FldDatabase' => '1',
+			'FldTable' => '182',
+			'FldSpecSource' => '0',
+			'FldName' => 'PartID',
+			'FldEng' => 'Part ID',
+			'FldDesc' => 'The primary Partner record number connected to a Capacity. Important for filtering organizations for a given situation.',
+			'FldForeignTable' => '110',
+			'FldForeignMin' => '0',
+			'FldForeignMax' => 'N',
+			'FldType' => 'INT',
+			'FldDataType' => 'Numeric',
+			'FldDataLength' => '0',
+			'FldCharSupport' => ',Numbers,',
+			'FldKeyType' => ',Foreign,',
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '878800'
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1557,
+			'FldDatabase' => '1',
+			'FldTable' => '182',
+			'FldOrd' => '1',
+			'FldSpecSource' => '0',
+			'FldName' => 'Capacity',
+			'FldEng' => 'Organizational Capacity',
+			'FldDesc' => 'Indicates the Capacity with which this Partner Organization can potentially help OPC users. Important for associating multiple Capacities with one Partner.',
+			'FldForeignMin' => 'N',
+			'FldForeignMax' => 'N',
+			'FldForeign2Min' => 'N',
+			'FldForeign2Max' => 'N',
+			'FldValues' => 'Def::Organization Capacities',
+			'FldType' => 'INT',
+			'FldDataType' => 'Numeric',
+			'FldDataLength' => '0',
+			'FldCharSupport' => ',Numbers,',
+			'FldKeyType' => ',',
+			'FldNullSupport' => '0',
+			'FldCompareSame' => '54925'
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1558,
+			'FldDatabase' => '1',
+			'FldTable' => '110',
+			'FldOrd' => '11',
+			'FldSpecSource' => '0',
+			'FldName' => 'GeoDesc',
+			'FldEng' => 'Description of Geographic Service Area',
+			'FldDesc' => 'Indicates whatever description the Partner finds appropriate to more specifically describe the geographic area where they offer services. Important for enabling all site Users to find better matches for the help they need.',
+			'FldForeignMin' => 'N',
+			'FldForeignMax' => 'N',
+			'FldForeign2Min' => 'N',
+			'FldForeign2Max' => 'N',
+			'FldDataLength' => '0',
+			'FldKeyType' => ',',
+			'FldNullSupport' => '0'
+		]);
+		DB::table('SL_Fields')->insert([
+			'FldID' => 1560,
+			'FldDatabase' => '1',
+			'FldTable' => '155',
+			'FldOrd' => '2',
+			'FldSpecSource' => '0',
+			'FldName' => 'Role',
+			'FldEng' => 'Vehicle Role',
+			'FldDesc' => 'When a Vehicle is associated with multiple Officers, this information can be important for identifier for which person was driving a Vehicle.',
+			'FldForeignMin' => 'N',
+			'FldForeignMax' => 'N',
+			'FldForeign2Min' => 'N',
+			'FldForeign2Max' => 'N',
+			'FldValues' => 'Def::Vehicle Roles',
+			'FldType' => 'INT',
+			'FldDataType' => 'Numeric',
+			'FldDataLength' => '0',
+			'FldCharSupport' => ',Numbers,',
 			'FldKeyType' => ',',
 			'FldNullSupport' => '0',
 			'FldCompareSame' => '878800'
@@ -13230,7 +13174,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'signup-instruct',
-			'DefDescription' => '<h1 class="mT0">Sign Up</h1>'
+			'DefDescription' => '<p>Here you can finish, review, or update your complaint. Volunteers also login here.</p>'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 21,
@@ -13329,7 +13273,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'app-license-img',
-			'DefDescription' => '/survloop/creative-commons-by-sa-88x31.png'
+			'DefDescription' => '/survloop/uploads/creative-commons-by-sa-88x31.png'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 101,
@@ -14322,7 +14266,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefSubset' => 'Evidence Types',
 			'DefOrder' => '3',
 			'DefIsActive' => '0',
-			'DefValue' => 'Diagram'
+			'DefValue' => 'Sketch/Diagram'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 225,
@@ -14353,8 +14297,8 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefSubset' => 'Force Type',
 			'DefOrder' => '2',
 			'DefIsActive' => '0',
-			'DefValue' => 'Body Weapons (Punch, Kick, etc)',
-			'DefDescription' => 'An officer\'s use of his/her limbs in a manner similar to an impact weapon, e.g., using his/her hands to punch, hit or slap a person.'
+			'DefValue' => 'Body Weapons (Punch, Kick, Elbow, etc)',
+			'DefDescription' => 'An officer\'s use of his/her limbs in a manner similar to an impact weapon. Body Weapons include Fist (Closed Hand), Slap (Open Hand), Kick (Feet), Knee, Elbow, Head.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 229,
@@ -14657,8 +14601,8 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefSubset' => 'Injury Types',
 			'DefOrder' => '9',
 			'DefIsActive' => '0',
-			'DefValue' => 'Effective Tasings',
-			'DefDescription' => 'LEVEL 1 (most serious)'
+			'DefValue' => 'Taser Wounds',
+			'DefDescription' => 'LEVEL 1 (most serious) was "Effective Tasings"'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 266,
@@ -15360,82 +15304,44 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefValue' => 'Indoor public space'
 		]);
 		DB::table('SL_Definitions')->insert([
-			'DefID' => 355,
-			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Civilian',
-			'DefIsActive' => '0',
-			'DefValue' => 'Car'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 356,
-			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Civilian',
-			'DefOrder' => '2',
-			'DefIsActive' => '0',
-			'DefValue' => 'Bicycle'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 357,
-			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Civilian',
-			'DefOrder' => '3',
-			'DefIsActive' => '0',
-			'DefValue' => 'Boat'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 358,
-			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Civilian',
-			'DefOrder' => '1',
-			'DefIsActive' => '0',
-			'DefValue' => 'Motorcycle'
-		]);
-		DB::table('SL_Definitions')->insert([
 			'DefID' => 360,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
-			'DefOrder' => '1',
-			'DefIsActive' => '0',
+			'DefSubset' => 'Transportation',
 			'DefValue' => 'Car'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 361,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
+			'DefSubset' => 'Transportation',
 			'DefOrder' => '2',
-			'DefIsActive' => '0',
 			'DefValue' => 'Van'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 362,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
+			'DefSubset' => 'Transportation',
 			'DefOrder' => '3',
-			'DefIsActive' => '0',
 			'DefValue' => 'Motorcycle'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 363,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
+			'DefSubset' => 'Transportation',
 			'DefOrder' => '4',
-			'DefIsActive' => '0',
 			'DefValue' => 'Bicycle'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 364,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
+			'DefSubset' => 'Transportation',
 			'DefOrder' => '5',
-			'DefIsActive' => '0',
 			'DefValue' => 'Boat'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 365,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Officer',
+			'DefSubset' => 'Transportation',
 			'DefOrder' => '6',
-			'DefIsActive' => '0',
 			'DefValue' => 'Other'
 		]);
 		DB::table('SL_Definitions')->insert([
@@ -15752,13 +15658,6 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefValue' => 'Loitering/Trespassing'
 		]);
 		DB::table('SL_Definitions')->insert([
-			'DefID' => 407,
-			'DefDatabase' => '1',
-			'DefSubset' => 'Transportation Civilian',
-			'DefOrder' => '4',
-			'DefValue' => 'Other'
-		]);
-		DB::table('SL_Definitions')->insert([
 			'DefID' => 408,
 			'DefDatabase' => '1',
 			'DefSubset' => 'Chase Types',
@@ -15810,20 +15709,21 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefID' => 415,
 			'DefDatabase' => '1',
 			'DefSubset' => 'Civilian Weapons',
+			'DefOrder' => '1',
 			'DefValue' => 'Gun'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 416,
 			'DefDatabase' => '1',
 			'DefSubset' => 'Civilian Weapons',
-			'DefOrder' => '1',
+			'DefOrder' => '2',
 			'DefValue' => 'Knife'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 417,
 			'DefDatabase' => '1',
 			'DefSubset' => 'Civilian Weapons',
-			'DefOrder' => '2',
+			'DefOrder' => '3',
 			'DefValue' => 'Other'
 		]);
 		DB::table('SL_Definitions')->insert([
@@ -16032,7 +15932,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'login-instruct',
-			'DefDescription' => 'Here you can finish, review, or update your complaint. Volunteers also login here.'
+			'DefDescription' => '<p>Here you can finish, review, or update your complaint. Volunteers also login here.</p>'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 448,
@@ -16325,6 +16225,9 @@ I really appreciate your time. Thanks so much for your help!'
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
+input, textarea, select, .nFld input, .nFld textarea, .nFld select, .nFld input.form-control, .nFld input.form-control-lg, .nFld input.form-control.form-control-lg, .nFld textarea.form-control, .nFld textarea.form-control-lg, .nFld textarea.form-control.form-control-lg, .nFld select.form-control, .nFld select.form-control-lg, .nFld select.form-control.form-control-lg { font-family: Georgia, serif; }
+input.btn, input.btn.btn-primary, input.btn.btn-secondary, input.btn.btn-primary.btn-xl { font-family: \'Cairo\', sans-serif; }
+
 
 b {
 font-weight: 900;
@@ -16352,6 +16255,7 @@ input[type="submit"].btn-primary, input[type="submit"].btn-primary.btn-xl, input
     background: #2b3493;
     border: 1px #FFF solid;
     text-shadow: none;
+    font-family: \'Cairo\', sans-serif;
 }
 a.btn-primary:hover, a.btn-primary.btn-xl:hover, a.btn-primary.btn-lg:hover, a.btn-primary.btn-sm:hover,
 input[type="submit"].btn-primary:hover, input[type="submit"].btn-primary.btn-xl:hover, input[type="submit"].btn-primary.btn-lg:hover, input[type="submit"].btn-primary.btn-sm:hover {
@@ -16370,6 +16274,7 @@ input[type="submit"].btn-info, input[type="submit"].btn-info.btn-xl, input[type=
     background: #EDF8FF;
     border: 1px #333 solid;
     text-shadow: none;
+    font-family: \'Cairo\', sans-serif;
 }
 a.btn-info:hover, a.btn-info.btn-xl:hover, a.btn-info.btn-lg:hover, a.btn-info.btn-sm:hover,
 input[type="submit"].btn-info:hover, input[type="submit"].btn-info.btn-xl:hover, input[type="submit"].btn-info.btn-lg:hover, input[type="submit"].btn-info.btn-sm:hover {
@@ -16388,6 +16293,7 @@ input[type="submit"].btn-secondary, input[type="submit"].btn-secondary.btn-xl, i
     background: #EDF8FF;
     border: 1px #2B3493 solid;
     text-shadow: none;
+    font-family: \'Cairo\', sans-serif;
 }
 a.btn-secondary:hover, a.btn-secondary.btn-xl:hover, a.btn-secondary.btn-lg:hover, a.btn-secondary.btn-sm:hover,
 input[type="submit"].btn-secondary:hover, input[type="submit"].btn-secondary.btn-xl:hover, input[type="submit"].btn-secondary.btn-lg:hover, input[type="submit"].btn-secondary.btn-sm:hover {
@@ -16406,6 +16312,7 @@ input[type="submit"].btn-danger, input[type="submit"].btn-danger.btn-xl, input[t
     background: #EC2327;
     border: 1px #FFF solid;
     text-shadow: none;
+    font-family: \'Cairo\', sans-serif;
 }
 a.btn-danger:hover, a.btn-danger.btn-xl:hover, a.btn-danger.btn-lg:hover, a.btn-danger.btn-sm:hover,
 input[type="submit"].btn-danger:hover, input[type="submit"].btn-danger.btn-xl:hover, input[type="submit"].btn-danger.btn-lg:hover, input[type="submit"].btn-danger.btn-sm:hover {
@@ -16514,7 +16421,9 @@ color: #FFF;
 .deptRgtCol { width: 116px; }
 .scoreRowOn, .scoreRowOff { padding: 10px; }
 .scoreRowOn { color: #63C6FF; }
-.scoreRowOff { color: #CCC; }'
+.scoreRowOff { color: #CCC; }
+
+#dontWorry { margin-top: 25px; }'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 466,
@@ -16573,7 +16482,7 @@ color: #FFF;
 			'DefDatabase' => '1',
 			'DefSet' => 'Tree Settings',
 			'DefSubset' => 'tree-1-footer',
-			'DefDescription' => '<center><div class="treeWrapForm"><div id="dontWorry" class="taL pB20 mB20"><p class="gry9">Don\'t worry, we\'re saving your progress. You can pick up where you left off anytime. Most answers are optional. But the more you share, the stronger your report will be!</p></div></div></center>'
+			'DefDescription' => '<br />'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 474,
@@ -16627,15 +16536,14 @@ color: #FFF;
     </div>
     <div class="col-md-2" id="footerSocialCol">
         <div class="footerSocial" style="margin: -5px 0px 0px 0px;">
-          <a href="https://www.facebook.com/FlexYourRights/" target="_blank"><img src="/survloop/images/facebook-logo.png" border="0"></a>
-          <a href="https://twitter.com/opencomplaints" target="_blank"><img src="/survloop/images/twitter-logo.png" border="0"></a>
+          <a href="https://www.facebook.com/FlexYourRights/" target="_blank"><img src="/survloop/uploads/facebook-logo.png" border="0"></a>
+          <a href="https://twitter.com/opencomplaints" target="_blank"><img src="/survloop/uploads/twitter-logo.png" border="0"></a>
         </div>
 	<a href="https://github.com/flexyourrights/openpolice" target="_blank"><div class="disBlo mR5 mL5 mBn10" style="font-size: 42px;"><i class="fa fa-github" aria-hidden="true"></i></div>View our code on GitHub</a>
       <div><a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank"><span class="slGrey fPerc80"><nobr>Creative Commons</nobr> <nobr>2015-2018 <i class="fa fa-creative-commons mL3" aria-hidden="true"></i></nobr>
 </span></a></div>
     </div>
-</div></div></div>
-'
+</div></div></div>'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 478,
@@ -16656,7 +16564,7 @@ color: #FFF;
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'log-css-reload',
-			'DefDescription' => '1543444490'
+			'DefDescription' => '1549816047'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 480,
@@ -16678,7 +16586,7 @@ color: #FFF;
 			'DefDatabase' => '1',
 			'DefSet' => 'Tree Settings',
 			'DefSubset' => 'tree-5-footer',
-			'DefDescription' => '<center><div class="treeWrapForm"><div id="dontWorry" class="taL pB20 mB20 gry9">Don\'t worry, we\'re saving your progress. You can pick up where you left off anytime!<br />Most answers are optional. But the more you share, the stronger your report will be!</div></div></center>'
+			'DefDescription' => '<center><div class="treeWrapForm"><div id="dontWorry" class="taL pB20 mB20">Don\'t worry, we\'re saving your progress. You can pick up where you left off anytime!<br />Most answers are optional. But the more you share, the stronger your report will be!</div></div></center>'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 483,
@@ -17375,6 +17283,181 @@ padding: 10px;
 			'DefSubset' => 'google-cod-key2',
 			'DefDescription' => 'AIzaSyCxvl1Od9PXI5xtWH-a0faGY4ZkrGAukrw'
 		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 582,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Weapons',
+			'DefValue' => 'No weapon'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 583,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Civilian Weapons',
+			'DefOrder' => '4',
+			'DefValue' => 'Not sure'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 584,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Partner Types',
+			'DefOrder' => '6',
+			'DefValue' => 'Organization'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 585,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefOrder' => '1',
+			'DefValue' => 'Services or Support for Police Brutality Victims'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 586,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefOrder' => '5',
+			'DefValue' => 'Political or Legislative Action'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 587,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefOrder' => '2',
+			'DefValue' => 'Education About Police or Corrections'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 588,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefValue' => 'Assist Complainants Using OpenPolice.org'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 589,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefOrder' => '3',
+			'DefValue' => 'Legal Assistance'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 590,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Organization Capacities',
+			'DefOrder' => '4',
+			'DefValue' => 'Legal Representation'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 591,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'user-name-req',
+			'DefDescription' => '0'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 592,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Transportation',
+			'DefOrder' => '1',
+			'DefValue' => 'Truck'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 593,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Vehicle Roles',
+			'DefValue' => 'Driver'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 594,
+			'DefDatabase' => '1',
+			'DefSubset' => 'Vehicle Roles',
+			'DefOrder' => '1',
+			'DefValue' => 'Passenger'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 595,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefDescription' => 'We are saving your progress.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 596,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '1',
+			'DefDescription' => 'You can log out and log in anytime.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 597,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '2',
+			'DefDescription' => 'Your story matters.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 598,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '3',
+			'DefDescription' => 'Most questions are optional.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 599,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '4',
+			'DefDescription' => 'Answer every question you can.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 600,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '5',
+			'DefDescription' => 'You are brave.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 601,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '6',
+			'DefDescription' => 'Focus on one incident for now.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 602,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '7',
+			'DefDescription' => 'Be truthful.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 603,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '8',
+			'DefDescription' => 'You are not alone.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 604,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '9',
+			'DefDescription' => 'Reload the page if it freezes.'
+		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 605,
+			'DefDatabase' => '1',
+			'DefSet' => 'Tree Settings',
+			'DefSubset' => 'tree-1-protip',
+			'DefOrder' => '10',
+			'DefDescription' => 'You are part of the solution.'
+		]);
 	
 	DB::table('SL_BusRules')->insert([
 			'RuleID' => 3,
@@ -17486,7 +17569,7 @@ padding: 10px;
 			'TreeID' => 1,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
-			'TreeOpts' => '47',
+			'TreeOpts' => '3478',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Complaint',
 			'TreeDesc' => 'Open Police Complaint',
@@ -17510,7 +17593,7 @@ padding: 10px;
 			'TreeID' => 5,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
-			'TreeOpts' => '47',
+			'TreeOpts' => '94',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Compliment',
 			'TreeDesc' => 'Open Police Compliment',
@@ -17591,7 +17674,7 @@ padding: 10px;
 			'TreeID' => 12,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
-			'TreeOpts' => '203',
+			'TreeOpts' => '7',
 			'TreeType' => 'Page',
 			'TreeName' => 'Open Police Complaints - You belong at the center of police oversight.',
 			'TreeDesc' => 'Home page',
@@ -17715,7 +17798,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
-			'TreeName' => 'Sharing Your Story',
+			'TreeName' => 'Complaint or Compliment: Sharing Your Story',
 			'TreeDesc' => 'Choose Complaint or Compliment',
 			'TreeRoot' => '1096',
 			'TreeFirstPage' => '1096',
@@ -17790,7 +17873,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '3689',
 			'TreeType' => 'Page',
-			'TreeName' => 'Volunteer',
+			'TreeName' => 'Volunteer Dashboard',
 			'TreeRoot' => '1210',
 			'TreeFirstPage' => '1210',
 			'TreeLastPage' => '1210'
@@ -18059,7 +18142,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey',
-			'TreeName' => 'Attorney Profile',
+			'TreeName' => 'Partner Profile',
 			'TreeRoot' => '1921',
 			'TreeFirstPage' => '1922',
 			'TreeLastPage' => '1954',
@@ -18071,7 +18154,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey XML',
-			'TreeName' => 'Attorney Profile',
+			'TreeName' => 'Partner Profile',
 			'TreeRoot' => '1923',
 			'TreeCoreTable' => '110'
 		]);
@@ -18081,7 +18164,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
-			'TreeName' => 'Manage Attorneys',
+			'TreeName' => 'Manage Partners',
 			'TreeRoot' => '1938',
 			'TreeFirstPage' => '1938',
 			'TreeLastPage' => '1938'
@@ -18101,12 +18184,13 @@ padding: 10px;
 			'TreeID' => 62,
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
-			'TreeOpts' => '29',
+			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Preparing Your Complaint for an Attorney',
 			'TreeRoot' => '1992',
 			'TreeFirstPage' => '1992',
-			'TreeLastPage' => '1992'
+			'TreeLastPage' => '1992',
+			'TreeCoreTable' => '110'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 63,
@@ -18129,6 +18213,100 @@ padding: 10px;
 			'TreeRoot' => '2012',
 			'TreeFirstPage' => '2012',
 			'TreeLastPage' => '2012'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 65,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '13',
+			'TreeType' => 'Page',
+			'TreeName' => 'Organization Profile',
+			'TreeRoot' => '2059',
+			'TreeFirstPage' => '2059',
+			'TreeLastPage' => '2059',
+			'TreeCoreTable' => '110'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 66,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '377',
+			'TreeType' => 'Page',
+			'TreeName' => 'Preparing Your Complaint for an Organization',
+			'TreeRoot' => '2063',
+			'TreeFirstPage' => '2063',
+			'TreeLastPage' => '2063',
+			'TreeCoreTable' => '110'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 67,
+			'TreeDatabase' => '1',
+			'TreeUser' => '0',
+			'TreeOpts' => '1333',
+			'TreeType' => 'Page',
+			'TreeName' => 'Staff Search',
+			'TreeRoot' => '2090'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 68,
+			'TreeDatabase' => '1',
+			'TreeUser' => '0',
+			'TreeOpts' => '1271',
+			'TreeType' => 'Page',
+			'TreeName' => 'Partner Search',
+			'TreeRoot' => '2092'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 69,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '1',
+			'TreeType' => 'Redirect',
+			'TreeDesc' => 'http://homestead.test/complaint-or-compliment'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 70,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '1',
+			'TreeType' => 'Page',
+			'TreeName' => 'Complaint or Compliment: Sharing Your Story',
+			'TreeRoot' => '2094',
+			'TreeFirstPage' => '2094',
+			'TreeLastPage' => '2094'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 71,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '1',
+			'TreeType' => 'Page',
+			'TreeName' => 'Features',
+			'TreeRoot' => '2104',
+			'TreeFirstPage' => '2104',
+			'TreeLastPage' => '2104'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 72,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '1',
+			'TreeType' => 'Page',
+			'TreeName' => 'Principles',
+			'TreeRoot' => '2106',
+			'TreeFirstPage' => '2106',
+			'TreeLastPage' => '2106'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 73,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeOpts' => '1',
+			'TreeType' => 'Page',
+			'TreeName' => 'OPC Partners',
+			'TreeRoot' => '2149',
+			'TreeFirstPage' => '2149',
+			'TreeLastPage' => '2149'
 		]);
 	
 	DB::table('SL_Node')->insert([
@@ -18194,10 +18372,8 @@ padding: 10px;
 			'NodeID' => 8,
 			'NodeTree' => '1',
 			'NodeParentID' => '454',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'User Sign Up',
-			'NodePromptText' => 'User Sign Up Form (Email, Password, Confirm Password)',
-			'NodeInternalNotes' => 'Open to idea of Login with Facebook (could be great for viral sharing of complaints once complete).',
+			'NodePromptText' => '<p><b>Your story matters.</b> Please sign up or login so you can finish your complaint later, if we get interrupted. It is also important so we can contact you about the progress of your complaint.</p>',
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
@@ -18236,7 +18412,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '455',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>When and where did this incident happen?</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">When and where did this incident happen?</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 22,
@@ -18285,7 +18461,7 @@ padding: 10px;
 			'NodeParentID' => '455',
 			'NodeParentOrder' => '9',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'Incidents:IncAddressZip',
 			'NodeOpts' => '3'
 		]);
@@ -18303,8 +18479,9 @@ padding: 10px;
 			'NodeID' => 28,
 			'NodeTree' => '1',
 			'NodeParentID' => '459',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'How were <span class="slBlueDark">you</span> involved with this incident?',
+			'NodePromptText' => '<p>How were <span class="slBlueDark">you</span> involved with this incident?</p>',
 			'NodeDataStore' => 'Civilians:CivRole',
 			'NodeOpts' => '5'
 		]);
@@ -18385,7 +18562,7 @@ padding: 10px;
 			'NodeParentID' => '604',
 			'NodeParentOrder' => '8',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'PersonContact:PrsnAddressZip',
 			'NodeOpts' => '15'
 		]);
@@ -18409,17 +18586,6 @@ padding: 10px;
 			'NodeInternalNotes' => 'Auto-fill if provided during login',
 			'NodeDataStore' => 'PersonContact:PrsnEmail',
 			'NodeOpts' => '15'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 40,
-			'NodeTree' => '1',
-			'NodeParentID' => '604',
-			'NodeParentOrder' => '11',
-			'NodeType' => 'Text',
-			'NodePromptText' => 'Facebook Profile URL',
-			'NodeInternalNotes' => 'Auto-fill if provided during login',
-			'NodeDataStore' => 'PersonContact:PrsnFacebook',
-			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 41,
@@ -18466,8 +18632,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 47,
 			'NodeTree' => '1',
-			'NodeParentID' => '457',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '2049',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did you record the incident with audio or video?',
 			'NodeDataStore' => 'Civilians:CivCameraRecord',
@@ -18479,7 +18644,8 @@ padding: 10px;
 			'NodeParentID' => '140',
 			'NodeType' => 'Loop Root',
 			'NodePromptText' => '<h2 class="slBlueDark">Who\'s Involved: Adding Victims</h2>
-<p>Please provide information about the victims in this incident. These are people who were harmed by an alleged act of police misconduct. (If you were the only victim, go to the next section.)</p>',
+<p>Please provide information about the victims in this incident. These are people who were harmed by an alleged act of police misconduct.</p>
+<p>If you were the only victim, go to the next section.</p>',
 			'NodePromptNotes' => 'add-victims',
 			'NodePromptAfter' => 'Add Victims - Your Complaint::M::::M::::M::',
 			'NodeDataBranch' => 'Victims',
@@ -18559,7 +18725,7 @@ padding: 10px;
 			'NodeParentID' => '1132',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'PersonContact:PrsnAddressZip',
 			'NodeOpts' => '3'
 		]);
@@ -18609,7 +18775,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '1441',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Your current contact information</h3>
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">Your current contact information</h2>
 <p>Most police investigators require this. We will never make it public, sell it, or mail you stuff.</p>',
 			'NodeOpts' => '3'
 		]);
@@ -18711,7 +18877,8 @@ padding: 10px;
 			'NodeParentID' => '141',
 			'NodeType' => 'Loop Root',
 			'NodePromptText' => '<h2 class="slBlueDark">Who\'s Involved: Adding Witnesses</h2>
-<p>Please share information about people who observed the incident. Witnesses are distinct from victims if they weren\'t harmed by anything an officer did. (If there were no witnesses, go to the next section.)</p>',
+<p>Please share information about people who observed the incident. Witnesses are distinct from victims if they weren\'t harmed by anything an officer did.</p>
+<p>If there were no witnesses, go to the next section.</p>',
 			'NodePromptNotes' => 'add-witnesses',
 			'NodePromptAfter' => 'Add Witnesses - Your Complaint::M::::M::::M::',
 			'NodeDataBranch' => 'Witnesses',
@@ -18722,8 +18889,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '462',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader" class="slBlueDark">Witness #[LoopItemCnt]: <div id="nodeEcho728" class="disIn"></div></h2>',
-			'NodePromptNotes' => 'All questions are optional.'
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">Witness #[LoopItemCnt]: <div id="nodeEcho728" class="disIn"></div></h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 99,
@@ -18810,7 +18976,7 @@ padding: 10px;
 			'NodeParentID' => '1134',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'PersonContact:PrsnAddressZip',
 			'NodeOpts' => '3'
 		]);
@@ -18929,25 +19095,6 @@ padding: 10px;
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 138,
-			'NodeTree' => '1',
-			'NodeParentID' => '453',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Radio',
-			'NodePromptText' => '<h2 class="slBlueDark">Personal Privacy Options</h2>
-<p>You should control who has access to you private information. That\'s why we\'ve created three unique options for how we collect and share their data.</p>
-<p>Whichever option you choose, all information you provide will be privately shared with the relevant oversight agencies responsible for investigating complaints against police.</p>
-<h4>How do you want the names of people involved to appear on your public complaint?</h4>',
-			'NodePromptAfter' => '<style>
-#node138 div.nFld div label { padding: 40px; }
-@media screen and (max-width: 768px) {
-#node138 div.nFld div label { padding: 40px; padding-bottom: 40px; }
-}
-</style>',
-			'NodeDataStore' => 'Complaints:ComPrivacy',
-			'NodeOpts' => '65'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 139,
 			'NodeTree' => '1',
 			'NodeParentID' => '4',
@@ -18990,7 +19137,8 @@ padding: 10px;
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Loop Root',
 			'NodePromptText' => '<h2>Police Departments At The Scene</h2>
-<p>Please identify the departments that were involved. These could also be federal agencies or private security firms.</p>',
+<p>Please identify the departments that were involved. These could also be federal agencies or private security firms.</p>
+<style> .loopItemBtn.editLoopItem { display: none; } </style>',
 			'NodePromptNotes' => 'add-police-departments',
 			'NodePromptAfter' => 'Add Police Departments - Your Complaint::M::::M::::M::',
 			'NodeDataBranch' => 'Departments',
@@ -19022,7 +19170,7 @@ padding: 10px;
 			'NodeParentID' => '482',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<h2 class="mTn20">Do you want to make a GOLD STAR complaint?</h2>',
+			'NodePromptText' => '<h3 class="mTn20">Do you want to keep going to make a <span class="slBlueDark">GOLD LEVEL complaint</span>?</h3>',
 			'NodePromptAfter' => '<style> #node146 { margin-bottom: 30px; }
 #node668 { margin-bottom: -20px; } </style>',
 			'NodeDefault' => 'Gold',
@@ -19032,69 +19180,45 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 148,
 			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h2 class="slBlueDark">Adding Details About What Happened</h2>
-<p>The blue "Next Event Details" button will take you through each event. You can use the gray buttons later to edit anything you need.</p>',
+			'NodeParentID' => '508',
+			'NodeType' => 'Loop Cycle',
 			'NodePromptNotes' => 'event-details',
-			'NodePromptAfter' => 'Provide Details on Key Incident Events - Your Complaint::M::::M::::M::',
-			'NodeDataBranch' => 'Events',
+			'NodeResponseSet' => 'LoopItems::Types of Force',
+			'NodeDataBranch' => 'EventSequence',
 			'NodeDataStore' => 'EventSequence:EveID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 149,
 			'NodeTree' => '1',
-			'NodeParentID' => '148',
+			'NodeParentID' => '6',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Stop',
-			'NodePromptNotes' => 'review-your-story',
-			'NodeDataBranch' => 'Stops'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 150,
-			'NodeTree' => '1',
-			'NodeParentID' => '148',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Search',
-			'NodePromptNotes' => 'review-your-story',
-			'NodeDataBranch' => 'Searches'
+			'NodePromptText' => 'Stops & Searches',
+			'NodePromptNotes' => 'review-your-story'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 151,
 			'NodeTree' => '1',
-			'NodeParentID' => '148',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '6',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Branch Title',
 			'NodePromptText' => 'Use of Force',
-			'NodePromptNotes' => 'review-your-story',
-			'NodeDataBranch' => 'Force'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 152,
-			'NodeTree' => '1',
-			'NodeParentID' => '148',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Arrest',
-			'NodePromptNotes' => 'review-your-story',
-			'NodeDataBranch' => 'Arrests'
+			'NodePromptNotes' => 'review-your-story'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 153,
 			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '6',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Citations',
+			'NodePromptText' => 'Arrests & Citations',
 			'NodePromptNotes' => 'review-your-story'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 154,
 			'NodeTree' => '1',
 			'NodeParentID' => '5',
-			'NodeParentOrder' => '6',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Branch Title',
 			'NodePromptText' => 'Other Allegations',
 			'NodePromptNotes' => 'allegation-intimidation-using-weapon'
@@ -19130,7 +19254,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '142',
 			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h1>Who\'s Involved: Police Officers</h1>',
+			'NodePromptText' => '<h2>Who\'s Involved: Police Officers</h2>',
 			'NodePromptNotes' => 'add-police-officers',
 			'NodePromptAfter' => 'Add Police Officers - Your Complaint::M::::M::::M::',
 			'NodeDataBranch' => 'Officers',
@@ -19357,17 +19481,8 @@ padding: 10px;
 			'NodeParentID' => '5',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Arrest',
+			'NodePromptText' => 'Arrests & Citations',
 			'NodePromptNotes' => 'allegation-arrest'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 202,
-			'NodeTree' => '1',
-			'NodeParentID' => '5',
-			'NodeParentOrder' => '5',
-			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Citations',
-			'NodePromptNotes' => 'allegation-citation'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 203,
@@ -19383,13 +19498,15 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '467',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer stop, question, or detain anybody during this incident? This is when officers pull over a vehicle or keep anyone from leaving.',
+			'NodePromptText' => '<h2 class="slBlueDark">Stops / Questioning<h2>
+<p>Did an officer stop, question, or detain anybody during this incident? This is when officers pull over a vehicle, or keep anyone from leaving.</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilStopYN'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 205,
 			'NodeTree' => '1',
-			'NodeParentID' => '204',
+			'NodeParentID' => '2033',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think anybody was <span class="slBlueDark">wrongfully</span> stopped or detained?',
 			'NodePromptNotes' => '<p><span class="slBlueDark">Example of Wrongful Stop #1:</span> Police are called to a high school after a student is accused of theft. Police and teachers interrogate him as he\'s held against his will. His parents are not contacted until many hours later.</p>
@@ -19410,19 +19527,18 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 207,
 			'NodeTree' => '1',
-			'NodeParentID' => '450',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2038',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) were stopped?',
 			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
+			'NodeDataStore' => 'LinksCivilianEvents:LnkCivEveCivID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 208,
 			'NodeTree' => '1',
 			'NodeParentID' => '450',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'What makes you think that this stop was wrongful?',
 			'NodeDataStore' => 'Allegations:AlleDescription',
@@ -19452,7 +19568,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '537',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which Officer(s)?',
+			'NodePromptText' => 'Which officer(s)?',
 			'NodeResponseSet' => 'LoopItems::Officers',
 			'NodeDataStore' => 'LinksOfficerAllegations:LnkOffAlleOffID',
 			'NodeOpts' => '3'
@@ -19462,13 +19578,14 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '469',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer conduct any searches during this incident? (This includes all types of searches of people, vehicles, homes, or other property.)',
+			'NodePromptText' => '<h2 class="slBlueDark">Searches</h2>
+<p>Did an officer conduct any searches during this incident? (This includes all types of searches of people, vehicles, homes, or other property.)</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilSearchYN'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 213,
 			'NodeTree' => '1',
-			'NodeParentID' => '212',
+			'NodeParentID' => '2034',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think anybody was <span class="slBlueDark">wrongfully</span> searched?',
@@ -19489,19 +19606,18 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 215,
 			'NodeTree' => '1',
-			'NodeParentID' => '538',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2039',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) were searched?',
 			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
+			'NodeDataStore' => 'LinksCivilianEvents:LnkCivEveCivID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 216,
 			'NodeTree' => '1',
 			'NodeParentID' => '538',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'What makes you think that this search was wrongful?',
 			'NodeDataStore' => 'Allegations:AlleDescription',
@@ -19531,6 +19647,7 @@ padding: 10px;
 			'NodeID' => 219,
 			'NodeTree' => '1',
 			'NodeParentID' => '539',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) seized or damaged property?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -19541,7 +19658,6 @@ padding: 10px;
 			'NodeID' => 220,
 			'NodeTree' => '1',
 			'NodeParentID' => '539',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) did this property belong to?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -19564,13 +19680,15 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '471',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer use physical force on anybody during this incident? This includes any use of violent contact up to and including deadly force by an officer.',
+			'NodePromptText' => '<h2 class="slBlueDark">Use of Physical Force</h2>
+<p>Did an officer use physical force on anybody during this incident? This includes any use of violent contact up to and including deadly force by an officer.</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilForceYN'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 223,
 			'NodeTree' => '1',
-			'NodeParentID' => '222',
+			'NodeParentID' => '2035',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think the use of physical force was <span class="slBlueDark">unreasonable</span>?',
 			'NodePromptNotes' => '<p><span class="slBlueDark">Definition of Unreasonable Force</span>: "Reasonable force" is the amount of effort required by police to compel an unwilling person to comply. So "unreasonable force" is any unnecessary or excessive force beyond what\'s required to do that.</p>
@@ -19591,19 +19709,18 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 225,
 			'NodeTree' => '1',
-			'NodeParentID' => '540',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2040',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Victim(s)?',
 			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
+			'NodeDataStore' => 'LinksCivilianEvents:LnkCivEveCivID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 226,
 			'NodeTree' => '1',
 			'NodeParentID' => '540',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'What makes you think that this use of physical force was unreasonable?',
 			'NodeDataStore' => 'Allegations:AlleDescription',
@@ -19615,13 +19732,15 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '472',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer arrest anybody during this incident? This means the officers took somebody to the police station.',
+			'NodePromptText' => '<h2 class="slBlueDark">Arrests</h2>
+<p>Did an officer arrest anybody during this incident? This means the officers took somebody to the police station.</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilArrestYN'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 228,
 			'NodeTree' => '1',
 			'NodeParentID' => '1172',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think anybody was <span class="slBlueDark">wrongfully</span> arrested?',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Wrongful Arrest:</span> A woman asserts her First Amendment rights by video recording on-duty police. An officer arrests her after she refuses to turn off her camera.',
@@ -19641,19 +19760,18 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 230,
 			'NodeTree' => '1',
-			'NodeParentID' => '541',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2041',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Victim(s)?',
 			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
+			'NodeDataStore' => 'LinksCivilianEvents:LnkCivEveCivID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 231,
 			'NodeTree' => '1',
 			'NodeParentID' => '541',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'What makes you think that their arrest was wrongful?',
 			'NodeDataStore' => 'Allegations:AlleDescription',
@@ -19661,38 +19779,19 @@ padding: 10px;
 			'NodeOpts' => '465'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 232,
-			'NodeTree' => '1',
-			'NodeParentID' => '1172',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did the officer fail to read any arrestees their Miranda rights?',
-			'NodePromptNotes' => '<span class="allegation">This is an allegation.</span>',
-			'NodeDataStore' => 'AllegSilver:AlleSilArrestMiranda',
-			'NodeOpts' => '3'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 233,
-			'NodeTree' => '1',
-			'NodeParentID' => '542',
-			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which Victim(s)?',
-			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
-			'NodeOpts' => '3'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 234,
 			'NodeTree' => '1',
 			'NodeParentID' => '473',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did anybody who was not arrested get a ticket or citation?',
+			'NodePromptText' => '<h2 class="slBlueDark">Tickets / Citations</h2>
+<p>Did anybody who was not arrested get a ticket or citation?</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilCitationYN'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 235,
 			'NodeTree' => '1',
-			'NodeParentID' => '234',
+			'NodeParentID' => '2036',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think that any citations were <span class="slBlueDark">wrongful</span> or <span class="slBlueDark">excessive</span>?',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Excessive Citation:</span> A motorist gets pulled over and cited for speeding. On the same ticket, the officer also cites him for "illegal window tint," "muffler violation," "seat belt violation," and "illegal lane change."',
@@ -19712,19 +19811,18 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 237,
 			'NodeTree' => '1',
-			'NodeParentID' => '543',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2036',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which victim(s) were given excessive citations?',
+			'NodePromptText' => 'Which victim(s) were given a citation?',
 			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataStore' => 'LinksCivilianAllegations:LnkCivAlleCivID',
+			'NodeDataStore' => 'Civilians:CivGivenCitation',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 238,
 			'NodeTree' => '1',
 			'NodeParentID' => '543',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'What makes you think that these citations were excessive?',
 			'NodeDataStore' => 'Allegations:AlleDescription',
@@ -19737,7 +19835,7 @@ padding: 10px;
 			'NodeParentID' => '475',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Do you think an officer <span class="slBlueDark">took actions</span> that did not follow appropriate policy or procedure?',
+			'NodePromptText' => 'Do you think an officer <span class="slBlueDark">took actions</span> that did not follow appropriate policy or procedure? Leave blank if you described this in an earlier allegation.',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Procedure Violation:</span> An officer parked his police vehicle in a handicap spot. There did not seem to be any emergency to justify this.',
 			'NodeDataStore' => 'AllegSilver:AlleSilProcedure'
 		]);
@@ -19767,7 +19865,8 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '476',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<p>Police are legally allowed to <i class="slBlueDark">display</i> a weapon if they feel threatened. But it\'s wrongful for police to use a weapon to intimidate people who aren\'t a threat.</p>
+			'NodePromptText' => '<h2 class="slBlueDark">Display of Weapon</h2>
+<p>Police are legally allowed to <i class="slBlueDark">display</i> a weapon if they feel threatened. But it\'s wrongful for police to use a weapon to intimidate people who aren\'t a threat.</p>
 <p>Do you think an officer displayed a weapon (or a police dog) to <span class="slBlueDark">wrongfully intimidate</span> anybody? (This does not include any violent use of force. <span class="allegation">Answers in red are allegations.</span>)</p>',
 			'NodePromptNotes' => '<span class="slBlueDark">Example:</span> While questioning a pedestrian, the officer pointed a taser at her in a threatening manner.',
 			'NodeDataStore' => 'AllegSilver:AlleSilIntimidatingWeapon'
@@ -19776,6 +19875,7 @@ padding: 10px;
 			'NodeID' => 244,
 			'NodeTree' => '1',
 			'NodeParentID' => '546',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) intimidated?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -19797,7 +19897,6 @@ padding: 10px;
 			'NodeID' => 246,
 			'NodeTree' => '1',
 			'NodeParentID' => '546',
-			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'What type of weapon?',
 			'NodeResponseSet' => 'Definition::Intimidation Weapons',
@@ -19821,8 +19920,7 @@ padding: 10px;
 			'NodeParentID' => '854',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<p>Do you think an officer <span class="slBlueDark">sexually <b><i>assaulted</i></b></span> anybody?</p>
-<p>Sexual assault is any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching.</p>',
+			'NodePromptText' => '<p>Do you think an officer <span class="slBlueDark">sexually <b><i>assaulted</i></b></span> anybody? Sexual assault is any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching.</p>',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Sexual Assault:</span> An officer put his hand down a motorist\'s pants, groping his genitals. He said he was looking for drugs.',
 			'NodeDataStore' => 'AllegSilver:AlleSilSexualAssault'
 		]);
@@ -19830,6 +19928,7 @@ padding: 10px;
 			'NodeID' => 249,
 			'NodeTree' => '1',
 			'NodeParentID' => '547',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Officer(s)?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -19840,7 +19939,6 @@ padding: 10px;
 			'NodeID' => 250,
 			'NodeTree' => '1',
 			'NodeParentID' => '547',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Victim(s)?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -19863,7 +19961,8 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '478',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<p>Do you think any officer(s) acted in a <span class="slBlueDark">biased or discriminatory</span> manner?</p>
+			'NodePromptText' => '<h2 class="slBlueDark">Biased Policing / Discrimination</h2>
+<p>Do you think any officer(s) acted in a <span class="slBlueDark">biased or discriminatory</span> manner?</p>
 <p>An officer\'s conduct was based on a person\'s race, religion, age, gender, sexual orientation, disability, etc.</p>',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Discriminatory Conduct:</span> An officer stops a black motorist in a primarily white neighborhood. The officer claimed he fit the description of a suspect.',
 			'NodeDataStore' => 'AllegSilver:AlleSilBias'
@@ -19872,6 +19971,7 @@ padding: 10px;
 			'NodeID' => 253,
 			'NodeTree' => '1',
 			'NodeParentID' => '548',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) used discrimination?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -19882,7 +19982,6 @@ padding: 10px;
 			'NodeID' => 254,
 			'NodeTree' => '1',
 			'NodeParentID' => '548',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) were discriminated against?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -19917,7 +20016,8 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '481',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<p>Was an officer <span class="slBlueDark">discourteous</span> in ways not included in other allegations?</p>
+			'NodePromptText' => '<h2 class="slBlueDark">Discourtesy</h2>
+<p>Was an officer <span class="slBlueDark">discourteous</span> in ways not included in other allegations?</p>
 <p>This includes the use of profanity, offensive language, loss of temper, verbal threats, impatience, or any discourteous behavior.</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilDiscourteous'
 		]);
@@ -19935,6 +20035,7 @@ padding: 10px;
 			'NodeID' => 263,
 			'NodeTree' => '1',
 			'NodeParentID' => '551',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) were discourteous?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -19971,10 +20072,10 @@ padding: 10px;
 			'NodePromptText' => '<h2>Congratulations! You\'re almost done.</h2>
 <p>To make sure your official report gets the respect it deserves, double-check your spelling and grammar. Also, try your best to refer to your allegations within your story.</p>
 <p>These are your allegations: <span class="slBlueDark">[[List of Allegations]]</span></p>',
-			'NodePromptAfter' => '<div class="pT15 slGrey fPerc125">Please do not provide addresses, phone numbers, or emails here.</p>
+			'NodePromptAfter' => '<div class="pT15">Please do not provide addresses, phone numbers, or emails here.</p>
 <style>
 #n267FldID { height: 300px; margin-top: 20px; }
-#nLabel267 label p.red { display: none; }
+#req267 { display: none; }
 </style>',
 			'NodeDataStore' => 'Complaints:ComSummary',
 			'NodeCharLimit' => '400',
@@ -19994,12 +20095,9 @@ padding: 10px;
 			'NodeID' => 269,
 			'NodeTree' => '1',
 			'NodeParentID' => '528',
-			'NodeParentOrder' => '4',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => '<h2 class="slBlueDark mR5">Please Confirm</h2>',
-			'NodePromptAfter' => '<style>
-#node785, #node783 { margin-top: -40px; }
-.investigateStatus, .complaintReportTitle, .complaintFooter { display: none; } 
+			'NodePromptAfter' => '<style> #nLabel[[nID]] label { display: none; } #nLabel[[nID]] { margin-top: -50px; } 
 </style>',
 			'NodeOpts' => '5'
 		]);
@@ -20007,6 +20105,7 @@ padding: 10px;
 			'NodeID' => 270,
 			'NodeTree' => '1',
 			'NodeParentID' => '529',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h1>All Done!</h1><h1>Taking you to your finished complaint ...<br></h1>'
 		]);
@@ -20014,7 +20113,6 @@ padding: 10px;
 			'NodeID' => 272,
 			'NodeTree' => '1',
 			'NodeParentID' => '551',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) experience discourtesy?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -20026,7 +20124,8 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '457',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Where did this incident begin?',
+			'NodePromptText' => '<h2 class="slBlueDark">Scene Information</h2>
+<p>Where did this incident begin?</p>',
 			'NodeResponseSet' => 'Definition::Scene Type',
 			'NodeDataStore' => 'Scenes:ScnType',
 			'NodeOpts' => '3'
@@ -20045,11 +20144,12 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 280,
 			'NodeTree' => '1',
-			'NodeParentID' => '457',
-			'NodeParentOrder' => '6',
+			'NodeParentID' => '2122',
 			'NodeType' => 'Uploads',
-			'NodePromptText' => 'Please upload any photos, sketches, official police reports, or link to any videos.',
-			'NodePromptNotes' => 'These should help describe <span class="slBlueDark">the scene</span> or show proof of <span class="slBlueDark">what happened</span>.',
+			'NodePromptText' => '<h2 class="slBlueDark">Evidence Upload</h2>
+<p>Please upload any photos, sketches, police reports, warrants, official documents, and links to videos. These should help describe the scene or show proof of what happened. If police injured someone, provide photos and medical records.</p>
+<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">
+WARNING: Only share what you want investigators to see. Do not upload anyone’s private information without their permission.<br /><br />We recommend that you set the privacy on injury photos to "public." But set medical documents to "private," so they\'re only visible to investigators.</div>',
 			'NodeDataStore' => 'Evidence:EvidID',
 			'NodeCharLimit' => '5',
 			'NodeOpts' => '3'
@@ -20075,60 +20175,52 @@ padding: 10px;
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 286,
-			'NodeTree' => '1',
-			'NodeParentID' => '483',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Next, you will dive deeper into your incident.</h2>
-<p>This will create a more complete picture of what happened.<br></p><p>It might feel like some questions are being repeated. But this process will help make sure we don\'t miss any important details.<br></p>'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 293,
 			'NodeTree' => '1',
-			'NodeParentID' => '512',
+			'NodeParentID' => '2030',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which officer(s) arrested [LoopItemLabel]?',
+			'NodePromptText' => 'Which officer(s) made the arrest(s)?',
 			'NodeResponseSet' => 'LoopItems::Officers',
 			'NodeDataStore' => 'LinksOfficerEvents:LnkOffEveOffID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 294,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which officer(s) used [ForceType] force against [LoopItemLabel]?',
+			'NodePromptText' => 'Which officer(s) used [ForceType] force?',
 			'NodeResponseSet' => 'LoopItems::Officers',
 			'NodeDataStore' => 'LinksOfficerEvents:LnkOffEveOffID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 295,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which officer(s) searched [LoopItemLabel]?',
+			'NodePromptText' => 'Which officer(s) performed the search?',
 			'NodeResponseSet' => 'LoopItems::Officers',
 			'NodeDataStore' => 'LinksOfficerEvents:LnkOffEveOffID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 296,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which officer(s) stopped [LoopItemLabel]?',
+			'NodePromptText' => 'Which officer(s) initiated the stop?',
 			'NodeResponseSet' => 'LoopItems::Officers',
 			'NodeDataStore' => 'LinksOfficerEvents:LnkOffEveOffID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 297,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Did an officer give a reason for the stop of [LoopItemLabel]?',
+			'NodePromptText' => 'Did an officer give a reason for the stop?',
 			'NodeResponseSet' => 'Definition::Reason for Vehicle Stop',
 			'NodeDataStore' => 'StopReasons:StopReasReason'
 		]);
@@ -20144,10 +20236,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 299,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Did an officer give a reason for the stop of [LoopItemLabel]?',
+			'NodePromptText' => 'Did an officer give a reason for the stop?',
 			'NodeResponseSet' => 'Definition::Reason for Pedestrian Stop',
 			'NodeDataStore' => 'StopReasons:StopReasReason'
 		]);
@@ -20163,10 +20255,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 301,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did [LoopItemLabel] ask to leave?',
+			'NodePromptText' => 'Did anybody ask to leave?',
 			'NodeInternalNotes' => 'NOT Home or Private Residence, or Workplace',
 			'NodeDataStore' => 'Stops:StopSubjectAskedToLeave'
 		]);
@@ -20175,17 +20267,17 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '301',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Describe what [LoopItemLabel] asked.',
+			'NodePromptText' => 'Describe what they asked.',
 			'NodeDataStore' => 'Stops:StopSubjectStatementsDesc',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 303,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '5',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer ask for [LoopItemLabel]\'s ID?',
+			'NodePromptText' => 'Did an officer ask for anybody\'s ID?',
 			'NodeDataStore' => 'Stops:StopRequestID'
 		]);
 		DB::table('SL_Node')->insert([
@@ -20193,17 +20285,17 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '303',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did [LoopItemLabel] provide ID to an officer?',
+			'NodePromptText' => 'Did anybody provide ID to an officer?',
 			'NodeDataStore' => 'Stops:StopRefuseID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 305,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did [LoopItemLabel] ask for an officer\'s ID?',
+			'NodePromptText' => 'Did anybody ask for an officer\'s ID?',
 			'NodePromptNotes' => 'Open Police Complaints does not usually recommend doing this.',
 			'NodeDataStore' => 'Stops:StopRequestOfficerID'
 		]);
@@ -20219,7 +20311,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 307,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '13',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did an officer enter a private home or workplace?',
@@ -20277,19 +20369,19 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 314,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '11',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] frisked during this stop?',
+			'NodePromptText' => 'Was anybody frisked during this stop?',
 			'NodeDataStore' => 'Stops:StopSubjectFrisk'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 315,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '12',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] handcuffed during this stop?',
+			'NodePromptText' => 'Was anybody handcuffed during this stop?',
 			'NodeDataStore' => 'Stops:StopSubjectHandcuffed',
 			'NodeOpts' => '3'
 		]);
@@ -20298,26 +20390,17 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '315',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] injured from being handcuffed?',
+			'NodePromptText' => 'Was anybody injured from being handcuffed?',
 			'NodeDataStore' => 'Stops:StopStopSubjectHandcuffInjYN',
-			'NodeOpts' => '3'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 317,
-			'NodeTree' => '1',
-			'NodeParentID' => '316',
-			'NodeType' => 'Uploads',
-			'NodePromptText' => 'Please upload any injury photos or links to relevant video.',
-			'NodeDataStore' => 'Stops:StopID',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 319,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer give a reason for searching [LoopItemLabel]?',
+			'NodePromptText' => 'Did an officer give a reason for searching anybody?',
 			'NodeDataStore' => 'Searches:SrchStatedReason',
 			'NodeOpts' => '3'
 		]);
@@ -20333,14 +20416,14 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 321,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Search/Seizure of [LoopItemLabel]:</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark">More about the Search / Seizure:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 322,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did an officer have a search warrant?',
@@ -20357,19 +20440,9 @@ padding: 10px;
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 324,
-			'NodeTree' => '1',
-			'NodeParentID' => '1153',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Uploads',
-			'NodePromptText' => 'Upload Warrant Photo, Scan, or PDF',
-			'NodeDataStore' => 'EventSequence:EveID',
-			'NodeOpts' => '3'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 325,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did an officer request permission to search anything?',
@@ -20388,10 +20461,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 328,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '5',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did [LoopItemLabel] consent to the search?',
+			'NodePromptText' => 'Did anybody consent to the search?',
 			'NodeDataStore' => 'Searches:SrchSubjectConsent',
 			'NodeOpts' => '3'
 		]);
@@ -20400,14 +20473,14 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '328',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'What did [LoopItemLabel] say or do?',
+			'NodePromptText' => 'What did they say or do?',
 			'NodeDataStore' => 'Searches:SrchSubjectSay',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 330,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did an officer make threats or lie to get permission to search?',
@@ -20426,7 +20499,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 335,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '7',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Was a K9 (dog) used during this search?',
@@ -20435,10 +20508,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 336,
 			'NodeTree' => '1',
-			'NodeParentID' => '500',
+			'NodeParentID' => '2029',
 			'NodeParentOrder' => '8',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] strip searched during this incident? This is a search for concealed items that removes some or all clothing to reveal intimate areas of the body. Please do not include searches that occurred at the police station.',
+			'NodePromptText' => 'Was anybody strip searched during this incident? This is a search for concealed items that removes some or all clothing to reveal intimate areas of the body. Please do not include searches that occurred at the police station.',
 			'NodeDataStore' => 'Searches:SrchStrip',
 			'NodeOpts' => '3'
 		]);
@@ -20454,7 +20527,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 338,
 			'NodeTree' => '1',
-			'NodeParentID' => '505',
+			'NodeParentID' => '2027',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Were any illegal items discovered in this search?',
@@ -20473,14 +20546,14 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 343,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">[ForceType] Force on [LoopItemLabel]:</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark">More about the [ForceType]</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 344,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'What type(s) of control holds were used?',
@@ -20491,7 +20564,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 345,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'What type(s) of body weapons were used?',
@@ -20502,7 +20575,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 346,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'What type(s) of takedowns were used?',
@@ -20513,7 +20586,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 347,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '5',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Describe the gun the best that you can.',
@@ -20533,17 +20606,17 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 349,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '8',
 			'NodeType' => 'Text:Number',
-			'NodePromptText' => 'How many times was [LoopItemLabel] struck with [ForceType] force?',
+			'NodePromptText' => 'How many times was anybody struck with [ForceType] force?',
 			'NodePromptAfter' => '<style> #n349fldID { width: 60px; } </style>',
 			'NodeDataStore' => 'Force:ForHowManyTimes'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 350,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '9',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which parts of the body were struck?',
@@ -20554,30 +20627,30 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 351,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] <span class="slBlueDark">handcuffed</span> when [ForceType] force was used?',
+			'NodePromptText' => 'Was anybody <span class="slBlueDark">handcuffed</span> when [ForceType] force was used?',
 			'NodeDataStore' => 'Force:ForWhileHandcuffed',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 352,
 			'NodeTree' => '1',
-			'NodeParentID' => '508',
+			'NodeParentID' => '2047',
 			'NodeParentOrder' => '7',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] <span class="slBlueDark">held down</span> when [ForceType] force was used?',
+			'NodePromptText' => 'Was anybody <span class="slBlueDark">held down</span> when [ForceType] force was used?',
 			'NodeDataStore' => 'Force:ForWhileHeldDown',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 358,
 			'NodeTree' => '1',
-			'NodeParentID' => '1167',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '1444',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Describe the injuries more, if needed.',
+			'NodePromptText' => '<br />Describe more, if needed.',
 			'NodeDataStore' => 'Injuries:InjDescription',
 			'NodeOpts' => '3'
 		]);
@@ -20585,19 +20658,20 @@ padding: 10px;
 			'NodeID' => 359,
 			'NodeTree' => '1',
 			'NodeParentID' => '1444',
-			'NodeType' => 'Checkbox',
+			'NodeType' => 'Drop Down',
 			'NodePromptText' => '<br />Where on their body did this type of injury happen?',
-			'NodeInternalNotes' => '"Where did these injuries happen?" (click areas of body)
-"Please upload any injury photos available:" (Upload Tools) ("Limit of " displayed after 1)
-"Describe the injury more, if needed:" (Text Field)',
+			'NodeInternalNotes' => '"Where did these injuries happen?" (click areas of body)
+"Please upload any injury photos available:" (Upload Tools) ("Limit of " displayed after 1)
+"Describe the injury more, if needed:" (Text Field)',
 			'NodeResponseSet' => 'Definition::Body Part',
-			'NodeDataStore' => 'InjuryBodyParts:InjBdyPart'
+			'NodeDefault' => 'select one or more...',
+			'NodeDataStore' => 'InjuryBodyParts:InjBdyPart',
+			'NodeOpts' => '53'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 362,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2056',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did [LoopItemLabel]\'s injuries result in death?',
 			'NodeDataStore' => 'InjuryCare:InjCareResultInDeath',
@@ -20606,10 +20680,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 364,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2056',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Name of hospital where treated:',
+			'NodePromptText' => 'Name of hospital where [LoopItemLabel] was treated:',
 			'NodeDataStore' => 'InjuryCare:InjCareHospitalTreated',
 			'NodeOpts' => '3'
 		]);
@@ -20626,62 +20700,50 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 366,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '3',
+			'NodeParentID' => '2056',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Doctor First Name',
+			'NodePromptText' => '[LoopItemLabel]\'s Doctor First Name',
 			'NodeDataStore' => 'InjuryCare:InjCareDoctorNameFirst',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 367,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '2056',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Doctor Last Name',
+			'NodePromptText' => '[LoopItemLabel]\'s Doctor Last Name',
 			'NodeDataStore' => 'InjuryCare:InjCareDoctorNameLast',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 368,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '2056',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Email',
-			'NodePromptText' => 'Doctor Email',
+			'NodePromptText' => '[LoopItemLabel]\'s Doctor Email',
 			'NodeDataStore' => 'InjuryCare:InjCareDoctorEmail',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 369,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '6',
+			'NodeParentID' => '2056',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Doctor Phone',
+			'NodePromptText' => '[LoopItemLabel]\'s Doctor Phone',
 			'NodeDataStore' => 'InjuryCare:InjCareDoctorPhone',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 370,
 			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '7',
+			'NodeParentID' => '2053',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Were any medical emergency staff on scene?',
 			'NodeDataStore' => 'InjuryCare:InjCareEmergencyOnScene'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 371,
-			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '8',
-			'NodeType' => 'Uploads',
-			'NodePromptText' => '<h3>Please upload any medical documents related to these injuries.</h3>
-<p>PDF documents are best. But you can also upload scans or photos of paper documents. Only share things that you are comfortable with investigators seeing. Do not upload anybody else\'s private information without their permission.</p>
-<p>We recommend that you set the privacy on injury photos to "public." But medical documents should be set to "private," so they\'re only visible to investigators.</p>',
-			'NodeDataStore' => 'InjuryCare:InjCareID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 372,
@@ -20745,17 +20807,17 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 378,
 			'NodeTree' => '1',
-			'NodeParentID' => '512',
+			'NodeParentID' => '2030',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Arrest of [LoopItemLabel]:</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark">More about the Arrest:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 379,
 			'NodeTree' => '1',
-			'NodeParentID' => '512',
+			'NodeParentID' => '2030',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer say why they arrested [LoopItemLabel]?',
+			'NodePromptText' => 'Did an officer say why they made the arrest(s)?',
 			'NodeDataStore' => 'Arrests:ArstStatedReason',
 			'NodeOpts' => '3'
 		]);
@@ -20769,22 +20831,12 @@ padding: 10px;
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 381,
-			'NodeTree' => '1',
-			'NodeParentID' => '512',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did the officer read [LoopItemLabel]\'s Miranda rights?',
-			'NodeDataStore' => 'Arrests:ArstMiranda',
-			'NodeOpts' => '3'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 385,
 			'NodeTree' => '1',
-			'NodeParentID' => '512',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '2030',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Were any charges filed against [LoopItemLabel] for this incident?',
+			'NodePromptText' => 'Were any charges filed against anybody for this incident?',
 			'NodeDataStore' => 'Arrests:ArstChargesFiled'
 		]);
 		DB::table('SL_Node')->insert([
@@ -20792,7 +20844,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '1155',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'What charges were filed against [LoopItemLabel]?',
+			'NodePromptText' => 'What charges were filed against anybody?',
 			'NodePromptNotes' => 'These terms vary, so please choose the charges that look the most similar.',
 			'NodeResponseSet' => 'Definition::Arrest Charges',
 			'NodeDataStore' => 'Charges:ChrgCharges',
@@ -20805,7 +20857,7 @@ padding: 10px;
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Were there other charges not on this list?',
-			'NodeDataStore' => 'Civilians:CivChargesOther',
+			'NodeDataStore' => 'Arrests:ArstChargesOther',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
@@ -20814,14 +20866,14 @@ padding: 10px;
 			'NodeParentID' => '1155',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Were <span class="slBlueDark">ALL</span> the charges dropped before [LoopItemLabel] was released?',
+			'NodePromptText' => 'Were <span class="slBlueDark">ALL</span> the charges dropped before everybody was released?',
 			'NodeDataStore' => 'Arrests:ArstNoChargesFiled',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 392,
 			'NodeTree' => '1',
-			'NodeParentID' => '523',
+			'NodeParentID' => '2058',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'What citation charges were filed against [LoopItemLabel]?',
@@ -20833,7 +20885,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 393,
 			'NodeTree' => '1',
-			'NodeParentID' => '523',
+			'NodeParentID' => '2058',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'What citation charges were filed against [LoopItemLabel]?',
@@ -20844,7 +20896,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 394,
 			'NodeTree' => '1',
-			'NodeParentID' => '523',
+			'NodeParentID' => '2058',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Were there other charges not on this list?',
@@ -20854,22 +20906,19 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 400,
 			'NodeTree' => '1',
-			'NodeParentID' => '153',
-			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h2>Now let\'s reveal important details of the citations given.</h2>',
-			'NodePromptNotes' => 'all-citations',
-			'NodePromptAfter' => 'Provide Citation Details - Your Complaint::M::::M::::M::',
-			'NodeDataBranch' => 'Citations',
+			'NodeParentID' => '523',
+			'NodeType' => 'Loop Cycle',
+			'NodeResponseSet' => 'LoopItems::Victims',
+			'NodeDataBranch' => 'Civilians',
 			'NodeDataStore' => 'Stops:StopID'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 402,
 			'NodeTree' => '1',
-			'NodeParentID' => '505',
+			'NodeParentID' => '2027',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was any of [LoopItemLabel]\'s property seized?',
-			'NodePromptNotes' => 'This does not include illegal items.',
+			'NodePromptText' => 'Was anybody\'s property seized? This does not include illegal items.',
 			'NodeDataStore' => 'Searches:SrchSeized',
 			'NodeOpts' => '3'
 		]);
@@ -20896,17 +20945,17 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 405,
 			'NodeTree' => '1',
-			'NodeParentID' => '505',
+			'NodeParentID' => '2027',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Search/Seizure of [LoopItemLabel]:</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark">About more about the Search / Seizure:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 406,
 			'NodeTree' => '1',
-			'NodeParentID' => '505',
+			'NodeParentID' => '2027',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was any of [LoopItemLabel]\'s property damaged?',
+			'NodePromptText' => 'Was anybody\'s property damaged?',
 			'NodeDataStore' => 'Searches:SrchDamage',
 			'NodeOpts' => '3'
 		]);
@@ -20922,10 +20971,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 410,
 			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeParentOrder' => '7',
+			'NodeParentID' => '6',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Branch Title',
-			'NodePromptText' => 'Injuries',
+			'NodePromptText' => 'Injuries & Medical Care',
 			'NodePromptNotes' => 'review-your-story'
 		]);
 		DB::table('SL_Node')->insert([
@@ -20940,48 +20989,28 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 412,
 			'NodeTree' => '1',
-			'NodeParentID' => '523',
+			'NodeParentID' => '2058',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Citations against [LoopItemLabel]:</h2>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 413,
-			'NodeTree' => '1',
-			'NodeParentID' => '517',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Uploads',
-			'NodePromptText' => 'Please upload any injury photos or links to relevant video.',
-			'NodeDataStore' => 'Injuries:InjID',
-			'NodeOpts' => '3'
+			'NodePromptText' => '<h2>More about citations against [LoopItemLabel]:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 414,
 			'NodeTree' => '1',
 			'NodeParentID' => '410',
 			'NodeParentOrder' => '1',
-			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h2>Revealing important details everyone\'s medical care.</h2>
-<p>The blue "Next Medical Care Details" button will take you through each person. You can use the gray buttons later to edit anything you need.</p>',
-			'NodePromptNotes' => 'gold-info-all-medical-care',
-			'NodePromptAfter' => 'Provide Medical Care Details  - Your Complaint::M::::M::::M::',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'gold-details-injury-medical-care',
+			'NodePromptAfter' => 'Gold Injury Details  - Your Complaint::M::::M::::M::',
 			'NodeResponseSet' => 'LoopItems::Medical Care',
-			'NodeDataBranch' => 'Medical Care',
 			'NodeDataStore' => 'InjuryCare:InjCareID'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 415,
-			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>[LoopItemLabel]\'s Medical Care</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 416,
 			'NodeTree' => '1',
 			'NodeParentID' => '463',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Who\'s Involved: Police Officers</h2>
-<p>Next, you\'ll share info about the police departments and officers, or private security firms, linked to the incident. This will help us get your complaint to the right place! Most questions are optional.<br></p>'
+			'NodePromptText' => '<h2 class="slBlueDark">Who\'s Involved: Police Officers</h2>
+<p>Next, you\'ll share info about the police departments, officers, or private security linked to the incident. This will help us get your complaint to the right place. Most questions are optional.<br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 419,
@@ -21023,20 +21052,20 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 424,
 			'NodeTree' => '1',
-			'NodeParentID' => '523',
+			'NodeParentID' => '2058',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'What is the citation number?',
-			'NodeDataStore' => 'Stops:StopCitationNumber',
+			'NodeDataStore' => 'Civilians:CivCitationNumber',
 			'NodeOpts' => '3'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 425,
 			'NodeTree' => '1',
-			'NodeParentID' => '862',
+			'NodeParentID' => '2119',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Were any officers injured during this <span class="slBlueDark">use of force</span> incident?',
+			'NodePromptText' => 'Were any officers injured during this incident?',
 			'NodeDataStore' => 'Complaints:ComOfficerInjured'
 		]);
 		DB::table('SL_Node')->insert([
@@ -21053,7 +21082,8 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '475',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Do you think an officer neglected their duty by <span class="slBlueDark">failing to take appropriate action</span>? These are things an officer should have done, but didn\'t do.',
+			'NodePromptText' => '<h2 class="slBlueDark">Wrongful Action or Inaction</h2>
+<p>Do you think an officer neglected their duty by <span class="slBlueDark">failing to take appropriate action</span>? These are things an officer should have done but didn\'t do.</p>',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Neglect of Duty:</span> A woman is groped on the street by an unknown man. When the police arrive, they refuse to file an official report or investigate.',
 			'NodeDataStore' => 'AllegSilver:AlleSilNeglectDuty'
 		]);
@@ -21148,7 +21178,7 @@ padding: 10px;
 			'NodeParentID' => '443',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Does anybody involved want us to try to <b>match them with a lawyer</b>?',
+			'NodePromptText' => 'Does anybody involved want us to try to <b>match them with attorneys and legal experts</b>?',
 			'NodePromptNotes' => 'If we find a match, we will share your complaint and contact information with them.',
 			'NodeDataStore' => 'Complaints:ComAttorneyWant',
 			'NodeOpts' => '15'
@@ -21169,8 +21199,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '461',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Victim <span class="slBlueDark">#</span>[LoopItemCnt]: <div id="nodeEcho726" class="disIn slBlueDark"></div></h2>',
-			'NodePromptNotes' => 'Most questions are optional.'
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">Victim #[LoopItemCnt]: <div id="nodeEcho726" class="disIn"></div></h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 447,
@@ -21373,7 +21402,8 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 473,
 			'NodeTree' => '1',
-			'NodeParentID' => '202',
+			'NodeParentID' => '201',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Allegation: Excessive Citation',
 			'NodePromptNotes' => 'allegation-citation',
@@ -21429,25 +21459,6 @@ padding: 10px;
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 483,
-			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeType' => 'Page',
-			'NodePromptText' => 'Next: What Happened, Gold Version',
-			'NodePromptNotes' => 'next-what-happened-gold',
-			'NodePromptAfter' => 'Next: What Happened, Gold Version - Your Complaint::M::::M::::M::'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 484,
-			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Page',
-			'NodePromptText' => 'What Happened (Gold)',
-			'NodePromptNotes' => 'did-these-things-happen-gold',
-			'NodePromptAfter' => 'What Happened (Gold) - Your Complaint::M::::M::::M::'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 488,
 			'NodeTree' => '1',
 			'NodeParentID' => '149',
@@ -21459,7 +21470,8 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 500,
 			'NodeTree' => '1',
-			'NodeParentID' => '150',
+			'NodeParentID' => '149',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Search: Reason Given, Content',
 			'NodePromptNotes' => 'gold-info-search-and-consent',
@@ -21468,8 +21480,8 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 505,
 			'NodeTree' => '1',
-			'NodeParentID' => '150',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '149',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Search: Property Damage/Seizure',
 			'NodePromptNotes' => 'gold-info-property-seized-or-damaged',
@@ -21479,15 +21491,16 @@ padding: 10px;
 			'NodeID' => 508,
 			'NodeTree' => '1',
 			'NodeParentID' => '151',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Gold Info: Use of Force',
-			'NodePromptNotes' => 'gold-info-use-of-force',
-			'NodePromptAfter' => 'Gold Info: Use of Force - Your Complaint::M::::M::::M::'
+			'NodePromptNotes' => 'gold-details-use-of-force',
+			'NodePromptAfter' => 'Gold Details: Use of Force - Your Complaint::M::::M::::M::'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 512,
 			'NodeTree' => '1',
-			'NodeParentID' => '152',
+			'NodeParentID' => '153',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Arrest: Reason Given, Miranda Rights',
 			'NodePromptNotes' => 'gold-info-arrest',
@@ -21505,7 +21518,7 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 520,
 			'NodeTree' => '1',
-			'NodeParentID' => '1167',
+			'NodeParentID' => '1162',
 			'NodeType' => 'Radio',
 			'NodePromptText' => '<p>Did [LoopItemLabel] receive medical care?</p>',
 			'NodeDataStore' => 'Civilians:CivHasInjuryCare'
@@ -21513,7 +21526,8 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 523,
 			'NodeTree' => '1',
-			'NodeParentID' => '400',
+			'NodeParentID' => '153',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page',
 			'NodePromptText' => 'Citation Details',
 			'NodePromptNotes' => 'gold-info-citations',
@@ -21612,15 +21626,6 @@ padding: 10px;
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 542,
-			'NodeTree' => '1',
-			'NodeParentID' => '232',
-			'NodeType' => 'Data Manip: Wrap',
-			'NodeResponseSet' => '131',
-			'NodeDataBranch' => 'Allegations',
-			'NodeDataStore' => 'Allegations:AlleType'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 543,
 			'NodeTree' => '1',
 			'NodeParentID' => '235',
@@ -21693,15 +21698,6 @@ padding: 10px;
 			'NodeDataStore' => 'Allegations:AlleType'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 556,
-			'NodeTree' => '1',
-			'NodeParentID' => '381',
-			'NodeType' => 'Data Manip: Wrap',
-			'NodeResponseSet' => '131',
-			'NodeDataBranch' => 'Allegations',
-			'NodeDataStore' => 'Allegations:AlleType'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 561,
 			'NodeTree' => '1',
 			'NodeParentID' => '311',
@@ -21733,16 +21729,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '458',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>About you:</h2>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 579,
-			'NodeTree' => '1',
-			'NodeParentID' => '512',
-			'NodeParentOrder' => '6',
-			'NodeType' => 'Hidden Field',
-			'NodeDefault' => 'Y',
-			'NodeDataStore' => 'EventSequence:EveUserFinished'
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">About You</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 580,
@@ -21766,7 +21753,7 @@ padding: 10px;
 			'NodeID' => 591,
 			'NodeTree' => '1',
 			'NodeParentID' => '1172',
-			'NodeParentOrder' => '1',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think the <span class="slBlueDark">arrest charges</span> filed against anybody were a form of <span class="slBlueDark">retaliation</span>?',
 			'NodePromptNotes' => '<span class="slBlueDark">Example of Retaliatory Charges:</span> Upset about the arrest of his wife, a man accidentally shoves an officer. Another officer responds by violently arresting the man. He\'s charged with "disturbing the peace," "resisting arrest," and "assaulting an officer."',
@@ -21785,6 +21772,7 @@ padding: 10px;
 			'NodeID' => 593,
 			'NodeTree' => '1',
 			'NodeParentID' => '592',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) used retaliation?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -21794,7 +21782,6 @@ padding: 10px;
 			'NodeID' => 594,
 			'NodeTree' => '1',
 			'NodeParentID' => '592',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) experienced retaliation?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -21823,10 +21810,10 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 600,
 			'NodeTree' => '1',
-			'NodeParentID' => '512',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '2030',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Was [LoopItemLabel] strip searched at the police station? This is a search for concealed items that removes some or all clothing to reveal intimate areas of the body.',
+			'NodePromptText' => 'Was anybody strip searched at the police station? This is a search for concealed items that removes some or all clothing to reveal intimate areas of the body.',
 			'NodeDataStore' => 'Arrests:ArstStrip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -21902,23 +21889,13 @@ padding: 10px;
 			'NodeParentID' => '865',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did [LoopItemLabel] have a weapon?',
-			'NodeDataStore' => 'Civilians:CivVictimHadWeapon'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 617,
-			'NodeTree' => '1',
-			'NodeParentID' => '1156',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'What type of weapon?',
 			'NodeResponseSet' => 'Definition::Civilian Weapons',
-			'NodeDataStore' => 'Civilians:CivVictimWhatWeapon',
-			'NodeTextSuggest' => 'Intimidation Weapons'
+			'NodeDataStore' => 'Civilians:CivVictimWhatWeapon'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 618,
 			'NodeTree' => '1',
-			'NodeParentID' => '1156',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '616',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did [LoopItemLabel] use the weapon?',
 			'NodeResponseSet' => 'Definition::Intimidating Displays Of Weapon',
@@ -21927,38 +21904,38 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 620,
 			'NodeTree' => '1',
-			'NodeParentID' => '862',
+			'NodeParentID' => '2119',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Select any of these types of force used against an officer:',
+			'NodePromptText' => 'Select any of these types of force used against an officer. (Leave blank if none.)',
 			'NodeResponseSet' => 'Definition::Force Type - Body Weapons',
 			'NodeDataStore' => 'CivWeapons:CivWeapBodyWeapon'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 622,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '7',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer give [LoopItemLabel] an <span class="slBlueDark">alcohol</span> breath test?',
+			'NodePromptText' => 'Did an officer give anybody an <span class="slBlueDark">alcohol</span> breath test?',
 			'NodeDataStore' => 'Stops:StopBreathAlcohol'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 623,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '8',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer give [LoopItemLabel] a <span class="slBlueDark">marijuana</span> breath test?',
+			'NodePromptText' => 'Did an officer give anybody a <span class="slBlueDark">marijuana</span> breath test?',
 			'NodeDataStore' => 'Stops:StopBreathCannabis'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 624,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '9',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer collect [LoopItemLabel]\'s <span class="slBlueDark">saliva</span>?',
+			'NodePromptText' => 'Did an officer collect anybody\'s <span class="slBlueDark">saliva</span>?',
 			'NodeDataStore' => 'Stops:StopSalivaTest'
 		]);
 		DB::table('SL_Node')->insert([
@@ -21966,7 +21943,7 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '622',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did the officer say [LoopItemLabel] failed an <span class="slBlueDark">alcohol</span> breath test?',
+			'NodePromptText' => 'Did the officer say anybody failed an <span class="slBlueDark">alcohol</span> breath test?',
 			'NodeDataStore' => 'Stops:StopBreathAlcoholFailed'
 		]);
 		DB::table('SL_Node')->insert([
@@ -21974,16 +21951,16 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '623',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did the officer say [LoopItemLabel] failed a <span class="slBlueDark">marijuana</span> breath test?',
+			'NodePromptText' => 'Did the officer say anybody failed a <span class="slBlueDark">marijuana</span> breath test?',
 			'NodeDataStore' => 'Stops:StopBreathCannabisFailed'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 627,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeParentOrder' => '10',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer give [LoopItemLabel] any other sobriety tests?',
+			'NodePromptText' => 'Did an officer give anybody any other sobriety tests?',
 			'NodeDataStore' => 'Stops:StopSobrietyOther'
 		]);
 		DB::table('SL_Node')->insert([
@@ -22224,15 +22201,15 @@ padding: 10px;
 			'NodeTree' => '1',
 			'NodeParentID' => '482',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<img src="/openpolice/medal-gold.png" width="20%" hspace="5" align="right">
-<h2>Great Job! Want To Go Gold? (It\'s Free!)<br></h2>
-<p>You have completed a solid complaint. This includes basic info that most departments need to investigate your complaint.</p>
-<p>But here are the benefits of taking a few more minutes to create a <span class="slBlueDark">GOLD STAR complaint</span> ...</p>
+			'NodePromptText' => '<img src="/openpolice/uploads/flex-arm-gold2.png" class="mL20" width="20%" align="right">
+<h2>Want To Go Gold?<br></h2>
+<p><b>Great Job!</b> You have completed a solid complaint. This includes basic info that most departments need to investigate your complaint.</p>
+<p>But here are the benefits of taking a few more minutes to create a free <b class="slBlueDark">GOLD LEVEL complaint</b> ...</p>
 <ul>
-<li>Dive deeper into your incident to paint a more complete picture</li>
+<li>Dive deeper into your incident to see a more complete picture</li>
 <li>Create a more complete complaint that\'s even stronger for investigators</li>
-<li>Receive custom information on the many things you can learn from this police encounter</li>
-<li>Helps us to better track problematic police behavior in your community and nationwide!</li>
+<li>Get recommended articles and videos based on your report</li>
+<li>Helps us to better track problematic police behavior in your community and nationwide</li>
 </ul>',
 			'NodeOpts' => '37'
 		]);
@@ -22313,32 +22290,29 @@ padding: 10px;
 		DB::table('SL_Node')->insert([
 			'NodeID' => 687,
 			'NodeTree' => '1',
-			'NodeParentID' => '528',
+			'NodeParentID' => '2124',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2 class="slBlueDark">Confirm Your Complaint</h2>
 <p>Below is a preview of your finished complaint. Remember that we will never publish anyone\'s private information. This includes addresses, phone numbers, emails, etc.</p>
-<hr>
-<h3><span class="slBlueDark">This is what police oversight investigators will see:</span></h3>
-<hr>'
+<h3>This is what police oversight investigators will see:</h3>
+'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 688,
 			'NodeTree' => '1',
-			'NodeParentID' => '528',
+			'NodeParentID' => '2124',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2 class="slBlueDark">Confirm Your Complaint</h2>
 <p>Remember that we will never publish anything in your private complaint that could be used for personal identification. This includes your story and all open-ended questions.</p>
-<hr>
-<h3><span class="slBlueDark">This is what police oversight investigators will see:</span></h3>
-<hr>'
+<h2>This is what police oversight investigators will see:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 694,
 			'NodeTree' => '1',
 			'NodeParentID' => '464',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Find &amp; Select A Police Department</h2>
+			'NodePromptText' => '<h2>Find &amp; Select a Police Department</h2>
 <p>Please search for a police department, agency, or private security firm at the scene. Try typing the department name, city, or county. Then select the correct department below. <small class="slRedDark">*required</small></p>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -22351,19 +22325,11 @@ padding: 10px;
 			'NodePromptNotes' => 'the-scene'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 708,
-			'NodeTree' => '1',
-			'NodeParentID' => '454',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Your Story Matters</h2>
-<p>Please create a login. It will let you finish your complaint later, if we get interrupted. It is also important so we can contact you about the progress of your complaint.</p>'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 715,
 			'NodeTree' => '1',
-			'NodeParentID' => '488',
+			'NodeParentID' => '2026',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 id="fixedHeader">Stop/Questioning of [LoopItemLabel]:</h2>'
+			'NodePromptText' => '<h2 class="slBlueDark">More about the Stop / Questioning:</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 726,
@@ -22371,7 +22337,7 @@ padding: 10px;
 			'NodeParentID' => '1199',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Please give a name or a nickname for this victim:',
-			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. For example, "Jordan" or "Red Hat Man." Please try to keep this professional. ;-)',
+			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. For example, "Jordan" or "Red Hat Man." Please try to keep this professional.',
 			'NodeDataStore' => 'PersonContact:PrsnNickname',
 			'NodeOpts' => '41'
 		]);
@@ -22381,7 +22347,7 @@ padding: 10px;
 			'NodeParentID' => '1201',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Please give a name or a nickname for this witness:',
-			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. For example, "Jordan" or "Red Hat Man". Please try to keep this professional. ;-)',
+			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. For example, "Jordan" or "Red Hat Man". Please try to keep this professional.',
 			'NodeDataStore' => 'PersonContact:PrsnNickname',
 			'NodeOpts' => '41'
 		]);
@@ -22391,7 +22357,7 @@ padding: 10px;
 			'NodeParentID' => '1203',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Please give a name or a nickname for this officer:',
-			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. (For example, "Tall Cop" or "Undercover Woman.") Please keep this PG-13!',
+			'NodePromptNotes' => 'This shortcut will help us refer to them in later questions. (For example, "Tall Cop" or "Undercover Woman.") Please try to keep this professional.',
 			'NodeDataStore' => 'PersonContact:PrsnNickname',
 			'NodeOpts' => '41'
 		]);
@@ -22404,115 +22370,21 @@ padding: 10px;
 			'NodeDataBranch' => 'PhysicalDesc'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 731,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">What Happened?</h2>
-<p>Select which types of events happened to which victims during this incident. This will map out much of your custom, gold star complaint.<br></p>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 732,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Did an officer pull over a vehicle, detain, frisk, or question anybody?',
-			'NodeResponseSet' => 'LoopItems::Victims'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 733,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '6',
-			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Did an officer search anybody\'s vehicle, home, person, or property? Or was any property seized?',
-			'NodeResponseSet' => 'LoopItems::Victims'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 734,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '11',
-			'NodeType' => 'Loop Cycle',
-			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataBranch' => 'Civilians'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 735,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '14',
-			'NodeType' => 'Loop Cycle',
-			'NodeResponseSet' => 'LoopItems::Victims',
-			'NodeDataBranch' => 'Civilians'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 736,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Did an officer stop, detain, frisk, or question anybody?',
-			'NodeResponseSet' => 'LoopItems::Victims'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 737,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '5',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer pull over a vehicle, detain, frisk, or question [LoopItemLabel:Victims]?',
-			'NodeOpts' => '5'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 738,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '4',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer stop, detain, frisk, or question [LoopItemLabel:Victims]?',
-			'NodeOpts' => '5'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 739,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '7',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer search a vehicle, home, person, or property? Or was any property seized?',
-			'NodeOpts' => '5'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 740,
-			'NodeTree' => '1',
-			'NodeParentID' => '734',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did an officer use any weapons or physical force against [LoopItemLabel]?',
-			'NodeOpts' => '5'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 741,
-			'NodeTree' => '1',
-			'NodeParentID' => '735',
-			'NodeType' => 'Radio',
-			'NodePromptText' => 'Did any of these things happen to [LoopItemLabel] during this incident?',
-			'NodeOpts' => '5'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 742,
 			'NodeTree' => '1',
-			'NodeParentID' => '740',
+			'NodeParentID' => '2032',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'Which types of force were used against [LoopItemLabel]?',
+			'NodePromptText' => 'Which types of force were used by an officer?',
 			'NodeResponseSet' => 'Definition::Force Type',
+			'NodeDataStore' => 'Force:ForType',
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 743,
 			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '12',
+			'NodeParentID' => '2032',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Did an officer use any weapons or physical force against a pet or other animal?'
 		]);
@@ -22668,13 +22540,18 @@ padding: 10px;
 			'NodeID' => 767,
 			'NodeTree' => '1',
 			'NodeParentID' => '528',
-			'NodeParentOrder' => '5',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Checkbox',
-			'NodePromptAfter' => '<style> #nLabel767 label { display: none; } #nLabel767 { margin-top: -30px; } </style>
+			'NodePromptText' => '<h2 class="slBlueDark mR5">Please Confirm</h2>',
+			'NodePromptAfter' => '<style>
+#n767fld0lab { margin-top: -20px; }
+#node785, #node783 { margin-top: -40px; }
+.investigateStatus, .complaintReportTitle, .complaintFooter, .slGlossary, #node1709 { display: none; } 
+</style>
 <script type="text/javascript">
 setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\'", 1);
 </script>',
-			'NodeOpts' => '5'
+			'NodeOpts' => '65'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 769,
@@ -22690,19 +22567,18 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodeID' => 770,
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">Filing Your Complaint</h2>
-<div style="margin-top: 20px; padding: 20px 20px 200px 20px; background: #f6f6f6; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will allow you to ...</h3>
+			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will help you to ...</h3>
 <ul>
 <li>Prepare and save a complete police misconduct report.</li>
 <li>File your report with the right police oversight agency.</li>
-<li>Get matched with civil rights attorneys.</li>
+<li>Get matched with legal help.</li>
 <li>Publish your complaint online and share on social media.</li>
 <li>Upload photos, documents, video, and other evidence.</li>
 </ul>
-<p>By completing this process, you must confirm that, to the best of your knowledge, the information in this complaint is truthful and accurate.</p>
-<div class="w100" style="height: 30px;"></div>
+<p>By completing this process, you confirm that, to the best of your knowledge, the information in this complaint is truthful and accurate.</p>
+<div class="w100" style="height: 10px;"></div>
 <h3>Your Privacy Options:</h3>
 <p>When you begin your new complaint, you\'ll have three privacy options to control what personal information you want to share.</p>
 <ul>
@@ -22711,26 +22587,19 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 <li>
 <b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
 <li>
-<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be completely anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
+<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
 </ul></div>',
-			'NodePromptAfter' => '<style> #node770 ul li { margin-bottom: 10px; } </style>'
+			'NodePromptAfter' => '<style> #node770 { padding: 0px; } #node770 ul li { margin-bottom: 10px; } </style>',
+			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 771,
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',
-			'NodeParentOrder' => '1',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-primary nFldBtn mT10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a></div>
-<div class="col-md-2"></div>
-</div>
-<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-secondary nFldBtn mT10" href="[[DOMAIN]]/login">Log Back In</a></div>
-<div class="col-md-2"></div>
-</div>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>
+<a class="btn btn-xl btn-secondary nFldBtn mT10 mB10" href="[[DOMAIN]]/login">Log Back In, Continue My Complaint</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 774,
@@ -22745,10 +22614,9 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodeID' => 775,
 			'NodeTree' => '8',
 			'NodeParentID' => '1009',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">Filing Your Compliment</h2>
-<div style="margin-top: 20px; padding: 20px 20px 200px 20px; background: #f6f6f6; height: 350px; overflow: auto; resize: both;"><h3 class="m0">This free web app will allow you to ...</h3>
+			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 350px; overflow: auto; resize: both;"><h3 class="m0">This free web app will allow you to ...</h3>
 <ul>
 <li>Prepare and save a precise and complete police commendation</li>
 <li>File your official report as easily as possible and within a department’s policies</li>
@@ -22763,50 +22631,34 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 <li>
 <b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
 <li>
-<b style="font-weight: bold;">Anonymous</b><br>You need your compliment to be completely anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul></div>'
+<b style="font-weight: bold;">Anonymous</b><br>You need your compliment to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
+</ul></div>',
+			'NodePromptAfter' => '<style> #node775 { padding: 0px; } </style>',
+			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 776,
 			'NodeTree' => '8',
 			'NodeParentID' => '1009',
-			'NodeParentOrder' => '1',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-primary nFldBtn mT10" href="[[DOMAIN]]/start/compliment">I Understand, Begin A New Compliment</a></div>
-<div class="col-md-2"></div>
-</div>
-<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-secondary nFldBtn mT10" href="[[DOMAIN]]/login">Log Back In</a></div>
-<div class="col-md-2"></div>
-</div>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/compliment">I Understand, Begin A New Compliment</a>
+<a class="btn btn-xl btn-secondary nFldBtn mT10 mB10" href="[[DOMAIN]]/login">Log Back In, Continue My Compliment</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 778,
 			'NodeTree' => '1',
 			'NodeParentID' => '1009',
-			'NodeParentOrder' => '4',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Instructions'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 783,
-			'NodeTree' => '1',
-			'NodeParentID' => '528',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Big Button',
-			'NodeResponseSet' => 'Default',
-			'NodeDefault' => 'See how your complaint will appear to the public',
-			'NodeOpts' => '2021'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 784,
 			'NodeTree' => '1',
-			'NodeParentID' => '783',
+			'NodeParentID' => '528',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2><span class="slBlueDark">This is what visitors to OpenPolice.org will see:</span></h2>
-<hr>',
+			'NodePromptText' => '<a href="/complaint/readi-[[coreID]]/public" target="_blank" class="slBlueDark"><i class="fa fa-external-link" aria-hidden="true"></i> Click here to preview what visitors to OpenPolice.org will see after your complaint is published.</a>',
 			'NodePromptAfter' => '<style> #node784kids, #node1442 { display: block; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -22902,7 +22754,7 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodeID' => 792,
 			'NodeTree' => '11',
 			'NodeParentID' => '791',
-			'NodeParentOrder' => '5',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>Announcement</h2>
 <p class="red f14">Getting closer to a fully 
@@ -22975,7 +22827,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodeTree' => '1',
 			'NodeParentID' => '810',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Who\'s Involved</h2>
+			'NodePromptText' => '<h2 class="slBlueDark">Who\'s Involved</h2>
 <p>Next, you\'ll share info about yourself. Then you\'ll share info about any other civilians who witnessed the incident. This will help investigators identify and contact anyone who was involved.</p>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -23070,7 +22922,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 <p>Complainants who select No Names Public will provide everything investigators need — but only their <i>anonymized</i> data will be published on the OpenPolice.org. For reciprocity purposes, neither civilian nor police officer names will be published. Only the <a href="#glossary">multiple-choice responses</a> will be published. (This does not include responses to <a href="#glossary">open-ended questions</a>, which could reveal identities.)</p>
 <p>&nbsp;</p>
 <h3>3. Anonymous</h3>
-<p><strong>The complainant needs to be completely anonymous, even though it might limit investigation.</strong></p>
+<p><strong>The complainant needs to be anonymous, even though it might limit investigation.</strong></p>
 <p>For complainants who select Anonymous, no personal information about them is requested or collected. Neither OPC staff nor investigators will be able to contact the complainant. While this makes it harder for oversight agencies to investigate, it’s an important option for complainants fearful of retaliation.</p>
 <p>Complainants’ <a href="#glossary">multiple-choice responses</a> will be published. (This does not include responses to <a href="#glossary">open-ended questions</a>, which could reveal identities.) Any details that could be used for personal identification may be deleted from OPC\'s database.</p>
 <div class="nodeAnchor"><a id="attorneys" name="attorneys"></a></div>
@@ -23782,8 +23634,8 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeTree' => '1',
 			'NodeParentID' => '854',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Do you think an officer <span class="slBlueDark">sexually <b><i>harassed</i></b></span> anybody?
-<br /><br />This includes the use of unwanted sexual advances or obscene remarks.',
+			'NodePromptText' => '<h2 class="slBlueDark">Sexual Harassment / Assault</h2>
+<p>Do you think an officer <span class="slBlueDark">sexually <b><i>harassed</i></b></span> anybody? This includes the use of unwanted sexual advances or obscene remarks.</p>',
 			'NodeDataStore' => 'AllegSilver:AlleSilSexualHarass'
 		]);
 		DB::table('SL_Node')->insert([
@@ -23807,6 +23659,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeID' => 855,
 			'NodeTree' => '1',
 			'NodeParentID' => '853',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Officer(s)?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -23816,7 +23669,6 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeID' => 856,
 			'NodeTree' => '1',
 			'NodeParentID' => '853',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which Victim(s)?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -23846,13 +23698,14 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeParentID' => '858',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>(Chart of All Police Department Accessibility Scores)<br></p>'
+			'NodePromptText' => '<p>(Chart of All Police Department Accessibility Scores)<br></p>',
+			'NodeOpts' => '97'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 862,
 			'NodeTree' => '1',
-			'NodeParentID' => '196',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '151',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Page',
 			'NodePromptNotes' => 'chase',
 			'NodePromptAfter' => 'Chase - Your Complaint::M::::M::::M::'
@@ -23861,6 +23714,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeID' => 863,
 			'NodeTree' => '1',
 			'NodeParentID' => '862',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Loop Cycle',
 			'NodeResponseSet' => 'LoopItems::Victims',
 			'NodeDataBranch' => 'Civilians'
@@ -23868,20 +23722,11 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 		DB::table('SL_Node')->insert([
 			'NodeID' => 865,
 			'NodeTree' => '1',
-			'NodeParentID' => '862',
+			'NodeParentID' => '2119',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Loop Cycle',
 			'NodeResponseSet' => 'LoopItems::Victims',
 			'NodeDataBranch' => 'Civilians'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 866,
-			'NodeTree' => '1',
-			'NodeParentID' => '484',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">What Happened?</h2>
-<p>Confirm which types of events happened during this incident. This will map out much of your custom, gold star complaint.<br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 867,
@@ -24058,7 +23903,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeParentID' => '878',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'Incidents:IncAddressZip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24234,7 +24079,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeParentID' => '899',
 			'NodeParentOrder' => '5',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'PersonContact:PrsnAddressZip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24802,9 +24647,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2 class="slBlueDark">Confirm Your Compliment</h2>
 <p>Below is a preview of your finished compliment. Remember that we will never publish anyone\'s private information. This includes addresses, phone numbers, emails, etc.</p>
-<hr>
-<h3><span class="slBlueDark">This is what police oversight investigators will see:</span></h3>
-<hr>'
+<h3>This is what police oversight investigators will see:</h3>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 966,
@@ -24913,7 +24756,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeID' => 977,
 			'NodeTree' => '8',
 			'NodeParentID' => '1009',
-			'NodeParentOrder' => '3',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Incomplete Sess Check',
 			'NodePromptText' => '<style>
 #n977ajaxLoad { margin-bottom: 20px; }
@@ -24925,28 +24768,28 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeID' => 978,
 			'NodeTree' => '8',
 			'NodeParentID' => '1009',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a class="btn btn-xl btn-primary w100 mT20" href="[[DOMAIN]]/start/compliment">I Understand, Begin A New Compliment</a>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/compliment">I Understand, Begin A New Compliment</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 980,
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a class="btn btn-xl btn-primary w100 mT20" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 982,
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',
-			'NodeParentOrder' => '3',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Incomplete Sess Check',
-			'NodePromptText' => '<style>
-#n982ajaxLoad { margin-bottom: 20px; }
-#n982ajaxLoad .nodeGap { padding: 10px; }
+			'NodePromptText' => '<div class="p20 m10"> </div><style>
+#n[[nID]]ajaxLoad .nodeGap { padding: 10px; }
 </style>',
+			'NodePromptAfter' => '<div class="p10"> </div>',
 			'NodeResponseSet' => '1'
 		]);
 		DB::table('SL_Node')->insert([
@@ -25116,16 +24959,10 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeTree' => '22',
 			'NodeParentID' => '1776',
 			'NodeParentOrder' => '2',
-			'NodeType' => 'Incomplete Sess Check',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<a href="/complaint-or-compliment" class="btn btn-lg btn-primary w100">Share A New Story</a>',
+			'NodePromptAfter' => '<style> #blockWrap[[nID]] { margin-top: 40px; } </style>',
 			'NodeResponseSet' => '1'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1004,
-			'NodeTree' => '22',
-			'NodeParentID' => '1776',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Incomplete Sess Check',
-			'NodeResponseSet' => '5'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1005,
@@ -25212,7 +25049,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
         <div style="padding: 20px;">
         <h3>Prepare a complete report</h3>
         <p>Police encounters can be stressful and complex. Our web app will help you organize and discover all of the crucial details that make your story unique.</p>
-        <p><a href="/sharing-your-story">BUILD YOUR REPORT</a></p>
+        <p><a href="/share-complaint-or-compliment">BUILD YOUR REPORT</a></p>
         <p><br></p>
         </div></center>
 '
@@ -25246,139 +25083,6 @@ back!</p>
         <p><a href="/frequently-asked-questions#when-users-file">LEARN MORE</a></p>
         <p><br></p>
         </div></center>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1031,
-			'NodeTree' => '12',
-			'NodeParentID' => '1438',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Layout Row',
-			'NodeCharLimit' => '3'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1032,
-			'NodeTree' => '12',
-			'NodeParentID' => '1031',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1033,
-			'NodeTree' => '12',
-			'NodeParentID' => '1031',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1034,
-			'NodeTree' => '12',
-			'NodeParentID' => '1031',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1035,
-			'NodeTree' => '12',
-			'NodeParentID' => '1032',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/openness-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Openness</h3>
-        <p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\'s the <i>opposite</i> of openness — because openness requires <i>accessibility</i>. OPC is always easy to use and easy to understand. And, of course, we’re always open to receive your complaint!</p>
-        </div>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1036,
-			'NodeTree' => '12',
-			'NodeParentID' => '1033',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/empowered-arm-2b-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Empowerment</h3>
-        <p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OPC users. We keep in touch because we care about how well — or how poorly — your department responds to your complaint. Your story is too important to be ignored!</p>
-        </div>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1037,
-			'NodeTree' => '12',
-			'NodeParentID' => '1034',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Completeness</h3>
-        <p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OPC helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
-        </div>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1038,
-			'NodeTree' => '12',
-			'NodeParentID' => '1438',
-			'NodeType' => 'Layout Row',
-			'NodeCharLimit' => '3'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1039,
-			'NodeTree' => '12',
-			'NodeParentID' => '1038',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1040,
-			'NodeTree' => '12',
-			'NodeParentID' => '1038',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1041,
-			'NodeTree' => '12',
-			'NodeParentID' => '1038',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1042,
-			'NodeTree' => '12',
-			'NodeParentID' => '1039',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Universality</h3>
-        <p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\'re helping to establish national police complaint data standards.</p>
-        </div>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1043,
-			'NodeTree' => '12',
-			'NodeParentID' => '1040',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Objectivity</h3>
-        <p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
-        </div>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1044,
-			'NodeTree' => '12',
-			'NodeParentID' => '1041',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
-        <div style="padding: 10px 0px;">
-        <h3>Transparency</h3>
-        <p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OPC enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>
-        </div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1045,
@@ -25783,8 +25487,9 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1090,
 			'NodeTree' => '1',
-			'NodeParentID' => '976',
+			'NodeParentID' => '529',
 			'NodeType' => 'Send Email',
+			'NodePromptNotes' => '::TO::-69::CC::::BCC::',
 			'NodePromptAfter' => '::TO::-69::CC::::BCC::',
 			'NodeResponseSet' => '1',
 			'NodeDefault' => '5'
@@ -25813,8 +25518,8 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeID' => 1096,
 			'NodeTree' => '24',
 			'NodeType' => 'Page',
-			'NodePromptNotes' => 'sharing-your-story',
-			'NodePromptAfter' => 'Sharing Your Story: Complaints and Compliments::M::::M::::M::',
+			'NodePromptNotes' => 'complaint-or-compliment',
+			'NodePromptAfter' => 'Complaint or Compliment: Sharing Your Story::M::::M::::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
@@ -25823,15 +25528,15 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeParentID' => '1096',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
+			'NodePromptText' => '<p> </p>
 <center>
 <h3>Do you have a complaint or a compliment about the police?</h3>
 </center>
-<p>&nbsp;</p>
+<p> </p>
 <p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-complaint"><i class="fa fa-thumbs-o-down mR10" aria-hidden="true"></i>  Share a Complaint</a></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-compliment"><i class="fa fa-thumbs-o-up mR10" aria-hidden="true"></i> Share a Compliment</a></p>
-<p>&nbsp;</p>',
+<p> </p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -25867,9 +25572,11 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 <ul>
 <li style="margin-bottom: 30px;"><a href="/">Home Page</a></li>
 <li style="margin-bottom: 30px;"><a href="/about">About Us</a><ul style="margin-top: 10px; padding-top: 0px;">
+<li><a href="/principles">Principles</a></li>
+<li><a href="/features">Features</a></li>
 <li><a href="/frequently-asked-questions">Frequently Asked Questions</a></li>
 </ul></li>
-<li style="margin-bottom: 30px;"><!-- <a href="/sharing-your-story"> -->Share Your Story (public soon)<!-- </a> --><ul style="margin-top: 10px; padding-top: 0px;">
+<li style="margin-bottom: 30px;"><!-- <a href="/share-complaint-or-compliment"> -->Share Your Story (public soon)<!-- </a> --><ul style="margin-top: 10px; padding-top: 0px;">
 <li><!-- <a href="/filing-your-police-complaint"> -->Filing Your Complaint<!-- </a> --></li>
 <li><!-- <a href="/filing-your-police-compliment"> -->Filing Your Compliment<!-- </a> --></li>
 <li><a href="/complaint-privacy-options">OPC User Privacy Options</a></li>
@@ -25908,20 +25615,10 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeID' => 1107,
 			'NodeTree' => '12',
 			'NodeParentID' => '793',
-			'NodeParentOrder' => '11',
+			'NodeParentOrder' => '12',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>How we stack up against most police departments</h2>
-
-<p>There are about 18,000 police departments in the United States. Each one collects, stores, and shares its civilian complaints data in its own way. While some try to provide an open and transparent process — most departments fail to deliver.</p>
-
-<p> </p>',
-			'NodePromptAfter' => '<style>
-#blockWrap[[nID]] { padding-top: 40px; }
-#blockWrap1107 { margin-bottom: -50px; }
-#treeWrap1107 { margin-top: 20px; margin-bottom: 30px; }
-</style>',
-			'NodeDefault' => '#EDF8FF;;#000;;#FFF;;;;w100;;N;;left;;auto',
-			'NodeOpts' => '4757'
+			'NodePromptText' => '<p>&nbsp;</p><div class="mB20"><h1>How we stack up against most police departments</h1></div>',
+			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1108,
@@ -25978,17 +25675,17 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1114,
-			'NodeTree' => '24',
-			'NodeParentID' => '1096',
+			'NodeTree' => '70',
+			'NodeParentID' => '2094',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
+			'NodePromptText' => '<p> </p>
 
-<center><h3>Sorry, but this isn&#39;t quite ready for the public yet.</h3></center>',
+<center><h3>Sorry, but this isn\'t quite ready for the public yet.</h3></center>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1120,
-			'NodeTree' => '24',
+			'NodeTree' => '70',
 			'NodeParentID' => '1114',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div class="p20"><br /></div>
@@ -26059,15 +25756,28 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 #homeHero2 { margin-top: 15px; }
 #blockWrap[[nID]] { text-shadow: -1px 1px 1px #000; min-height: 530px; }
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 360px; }
+#blockWrap2010 { margin-top: -17px; }
+#deferNode2011 { height: 772px; }
+#homeDemoVid { height: 600px; }
+#deferAnim2011 { margin-top: 250px; }
 
+@media screen and (max-width: 1200px) {
+#deferNode2011 { height: 672px; }
+#homeDemoVid { height: 500px; }
+}
 @media screen and (max-width: 992px) {
 #homeLogo { width: 90%; }
 #homeHeroTop, #homeHeroBot { height: 20px; }
+#deferNode2011 { height: 602px; }
+#homeDemoVid { height: 380px; }
+#deferAnim2011 { margin-top: 200px; }
 }
 @media screen and (max-width: 768px) {
 #homeHeroBox { background: url(/survloop/uploads/trans-black-50.png); }
 #homeHeroHead { font-size: 1.75rem; }
 #homeHero2 { font-size: 1.3rem; }
+#deferNode2011 { height: 472px; }
+#homeDemoVid { height: 250px; }
 }
 @media screen and (max-width: 480px) {
 #homeHeroTop, #homeHeroBot { height: 0px; }
@@ -26075,18 +25785,21 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 #blockWrap[[nID]] { background-size: auto 100%; overflow: visible; }
 #homeHeroHead { font-size: 1.3rem; }
 #homeHero2 { font-size: 1rem; }
+#deferNode2011 { height: 470px; }
+#homeDemoVid { height: 205px; }
 }
 </style>
 <script type="text/javascript"> $(document).ready(function(){
 function checkLogoScroll() {
-    if (jQuery(this).scrollTop() > 170) $("#slLogoWrap").slideDown("fast");
-    else $("#slLogoWrap").slideUp("fast");
+if (jQuery(this).scrollTop() > 170) $("#slLogoWrap").slideDown("fast");
+else $("#slLogoWrap").slideUp("fast");
 }
 setTimeout(function() { checkLogoScroll(); }, 50);
 jQuery(window).scroll(function () { checkLogoScroll(); });
-}); </script>',
-			'NodeResponseSet' => '/sharing-your-story?test=1',
-			'NodeDefault' => '#000;;#EDF8FF;;#FFF;;/openpolice/open-police-hero-1J.jpg;;w100;;P;;center;;h100',
+});
+</script>',
+			'NodeResponseSet' => '/complaint-or-compliment',
+			'NodeDefault' => '#333333;;#EDF8FF;;#FFF;;/openpolice/open-police-hero-1J.jpg;;w100;;P;;center;;h100',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26137,16 +25850,16 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 			'NodeTree' => '12',
 			'NodeParentID' => '793',
 			'NodeParentOrder' => '1',
-			'NodeType' => 'Instructions',
+			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div id="homeHeroTop"></div><center>
 <div id="homeHeroBox">
 <img id="homeLogo" src="/openpolice/Flex_Open_v4-beta-shade.png" border="0">
 <h1 id="homeHeroHead">Your Story is Too Important <nobr>to be Ignored</nobr></h1>
 <h3 id="homeHero2">Prepare, file, and track reports of police misconduct.</h3>
 <div id="btnBig">
-<a class="btn btn-primary btn-xl m15" href="/sharing-your-story?test=1" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-xl m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
+<a class="btn btn-primary btn-xl m15" href="/complaint-or-compliment" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-xl m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
 <div id="btnSm">
-<a class="btn btn-primary btn-lg m15" href="/sharing-your-story?test=1" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-lg m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
+<a class="btn btn-primary btn-lg m15" href="/complaint-or-compliment" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-lg m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
 </div>
 </center>
 <div id="homeHeroBot"></div>',
@@ -26159,12 +25872,23 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 #homeLogo { width: 65%; margin-right: -15px; }
 #homeHeroBox { background: none; text-shadow: -1px 1px 1px #000; padding: 15px 0px; }
 #homeHero2 { margin-top: 15px; }
-#blockWrap[[nID]] { text-shadow: -1px 1px 1px #000; min-height: 530px; }
+#blockWrap[[nID]] { background: #333; text-shadow: -1px 1px 1px #000; min-height: 530px; }
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 360px; }
+#blockWrap2010 { margin-top: -17px; }
+#deferNode2011 { height: 772px; }
+#homeDemoVid { height: 600px; }
+#deferAnim2011 { margin-top: 250px; }
 
+@media screen and (max-width: 1200px) {
+#deferNode2011 { height: 672px; }
+#homeDemoVid { height: 500px; }
+}
 @media screen and (max-width: 992px) {
 #homeLogo { width: 90%; }
 #homeHeroTop, #homeHeroBot { height: 20px; }
+#deferNode2011 { height: 602px; }
+#homeDemoVid { height: 380px; }
+#deferAnim2011 { margin-top: 200px; }
 }
 @media screen and (max-width: 768px) {
 #btnBig { display: none; }
@@ -26173,6 +25897,8 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 #homeHeroBox { background: url(/survloop/uploads/trans-black-50.png); }
 #homeHeroHead { font-size: 1.75rem; }
 #homeHero2 { font-size: 1.3rem; }
+#deferNode2011 { height: 472px; }
+#homeDemoVid { height: 250px; }
 }
 @media screen and (max-width: 480px) {
 #btnSm { margin-top: 10px; }
@@ -26182,6 +25908,8 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 250px; }
 #homeHeroHead { font-size: 1.3rem; }
 #homeHero2 { font-size: 1rem; }
+#deferNode2011 { height: 470px; }
+#homeDemoVid { height: 205px; }
 }
 </style>
 <script type="text/javascript"> $(document).ready(function(){
@@ -26210,7 +25938,7 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>&nbsp;</h2>
 <h2>"Go Gold" To Make Your Complaint As Strong As Possible&nbsp; (It\'s Free!)</h2>
-<p><img src="../../../../openpolice/medal-gold.png" width="20%" hspace="5" align="right"></p>
+<p><img src="/openpolice/uploads/flex-arm-gold2.png" width="20%" hspace="5" align="right"></p>
 <p>You have completed a solid complaint. This includes basic info that most departments need to investigate your complaint.</p>
 <p>But here are the benefits of taking a few more minutes to create a <span class="slBlueDark">GOLD STAR complaint</span>...</p>
 <ul>
@@ -26271,12 +25999,6 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 			'NodeType' => 'Page Block'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1156,
-			'NodeTree' => '1',
-			'NodeParentID' => '616',
-			'NodeType' => 'Page Block'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1157,
 			'NodeTree' => '1',
 			'NodeParentID' => '370',
@@ -26293,15 +26015,16 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1163,
 			'NodeTree' => '1',
-			'NodeParentID' => '1167',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2050',
 			'NodeType' => 'Checkbox',
-			'NodePromptText' => 'What injuries did [LoopItemLabel] experience?',
-			'NodePromptAfter' => '<script type="text/javascript">
+			'NodePromptText' => '<h2>What injuries did [LoopItemLabel] experience?</h2>',
+			'NodePromptAfter' => '<style>
+.subRes { padding-left: 45px; }
+</style><script type="text/javascript">
 function checkYouFatal() {
     if (document.getElementById(\'nLabel1163cyc0\') && document.getElementById(\'n1163cyc0fld0lab\')) {
         var promptTxt = document.getElementById(\'nLabel1163cyc0\').innerHTML.trim();
-        if (promptTxt.indexOf("<b>you</b>") > 0) {
+        if (promptTxt.indexOf("you") > 0) {
             document.getElementById(\'n1163cyc0fld0lab\').style.display="none";
         }
     }
@@ -26319,34 +26042,12 @@ setTimeout("checkYouFatal()", 1);
 			'NodePromptText' => '<h2>Physical Injuries</h2>'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1165,
-			'NodeTree' => '1',
-			'NodeParentID' => '520',
-			'NodeType' => 'Data Manip: New',
-			'NodeDataBranch' => 'InjuryCare'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1167,
-			'NodeTree' => '1',
-			'NodeParentID' => '1162',
-			'NodeType' => 'Page Block'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1169,
-			'NodeTree' => '1',
-			'NodeParentID' => '1170',
-			'NodeParentOrder' => '9',
-			'NodeType' => 'Hidden Field',
-			'NodeDefault' => '1',
-			'NodeDataStore' => 'InjuryCare:InjCareDone'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1170,
 			'NodeTree' => '1',
 			'NodeParentID' => '414',
-			'NodeType' => 'Page',
-			'NodePromptNotes' => 'gold-info-medical-care',
-			'NodePromptAfter' => 'Medical Care - Gold Info - Your Complaint::M::::M::::M::'
+			'NodeType' => 'Loop Cycle',
+			'NodeResponseSet' => 'LoopItems::Victims',
+			'NodeDataBranch' => 'Civilians'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1172,
@@ -26357,11 +26058,13 @@ setTimeout("checkYouFatal()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1175,
 			'NodeTree' => '1',
-			'NodeParentID' => '976',
+			'NodeParentID' => '529',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Send Email',
+			'NodePromptNotes' => '::TO::1,32::CC::::BCC::',
 			'NodePromptAfter' => '::TO::1,32::CC::::BCC::',
-			'NodeResponseSet' => '1'
+			'NodeResponseSet' => '1',
+			'NodeDefault' => '23'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1176,
@@ -26393,6 +26096,7 @@ setTimeout("checkYouFatal()", 1);
 			'NodeID' => 1181,
 			'NodeTree' => '1',
 			'NodeParentID' => '1180',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which officer(s) seized or damaged property?',
 			'NodeResponseSet' => 'LoopItems::Officers',
@@ -26402,7 +26106,6 @@ setTimeout("checkYouFatal()", 1);
 			'NodeID' => 1182,
 			'NodeTree' => '1',
 			'NodeParentID' => '1180',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Checkbox',
 			'NodePromptText' => 'Which victim(s) did this property belong to?',
 			'NodeResponseSet' => 'LoopItems::Victims',
@@ -26478,7 +26181,7 @@ setTimeout("checkYouFatal()", 1);
 			'NodeParentID' => '451',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p class="slGrey">Don\'t worry about spelling or grammar now because you can edit your story later. And <b>please do not provide addresses, phone numbers, or emails here.</b></p>',
+			'NodePromptText' => '<p>Don\'t worry about spelling or grammar now because you can edit your story later. And <b>please do not provide addresses, phone numbers, or emails here.</b></p>',
 			'NodePromptAfter' => '<style> #node1194 { margin: -40px 0px -20px 0px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26499,9 +26202,9 @@ Download it
 <h1 class="slBlueDark" style="margin-top: 15px;"><i class="fa fa-envelope" aria-hidden="true"></i></h1>
 Email it
 </td></tr></table>
-<p>For your protection, your story will then be deleted from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. <b>This will publish your full story.</b></p>
-<h3 class="slBlueDark" style="margin-top: 20px;">Remember: The more details you share, the better we can match you with a lawyer!</h3>',
+<p>For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
+<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. <b>This will publish your full story and file it with a police oversight agency.</b></p>
+<h3 class="slBlueDark" style="margin-top: 20px;">Remember: The more details you share, the better we can match you with a lawyer.</h3>',
 			'NodeOpts' => '37'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26569,37 +26272,11 @@ Email it
 			'NodeDataBranch' => 'PersonContact'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1205,
-			'NodeTree' => '1',
-			'NodeParentID' => '488',
-			'NodeParentOrder' => '14',
-			'NodeType' => 'Hidden Field',
-			'NodeDefault' => 'Y',
-			'NodeDataStore' => 'EventSequence:EveUserFinished'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1206,
-			'NodeTree' => '1',
-			'NodeParentID' => '505',
-			'NodeParentOrder' => '4',
-			'NodeType' => 'Hidden Field',
-			'NodeDefault' => 'Y',
-			'NodeDataStore' => 'EventSequence:EveUserFinished'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1207,
-			'NodeTree' => '1',
-			'NodeParentID' => '508',
-			'NodeParentOrder' => '10',
-			'NodeType' => 'Data Manip: Update',
-			'NodeDefault' => 'Y',
-			'NodeDataStore' => 'EventSequence:EveUserFinished'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1210,
 			'NodeTree' => '33',
 			'NodeType' => 'Page',
-			'NodePromptNotes' => 'volunteer'
+			'NodePromptNotes' => 'volunteer',
+			'NodePromptAfter' => 'Volunteer Dashboard::M::::M::::M::'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1211,
@@ -26633,24 +26310,25 @@ Email it
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1216,
 			'NodeTree' => '33',
-			'NodeParentID' => '1215',
+			'NodeParentID' => '1213',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3 class="slBlueDark mT0">Thank You For Your Help!</h3>
+			'NodePromptText' => '<h2>Volunteer Dashboard: Department Research</h2>
 <p>
 Please verify as much of department information as possible. This requires both online research and calling each department - including their internal affairs office.
 </p><p>
 Completing research on each department should take you about 30 minutes. Please take your time, because quality matters most!
 </p><p>
-Please help take care of <span class="slRedLight">priority departments first</span>. Then you can choose a random department, or search for a city or county in your home state.
+Please help take care of high-priority departments first. Then you can choose a random department, or search for a city or county in your home state. This also includes some private firms involved in security misconduct.
+</p><p>
+<b>Thank you for helping create the <a href="/department-accessibility" target="_blank">best police department accessibility database</a> in the world!</b>
 </p>',
-			'NodePromptAfter' => '<style> #mainBody { background: #F5FBFF; } #blockWrap1212 { margin-top: 20px; } </style>',
+			'NodePromptAfter' => '<style> #mainBody { background: #F5FBFF; } </style>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1217,
 			'NodeTree' => '33',
 			'NodeParentID' => '1215',
-			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
 			'NodeOpts' => '89'
 		]);
@@ -26713,59 +26391,53 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 			'NodeID' => 1226,
 			'NodeTree' => '36',
 			'NodeParentID' => '1223',
-			'NodeParentOrder' => '12',
+			'NodeParentOrder' => '7',
 			'NodeType' => 'Hidden Field',
 			'NodeDataStore' => 'Departments:DeptScoreOpenness'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1227,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2155',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div class="nodeAnchor"><a id="deptWeb" name="deptWeb"></a></div><hr><h2 class="mB0">Web Presence & Complaint Process</h2>
-<p class="slGrey">Leave fields blank if the department doesn\'t have the thing.</p>'
+<p>Leave fields blank if the department doesn\'t have the thing.</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1228,
 			'NodeTree' => '36',
-			'NodeParentID' => '1273',
-			'NodeParentOrder' => '3',
+			'NodeParentID' => '2156',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div class="nodeAnchor"><a id="deptIA" name="deptIA"></a></div><hr><h2 class="mB0">Internal Affairs Office</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1229,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '2157',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div class="nodeAnchor"><a id="deptOver" name="deptOver"></a></div><hr><h2 class="mB0">Civilian Oversight Office</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1230,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '6',
+			'NodeParentID' => '2158',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="nodeAnchor"><a id="deptSave" name="deptSave"></a></div><hr><h2 class="mB0 slBlueDark">Save Departments Changes</h2>',
+			'NodePromptText' => '<div class="nodeAnchor"><a id="deptSave" name="deptSave"></a></div><h2 class="mB0 slBlueDark">Save Departments Changes</h2>',
 			'NodePromptAfter' => '<style> #blockWrap1330 { margin-top: -30px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1231,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '9',
+			'NodeParentID' => '2159',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<div class="nodeAnchor"><a id="deptEdits" name="deptEdits"></a></div><hr><h2 class="mB0">Past Volunteer Edits</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1232,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '10',
+			'NodeParentID' => '2161',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="nodeAnchor"><a id="deptChecklist" name="deptChecklist"></a></div><hr><h2 class="mB0">Volunteer Checklist & Phone Scripts</h2>'
+			'NodePromptText' => '<div class="nodeAnchor"><a id="deptChecklist" name="deptChecklist"></a></div><h2 class="mB0">Volunteer Checklist & Phone Scripts</h2>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1234,
@@ -26788,7 +26460,7 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1236,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
+			'NodeParentID' => '2154',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '3'
@@ -26903,7 +26575,7 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 			'NodeTree' => '36',
 			'NodeParentID' => '1249',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'Departments:DeptAddressZip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27046,7 +26718,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1268,
 			'NodeTree' => '36',
-			'NodeParentID' => '1273',
+			'NodeParentID' => '2155',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '3'
 		]);
@@ -27085,7 +26758,7 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 			'NodeID' => 1273,
 			'NodeTree' => '36',
 			'NodeParentID' => '1223',
-			'NodeParentOrder' => '3',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Data Manip: New',
 			'NodeResponseSet' => '303',
 			'NodeDataBranch' => 'Oversight',
@@ -27156,8 +26829,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1281,
 			'NodeTree' => '36',
-			'NodeParentID' => '1273',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2155',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '3'
 		]);
@@ -27228,8 +26901,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1290,
 			'NodeTree' => '36',
-			'NodeParentID' => '1273',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '2156',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '1'
 		]);
@@ -27335,7 +27008,7 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 			'NodeTree' => '36',
 			'NodeParentID' => '1300',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'Oversight:OverAddressZip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27467,8 +27140,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1319,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '2157',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page Block'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27492,7 +27165,7 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 			'NodeTree' => '36',
 			'NodeParentID' => '1318',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Zip',
+			'NodePromptText' => 'Zip Code',
 			'NodeDataStore' => 'Oversight:OverAddressZip'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27566,8 +27239,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1330,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '7',
+			'NodeParentID' => '2158',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '3'
 		]);
@@ -27613,8 +27286,8 @@ Please help take care of <span class="slRedLight">priority departments first</sp
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1336,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '8',
+			'NodeParentID' => '2158',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<a href="javascript:;" class="btn btn-primary btn-xl w100 nFormNext" id="nFormNextBtn2">Save All Department Changes</a>',
 			'NodePromptAfter' => '<style> #nFormNextBtn { width: 100%; } </style>
@@ -27634,8 +27307,8 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1338,
 			'NodeTree' => '36',
-			'NodeParentID' => '1223',
-			'NodeParentOrder' => '11',
+			'NodeParentID' => '2161',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '[ pull from blurb ]'
 		]);
@@ -27667,8 +27340,7 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1342,
 			'NodeTree' => '11',
-			'NodeParentID' => '1353',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2097',
 			'NodeType' => 'Instructions Raw'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27716,14 +27388,14 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1776',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a href="/sharing-your-story" class="btn btn-lg btn-primary w100">Share A New Story</a>',
-			'NodePromptAfter' => '<style> #blockWrap1348 { margin-top: 40px; } </style>'
+			'NodePromptText' => '<a href="/share-complaint-or-compliment" class="btn btn-lg btn-primary w100">Share A New Story</a>',
+			'NodePromptAfter' => '<style> #blockWrap[[nID]] { margin-top: 40px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1349,
 			'NodeTree' => '11',
-			'NodeParentID' => '791',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2098',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '[ Recent Volunteer Stats ]'
 		]);
@@ -27755,7 +27427,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '11',
 			'NodeParentID' => '1352',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '8'
+			'NodeCharLimit' => '7'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1354,
@@ -27763,13 +27435,13 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1352',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
+			'NodeCharLimit' => '5'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1355,
 			'NodeTree' => '11',
 			'NodeParentID' => '791',
-			'NodeParentOrder' => '4',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '2'
 		]);
@@ -27778,7 +27450,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '11',
 			'NodeParentID' => '1355',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '8'
+			'NodeCharLimit' => '7'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1357,
@@ -27786,33 +27458,34 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1355',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '4'
+			'NodeCharLimit' => '5'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1358,
 			'NodeTree' => '11',
-			'NodeParentID' => '791',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Instructions Raw'
+			'NodeParentID' => '2098',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<div class="mB10"><h2 class="slBlueDark"><i class="fa fa-users"></i> Department Data Mining Stats</h2></div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1359,
 			'NodeTree' => '11',
-			'NodeParentID' => '791',
-			'NodeParentOrder' => '3',
+			'NodeParentID' => '2095',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1360,
 			'NodeTree' => '11',
-			'NodeParentID' => '1353',
+			'NodeParentID' => '2095',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="p5">&nbsp;</div><h2 class="slBlueDark mB0">Recent Complaint Submissions</h2>'
+			'NodePromptText' => '<div class="mB10"><h2 class="slBlueDark">Recent Complaint Submissions</h2></div>',
+			'NodePromptAfter' => '<style> #mainBody { background: #F5FBFF; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1361,
 			'NodeTree' => '11',
-			'NodeParentID' => '1354',
+			'NodeParentID' => '2096',
 			'NodeType' => 'Instructions Raw'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27964,7 +27637,7 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1418,
 			'NodeTree' => '44',
-			'NodeParentID' => '1417',
+			'NodeParentID' => '2152',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>All Complete Complaints...</h2>
 <p>(Hard-Coded!-)</p>'
@@ -27980,7 +27653,7 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1420,
 			'NodeTree' => '46',
-			'NodeParentID' => '1419',
+			'NodeParentID' => '2153',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>All Incomplete Complaints</h2>
 <p>(Hard-Coded!-)</p>'
@@ -27988,77 +27661,34 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1421,
 			'NodeTree' => '1',
-			'NodeParentID' => '4',
-			'NodeParentOrder' => '6',
+			'NodeParentID' => '2128',
 			'NodeType' => 'Page',
-			'NodePromptNotes' => 'what-vehicles-were-involved',
-			'NodePromptAfter' => 'What Vehicles Were Involved::M::::M::::M::'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1423,
-			'NodeTree' => '1',
-			'NodeParentID' => '1421',
-			'NodeType' => 'Spreadsheet Table',
-			'NodePromptText' => '<h2 class="slBlueDark">Victim & Witness Vehicles</h2>
-<p>During this incident, were any victims or witnesses in any vehicles?</p>',
-			'NodeResponseSet' => 'LoopItems::Civilian Vehicles',
-			'NodeDataBranch' => 'Vehicles',
-			'NodeCharLimit' => '5'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1424,
-			'NodeTree' => '1',
-			'NodeParentID' => '1423',
-			'NodeType' => 'Drop Down',
-			'NodePromptText' => '<nobr>Type of Vehicle</nobr>',
-			'NodeResponseSet' => 'Definition::Transportation Civilian',
-			'NodeDataStore' => 'Vehicles:VehicTransportation'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1425,
-			'NodeTree' => '1',
-			'NodeParentID' => '1421',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Spreadsheet Table',
-			'NodePromptText' => '<h2 class="slBlueDark mTn20">Officer Vehicles</h2>
-<p>During this incident, were any officers in any police vehicles?</p>
-<p>Was a police vehicle unmarked or undercover? This means it looks like a normal vehicle with no badges, graphics, or visible police lights.</p>',
-			'NodeResponseSet' => 'LoopItems::Officer Vehicles',
-			'NodeDataBranch' => 'Vehicles',
-			'NodeCharLimit' => '5'
+			'NodePromptNotes' => 'adding-a-vehicle',
+			'NodePromptAfter' => 'Adding A Vehicle::M::::M::::M::'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1426,
 			'NodeTree' => '1',
-			'NodeParentID' => '1423',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Make',
+			'NodePromptText' => 'Vehicle Make',
 			'NodeDataStore' => 'Vehicles:VehicVehicleMake'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1427,
 			'NodeTree' => '1',
-			'NodeParentID' => '1423',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Model',
+			'NodePromptText' => 'Vehicle Model',
 			'NodeDataStore' => 'Vehicles:VehicVehicleModel'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1428,
-			'NodeTree' => '1',
-			'NodeParentID' => '1423',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Text',
-			'NodePromptText' => 'Description',
-			'NodeDataStore' => 'Vehicles:VehicVehicleDesc'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1429,
 			'NodeTree' => '1',
-			'NodeParentID' => '1423',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '6',
 			'NodeType' => 'Text',
 			'NodePromptText' => '<nobr>License Number</nobr>',
 			'NodeDataStore' => 'Vehicles:VehicVehicleLicence'
@@ -28066,80 +27696,45 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1430,
 			'NodeTree' => '1',
-			'NodeParentID' => '1425',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Drop Down',
-			'NodePromptText' => 'Unmarked',
+			'NodeParentID' => '2141',
+			'NodeType' => 'Radio',
+			'NodePromptText' => 'Was this an <span class="slBlueDark">unmarked or undercover</span> police vehicle? This means it looks like a normal vehicle with no badges, graphics, or visible police lights.',
 			'NodeDataStore' => 'Vehicles:VehicUnmarked'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1431,
 			'NodeTree' => '1',
-			'NodeParentID' => '1425',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Drop Down',
 			'NodePromptText' => '<nobr>Type of Vehicle</nobr>',
-			'NodeResponseSet' => 'Definition::Transportation Officer',
+			'NodeResponseSet' => 'Definition::Transportation',
 			'NodeDataStore' => 'Vehicles:VehicTransportation'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1432,
 			'NodeTree' => '1',
-			'NodeParentID' => '1425',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '5',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Description',
 			'NodeDataStore' => 'Vehicles:VehicVehicleDesc'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1433,
-			'NodeTree' => '1',
-			'NodeParentID' => '1425',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Text',
-			'NodePromptText' => 'License Number',
-			'NodeDataStore' => 'Vehicles:VehicVehicleLicence'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1434,
 			'NodeTree' => '1',
-			'NodeParentID' => '1425',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '1430',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Vehicle Number',
 			'NodeDataStore' => 'Vehicles:VehicVehicleNumber'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1435,
-			'NodeTree' => '1',
-			'NodeParentID' => '4',
-			'NodeParentOrder' => '7',
-			'NodeType' => 'Page',
-			'NodePromptNotes' => 'who-was-in-which-vehicle',
-			'NodePromptAfter' => 'Who Was In Which Vehicle::M::::M::::M::'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1436,
-			'NodeTree' => '1',
-			'NodeParentID' => '1435',
-			'NodeType' => 'Text',
-			'NodePromptText' => '<h2>Who Was In Which Vehicle?</h2>',
-			'NodeInternalNotes' => 'Hard-coded ;)'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1437,
 			'NodeTree' => '22',
-			'NodeParentID' => '1000',
+			'NodeParentID' => '2048',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Page Block',
 			'NodePromptText' => '<br>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1438,
-			'NodeTree' => '12',
-			'NodeParentID' => '793',
-			'NodeParentOrder' => '7',
-			'NodeType' => 'Page Block',
-			'NodeCharLimit' => '2'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1441,
@@ -28151,17 +27746,11 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeDataStore' => 'Civilians:CivIsCreator'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1442,
-			'NodeTree' => '1',
-			'NodeParentID' => '784',
-			'NodeType' => 'Record Full Public',
-			'NodeResponseSet' => '1'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1444,
 			'NodeTree' => '1',
 			'NodeParentID' => '1163',
-			'NodeType' => 'Layout Sub-Response'
+			'NodeType' => 'Layout Sub-Response',
+			'NodeDataBranch' => 'Injuries'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1445,
@@ -28272,7 +27861,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1750',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pT5">&nbsp;</div>'
+			'NodePromptText' => '<div class="pT5"> </div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1466,
@@ -30391,15 +29980,16 @@ You can get up to seven gold stars for each department that you help with, one f
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1756,
 			'NodeTree' => '33',
-			'NodeParentID' => '1213',
+			'NodeParentID' => '1210',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Page Block',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1757,
 			'NodeTree' => '33',
-			'NodeParentID' => '1213',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '1210',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Page Block',
 			'NodeOpts' => '89'
 		]);
@@ -30447,19 +30037,60 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1847',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<center>
-<h1 style="margin-top: 40px;">Our Core Principles</h1>
-<p>We built Open Police Complaints (OPC) atop these principles. Together, they form a just and effective police complaints model.</p>
-<p> </p>
-<p> </p>
-</center>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1782,
-			'NodeTree' => '12',
-			'NodeParentID' => '1438',
-			'NodeParentOrder' => '2',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<br /><br />'
+<h1 style="margin: 60px 0px 40px 0px;">Our Core Principles</h1>
+</center>
+<p>&nbsp;</p>
+<div class="row"><div class="col-lg-5 col-md-12 col-sm-12">
+
+<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-lg-8 col-md-9 col-sm-9">
+<h3>Universality</h3>
+<p>Consistent user experience for all 18,000 police departments in the U.S.</p>
+</div></div>
+
+</div><div class="col-lg-1 col-0">
+</div><div class="col-lg-5 col-md-12 col-sm-12">
+
+<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-lg-8 col-md-9 col-sm-9">
+<h3>Objectivity</h3>
+<p>Neutral, non-leading questions seeking truth and accuracy</p>
+</div></div>
+
+</div><div class="col-lg-1 col-0"></div></div>
+<div class="row"><div class="col-lg-5 col-md-12 col-sm-12">
+
+<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-lg-8 col-md-9 col-sm-9">
+<h3>Transparency</h3>
+<p>Bypass state secrecy laws with uncensored public reporting<br></p>
+</div></div>
+
+</div><div class="col-lg-1 col-0">
+</div><div class="col-lg-5 col-md-12 col-sm-12">
+
+<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
+<i class="fa fa-lock" aria-hidden="true"></i>
+</div></div><div class="col-lg-8 col-md-9 col-sm-9">
+<h3>Privacy</h3>
+<p>Multiple options for how your information is shared with police and with the public</p>
+</div></div>
+
+</div><div class="col-lg-1 col-0">
+</div></div>
+
+<p>&nbsp;</p>
+<center><a href="/principles" class="btn btn-lg btn-secondary" onmouseover="this.style.color=\'#FFF\';" onmouseout="this.style.color=\'#2B3493\';" style="color: #2B3493;">Learn more</a></center>
+<p>&nbsp;</p>
+<p>&nbsp;</p>',
+			'NodePromptAfter' => '<style>
+.bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; background: #FFF; }
+.bigIcoWrap i { font-size: 75px; margin-top: -7px; color: #000; }
+#blockWrap1847 { margin-bottom: -15px; }
+</style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1783,
@@ -30791,8 +30422,8 @@ Departments that use social media are better able to address community needs and
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1809,
 			'NodeTree' => '36',
-			'NodeParentID' => '1273',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2155',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<h3>How Can Complaints Be Submitted AND Investigated?</h3>'
 		]);
@@ -30834,7 +30465,8 @@ Departments that use social media are better able to address community needs and
 			'NodeParentID' => '1852',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p>( Bar Graphs of Criteria )<br></p>'
+			'NodePromptText' => '<p>( Bar Graphs of Criteria )<br></p>',
+			'NodeOpts' => '97'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1819,
@@ -31194,7 +30826,7 @@ Departments should never require that people visit the station to report miscond
 			'NodeID' => 1841,
 			'NodeTree' => '12',
 			'NodeParentID' => '793',
-			'NodeParentOrder' => '9',
+			'NodeParentOrder' => '10',
 			'NodeType' => 'Page Block',
 			'NodeDefault' => '#2B3493;;#FFF;;#EDF8FF;;/openpolice/uploads/ten-rules-still-bg3.jpg;;w100;;P;;left;;auto',
 			'NodeOpts' => '71'
@@ -31251,7 +30883,8 @@ Departments should never require that people visit the station to report miscond
 			'NodeParentID' => '793',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Page Block',
-			'NodeOpts' => '67'
+			'NodeDefault' => '#2B3493;;#FFF;;#2B3493;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1848,
@@ -31268,7 +30901,10 @@ Departments should never require that people visit the station to report miscond
 			'NodeParentID' => '1848',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<center><h4>RELEASE NOTE: We are only accepting a limited number of complaints through our pilot program. But everyone will be able to publish complaints soon!<br></h4></center>',
-			'NodePromptAfter' => '<style> #nLabel1849 { padding: 30px 0px 40px 0px; } #blockWrap1848 { border-bottom: 1px #F5FBFF solid; } </style>'
+			'NodePromptAfter' => '<style>
+#nLabel1849 { padding: 30px 0px 40px 0px; }
+#blockWrap1848 { border-bottom: 1px #F5FBFF solid; }
+</style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1850,
@@ -31297,8 +30933,10 @@ Departments should never require that people visit the station to report miscond
 			'NodeID' => 1853,
 			'NodeTree' => '12',
 			'NodeParentID' => '793',
-			'NodeParentOrder' => '10',
-			'NodeType' => 'Page Block'
+			'NodeParentOrder' => '9',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#EDF8FF;;#000;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1854,
@@ -31335,16 +30973,16 @@ Departments should never require that people visit the station to report miscond
 			'NodeTree' => '12',
 			'NodeParentID' => '1860',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p>( dept accessibility bar graphs )<br></p>'
+			'NodePromptText' => '<p>( dept accessibility us map )<br></p>',
+			'NodeOpts' => '97'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1859,
 			'NodeTree' => '12',
 			'NodeParentID' => '1855',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p><br></p>
-<h2>Police Department Accessibility Grades</h2><p>
-The higher the score, the easier it is for people to share complaints with a department. Unfortunately, most get failing grades by making it too difficult. The good news is that most departments can improve their scores by making a few small changes.<br></p>',
+			'NodePromptText' => '<h2 style="margin-top: 40px;">Police Department <nobr>Accessibility Grades</nobr></h2><p>
+The higher the score, the easier it is for people to share complaints. Most departments fail, but they can improve their scores by making a few small changes.<br></p>',
 			'NodePromptAfter' => '<style>
 #blockWrap1854 { margin-top: 20px; margin-bottom: 20px; }
 #blockWrap1853 { padding-bottom: 50px; }
@@ -31363,14 +31001,23 @@ The higher the score, the easier it is for people to share complaints with a dep
 			'NodeTree' => '12',
 			'NodeParentID' => '1857',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><a class="btn btn-secondary btn-lg" href="/department-accessibility">Learn more</a></p>'
+			'NodePromptText' => '<div id="deptAccMoreGap"> </div><p><a id="btnDeptAccMore" class="btn btn-primary btn-lg" href="/department-accessibility">Learn more</a></p>',
+			'NodePromptAfter' => '<script type="text/javascript"> setTimeout("document.getElementById(\'node1860\').style.background=\'#FFF\'", 100); </script>
+<style>
+a#btnDeptAccMore:link, a#btnDeptAccMore:active, a#btnDeptAccMore:visited { color: #FFF; }
+a#btnDeptAccMore:hover { color: #2B3493; }
+#deptAccMoreGap { height: 80px; }
+@media screen and (max-width: 992px) { #deptAccMoreGap { height: 115px; } }
+@media screen and (max-width: 768px) { #deptAccMoreGap { height: 0px; } }
+</style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1863,
 			'NodeTree' => '21',
 			'NodeParentID' => '1864',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p><span class="fPerc133">(Map of All Police Department Accessibility Scores)</span></p>'
+			'NodePromptText' => '<p><span class="fPerc133">(Map of All Police Department Accessibility Scores)</span></p>',
+			'NodeOpts' => '97'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1864,
@@ -31384,13 +31031,16 @@ The higher the score, the easier it is for people to share complaints with a dep
 			'NodeID' => 1865,
 			'NodeTree' => '12',
 			'NodeParentID' => '793',
-			'NodeParentOrder' => '12',
-			'NodeType' => 'Page Block'
+			'NodeParentOrder' => '11',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#EDF8FF;;#333;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1866,
 			'NodeTree' => '12',
 			'NodeParentID' => '1865',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '3'
 		]);
@@ -31399,7 +31049,7 @@ The higher the score, the easier it is for people to share complaints with a dep
 			'NodeTree' => '12',
 			'NodeParentID' => '1866',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '3'
+			'NodeCharLimit' => '4'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1868,
@@ -31407,7 +31057,7 @@ The higher the score, the easier it is for people to share complaints with a dep
 			'NodeParentID' => '1866',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '3'
+			'NodeCharLimit' => '4'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1869,
@@ -31415,69 +31065,55 @@ The higher the score, the easier it is for people to share complaints with a dep
 			'NodeParentID' => '1866',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '3'
+			'NodeCharLimit' => '4'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1870,
 			'NodeTree' => '12',
-			'NodeParentID' => '1867',
+			'NodeParentID' => '2103',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p> </p>
-<p> </p>
-<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/katryna-smile-crop-sm.jpg" border=0 ></div>
-<p>"I\'ve never used a police complaints software before, but I\'m feelin\' this!"</p>
-<p class="fPerc80">Katryna Lawson</p>',
-			'NodePromptAfter' => '<style> #blockWrap1107 { margin-bottom: 0px; } #blockWrap1865 {.margin: 50px 0px; } </style>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1871,
-			'NodeTree' => '12',
-			'NodeParentID' => '1866',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Layout Column',
-			'NodeCharLimit' => '3'
+			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/katryna-smile-crop-sm.jpg" border=0 ></div>
+<div class="bigQuote"><span class="slBlueDark">”</span></div>
+<div class="quoteTxt"><p>I\'ve never used a police complaints software before — but I\'m feelin\' this!</p></div>
+<p><b class="slBlueDark">Katryna Lawson</b><br />OpenPolice.org User</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1872,
 			'NodeTree' => '12',
-			'NodeParentID' => '1868',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p> </p>
-<p> </p>
-<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/norm-stamper.jpeg" border=0 ></div>
-<p>"Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur facilisis a mi a gravida. Ut egestas felis in elit convallis tristique."</p>
-<p class="fPerc80">Norm Stamper</p>'
+			'NodeParentID' => '2102',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/norm-stamper.jpeg" border=0 ></div>
+<div class="bigQuote"><span class="slBlueDark">”</span></div>
+<div class="quoteTxt"><p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur facilisis a mi a gravida. Ut egestas felis in elit convallis tristique.</p></div>
+<p><b class="slBlueDark">Norm Stamper</b><br />Former Chief of Police, Seattle PD</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1873,
 			'NodeTree' => '12',
-			'NodeParentID' => '1871',
-			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p> </p>
-<p> </p>
-<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/billy-murphy.jpeg" border=0 ></div>
-<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sodales erat non ipsum ultricies efficitur."</p>
-<p class="fPerc80">Billy Murphy</p>'
+			'NodeParentID' => '1865',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<h1>What others say</h1>',
+			'NodePromptAfter' => '<style>
+#blockWrap1107 { margin-bottom: 0px; }
+#blockWrap1865 {.margin: 50px 0px; } 
+#node1873 { padding: 50px 0px 30px 0px; }
+#node1865 { padding-bottom: 50px; }
+.bigQuote { font-size: 140px; line-height: 70px; margin: -10px 0px -45px 0px; font-family: Georgia, serif; }
+.quoteTxt { min-height: 90px; }
+@media screen and (max-width: 992px) { .quoteTxt { min-height: 140px; } }
+@media screen and (max-width: 768px) { .quoteTxt { min-height: 80px; } }
+@media screen and (max-width: 480px) { .quoteTxt { min-height: 80px; } }
+</style>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1874,
 			'NodeTree' => '12',
-			'NodeParentID' => '1869',
+			'NodeParentID' => '2101',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p> </p>
-<p> </p>
-<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/cynthia-conti-cook1.jpeg" border=0 ></div>
-<p>"Police secrecy laws create a void where there should be public transparency. Open Police Complaints is building a bridge across that void."</p>
-<p class="fPerc80">Cynthia Conti-Cook</p>'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1875,
-			'NodeTree' => '12',
-			'NodeParentID' => '1865',
-			'NodeParentOrder' => '1',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p> </p>
-<hr>'
+			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/cynthia-conti-cook1.jpeg" border=0 ></div>
+<div class="bigQuote"><span class="slBlueDark">”</span></div>
+<div class="quoteTxt"><p>OPC helps people thoroughly document police misconduct. This is vital for making this data transparent and accessible to the public.</p></div>
+<p><b class="slBlueDark">Cynthia Conti-Cook</b><br />Staff Attorney, New York Legal Aid Society</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1876,
@@ -31682,7 +31318,7 @@ We encourage your office to promptly investigate it. If possible and appropriate
 complainant to confirm their identity and corroborate their testimony. Then, within a reasonable period of time, our 
 users expect to receive a final disposition letter that includes the details of your investigation\'s findings.</p>
 <p>We encourage users to upload investigation findings and attach them to their complaints. This allows OpenPolice.org 
-visitors to see which allegations were considered sustained or unfound.</p>
+visitors to see which allegations were sustained or unfounded.</p>
 <p>If your oversight agency creates an authenticated user account on OpenPolice.org, you will also be able to instantly 
 upload the findings of your investigations. Participating in this clearinghouse for complaints is a great way to engage 
 with the community and build trust.</p>
@@ -31745,8 +31381,7 @@ content our users\' post to this site.</p>
 <li>Requests must include the name and contact information of both subject officers and their attorneys.</li>
 </ul>
 <p>If your request fulfills all the above requirements, we will submit it to our pro bono legal team for review.</p>
-</div>
-',
+</div>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -31822,7 +31457,7 @@ function bodyOnScroll() {
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1893,
 			'NodeTree' => '22',
-			'NodeParentID' => '1000',
+			'NodeParentID' => '2048',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<h2 class="slBlueDark">Your Complaints & Compliments</h2>'
 		]);
@@ -32117,7 +31752,7 @@ are provided in exchange for this contribution.</p>'
 			'NodeParentID' => '1921',
 			'NodeType' => 'Page',
 			'NodePromptNotes' => 'info',
-			'NodePromptAfter' => 'Attorney Profile::M::::M::::M::',
+			'NodePromptAfter' => 'Partner Profile::M::::M::::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32130,11 +31765,10 @@ are provided in exchange for this contribution.</p>'
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1924,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '1922',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div class="m0"></div><h2 class="m0 slBlueDark">Edit Attorney Profile</h2>',
-			'NodePromptAfter' => '<style> #skinnySurv { margin-top: -33px; } #nLabel1924 { margin-bottom: -30px; } </style>
+			'NodePromptText' => '<div class="m0"></div><h2 class="m0 slBlueDark">Edit Partner Profile</h2>',
+			'NodePromptAfter' => '<style> #blockWrap1924 { margin-top: -60px; } #nLabel1924 { margin-bottom: -30px; } </style>
 <script type="text/javascript"> 
 function loadAttProf() {
   document.getElementById(\'nFormNextBtn\').innerHTML=\'Save Profile\';
@@ -32145,8 +31779,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1925,
 			'NodeTree' => '58',
-			'NodeParentID' => '1958',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2071',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Publicly-visible Name',
 			'NodeDataStore' => 'PersonContact:PrsnNickname',
@@ -32155,8 +31789,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1926,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '2073',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Drop Down',
 			'NodePromptText' => 'Status of Profile',
 			'NodeDataStore' => 'Partners:PartStatus'
@@ -32164,8 +31798,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1927,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '7',
+			'NodeParentID' => '2081',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Company/Firm Name',
 			'NodeDataStore' => 'Partners:PartCompanyName'
@@ -32173,8 +31807,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1928,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '8',
+			'NodeParentID' => '2081',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Company/Firm Website',
 			'NodeDataStore' => 'Partners:PartCompanyWebsite'
@@ -32182,8 +31816,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1929,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '6',
+			'NodeParentID' => '2081',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Attorney Title',
 			'NodeDataStore' => 'Partners:PartTitle'
@@ -32191,8 +31825,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1930,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '12',
+			'NodeParentID' => '2081',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Attorney Online Bio',
 			'NodeDataStore' => 'Partners:PartBioUrl'
@@ -32201,6 +31835,7 @@ setTimeout("loadAttProf()", 1);
 			'NodeID' => 1931,
 			'NodeTree' => '58',
 			'NodeParentID' => '1922',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Layout Row',
 			'NodeCharLimit' => '2'
 		]);
@@ -32222,8 +31857,7 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1934,
 			'NodeTree' => '58',
-			'NodeParentID' => '1933',
-			'NodeParentOrder' => '1',
+			'NodeParentID' => '2082',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h3 class="m0 disIn">Cases I\'d Like To Handle</h3><small class="rqd mL10">*required</small>
 <p>Create one or more case profiles to filter your referral search results.</p><p>For each case profile, a matching complaint must meet <b>all</b> of your selected conditions. Select one condition at a time with the dropdowns below.<br></p>'
@@ -32243,8 +31877,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1936,
 			'NodeTree' => '58',
-			'NodeParentID' => '1933',
-			'NodeParentOrder' => '2',
+			'NodeParentID' => '2082',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Loop Cycle',
 			'NodeResponseSet' => 'LoopItems::Case Types',
 			'NodeDataBranch' => 'PartnerCaseTypes'
@@ -32252,24 +31886,27 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1937,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '4',
+			'NodeParentID' => '2071',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Text',
-			'NodePromptText' => '<div class="pull-right slBlueDark">https://openpolice.org/attorney/</div>Attorney URL',
-			'NodeDataStore' => 'Partners:PartSlug'
+			'NodePromptText' => 'Partner URL Slug
+<div class="mTn5 mBn5">Current: [[PartnerUrl]]</div>',
+			'NodeDefault' => 'partner-url',
+			'NodeDataStore' => 'Partners:PartSlug',
+			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1938,
 			'NodeTree' => '60',
 			'NodeType' => 'Page',
-			'NodePromptNotes' => 'manage-attorneys',
-			'NodePromptAfter' => 'Manage Attorneys::M::::M::::M::',
+			'NodePromptNotes' => 'manage-partners',
+			'NodePromptAfter' => 'Manage Partners::M::::M::::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1939,
 			'NodeTree' => '60',
-			'NodeParentID' => '1938',
+			'NodeParentID' => '2151',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>Welcome to Manage Attorneys.</h2>
 <p>Edit this node to fill in your page! This node could be your entire page, or just one little component.</p>'
@@ -32278,10 +31915,8 @@ setTimeout("loadAttProf()", 1);
 			'NodeID' => 1940,
 			'NodeTree' => '58',
 			'NodeParentID' => '1932',
-			'NodeParentOrder' => '11',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h3>Attorney Public Contact Info</h3>'
+			'NodePromptText' => '<h3>Public Contact Info</h3>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1941,
@@ -32289,7 +31924,7 @@ setTimeout("loadAttProf()", 1);
 			'NodeParentID' => '1953',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<p>&nbsp;</p>
-<h3>Attorney Private Contact Info</h3>'
+<h3>Private Contact Info</h3>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1942,
@@ -32330,7 +31965,7 @@ setTimeout("loadAttProf()", 1);
 			'NodeID' => 1946,
 			'NodeTree' => '58',
 			'NodeParentID' => '1932',
-			'NodeParentOrder' => '13',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Data Manip: Wrap',
 			'NodeDataBranch' => 'PersonContact'
 		]);
@@ -32376,8 +32011,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1951,
 			'NodeTree' => '58',
-			'NodeParentID' => '1933',
-			'NodeParentOrder' => '3',
+			'NodeParentID' => '2082',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
 			'NodePromptText' => '<p> </p>
 <h3>Referral Alert Options</h3>',
@@ -32396,8 +32031,8 @@ setTimeout("loadAttProf()", 1);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1953,
 			'NodeTree' => '58',
-			'NodeParentID' => '1933',
-			'NodeParentOrder' => '5',
+			'NodeParentID' => '1932',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Data Manip: Wrap',
 			'NodeDataBranch' => 'PersonContact'
 		]);
@@ -32417,7 +32052,7 @@ setTimeout("loadAttProf()", 1);
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<center><img src="/openpolice/logo-ico-loading-anim.gif" border=0 class="round10 mT20 mB20" style="width: 75px;" ></center>
 <script type="text/javascript">
-setTimeout("window.location=\'/dash/manage-attorneys\'", 5);
+setTimeout("window.location=\'/dash/manage-partners\'", 5);
 </script>
 <style> #nodeSubBtns, #sessMgmtWrap { display: none; } </style>'
 		]);
@@ -32425,7 +32060,7 @@ setTimeout("window.location=\'/dash/manage-attorneys\'", 5);
 			'NodeID' => 1956,
 			'NodeTree' => '58',
 			'NodeParentID' => '1954',
-			'NodeParentOrder' => '1',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<center><img src="/openpolice/logo-ico-loading-anim.gif" border=0 class="round10 mT20 mB20" style="width: 75px;" ></center>
 <script type="text/javascript">
@@ -32447,8 +32082,7 @@ $(document).ready(function(){
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1958,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '3',
+			'NodeParentID' => '2081',
 			'NodeType' => 'Data Manip: Wrap',
 			'NodeDataBranch' => 'PersonContact'
 		]);
@@ -32467,7 +32101,7 @@ $(document).ready(function(){
 			'NodeTree' => '56',
 			'NodeParentID' => '1897',
 			'NodeType' => 'Page Block',
-			'NodeDefault' => '#2B3493;;#FCFEFF;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeDefault' => '#2B3493;;#FCFEFF;;#2B3493;;;;w100;;N;;left;;auto',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32495,7 +32129,7 @@ $(document).ready(function(){
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1964,
 			'NodeTree' => '58',
-			'NodeParentID' => '1933',
+			'NodeParentID' => '2073',
 			'NodeType' => 'U.S. States',
 			'NodePromptText' => '<h3 class="disIn">Licensed In</h3>',
 			'NodeResponseSet' => 'Definition::--STATES--',
@@ -32506,8 +32140,8 @@ $(document).ready(function(){
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1965,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '9',
+			'NodeParentID' => '2071',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Long Text',
 			'NodePromptText' => 'Bio Paragraph',
 			'NodeDataStore' => 'Partners:PartBio'
@@ -32515,20 +32149,11 @@ $(document).ready(function(){
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1966,
 			'NodeTree' => '58',
-			'NodeParentID' => '1932',
-			'NodeParentOrder' => '10',
+			'NodeParentID' => '2071',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
 			'NodePromptText' => 'Profile Picture URL',
 			'NodeDataStore' => 'Partners:PartPhotoUrl'
-		]);
-		DB::table('SL_Node')->insert([
-			'NodeID' => 1967,
-			'NodeTree' => '58',
-			'NodeParentID' => '1933',
-			'NodeParentOrder' => '4',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a href="javascript:;" class="fR btn btn-primary btn-xl nFormNext">Save Profile</a>',
-			'NodeResponseSet' => '1'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1968,
@@ -32719,6 +32344,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h1 class="slBlueDark">Team Resources</h1>
 <p><nobr><a href="#daily-checklist">Daily Admin Checklist</a></nobr> - <nobr><a href="#find-complainants">Find Complainants</a></nobr> - <nobr><a href="#find-attorneys">Find Attorneys</a></nobr></p>',
+			'NodePromptAfter' => '<style> #mainBody { background: #F5FBFF; } </style>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32767,30 +32393,30 @@ James became fascinated with civil liberties while studying political science in
 			'NodeType' => 'Page',
 			'NodePromptNotes' => 'prepare-complaint-for-attorney',
 			'NodePromptAfter' => 'Preparing Your Complaint for an Attorney::M::::M::::M::',
+			'NodeResponseSet' => '58',
+			'NodeDataBranch' => 'Partners',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1993,
 			'NodeTree' => '62',
 			'NodeParentID' => '1994',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">Preparing Your Complaint for an Attorney</h2>
-<div style="margin-top: 20px; padding: 20px 20px 200px 20px; background: #f6f6f6; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will allow you to ...</h3>
+			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will help you to ...</h3>
 <ul>
-<li>Prepare a complete and professional police misconduct report.</li>
+<li>Prepare and save a complete police misconduct report.</li>
 <li>Upload photos, documents, video, and other evidence.</li>
-<li>Get matched with civil rights attorneys.</li>
-<li>Print, email, and download your full complaint, then delete the details from our servers.</li>
-<li>You will not file your report with any police oversight agencies now.</li>
-<li>You will not publish your full complaint online.</li>
+<li>Get matched with legal help.</li>
 </ul>
-<p>By completing this process, you must confirm that, to the best of your knowledge, the information in this complaint is truthful and accurate.</p>
+<p>By completing this process, you confirm that, to the best of your knowledge, the information in this complaint is truthful and accurate.</p>
 <div class="w100" style="height: 30px;"></div>
 <h3>Your Privacy:</h3>
-<p>When you prepare your new complaint for an attorney, you will should download and email your finished complaint to yourself. Once you — and your attorney, if a match is found — have your complaint\'s full details, it will be \'anonymized\' on our servers.</p>
-<p>Anonymizing means to permanently delete all open-ended questions, which might possibly reveal identities of people involved in the incident. If you really need to, you can also choose to delete everything about your complaint from our servers.</p>
-</div>'
+<p>After you complete your complaint, you can download it, print it, or email it. For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
+<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. This will publish your full story and file it with a police oversight agency.</p>
+</div>',
+			'NodePromptAfter' => '<style> #node1993 { padding: 0px; } </style>',
+			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1994,
@@ -32803,32 +32429,24 @@ James became fascinated with civil liberties while studying political science in
 			'NodeID' => 1995,
 			'NodeTree' => '62',
 			'NodeParentID' => '1994',
-			'NodeParentOrder' => '1',
+			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-primary nFldBtn mT10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a></div>
-<div class="col-md-2"></div>
-</div>
-<div class="row">
-<div class="col-md-2"></div>
-<div class="col-md-8"><a class="btn btn-lg btn-secondary nFldBtn mT10" href="[[DOMAIN]]/login">Log Back In</a></div>
-<div class="col-md-2"></div>
-</div>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>
+<a class="btn btn-xl btn-secondary nFldBtn mT10 mB10" href="[[DOMAIN]]/login">Log Back In</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1996,
 			'NodeTree' => '62',
 			'NodeParentID' => '1994',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a class="btn btn-xl btn-primary w100 mT20" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary w100 mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Share My Story</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1997,
 			'NodeTree' => '62',
 			'NodeParentID' => '1994',
-			'NodeParentOrder' => '3',
+			'NodeParentOrder' => '4',
 			'NodeType' => 'Incomplete Sess Check',
 			'NodeResponseSet' => '1'
 		]);
@@ -32966,7 +32584,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeParentID' => '793',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Page Block',
-			'NodeDefault' => '#2B3493;;#EDF8FF;;#EDF8FF;;;;w100;;N;;left;;auto',
+			'NodeDefault' => '#EDF8FF;;#333;;#2B3493;;;;w100;;N;;left;;auto',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32976,15 +32594,9 @@ James became fascinated with civil liberties while studying political science in
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<center><h1 style="margin: 40px 0px 30px 0px;">Moving You to <nobr>the Center</nobr> of <nobr>Police Accountability</nobr></h1>
 <iframe id="homeDemoVid" width="100%" height="460" src="https://www.youtube-nocookie.com/embed/Hn_KOQvWEmU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
-<div class="p5"><p>&nbsp;</p></div>
+<div class="p5"><p> </p></div>
 </center>',
-			'NodePromptAfter' => '<style>
-#homeDemoVid { width: 100%; max-width: 820px; height: 460px; box-shadow: 0px 5px 20px #222; }
-#blockWrap2010 { margin-top: -16px; }
-@media screen and (max-width: 992px) { #homeDemoVid { height: 395px; } }
-@media screen and (max-width: 768px) { #homeDemoVid { height: 270px; } }
-@media screen and (max-width: 480px) { #homeDemoVid { height: 200px; } }
-</style>'
+			'NodeOpts' => '97'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2012,
@@ -33028,61 +32640,9 @@ James became fascinated with civil liberties while studying political science in
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 2017,
-			'NodeTree' => '1',
-			'NodeParentID' => '453',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<h2 class="slBlueDark">Personal Privacy Options</h2>
-<p>You control who has access to you private information. That\'s why we\'ve created three unique options for how we collect and share their data.</p>
-
-<div class="p15"><div class="row">
-<div class="col-6"></div>
-<div class="col-6">
-<div><label class="finger"><input type="radio" name="bob"> <b>Anonymous</b></label></div>
-<div class="w100 taC pT5 pB5"><label class="finger"><input type="radio" name="bob"> <b>No Names Public</b></label></div>
-<div class="w100 taR pB5"><label class="finger"><input type="radio" name="bob"> <b>Full Transparency</b></label></div>
-</div></div>
-
-<div class="p15 row2"><div class="row">
-<div class="col-6">OPC will file and submit all information you provide to the right oversight agency to investigate your complaint.</div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-</div></div>
-
-<div class="p15"><div class="row">
-<div class="col-6">OPC will NOT publish anybody’s private information such as addresses, phone numbers, and emails.</div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-</div></div>
-
-<div class="p15 row2"><div class="row">
-<div class="col-6">OPC will NOT request any personal information about you. Neither OPC staff nor investigators will be able to contact you.</div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-</div></div>
-
-<div class="p15"><div class="row">
-<div class="col-6">OPC will publish the names of all civilians and police officers on OpenPolice.org. This can include badge numbers.</div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-</div></div>
-
-<div class="p15 row2"><div class="row">
-<div class="col-6">OPC will publish your full written story and survey answers.</div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-times slRedDark" aria-hidden="true"></i></div>
-<div class="col-2 taC icoBig"><i class="fa fa-check slBlueDark" aria-hidden="true"></i></div>
-</div></div>'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 2018,
 			'NodeTree' => '1',
 			'NodeParentID' => '453',
-			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
 			'NodePromptText' => '<h2 class="slBlueDark">Personal Privacy Options</h2>
 <p>You have three options for how we collect your data and who we share it with. No matter which one you choose, <b>we will never publish anyone\'s private information</b>. (This includes addresses, phone numbers, emails, etc.)</p>',
@@ -33100,7 +32660,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeID' => 2019,
 			'NodeTree' => '1',
 			'NodeParentID' => '453',
-			'NodeParentOrder' => '2',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<a href="/complaint-privacy-options" target="_blank"><i class="fa fa-external-link mL10" aria-hidden="true"></i> Read more about your privacy options</a>'
 		]);
@@ -33110,6 +32670,1162 @@ James became fascinated with civil liberties while studying political science in
 			'NodeParentID' => '1267',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<h3 style="margin-bottom: -32px;">Primary Contact:</h3>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2021,
+			'NodeTree' => '1',
+			'NodeParentID' => '488',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Stops',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2022,
+			'NodeTree' => '1',
+			'NodeParentID' => '505',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Searches',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2023,
+			'NodeTree' => '1',
+			'NodeParentID' => '512',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Arrests',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2026,
+			'NodeTree' => '1',
+			'NodeParentID' => '2021',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'Stops'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2027,
+			'NodeTree' => '1',
+			'NodeParentID' => '2022',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'Searches'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2028,
+			'NodeTree' => '1',
+			'NodeParentID' => '500',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Searches',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2029,
+			'NodeTree' => '1',
+			'NodeParentID' => '2028',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'Searches'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2030,
+			'NodeTree' => '1',
+			'NodeParentID' => '2023',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'Arrests'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2031,
+			'NodeTree' => '1',
+			'NodeParentID' => '148',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'Force'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2032,
+			'NodeTree' => '1',
+			'NodeParentID' => '151',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'gold-types-of-force',
+			'NodePromptAfter' => 'Gold Types of Force::M::::M::::M::'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2033,
+			'NodeTree' => '1',
+			'NodeParentID' => '204',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2034,
+			'NodeTree' => '1',
+			'NodeParentID' => '212',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2035,
+			'NodeTree' => '1',
+			'NodeParentID' => '222',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2036,
+			'NodeTree' => '1',
+			'NodeParentID' => '234',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2038,
+			'NodeTree' => '1',
+			'NodeParentID' => '2033',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Stops',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2039,
+			'NodeTree' => '1',
+			'NodeParentID' => '2034',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Searches',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2040,
+			'NodeTree' => '1',
+			'NodeParentID' => '2035',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Force',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2041,
+			'NodeTree' => '1',
+			'NodeParentID' => '1172',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Arrests',
+			'NodeDataBranch' => 'EventSequence',
+			'NodeDataStore' => 'EventSequence:EveType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2042,
+			'NodeTree' => '1',
+			'NodeParentID' => '742',
+			'NodeType' => 'Layout Sub-Response'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2043,
+			'NodeTree' => '1',
+			'NodeParentID' => '2042',
+			'NodeType' => 'Checkbox',
+			'NodeResponseSet' => 'LoopItems::Victims',
+			'NodeDataStore' => 'LinksCivilianEvents:LnkCivEveCivID'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2044,
+			'NodeTree' => '1',
+			'NodeParentID' => '2032',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Checkbox',
+			'NodePromptText' => 'Which types of force were used by an officer?',
+			'NodeResponseSet' => 'Definition::Force Type',
+			'NodeDataStore' => 'Force:ForType',
+			'NodeOpts' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2045,
+			'NodeTree' => '1',
+			'NodeParentID' => '2032',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="slBlueDark">More about the Use of Force:</h2>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2047,
+			'NodeTree' => '1',
+			'NodeParentID' => '2031',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2048,
+			'NodeTree' => '22',
+			'NodeParentID' => '1000',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2049,
+			'NodeTree' => '1',
+			'NodeParentID' => '457',
+			'NodeParentOrder' => '5',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDefault' => 'Y',
+			'NodeDataBranch' => 'Civilians',
+			'NodeDataStore' => 'Civilians:CivIsCreator'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2050,
+			'NodeTree' => '1',
+			'NodeParentID' => '1170',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2052,
+			'NodeTree' => '1',
+			'NodeParentID' => '520',
+			'NodeType' => 'Data Manip: New',
+			'NodeDataBranch' => 'InjuryCare'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2053,
+			'NodeTree' => '1',
+			'NodeParentID' => '2054',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'InjuryCare'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2054,
+			'NodeTree' => '1',
+			'NodeParentID' => '410',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'gold-emergency-staff',
+			'NodePromptAfter' => 'Gold Emergency Staff::M::::M::::M::'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2055,
+			'NodeTree' => '1',
+			'NodeParentID' => '2054',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Loop Cycle',
+			'NodeResponseSet' => 'LoopItems::Victims',
+			'NodeDataBranch' => 'Civilians'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2056,
+			'NodeTree' => '1',
+			'NodeParentID' => '2055',
+			'NodeType' => 'Data Manip: Wrap',
+			'NodeDataBranch' => 'InjuryCare'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2057,
+			'NodeTree' => '1',
+			'NodeParentID' => '2054',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Final Medical Care Details</h2>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2058,
+			'NodeTree' => '1',
+			'NodeParentID' => '400',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2059,
+			'NodeTree' => '65',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'org',
+			'NodePromptAfter' => 'Organization Profile::M::::M::::M::',
+			'NodeResponseSet' => '58',
+			'NodeDataBranch' => 'Partners',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2060,
+			'NodeTree' => '65',
+			'NodeParentID' => '2059',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Welcome to Organization.</h2>
+<p>Edit this node to fill in your page! This node could be your entire page, or just one little component.</p>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2061,
+			'NodeTree' => '65',
+			'NodeParentID' => '2059',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#2B3493;;#FCFEFF;;#2B3493;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '71'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2062,
+			'NodeTree' => '65',
+			'NodeParentID' => '2061',
+			'NodeType' => 'Instructions Raw'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2063,
+			'NodeTree' => '66',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'preparing-complaint-for-org',
+			'NodePromptAfter' => 'Preparing Your Complaint for an Organization::M::::M::::M::',
+			'NodeResponseSet' => '58',
+			'NodeDataBranch' => 'Partners',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2064,
+			'NodeTree' => '66',
+			'NodeParentID' => '2065',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will help you to ...</h3>
+<ul>
+<li>Prepare and save a complete police misconduct report.</li>
+<li>File your report with the right police oversight agency.</li>
+<li>Get matched with legal help.</li>
+<li>Publish your complaint online and share on social media.</li>
+<li>Upload photos, documents, video, and other evidence.</li>
+</ul>
+<p>By completing this process, you confirm that, to the best of your knowledge, the information in this complaint is truthful and accurate.</p>
+<div class="w100" style="height: 10px;"></div>
+<h3>Your Privacy Options:</h3>
+<p>When you begin your new complaint, you\'ll have three privacy options to control what personal information you want to share.</p>
+<ul>
+<li>
+<b style="font-weight: bold;">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
+<li>
+<b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
+<li>
+<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
+</ul></div>',
+			'NodePromptAfter' => '<style> #node2064 { padding: 0px; } </style>',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2065,
+			'NodeTree' => '66',
+			'NodeParentID' => '2063',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '67'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2066,
+			'NodeTree' => '66',
+			'NodeParentID' => '2065',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Share My Story</a>
+<a class="btn btn-xl btn-secondary nFldBtn mT10 mB10" href="[[DOMAIN]]/login">Log Back In</a>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2067,
+			'NodeTree' => '66',
+			'NodeParentID' => '2065',
+			'NodeParentOrder' => '3',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2068,
+			'NodeTree' => '66',
+			'NodeParentID' => '2065',
+			'NodeParentOrder' => '4',
+			'NodeType' => 'Incomplete Sess Check',
+			'NodeResponseSet' => '1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2069,
+			'NodeTree' => '66',
+			'NodeParentID' => '2065',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<p>&nbsp;</p>
+<h2 class="slBlueDark">Preparing Your Story for an Organization</h2>
+<br />'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2070,
+			'NodeTree' => '58',
+			'NodeParentID' => '1922',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Layout Row',
+			'NodeCharLimit' => '3'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2071,
+			'NodeTree' => '58',
+			'NodeParentID' => '2070',
+			'NodeType' => 'Layout Column',
+			'NodeCharLimit' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2072,
+			'NodeTree' => '58',
+			'NodeParentID' => '2070',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Layout Column',
+			'NodeCharLimit' => '1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2073,
+			'NodeTree' => '58',
+			'NodeParentID' => '2070',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Layout Column',
+			'NodeCharLimit' => '6'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2074,
+			'NodeTree' => '58',
+			'NodeParentID' => '2071',
+			'NodeType' => 'Drop Down',
+			'NodePromptText' => 'Type of Partner',
+			'NodeResponseSet' => 'Definition::Partner Types',
+			'NodeDataStore' => 'Partners:PartType',
+			'NodeOpts' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2075,
+			'NodeTree' => '58',
+			'NodeParentID' => '2073',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Drop Down',
+			'NodePromptText' => '<h3 class="disIn">Operating In</h3>',
+			'NodeResponseSet' => 'Definition::--STATES--',
+			'NodeDataStore' => 'PartnerStates:PrtStaState',
+			'NodeOpts' => '53'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2081,
+			'NodeTree' => '58',
+			'NodeParentID' => '1932',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2082,
+			'NodeTree' => '58',
+			'NodeParentID' => '1933',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2083,
+			'NodeTree' => '58',
+			'NodeParentID' => '2073',
+			'NodeParentOrder' => '5',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2084,
+			'NodeTree' => '58',
+			'NodeParentID' => '1932',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2085,
+			'NodeTree' => '58',
+			'NodeParentID' => '2083',
+			'NodeType' => 'Drop Down',
+			'NodePromptText' => '<h3 class="m0 disIn">Capacities to Help Complainants</h3><small class="rqd mL10">*required</small>
+<p>This helps complainants, OPC staff, and other organizations find the right help for each situation.<br></p>',
+			'NodeResponseSet' => 'Definition::Organization Capacities',
+			'NodeDataStore' => 'PartnerCapac:PrtCapCapacity',
+			'NodeOpts' => '53'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2086,
+			'NodeTree' => '58',
+			'NodeParentID' => '2084',
+			'NodeType' => 'Text',
+			'NodePromptText' => 'Organization Website',
+			'NodeDataStore' => 'Partners:PartCompanyWebsite'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2087,
+			'NodeTree' => '58',
+			'NodeParentID' => '2073',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Text',
+			'NodePromptText' => 'Description of Service Area',
+			'NodeDataStore' => 'Partners:PartGeoDesc'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2088,
+			'NodeTree' => '58',
+			'NodeParentID' => '2084',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Text',
+			'NodePromptText' => 'Website About Page',
+			'NodeDataStore' => 'Partners:PartBioUrl'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2089,
+			'NodeTree' => '58',
+			'NodeParentID' => '2083',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Long Text',
+			'NodePromptText' => 'Specific instructions about what types of complainants should share their story with this organization.',
+			'NodeDataStore' => 'Partners:PartHelpReqs'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2090,
+			'NodeTree' => '67',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'staff-search'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2091,
+			'NodeTree' => '67',
+			'NodeParentID' => '2090',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<center><h1 style="margin-top: 50px;">Coming Soon</h1></center>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2092,
+			'NodeTree' => '68',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'partner-search'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2093,
+			'NodeTree' => '68',
+			'NodeParentID' => '2092',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<center><h1 style="margin-top: 50px;">Coming Soon</h1></center>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2094,
+			'NodeTree' => '70',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'share-complaint-or-compliment',
+			'NodePromptAfter' => 'Complaint or Compliment: Sharing Your Story::M::::M::::M::',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2095,
+			'NodeTree' => '11',
+			'NodeParentID' => '1353',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2096,
+			'NodeTree' => '11',
+			'NodeParentID' => '1354',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2097,
+			'NodeTree' => '11',
+			'NodeParentID' => '1353',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2098,
+			'NodeTree' => '11',
+			'NodeParentID' => '1356',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2099,
+			'NodeTree' => '11',
+			'NodeParentID' => '1357',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2100,
+			'NodeTree' => '11',
+			'NodeParentID' => '2099',
+			'NodeType' => 'Instructions Raw'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2101,
+			'NodeTree' => '12',
+			'NodeParentID' => '1867',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#FFF;;#333;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '6319'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2102,
+			'NodeTree' => '12',
+			'NodeParentID' => '1869',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#FFF;;#333;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '6319'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2103,
+			'NodeTree' => '12',
+			'NodeParentID' => '1868',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#FFF;;#333;;#416CBD;;;;w100;;N;;left;;auto',
+			'NodeOpts' => '6319'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2104,
+			'NodeTree' => '71',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'features',
+			'NodePromptAfter' => 'Features::M::::M::::M::',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2105,
+			'NodeTree' => '71',
+			'NodeParentID' => '2109',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<p>&nbsp;</p><h1>Our Core Features</h1>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">Prepare and save a complete police misconduct report</h3>
+<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\'re helping to establish national police complaint data standards.</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">File your report with the right police oversight agency</h3>
+<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">Get matched with civil rights attorneys</h3>
+<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OPC enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/openness-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">Publish your complaint online and share on social media</h3>
+<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\'s the <i>opposite</i> of openness — because openness requires <i>accessibility</i>. OPC is always easy to use and easy to understand. And, of course, we’re always open to receive your complaint!</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/empowered-arm-2b-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">Upload photos, documents, video, and other evidence</h3>
+<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OPC users. We keep in touch because we care about how well — or how poorly — your department responds to your complaint. Your story is too important to be ignored!</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-9">
+<h3 class="slBlueDark">Select from three privacy options</h3>
+<p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OPC helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
+</div></div>
+<p>&nbsp;</p>
+<p><a href="/principles" class="btn btn-xl btn-primary w100">Our Core Principles</a></p>
+<p>&nbsp;</p>',
+			'NodePromptAfter' => '<style> .bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; }</style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2106,
+			'NodeTree' => '72',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'principles',
+			'NodePromptAfter' => 'Principles::M::::M::::M::',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2107,
+			'NodeTree' => '72',
+			'NodeParentID' => '2108',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Universality</h1>
+<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\'re helping to establish national police complaint data standards.</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Objectivity</h1>
+<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Transparency</h1>
+<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OPC enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<i class="fa fa-lock" aria-hidden="true"></i>
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Privacy</h1>
+<p>You choose how your complaint information is shared with police and with the public. For example, you can choose to be anonymous. But no matter which option you choose, we will never publish anyone’s private information. Learn more about your privacy options.
+<a href="/complaint-privacy-options">Read more about privacy options</a></p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/openness-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Openness</h1>
+<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\'s the <i>opposite</i> of openness — because openness requires <i>accessibility</i>. OPC is always easy to use and easy to understand. And, of course, we’re always open to receive your complaint!</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/empowered-arm-2b-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Empowerment</h1>
+<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OPC users. We keep in touch because we care about how well — or how poorly — your department responds to your complaint. Your story is too important to be ignored!</p>
+</div></div>
+<p>&nbsp;</p>
+<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
+<img src="/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg" style="height: 65px;" border="0">
+</div></div><div class="col-sm-9 col-8">
+<h1 class="slBlueDark">Completeness</h1>
+<p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OPC helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
+</div></div>
+<!--
+<p>&nbsp;</p>
+<p><center><a href="/features" class="btn btn-lg btn-primary">Our Key Features</a></center></p>
+<p>&nbsp;</p>
+-->',
+			'NodePromptAfter' => '<style>
+.bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; }
+.bigIcoWrap i { font-size: 75px; margin-top: -7px; color: #000; }
+</style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2108,
+			'NodeTree' => '72',
+			'NodeParentID' => '2106',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '67'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2109,
+			'NodeTree' => '71',
+			'NodeParentID' => '2104',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '67'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2110,
+			'NodeTree' => '72',
+			'NodeParentID' => '2106',
+			'NodeType' => 'Page Block',
+			'NodeDefault' => '#000;;#FFF;;#FFF;;http://homestead.test/openpolice/uploads/compass-us.jpg;;w100;;P;;left;;auto',
+			'NodeOpts' => '71'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2111,
+			'NodeTree' => '72',
+			'NodeParentID' => '2110',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<p>&nbsp;</p>
+<center><div id="pageHeroTitle"><h1>Our Core Principles</h1></div></center>
+<p>&nbsp;</p>',
+			'NodePromptAfter' => '<style>
+#pageHeroTitle { padding: 150px 0px 180px 0px; }
+#pageHeroTitle h1 {
+text-shadow: -1px 1px 1px #000;
+font-size: 50px;
+}
+@media screen and (max-width: 768px) {
+#pageHeroTitle { padding: 100px 0px 120px 0px; }
+}
+</style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2112,
+			'NodeTree' => '1',
+			'NodeParentID' => '459',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="slBlueDark">Your Involvement</h2>',
+			'NodePromptAfter' => '<style> #node2112 { margin-bottom: -40px; } </style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2113,
+			'NodeTree' => '7',
+			'NodeParentID' => '1008',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<p>&nbsp;</p>
+<h2 class="slBlueDark">Filing Your Complaint</h2>
+<br />'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2114,
+			'NodeTree' => '8',
+			'NodeParentID' => '1009',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<p>&nbsp;</p>
+<h2 class="slBlueDark">Filing Your Compliment</h2>
+<br>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2115,
+			'NodeTree' => '62',
+			'NodeParentID' => '1994',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<p>&nbsp;</p>
+<h2 class="slBlueDark">Preparing Your Complaint for an Attorney</h2>
+<br>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2116,
+			'NodeTree' => '58',
+			'NodeParentID' => '1954',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<center><img src="/openpolice/logo-ico-loading-anim.gif" border=0 class="round10 mT20 mB20" style="width: 75px;" ></center>
+<script type="text/javascript">
+setTimeout("window.location=\'/dash/manage-partners\'", 5);
+</script>
+<style> #nodeSubBtns, #sessMgmtWrap { display: none; } </style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2117,
+			'NodeTree' => '58',
+			'NodeParentID' => '1954',
+			'NodeParentOrder' => '3',
+			'NodeType' => 'Data Manip: Close Sess',
+			'NodeResponseSet' => '58'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2118,
+			'NodeTree' => '58',
+			'NodeParentID' => '2073',
+			'NodeParentOrder' => '4',
+			'NodeType' => 'Hidden Field',
+			'NodeDefault' => '219',
+			'NodeDataStore' => 'Partners:PartType'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2119,
+			'NodeTree' => '1',
+			'NodeParentID' => '151',
+			'NodeParentOrder' => '3',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'force-against-officer',
+			'NodePromptAfter' => 'Force Against an Officer::M::::M::::M::'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2120,
+			'NodeTree' => '1',
+			'NodeParentID' => '862',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Questions about Police Chases</h2>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2121,
+			'NodeTree' => '1',
+			'NodeParentID' => '2119',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Use of Force against an Officer</h2>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2122,
+			'NodeTree' => '1',
+			'NodeParentID' => '707',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'uploads',
+			'NodePromptAfter' => 'Upload Documentation::M::::M::::M::'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2123,
+			'NodeTree' => '1',
+			'NodeParentID' => '528',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="slBlueDark">Confirm Your Complaint</h2>
+<h3>Below is what attorneys and legal experts will see:</h3>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2124,
+			'NodeTree' => '1',
+			'NodeParentID' => '528',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2125,
+			'NodeTree' => '1',
+			'NodeParentID' => '528',
+			'NodeParentOrder' => '6',
+			'NodeType' => 'Checkbox',
+			'NodePromptAfter' => '<style> #nLabel[[nID]] label { display: none; } #nLabel[[nID]] { margin-top: -50px; } 
+</style>',
+			'NodeOpts' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2126,
+			'NodeTree' => '1',
+			'NodeParentID' => '528',
+			'NodeParentOrder' => '7',
+			'NodeType' => 'Checkbox',
+			'NodePromptAfter' => '<style> #nLabel[[nID]] label { display: none; } #nLabel[[nID]] { margin-top: -50px; } 
+</style>',
+			'NodeOpts' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2127,
+			'NodeTree' => '1',
+			'NodeParentID' => '2050',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '<style> #n1163cyc0fld0lab, #blockWrap2127cyc0 { display: none; } </style>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2128,
+			'NodeTree' => '1',
+			'NodeParentID' => '4',
+			'NodeParentOrder' => '6',
+			'NodeType' => 'Loop Root',
+			'NodePromptText' => '<h2>Vehicles at the Scene</h2>
+<p>Please share information about <span class="slBlueDark">civilian and police vehicles</span> involved in the incident. This includes cars, trucks, vans, motorcycles, bicycles, boats, or other.</p>
+<p>If there were no vehicles involved, go to the next section.</p>',
+			'NodePromptNotes' => 'add-vehicles',
+			'NodePromptAfter' => 'Add Vehicles That Were Involved::M::::M::::M::',
+			'NodeDataBranch' => 'Vehicles',
+			'NodeDataStore' => 'Vehicles:VehicID'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2129,
+			'NodeTree' => '1',
+			'NodeParentID' => '1421',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="slBlueDark" id="fixedHeader">Vehicle #[LoopItemCnt]:</h2>',
+			'NodePromptAfter' => '<style> #blockWrap2135, #blockWrap2136 { display: none; } </style>
+<script type="text/javascript"> $(document).ready(function(){
+function checkVehicType() {
+  if (document.getElementById("blockWrap2135") && document.getElementById("blockWrap2136")) {
+    if (!document.getElementById("blockWrap2136").style.display) document.getElementById("blockWrap2136").style.display = \'none\';
+    if (!document.getElementById("blockWrap2135").style.display) document.getElementById("blockWrap2135").style.display = \'none\';
+    var isOfficer = false;
+    if (document.getElementById("n2137fld0") && document.getElementById("n2137fld0").checked) {
+      isOfficer = true;
+    }
+    if (document.getElementById("n2133fld") && document.getElementById("n2133fld").length > 0) {
+      isOfficer = true;
+    }
+    if (isOfficer) {
+      kidsVisible(2136, \'\', false);
+      kidsVisible(2135, \'\', true);
+      if (document.getElementById("blockWrap2136").style.display == \'block\') {
+        $("#blockWrap2136").slideUp("fast");
+      }
+      if (document.getElementById("blockWrap2135").style.display == \'none\') {
+        setTimeout(function() { $("#blockWrap2135").slideDown("fast"); }, 330);
+      }
+    } else {
+      kidsVisible(2135, \'\', false);
+      kidsVisible(2136, \'\', true);
+      if (document.getElementById("blockWrap2135").style.display == \'block\') {
+        $("#blockWrap2135").slideUp("fast");
+      }
+      if (document.getElementById("blockWrap2136").style.display == \'none\') {
+        setTimeout(function() { $("#blockWrap2136").slideDown("fast"); }, 330);
+      }
+    }
+  }
+  setTimeout(function() { checkVehicType(); }, 700);
+}
+setTimeout(function() { checkVehicType(); }, 100);
+}); </script>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2130,
+			'NodeTree' => '1',
+			'NodeParentID' => '2142',
+			'NodeType' => 'Checkbox',
+			'NodePromptText' => '<h3>[LoopItemLabel]</h3>
+<p>Who was riding this vehicle during this incident?</p>',
+			'NodePromptAfter' => '<style> #nLabel[[nID]] { margin-bottom: -20px; } </style>',
+			'NodeResponseSet' => 'Table::Civilians',
+			'NodeDataStore' => 'LinksCivilianVehicles:LnkCivVehicCivID'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2131,
+			'NodeTree' => '1',
+			'NodeParentID' => '2130',
+			'NodeType' => 'Layout Sub-Response',
+			'NodeDataBranch' => 'LinksCivilianVehicles'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2132,
+			'NodeTree' => '1',
+			'NodeParentID' => '2131',
+			'NodeType' => 'Radio',
+			'NodePromptAfter' => '<style> #node[[nID]] { margin-top: -20px; } </style>',
+			'NodeResponseSet' => 'Definition::Vehicle Roles',
+			'NodeDataStore' => 'LinksCivilianVehicles:LnkCivVehicRole'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2133,
+			'NodeTree' => '1',
+			'NodeParentID' => '2142',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Checkbox',
+			'NodePromptAfter' => '<style> #node[[nID]] { margin: -60px 0px 0px 0px; } </style>',
+			'NodeResponseSet' => 'Table::Officers',
+			'NodeDataStore' => 'LinksOfficerVehicles:LnkOffVehicOffID'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2140,
+			'NodeTree' => '1',
+			'NodeParentID' => '1421',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Radio',
+			'NodePromptText' => 'Was this an officer\'s vehicle?',
+			'NodeDataStore' => 'Vehicles:VehicIsCivilian',
+			'NodeOpts' => '5'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2141,
+			'NodeTree' => '1',
+			'NodeParentID' => '2140',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2142,
+			'NodeTree' => '1',
+			'NodeParentID' => '2143',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Loop Cycle',
+			'NodeResponseSet' => 'LoopItems::Vehicles',
+			'NodeDataBranch' => 'Vehicles'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2143,
+			'NodeTree' => '1',
+			'NodeParentID' => '4',
+			'NodeParentOrder' => '7',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'vehicle-roles',
+			'NodePromptAfter' => 'Vehicle Roles::M::::M::::M::'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2144,
+			'NodeTree' => '1',
+			'NodeParentID' => '2143',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Vehicle Use</h2>
+<div class="mBn20"><p>This does not include police searches.</p></div>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2146,
+			'NodeTree' => '1',
+			'NodeParentID' => '2133',
+			'NodeType' => 'Layout Sub-Response',
+			'NodeDataBranch' => 'LinksOfficerVehicles'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2147,
+			'NodeTree' => '1',
+			'NodeParentID' => '2146',
+			'NodeType' => 'Radio',
+			'NodePromptAfter' => '<style> #node[[nID]] { margin-top: -20px; } </style>',
+			'NodeResponseSet' => 'Definition::Vehicle Roles',
+			'NodeDataStore' => 'LinksOfficerVehicles:LnkOffVehicRole'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2149,
+			'NodeTree' => '73',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'partners',
+			'NodePromptAfter' => 'OPC Partners::M::::M::::M::',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2150,
+			'NodeTree' => '73',
+			'NodeParentID' => '2149',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>OPC Partners Listings...<br></h2>
+<p><br></p>'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2151,
+			'NodeTree' => '60',
+			'NodeParentID' => '1938',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2152,
+			'NodeTree' => '44',
+			'NodeParentID' => '1417',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2153,
+			'NodeTree' => '46',
+			'NodeParentID' => '1419',
+			'NodeType' => 'Page Block'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2154,
+			'NodeTree' => '36',
+			'NodeParentID' => '1223',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2155,
+			'NodeTree' => '36',
+			'NodeParentID' => '1273',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2156,
+			'NodeTree' => '36',
+			'NodeParentID' => '1273',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2157,
+			'NodeTree' => '36',
+			'NodeParentID' => '1223',
+			'NodeParentOrder' => '3',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2158,
+			'NodeTree' => '36',
+			'NodeParentID' => '1223',
+			'NodeParentOrder' => '4',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2159,
+			'NodeTree' => '36',
+			'NodeParentID' => '1223',
+			'NodeParentOrder' => '5',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2161,
+			'NodeTree' => '36',
+			'NodeParentID' => '1223',
+			'NodeParentOrder' => '6',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2162,
+			'NodeTree' => '36',
+			'NodeParentID' => '2154',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="m0">Department Main Contact Info</h2>'
 		]);
 	
 	DB::table('SL_NodeResponses')->insert([
@@ -33327,30 +34043,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '?'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 51,
-			'NodeResNode' => '138',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">Full Transparency</h2>
-<p><b>Publish all names</b> of civilians and police officers on this website</p>',
-			'NodeResValue' => '304'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 52,
-			'NodeResNode' => '138',
-			'NodeResOrd' => '1',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">No Names Public</h2>
-<p><b>Do not publish names</b> of civilians and police officers on this website. This includes police officers\' names and badge numbers too.</p>',
-			'NodeResValue' => '305'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 53,
-			'NodeResNode' => '138',
-			'NodeResOrd' => '2',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">Anonymous</h2>
-<p>Keep my complaint to be <b>completely anonymous</b>, even though it will be harder to investigate. Neither OPC staff nor investigators will be able to contact you.</p>
-<p>Any details that could be used for personal identification may be deleted from the database.</p>',
-			'NodeResValue' => '306'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 55,
 			'NodeResNode' => '163',
 			'NodeResEng' => 'This officer <b class="slBlueDark">engaged in misconduct</b>',
@@ -33430,7 +34122,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResNode' => '204',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '205'
+			'NodeResShowKids' => '2033'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 76,
@@ -33514,7 +34206,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResNode' => '212',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '213'
+			'NodeResShowKids' => '2034'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 91,
@@ -33598,7 +34290,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResNode' => '222',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '223'
+			'NodeResShowKids' => '2035'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 107,
@@ -33678,32 +34370,11 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '?'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 122,
-			'NodeResNode' => '232',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '542'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 123,
-			'NodeResNode' => '232',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 124,
-			'NodeResNode' => '232',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '?'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 126,
 			'NodeResNode' => '234',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '235'
+			'NodeResShowKids' => '2036'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 127,
@@ -33871,7 +34542,7 @@ James became fascinated with civil liberties while studying political science in
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 166,
 			'NodeResNode' => '269',
-			'NodeResEng' => 'Yes, I want to submit my complaint to the appropriate police oversight agencies. I also want to publish my complaint data on this website.',
+			'NodeResEng' => 'Yes, I want to submit my complaint to the appropriate police oversight agencies.',
 			'NodeResValue' => 'Y'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -34414,12 +35085,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Not sure',
 			'NodeResValue' => '?'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 271,
-			'NodeResNode' => '381',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 277,
@@ -35036,21 +35701,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '109'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 514,
-			'NodeResNode' => '381',
-			'NodeResOrd' => '1',
-			'NodeResEng' => '<span class="allegation">No (This is an allegation.)</span>',
-			'NodeResValue' => 'N',
-			'NodeResShowKids' => '556'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 517,
-			'NodeResNode' => '381',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '?'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 524,
 			'NodeResNode' => '563',
 			'NodeResEng' => 'Yes',
@@ -35551,26 +36201,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '412'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 733,
-			'NodeResNode' => '617',
-			'NodeResEng' => 'Gun',
-			'NodeResValue' => '415'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 734,
-			'NodeResNode' => '617',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Knife',
-			'NodeResValue' => '416'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 735,
-			'NodeResNode' => '617',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Other',
-			'NodeResValue' => '417'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 742,
 			'NodeResNode' => '613',
 			'NodeResEng' => 'On Foot',
@@ -35600,24 +36230,24 @@ James became fascinated with civil liberties while studying political science in
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 746,
 			'NodeResNode' => '616',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '1156'
+			'NodeResEng' => 'No weapon',
+			'NodeResValue' => '582'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 747,
 			'NodeResNode' => '616',
 			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
+			'NodeResEng' => 'Gun',
+			'NodeResValue' => '415',
+			'NodeResShowKids' => '618'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 748,
 			'NodeResNode' => '616',
 			'NodeResOrd' => '2',
-			'NodeResEng' => 'Not sure',
-			'NodeResValue' => '?',
-			'NodeResShowKids' => '1156'
+			'NodeResEng' => 'Knife',
+			'NodeResValue' => '416',
+			'NodeResShowKids' => '618'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 779,
@@ -36020,242 +36650,11 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '169'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 878,
-			'NodeResNode' => '735',
-			'NodeResEng' => 'Arrested',
-			'NodeResValue' => 'Arrests'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 879,
-			'NodeResNode' => '735',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Citation',
-			'NodeResValue' => 'Citations'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 880,
-			'NodeResNode' => '735',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Written Warning',
-			'NodeResValue' => 'Warnings'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 881,
-			'NodeResNode' => '735',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'None of these',
-			'NodeResValue' => 'None'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 882,
-			'NodeResNode' => '737',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 883,
-			'NodeResNode' => '738',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 884,
-			'NodeResNode' => '739',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 885,
-			'NodeResNode' => '740',
-			'NodeResEng' => 'Yes',
-			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '742'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 886,
-			'NodeResNode' => '741',
-			'NodeResEng' => 'Arrested',
-			'NodeResValue' => 'Arrests'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 887,
-			'NodeResNode' => '741',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Citation',
-			'NodeResValue' => 'Citations'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 888,
-			'NodeResNode' => '741',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Written Warning',
-			'NodeResValue' => 'Warnings'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 889,
-			'NodeResNode' => '741',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'None of these',
-			'NodeResValue' => 'None'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 900,
 			'NodeResNode' => '743',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
 			'NodeResShowKids' => '1152'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 911,
-			'NodeResNode' => '744',
-			'NodeResEng' => 'Grabbing or Control Hold',
-			'NodeResValue' => '227'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 912,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Pushing',
-			'NodeResValue' => '443'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 913,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Body Weapons (Punch, Kick, etc)',
-			'NodeResValue' => '228'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 914,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'Takedown',
-			'NodeResValue' => '229'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 915,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '4',
-			'NodeResEng' => 'Baton Strike',
-			'NodeResValue' => '230'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 916,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '5',
-			'NodeResEng' => 'Taser',
-			'NodeResValue' => '231'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 917,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '6',
-			'NodeResEng' => 'Gun',
-			'NodeResValue' => '232'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 918,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '7',
-			'NodeResEng' => 'Mace or Pepper Spray',
-			'NodeResValue' => '233'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 919,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '8',
-			'NodeResEng' => 'K9 (Dog) Bite',
-			'NodeResValue' => '234'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 920,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '9',
-			'NodeResEng' => 'Vehicle',
-			'NodeResValue' => '235'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 921,
-			'NodeResNode' => '742',
-			'NodeResEng' => 'Grabbing or Control Hold',
-			'NodeResValue' => '227'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 922,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Pushing',
-			'NodeResValue' => '443'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 923,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Body Weapons (Punch, Kick, etc)',
-			'NodeResValue' => '228'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 924,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'Takedown',
-			'NodeResValue' => '229'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 925,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '4',
-			'NodeResEng' => 'Baton Strike',
-			'NodeResValue' => '230'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 926,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '5',
-			'NodeResEng' => 'Taser',
-			'NodeResValue' => '231'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 927,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '6',
-			'NodeResEng' => 'Gun',
-			'NodeResValue' => '232'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 928,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '7',
-			'NodeResEng' => 'Mace or Pepper Spray',
-			'NodeResValue' => '233'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 929,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '8',
-			'NodeResEng' => 'K9 (Dog) Bite',
-			'NodeResValue' => '234'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 930,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '9',
-			'NodeResEng' => 'Vehicle',
-			'NodeResValue' => '235'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 931,
-			'NodeResNode' => '742',
-			'NodeResOrd' => '10',
-			'NodeResEng' => 'Other',
-			'NodeResValue' => '236'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 932,
-			'NodeResNode' => '744',
-			'NodeResOrd' => '10',
-			'NodeResEng' => 'Other',
-			'NodeResValue' => '236'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 934,
@@ -36709,34 +37108,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResOrd' => '5',
 			'NodeResEng' => 'Fired or Discharged Weapon',
 			'NodeResValue' => '280'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1000,
-			'NodeResNode' => '738',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1001,
-			'NodeResNode' => '737',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1002,
-			'NodeResNode' => '739',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1003,
-			'NodeResNode' => '740',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1004,
@@ -37408,7 +37779,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResNode' => '1162',
 			'NodeResEng' => 'Yes',
 			'NodeResValue' => 'Y',
-			'NodeResShowKids' => '1167'
+			'NodeResShowKids' => '520'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1103,
@@ -37440,126 +37811,126 @@ James became fascinated with civil liberties while studying political science in
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1107,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '2',
+			'NodeResOrd' => '3',
 			'NodeResEng' => 'Compound fracture',
 			'NodeResValue' => '258'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1108,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '3',
+			'NodeResOrd' => '4',
 			'NodeResEng' => 'In-patient hospital stay required',
 			'NodeResValue' => '259'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1109,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '4',
+			'NodeResOrd' => '5',
 			'NodeResEng' => 'Blood loss requiring transfusion',
 			'NodeResValue' => '260'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1110,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '5',
+			'NodeResOrd' => '6',
 			'NodeResEng' => 'Major concussion',
 			'NodeResValue' => '261'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1111,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '6',
+			'NodeResOrd' => '8',
 			'NodeResEng' => 'Longer than brief loss of consciousness',
 			'NodeResValue' => '262'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1112,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '7',
+			'NodeResOrd' => '10',
 			'NodeResEng' => 'Debilitating chronic pain',
 			'NodeResValue' => '263'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1113,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '8',
+			'NodeResOrd' => '11',
 			'NodeResEng' => 'Damage to organ (other than skin)',
 			'NodeResValue' => '264'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1114,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '9',
-			'NodeResEng' => 'Effective Tasings',
+			'NodeResOrd' => '12',
+			'NodeResEng' => 'Taser Wounds',
 			'NodeResValue' => '265'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1115,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '10',
+			'NodeResOrd' => '2',
 			'NodeResEng' => 'Minor bone broken',
 			'NodeResValue' => '266'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1116,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '11',
+			'NodeResOrd' => '13',
 			'NodeResEng' => 'Major laceration requiring stitches',
 			'NodeResValue' => '267'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1117,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '12',
+			'NodeResOrd' => '7',
 			'NodeResEng' => 'Minor concussion',
 			'NodeResValue' => '268'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1118,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '13',
+			'NodeResOrd' => '9',
 			'NodeResEng' => 'Brief loss of consciousness',
 			'NodeResValue' => '269'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1119,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '14',
+			'NodeResOrd' => '15',
 			'NodeResEng' => 'Chipped or lost tooth',
 			'NodeResValue' => '270'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1120,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '15',
+			'NodeResOrd' => '16',
 			'NodeResEng' => 'Major abrasion',
 			'NodeResValue' => '271'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1121,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '16',
+			'NodeResOrd' => '18',
 			'NodeResEng' => 'Sprain',
 			'NodeResValue' => '272'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1122,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '17',
+			'NodeResOrd' => '19',
 			'NodeResEng' => 'Bruising',
 			'NodeResValue' => '273'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1123,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '18',
+			'NodeResOrd' => '14',
 			'NodeResEng' => 'Minor laceration',
 			'NodeResValue' => '274'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1124,
 			'NodeResNode' => '1163',
-			'NodeResOrd' => '19',
+			'NodeResOrd' => '17',
 			'NodeResEng' => 'Minor abrasion',
 			'NodeResValue' => '275'
 		]);
@@ -38040,40 +38411,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResValue' => '?'
 		]);
 		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1226,
-			'NodeResNode' => '1424',
-			'NodeResEng' => 'Car',
-			'NodeResValue' => '355'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1227,
-			'NodeResNode' => '1424',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '358'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1228,
-			'NodeResNode' => '1424',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '356'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1229,
-			'NodeResNode' => '1424',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'Boat',
-			'NodeResValue' => '357'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1230,
-			'NodeResNode' => '1424',
-			'NodeResOrd' => '4',
-			'NodeResEng' => 'Other',
-			'NodeResValue' => '407'
-		]);
-		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1231,
 			'NodeResNode' => '1430',
 			'NodeResEng' => 'Yes',
@@ -38084,7 +38421,8 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResNode' => '1430',
 			'NodeResOrd' => '1',
 			'NodeResEng' => 'No',
-			'NodeResValue' => 'N'
+			'NodeResValue' => 'N',
+			'NodeResShowKids' => '1434'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1233,
@@ -38092,47 +38430,6 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResOrd' => '2',
 			'NodeResEng' => 'Not sure',
 			'NodeResValue' => '?'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1234,
-			'NodeResNode' => '1431',
-			'NodeResEng' => 'Car',
-			'NodeResValue' => '360'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1235,
-			'NodeResNode' => '1431',
-			'NodeResOrd' => '1',
-			'NodeResEng' => 'Van',
-			'NodeResValue' => '361'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1236,
-			'NodeResNode' => '1431',
-			'NodeResOrd' => '2',
-			'NodeResEng' => 'Motorcycle',
-			'NodeResValue' => '362'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1237,
-			'NodeResNode' => '1431',
-			'NodeResOrd' => '3',
-			'NodeResEng' => 'Bicycle',
-			'NodeResValue' => '363'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1238,
-			'NodeResNode' => '1431',
-			'NodeResOrd' => '4',
-			'NodeResEng' => 'Boat',
-			'NodeResValue' => '364'
-		]);
-		DB::table('SL_NodeResponses')->insert([
-			'NodeResID' => 1239,
-			'NodeResNode' => '1431',
-			'NodeResOrd' => '5',
-			'NodeResEng' => 'Other',
-			'NodeResValue' => '365'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1240,
@@ -38782,6 +39079,445 @@ James became fascinated with civil liberties while studying political science in
 			'NodeResEng' => 'I want to correct an inaccuracy',
 			'NodeResValue' => 'Correct inaccuracy'
 		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1376,
+			'NodeResNode' => '742',
+			'NodeResEng' => 'Grabbing or Control Hold',
+			'NodeResValue' => '227'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1377,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Pushing',
+			'NodeResValue' => '443'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1378,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Body Weapons (Punch, Kick, Elbow, etc)',
+			'NodeResValue' => '228'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1379,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Takedown',
+			'NodeResValue' => '229'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1380,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Baton Strike',
+			'NodeResValue' => '230'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1381,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Taser',
+			'NodeResValue' => '231'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1382,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '6',
+			'NodeResEng' => 'Gun',
+			'NodeResValue' => '232'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1383,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '7',
+			'NodeResEng' => 'Mace or Pepper Spray',
+			'NodeResValue' => '233'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1384,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '8',
+			'NodeResEng' => 'K9 (Dog) Bite',
+			'NodeResValue' => '234'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1385,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '9',
+			'NodeResEng' => 'Vehicle',
+			'NodeResValue' => '235'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1386,
+			'NodeResNode' => '742',
+			'NodeResOrd' => '10',
+			'NodeResEng' => 'Other',
+			'NodeResValue' => '236'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1387,
+			'NodeResNode' => '744',
+			'NodeResEng' => 'Grabbing or Control Hold',
+			'NodeResValue' => '227'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1388,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Pushing',
+			'NodeResValue' => '443'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1389,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Body Weapons (Punch, Kick, Elbow, etc)',
+			'NodeResValue' => '228'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1390,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Takedown',
+			'NodeResValue' => '229'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1391,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Baton Strike',
+			'NodeResValue' => '230'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1392,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Taser',
+			'NodeResValue' => '231'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1393,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '6',
+			'NodeResEng' => 'Gun',
+			'NodeResValue' => '232'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1394,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '7',
+			'NodeResEng' => 'Mace or Pepper Spray',
+			'NodeResValue' => '233'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1395,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '8',
+			'NodeResEng' => 'K9 (Dog) Bite',
+			'NodeResValue' => '234'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1396,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '9',
+			'NodeResEng' => 'Vehicle',
+			'NodeResValue' => '235'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1397,
+			'NodeResNode' => '744',
+			'NodeResOrd' => '10',
+			'NodeResEng' => 'Other',
+			'NodeResValue' => '236'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1398,
+			'NodeResNode' => '2044',
+			'NodeResEng' => 'Grabbing or Control Hold',
+			'NodeResValue' => '227'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1399,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Pushing',
+			'NodeResValue' => '443'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1400,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Body Weapons (Punch, Kick, Elbow, etc)',
+			'NodeResValue' => '228'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1401,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Takedown',
+			'NodeResValue' => '229'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1402,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Baton Strike',
+			'NodeResValue' => '230'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1403,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Taser',
+			'NodeResValue' => '231'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1404,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '6',
+			'NodeResEng' => 'Gun',
+			'NodeResValue' => '232'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1405,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '7',
+			'NodeResEng' => 'Mace or Pepper Spray',
+			'NodeResValue' => '233'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1406,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '8',
+			'NodeResEng' => 'K9 (Dog) Bite',
+			'NodeResValue' => '234'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1407,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '9',
+			'NodeResEng' => 'Vehicle',
+			'NodeResValue' => '235'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1408,
+			'NodeResNode' => '2044',
+			'NodeResOrd' => '10',
+			'NodeResEng' => 'Other',
+			'NodeResValue' => '236'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1409,
+			'NodeResNode' => '616',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Other',
+			'NodeResValue' => '417',
+			'NodeResShowKids' => '618'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1410,
+			'NodeResNode' => '616',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Not sure',
+			'NodeResValue' => '583',
+			'NodeResShowKids' => '618'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1411,
+			'NodeResNode' => '2074',
+			'NodeResEng' => 'Attorney',
+			'NodeResValue' => '219'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1412,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Academic',
+			'NodeResValue' => '220'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1413,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Journalist',
+			'NodeResValue' => '221'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1414,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Researcher',
+			'NodeResValue' => '222'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1415,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Police Department',
+			'NodeResValue' => '516'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1416,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Oversight Agency',
+			'NodeResValue' => '517'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1417,
+			'NodeResNode' => '2074',
+			'NodeResOrd' => '6',
+			'NodeResEng' => 'Organization',
+			'NodeResValue' => '584'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1418,
+			'NodeResNode' => '2125',
+			'NodeResEng' => 'Yes, I want to share my complaint with attorneys and legal experts who can help.',
+			'NodeResValue' => 'Y'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1419,
+			'NodeResNode' => '2126',
+			'NodeResEng' => 'Yes, I want to publish my complaint data on this website.',
+			'NodeResValue' => 'Yes, I want to publish my complaint data on this website.'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1420,
+			'NodeResNode' => '349',
+			'NodeResOrd' => '-1',
+			'NodeResValue' => '0'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1421,
+			'NodeResNode' => '2132',
+			'NodeResEng' => 'Driver',
+			'NodeResValue' => '593'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1422,
+			'NodeResNode' => '2132',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Passenger',
+			'NodeResValue' => '594'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1429,
+			'NodeResNode' => '1431',
+			'NodeResEng' => 'Car',
+			'NodeResValue' => '360'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1430,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Truck',
+			'NodeResValue' => '592'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1431,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Van',
+			'NodeResValue' => '361'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1432,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Motorcycle',
+			'NodeResValue' => '362'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1433,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Bicycle',
+			'NodeResValue' => '363'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1434,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Boat',
+			'NodeResValue' => '364'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1435,
+			'NodeResNode' => '1431',
+			'NodeResOrd' => '6',
+			'NodeResEng' => 'Other',
+			'NodeResValue' => '365'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1436,
+			'NodeResNode' => '2140',
+			'NodeResEng' => 'Yes',
+			'NodeResValue' => '0',
+			'NodeResShowKids' => '2141'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1437,
+			'NodeResNode' => '2140',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'No',
+			'NodeResValue' => '1'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1438,
+			'NodeResNode' => '2147',
+			'NodeResEng' => 'Driver',
+			'NodeResValue' => '593'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1439,
+			'NodeResNode' => '2147',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Passenger',
+			'NodeResValue' => '594'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1440,
+			'NodeResNode' => '2085',
+			'NodeResEng' => 'Assist Complainants Using OpenPolice.org',
+			'NodeResValue' => '588'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1441,
+			'NodeResNode' => '2085',
+			'NodeResOrd' => '1',
+			'NodeResEng' => 'Services or Support for Police Brutality Victims',
+			'NodeResValue' => '585'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1442,
+			'NodeResNode' => '2085',
+			'NodeResOrd' => '2',
+			'NodeResEng' => 'Education About Police or Corrections',
+			'NodeResValue' => '587'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1443,
+			'NodeResNode' => '2085',
+			'NodeResOrd' => '3',
+			'NodeResEng' => 'Legal Assistance',
+			'NodeResValue' => '589'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1444,
+			'NodeResNode' => '2085',
+			'NodeResOrd' => '4',
+			'NodeResEng' => 'Legal Representation',
+			'NodeResValue' => '590'
+		]);
+		DB::table('SL_NodeResponses')->insert([
+			'NodeResID' => 1445,
+			'NodeResNode' => '2085',
+			'NodeResOrd' => '5',
+			'NodeResEng' => 'Political or Legislative Action',
+			'NodeResValue' => '586'
+		]);
 	
 	DB::table('SL_Conditions')->insert([
 			'CondID' => 1,
@@ -38879,8 +39615,9 @@ James became fascinated with civil liberties while studying political science in
 			'CondOperator' => 'EXISTS>',
 			'CondOperDeet' => '1',
 			'CondField' => '0',
-			'CondTable' => '102',
-			'CondLoop' => '1'
+			'CondTable' => '0',
+			'CondLoop' => '1',
+			'CondOpts' => '2'
 		]);
 		DB::table('SL_Conditions')->insert([
 			'CondID' => 10,
@@ -38945,22 +39682,11 @@ James became fascinated with civil liberties while studying political science in
 			'CondLoop' => '6'
 		]);
 		DB::table('SL_Conditions')->insert([
-			'CondID' => 17,
-			'CondDatabase' => '1',
-			'CondTag' => '#EventIsForceAnimal',
-			'CondDesc' => 'Current event (being edited) is a use of force against an animal.',
-			'CondOperator' => '}',
-			'CondOperDeet' => '0',
-			'CondField' => '860',
-			'CondTable' => '137',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
 			'CondID' => 18,
 			'CondDatabase' => '1',
 			'CondTag' => '#HasInjury',
 			'CondDesc' => 'Complaint has at least one injury described.',
-			'CondOperator' => 'EXISTS>',
+			'CondOperator' => 'CUSTOM',
 			'CondOperDeet' => '0',
 			'CondField' => '0',
 			'CondTable' => '117',
@@ -39057,48 +39783,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondLoop' => '0'
 		]);
 		DB::table('SL_Conditions')->insert([
-			'CondID' => 27,
-			'CondDatabase' => '1',
-			'CondTag' => '#EventIsStop',
-			'CondDesc' => 'Current event (being edited) is a stop.',
-			'CondOperDeet' => '0',
-			'CondField' => '1154',
-			'CondTable' => '137',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 28,
-			'CondDatabase' => '1',
-			'CondTag' => '#PreviousEnteredStops',
-			'CondDesc' => 'Complainant has already entered at least one other stop event.',
-			'CondOperator' => 'CUSTOM',
-			'CondOperDeet' => '0',
-			'CondField' => '0',
-			'CondTable' => '0',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 29,
-			'CondDatabase' => '1',
-			'CondTag' => '#EventIsSearch',
-			'CondDesc' => 'Current event (being edited) is a search.',
-			'CondOperDeet' => '0',
-			'CondField' => '1154',
-			'CondTable' => '137',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 30,
-			'CondDatabase' => '1',
-			'CondTag' => '#PreviousEnteredSearches',
-			'CondDesc' => 'Complainant has already entered at least one other search event.',
-			'CondOperator' => 'CUSTOM',
-			'CondOperDeet' => '0',
-			'CondField' => '0',
-			'CondTable' => '0',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
 			'CondID' => 31,
 			'CondDatabase' => '1',
 			'CondTag' => '#EventIsForce',
@@ -39106,38 +39790,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondOperDeet' => '0',
 			'CondField' => '1154',
 			'CondTable' => '137',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 32,
-			'CondDatabase' => '1',
-			'CondTag' => '#PreviousEnteredForce',
-			'CondDesc' => 'Complainant has already entered at least one other use of force event.',
-			'CondOperator' => 'CUSTOM',
-			'CondOperDeet' => '0',
-			'CondField' => '0',
-			'CondTable' => '0',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 33,
-			'CondDatabase' => '1',
-			'CondTag' => '#EventIsArrest',
-			'CondDesc' => 'Current event (being edited) is an arrest.',
-			'CondOperDeet' => '0',
-			'CondField' => '1154',
-			'CondTable' => '137',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 34,
-			'CondDatabase' => '1',
-			'CondTag' => '#PreviousEnteredArrests',
-			'CondDesc' => 'Complainant has already entered at least one other arrest event.',
-			'CondOperator' => 'CUSTOM',
-			'CondOperDeet' => '0',
-			'CondField' => '0',
-			'CondTable' => '0',
 			'CondLoop' => '0'
 		]);
 		DB::table('SL_Conditions')->insert([
@@ -39224,16 +39876,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondOperDeet' => '0',
 			'CondField' => '984',
 			'CondTable' => '102',
-			'CondLoop' => '0'
-		]);
-		DB::table('SL_Conditions')->insert([
-			'CondID' => 43,
-			'CondDatabase' => '1',
-			'CondTag' => '#StopGivenCitation',
-			'CondDesc' => 'Current stop resulting in citation charges.',
-			'CondOperDeet' => '0',
-			'CondField' => '1084',
-			'CondTable' => '121',
 			'CondLoop' => '0'
 		]);
 		DB::table('SL_Conditions')->insert([
@@ -39841,6 +40483,69 @@ James became fascinated with civil liberties while studying political science in
 			'CondLoop' => '0',
 			'CondOpts' => '2'
 		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 125,
+			'CondDatabase' => '1',
+			'CondTag' => '#ForceHasType',
+			'CondDesc' => 'Use of current force record includes a type of force.',
+			'CondOperDeet' => '0',
+			'CondField' => '256',
+			'CondTable' => '116',
+			'CondLoop' => '0'
+		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 126,
+			'CondDatabase' => '1',
+			'CondTag' => '#CivHasMedicalCare',
+			'CondDesc' => 'Current civilian received medical care for injuries.',
+			'CondOperDeet' => '0',
+			'CondField' => '1437',
+			'CondTable' => '102',
+			'CondLoop' => '0',
+			'CondOpts' => '2'
+		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 127,
+			'CondDatabase' => '1',
+			'CondTag' => '#CivHasCitation',
+			'CondDesc' => 'The current civilian was given a citation.',
+			'CondOperDeet' => '0',
+			'CondField' => '1084',
+			'CondTable' => '102',
+			'CondLoop' => '0'
+		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 128,
+			'CondDatabase' => '1',
+			'CondTag' => '#PartnerIsAttorney',
+			'CondDesc' => 'Current partner is an attorney.',
+			'CondOperDeet' => '0',
+			'CondField' => '988',
+			'CondTable' => '110',
+			'CondLoop' => '0'
+		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 129,
+			'CondDatabase' => '1',
+			'CondTag' => '#PartnerIsOrg',
+			'CondDesc' => 'Current partner is an organization.',
+			'CondOperDeet' => '0',
+			'CondField' => '988',
+			'CondTable' => '110',
+			'CondLoop' => '0'
+		]);
+		DB::table('SL_Conditions')->insert([
+			'CondID' => 135,
+			'CondDatabase' => '1',
+			'CondTag' => '#HasMultipleCivilians',
+			'CondDesc' => 'Complaint has Victims and Witnesses totalling more than one.',
+			'CondOperator' => 'EXISTS>',
+			'CondOperDeet' => '1',
+			'CondField' => '0',
+			'CondTable' => '0',
+			'CondLoop' => '25',
+			'CondOpts' => '2'
+		]);
 	
 	DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 1,
@@ -39878,34 +40583,14 @@ James became fascinated with civil liberties while studying political science in
 			'CondValValue' => '350'
 		]);
 		DB::table('SL_ConditionsVals')->insert([
-			'CondValID' => 14,
-			'CondValCondID' => '17',
-			'CondValValue' => 'Y'
-		]);
-		DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 17,
 			'CondValCondID' => '21',
 			'CondValValue' => '307'
 		]);
 		DB::table('SL_ConditionsVals')->insert([
-			'CondValID' => 18,
-			'CondValCondID' => '27',
-			'CondValValue' => 'Stops'
-		]);
-		DB::table('SL_ConditionsVals')->insert([
-			'CondValID' => 19,
-			'CondValCondID' => '29',
-			'CondValValue' => 'Searches'
-		]);
-		DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 20,
 			'CondValCondID' => '31',
 			'CondValValue' => 'Force'
-		]);
-		DB::table('SL_ConditionsVals')->insert([
-			'CondValID' => 21,
-			'CondValCondID' => '33',
-			'CondValValue' => 'Arrests'
 		]);
 		DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 23,
@@ -39930,11 +40615,6 @@ James became fascinated with civil liberties while studying political science in
 		DB::table('SL_ConditionsVals')->insert([
 			'CondValID' => 27,
 			'CondValCondID' => '42',
-			'CondValValue' => 'Y'
-		]);
-		DB::table('SL_ConditionsVals')->insert([
-			'CondValID' => 28,
-			'CondValCondID' => '43',
 			'CondValValue' => 'Y'
 		]);
 		DB::table('SL_ConditionsVals')->insert([
@@ -40307,6 +40987,81 @@ James became fascinated with civil liberties while studying political science in
 			'CondValCondID' => '119',
 			'CondValValue' => '199'
 		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 145,
+			'CondValCondID' => '125',
+			'CondValValue' => '227'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 146,
+			'CondValCondID' => '125',
+			'CondValValue' => '443'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 147,
+			'CondValCondID' => '125',
+			'CondValValue' => '228'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 148,
+			'CondValCondID' => '125',
+			'CondValValue' => '229'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 149,
+			'CondValCondID' => '125',
+			'CondValValue' => '230'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 150,
+			'CondValCondID' => '125',
+			'CondValValue' => '231'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 151,
+			'CondValCondID' => '125',
+			'CondValValue' => '232'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 152,
+			'CondValCondID' => '125',
+			'CondValValue' => '233'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 153,
+			'CondValCondID' => '125',
+			'CondValValue' => '234'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 154,
+			'CondValCondID' => '125',
+			'CondValValue' => '235'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 155,
+			'CondValCondID' => '125',
+			'CondValValue' => '236'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 156,
+			'CondValCondID' => '126',
+			'CondValValue' => 'Y'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 157,
+			'CondValCondID' => '127',
+			'CondValValue' => 'Y'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 158,
+			'CondValCondID' => '128',
+			'CondValValue' => '219'
+		]);
+		DB::table('SL_ConditionsVals')->insert([
+			'CondValID' => 159,
+			'CondValCondID' => '129',
+			'CondValValue' => '584'
+		]);
 	
 	DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 1,
@@ -40504,11 +41259,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '48'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 43,
-			'CondNodeCondID' => '4',
-			'CondNodeNodeID' => '148'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 44,
 			'CondNodeCondID' => '4',
 			'CondNodeNodeID' => '485'
@@ -40624,29 +41374,9 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '593'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 68,
-			'CondNodeCondID' => '9',
-			'CondNodeNodeID' => '207'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 69,
-			'CondNodeCondID' => '9',
-			'CondNodeNodeID' => '215'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 70,
 			'CondNodeCondID' => '9',
 			'CondNodeNodeID' => '220'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 71,
-			'CondNodeCondID' => '9',
-			'CondNodeNodeID' => '225'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 72,
-			'CondNodeCondID' => '9',
-			'CondNodeNodeID' => '230'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 73,
@@ -40800,101 +41530,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '260'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 113,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '487'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 114,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '486'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 115,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '488'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 116,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '489'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 117,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '490'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 118,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '491'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 119,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '492'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 120,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '493'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 121,
-			'CondNodeCondID' => '28',
-			'CondNodeNodeID' => '486'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 122,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '495'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 123,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '494'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 124,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '500'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 125,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '501'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 126,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '502'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 127,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '503'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 128,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '504'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 129,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '505'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 130,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '506'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 131,
-			'CondNodeCondID' => '30',
-			'CondNodeNodeID' => '494'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 132,
 			'CondNodeCondID' => '31',
 			'CondNodeNodeID' => '498'
@@ -40910,11 +41545,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '507'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 135,
-			'CondNodeCondID' => '31',
-			'CondNodeNodeID' => '508'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 136,
 			'CondNodeCondID' => '31',
 			'CondNodeNodeID' => '509'
@@ -40925,56 +41555,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '511'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 139,
-			'CondNodeCondID' => '32',
-			'CondNodeNodeID' => '496'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 140,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '497'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 141,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '499'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 142,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '512'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 143,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '513'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 144,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '514'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 145,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '515'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 146,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '516'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 147,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '599'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 148,
-			'CondNodeCondID' => '34',
-			'CondNodeNodeID' => '497'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 149,
 			'CondNodeCondID' => '35',
 			'CondNodeNodeID' => '506'
@@ -40983,11 +41563,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeID' => 151,
 			'CondNodeCondID' => '37',
 			'CondNodeNodeID' => '516'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 152,
-			'CondNodeCondID' => '38',
-			'CondNodeNodeID' => '517'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 153,
@@ -41015,11 +41590,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeLoopID' => '7'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 158,
-			'CondNodeCondID' => '43',
-			'CondNodeLoopID' => '15'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 159,
 			'CondNodeCondID' => '44',
 			'CondNodeNodeID' => '610'
@@ -41033,11 +41603,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeID' => 161,
 			'CondNodeCondID' => '44',
 			'CondNodeNodeID' => '611'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 162,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '621'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 167,
@@ -41387,17 +41952,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeLoopID' => '-1'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 280,
-			'CondNodeCondID' => '62',
-			'CondNodeNodeID' => '1097'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 281,
-			'CondNodeCondID' => '62',
-			'CondNodeNodeID' => '1114',
-			'CondNodeLoopID' => '-1'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 282,
 			'CondNodeCondID' => '62',
 			'CondNodeNodeID' => '-3'
@@ -41696,41 +42250,6 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeNodeID' => '1412'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 356,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1426'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 357,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1427'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 358,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1428'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 359,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1429'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 360,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1432'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 361,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1433'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 362,
-			'CondNodeCondID' => '1',
-			'CondNodeNodeID' => '1434'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 363,
 			'CondNodeCondID' => '105',
 			'CondNodeNodeID' => '1436'
@@ -41768,30 +42287,9 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeLoopID' => '-1'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 381,
-			'CondNodeCondID' => '27',
-			'CondNodeNodeID' => '1575'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 382,
-			'CondNodeCondID' => '29',
-			'CondNodeNodeID' => '1576'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 383,
 			'CondNodeCondID' => '31',
 			'CondNodeNodeID' => '1577'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 384,
-			'CondNodeCondID' => '33',
-			'CondNodeNodeID' => '1578'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 385,
-			'CondNodeCondID' => '17',
-			'CondNodeNodeID' => '351',
-			'CondNodeLoopID' => '-1'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
 			'CondNodeID' => 393,
@@ -41875,6 +42373,288 @@ James became fascinated with civil liberties while studying political science in
 			'CondNodeCondID' => '99',
 			'CondNodeNodeID' => '453',
 			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 443,
+			'CondNodeCondID' => '77',
+			'CondNodeNodeID' => '150'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 444,
+			'CondNodeCondID' => '44',
+			'CondNodeNodeID' => '152'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 447,
+			'CondNodeCondID' => '31',
+			'CondNodeLoopID' => '6'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 449,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '2038'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 450,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '2039'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 453,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '742'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 454,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '2044',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 455,
+			'CondNodeCondID' => '125',
+			'CondNodeNodeID' => '2047'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 457,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '2040'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 458,
+			'CondNodeCondID' => '9',
+			'CondNodeNodeID' => '2041'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 459,
+			'CondNodeCondID' => '96',
+			'CondNodeNodeID' => '2050'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 460,
+			'CondNodeCondID' => '126',
+			'CondNodeNodeID' => '2051'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 463,
+			'CondNodeCondID' => '20',
+			'CondNodeNodeID' => '2054'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 464,
+			'CondNodeCondID' => '126',
+			'CondNodeNodeID' => '2056'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 467,
+			'CondNodeCondID' => '77',
+			'CondNodeNodeID' => '505'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 468,
+			'CondNodeCondID' => '76',
+			'CondNodeNodeID' => '488'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 469,
+			'CondNodeCondID' => '77',
+			'CondNodeNodeID' => '500'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 471,
+			'CondNodeCondID' => '44',
+			'CondNodeNodeID' => '512'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 472,
+			'CondNodeCondID' => '18',
+			'CondNodeNodeID' => '414'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 473,
+			'CondNodeCondID' => '78',
+			'CondNodeNodeID' => '2032'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 474,
+			'CondNodeCondID' => '78',
+			'CondNodeNodeID' => '508'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 475,
+			'CondNodeCondID' => '127',
+			'CondNodeNodeID' => '2058'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 476,
+			'CondNodeCondID' => '79',
+			'CondNodeNodeID' => '523'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 481,
+			'CondNodeCondID' => '128',
+			'CondNodeNodeID' => '1964'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 482,
+			'CondNodeCondID' => '129',
+			'CondNodeNodeID' => '2075'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 484,
+			'CondNodeCondID' => '129',
+			'CondNodeNodeID' => '2076'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 485,
+			'CondNodeCondID' => '128',
+			'CondNodeNodeID' => '2081'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 486,
+			'CondNodeCondID' => '128',
+			'CondNodeNodeID' => '2082'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 487,
+			'CondNodeCondID' => '129',
+			'CondNodeNodeID' => '2083'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 488,
+			'CondNodeCondID' => '129',
+			'CondNodeNodeID' => '2084'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 492,
+			'CondNodeCondID' => '39',
+			'CondNodeNodeID' => '454'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 493,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '862'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 494,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '508'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 495,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '2032'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 496,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '523'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 497,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '512'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 498,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '500'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 499,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '2054'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 500,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '505'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 501,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '488'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 502,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '414'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 503,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '517'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 512,
+			'CondNodeCondID' => '56',
+			'CondNodeNodeID' => '1794'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 513,
+			'CondNodeCondID' => '7',
+			'CondNodeNodeID' => '2119'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 514,
+			'CondNodeCondID' => '103',
+			'CondNodeNodeID' => '1794'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 515,
+			'CondNodeCondID' => '101',
+			'CondNodeNodeID' => '1794',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 516,
+			'CondNodeCondID' => '99',
+			'CondNodeNodeID' => '2123'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 517,
+			'CondNodeCondID' => '99',
+			'CondNodeNodeID' => '2124',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 518,
+			'CondNodeCondID' => '99',
+			'CondNodeNodeID' => '269',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 519,
+			'CondNodeCondID' => '99',
+			'CondNodeNodeID' => '2125'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 521,
+			'CondNodeCondID' => '97',
+			'CondNodeNodeID' => '2127',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 524,
+			'CondNodeCondID' => '135',
+			'CondNodeNodeID' => '2138',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 525,
+			'CondNodeCondID' => '8',
+			'CondNodeNodeID' => '2137',
+			'CondNodeLoopID' => '-1'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 526,
+			'CondNodeCondID' => '105',
+			'CondNodeNodeID' => '-3'
+		]);
+		DB::table('SL_ConditionsNodes')->insert([
+			'CondNodeID' => 527,
+			'CondNodeCondID' => '105',
+			'CondNodeNodeID' => '2143'
 		]);
 	
 	DB::table('SL_ConditionsArticles')->insert([
@@ -42131,11 +42911,10 @@ James became fascinated with civil liberties while studying political science in
 			'DataLoopID' => 6,
 			'DataLoopTree' => '1',
 			'DataLoopRoot' => '148',
-			'DataLoopPlural' => 'Events',
-			'DataLoopSingular' => 'Event',
+			'DataLoopPlural' => 'Types of Force',
+			'DataLoopSingular' => 'Type of Force',
 			'DataLoopTable' => 'EventSequence',
 			'DataLoopSortFld' => 'EveOrder',
-			'DataLoopDoneFld' => 'EventSequence:EveUserFinished',
 			'DataLoopIsStep' => '1',
 			'DataLoopAutoGen' => '0'
 		]);
@@ -42158,18 +42937,7 @@ James became fascinated with civil liberties while studying political science in
 			'DataLoopRoot' => '400',
 			'DataLoopPlural' => 'Citations',
 			'DataLoopSingular' => 'Citation',
-			'DataLoopTable' => 'Stops',
-			'DataLoopDoneFld' => 'Stops:StopChargesOther',
-			'DataLoopIsStep' => '1',
-			'DataLoopAutoGen' => '0'
-		]);
-		DB::table('SL_DataLoop')->insert([
-			'DataLoopID' => 16,
-			'DataLoopTree' => '1',
-			'DataLoopRoot' => '414',
-			'DataLoopPlural' => 'Medical Care',
-			'DataLoopSingular' => 'Medical Care',
-			'DataLoopTable' => 'InjuryCare',
+			'DataLoopTable' => 'Civilians',
 			'DataLoopIsStep' => '1',
 			'DataLoopAutoGen' => '0'
 		]);
@@ -42248,14 +43016,6 @@ James became fascinated with civil liberties while studying political science in
 			'DataLoopIsStep' => '1'
 		]);
 		DB::table('SL_DataLoop')->insert([
-			'DataLoopID' => 26,
-			'DataLoopTree' => '1',
-			'DataLoopRoot' => '1501',
-			'DataLoopPlural' => 'Injuries',
-			'DataLoopSingular' => 'Injury',
-			'DataLoopTable' => 'Injuries'
-		]);
-		DB::table('SL_DataLoop')->insert([
 			'DataLoopID' => 27,
 			'DataLoopTree' => '1',
 			'DataLoopRoot' => '1701',
@@ -42266,10 +43026,12 @@ James became fascinated with civil liberties while studying political science in
 		DB::table('SL_DataLoop')->insert([
 			'DataLoopID' => 28,
 			'DataLoopTree' => '1',
-			'DataLoopRoot' => '1489',
+			'DataLoopRoot' => '2128',
 			'DataLoopPlural' => 'Vehicles',
 			'DataLoopSingular' => 'Vehicle',
-			'DataLoopTable' => 'Vehicles'
+			'DataLoopTable' => 'Vehicles',
+			'DataLoopMaxLimit' => '3',
+			'DataLoopWarnLimit' => '2'
 		]);
 		DB::table('SL_DataLoop')->insert([
 			'DataLoopID' => 29,
@@ -42571,14 +43333,6 @@ James became fascinated with civil liberties while studying political science in
 			'DataHelpValueField' => 'PhysRaceRace'
 		]);
 		DB::table('SL_DataHelpers')->insert([
-			'DataHelpID' => 32,
-			'DataHelpTree' => '1',
-			'DataHelpParentTable' => 'EventSequence',
-			'DataHelpTable' => 'Charges',
-			'DataHelpKeyField' => 'ChrgEventID',
-			'DataHelpValueField' => 'ChrgCharges'
-		]);
-		DB::table('SL_DataHelpers')->insert([
 			'DataHelpID' => 33,
 			'DataHelpTree' => '1',
 			'DataHelpParentTable' => 'Civilians',
@@ -42618,13 +43372,6 @@ James became fascinated with civil liberties while studying political science in
 			'DataHelpValueField' => 'CivWeapBodyWeapon'
 		]);
 		DB::table('SL_DataHelpers')->insert([
-			'DataHelpID' => 38,
-			'DataHelpTree' => '1',
-			'DataHelpParentTable' => 'Civilians',
-			'DataHelpTable' => 'Charges',
-			'DataHelpKeyField' => 'ChrgCivID'
-		]);
-		DB::table('SL_DataHelpers')->insert([
 			'DataHelpID' => 39,
 			'DataHelpTree' => '58',
 			'DataHelpParentTable' => 'Partners',
@@ -42647,16 +43394,37 @@ James became fascinated with civil liberties while studying political science in
 			'DataHelpKeyField' => 'PrtStaPartID',
 			'DataHelpValueField' => 'PrtStaState'
 		]);
-	
-	DB::table('SL_DataLinks')->insert([
-			'DataLinkID' => 1,
-			'DataLinkTree' => '1',
-			'DataLinkTable' => '163'
+		DB::table('SL_DataHelpers')->insert([
+			'DataHelpID' => 42,
+			'DataHelpTree' => '1',
+			'DataHelpParentTable' => 'Civilians',
+			'DataHelpTable' => 'Charges',
+			'DataHelpKeyField' => 'ChrgCivID',
+			'DataHelpValueField' => 'ChrgCharges'
 		]);
-		DB::table('SL_DataLinks')->insert([
-			'DataLinkID' => 4,
-			'DataLinkTree' => '1',
-			'DataLinkTable' => '155'
+		DB::table('SL_DataHelpers')->insert([
+			'DataHelpID' => 43,
+			'DataHelpTree' => '58',
+			'DataHelpParentTable' => 'Partners',
+			'DataHelpTable' => 'PartnerCapac',
+			'DataHelpKeyField' => 'PrtCapPartID',
+			'DataHelpValueField' => 'PrtCapCapacity'
 		]);
-	
+		DB::table('SL_DataHelpers')->insert([
+			'DataHelpID' => 44,
+			'DataHelpTree' => '1',
+			'DataHelpParentTable' => 'Vehicles',
+			'DataHelpTable' => 'LinksCivilianVehicles',
+			'DataHelpKeyField' => 'LnkCivVehicVehicID',
+			'DataHelpValueField' => 'LnkCivVehicCivID'
+		]);
+		DB::table('SL_DataHelpers')->insert([
+			'DataHelpID' => 45,
+			'DataHelpTree' => '1',
+			'DataHelpParentTable' => 'Vehicles',
+			'DataHelpTable' => 'LinksOfficerVehicles',
+			'DataHelpKeyField' => 'LnkOffVehicVehicID',
+			'DataHelpValueField' => 'LnkOffVehicOffID'
+		]);
+
  } } 

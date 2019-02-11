@@ -16,21 +16,11 @@
         {!! $editsSummary[0] !!}
     </div>
 </div>
-<div class="row" style="margin-top: 90px;">
-    <div class="col-7">
-        <h2 class="m0">Department Main Contact Info</h2>
-    </div><div class="col-5">
-        <!-- <div id="ScoreDeet" class="disNon w100 row2 p15">
-            
-        </div> -->
-        <a href="https://www.google.com/search?as_q={{ $deptRow->DeptName }}, {{ $deptRow->DeptAddressState }} {{ 
-            $deptRow->DeptAddressZip }}" class="btn btn-secondary" target="_blank"
-            >Begin Department Search <i class="fa fa-google mL10"></i></a>
-    </div>
-</div>
 <style>
 #pageTopGapID { display: none; }
 .nodeAnchor a { top: -100px; }
+#mainBody, #fixedHeader, .fixed, #fixedHeader.fixed { background: #F5FBFF; }
+#leftSideWrap, #leftAdmMenu, #admMenuCustom { background: #FCFEFF; }
 </style>
 <script type="text/javascript">
 $(document).ready(function(){

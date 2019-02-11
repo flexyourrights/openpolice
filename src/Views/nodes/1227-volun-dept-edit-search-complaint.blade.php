@@ -1,6 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1227-volun-dept-edit-search-complaint.blade.php -->
 <div class="nodeAnchor"><a id="deptWeb" name="deptWeb"></a></div>
-<hr>
 <div class="row">
     <div class="col-7">
         <h2 class="m0">Web Presence & Complaint Process</h2>

@@ -55,6 +55,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                     $this->admMenuLnk('/dash/volunteer', 'Department List'),
                     $this->admMenuLnk('/dash/team-resources',   'Team Resources')
                     ]);
+                return $treeMenu;
             } elseif ($this->currUser->hasRole('volunteer')) {
                 $treeMenu[] = $this->admMenuLnk('/dash/volunteer', 'Police Departments List');
                 $treeMenu[] = $this->admMenuLnk('/dash/verify-next-department', 'Verify A Dept.');
@@ -72,6 +73,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                     $treeMenu[] = $this->admMenuLnk('/dash/volunteer-stars', 
                         $stars . 'You Have ' . number_format($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars) . ' Stars');
                 }
+                return $treeMenu;
             }
         }
         //$treeMenu = $this->addAdmMenuHome();

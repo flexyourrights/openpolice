@@ -1,5 +1,5 @@
 <!-- resources/views/vendor/openpolice/volun/volun-dept-edit-ia-contact.blade.php -->
-<div class="nodeAnchor"><a id="dept{{ $whch }}" name="dept{{ $whch }}"></a></div><hr>
+<div class="nodeAnchor"><a id="dept{{ $whch }}" name="dept{{ $whch }}"></a></div>
 @if ($whch == 'Civ' && !$hasCiv)
     <a id="hidnodeBtn1319" href="javascript:;" class="btn btn-xl btn-secondary hidnodeBtnSelf"
         ><i class="fa fa-plus-circle"></i> Add Civilian Oversight Office</a>

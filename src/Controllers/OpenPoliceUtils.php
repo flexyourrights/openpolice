@@ -3,6 +3,7 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
+use App\Models\User;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\OPIncidents;
@@ -72,7 +73,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function isCompliment()
     { 
-        if (!isset($this->sessData->dataSets["Complaints"])) return ($this->treeID == 5);
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return ($this->treeID == 5);
+        }
         return (isset($this->sessData->dataSets["Complaints"][0]->ComIsCompliment)
             && intVal($this->sessData->dataSets["Complaints"][0]->ComIsCompliment) == 1);
     }
@@ -86,19 +89,25 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function isSilver()
     { 
-        if (!isset($this->sessData->dataSets["Complaints"])) return false;
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return false;
+        }
         return ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Silver'); 
     }
     
     protected function isGold()
     {
-        if (!isset($this->sessData->dataSets["Complaints"])) return false;
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return false;
+        }
         return ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold');
     }
     
     protected function isPublic()
     {
-        if (!isset($this->sessData->dataSets["Complaints"])) return false;
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return false;
+        }
         return ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
             == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'));
     }
@@ -106,7 +115,9 @@ class OpenPoliceUtils extends TreeSurvForm
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
     {
         if ($coreTbl == 'Complaints') {
-            if (!$coreRec) $coreRec = OPComplaints::find($coreID);
+            if (!$coreRec) {
+                $coreRec = OPComplaints::find($coreID);
+            }
             if ($coreRec && isset($coreRec->ComStatus)) {
                 return (in_array($coreRec->ComStatus, $this->getPublishedStatusList($coreTbl)));
             }
@@ -117,13 +128,17 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function moreThan1Victim()
     { 
-        if (!isset($this->sessData->loopItemIDs['Victims'])) return false;
+        if (!isset($this->sessData->loopItemIDs['Victims'])) {
+            return false;
+        }
         return (sizeof($this->sessData->loopItemIDs['Victims']) > 1); 
     }
     
     protected function moreThan1Officer() 
     { 
-        if (!isset($this->sessData->loopItemIDs['Officers'])) return false;
+        if (!isset($this->sessData->loopItemIDs['Officers'])) {
+            return false;
+        }
         return (sizeof($this->sessData->loopItemIDs["Officers"]) > 1); 
     }
     
@@ -199,23 +214,43 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function chkCoreRecEmpty($coreID = -3, $coreRec = NULL)
     {
-        if ($coreID <= 0) $coreID = $this->coreID;
-        if (!$coreRec && $coreID > 0) $coreRec = OPComplaints::find($coreID);
-        if (!$coreRec) return false;
-        if (!isset($coreRec->ComSubmissionProgress) || intVal($coreRec->ComSubmissionProgress) <= 0) return true;
-        if (!isset($coreRec->ComSummary) || trim($coreRec->ComSummary) == '') return true;
+        if ($coreID <= 0) {
+            $coreID = $this->coreID;
+        }
+        if (!$coreRec && $coreID > 0) {
+            $coreRec = OPComplaints::find($coreID);
+        }
+        if (!$coreRec) {
+            return false;
+        }
+        if (!isset($coreRec->ComSubmissionProgress) || intVal($coreRec->ComSubmissionProgress) <= 0) {
+            return true;
+        }
+        if (!isset($coreRec->ComSummary) || trim($coreRec->ComSummary) == '') {
+            return true;
+        }
         return false;
     }
     
     protected function recordIsEditable($coreTbl, $coreID, $coreRec = NULL)
     {
-        if (!$coreRec && $coreID > 0) $coreRec = OPComplaints::find($coreID);
-        if (!isset($coreRec->ComStatus)) return true;
-        if (!$coreRec) return false;
+        if (!$coreRec && $coreID > 0) {
+            $coreRec = OPComplaints::find($coreID);
+        }
+        if (!isset($coreRec->ComStatus)) {
+            return true;
+        }
+        if (!$coreRec) {
+            return false;
+        }
         if ($this->treeID == 1) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) return true;
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+                return true;
+            }
         } elseif ($this->treeID == 5) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete')) return true;
+            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete')) {
+                return true;
+            }
         }
         return false;
     }
@@ -223,7 +258,9 @@ class OpenPoliceUtils extends TreeSurvForm
     public function getAllPublicCoreIDs($coreTbl = '')
     {
         
-        if (trim($coreTbl) == '') $coreTbl = $GLOBALS["SL"]->coreTbl;
+        if (trim($coreTbl) == '') {
+            $coreTbl = $GLOBALS["SL"]->coreTbl;
+        }
         $this->allPublicCoreIDs = $list = [];
         if ($coreTbl == 'Complaints') {
             $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList($coreTbl))
@@ -239,7 +276,9 @@ class OpenPoliceUtils extends TreeSurvForm
                 ->get();
         }
         if ($list->isNotEmpty()) {
-            foreach ($list as $l) $this->allPublicCoreIDs[] = $l->ComPublicID;
+            foreach ($list as $l) {
+                $this->allPublicCoreIDs[] = $l->ComPublicID;
+            }
         }
         //echo '<pre>'; print_r($this->allPublicCoreIDs); echo '</pre>';
         return $this->allPublicCoreIDs;
@@ -247,7 +286,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl)) $coreTbl = $GLOBALS["SL"]->coreTbl;
+        if (!isset($coreTbl)) {
+            $coreTbl = $GLOBALS["SL"]->coreTbl;
+        }
         if ($coreTbl == 'Complaints') {
             return [
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Submitted to Oversight'), 
@@ -267,7 +308,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getUnPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl)) $coreTbl = $GLOBALS["SL"]->coreTbl;
+        if (!isset($coreTbl)) {
+            $coreTbl = $GLOBALS["SL"]->coreTbl;
+        }
         if ($coreTbl == 'Complaints') {
             return [
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Hold'), 
@@ -290,7 +333,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function tblsInPackage()
     {
-        if ($this->dbID == 1) return ['Departments', 'Oversight'];
+        if ($this->dbID == 1) {
+            return ['Departments', 'Oversight'];
+        }
         return [];
     }
     
@@ -346,7 +391,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function loadDeptStuff($deptID = -3)
     {
-        if (!isset($this->v["deptScores"])) $this->v["deptScores"] = new DepartmentScores;
+        if (!isset($this->v["deptScores"])) {
+            $this->v["deptScores"] = new DepartmentScores;
+        }
         $this->v["deptScores"]->loadDeptStuff($deptID);
         return true;
     }
@@ -484,7 +531,9 @@ class OpenPoliceUtils extends TreeSurvForm
                         }
                         break;
                 }
-                if ($allegInfo[1] != '') $this->allegations[] = $allegInfo;
+                if ($allegInfo[1] != '') {
+                    $this->allegations[] = $allegInfo;
+                }
             }
         }
         return $this->allegations;
@@ -511,8 +560,12 @@ class OpenPoliceUtils extends TreeSurvForm
         $ret = '';
         $this->simpleAllegationList();
         if (sizeof($this->allegations) > 0) {
-            if (sizeof($this->allegations) == 1) return $this->allegations[0][0];
-            if (sizeof($this->allegations) == 2) return $this->allegations[0][0] . ' and ' . $this->allegations[1][0];
+            if (sizeof($this->allegations) == 1) {
+                return $this->allegations[0][0];
+            }
+            if (sizeof($this->allegations) == 2) {
+                return $this->allegations[0][0] . ' and ' . $this->allegations[1][0];
+            }
             return $this->allegations[0][0] . ', ' . $this->allegations[1][0] . ', and ' . $this->allegations[2][0];
         }
         return $ret;
@@ -551,15 +604,33 @@ class OpenPoliceUtils extends TreeSurvForm
             }
         }
         $ret = '';
-        if (in_array('Valor', $types))           $ret .= ', Valor';
-        if (in_array('Lifesaving', $types))      $ret .= ', Lifesaving';
-        if (in_array('De-escalation', $types))   $ret .= ', De-escalation';
-        if (in_array('Professionalism', $types)) $ret .= ', Professionalism';
-        if (in_array('Fairness', $types))        $ret .= ', Fairness';
-        if (in_array('Constitutional', $types))  $ret .= ', Constitutional Policing';
-        if (in_array('Compassion', $types))      $ret .= ', Compassion';
-        if (in_array('Community', $types))       $ret .= ', Community Service';
-        if (trim($ret) != '') $ret = trim(substr($ret, 1));
+        if (in_array('Valor', $types)) {
+            $ret .= ', Valor';
+        }
+        if (in_array('Lifesaving', $types)) {
+            $ret .= ', Lifesaving';
+        }
+        if (in_array('De-escalation', $types)) {
+            $ret .= ', De-escalation';
+        }
+        if (in_array('Professionalism', $types)) {
+            $ret .= ', Professionalism';
+        }
+        if (in_array('Fairness', $types)) {
+            $ret .= ', Fairness';
+        }
+        if (in_array('Constitutional', $types)) {
+            $ret .= ', Constitutional Policing';
+        }
+        if (in_array('Compassion', $types)) {
+            $ret .= ', Compassion';
+        }
+        if (in_array('Community', $types)) {
+            $ret .= ', Community Service';
+        }
+        if (trim($ret) != '') {
+            $ret = trim(substr($ret, 1));
+        }
         return $ret;
     }
     
@@ -575,7 +646,9 @@ class OpenPoliceUtils extends TreeSurvForm
     {
         if (sizeof($this->worstAllegations) > 0) {
             foreach ($this->worstAllegations as $a) {
-                if ($a[1] == $allegName) return $a[0];
+                if ($a[1] == $allegName) {
+                    return $a[0];
+                }
             }
         }
         return -3;
@@ -583,7 +656,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getAllegSilvRec($allegName, $allegID = -3)
     {
-        if ($allegID <= 0) $allegID = $this->getAllegID($allegName);
+        if ($allegID <= 0) {
+            $allegID = $this->getAllegID($allegName);
+        }
         if (isset($this->sessData->dataSets["Allegations"]) && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
             foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
                 if ($alleg->AlleType == $allegID 
@@ -597,7 +672,9 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getAllegGoldRec($allegName, $allegID = -3)
     {
-        if ($allegID <= 0) $allegID = $this->getAllegID($allegName);
+        if ($allegID <= 0) {
+            $allegID = $this->getAllegID($allegName);
+        }
         if (isset($this->sessData->dataSets["Allegations"]) && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
             foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
                 if ($alleg->AlleType == $allegID 
@@ -611,8 +688,12 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getAllegDesc($allegName, $allegID = -3, $allegRec = [])
     {
-        if (!$allegRec || !isset($allegRec->AlleDescription)) $allegRec = $this->getAllegSilvRec($allegName, $allegID);
-        if ($allegRec && isset($allegRec->AlleDescription)) return trim($allegRec->AlleDescription);
+        if (!$allegRec || !isset($allegRec->AlleDescription)) {
+            $allegRec = $this->getAllegSilvRec($allegName, $allegID);
+        }
+        if ($allegRec && isset($allegRec->AlleDescription)) {
+            return trim($allegRec->AlleDescription);
+        }
         return '';
     }
     
@@ -721,7 +802,9 @@ class OpenPoliceUtils extends TreeSurvForm
         if (isset($this->sessData->dataSets["EventSequence"]) 
             && sizeof($this->sessData->dataSets["EventSequence"]) > 0) { 
             foreach ($this->sessData->dataSets["EventSequence"] as $i => $eveSeq) {
-                if ($eveSeq->EveID == $eveSeqID) return $eveSeq->EveOrder;
+                if ($eveSeq->EveID == $eveSeqID) {
+                    return $eveSeq->EveOrder;
+                }
             }
         }
         return 0;
@@ -750,7 +833,7 @@ class OpenPoliceUtils extends TreeSurvForm
             'Citations'    => [], 
             'Warnings'     => [], 
             'No Punish'    => []
-        ];
+            ];
         $loopRows = $this->sessData->getLoopRows('Victims');
         foreach ($loopRows as $i => $civ) {
             if ($this->getCivEveSeqIdByType($civ->CivID, 'Stops') > 0) {
@@ -768,8 +851,12 @@ class OpenPoliceUtils extends TreeSurvForm
                 && ($civ->CivGivenWarning == 'N' || trim($civ->CivGivenWarning) == '')) {
                 $this->eventCivLookup["No Punish"][] = $civ->CivID;
             }
-            if ($civ->CivGivenCitation == 'Y') $this->eventCivLookup["Citations"][] = $civ->CivID;
-            if ($civ->CivGivenWarning == 'Y') $this->eventCivLookup["Warnings"][] = $civ->CivID;
+            if ($civ->CivGivenCitation == 'Y') {
+                $this->eventCivLookup["Citations"][] = $civ->CivID;
+            }
+            if ($civ->CivGivenWarning == 'Y') {
+                $this->eventCivLookup["Warnings"][] = $civ->CivID;
+            }
         }
         if (isset($this->sessData->dataSets["Force"]) && sizeof($this->sessData->dataSets["Force"]) > 0) {
             foreach ($this->sessData->dataSets["Force"] as $forceRow) {
@@ -790,7 +877,9 @@ class OpenPoliceUtils extends TreeSurvForm
         $newEveSeq->save();
         eval("\$newEvent = new App\\Models\\" . $GLOBALS["SL"]->tblModels[$eventType] . ";");
         $newEvent->{ $GLOBALS["SL"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
-        if ($eventType == 'Force' && $forceType > 0) $newEvent->ForType = $forceType;
+        if ($eventType == 'Force' && $forceType > 0) {
+            $newEvent->ForType = $forceType;
+        }
         $newEvent->save();
         $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
         $this->sessData->dataSets[$eventType][] = $newEvent;
@@ -805,7 +894,9 @@ class OpenPoliceUtils extends TreeSurvForm
             ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
             ->select('OP_EventSequence.*')
             ->first();
-        if ($civLnk && isset($civLnk->EveID)) return $civLnk->EveID;
+        if ($civLnk && isset($civLnk->EveID)) {
+            return $civLnk->EveID;
+        }
         return -3;
     }
     
@@ -848,9 +939,13 @@ class OpenPoliceUtils extends TreeSurvForm
         $frc->ForEventSequenceID = $eve->getKey();
         $frc->ForAgainstAnimal = 'Y';
         $frc->save();
-        if (!isset($this->sessData->dataSets["Force"])) $this->sessData->dataSets["Force"] = [];
+        if (!isset($this->sessData->dataSets["Force"])) {
+            $this->sessData->dataSets["Force"] = [];
+        }
         $this->sessData->dataSets["Force"][] = $frc;
-        if (!isset($this->sessData->dataSets["EventSequence"])) $this->sessData->dataSets["EventSequence"] = [];
+        if (!isset($this->sessData->dataSets["EventSequence"])) {
+            $this->sessData->dataSets["EventSequence"] = [];
+        }
         $this->sessData->dataSets["EventSequence"][] = $eve;
         return $eve;
     }
@@ -902,7 +997,7 @@ class OpenPoliceUtils extends TreeSurvForm
                         "Civilians" => $this->getLinkedToEvent('Civilian', $eveSeq->EveID), 
                         "Officers"  => $this->getLinkedToEvent('Officer', $eveSeq->EveID), 
                         "Event"     => $this->sessData->getChildRow('EventSequence', $eveSeq->EveID, $eveSeq->EveType)
-                    ];
+                        ];
                 }
             }
         }
@@ -920,8 +1015,12 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function printEventSequenceLine($eveSeq, $info = '')
     {
-        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) $eveSeq = $eveSeq[0];
-        if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) return '';
+        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) {
+            $eveSeq = $eveSeq[0];
+        }
+        if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) {
+            return '';
+        }
         $ret = '<span class="slBlueDark">';
         if ($eveSeq["EveType"] == 'Force' && isset($eveSeq["Event"]->ForType) && trim($eveSeq["Event"]->ForType) != ''){
             if ($eveSeq["Event"]->ForType == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
@@ -988,7 +1087,9 @@ class OpenPoliceUtils extends TreeSurvForm
     protected function getEveSeqRowType($eveSeqID = -3)
     {
         $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-        if ($eveSeq) return $eveSeq->EveType;
+        if ($eveSeq) {
+            return $eveSeq->EveType;
+        }
         return '';
     }
     
@@ -1001,7 +1102,9 @@ class OpenPoliceUtils extends TreeSurvForm
                     $chk = OPLinksCivilianEvents::where('LnkCivEveEveID', $eve->EveID)
                         ->where('LnkCivEveCivID', $civID)
                         ->first();
-                    if ($chk && isset($chk->LnkCivEveID)) return 1;
+                    if ($chk && isset($chk->LnkCivEveID)) {
+                        return 1;
+                    }
                 }
             }
         }
@@ -1073,7 +1176,9 @@ class OpenPoliceUtils extends TreeSurvForm
                     $contact = $this->sessData->getChildRow('Civilians', $civ->CivPersonID, 'PersonContact');
                     $name = $contact->PrsnNameFirst . ' ' . $contact->PrsnNameLast;
                 }
-                if (trim($name) == '') $name = 'Complainant';
+                if (trim($name) == '') {
+                    $name = 'Complainant';
+                }
             } else {
                 $name = 'You ' . $name;
             }
@@ -1083,6 +1188,9 @@ class OpenPoliceUtils extends TreeSurvForm
         $name = trim($name);
         if ($name != '' && $name != 'You') {
             $name .= ' (' . $civ->CivRole . ' #' . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) . ')';
+        }
+        if ($name == '') {
+            
         }
         return trim($name);
     }
@@ -1100,28 +1208,61 @@ class OpenPoliceUtils extends TreeSurvForm
         }
         $civInd = $this->sessData->getLoopIndFromID('Victims', $civID);
         if ($civInd >= 0) {
-            return $this->getCivName('Victims', $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            $name = $this->getCivName('Victims', $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            if ($name == '') {
+                $name = 'Victim #' . (1+$civInd);
+            }
+            return $name;
         }
         $civInd = $this->sessData->getLoopIndFromID('Witnesses', $civID);
         if ($civInd >= 0) {
-            return $this->getCivName('Witnesses', $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            $name = $this->getCivName('Witnesses', $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            if ($name == '') {
+                $name = 'Witness #' . (1+$civInd);
+            }
+            return $name;
         }
         return '';
+    }
+    
+    protected function getCivNamesFromEvent($eveID)
+    {
+        $ret = '';
+        $lnks = OPLinksCivilianEvents::where('LnkCivEveEveID', $eveID)
+            ->get();
+        if ($lnks->isNotEmpty()) {
+            $civs = [];
+            foreach ($lnks as $lnk) {
+                if (!in_array($lnk->LnkCivEveCivID, $civs)) {
+                    $civs[] = $lnk->LnkCivEveCivID;
+                }
+            }
+            foreach ($civs as $i => $civID) {
+                $ret .= (($i > 0) ? ', ' . ((sizeof($civs) > 2 && $i == (sizeof($civs)-1)) ? 'and ' : '') : '')
+                    . $this->getPersonLabel('Civilians', $civID);
+            }
+        }
+        return $ret;
     }
     
     // converts Officer row into identifying name used in most of the complaint process
     protected function getOfficerName($officer = [], $itemIndex = -3)
     {
         $name = $this->getPersonLabel('Officers', $officer->OffID, $officer);
-        if (trim($name) == '') $name = 'Officer #' . (1+$itemIndex);
-        else $name .= ' (Officer #' . (1+$itemIndex) . ')';
+        if (trim($name) == '') {
+            $name = 'Officer #' . (1+$itemIndex);
+        } else {
+            $name .= ' (Officer #' . (1+$itemIndex) . ')';
+        }
         return trim($name);
     }
     
     protected function getOfficerNameFromID($offID)
     {
         $offInd = $this->sessData->getLoopIndFromID('Officers', $offID);
-        if ($offInd >= 0) return $this->getOfficerName($this->sessData->getRowById('Officers', $offID), (1+$offInd));
+        if ($offInd >= 0) {
+            return $this->getOfficerName($this->sessData->getRowById('Officers', $offID), (1+$offInd));
+        }
         return '';
     }
     
@@ -1130,7 +1271,9 @@ class OpenPoliceUtils extends TreeSurvForm
         $civInd = -3;
         if (sizeof($this->sessData->dataSets["Civilians"]) > 0) {
             foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
-                if (isset($civ->CivRole) && trim($civ->CivRole) == 'Victim' && $civInd < 0) $civInd = $i;
+                if (isset($civ->CivRole) && trim($civ->CivRole) == 'Victim' && $civInd < 0) {
+                    $civInd = $i;
+                }
             }
         }
         return $civInd;
@@ -1156,29 +1299,39 @@ class OpenPoliceUtils extends TreeSurvForm
     protected function getDeptName($dept = [], $itemIndex = -3)
     {
         $name = ''; //(($itemIndex > 0) ? '<span class="fPerc66 gry9">(#'.$itemIndex.')</span>' : '');
-        if (isset($dept->DeptName) && trim($dept->DeptName) != '') $name = $dept->DeptName . ' ' . $name;
+        if (isset($dept->DeptName) && trim($dept->DeptName) != '') {
+            $name = $dept->DeptName . ' ' . $name;
+        }
         return trim($name);
     }
     
     protected function getDeptNameByID($deptID)
     {
         $dept = $this->sessData->getRowById('Departments', $deptID);
-        if ($dept) return $this->getDeptName($dept);
+        if ($dept) {
+            return $this->getDeptName($dept);
+        }
         return '';
     }
     
     protected function civRow2Set($civ)
     {
-        if (!$civ || !isset($civ->CivIsCreator)) return '';
+        if (!$civ || !isset($civ->CivIsCreator)) {
+            return '';
+        }
         return (($civ->CivIsCreator == 'Y') ? '' : (($civ->CivRole == 'Victim') ? 'Victims' : 'Witnesses') );
     }
     
     protected function getCivilianList($loop = 'Victims')
     {
-        if ($loop == 'Victims' || $loop == 'Witness') return $this->sessData->loopItemIDs[$loop];
+        if ($loop == 'Victims' || $loop == 'Witness') {
+            return $this->sessData->loopItemIDs[$loop];
+        }
         $civs = [];
         if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $civ) $civs[] = $civ->CivID;
+            foreach ($this->sessData->dataSets["Civilians"] as $civ) {
+                $civs[] = $civ->CivID;
+            }
         }
         return $civs;
     }
@@ -1203,18 +1356,26 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function loadPrtnAbbr($defID)
     {
-        if (!isset($this->v["prtnTypes"])) $this->loadPartnerTypes();
+        if (!isset($this->v["prtnTypes"])) {
+            $this->loadPartnerTypes();
+        }
         foreach ($this->v["prtnTypes"] as $p) {
-            if ($p["defID"] == $defID) return $p["abbr"];
+            if ($p["defID"] == $defID) {
+                return $p["abbr"];
+            }
         }
         return '';
     }
     
     protected function loadPrtnDefID($abbr)
     {
-        if (!isset($this->v["prtnTypes"])) $this->loadPartnerTypes();
+        if (!isset($this->v["prtnTypes"])) {
+            $this->loadPartnerTypes();
+        }
         foreach ($this->v["prtnTypes"] as $p) {
-            if ($p["abbr"] == $abbr) return $p["defID"];
+            if ($p["abbr"] == $abbr) {
+                return $p["defID"];
+            }
         }
         return '';
     }
@@ -1283,7 +1444,9 @@ class OpenPoliceUtils extends TreeSurvForm
             }
         }
         $usr = User::find($uID);
-        if ($usr && isset($usr->name)) return $usr->name;
+        if ($usr && isset($usr->name)) {
+            return $usr->name;
+        }
         return '';
     }
     
@@ -1312,6 +1475,5 @@ class OpenPoliceUtils extends TreeSurvForm
         }
         return true;
     }
-    
     
 }
