@@ -6,6 +6,7 @@ use App\Models\SLEmails;
 use App\Models\SLEmailed;
 use App\Models\OPComplaints;
 use App\Models\OPzComplaintReviews;
+use SurvLoop\Controllers\SessAnalysis;
 use OpenPolice\Controllers\OpenReport;
 
 class OpenReportTools extends OpenReport
@@ -47,6 +48,23 @@ class OpenReportTools extends OpenReport
             ])->render();
     }
     
+    protected function printComplaintSessPath()
+    {
+        if ($this->v["isOwner"] || $this->v["user"]->hasRole('administrator|databaser|staff')) {
+            $this->loadCustLoop($GLOBALS["SL"]->REQ, 1, 1);
+            $this->custReport->loadTree(1);
+            $analyze = new SessAnalysis(1);
+            $nodeTots = $analyze->loadNodeTots($this->custReport);
+            $coreTots = $analyze->analyzeCoreSessions($this->coreID);
+            return '<div class="pT20 pB20"><div class="slCard mT20 mB20"><h2>Incomplete: Session Attempt History</h2>'
+                . view('vendor.survloop.admin.tree.tree-session-attempt-history', [
+                "core"     => $coreTots,
+                "nodeTots" => $nodeTots
+                ])->render() . '<br /></div></div>';
+        }
+        return '';
+    }
+    
     protected function printComplaintOwner()
     {
         if ($this->v["isOwner"] && $GLOBALS["SL"]->REQ->has('ownerUpdate') 
@@ -59,13 +77,13 @@ class OpenReportTools extends OpenReport
             $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overID);
         
             $newReview = new OPzComplaintReviews;
-            $newReview->ComRevComplaint  = $this->coreID;
-            $newReview->ComRevUser       = $this->v["user"]->id;
-            $newReview->ComRevDate       = date("Y-m-d H:i:s");
-            $newReview->ComRevType       = 'Owner';
-            $newReview->ComRevNote       = (($GLOBALS["SL"]->REQ->has('overNote')) 
+            $newReview->ComRevComplaint = $this->coreID;
+            $newReview->ComRevUser      = $this->v["user"]->id;
+            $newReview->ComRevDate      = date("Y-m-d H:i:s");
+            $newReview->ComRevType      = 'Owner';
+            $newReview->ComRevNote      = (($GLOBALS["SL"]->REQ->has('overNote')) 
                 ? trim($GLOBALS["SL"]->REQ->overNote) : '');
-            $newReview->ComRevStatus     = $GLOBALS["SL"]->REQ->overStatus;
+            $newReview->ComRevStatus    = $GLOBALS["SL"]->REQ->overStatus;
             $newReview->save();
             if ($GLOBALS["SL"]->REQ->has('overStatus')) {
                 if (trim($GLOBALS["SL"]->REQ->overStatus) == 'Received by Oversight') {

@@ -7,18 +7,42 @@ use App\Models\OPPartners;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPPartnerCaseTypes;
+use App\Models\OPPartnerCapac;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenVolunteers;
 
 class OpenPartners extends OpenVolunteers
 {
-    protected function printManageAttorneys()
+    protected function printPartnersOverview()
+    {
+        $this->loadPartnerTypes();
+        foreach ($this->v["prtnTypes"] as $i => $p) {
+            $this->v["prtnTypes"][$i]["tot"] = OPPartners::where('PartType', $p["defID"])
+                ->count();
+        }
+        return view('vendor.openpolice.nodes.1939-manage-partners-overview', $this->v)->render();
+    }
+    
+    protected function printPartnerCapabilitiesOverview()
+    {
+        $capac = [];
+        $defs = $GLOBALS["SL"]->def->getSet('Organization Capabilities');
+        foreach ($defs as $i => $def) {
+            $capac[] = [
+                "def" => $def->DefValue,
+                "tot" => OPPartnerCapac::where('PrtCapCapacity', $def->DefID)
+                    ->count()
+                ];
+        }
+        return view('vendor.openpolice.nodes.2169-partner-overview-capabilities', [ "capac" => $capac ])->render();
+    }
+    
+    protected function printManageAttorneys($type = 'Attorney')
     {
         $ret = '';
         $this->loadPartnerTypes();
-        $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
+        $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', $type);
         if ($GLOBALS["SL"]->REQ->has('add')) {
-            
             $newAtt = new OPPartners;
             $newAtt->PartType = (($GLOBALS["SL"]->REQ->has('type')) 
                 ? $this->loadPrtnDefID($GLOBALS["SL"]->REQ->get('type')) : null);
@@ -26,20 +50,50 @@ class OpenPartners extends OpenVolunteers
             $this->redir('/dashboard/start-' . $newAtt->PartID . '/partner-profile', true);
         }
         foreach ($this->v["prtnTypes"] as $p) {
-            $this->v["partners"] = DB::table('OP_Partners')
-                ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
-                ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
-                ->where('OP_Partners.PartType', $p["defID"])
-                ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
-                    'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
-                    'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
-                ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
-                ->get();
-            $this->v["prtnType"] = $p;
-            $ret .= view('vendor.openpolice.nodes.1939-manage-attorneys', $this->v)->render();
-            
+            if ($p["defID"] == $defAtt) {
+                $this->v["partners"] = $this->getPartnersOfType($p["defID"]);
+                $this->v["prtnType"] = $p;
+                return view('vendor.openpolice.nodes.2166-manage-attorneys', $this->v)->render();
+            }
         }
-        return $ret;
+        return '';
+    }
+    
+    protected function getPartnersOfType($partTypeDef = 584, $statusIn = [1])
+    {
+        return DB::table('OP_Partners')
+            ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
+            ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
+            ->where('OP_Partners.PartType', $partTypeDef)
+            ->whereIn('OP_Partners.PartStatus', $statusIn)
+            ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
+                'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
+                'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
+            ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
+            ->get();
+    }
+    
+    protected function loadPartnerCapabLookups($inEnglish = false)
+    {
+        $lookup = [];
+        $links = OPPartnerCapac::get();
+        if ($links->isNotEmpty()) {
+            foreach ($links as $lnk) {
+                if (isset($lnk->PrtCapPartID) && intVal($lnk->PrtCapPartID) > 0 && isset($lnk->PrtCapCapacity)
+                    && intVal($lnk->PrtCapCapacity) > 0) {
+                    if (!isset($lookup[$lnk->PrtCapPartID])) {
+                        $lookup[$lnk->PrtCapPartID] = [];
+                    }
+                    if ($inEnglish) {
+                        $lookup[$lnk->PrtCapPartID][] 
+                            = $GLOBALS["SL"]->def->getVal('Organization Capabilities', $lnk->PrtCapCapacity);
+                    } else {
+                        $lookup[$lnk->PrtCapPartID][] = $lnk->PrtCapCapacity;
+                    }
+                }
+            }
+        }
+        return $lookup;
     }
     
     protected function initPartnerCaseTypes($nID)
@@ -58,6 +112,14 @@ class OpenPartners extends OpenVolunteers
             $this->sessData->dataSets["Partners"][0]->PartType = intVal($GLOBALS["SL"]->REQ->get('nv2074'));
         }
         return '';
+    }
+    
+    protected function printPartnersOverviewPublic($nID = -3)
+    {
+        return view('vendor.openpolice.nodes.2179-list-organizations', [
+            "orgs"  => $this->getPartnersOfType($GLOBALS["SL"]->def->getID('Partner Types', 'Organization')),
+            "capab" => $this->loadPartnerCapabLookups(true)
+            ])->render();
     }
 
     protected function loadPartnerPage(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 56)

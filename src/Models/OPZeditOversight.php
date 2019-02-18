@@ -17,7 +17,6 @@ class OPZeditOversight extends Model
 		'ZedOverNotes', 
 		'ZedOverOverID', 
 		'ZedOverOverType', 
-		'ZedOverOverCivModel', 
 		'ZedOverOverUserID', 
 		'ZedOverOverDeptID', 
 		'ZedOverOverAgncName', 

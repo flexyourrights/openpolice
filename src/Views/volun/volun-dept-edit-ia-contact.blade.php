@@ -4,15 +4,12 @@
     <a id="hidnodeBtn1319" href="javascript:;" class="btn btn-xl btn-secondary hidnodeBtnSelf"
         ><i class="fa fa-plus-circle"></i> Add Civilian Oversight Office</a>
 @endif
-<div id="overHead{{ $whch }}" class="row @if ($whch == 'IA' || $hasCiv) disBlo @else disNon @endif ">
-    <div class="col-7">
-        <h2 class="m0">{{ $type }} Office</h2>
-    </div><div class="col-5">
-        @if (!$hasC)
-            <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-secondary hidnodeBtnSelf"
-                ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>
-        @endif
-    </div>
+<div id="overHead{{ $whch }}" class="w100 @if ($whch == 'IA' || $hasCiv) disBlo @else disNon @endif ">
+    @if (!$hasC)
+        <a id="hidnodeBtn{{ $n }}" href="javascript:;" class="btn btn-secondary hidnodeBtnSelf pull-right"
+            ><i class="fa fa-plus-circle"></i> Add Primary Contact</a>
+    @endif
+    <h2 class="m0">{{ $type }} Office</h2>
 </div>
 <style>
 @if (!$hasC) #node{{ $n }} { display: none; } @endif

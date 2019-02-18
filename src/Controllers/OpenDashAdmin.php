@@ -19,8 +19,9 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $grapher = new SurvTrends('' . rand(1000000, 10000000) . '');
-        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#2b3493', '#2b3493');
         $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
+        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#c3ffe1', '#c3ffe1');
+        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#2b3493', '#2b3493');
         $recentAttempts = OPComplaints::whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
             ->where('created_at', '>=', $grapher->getPastStartDate() . ' 00:00:00')
@@ -28,14 +29,13 @@ class OpenDashAdmin
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
-                if ($GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+                if ($rec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
                     $grapher->addDayTally('incomplete', $rec->created_at);
                 } else {
                     $grapher->addDayTally('complete', $rec->created_at);
                 }
             }
         }
-        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#c3ffe1', '#c3ffe1');
         $recentAttempts = OPLinksComplaintOversight::select('LnkComOverSubmitted')
             ->where('LnkComOverSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
             ->get();
@@ -44,7 +44,6 @@ class OpenDashAdmin
                 $grapher->addDayTally('submitted', $rec->LnkComOverSubmitted);
             }
         }
-        //$grapher->addDataLineType('attorneyd', 'Attorney\'d', '', '#63c6ff', '#63c6ff');
         return $grapher->printDailyGraph(350);
     }
     

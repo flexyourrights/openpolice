@@ -63,10 +63,43 @@ class OpenListing extends OpenAjax
             LEFT OUTER JOIN `OP_PersonContact` p ON p.`PrsnID` LIKE civ.`CivPersonID` WHERE "
             . ((isset($this->v["fltQry"])) ? $this->v["fltQry"] : "");
         if (isset($this->v["fltIDs"]) && sizeof($this->v["fltIDs"]) > 0) {
-            foreach ($this->v["fltIDs"] as $ids) $qman .= " c.`ComID` IN (" . implode(', ', $ids) . ") AND ";
+            foreach ($this->v["fltIDs"] as $ids) {
+                $qman .= " c.`ComID` IN (" . implode(', ', $ids) . ") AND ";
+            }
         }
         $qman .= " civ.`CivIsCreator` LIKE 'Y' ";
-        if ($this->v["fltStatus"] > 0) $qman .= " AND c.`ComStatus` LIKE '" . $this->v["fltStatus"] . "' ";
+        $comTypes = [];
+        if ($GLOBALS["SL"]->REQ->has('type')) {
+            switch (trim($GLOBALS["SL"]->REQ->get('type'))) {
+                case 'notsure':
+                    $GLOBALS["SL"]->setCurrPage('/dash/all-complete-complaints?type=notsure');
+                    $comTypes = [ $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure') ];
+                    break;
+                case 'notpolice':
+                    $GLOBALS["SL"]->setCurrPage('/dash/all-complete-complaints?type=notpolice');
+                    $comTypes = [ $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not About Police') ];
+                    break;
+                case 'spam':
+                    $GLOBALS["SL"]->setCurrPage('/dash/all-complete-complaints?type=spam');
+                    $comTypes = [
+                        $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Abuse'),
+                        $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Spam'),
+                        $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Test')
+                        ];
+                    break;
+            }
+        }
+        if (sizeof($comTypes) == 0) {
+            $comTypes = [
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                ];
+        }
+        $qman .= " AND c.`ComType` IN ('" . implode("', '", $comTypes) . "') ";
+        if ($this->v["fltStatus"] > 0) {
+            $qman .= " AND c.`ComStatus` LIKE '" . $this->v["fltStatus"] . "' ";
+        }
         switch ($this->v["listView"]) {
             case 'review':         
                 $qman .= " AND (c.`ComStatus` LIKE '" . $GLOBALS["SL"]->def->getID('Complaint Status', 'New') . "' 

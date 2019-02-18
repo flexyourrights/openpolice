@@ -148,6 +148,14 @@ class OpenComplaintConditions extends OpenSessDataOverride
             return 0;
         } elseif ($condition == '#IsOversightAgency') {
             return (($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) ? 1 : 0);
+        } elseif ($condition == '#ComplaintNotIncompleteOrCurrIsStaff') {
+            if ((isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
+                && $this->sessData->dataSets["Complaints"][0]->ComStatus
+                    != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
+                || ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|staff'))) {
+                return 1;
+            }
+            return 0;
         }
         return -1; 
     }

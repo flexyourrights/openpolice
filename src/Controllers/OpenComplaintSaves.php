@@ -58,8 +58,6 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveDeptSubWays2($nID);
         } elseif ($nID == 1329) {
             return $this->saveEditLog($nID);
-        } elseif ($nID == 1229) {
-            return $this->saveInitDeptOversight($nID);
             
         // Page Nodes ...
         } elseif ($nID == 1007) {

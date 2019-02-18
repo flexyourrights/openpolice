@@ -226,6 +226,13 @@ class OpenSessDataOverride extends OpenComplaintPrints
                 $currNodeSessionData[] = 'TimeLimit';
             }
             return $currNodeSessionData;
+        } elseif ($nID == 1229) {
+            $civOver = $this->getOverRow('Civ');
+//echo '<pre>'; print_r($civOver); print_r($this->sessData->dataSets["Oversight"]); echo '</pre>'; exit;
+            if (isset($civOver) && isset($civOver->OverAgncName) && trim($civOver->OverAgncName) != '') {
+                return ['Y'];
+            }
+            return ['N'];
         }
         return [];
     }

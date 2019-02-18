@@ -1,5 +1,4 @@
-<!-- resources/views/vendor/openpolice/nodes/1939-manage-attorneys.blade.php -->
-<div class="slCard nodeWrap">
+<!-- resources/views/vendor/openpolice/nodes/2166-manage-attorneys.blade.php -->
 <a href="/dashboard/start/partner-profile/?nv2074={{ $prtnType['defID'] }}" class="btn btn-primary pull-right"
     ><i class="fa fa-plus-circle"></i> Add {{ $prtnType["sing"] }}</a>
 <h2>Manage {{ $prtnType["plur"] }}</h2>
@@ -16,8 +15,8 @@
                 @else <span class="slGrey">(empty)</span> @endif </a>
         </div>
         <div class="col-md-4">
+            @if (isset($p->PrsnAddressCity)) {{ $p->PrsnAddressCity }}, @endif
             @if (isset($p->PrsnAddressState)) {{ $p->PrsnAddressState }} @endif
-            @if (isset($p->PrsnAddressCity)) {{ $p->PrsnAddressCity }} @endif
             @if ($prtnType["abbr"] == 'attorney') 
                 @if (isset($p->PartCompanyName)) - {{ $p->PartCompanyName }} @endif
             @endif
@@ -31,5 +30,3 @@
     </div></div>
 @empty <div class="pT20"><i>No {{ $prtnType["plur"] }} Found.</i></div>
 @endforelse
-</div>
-<style> #mainBody { background: #F5FBFF; } </style>

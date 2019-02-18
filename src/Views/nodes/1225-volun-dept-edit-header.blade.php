@@ -1,28 +1,37 @@
 <!-- resources/views/vendor/openpolice/nodes/1225-volun-dept-edit-header.blade.php -->
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
+<div id="fixedHeadWidth" class="w100"> </div>
 <div id="fixedHeader" class="fixed">
-    <div class="row mT5">
-        <div class="col-9">
-            <h2 class="slBlueDark m0">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h2>
-        </div><div class="col-3 taR">
-            <a href="javascript:;" id="hidivBtnScoreDeet" class="fR disBlo hidivBtn pT10">
-                <h3 class="m0 slGreenLight"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
-                    intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3></a>
-            <div class="fC"></div>
+    <div class="row">
+        <div class="col-8">
+            <h4 class="m0 slBlueDark">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h4>
+        </div><div class="col-4">
+            <h4 class="m0 slGreenLight"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
+                intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h4>
         </div>
     </div>
-    <div class="slGrey mB10">
+</div>
+<div style="margin: 20px 0px -80px 0px;">
+    <div class="slCard nodeWrap slGrey">
+        <a href="/dept/{{ $deptRow->DeptSlug }}" target="_blank">
+            <i class="fa fa-external-link mR5" aria-hidden="true"></i>
+            openpolice.org/dept/{{ $deptRow->DeptSlug }}</a><br />
         {{ $deptRow->DeptAddressCity }}, {{ $deptRow->DeptAddressState }} {{ $deptRow->DeptAddressZip }}
         {!! $editsSummary[0] !!}
     </div>
 </div>
 <style>
 #pageTopGapID { display: none; }
-.nodeAnchor a { top: -100px; }
-#mainBody, #fixedHeader, .fixed, #fixedHeader.fixed { background: #F5FBFF; }
-#leftSideWrap, #leftAdmMenu, #admMenuCustom { background: #FCFEFF; }
+#fixedHeader, #fixedHeader.fixed {
+    margin: 55px 0px 0px -16px;
+    background: #F5FBFF;
+}
+@media screen and (max-width: 480px) {
+
+}
 </style>
 <script type="text/javascript">
+anchorOffsetBonus = -140;
 $(document).ready(function(){
     function chkDeptScore() {
         if (document.getElementById("n1226FldID") && document.getElementById("opcScore")) {
@@ -102,11 +111,6 @@ $(document).ready(function(){
         setTimeout(function() { chkDeptScore(); }, 3000);
     }
     setTimeout(function() { chkDeptScore(); }, 100);
-    
-	$(document).on("click", "#closeScripts", function() {
-        $("#hidivScripts").slideUp("fast");
-        setTimeout(function() { $("#hidivBtnScripts").slideDown("fast"); }, 600);
-	});
     
 });
 </script>

@@ -19,7 +19,6 @@ class OpenPolice extends OpenInitExtras
 {
     protected function customNodePrint($nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
     {
-        $ret = '';
         // Main Complaint Survey
         if (in_array($nID, [145, 920])) {
             return $this->printDeptSearch($nID);
@@ -64,6 +63,8 @@ class OpenPolice extends OpenInitExtras
             return $this->printDeptPage1099($nID);
             
         // Partner Profiles
+        } elseif ($nID == 2179) {
+            return $this->printPartnersOverviewPublic($nID);
         } elseif ($nID == 1896) {
             return $this->printAttorneyReferrals($nID);
         } elseif (in_array($nID, [1961, 2062])) {
@@ -132,6 +133,8 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintOwner();
         } elseif ($nID == 1780) {
             return $this->printMfaInstruct();
+        } elseif ($nID == 2164) {
+            return $this->printComplaintSessPath();
             
         // Staff Area Nodes
         } elseif ($nID == 1418) {
@@ -139,9 +142,22 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1420) {
             return $this->printComplaintListing('incomplete');
         } elseif ($nID == 1939) {
+            return $this->printPartnersOverview();
+        } elseif ($nID == 2169) {
+            return $this->printPartnerCapabilitiesOverview();
+        } elseif ($nID == 2166) {
             return $this->printManageAttorneys();
+        } elseif ($nID == 2171) {
+            return $this->printManageAttorneys('Organization');
         } elseif ($nID == 1924) {
             return $this->initPartnerCaseTypes($nID);
+        } elseif ($nID == 2181) {
+            if ($this->sessData->dataSets["Partners"][0]->PartType 
+                == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')) {
+                $GLOBALS["SL"]->setCurrPage('/dash/manage-organizations');
+            } else {
+                $GLOBALS["SL"]->setCurrPage('/dash/manage-attorneys');
+            }
             
         // Volunteer Area Nodes
         } elseif ($nID == 1211) {
@@ -160,8 +176,6 @@ class OpenPolice extends OpenInitExtras
             return view('vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate', $this->v)->render();
         } elseif ($nID == 1227) {
             return view('vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', $this->v)->render();
-        } elseif (in_array($nID, [1228, 1229])) {
-            return $this->printDeptEditContact($nID);
         } elseif ($nID == 1231) {
             return view('vendor.openpolice.volun.volun-dept-edit-history', $this->v)->render();
         } elseif ($nID == 1338) {
@@ -193,7 +207,7 @@ class OpenPolice extends OpenInitExtras
             $this->initAdmDash();
             return $this->v["openDash"]->volunStatsTable();
         }
-        return $ret;
+        return '';
     }
     
     protected function customResponses($nID, $curr)

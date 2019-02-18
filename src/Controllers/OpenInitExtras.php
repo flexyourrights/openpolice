@@ -220,15 +220,22 @@ class OpenInitExtras extends OpenPartners
             }
             session()->put('opcChks', true);
         }
+        
+        // Department Research Survey
+        if ($this->treeID == 36) {
+            if (sizeof($this->sessData->dataSets['Oversight']) == 1) {
+                $new = $this->sessData->newDataRecord('Oversight', 'OverDeptID', 
+                    $this->sessData->dataSets['Departments'][0]->DeptID, true);
+                $new->OverType = 302;
+                $new->save();
+                $this->sessData->refreshDataSets();
+            }
+        }
         return true;
     }
     
     public function initPowerUser($uID = -3)
     {
-        /* if (!$this->v["user"] || intVal($this->v["user"]->id) <= 0
-            || !$this->v["user"]->hasRole('administrator|staff|databaser|partner|volunteer')) {
-            return $this->redir('/');
-        } */
         if ($uID <= 0) {
             $uID = $this->v["uID"];
         }
@@ -281,14 +288,6 @@ class OpenInitExtras extends OpenPartners
             }
         }
         return true;
-    }
-    
-    protected function rawOrderPercentTweak($nID, $rawPerc, $found = -3)
-    { 
-        if ($this->isGold() && !$this->isCompliment()) {
-            return $rawPerc;
-        }
-        return round(100*($found/(sizeof($this->nodesRawOrder)-200)));
     }
     
     protected function runPageExtra($nID = -3)

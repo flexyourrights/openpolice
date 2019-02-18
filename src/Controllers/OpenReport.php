@@ -143,7 +143,9 @@ class OpenReport extends OpenDepts
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')))) {
             $ret = $this->getCivReportName($this->sessData->dataSets["Civilians"][0]->CivID);
         }
-        if (trim($ret) != '') return ['Submitted By', $ret];
+        if (trim($ret) != '') {
+            return ['Submitted By', $ret];
+        }
         return [];
     }
     
@@ -154,11 +156,18 @@ class OpenReport extends OpenDepts
             && $this->sessData->dataSets['Complaints'][0]->ComPrivacy
             == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'))) {
             $date = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-            if ($this->sessData->dataSets["Incidents"][0]->IncTimeStart !== null) {
-                $date .= ' at ' . date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-            }
+            $timeStart = $timeEnd = '';
             if ($this->sessData->dataSets["Incidents"][0]->IncTimeEnd !== null) {
-                $date .= ' until ' . date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeEnd));
+                $timeEnd = date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeEnd));
+            }
+            if ($this->sessData->dataSets["Incidents"][0]->IncTimeStart !== null) {
+                $timeStart = date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
+                if ($timeStart != '' && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
+                    $date .= ' at ' . $timeStart;
+                    if ($timeEnd != '' && $timeStart != $timeEnd) {
+                        $date .= ' until ' . $timeEnd;
+                    }
+                }
             }
         } else {
             $date = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));

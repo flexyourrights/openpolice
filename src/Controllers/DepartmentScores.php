@@ -3,14 +3,14 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-
 use App\Models\User;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
-
 use App\Models\OPzComplaintReviews;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
+
+use App\Models\OPOversightModels;
 
 class DepartmentScores
 {
@@ -100,7 +100,9 @@ class DepartmentScores
             '#EC2327'
             ];
         $this->stats = [ "count" => 0, "score" => 0 ];
-        foreach ($this->vals as $type => $specs) $this->stats[$type] = 0;
+        foreach ($this->vals as $type => $specs) {
+            $this->stats[$type] = 0;
+        }
         return true;
     }
     
@@ -151,6 +153,12 @@ class DepartmentScores
         $this->loadAllDepts();
         if ($this->scoreDepts->isNotEmpty()) {
             foreach ($this->scoreDepts as $i => $dept) {
+                $lastUpdate = OPZeditDepartments::where('ZedDeptDeptID', $dept->DeptID)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                if ($lastUpdate && isset($lastUpdate->created_at)) {
+                    $this->scoreDepts[$i]->update([ "DeptVerified" => $lastUpdate->created_at ]);
+                }
                 if ($this->deptOvers[$dept->DeptID]) {
                     $this->stats["count"]++;
                     $this->scoreDepts[$i]->DeptScoreOpenness = 0;
@@ -165,7 +173,9 @@ class DepartmentScores
                     $this->stats["score"] += $this->scoreDepts[$i]->DeptScoreOpenness;
                 }
             }
-            if ($this->stats["count"] > 0) $this->stats["scoreAvg"] = $this->stats["score"]/$this->stats["count"];
+            if ($this->stats["count"] > 0) {
+                $this->stats["scoreAvg"] = $this->stats["score"]/$this->stats["count"];
+            }
         }
         return true;
     }
@@ -173,9 +183,13 @@ class DepartmentScores
     public function checkRecFld($specs, $deptID, $overrow = null)
     {
         if ($overrow === null) {
-            if ($deptID <= 0) return 0;
+            if ($deptID <= 0) {
+                return 0;
+            }
             $overrow = ((isset($this->deptScore[$deptID])) ? $this->deptScore[$deptID] : $this->deptOvers[$deptID]);
-            if (!$overrow) return 0;
+            if (!$overrow) {
+                return 0;
+            }
         }
         if (trim($specs->ifIs) != '') {
             if (isset($overrow->{ $specs->fld }) && trim($overrow->{ $specs->fld }) == $specs->ifIs) {

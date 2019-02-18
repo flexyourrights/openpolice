@@ -1,6 +1,7 @@
 <!-- resources/views/vendor/openpolice/volun/dept-rows.blade.php -->
 @if (sizeof($deptRows) > 0)
-    <p>Click a department below to verify it's information and Accessibility Score:</p>
+    <p>Click a department below to verify it's information and 
+    <a href="/department-accessibility">Accessibility Score</a>:</p>
     <div class="p10"><div class="row">
         <div class="col-md-6"><b>Department Name</b></div>
         <div class="col-md-3 taR"><b>City, State</b></div>

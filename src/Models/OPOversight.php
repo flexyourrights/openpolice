@@ -11,7 +11,6 @@ class OPOversight extends Model
     protected $fillable   = 
     [    
 		'OverType', 
-		'OverCivModel', 
 		'OverUserID', 
 		'OverDeptID', 
 		'OverAgncName', 

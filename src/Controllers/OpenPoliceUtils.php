@@ -1338,19 +1338,21 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function loadPartnerTypes()
     {
-        $this->v["prtnTypes"] = [
-            [
-                "abbr" => 'attorney',
-                "sing" => 'Attorney',
-                "plur" => 'Attorneys', 
-                "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')
-            ], [
-                "abbr" => 'org',
-                "sing" => 'Organization',
-                "plur" => 'Organizations', 
-                "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')
-            ]
-        ];
+        if (!isset($this->v["prtnTypes"])) {
+            $this->v["prtnTypes"] = [
+                [
+                    "abbr" => 'org',
+                    "sing" => 'Organization',
+                    "plur" => 'Organizations', 
+                    "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')
+                ], [
+                    "abbr" => 'attorney',
+                    "sing" => 'Attorney',
+                    "plur" => 'Attorneys', 
+                    "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')
+                ]
+            ];
+        }
         return true;
     }
     

@@ -172,26 +172,6 @@ class OpenDepts extends OpenListing
         return true;
     }
     
-    protected function genDeptAdmTopMenu()
-    {
-        $lnks = [
-            [ 'deptContact',   'Contact Info' ],
-            [ 'deptWeb',       'Web Presence' ],
-            [ 'deptIA',        'Internal Affairs' ],
-            [ 'deptCiv',       'Civilian Oversight' ],
-            [ 'deptSave',      '<i class="fa fa-floppy-o mR5" aria-hidden="true"></i> Save Changes' ],
-            [ 'deptEdits',     'Dept Edit History' ],
-            [ 'deptChecklist', 'Checklist & Scripts' ]
-            ];
-        foreach ($lnks as $lnk) {
-            $GLOBALS["SL"]->pageJAVA .= 'addHshoo("#' . $lnk[0] . '"); ';
-        }
-        return view('vendor.openpolice.volun.volun-dept-edit-adm-menu', [
-            "deptRow" => $this->v["deptRow"],
-            "lnks"    => $lnks
-            ])->render();
-    }
-    
     protected function printDeptEditHeader()
     {
         $this->v["deptRow"]     = $this->sessData->dataSets["Departments"][0];
@@ -218,10 +198,18 @@ class OpenDepts extends OpenListing
                     ->where('ZedOverOverType', $this->overWhichDefID('Civ'))
                     ->first();
                 if ($this->v["editsIA"][$i]) {
-                    if (trim($this->v["editsIA"][$i]->ZedOverNotes) != '')           $this->v["editTots"]["notes"]++;
-                    if (intVal($this->v["editsIA"][$i]->ZedOverOnlineResearch) == 1) $this->v["editTots"]["online"]++;
-                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeDeptCall) == 1)   $this->v["editTots"]["callDept"]++;
-                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeIACall) == 1)     $this->v["editTots"]["callIA"]++;
+                    if (trim($this->v["editsIA"][$i]->ZedOverNotes) != '') {
+                        $this->v["editTots"]["notes"]++;
+                    }
+                    if (intVal($this->v["editsIA"][$i]->ZedOverOnlineResearch) == 1) {
+                        $this->v["editTots"]["online"]++;
+                    }
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeDeptCall) == 1) {
+                        $this->v["editTots"]["callDept"]++;
+                    }
+                    if (intVal($this->v["editsIA"][$i]->ZedOverMadeIACall) == 1) {
+                        $this->v["editTots"]["callIA"]++;
+                    }
                 }
                 if (!isset($this->v["userNames"][$edit->ZedDeptUserID])) {
                     $this->v["userNames"][$edit->ZedDeptUserID] = $this->printUserLnk($edit->ZedDeptUserID);
@@ -234,7 +222,7 @@ class OpenDepts extends OpenListing
                         "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $edit->DeptType),
                         "iaEdit"   => $this->v["editsIA"][$i], 
                         "civEdit"  => $this->v["editsCiv"][$i]
-                    ])->render();
+                        ])->render();
                 }
             }
         } else {
@@ -242,10 +230,19 @@ class OpenDepts extends OpenListing
         }
         $this->loadDeptEditsSummary();
         $GLOBALS["SL"]->loadStates();
-        $GLOBALS["SL"]->x["admMenuCustom"] = $this->genDeptAdmTopMenu();
         if (!isset($this->v["deptScores"])) {
             $this->v["deptScores"] = new DepartmentScores;
         }
+        $GLOBALS["SL"]->addHshoos([
+            '#deptContact',
+            '#deptWeb',
+            '#deptIA',
+            '#deptCiv',
+            '#deptSave',
+            '#deptEdits',
+            '#deptChecklist'
+            ]);
+        $GLOBALS["SL"]->setCurrPage('#deptContact');
         return view('vendor.openpolice.nodes.1225-volun-dept-edit-header', $this->v)->render();
     }
     
@@ -253,31 +250,6 @@ class OpenDepts extends OpenListing
     {
         return view('vendor.openpolice.nodes.2162-volun-dept-edit-header2', 
             [ "deptRow" => $this->sessData->dataSets["Departments"][0] ])->render();
-    }
-    
-    protected function printDeptEditContact($nID)
-    {
-        $this->getOverRow('IA');
-        $this->getOverRow('Civ');
-        $which = [ 'IA', 1305 ];
-        $hasCiv = false;
-        if ($nID == 1229) {
-            if (isset($this->v["overRowCiv"]->OverAgncName) && trim($this->v["overRowCiv"]->OverAgncName) != '') {
-                $hasCiv = true;
-            }
-            $which = [ 'Civ', 1267 ];
-        }
-        $overRow = $this->getOverRow($which[0]);
-        $hasC = ((isset($overRow->OverNameFirst) && trim($overRow->OverNameFirst) != '')
-            || (isset($overRow->OverNameLast) && trim($overRow->OverNameLast) != '') 
-            || (isset($overRow->OverTitle) && trim($overRow->OverTitle) != ''));
-        return view('vendor.openpolice.volun.volun-dept-edit-ia-contact', [
-            "type"   => $this->overWhichEng($which[0]),
-            "whch"   => $which[0],
-            "n"      => $which[1],
-            "hasCiv" => $hasCiv,
-            "hasC"   => $hasC
-            ])->render();
     }
     
     protected function saveNewDept($nID)
@@ -296,20 +268,6 @@ class OpenDepts extends OpenListing
         }
         if ($newDeptID > 0) $this->chkDeptLinks($newDeptID);
         return true;   
-    }
-    
-    protected function saveInitDeptOversight($nID)
-    {
-//echo '<br /><br /><br />checking 1229: ' . (($GLOBALS["SL"]->REQ->has('n1341fld')) ? 'has name' : 'no name') . '<br />';
-        if ($GLOBALS["SL"]->REQ->has('n1341fld') && trim($GLOBALS["SL"]->REQ->n1341fld) != ''
-            && sizeof($this->sessData->dataSets['Oversight']) == 1) {
-            $new = $this->sessData->newDataRecord('Oversight', 'OverDeptID', 
-                $this->sessData->dataSets['Departments'][0]->DeptID, true);
-            $new->OverType = 302;
-            $new->save();
-            $this->sessData->refreshDataSets();
-        }
-        return false;
     }
 
     protected function saveDeptSubWays1($nID)
@@ -354,13 +312,10 @@ class OpenDepts extends OpenListing
     
     protected function saveEditLog($nID)
     {
-        if ($GLOBALS["SL"]->REQ->get('step') != 'next') return true;
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))
-            && sizeof($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
-            if (in_array('IACall', $GLOBALS["SL"]->REQ->n1329fld)) {
-                $this->sessData->currSessData($nID, 'Departments', 'DeptVerified', 'update', date("Y-m-d H:i:s"));
-            }
+        if ($GLOBALS["SL"]->REQ->get('step') != 'next') {
+            return true;
         }
+        $this->sessData->currSessData($nID, 'Departments', 'DeptVerified', 'update', date("Y-m-d H:i:s"));
         $this->sessData->createTblExtendFlds('Departments', $this->coreID, 'Zedit_Departments', [
             'ZedDeptDeptID'   => $this->coreID,
             'ZedDeptUserID'   => $this->v["uID"],
@@ -461,10 +416,8 @@ class OpenDepts extends OpenListing
         } else {
             $cnt = 0;
             $limit = 10;
-//echo '<pre>'; print_r($this->v["deptScores"]->scoreDepts); echo '</pre>';
             for ($i = sizeof($this->v["deptScores"]->scoreDepts)-1; $i >= 0; $i--) {
                 $dept = $this->v["deptScores"]->scoreDepts[$i];
-//echo $dept->DeptID . ' - ' . $GLOBALS["SL"]->printRowAddy($dept, 'Dept') . ' - ' . $dept->DeptAddressLat . ', ' . $dept->DeptAddressLng . '<br />';
                 if ($cnt < $limit && !isset($dept->DeptAddressLat) || intVal($dept->DeptAddressLat) == 0) {
                     $addy = $GLOBALS["SL"]->printRowAddy($dept, 'Dept');
                     if (trim($addy) != '') {
@@ -695,7 +648,9 @@ class OpenDepts extends OpenListing
     
     protected function getOverRow($which = 'IA')
     {
-        if (isset($this->v["overRow" . $which])) return $this->v["overRow" . $which];
+        if (isset($this->v["overRow" . $which])) {
+            return $this->v["overRow" . $which];
+        }
         $rows = $this->sessData->getRowIDsByFldVal('Oversight', [ 'OverType' => $this->overWhichDefID($which) ], true);
         if (sizeof($rows) > 0) {
             $this->v["overRow" . $which] = $rows[0];
@@ -703,6 +658,5 @@ class OpenDepts extends OpenListing
         }
         return [];
     }
-    
     
 }
