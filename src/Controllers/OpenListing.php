@@ -5,6 +5,7 @@ use DB;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\SLNode;
+use App\Models\OPTesterBeta;
 use OpenPolice\Controllers\OpenAjax;
 
 class OpenListing extends OpenAjax
@@ -233,6 +234,15 @@ class OpenListing extends OpenAjax
             }
         }
         return $ret;
+    }
+    
+    protected function printBetaTesters($nID)
+    {
+        return view('vendor.openpolice.nodes.2234-beta-listing', [
+            "betas" => OPTesterBeta::whereNotNull('BetaEmail')
+                ->orderBy('created_at', 'desc')
+                ->get()
+            ])->render();
     }
     
 }

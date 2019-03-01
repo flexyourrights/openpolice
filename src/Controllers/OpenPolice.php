@@ -158,6 +158,8 @@ class OpenPolice extends OpenInitExtras
             } else {
                 $GLOBALS["SL"]->setCurrPage('/dash/manage-attorneys');
             }
+        } elseif ($nID == 2234) {
+            return $this->printBetaTesters($nID);
             
         // Volunteer Area Nodes
         } elseif ($nID == 1211) {

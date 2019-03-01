@@ -294,7 +294,8 @@ class DepartmentScores
                 }
             }
             
-            $d["whichOver"] = $which = ((isset($d["civRow"]) && isset($d["civRow"]->OverAgncName)) ? "civRow" :"iaRow");
+            $d["whichOver"] = $which = ((isset($d["civRow"]) && isset($d["civRow"]->OverAgncName)
+                && trim($d["civRow"]->OverAgncName) != '') ? "civRow" :"iaRow");
             $d["overUser"] = $d["score"] = [];
             if (isset($d[$which]) && isset($d[$which]->OverEmail)) {
                 $email = $d[$which]->OverEmail;

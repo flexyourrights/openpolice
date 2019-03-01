@@ -25839,7 +25839,7 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 <li>5 - <a href="#n3" class="hshoo">Has a Twitter account</a></li>
 <li>5 - <a href="#n4" class="hshoo">Has a YouTube channel</a></li>
 <li>3 - <a href="#n5" class="hshoo">Investigates complaints sent via phone</a></li>
-<li>2 - <a href="#n6" class="hshoo">Investigates complaints sent via snail mail</a></li>
+<li>2 - <a href="#n6" class="hshoo">Investigates complaints sent via postal mail</a></li>
 <li>0 - <a href="#n7" class="hshoo">Requires complaints to be filed in person</a></li>
 <li>-10 - <a href="#n1835" class="hshoo">Requires Notary (for any type of complaint)</a></li>
 </ul>',
@@ -38249,7 +38249,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResID' => 1173,
 			'NodeResNode' => '1285',
 			'NodeResOrd' => '2',
-			'NodeResEng' => 'Paper Form via Snail Mail Allowed <span class="slGreenLight fPerc66 mL10">Score+2</span>',
+			'NodeResEng' => 'Paper Form via Postal Mail Allowed <span class="slGreenLight fPerc66 mL10">Score+2</span>',
 			'NodeResValue' => 'PaperMail'
 		]);
 		DB::table('SL_NodeResponses')->insert([

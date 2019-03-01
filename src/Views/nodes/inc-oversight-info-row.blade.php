@@ -55,7 +55,7 @@
         Complaints submitted by phone will be investigated.<br /> 
     @endif
     @if (isset($o->OverWaySubPaperMail) && intVal($o->OverWaySubPaperMail) == 1)
-        Complaints submitted by snail mail will be investigated.<br /> 
+        Complaints submitted by postal mail will be investigated.<br /> 
     @endif
     @if (isset($o->OverWaySubPaperInPerson) && intVal($o->OverWaySubPaperInPerson) == 1)
         Complaints submitted in person will be investigated.<br /> 

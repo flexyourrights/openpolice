@@ -41,6 +41,7 @@ class OpenPoliceUtils extends TreeSurvForm
         [121, 'Bias-Based Policing',            'AlleSilBias'],
         [122, 'Excessive Arrest Charges',       'AlleSilArrestRetaliatory'],
         [124, 'Excessive Citation',             'AlleSilCitationExcessive'],
+        [608, 'Repeat Harassment',              'AlleSilRepeatHarass'],
         [128, 'Conduct Unbecoming an Officer',  'AlleSilUnbecoming'],
         [129, 'Discourtesy',                    'AlleSilDiscourteous'],
         [127, 'Neglect of Duty',                'AlleSilNeglectDuty'], 
@@ -48,8 +49,18 @@ class OpenPoliceUtils extends TreeSurvForm
         [131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
         [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
         ];
-    public $eventTypes         = [ 'Stops', 'Searches', 'Force', 'Arrests' ];
-    public $eveTypIDs          = [ 252 => 'Stops', 253 => 'Searches', 254 => 'Force', 255 => 'Arrests' ];
+    public $eventTypes         = [
+        'Stops',
+        'Searches',
+        'Force',
+        'Arrests'
+        ];
+    public $eveTypIDs          = [
+        252 => 'Stops',
+        253 => 'Searches',
+        254 => 'Force',
+        255 => 'Arrests'
+        ];
     protected $eventTypeLabel  = [
         'Stops'    => 'Stop/Questioning',
         'Searches' => 'Search/Seizure',
@@ -499,6 +510,9 @@ class OpenPoliceUtils extends TreeSurvForm
                         break;
                     case 'Bias-Based Policing':
                         $allegInfo[1] .= $this->chkSilvAlleg('AlleSilBias', $alleg[1], $alleg[0]);
+                        break;
+                    case 'Repeat Harassment':
+                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilRepeatHarass', $alleg[1], $alleg[0]);
                         break;
                     case 'Excessive Arrest Charges':
                         $allegInfo[1] .= $this->chkSilvAlleg('AlleSilArrestRetaliatory', $alleg[1], $alleg[0]);

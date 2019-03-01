@@ -52,6 +52,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveStatusCompletion($nID);
             
         // Department Editor Survey ...
+        } elseif ($nID == 2232) {
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', date('Y-m-d H:i:s'));
+            return true;
         } elseif ($nID == 1285) {
             return $this->saveDeptSubWays1($nID);
         } elseif ($nID == 1287) {

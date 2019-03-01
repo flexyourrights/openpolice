@@ -177,7 +177,7 @@ class OpenDepts extends OpenListing
         $this->v["deptRow"]     = $this->sessData->dataSets["Departments"][0];
         $this->v["deptSlug"]    = $this->v["deptRow"]->DeptSlug;
         $this->v["editsIA"]     = $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = [];
-        $this->v["editTots"]    = ["notes" => 0, "online" => 0, "callDept" => 0, "callIA" => 0];
+        $this->v["editTots"]    = [ "notes" => 0, "online" => 0, "callDept" => 0, "callIA" => 0 ];
         $this->v["user"]        = Auth::user();
         $this->v["neverEdited"] = false;
         $this->v["recentEdits"] = '';
@@ -532,6 +532,7 @@ class OpenDepts extends OpenListing
         }
         $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
             . '</div>';
+        
         $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' . $this->v["deptID"] 
             . '&limit=20");' . "\n";
         

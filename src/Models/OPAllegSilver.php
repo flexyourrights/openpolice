@@ -36,6 +36,8 @@ class OPAllegSilver extends Model
 		'AlleSilIntimidatingWeapon', 
 		'AlleSilIntimidatingWeaponType', 
 		'AlleSilWrongfulEntry', 
+		'AlleSilRepeatContact',
+		'AlleSilRepeatHarass',
 		'AlleSilUnbecoming', 
 		'AlleSilDiscourteous', 
     ];

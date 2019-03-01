@@ -109,10 +109,10 @@
                     <p class="mB20">
                         This police department's policy permits them to investigate complaints sent via email. 
                         They also accept complaints filed on non-department forms. 
-                        <b class="bld">That means OPC will automically file your report after you 
+                        <b class="bld">That means OPC will automatically file your report after you 
                         <a href="/share-complaint-or-compliment"
                             <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
-                            >share your story</a>!</b>
+                            >share your story</a>.</b>
                     </p><p>
                         The information below includes other ways to submit a formal complaint to the 
                         {{ $d[$d["whichOver"]]->OverAgncName }}.
@@ -195,7 +195,7 @@
                     <li>Complaints submitted by phone will be investigated.</li>
                 @endif
                 @if (isset($d["iaRow"]->OverWaySubPaperMail) && intVal($d["iaRow"]->OverWaySubPaperMail) == 1)
-                    <li>Complaints submitted by snail mail will be investigated.</li>
+                    <li>Complaints submitted by postal mail will be investigated.</li>
                 @endif
                 @if (isset($d["iaRow"]->OverWaySubPaperInPerson) && intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1)
                     <li>Complaints submitted in person will be investigated.</li>

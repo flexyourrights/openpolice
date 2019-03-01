@@ -70,11 +70,15 @@ class OpenReport extends OpenDepts
                 if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
                     $brkPos = strpos($this->sessData->dataSets["Complaints"][0]->ComSummary, ' ', $previewMax);
                     if ($brkPos > 0) {
-                        $ret = '<div id="hidivStoryLess" class="disBlo">' . str_replace("\n", '<br />', 
+                        $ret = '<div id="hidivStoryLess" class="' 
+                            . (($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more')
+                                ? 'disNon' : 'disBlo') . '">' . str_replace("\n", '<br />', 
                             substr($this->sessData->dataSets["Complaints"][0]->ComSummary, 0, $brkPos+1)) . ' ...<br />'
                             . '<a id="hidivBtnStoryMore" class="btn btn-primary mT20" href="javascript:;">Read More</a>'
                             . '</div>'
-                            . '<div id="hidivStoryMore" class="disNon">' . str_replace("\n", '<br />', 
+                            . '<div id="hidivStoryMore" class="' 
+                            . (($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more')
+                                ? 'disBlo' : 'disNon') . '">' . str_replace("\n", '<br />', 
                             $this->sessData->dataSets["Complaints"][0]->ComSummary, $brkPos) 
                             . '<br /><a id="hidivBtnStryLessBtn" class="btn btn-primary mT20" href="javascript:;">'
                             . 'Read Less</a></div>';
@@ -411,7 +415,8 @@ class OpenReport extends OpenDepts
     protected function fillGlossary()
     {
         $this->v["glossaryList"] = [];
-        if (in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1) {
+        if ((in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1)
+            && isset($this->sessData->dataSets["Complaints"])) {
             $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
             if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {

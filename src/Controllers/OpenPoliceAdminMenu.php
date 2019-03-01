@@ -35,7 +35,8 @@ class OpenPoliceAdminMenu extends AdminMenu
                     $this->admMenuLnk('/dash/volunteer', 'Manage Departments', '', 1, $deptSubMenu),
                     $this->admMenuLnk('/dash/manage-partners', 'Manage Partners', '', 1, [
                         $this->admMenuLnk('/dash/manage-attorneys', 'Attorneys'),
-                        $this->admMenuLnk('/dash/manage-organizations', 'Organizations')
+                        $this->admMenuLnk('/dash/manage-organizations', 'Organizations'),
+                        $this->admMenuLnk('/dash/beta-test-signups', 'Beta Signups')
                         ]),
                     $this->admMenuLnk('/dash/team-resources', 'Team Resources')
                     ]);

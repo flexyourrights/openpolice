@@ -223,7 +223,7 @@ class OpenInitExtras extends OpenPartners
         
         // Department Research Survey
         if ($this->treeID == 36) {
-            if (sizeof($this->sessData->dataSets['Oversight']) == 1) {
+            if (isset($this->sessData->dataSets['Oversight']) && sizeof($this->sessData->dataSets['Oversight']) == 1) {
                 $new = $this->sessData->newDataRecord('Oversight', 'OverDeptID', 
                     $this->sessData->dataSets['Departments'][0]->DeptID, true);
                 $new->OverType = 302;
