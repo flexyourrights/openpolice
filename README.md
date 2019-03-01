@@ -1,7 +1,7 @@
 
 # FlexYourRights/OpenPolice
 
-[![Laravel](https://img.shields.io/badge/Laravel-5.7-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-5.8-orange.svg?style=flat-square)](http://laravel.com)
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -13,12 +13,12 @@ U.S.. Open Police is built using <a href="https://github.com/wikiworldorder/surv
 
 <a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
 
-It is currently in continued, heavy development, with much happening here in early 2018, almost ready to go live. 
+It is currently in continued, heavy development, with the pilot program rolling now in early 2019. 
 I plan to provide more documentation in the coming weeks. Thank you for your interest and patience!
 
 The upcoming Open Police web app can be tested out here, 
 feedback welcome via the end of the <b>beta demo</b> submission process:<br />
-<a href="https://openpolice.org/test" target="_blank">https://openpolice.org/test</a><br />
+<a href="https://openpolice.org/filing-your-police-complaint" target="_blank">/filing-your-police-complaint</a><br />
 The resulting database designed using the engine, as well as the branching tree which specifies the user's experience: 
 <a href="https://openpolice.org/db/OP" target="_blank">/db/OP</a><br />
 <a href="https://openpolice.org/tree/complaint" target="_blank">/tree/complaint</a><br />
@@ -41,8 +41,8 @@ XML included an automatically generated schema, eg.<br />
 # <a name="requirements"></a>Requirements
 
 * php: >=7.2.11
-* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.7.*
-* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.*
+* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.8.*
+* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.1.*
 
 # <a name="getting-started"></a>Getting Started
 
@@ -54,7 +54,7 @@ For more on creating environments to host Laravel, you can find more instruction
 
 ```
 $ composer global require "laravel/installer"
-$ composer create-project laravel/laravel OpenPolice "5.7.*"
+$ composer create-project laravel/laravel OpenPolice "5.8.*"
 $ cd OpenPolice
 $ php artisan make:auth
 $ php artisan vendor:publish --tag=laravel-notifications
@@ -70,7 +70,7 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "flexyourrights/openpolice": "0.*",
+    "flexyourrights/openpolice": "^0.1.0",
 	...
 },
 ...
