@@ -12,7 +12,9 @@ class OPTesterBeta extends Model
     [    
 		'BetaEmail', 
 		'BetaName', 
+		'BetaLastName',
 		'BetaNarrative', 
+		'BetaHowHear',
 		'BetaSubmissionProgress', 
 		'BetaVersionAB', 
 		'BetaTreeVersion', 

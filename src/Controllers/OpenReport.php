@@ -173,7 +173,7 @@ class OpenReport extends OpenDepts
                     }
                 }
             }
-        } else {
+        } elseif (isset($this->sessData->dataSets["Incidents"][0])) {
             $date = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
         }
         return ['When', $date];

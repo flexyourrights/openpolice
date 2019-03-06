@@ -240,8 +240,13 @@ class OpenListing extends OpenAjax
     {
         return view('vendor.openpolice.nodes.2234-beta-listing', [
             "betas" => OPTesterBeta::whereNotNull('BetaEmail')
+                ->where('BetaEmail', 'NOT LIKE', '')
                 ->orderBy('created_at', 'desc')
-                ->get()
+                ->get(),
+            "emptyTot" => OPTesterBeta::whereNull('BetaEmail')
+                ->orWhere('BetaEmail', 'LIKE', '')
+                ->orderBy('created_at', 'desc')
+                ->count()
             ])->render();
     }
     

@@ -30,8 +30,8 @@ class OpenPolice extends OpenInitExtras
         // Home Page
         } elseif ($nID == 1876) {
             return view('vendor.openpolice.nodes.1876-home-page-hero-credit')->render();
-        } elseif ($nID == 1848) {
-            return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
+        //} elseif ($nID == 1848) {
+        //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
                 
         // FAQ
         } elseif ($nID == 1884) {
