@@ -186,6 +186,14 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif ($nID == 269) { // Confirm Submission, Complaint Completed!
             return [(($this->sessData->dataSets["Complaints"][0]->ComStatus 
                 != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) ? 'Y' : '')];
+            
+        } elseif ($nID == 2245) { // How Hear?
+            if ($GLOBALS["SL"]->REQ->has('from') && trim($GLOBALS["SL"]->REQ->get('from')) != '') {
+                $this->sessData->dataSets["TesterBeta"][0]->update([
+                    'BetaHowHear' => $GLOBALS["SL"]->REQ->get('from')
+                    ]);
+                return [$GLOBALS["SL"]->REQ->get('from')];
+            }
         
         // Volunteer Research Departments
         } elseif ($nID == 1285) {

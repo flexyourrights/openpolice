@@ -13,6 +13,8 @@
 
 Route::group(['middleware' => ['web']], function () {
 
+    Route::get( '/join-beta-test/{campaign}', 'OpenPolice\Controllers\OpenPolice@joinBetaLink');
+    
     Route::get( '/dept/{deptSlug}',                    'OpenPolice\Controllers\OpenPolice@deptPage');
     Route::get( '/complaint-or-compliment/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
     

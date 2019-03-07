@@ -31,7 +31,7 @@
             </div>
             
             <div class="slCard mT20 mB20">
-                <a href="/share-complaint-or-compliment"
+                <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
                     <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
                     class="btn btn-primary btn-lg w100">Share Your Complaint or Compliment with the 
                     {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
@@ -40,8 +40,10 @@
             <div class="slCard mT20 mB20">
                 <h3 class="mT0">Recent Complaints & Compliments</h3>
                 {!! $previews !!}
-                <div class="mBn5"><p><i class="slGrey">OpenPolice.org is currently beta testing with individual complainants,
-                and is not yet open to the public.</i></p></div>
+                <div class="mBn5"><p><i class="slGrey">
+                OpenPolice.org is currently only beta testing with individual complainants.<br />
+                Use the button above to sign up.
+                </i></p></div>
             </div>
             
         </div>
@@ -110,7 +112,7 @@
                         This police department's policy permits them to investigate complaints sent via email. 
                         They also accept complaints filed on non-department forms. 
                         <b class="bld">That means OPC will automatically file your report after you 
-                        <a href="/share-complaint-or-compliment"
+                        <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
                             <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
                             >share your story</a>.</b>
                     </p><p>
@@ -120,7 +122,7 @@
                 @else
                     <p>
                         This department does not investigate OPC reports sent by email. We recommend you 
-                        <a href="/share-complaint-or-compliment"
+                        <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
                             <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
                             >share your story on OpenPolice.org</a>.
                         Then use the information below to submit a formal complaint 

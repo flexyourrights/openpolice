@@ -266,4 +266,10 @@ class OpenPartners extends OpenVolunteers
         return true;
     }
     
+    public function joinBetaLink(Request $request, $campaign = '')
+    {
+        header("Location: /start/beta-test-signup?from=" . $campaign);
+        exit;
+    }
+    
 }
