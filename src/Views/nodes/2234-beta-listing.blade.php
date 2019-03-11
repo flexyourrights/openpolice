@@ -31,7 +31,8 @@
 <div class="nodeAnchor"><a name="stats"></a></div>
 <hr>
 <h2>Click-Throughs</h2>
-<p>There were also {{ number_format($emptyNoRef) }} beta signup page loads without any referral.</p>
+<p>There were also {{ number_format($emptyNoRef) }} beta signup page loads without any referral, 
+out of {{ number_format($totLoads) }} total loads.</p>
 <div id="betaClicks" class="w100"></div>
 
 <hr>

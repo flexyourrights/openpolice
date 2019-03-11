@@ -257,7 +257,8 @@ class OpenListing extends OpenAjax
             "betas" => $betas,
             "emptyNoRef" => OPTesterBeta::whereNull('BetaHowHear')
                 ->orWhere('BetaHowHear', 'LIKE', '')
-                ->count()
+                ->count(),
+            "totLoads"   => OPTesterBeta::count()
             ])->render();
     }
     
@@ -288,7 +289,10 @@ class OpenListing extends OpenAjax
                 unset($tots[$how]);
             }
         }
-        $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.graph-bar-plot', [ "graph" => $graph ])->render();
+        $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.graph-bar-plot', [
+            "graph"  => $graph,
+            "height" => 700
+            ])->render();
         return $graph;
     }
     
