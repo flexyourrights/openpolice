@@ -2,7 +2,7 @@
 # FlexYourRights/OpenPolice
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.8-orange.svg?style=flat-square)](http://laravel.com)
-[![SurvLoop](https://img.shields.io/badge/SurvLoop-0.0-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
+[![SurvLoop](https://img.shields.io/badge/SurvLoop-0.1-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
@@ -40,8 +40,8 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="requirements"></a>Requirements
 
-* php: >=7.2.11
-* <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 5.8.*
+* php: >=7.3
+* <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 5.8.*
 * <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.1.*
 
 # <a name="getting-started"></a>Getting Started
@@ -70,7 +70,7 @@ $ nano composer.json
 ...
 "require": {
 	...
-    "flexyourrights/openpolice": "^0.1.0",
+    "flexyourrights/openpolice": "^0.1.*",
 	...
 },
 ...

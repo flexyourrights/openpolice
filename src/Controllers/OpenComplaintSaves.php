@@ -26,6 +26,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveUnresolvedCharges($nID);
         } elseif (in_array($nID, [16, 17])) {
             return $this->saveStartTime($nID, $tbl, $fld);
+        } elseif (in_array($nID, [2262, 2263])) {
+            return $this->saveStartTime($nID, $tbl, $fld);
         } elseif (in_array($nID, [145, 920])) {
             return $this->saveNewDept($nID);
         } elseif ($nID == 234) {
@@ -95,7 +97,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
     protected function saveStartTime($nID, $tbl, $fld)
     {
         $time = $this->postFormTimeStr($nID);
-        $date = date("Y-m-d", strtotime($GLOBALS["SL"]->REQ->get("n15fld")));
+        $dateNode = ((in_array($nID, [16, 17])) ? 15 : 2261);
+        $date = date("Y-m-d", strtotime($this->getRawFormDate($dateNode)));
         if ($time === null) {
             $date .= ' 00:00:00';
         } else {

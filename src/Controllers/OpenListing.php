@@ -238,16 +238,58 @@ class OpenListing extends OpenAjax
     
     protected function printBetaTesters($nID)
     {
+        if ($GLOBALS["SL"]->REQ->has('invite') && intVal($GLOBALS["SL"]->REQ->get('invite')) > 0) {
+            OPTesterBeta::find(intVal($GLOBALS["SL"]->REQ->get('invite')))
+                ->update([ 'BetaInvited' => date('Y-m-d') ]);
+        }
+        $betas = OPTesterBeta::whereNotNull('BetaEmail')
+            ->where('BetaEmail', 'NOT LIKE', '')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $empties = OPTesterBeta::whereNotNull('BetaHowHear')
+            ->where('BetaHowHear', 'NOT LIKE', '')
+            ->get();
+        //$GLOBALS["SL"]->addHshoo("#stats");
+        $GLOBALS["SL"]->x["needsPlots"] = true;
+        $this->sortBetas($betas, 'betaSignups');
+        $this->sortBetas($empties, 'betaClicks');
         return view('vendor.openpolice.nodes.2234-beta-listing', [
-            "betas" => OPTesterBeta::whereNotNull('BetaEmail')
-                ->where('BetaEmail', 'NOT LIKE', '')
-                ->orderBy('created_at', 'desc')
-                ->get(),
-            "emptyTot" => OPTesterBeta::whereNull('BetaEmail')
-                ->orWhere('BetaEmail', 'LIKE', '')
-                ->orderBy('created_at', 'desc')
+            "betas" => $betas,
+            "emptyNoRef" => OPTesterBeta::whereNull('BetaHowHear')
+                ->orWhere('BetaHowHear', 'LIKE', '')
                 ->count()
             ])->render();
+    }
+    
+    protected function sortBetas($betas, $divName)
+    {
+        $graph = [ "divName" => $divName, "values" => '', "labels" => '' ];
+        $tots = [];
+        if ($betas->isNotEmpty()) {
+            foreach ($betas as $i => $beta) {
+                $how = str_replace('-police-dept', '', trim($beta->BetaHowHear));
+                if (!isset($tots[$how])) {
+                    $tots[$how] = 0;
+                }
+                $tots[$how]++;
+            }
+            $passCnt = sizeof($tots);
+            for ($i = 0; $i < $passCnt; $i++) {
+                $min = 10000000000;
+                $how = '';
+                foreach ($tots as $howHear => $tot) {
+                    if ($min > $tot) {
+                        $min = $tot;
+                        $how = $howHear;
+                    }
+                }
+                $graph["values"] .= (($i > 0) ? ', ' : '') . $min;
+                $graph["labels"] .= (($i > 0) ? ', ' : '') . json_encode($how);
+                unset($tots[$how]);
+            }
+        }
+        $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.graph-bar-plot', [ "graph" => $graph ])->render();
+        return $graph;
     }
     
 }
