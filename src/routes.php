@@ -24,11 +24,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/org/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@orgPage');
     Route::get( '/prepare-complaint-for-org/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryOrg');
     
-    Route::get( '/form-tree', function () {
-        header("Location: /tree/complaint");
-        exit;
-    });
-
 });    
 
 ?>
