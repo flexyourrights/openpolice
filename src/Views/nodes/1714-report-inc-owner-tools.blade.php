@@ -11,7 +11,7 @@
                 @else Complaint #{{ $complaint->ComPublicID }} @endif </h2>
             @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
                 $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
-                <h4 class="mT5 slRedDark">Current Status: Incomplete</h4>
+                <h4 class="mT5 txtDanger">Current Status: Incomplete</h4>
             @else
                 <h4 class="mT5">Current Status: 
                 @if (isset($overUpdateRow->LnkComOverReceived) && trim($overUpdateRow->LnkComOverReceived) != '')

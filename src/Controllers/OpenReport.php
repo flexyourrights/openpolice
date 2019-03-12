@@ -47,7 +47,7 @@ class OpenReport extends OpenDepts
     protected function reportAllegsWhy($nID = -3)
     {
         return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 
-            'Allegations<div class="pT5 f12 slGrey">Including comments from the complainant</span> ');
+            'Allegations<div class="pT5 slGrey">Including comments from the complainant</span> ');
     }
 
     protected function reportCivAddy($nID)

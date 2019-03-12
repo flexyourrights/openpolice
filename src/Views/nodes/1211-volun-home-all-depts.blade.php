@@ -52,7 +52,7 @@
     </form>
     <form name="volunAddNewDept" action="/dash/volunteer?newDept=1" method="post" onSubmit="return checkNewDept();">
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-    <div class="row mB20 f18">
+    <div class="row mB20 fPerc125">
         <div class="col-8">
             <fieldset class="form-group">
                 <label for="deptNameID">Department Name</label>

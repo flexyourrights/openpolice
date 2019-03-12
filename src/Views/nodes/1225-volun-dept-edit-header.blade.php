@@ -6,7 +6,7 @@
         <div class="col-8">
             <h4 class="m0 slBlueDark">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h4>
         </div><div class="col-4">
-            <h4 class="m0 slGreenLight"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
+            <h4 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
                 intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h4>
         </div>
     </div>

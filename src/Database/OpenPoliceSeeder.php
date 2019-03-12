@@ -2719,7 +2719,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldName' => 'Status',
 			'FldEng' => 'OPC Complaint Status',
 			'FldDesc' => 'The current progress of a "complete" or "incomplete" Complaint within the OPC system. We use this information internally to determine next Administrator actions to guide a Complaint to the final status of "closed."',
-			'FldNotes' => 'AKA Disposition of Complaint. <a href="extras.php?flows=1" target="_blank" class="f12">see Work Flows</a>.',
+			'FldNotes' => 'AKA Disposition of Complaint. <a href="extras.php?flows=1" target="_blank">see Work Flows</a>.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -15982,7 +15982,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
     <tr><td>
     	<nobr><input id="step5" autocomplete="off" type="checkbox" class="mR5"> <h3 class="disIn m0">5)</h3></nobr>
     </td><td class="w100"><label for="step5">
-	    Next, you\'ll determine if the department\'s main website has a clear link to information about how to submit a complaint about the police. From the department\'s home page, scan for links like "complaint" or "forms". (If you can\'t easily see one, try using <span class="gry6"><b>Ctrl+F</b></span> with "complaint" or "forms".) If there is a link, be sure to click it to check that the page really has information about how to submit a complaint against the police. (Sometimes they only have information about <i>other</i> types of complaints.)
+	    Next, you\'ll determine if the department\'s main website has a clear link to information about how to submit a complaint about the police. From the department\'s home page, scan for links like "complaint" or "forms". (If you can\'t easily see one, try using <span class="slGrey"><b>Ctrl+F</b></span> with "complaint" or "forms".) If there is a link, be sure to click it to check that the page really has information about how to submit a complaint against the police. (Sometimes they only have information about <i>other</i> types of complaints.)
         <br><br>
         If the link does have real complaint information, click "Yes" on <b>Link to Complaint Info from Home Page</b>. Next, copy the link into the <b>Complaint Info URL</b> field.
         <br><br>
@@ -15991,7 +15991,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
     <tr><td>
     	<nobr><input id="step6" autocomplete="off" type="checkbox" class="mR5"> <h3 class="disIn m0">6)</h3></nobr>
     </td><td class="w100"><label for="step6">
-	    If you find complaint information, look for a complaint form that can be printed. If you find one, copy the .PDF or .DOC link into the <b>Complaint Form PDF</b> field. In some rare cases, departments might also have an online-submittable complaint form, which is awesome. If so, check the <b>Online-Submittable Form</b> box, and copy the link into the <b>URL</b> box. <span class="gry6 f12">(Then do a little dance.)</span>
+	    If you find complaint information, look for a complaint form that can be printed. If you find one, copy the .PDF or .DOC link into the <b>Complaint Form PDF</b> field. In some rare cases, departments might also have an online-submittable complaint form, which is awesome. If so, check the <b>Online-Submittable Form</b> box, and copy the link into the <b>URL</b> box. <span class="slGrey f12">(Then do a little dance.)</span>
     </label></td></tr>
 </table>
 
@@ -16030,13 +16030,13 @@ Due to the importance of this information in filing Open Police Complaints, we w
 			'DefSet' => 'Blurbs',
 			'DefSubset' => 'Phone Script: Department',
 			'DefDescription' => 'Hi, my name is [Your First Name], and I\'m doing some research for an online directory of police department information. Do you mind if I ask you some quick questions? This will just take about two minutes.<br /><br />
-<span class="gry9"><i>Note: If they ask what this is for, you can say something like:</i></span>
-<div class="pL10 pB20 gry6">I\'m volunteering with a non-profit group called Open Police Complaints. They provide information about how people can submit police complaints. We\'re making these calls for all 18,000 police departments in the United States, so I really appreciate your help!</div>
+<span class="slGrey"><i>Note: If they ask what this is for, you can say something like:</i></span>
+<div class="pL10 pB20 slGrey">I\'m volunteering with a non-profit group called Open Police Complaints. They provide information about how people can submit police complaints. We\'re making these calls for all 18,000 police departments in the United States, so I really appreciate your help!</div>
 <ul>
-<li class="pB20"><span class="gry9"><i>If needed:</i></span> What\'s the main address for your department?</li>
-<li class="pB20"><span class="gry9"><i>If needed:</i></span> Do you have a website and email address? Are you on Facebook?</li>
-<li class="pB20"><span class="gry9"><i>If needed:</i></span> How many people work in your department?</li>
-<li class="pB20"><span class="gry9"><i>If needed:</i></span> Do you know how many people live in your department\'s jurisdiction?</li>
+<li class="pB20"><span class="slGrey"><i>If needed:</i></span> What\'s the main address for your department?</li>
+<li class="pB20"><span class="slGrey"><i>If needed:</i></span> Do you have a website and email address? Are you on Facebook?</li>
+<li class="pB20"><span class="slGrey"><i>If needed:</i></span> How many people work in your department?</li>
+<li class="pB20"><span class="slGrey"><i>If needed:</i></span> Do you know how many people live in your department\'s jurisdiction?</li>
 <li class="pB20">What\'s the phone number for your internal affairs office?</li>
 </ul>
 I really appreciate your time. Thanks so much for your help!'
@@ -22313,7 +22313,7 @@ WARNING: Only share what you want investigators to see. Do not upload anyone’s
 			'NodeParentID' => '464',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>Find &amp; Select a Police Department</h2>
-<p>Please search for a police department, agency, or private security firm at the scene. Try typing the department name, city, or county. Then select the correct department below. <small class="slRedDark">*required</small></p>'
+<p>Please search for a police department, agency, or private security firm at the scene. Try typing the department name, city, or county. Then select the correct department below. <small class="txtDanger">*required</small></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 707,
@@ -22757,15 +22757,15 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>Announcement</h2>
-<p class="red f14">Getting closer to a fully 
+<p class="red">Getting closer to a fully 
 functional OpenPolice.org!</p>
 <hr>
 Overview of recent activity and statistics coming soon. For now, the most interesting things in this admin area are...
         <ul>
-        <li class="mB20"><a href="/dashboard/subs" class="f22">New Submissions</a></li>
-        <li class="mB20"><a href="/dashboard/tree/map?all=1" class="f22">Map of Entire Complaint Submission Process</a></li>
-        <li class="mB20"><a href="/dashboard/db/all" class="f22">Entire Database Design</a></li>
-        <li class="mB20"><a href="/dashboard/pages/list" class="f22">Edit Pages</a></li>
+        <li class="mB20"><a href="/dashboard/subs" class="fPerc125">New Submissions</a></li>
+        <li class="mB20"><a href="/dashboard/tree/map?all=1" class="fPerc125">Map of Entire Complaint Submission Process</a></li>
+        <li class="mB20"><a href="/dashboard/db/all" class="fPerc125">Entire Database Design</a></li>
+        <li class="mB20"><a href="/dashboard/pages/list" class="fPerc125">Edit Pages</a></li>
         </ul>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -23770,7 +23770,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeType' => 'Radio',
 			'NodePromptText' => '<h2 class="slBlueDark">Transparency Options</h2>
 <p>How do you want the names of people involved to appear on your public compliment?</p>
-<p class="gry9 fPerc80">No matter which option you select, we\'ll never publish anyone\'s private information. (This includes addresses, phone numbers, emails, etc.) We will only share this with appropriate agencies who can investigate your compliment.</p>',
+<p class="slGrey fPerc80">No matter which option you select, we\'ll never publish anyone\'s private information. (This includes addresses, phone numbers, emails, etc.) We will only share this with appropriate agencies who can investigate your compliment.</p>',
 			'NodePromptAfter' => '<style>
 #node138 div.nFld div label { padding: 40px; }
 @media screen and (max-width: 768px) {
@@ -24210,7 +24210,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeParentID' => '918',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h2>Find &amp; Select A Police Department</h2>
-<p>Please search for a police department, agency, or private security firm on the scene. Try typing the department name, city, or county. Then select the correct department below. <small class="slRedDark">*required</small></p>'
+<p>Please search for a police department, agency, or private security firm on the scene. Try typing the department name, city, or county. Then select the correct department below. <small class="txtDanger">*required</small></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 920,
@@ -25649,16 +25649,16 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h3>Open Police Complaints</h3>
 <br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Online Report Filing<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Digital Evidence Uploading<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Anonymous Reports Allowed<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Department Identification Tools<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Publicly Searchable Reports<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Officers\' Names Made Public<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Social Media Sharing<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Status Updates via Email<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Help Finding an Attorney<br>
-<i class="fa fa-check mL10 mR10 slGreenLight" aria-hidden="true"></i> Commitment to Open Data<p></p><p><br></p>'
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Online Report Filing<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Digital Evidence Uploading<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Anonymous Reports Allowed<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Department Identification Tools<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Publicly Searchable Reports<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Officers\' Names Made Public<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Social Media Sharing<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Status Updates via Email<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Help Finding an Attorney<br>
+<i class="fa fa-check mL10 mR10 slGreenDark" aria-hidden="true"></i> Commitment to Open Data<p></p><p><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1112,
@@ -25667,11 +25667,11 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h3>Most Police Departments</h3>
 <br>
-<i class="fa fa-check mL10 mR10 slRedDark" aria-hidden="true"></i> Require Police Station Visit<br>
-<i class="fa fa-check mL10 mR10 slRedDark" aria-hidden="true"></i> Require Paper Reports<br>
-<i class="fa fa-check mL10 mR10 slRedDark" aria-hidden="true"></i>&nbsp;Unhelpful or Intimidating Employees<br>
-<i class="fa fa-check mL10 mR10 slRedDark" aria-hidden="true"></i> Bound by State Secrecy Laws<br>
-<i class="fa fa-check mL10 mR10 slRedDark" aria-hidden="true"></i> Old Complaint Records Destroyed<p></p><p><br></p>'
+<i class="fa fa-check mL10 mR10 txtDanger" aria-hidden="true"></i> Require Police Station Visit<br>
+<i class="fa fa-check mL10 mR10 txtDanger" aria-hidden="true"></i> Require Paper Reports<br>
+<i class="fa fa-check mL10 mR10 txtDanger" aria-hidden="true"></i>&nbsp;Unhelpful or Intimidating Employees<br>
+<i class="fa fa-check mL10 mR10 txtDanger" aria-hidden="true"></i> Bound by State Secrecy Laws<br>
+<i class="fa fa-check mL10 mR10 txtDanger" aria-hidden="true"></i> Old Complaint Records Destroyed<p></p><p><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1114,
@@ -26751,7 +26751,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeTree' => '36',
 			'NodeParentID' => '1269',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Website URL <span class="slGreenLight fPerc66 mL10">Score+3</span>',
+			'NodePromptText' => 'Website URL <span class="slGreenDark fPerc66 mL10">Score+3</span>',
 			'NodeDataStore' => 'Oversight:OverWebsite'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26770,7 +26770,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1269',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Facebook URL <span class="slGreenLight fPerc66 mL10">Score+3</span>',
+			'NodePromptText' => 'Facebook URL <span class="slGreenDark fPerc66 mL10">Score+3</span>',
 			'NodeDataStore' => 'Oversight:OverFacebook'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26779,7 +26779,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1269',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Twitter URL <span class="slGreenLight fPerc66 mL10">Score+3</span>',
+			'NodePromptText' => 'Twitter URL <span class="slGreenDark fPerc66 mL10">Score+3</span>',
 			'NodeDataStore' => 'Oversight:OverTwitter'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26788,7 +26788,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1269',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'YouTube Channel URL <span class="slGreenLight fPerc66 mL10">Score+3</span>',
+			'NodePromptText' => 'YouTube Channel URL <span class="slGreenDark fPerc66 mL10">Score+3</span>',
 			'NodeDataStore' => 'Oversight:OverYouTube'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26805,7 +26805,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeTree' => '36',
 			'NodeParentID' => '1271',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Link to Complaint Info from Home Page? <span class="slGreenLight fPerc66 mL10">Score+10</span>',
+			'NodePromptText' => 'Link to Complaint Info from Home Page? <span class="slGreenDark fPerc66 mL10">Score+10</span>',
 			'NodeDataStore' => 'Oversight:OverHomepageComplaintLink'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26814,7 +26814,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1271',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Complaint Info URL <span class="slGreenLight fPerc66 mL10">Score+14</span>',
+			'NodePromptText' => 'Complaint Info URL <span class="slGreenDark fPerc66 mL10">Score+14</span>',
 			'NodeDataStore' => 'Oversight:OverWebComplaintInfo'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26823,7 +26823,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1271',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Complaint Form PDF <span class="slGreenLight fPerc66 mL10">Score+10</span>',
+			'NodePromptText' => 'Complaint Form PDF <span class="slGreenDark fPerc66 mL10">Score+10</span>',
 			'NodeDataStore' => 'Oversight:OverComplaintPDF'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26870,7 +26870,7 @@ Please help take care of high-priority departments first. Then you can choose a 
 			'NodeParentID' => '1271',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Text',
-			'NodePromptText' => 'Online-Submittable Complaint Form <span class="slGreenLight fPerc66 mL10">Score+20</span>',
+			'NodePromptText' => 'Online-Submittable Complaint Form <span class="slGreenDark fPerc66 mL10">Score+20</span>',
 			'NodePromptNotes' => '<div style="margin-top: -10px;">(<i>This is rare.</i> <a href="https://www.phillypolice.com/forms/official-complaint-form/" target="_blank"><i>Here\'s an example</i></a>.)</div>',
 			'NodeDataStore' => 'Oversight:OverComplaintWebForm'
 		]);
@@ -30663,10 +30663,10 @@ Many people who wish to submit complaints fear police retaliation. They shouldn\
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<p><br></p>
 <div class="row">
-<div class="col-md-1"><div class="icoHuge slRedDark" style="margin-top: -20px;"><i class="fa fa-certificate" aria-hidden="true"></i></div></div>
-<div class="col-md-1 fPerc133 slRedDark icoScoreVal">-10</div>
+<div class="col-md-1"><div class="icoHuge txtDanger" style="margin-top: -20px;"><i class="fa fa-certificate" aria-hidden="true"></i></div></div>
+<div class="col-md-1 fPerc133 txtDanger icoScoreVal">-10</div>
 <div class="col-md-8">
-<div class="fPerc133 slRedDark">Requires notary </div><div class="disIn fPerc80">(for one or more types of complaint)</div>
+<div class="fPerc133 txtDanger">Requires notary </div><div class="disIn fPerc80">(for one or more types of complaint)</div>
 <p><b>What\'s this?</b><br />
 Some state and local lawmakers have passed so-called Law Enforcement Officers\' Bill of Rights (LEOBR) laws. These often include provisions requiring certain types of complaints to be certifed by a public notary.</p>
 <p><b>Why is this important?</b><br />
@@ -30809,9 +30809,9 @@ Departments should provide multiple ways to accept complaints, including postal 
 <p><br></p>
 <div class="row">
 <div class="col-md-1"></div>
-<div class="col-lg-1 col-md-12 col-sm-12 slRedDark"><div class="fPerc66">(Misses out <nobr>on 34</nobr> other points)</div></div>
+<div class="col-lg-1 col-md-12 col-sm-12 txtDanger"><div class="fPerc66">(Misses out <nobr>on 34</nobr> other points)</div></div>
 <div class="col-md-8">
-<div class="fPerc133 disIn slRedDark">Requires complaints to be filed in person</div>
+<div class="fPerc133 disIn txtDanger">Requires complaints to be filed in person</div>
 <p><b>What\'s this?</b><br />
 This department only accepts or investigate complaints that are filed at the station.</p>
 <p><b>Why is this important?</b><br />
@@ -37148,7 +37148,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResNode' => '871',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '<h2 class="disIn slBlueDark">No Names Public</h2>
-<p class="pL20">I don\'t want to publish any names on this website. </p><p class="gry9 fPerc80 pL20">This includes police officers\' names and badge numbers too.</p>',
+<p class="pL20">I don\'t want to publish any names on this website. </p><p class="slGrey fPerc80 pL20">This includes police officers\' names and badge numbers too.</p>',
 			'NodeResValue' => '305'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -37156,7 +37156,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResNode' => '871',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '<h2 class="disIn slBlueDark">Anonymous</h2>
-<p class="pL20">I want my compliment to be completely anonymous</p><p class="gry9 fPerc80 pL20">No names will be published on this website. Neither OPC staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</p>',
+<p class="pL20">I want my compliment to be completely anonymous</p><p class="slGrey fPerc80 pL20">No names will be published on this website. Neither OPC staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</p>',
 			'NodeResValue' => '306'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -38235,21 +38235,21 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1171,
 			'NodeResNode' => '1285',
-			'NodeResEng' => 'Submit via Email Allowed <span class="slGreenLight fPerc66 mL10">Score+10</span>',
+			'NodeResEng' => 'Submit via Email Allowed <span class="slGreenDark fPerc66 mL10">Score+10</span>',
 			'NodeResValue' => 'Email'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1172,
 			'NodeResNode' => '1285',
 			'NodeResOrd' => '1',
-			'NodeResEng' => 'Verbally on Phone Allowed <span class="slGreenLight fPerc66 mL10">Score+2</span>',
+			'NodeResEng' => 'Verbally on Phone Allowed <span class="slGreenDark fPerc66 mL10">Score+2</span>',
 			'NodeResValue' => 'VerbalPhone'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1173,
 			'NodeResNode' => '1285',
 			'NodeResOrd' => '2',
-			'NodeResEng' => 'Paper Form via Postal Mail Allowed <span class="slGreenLight fPerc66 mL10">Score+2</span>',
+			'NodeResEng' => 'Paper Form via Postal Mail Allowed <span class="slGreenDark fPerc66 mL10">Score+2</span>',
 			'NodeResValue' => 'PaperMail'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -38262,21 +38262,21 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1175,
 			'NodeResNode' => '1287',
-			'NodeResEng' => 'Official Form NOT Required <span class="slGreenLight fPerc66 mL10">Score+10</span>',
+			'NodeResEng' => 'Official Form NOT Required <span class="slGreenDark fPerc66 mL10">Score+10</span>',
 			'NodeResValue' => 'OfficialFormNotReq'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1176,
 			'NodeResNode' => '1287',
 			'NodeResOrd' => '1',
-			'NodeResEng' => 'Anonymous Complaints <span class="slGreenLight fPerc66 mL10">Score+10</span>',
+			'NodeResEng' => 'Anonymous Complaints <span class="slGreenDark fPerc66 mL10">Score+10</span>',
 			'NodeResValue' => 'OfficialAnon'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1177,
 			'NodeResNode' => '1287',
 			'NodeResOrd' => '2',
-			'NodeResEng' => 'Requires Notary <span class="slGrey" style="font-size: 66%;">(for one or more types of complaint)</span> <span class="slRedLight fPerc66 mL10">Score-10</span>',
+			'NodeResEng' => 'Requires Notary <span class="slGrey" style="font-size: 66%;">(for one or more types of complaint)</span> <span class="txtDanger fPerc66 mL10">Score-10</span>',
 			'NodeResValue' => 'Notary'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -38296,7 +38296,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1182,
 			'NodeResNode' => '1329',
-			'NodeResEng' => '<span class="fPerc133"><i class="fa fa-laptop mL5 mR5"></i> Online Research </span><span class="fPerc80 gry9">(if you completed search for ALL desired info)</span> <img id="saveStar1" src="/openpolice/star1-gry.png" border=0 height=15 >',
+			'NodeResEng' => '<span class="fPerc133"><i class="fa fa-laptop mL5 mR5"></i> Online Research </span><span class="fPerc80 slGrey">(if you completed search for ALL desired info)</span> <img id="saveStar1" src="/openpolice/star1-gry.png" border=0 height=15 >',
 			'NodeResValue' => 'Online'
 		]);
 		DB::table('SL_NodeResponses')->insert([

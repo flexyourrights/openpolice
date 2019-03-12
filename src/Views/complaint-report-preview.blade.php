@@ -9,7 +9,7 @@
             @if (!isset($complaint->{ $coreAbbr . 'Status' }) || intVal($complaint->{ $coreAbbr . 'Status' }) <= 0 || 
                 $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->{ $coreAbbr . 'Status' }) == 'Incomplete' || 
                 $GLOBALS["SL"]->def->getVal('Compliment Status', $complaint->{ $coreAbbr . 'Status' }) == 'Incomplete')
-                <span class="slRedDark">Incomplete</span>
+                <span class="txtDanger">Incomplete</span>
             @else
                 <span class="slBlueDark">
                 @if ($coreAbbr == 'Com') {{ $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) }} 

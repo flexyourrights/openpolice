@@ -5,9 +5,9 @@
     <tr>
     <td class="pT10 pB20">
     <b>{{ date("n/j/y g:ia", strtotime($deptEdit->ZedDeptDeptVerified)) }}</b><br />
-    <span class="gry9"><i>by</i></span> {!! $user !!}<br />
+    <span class="slGrey"><i>by</i></span> {!! $user !!}<br />
     <br />
-    <span class="gry9"><i>took</i></span> {{ number_format(($deptEdit->ZedDeptDeptDuration/60), 1) }} minutes<br />
+    <span class="slGrey"><i>took</i></span> {{ number_format(($deptEdit->ZedDeptDeptDuration/60), 1) }} minutes<br />
     <br />
     
     @if (isset($iaEdit) && $iaEdit)
@@ -44,7 +44,7 @@
         @if (trim($deptEdit->ZedDeptDeptPhoneWork) != '')
             {{ $deptEdit->ZedDeptDeptPhoneWork }}<br />
         @endif
-        <span class="gry9">{{ $deptEdit->ZedDeptDeptAddress }}
+        <span class="slGrey">{{ $deptEdit->ZedDeptDeptAddress }}
         @if (trim($deptEdit->ZedDeptDeptAddress2) != '')
             <br />{{ $deptEdit->ZedDeptDeptAddress2 }}
         @endif
@@ -56,15 +56,15 @@
         </span>
         
         @if (intVal($deptEdit->ZedDeptDeptJurisdictionPopulation) > 0)
-            <nobr><span class="gry9">Population:</span> {{ number_format($deptEdit->ZedDeptDeptJurisdictionPopulation) }}</nobr><br />
+            <nobr><span class="slGrey">Population:</span> {{ number_format($deptEdit->ZedDeptDeptJurisdictionPopulation) }}</nobr><br />
         @endif
         @if (intVal($deptEdit->ZedDeptDeptTotOfficers) > 0)
-            <nobr><span class="gry9">Officers:</span> {{ number_format($deptEdit->ZedDeptDeptTotOfficers) }}</nobr><br />
+            <nobr><span class="slGrey">Officers:</span> {{ number_format($deptEdit->ZedDeptDeptTotOfficers) }}</nobr><br />
         @endif
     
         </td><td>
         
-        <nobr><b><span class="gry9">Accessibility:</span> {{ $deptEdit->ZedDeptDeptScoreOpenness }}</b></nobr><br />
+        <nobr><b><span class="slGrey">Accessibility:</span> {{ $deptEdit->ZedDeptDeptScoreOpenness }}</b></nobr><br />
     
         @if (trim($iaEdit->ZedOverOverWebComplaintInfo) != '')
             <a href="{{ $iaEdit->ZedOverOverWebComplaintInfo }}" target="_blank">Complaint Info</a><br />
@@ -73,7 +73,7 @@
             <a href="{{ $iaEdit->ZedOverOverComplaintWebForm }}" target="_blank">Online Form</a><br />
         @endif
         @if (trim($deptEdit->ZedDeptDeptWebsite) != '')
-            <span class="gry9">Homepage Link:</span> {{ $iaEdit->ZedOverOverHomepageComplaintLink }}<br />
+            <span class="slGrey">Homepage Link:</span> {{ $iaEdit->ZedOverOverHomepageComplaintLink }}<br />
         @endif
         @if ($iaEdit->ZedOverOverWaySubPaperMail)
             Paper Form Mail<br />
@@ -98,7 +98,7 @@
         @endif
         
         @if (intVal($iaEdit->ZedOverOverSubmitDeadline) > 0) 
-            <nobr><span class="gry9">Days To Submit:</span> {{ $iaEdit->ZedOverOverSubmitDeadline }}</nobr><br />
+            <nobr><span class="slGrey">Days To Submit:</span> {{ $iaEdit->ZedOverOverSubmitDeadline }}</nobr><br />
         @endif
         @if (trim($iaEdit->ZedOverOverEmail) != '')
             {{ $iaEdit->ZedOverOverEmail }}<br />
@@ -107,7 +107,7 @@
             {{ $iaEdit->ZedOverOverPhoneWork }}<br />
         @endif
         
-        <span class="gry9">{{ $iaEdit->ZedOverOverAddress }}
+        <span class="slGrey">{{ $iaEdit->ZedOverOverAddress }}
         @if (trim($iaEdit->ZedOverOverAddress2) != '')
             <br />{{ $iaEdit->ZedOverOverAddress2 }}
         @endif
@@ -133,7 +133,7 @@
         @if (trim($civEdit->ZedOverOverFacebook) != '')
             <a href="{{ $civEdit->ZedOverOverFacebook }}" target="_blank">Facebook</a><br />
         @endif
-        <span class="gry9">{{ $civEdit->ZedOverOverAddress }}<br />
+        <span class="slGrey">{{ $civEdit->ZedOverOverAddress }}<br />
         @if (trim($civEdit->ZedOverOverAddress2) != '')
             {{ $civEdit->ZedOverOverAddress2 }}<br />
         @endif
@@ -168,7 +168,7 @@
         @endif
     
         @if (intVal($civEdit->ZedOverOverSubmitDeadline) > 0)
-            <nobr><span class="gry9">Days To Submit:</span> {{ $civEdit->ZedOverOverSubmitDeadline }}</nobr><br />
+            <nobr><span class="slGrey">Days To Submit:</span> {{ $civEdit->ZedOverOverSubmitDeadline }}</nobr><br />
         @endif
     @endif
     
@@ -177,7 +177,7 @@
     @if (isset($iaEdit->ZedOverNotes) && trim($iaEdit->ZedOverNotes) != '')
         <tr>
         <td>&nbsp;</td>
-        <td colspan=3 class="pB20 slRedDark"><i class="fa fa-level-up fa-flip-horizontal" aria-hidden="true"></i> <i>Note:</i> {{ $iaEdit->ZedOverNotes }}</td>
+        <td colspan=3 class="pB20 txtDanger"><i class="fa fa-level-up fa-flip-horizontal" aria-hidden="true"></i> <i>Note:</i> {{ $iaEdit->ZedOverNotes }}</td>
         </tr>
     @endif
     

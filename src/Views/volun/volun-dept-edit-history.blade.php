@@ -39,7 +39,7 @@
     @endforelse
     </table>
 @else
-    <div class="gry9"><i>No volunteer edits of this departments yet.</i></div>
+    <div class="slGrey"><i>No volunteer edits of this departments yet.</i></div>
 @endif
 
 @if ($recentEdits != '')

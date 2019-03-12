@@ -8,7 +8,7 @@ Search Local Departments:
     {!! $stateDrop !!}
 </select> 
 <input id="deptNameID" name="deptName" value="{{ $deptName }}" type="text" class="form-control form-control-lg" >
-<a href="javascript:;" onClick="return subVolunDeptSearch();" class="btn btn-lg btn-primary f16"><i class="fa fa-search"></i></a>
+<a href="javascript:;" onClick="return subVolunDeptSearch();" class="btn btn-lg btn-primary"><i class="fa fa-search"></i></a>
 </form>
 
 <script type="text/javascript">

@@ -25,7 +25,7 @@
         <th class="taC">State</th>
     </tr>
     <!---
-    <tr class="f26 slBlueDark">
+    <tr class="fPerc125 slBlueDark">
         <td class="taC"><b>You</b></td>
         <td class="taC">{{ $yourStats->UserInfoStars }}</td>
         <td>{{ $yourStats->UserInfoStars1 }}</td>
@@ -48,23 +48,23 @@
                     <nobr><img src="/openpolice/star1.png" border=0 height=16 class="mTn5" > 
                     <b>{{ number_format($u->UserInfoStars) }}</b> 
                     <img src="/openpolice/star1.png" border=0 height=16 class="mTn5" ></nobr>
-                @else <span class="gryC">0</span> @endif
+                @else <span class="slGrey">0</span> @endif
             </td>
             <td class=" @if ($u->UserInfoUserID == $yourStats->UserInfoUserID) bld @endif 
-                @if ($u->UserInfoStars1 == 0) gryC @endif " >{{ $u->UserInfoStars1 }}</td>
+                @if ($u->UserInfoStars1 == 0) slGrey @endif " >{{ $u->UserInfoStars1 }}</td>
             <td class=" @if ($u->UserInfoUserID == $yourStats->UserInfoUserID) bld @endif 
-                @if ($u->UserInfoStars2 == 0) gryC @endif " >{{ $u->UserInfoStars2 }}</td>
+                @if ($u->UserInfoStars2 == 0) slGrey @endif " >{{ $u->UserInfoStars2 }}</td>
             <td class=" @if ($u->UserInfoUserID == $yourStats->UserInfoUserID) bld @endif 
-                @if ($u->UserInfoStars3 == 0) gryC @endif " >{{ $u->UserInfoStars3 }}</td>
+                @if ($u->UserInfoStars3 == 0) slGrey @endif " >{{ $u->UserInfoStars3 }}</td>
             <td class=" @if ($u->UserInfoUserID == $yourStats->UserInfoUserID) bld @endif 
-                @if ($u->UserInfoDepts == 0) gryC @endif " >{{ $u->UserInfoDepts }}</td>
+                @if ($u->UserInfoDepts == 0) slGrey @endif " >{{ $u->UserInfoDepts }}</td>
             <td class=" @if ($u->UserInfoUserID == $yourStats->UserInfoUserID) bld @else @endif 
-                @if ($u->UserInfoAvgTimeDept == 0) gryC @endif " ><span class="f14"><nobr>
+                @if ($u->UserInfoAvgTimeDept == 0) slGrey @endif " ><span class="f14"><nobr>
                 @if (($u->UserInfoAvgTimeDept/60) < 10) {{ number_format($u->UserInfoAvgTimeDept/60, 1) }}
                 @else {{ number_format($u->UserInfoAvgTimeDept/60, 0) }}
                 @endif min</nobr></span></td>
             <td> @if (isset($u->PrsnAddressState)) {{ $u->PrsnAddressState }} 
-                @else <span class="gryC">-</span> @endif </td>
+                @else <span class="slGrey">-</span> @endif </td>
         </tr>
     @endforeach
 </table>

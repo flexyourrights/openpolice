@@ -21,7 +21,7 @@
             delLoopItem nFormLnkDel"><i class="fa fa-times"></i> Delete</a>
         <input type="checkbox" class="disNon" name="delItem[]" id="delItem{{ $itemID }}" value="{{ $itemID }}" >
     </div>
-    <div id="wrapItem{{ $itemID }}Off" class="wrapItemOff brdA round20 mB20">
+    <div id="wrapItem{{ $itemID }}Off" class="wrapItemOff brdGrey round20 mB20">
         <i class="mR20 fL">Deleted: {{ $GLOBALS['SL']->closestLoop["obj"]->DataLoopSingular }} #{{ (1+$setIndex) }}: 
             {!! $loopItem->DeptName !!}</i> 
         <a href="javascript:;" id="unDelLoopItem{{ $itemID }}" class="unDelLoopItem nFormLnkEdit mL20 fR"

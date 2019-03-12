@@ -195,7 +195,7 @@
         @endif
             
             <div class="slCard nodeWrap">
-                @if ($firstRevDone) <h3 class="mBn10"><span class="slRedDark">Next, Update Complaint Status:</span></h3>
+                @if ($firstRevDone) <h3 class="mBn10"><span class="txtDanger">Next, Update Complaint Status:</span></h3>
                 @else <a id="hidivBtnStatus" href="javascript:;" 
                     class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-secondary @endif disBlo taL" 
                     @if ($firstRevDone) style="color: #FFF;" @endif >

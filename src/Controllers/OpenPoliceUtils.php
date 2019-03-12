@@ -18,7 +18,7 @@ use App\Models\OPLinksOfficerEvents;
 use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
 use App\Models\OPzVolunUserInfo;
-use SurvLoop\Controllers\TreeSurvForm;
+use SurvLoop\Controllers\Tree\TreeSurvForm;
 
 class OpenPoliceUtils extends TreeSurvForm
 {
@@ -731,7 +731,7 @@ class OpenPoliceUtils extends TreeSurvForm
             if (!$isAnon && isset($this->sessData->dataSets["Officers"]) 
                 && sizeof($this->sessData->dataSets["Officers"]) == 1) {
                 /*
-                $ret .= '<div class="pL5 pB10 f16">Officer '
+                $ret .= '<div class="pL5 pB10">Officer '
                     . $this->getOfficerNameFromID($this->sessData->dataSets["Officers"][0]->OffID) . '</div>';
                 */
                 $printedOfficers = true;
@@ -762,7 +762,7 @@ class OpenPoliceUtils extends TreeSurvForm
                     $prevAllegOff = $allegOff;
                 }
                 if (!$isAnon && $allOfficersSame) { // all the same, so print once at the top
-                    $ret .= '<div class="pL5 pB10 f18">' 
+                    $ret .= '<div class="pL5 pB10 fPerc125">' 
                         . $allegOffs[$this->sessData->dataSets["Allegations"][0]->AlleID] . '</div>';
                     $printedOfficers = true;
                 }
@@ -771,12 +771,12 @@ class OpenPoliceUtils extends TreeSurvForm
                 foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
                     if ($alleg->AlleType == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
                         if ($this->checkAllegIntimidWeapon($alleg)) {
-                            $ret .= '<div class="f18">' . $allegType;
+                            $ret .= '<div class="fPerc125">' . $allegType;
                             if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->AlleID])) {
-                                $ret .= ' <span class="f16 mL20 gry6">' . $allegOffs[$alleg->AlleID] . '</span>';
+                                $ret .= ' <span class="mL20 slGrey">' . $allegOffs[$alleg->AlleID] . '</span>';
                             }
                             $ret .= '</div>' 
-                            . (($showWhy) ? '<div class="gry9 f14 mTn10 pL20">' . $alleg->AlleDescription . '</div>' : '')
+                            . (($showWhy) ? '<div class="slGrey mTn10 pL20">' . $alleg->AlleDescription . '</div>' : '')
                             . '<div class="p5"></div>';
                         }
                     }
@@ -1312,7 +1312,7 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getDeptName($dept = [], $itemIndex = -3)
     {
-        $name = ''; //(($itemIndex > 0) ? '<span class="fPerc66 gry9">(#'.$itemIndex.')</span>' : '');
+        $name = ''; //(($itemIndex > 0) ? '<span class="fPerc66 slGrey">(#'.$itemIndex.')</span>' : '');
         if (isset($dept->DeptName) && trim($dept->DeptName) != '') {
             $name = $dept->DeptName . ' ' . $name;
         }
