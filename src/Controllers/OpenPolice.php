@@ -102,7 +102,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1795) {
             $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
             return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
-                . view('vendor.survloop.inc-report-uploads', [ "uploads" => $uploads ])->render();
+                . view('vendor.survloop.reports.inc-uploads', [ "uploads" => $uploads ])->render();
         } elseif ($nID == 1478) {
             return [ $this->getCivSnstvFldsNotPrinted($this->sessData->getLatestDataBranchID()) ];
         } elseif ($nID == 1511) {

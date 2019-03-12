@@ -289,7 +289,7 @@ class OpenListing extends OpenAjax
                 unset($tots[$how]);
             }
         }
-        $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.graph-bar-plot', [
+        $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.reports.graph-bar-plot', [
             "graph"  => $graph,
             "height" => 700
             ])->render();
