@@ -155,7 +155,7 @@
                 </div>
                 <textarea name="overNote" class="w100 mT5"></textarea>
             </div>
-            <input type="submit" value="Save New Status" class="btn btn-xl btn-primary mT20">
+            <input type="submit" value="Save New Status" class="btn btn-lg btn-xl btn-primary mT20">
             </form>
         </div>
 

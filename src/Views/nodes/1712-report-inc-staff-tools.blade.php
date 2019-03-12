@@ -157,7 +157,7 @@
                         @endforelse
                     @endif
                     
-                    <div class="m20 taC"><input type="submit" class="btn btn-xl btn-primary w66" id="stfBtn9"
+                    <div class="m20 taC"><input type="submit" class="btn btn-lg btn-xl btn-primary w66" id="stfBtn9"
                         value="Send Email"></div>
                     
                 </div>

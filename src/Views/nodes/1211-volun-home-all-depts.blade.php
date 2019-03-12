@@ -30,7 +30,7 @@
         </select>
     </div><div class="col-2">
         &nbsp;<br />
-        <a class="btn btn-primary w100 slTab" {!! $GLOBALS["SL"]->tabInd() !!}
+        <a class="btn btn-primary btn-block slTab" {!! $GLOBALS["SL"]->tabInd() !!}
             onClick="return runVolunDeptSearch();" href="javascript:;">Search</a>
     </div>
 </div>

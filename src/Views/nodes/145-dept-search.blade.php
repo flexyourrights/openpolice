@@ -14,7 +14,7 @@
             </select>
         </div>
         <div class="col-sm-2 pB20">
-            <a href="javascript:;" id="ajaxSubmit" class="btn btn-lg btn-secondary w100"
+            <a href="javascript:;" id="ajaxSubmit" class="btn btn-lg btn-secondary btn-block"
                 ><i class="fa fa-search"></i></a>
         </div>
     </div>

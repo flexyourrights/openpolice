@@ -24960,7 +24960,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodeParentID' => '1776',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a href="/complaint-or-compliment" class="btn btn-lg btn-primary w100">Share A New Story</a>',
+			'NodePromptText' => '<a href="/complaint-or-compliment" class="btn btn-lg btn-primary btn-block">Share A New Story</a>',
 			'NodePromptAfter' => '<style> #blockWrap[[nID]] { margin-top: 40px; } </style>',
 			'NodeResponseSet' => '1'
 		]);
@@ -25533,9 +25533,9 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 <h3>Do you have a complaint or a compliment about the police?</h3>
 </center>
 <p> </p>
-<p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-complaint"><i class="fa fa-thumbs-o-down mR10" aria-hidden="true"></i>  Share a Complaint</a></p>
+<p><a class="btn btn-xl btn-primary btn-block" href="[[DOMAIN]]/filing-your-police-complaint"><i class="fa fa-thumbs-o-down mR10" aria-hidden="true"></i>  Share a Complaint</a></p>
 <p> </p>
-<p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-compliment"><i class="fa fa-thumbs-o-up mR10" aria-hidden="true"></i> Share a Compliment</a></p>
+<p><a class="btn btn-xl btn-primary btn-block" href="[[DOMAIN]]/filing-your-police-compliment"><i class="fa fa-thumbs-o-up mR10" aria-hidden="true"></i> Share a Compliment</a></p>
 <p> </p>',
 			'NodeOpts' => '67'
 		]);
@@ -27380,7 +27380,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '22',
 			'NodeParentID' => '1776',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a href="/dash/volunteer" class="btn btn-lg btn-primary w100"><span class="fPerc133">VOLUNTEER</span><br />to help create the best database of police department information <nobr>in the world!</nobr></a>'
+			'NodePromptText' => '<a href="/dash/volunteer" class="btn btn-lg btn-primary btn-block"><span class="fPerc133">VOLUNTEER</span><br />to help create the best database of police department information <nobr>in the world!</nobr></a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1348,
@@ -27388,7 +27388,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1776',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a href="/share-complaint-or-compliment" class="btn btn-lg btn-primary w100">Share A New Story</a>',
+			'NodePromptText' => '<a href="/share-complaint-or-compliment" class="btn btn-lg btn-primary btn-block">Share A New Story</a>',
 			'NodePromptAfter' => '<style> #blockWrap[[nID]] { margin-top: 40px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32174,7 +32174,7 @@ $(document).ready(function(){
 <p>Then you can log in any time to get to the volunteers\' dashboard, which includes more instructions and a video on how to help out with this research.</p>
 <h3>Thank you, volunteers!</h3>
 <p>&nbsp;</p>
-<a class="btn btn-xl btn-primary w100" href="/register?volunteer=yes">Sign Up To Volunteer</a>',
+<a class="btn btn-xl btn-primary btn-block" href="/register?volunteer=yes">Sign Up To Volunteer</a>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32440,7 +32440,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeParentID' => '1994',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a class="btn btn-xl btn-primary w100 mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Share My Story</a>'
+			'NodePromptText' => '<a class="btn btn-xl btn-primary btn-block mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Share My Story</a>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1997,
@@ -33320,7 +33320,7 @@ James became fascinated with civil liberties while studying political science in
 <p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OPC helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
 </div></div>
 <p>&nbsp;</p>
-<p><a href="/principles" class="btn btn-xl btn-primary w100">Our Core Principles</a></p>
+<p><a href="/principles" class="btn btn-xl btn-primary btn-block">Our Core Principles</a></p>
 <p>&nbsp;</p>',
 			'NodePromptAfter' => '<style> .bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; }</style>'
 		]);

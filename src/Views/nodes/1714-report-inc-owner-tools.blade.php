@@ -96,7 +96,7 @@
         
     @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
         $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
-            <a href="/switch/1/{{ $complaint->ComID }}" class="btn btn-lg btn-primary w100 mB10 taL" id="ownBtnCont"
+            <a href="/switch/1/{{ $complaint->ComID }}" class="btn btn-lg btn-primary btn-block mB10 taL" id="ownBtnCont"
                 ><i class="fa fa-pencil mR5"></i> Continue</a>
             <a href="javascript:;" class="btn btn-lg btn-danger w100 taL" id="ownBtnDel"
                 onClick="if (confirm('{!! $warning !!}')) { window.location='/delSess/1/{{ $complaint->ComID }}'; }"
@@ -104,7 +104,7 @@
     @else
         @if (!in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), 
             ['Hold', 'New', 'Reviewed']))
-            <div class="mB10"><a id="hidivBtnUpdateStatus" class="btn btn-lg btn-primary w100 taL hidivBtn"
+            <div class="mB10"><a id="hidivBtnUpdateStatus" class="btn btn-lg btn-primary btn-block taL hidivBtn"
                 style="color: #FFF;" href="javascript:;"><i class="fa fa-refresh mR5" aria-hidden="true"></i> 
                 Update Complaint Status</a></div>
             <div id="hidivUpdateStatus" class="mTn10 mB20 disNon">
@@ -160,10 +160,10 @@
             <div class="mB20"> </div>
         @endif
             <a href="/complaint/read-{{ $complaint->ComPublicID }}/full-pdf" target="_blank"
-                class="btn btn-lg btn-secondary w100 taL" id="ownBtnPrnt"
+                class="btn btn-lg btn-secondary btn-block taL" id="ownBtnPrnt"
                 ><i class="fa fa-print mR5" aria-hidden="true"></i> Print Complaint / Save as PDF</a>
             <div class="mT20"><a href="/complaint/read-{{ $complaint->ComPublicID }}/full-xml" target="_blank"
-                class="btn btn-lg btn-secondary w100 taL" id="ownBtnDwnl"
+                class="btn btn-lg btn-secondary btn-block taL" id="ownBtnDwnl"
                 ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> Download Raw Data File</a></div>
                 
             <h3 class="mT20 mB5">Email Complaint To:</h3>
@@ -171,7 +171,7 @@
                 <div class="col-md-12 col-lg-7 col-xl-8">
                     <input value="{{ $user->email }}" type="text" class="form-control w100 mB5">
                 </div><div class="col-md-12 col-lg-5 col-xl-4">
-                    <a class="btn btn-secondary w100 mB5" id="ownBtnSend" href="javascript:;"
+                    <a class="btn btn-secondary btn-block mB5" id="ownBtnSend" href="javascript:;"
                         ><nobr><i class="fa fa-envelope" aria-hidden="true"></i> Send</nobr></a>
                 </div>
             </div>
