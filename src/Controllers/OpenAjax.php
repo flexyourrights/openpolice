@@ -11,14 +11,16 @@ use OpenPolice\Controllers\OpenComplaintSaves;
 
 class OpenAjax extends OpenComplaintSaves
 {
-    public function runAjaxChecks(Request $request, $over = '')
+    public function runAjaxChecksCustom(Request $request, $over = '')
     {
         if ($request->has('email') && $request->has('password')) {
-            return $this->ajaxEmailPass($request);
+            echo $this->ajaxEmailPass($request);
+            exit;
         } elseif ($request->has('policeDept')) {
-            return $this->ajaxPoliceDeptSearch($request);
+            echo $this->ajaxPoliceDeptSearch($request);
+            exit;
         }
-        exit;
+        return false;
     }
     
     public function ajaxChecksCustom(Request $request, $type = '')
