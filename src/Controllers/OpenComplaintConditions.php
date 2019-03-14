@@ -23,6 +23,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 }
             }
             return 0;
+        } elseif ($condition == '#PartnerIntake') {
+            if (isset($this->sessData->dataSets["Complaints"][0]->ComAttID)
+                && intVal($this->sessData->dataSets["Complaints"][0]->ComAttID) > 0) {
+                return 1;
+            }
+            return 0;
         } elseif ($condition == '#LawyerInvolved') {
             if ((isset($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas) 
                 && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas), ['Y', '?']))

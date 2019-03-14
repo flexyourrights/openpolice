@@ -1,6 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/2069-prepare-complaint-org.blade.php -->
 <h3 class="slBlueDark">Share your story with 
-@if (strpos($dat["PersonContact"][0]->PrsnNickname, 'Office') == 0) the @endif
 <br />{!! $dat["PersonContact"][0]->PrsnNickname !!}</h3>
 <p>
 @if (isset($dat["Partners"][0]->PartHelpReqs)) {!! $dat["Partners"][0]->PartHelpReqs !!} @endif
