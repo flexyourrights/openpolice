@@ -9,7 +9,7 @@ use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunStatDays;
-use SurvLoop\Controllers\SurvTrends;
+use SurvLoop\Controllers\Stats\SurvTrends;
 
 class OpenDashAdmin
 {

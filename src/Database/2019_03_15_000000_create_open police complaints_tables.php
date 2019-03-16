@@ -58,6 +58,7 @@ class OPCreateTables extends Migration
 			$table->string('ComUniqueStr', 20)->nullable();
 			$table->string('ComIPaddy')->nullable();
 			$table->integer('ComPublicID')->nullable();
+			$table->boolean('ComIsDemo')->default('0')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Compliments', function(Blueprint $table)
@@ -83,6 +84,7 @@ class OPCreateTables extends Migration
 			$table->string('CompliUniqueStr', 20)->nullable();
 			$table->string('CompliIPaddy')->nullable();
 			$table->integer('CompliPublicID')->nullable();
+			$table->boolean('CompliIsDemo')->default('0')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Incidents', function(Blueprint $table)
@@ -145,6 +147,8 @@ class OPCreateTables extends Migration
 			$table->integer('AlleSilIntimidatingWeapon')->unsigned()->nullable();
 			$table->integer('AlleSilIntimidatingWeaponType')->unsigned()->nullable();
 			$table->char('AlleSilWrongfulEntry', 1)->nullable();
+			$table->char('AlleSilRepeatContact', 1)->nullable();
+			$table->char('AlleSilRepeatHarass', 1)->nullable();
 			$table->char('AlleSilUnbecoming', 1)->nullable();
 			$table->char('AlleSilDiscourteous', 1)->nullable();
 			$table->timestamps();
@@ -617,6 +621,25 @@ class OPCreateTables extends Migration
 			$table->integer('PrtFltFilter')->unsigned()->nullable();
 			$table->timestamps();
 		});
+		Schema::create('OP_TesterBeta', function(Blueprint $table)
+		{
+			$table->increments('BetaID');
+			$table->string('BetaEmail')->nullable();
+			$table->string('BetaName')->nullable();
+			$table->string('BetaLastName')->nullable();
+			$table->integer('BetaYear')->nullable();
+			$table->longText('BetaNarrative')->nullable();
+			$table->string('BetaHowHear')->nullable();
+			$table->date('BetaInvited')->nullable();
+			$table->integer('BetaUserID')->unsigned()->nullable();
+			$table->string('BetaVersionAB')->nullable();
+			$table->integer('BetaSubmissionProgress')->nullable();
+			$table->string('BetaIPaddy')->nullable();
+			$table->string('BetaTreeVersion')->nullable();
+			$table->string('BetaUniqueStr')->nullable();
+			$table->string('BetaIsMobile')->nullable();
+			$table->timestamps();
+		});
 		Schema::create('OP_Administrators', function(Blueprint $table)
 		{
 			$table->increments('AdmID');
@@ -923,6 +946,7 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_PartnerCapac');
 		Schema::drop('OP_PartnerCaseTypes');
 		Schema::drop('OP_PartnerFilters');
+		Schema::drop('OP_TesterBeta');
 		Schema::drop('OP_Administrators');
 		Schema::drop('OP_LinksComplaintDept');
 		Schema::drop('OP_LinksComplaintOversight');
