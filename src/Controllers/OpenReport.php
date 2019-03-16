@@ -47,7 +47,8 @@ class OpenReport extends OpenDepts
     protected function reportAllegsWhy($nID = -3)
     {
         return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 
-            'Allegations<div class="pT5 slGrey">Including comments from the complainant</span> ');
+            'Allegations</h3><div class="mTn10 slGrey">Including comments from the complainant</div>'
+            . '<h3 class="disNon">');
     }
 
     protected function reportCivAddy($nID)
@@ -197,19 +198,25 @@ class OpenReport extends OpenDepts
     
     protected function getReportWhereLine($nID = -3)
     {
-        $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->dataSets["Incidents"][0], 'Inc');
-        if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
-            return ['Where', $addy];
-        }
-        if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressState)) {
-            $c = '';
-            $state = $this->sessData->dataSets["Incidents"][0]->IncAddressState;
-            if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) {
-                $c = $GLOBALS["SL"]->getZipProperty($this->sessData->dataSets["Incidents"][0]->IncAddressZip, 'County');
-            } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncAddressCity)) {
-                $c = $GLOBALS["SL"]->getCityCounty($this->sessData->dataSets["Incidents"][0]->IncAddressZip, $state);
+        if (isset($this->sessData->dataSets["Incidents"])) {
+            $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->dataSets["Incidents"][0], 'Inc');
+            if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
+                return ['Where', $addy];
             }
-            if (trim($c) != '') return ['Where', $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state];
+            if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressState)) {
+                $c = '';
+                $state = $this->sessData->dataSets["Incidents"][0]->IncAddressState;
+                if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) {
+                    $c = $GLOBALS["SL"]->getZipProperty($this->sessData->dataSets["Incidents"][0]->IncAddressZip,
+                        'County');
+                } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncAddressCity)) {
+                    $c = $GLOBALS["SL"]->getCityCounty($this->sessData->dataSets["Incidents"][0]->IncAddressZip,
+                        $state);
+                }
+                if (trim($c) != '') {
+                    return ['Where', $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state];
+                }
+            }
         }
         return [];
     }

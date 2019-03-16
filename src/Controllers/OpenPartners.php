@@ -156,7 +156,7 @@ class OpenPartners extends OpenVolunteers
     
     protected function partnerShareStory(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 62)
     {
-        $this->loadPageVariation($request, 1, $tree, '/preparing-complaint-for-org-' . $type . '/' . $prtnSlug);
+        $this->loadPageVariation($request, 1, $tree, '/preparing-complaint-for-' . $type . '/' . $prtnSlug);
         $partRow = OPPartners::where('PartSlug', $prtnSlug)
             ->first();
         if ($partRow && isset($partRow->PartID)) {

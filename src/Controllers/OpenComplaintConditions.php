@@ -3,6 +3,7 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
+use App\Models\OPPartners;
 use App\Models\SLEmailed;
 use OpenPolice\Controllers\OpenSessDataOverride;
 
@@ -27,6 +28,16 @@ class OpenComplaintConditions extends OpenSessDataOverride
             if (isset($this->sessData->dataSets["Complaints"][0]->ComAttID)
                 && intVal($this->sessData->dataSets["Complaints"][0]->ComAttID) > 0) {
                 return 1;
+            }
+            return 0;
+        } elseif ($condition == '#AttorneyIntake') {
+            if (isset($this->sessData->dataSets["Complaints"][0]->ComAttID)
+                && intVal($this->sessData->dataSets["Complaints"][0]->ComAttID) > 0) {
+                $partner = OPPartners::find(intVal($this->sessData->dataSets["Complaints"][0]->ComAttID));
+                if ($partner && isset($partner->PartType) 
+                    && $partner->PartType == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) {
+                    return 1;
+                }
             }
             return 0;
         } elseif ($condition == '#LawyerInvolved') {
@@ -128,8 +139,28 @@ class OpenComplaintConditions extends OpenSessDataOverride
             }
             return 0;
         } elseif ($condition == '#HasUploads') {
-            $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
-            if ($uploads && sizeof($uploads) > 0) {
+            return $this->complaintHasUploads();
+        } elseif ($condition == '#ShowUploads') {
+            if ($this->complaintHasUploads() == 0 || !isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)) {
+                return 0;
+            }
+            if ($this->v["isAdmin"] || $this->v["isOwner"]) {
+                return 1;
+            }
+            if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) { // needs more strength here
+                return 1;
+            }
+            if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                    != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+                return 0;
+            } // else Full Transparency, but check status first...
+            if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Declined To Investigate (Closed)'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Investigated (Closed)'),
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
+                    ])) {
                 return 1;
             }
             return 0;
@@ -164,6 +195,15 @@ class OpenComplaintConditions extends OpenSessDataOverride
             return 0;
         }
         return -1; 
+    }
+    
+    protected function complaintHasUploads()
+    {
+        $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
+        if ($uploads && sizeof($uploads) > 0) {
+            return 1;
+        }
+        return 0;
     }
     
 }

@@ -71,7 +71,7 @@ class OpenPolice extends OpenInitExtras
             return $this->publicPartnerHeader($nID);
         } elseif (in_array($nID, [1898, 2060])) {
             return $this->publicPartnerPage($nID);
-        } elseif ($nID == 2069) {
+        } elseif (in_array($nID, [2115, 2069])) {
             return $this->printPreparePartnerHeader($nID);
                
         // User Profile
@@ -99,7 +99,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getCivReportNameHeader($nID);
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
-        } elseif ($nID == 1795) {
+        } elseif (in_array($nID, [1795, 2266])) {
             $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
             return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
                 . view('vendor.survloop.reports.inc-uploads', [ "uploads" => $uploads ])->render();
