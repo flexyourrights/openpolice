@@ -25,7 +25,8 @@
         }
     ],
     "require": {
-        "wikiworldorder/survloop": "*@dev"
+        "wikiworldorder/survloop": "*@dev",
+        "flexyourrights/openpolice-departments": "*@dev"
     },
     "autoload": {
         "psr-4": {
