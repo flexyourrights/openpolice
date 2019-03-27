@@ -31,7 +31,7 @@
     "autoload": {
         "psr-4": {
             "OpenPolice\\": "src/",
-            "OpenPolice\\Models\\": "storage/app/models/openpolice",
+            "OpenPolice\\Models\\": "storage/app/models/openpolice"
         }
     }
 }
