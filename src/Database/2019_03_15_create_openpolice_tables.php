@@ -4,7 +4,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class OPCreateTables extends Migration
+class CreateOpenPoliceTables extends Migration
 {
     /**
      * Run the migrations.

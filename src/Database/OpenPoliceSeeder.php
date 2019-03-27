@@ -4,7 +4,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-class OPSeeder extends Seeder
+class OpenPoliceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
