@@ -30,8 +30,8 @@ class OpenPoliceServiceProvider extends ServiceProvider
             __DIR__.'/Models'  => base_path('app/Models/OpenPolice'),
             __DIR__.'/Models'  => base_path('app/Models'),
 
-            __DIR__.'/Database/2019_03_15_OP_create_tables.php'
-                => base_path('database/migrations/2019_03_15_OP_create_tables.php'),
+            __DIR__.'/Database/2019_03_15_000000_create_openpolice_tables.php'
+                => base_path('database/migrations/2019_03_15_000000_create_openpolice_tables.php'),
             __DIR__.'/Database/OpenPoliceSeeder.php'
                 => base_path('database/seeds/OpenPoliceSeeder.php'),
             base_path('/vendor/flexyourrights/openpolice-departments/src/OpenPoliceDeptSeeder.php')

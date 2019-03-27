@@ -373,7 +373,7 @@ class CreateOpenPoliceTables extends Migration
 			$table->integer('NoteComplaintID')->unsigned()->nullable();
 		$table->index('NoteComplaintID');
 			$table->integer('NoteUserID')->unsigned()->nullable();
-			$table->dateTime('NoteTimestamp')->default('NOW()')->nullable();
+			$table->dateTime('NoteTimestamp')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable();
 			$table->longText('NoteContent')->nullable();
 			$table->timestamps();
 		});
@@ -750,7 +750,7 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('AdmActID');
 			$table->integer('AdmActUserID')->unsigned()->nullable();
-			$table->dateTime('AdmActTimestamp')->default('NOW()')->nullable();
+			$table->dateTime('AdmActTimestamp')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable();
 			$table->string('AdmActTable')->nullable();
 			$table->integer('AdmActRecordID')->nullable();
 			$table->longText('AdmActOldData')->nullable();
