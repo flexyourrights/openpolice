@@ -18,12 +18,12 @@ class OPzVolunStatDays extends Model
 		'VolunStatOnlineResearch', 
 		'VolunStatCallsDept', 
 		'VolunStatCallsIA', 
-		'VolunStatTot', 
+		'VolunStatCallsTot', 
 		'VolunStatTotalEdits', 
 		'VolunStatOnlineResearchV', 
 		'VolunStatCallsDeptV', 
 		'VolunStatCallsIAV', 
-		'VolunStatTotV', 
+		'VolunStatCallsTotV', 
 		'VolunStatTotalEditsV', 
     ];
     
