@@ -9,7 +9,7 @@
             @endif
         </div><div class="col-sm-4">
             <a href="/org/{{ $p->PartSlug }}"><h4>{{ $p->PrsnNickname }}</h4></a>
-            @if (isset($p->PartBio)) <p>{{ $GLOBALS["SL"]->wordLimitDotDotDot($p->PartBio) }}</p> @endif
+            @if (isset($p->PartBio)) <p>{{ $GLOBALS["SL"]->wordLimitDotDotDot($GLOBALS["SL"]->plainLineBreaks($p->PartBio)) }}</p> @endif
             <p>
             @if (isset($p->PrsnAddressCity)) {{ $p->PrsnAddressCity }}, @endif
             @if (isset($p->PrsnAddressState)) {{ $p->PrsnAddressState }} @endif

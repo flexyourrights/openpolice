@@ -528,6 +528,8 @@ class CreateOpenPoliceTables extends Migration
 		$table->index('OverDeptID');
 			$table->string('OverAgncName')->nullable();
 			$table->dateTime('OverVerified')->nullable();
+$table->integer('OverCivModel')->nullable();
+
 			$table->string('OverNamePrefix', 20)->nullable();
 			$table->string('OverNameFirst')->nullable();
 			$table->string('OverNickname')->nullable();
