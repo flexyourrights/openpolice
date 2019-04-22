@@ -37,10 +37,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "FlexYourRights\\OpenPolice\\OpenPoliceServiceProvider"
+                "OpenPolice\\OpenPoliceServiceProvider"
             ],
             "aliases": {
-                "OpenPolice": "FlexYourRights\\OpenPolice\\OpenPoliceFacade"
+                "OpenPolice": "OpenPolice\\OpenPoliceFacade"
             }
         }
     }
