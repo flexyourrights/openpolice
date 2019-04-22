@@ -33,5 +33,15 @@
             "OpenPolice\\": "src/",
             "OpenPolice\\Models\\": "storage/app/models/openpolice"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FlexYourRights\\OpenPolice\\OpenPoliceServiceProvider"
+            ],
+            "aliases": {
+                "OpenPolice": "FlexYourRights\\OpenPolice\\OpenPoliceFacade"
+            }
+        }
     }
 }

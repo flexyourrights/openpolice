@@ -23596,7 +23596,7 @@ $ vagrant up
 $ vagrant ssh
 $ cd /home/vagrant/Code
 $ composer global require "laravel/installer"
-$ composer create-project laravel/laravel OpenPolice "5.3.*"
+$ composer create-project laravel/laravel OpenPolice "5.8.*"
 </pre></li></ol>
 <p><br></p>
 <p>Now you should be able to confirm your successful installation by pulling up http://homestead.test/ in your browser!</p><ul><li>If you like, you can now connect to your server\'s database with something like <a href="https://www.sequelpro.com/" target="_blank">Sequel Pro</a>,
@@ -23620,8 +23620,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodePromptText' => '<p> </p>
 <p> </p>
 <div>{{Newsletter Sign Up}}</div>
-<p> </p>
-<p> </p>',
+<p> </p><p> </p><p> </p><p> </p>',
 			'NodePromptAfter' => '<style>
 #nBtn1125 { margin-bottom: 40px; }
 #blockWrap849 { margin-bottom: -85px; }
@@ -25723,86 +25722,6 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeDataBranch' => 'users'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 1124,
-			'NodeTree' => '12',
-			'NodeParentID' => '793',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div id="homeHeroTop"></div><center>
-<div id="homeHeroBox">
-<img id="homeLogo" src="/openpolice/Flex_Open_v4-beta-shade.png" border=0 >
-<h1 id="homeHeroHead">Your Story is Too Important <nobr>to be Ignored</nobr></h1>
-<h3 id="homeHero2">Prepare, file, and track reports of police misconduct.</h3>
-<p>Be the first to know when we launch.</p>
-<form action="https://flexyourrights.us5.list-manage.com/subscribe/post?u=6b424f1b6d7c45a5906cd7579&id=31f97a79b7" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank"> 
-    <div style="position: absolute; left: -5000px;" aria-hidden="true">
-      <input name="b_6b424f1b6d7c45a5906cd7579_31f97a79b7" tabindex="-1" value="" type="text">
-    </div>
-    <p><input name="EMAIL" class="form-control required email" style="width: 250px; margin-bottom: -10px;" id="mce-EMAIL" placeholder="Your email address" type="email" ></p>
-    <p></p>
-<input value="SIGN ME UP" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary btn-xl m15" style="margin-bottom: 5px; width: 250px;" type="submit">
-</form>
-
-<a class="btn btn-danger btn-xl m15" style="width: 250px;" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';">DONATE</a>
-
-</div>
-</center>
-<div id="homeHeroBot"></div>',
-			'NodePromptAfter' => '<style>
-#slLogoWrap { display: none; }
-#homeHeroTop, #homeHeroBot { width: 100%; height: 40px; }
-#homeHeroBot { height: 80px; }
-#homeLogo { width: 65%; margin-right: -15px; }
-#homeHeroBox { background: none; text-shadow: -1px 1px 1px #000; padding: 15px 0px; }
-#homeHero2 { margin-top: 15px; }
-#blockWrap[[nID]] { text-shadow: -1px 1px 1px #000; min-height: 530px; }
-#blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 360px; }
-#blockWrap2010 { margin-top: -17px; }
-#deferNode2011 { height: 772px; }
-#homeDemoVid { height: 600px; }
-#deferAnim2011 { margin-top: 250px; }
-
-@media screen and (max-width: 1200px) {
-#deferNode2011 { height: 672px; }
-#homeDemoVid { height: 500px; }
-}
-@media screen and (max-width: 992px) {
-#homeLogo { width: 90%; }
-#homeHeroTop, #homeHeroBot { height: 20px; }
-#deferNode2011 { height: 602px; }
-#homeDemoVid { height: 380px; }
-#deferAnim2011 { margin-top: 200px; }
-}
-@media screen and (max-width: 768px) {
-#homeHeroBox { background: url(/survloop/uploads/trans-black-50.png); }
-#homeHeroHead { font-size: 1.75rem; }
-#homeHero2 { font-size: 1.3rem; }
-#deferNode2011 { height: 472px; }
-#homeDemoVid { height: 250px; }
-}
-@media screen and (max-width: 480px) {
-#homeHeroTop, #homeHeroBot { height: 0px; }
-#homeLogo { margin-bottom: 10px; }
-#blockWrap[[nID]] { background-size: auto 100%; overflow: visible; }
-#homeHeroHead { font-size: 1.3rem; }
-#homeHero2 { font-size: 1rem; }
-#deferNode2011 { height: 470px; }
-#homeDemoVid { height: 205px; }
-}
-</style>
-<script type="text/javascript"> $(document).ready(function(){
-function checkLogoScroll() {
-if (jQuery(this).scrollTop() > 170) $("#slLogoWrap").slideDown("fast");
-else $("#slLogoWrap").slideUp("fast");
-}
-setTimeout(function() { checkLogoScroll(); }, 50);
-jQuery(window).scroll(function () { checkLogoScroll(); });
-});
-</script>',
-			'NodeResponseSet' => '/complaint-or-compliment',
-			'NodeDefault' => '#333333;;#EDF8FF;;#FFF;;/openpolice/open-police-hero-1J.jpg;;w100;;P;;center;;h100',
-			'NodeOpts' => '71'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 1125,
 			'NodeTree' => '12',
 			'NodeParentID' => '799',
@@ -25854,13 +25773,10 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 			'NodePromptText' => '<div id="homeHeroTop"></div><center>
 <div id="homeHeroBox">
 <img id="homeLogo" src="/openpolice/Flex_Open_v4-beta-shade.png" border="0">
-<h1 id="homeHeroHead">Your Story is Too Important <nobr>to be Ignored</nobr></h1>
-<h3 id="homeHero2">Prepare, file, and track reports of police misconduct.</h3>
-<div id="btnBig">
-<a class="btn btn-primary btn-xl m15" href="/complaint-or-compliment" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-xl m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
-<div id="btnSm">
-<a class="btn btn-primary btn-lg m15" href="/complaint-or-compliment" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a> <a class="btn btn-danger btn-lg m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
-</div>
+<h2 id="homeHeroHead">Your story is too important <nobr>to be ignored.</nobr></h2>
+<h2 id="homeHero2">Prepare, file, and track reports of <nobr>police misconduct.</nobr></h2>
+<a id="homeHeroBtn1" class="btn btn-primary btn-lg m15" href="/filing-your-police-complaint" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">SHARE YOUR STORY</a>
+<a id="homeHeroBtn2" class="btn btn-danger btn-lg m15" href="/donate" target="_blank" onmouseover="this.style.color=\'#EC2327\';" onmouseout="this.style.color=\'#FFF\';" style="color: rgb(255, 255, 255);">DONATE</a></div>
 </center>
 <div id="homeHeroBot"></div>',
 			'NodePromptAfter' => '<style>
@@ -25870,46 +25786,39 @@ jQuery(window).scroll(function () { checkLogoScroll(); });
 #homeHeroTop, #homeHeroBot { width: 100%; height: 40px; }
 #homeHeroBot { height: 80px; }
 #homeLogo { width: 65%; margin-right: -15px; }
+#homeHeroHead { margin-top: 20px; }
 #homeHeroBox { background: none; text-shadow: -1px 1px 1px #000; padding: 15px 0px; }
 #homeHero2 { margin-top: 15px; }
 #blockWrap[[nID]] { background: #333; text-shadow: -1px 1px 1px #000; min-height: 530px; }
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 360px; }
 #blockWrap2010 { margin-top: -17px; }
 #deferNode2011 { height: 772px; }
-#homeDemoVid { height: 600px; }
 #deferAnim2011 { margin-top: 250px; }
+#homeHeroHead, #homeHero2, #homeHeroBtn1, #homeHeroBtn2, #mailchimpH2 { font-size: 1.75rem; }
 
 @media screen and (max-width: 1200px) {
 #deferNode2011 { height: 672px; }
-#homeDemoVid { height: 500px; }
 }
 @media screen and (max-width: 992px) {
 #homeLogo { width: 90%; }
 #homeHeroTop, #homeHeroBot { height: 20px; }
 #deferNode2011 { height: 602px; }
-#homeDemoVid { height: 380px; }
 #deferAnim2011 { margin-top: 200px; }
 }
 @media screen and (max-width: 768px) {
+#homeHeroHead, #homeHero2, #homeHeroBtn1, #homeHeroBtn2, #mailchimpH2 { font-size: 1.5rem; }
 #btnBig { display: none; }
 #btnSm { display: block; }
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 300px; }
 #homeHeroBox { background: url(/survloop/uploads/trans-black-50.png); }
-#homeHeroHead { font-size: 1.75rem; }
-#homeHero2 { font-size: 1.3rem; }
 #deferNode2011 { height: 472px; }
-#homeDemoVid { height: 250px; }
 }
 @media screen and (max-width: 480px) {
 #btnSm { margin-top: 10px; }
 #homeHeroTop, #homeHeroBot { height: 0px; }
 #homeLogo { margin-bottom: 10px; }
-#blockWrap[[nID]] { background-size: auto 100%; overflow: visible; min-height: 430px; }
 #blockWrap[[nID]] a.btn:link, #blockWrap[[nID]] a.btn:visited, #blockWrap[[nID]] a.btn:active, #blockWrap[[nID]] a.btn:hover { width: 250px; }
-#homeHeroHead { font-size: 1.3rem; }
-#homeHero2 { font-size: 1rem; }
 #deferNode2011 { height: 470px; }
-#homeDemoVid { height: 205px; }
 }
 </style>
 <script type="text/javascript"> $(document).ready(function(){
@@ -25920,7 +25829,7 @@ function checkLogoScroll() {
 setTimeout(function() { checkLogoScroll(); }, 50);
 jQuery(window).scroll(function () { checkLogoScroll(); });
 }); </script>',
-			'NodeDefault' => '#000;;#EDF8FF;;#FFF;;/openpolice/open-police-hero-1J.jpg;;w100;;P;;center;;h100',
+			'NodeDefault' => '#000;;#EDF8FF;;#FFF;;/openpolice/open-police-hero-1J.jpg;;w100;;Y;;center;;h100',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -30828,7 +30737,7 @@ Departments should never require that people visit the station to report miscond
 			'NodeParentID' => '793',
 			'NodeParentOrder' => '10',
 			'NodeType' => 'Page Block',
-			'NodeDefault' => '#2B3493;;#FFF;;#EDF8FF;;/openpolice/uploads/ten-rules-still-bg3.jpg;;w100;;P;;left;;auto',
+			'NodeDefault' => '#2B3493;;#FFF;;#EDF8FF;;/openpolice/uploads/ten-rules-still-bg3.jpg;;w100;;Y;;left;;auto',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -41960,17 +41869,6 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'CondNodeID' => 284,
 			'CondNodeCondID' => '62',
 			'CondNodeNodeID' => '1113',
-			'CondNodeLoopID' => '-1'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 285,
-			'CondNodeCondID' => '62',
-			'CondNodeNodeID' => '1128'
-		]);
-		DB::table('SL_ConditionsNodes')->insert([
-			'CondNodeID' => 286,
-			'CondNodeCondID' => '62',
-			'CondNodeNodeID' => '1124',
 			'CondNodeLoopID' => '-1'
 		]);
 		DB::table('SL_ConditionsNodes')->insert([
