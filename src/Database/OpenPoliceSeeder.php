@@ -17458,6 +17458,13 @@ padding: 10px;
 			'DefOrder' => '10',
 			'DefDescription' => 'You are part of the solution.'
 		]);
+		DB::table('SL_Definitions')->insert([
+			'DefID' => 606,
+			'DefDatabase' => '1',
+			'DefSet' => 'System Settings',
+			'DefSubset' => 'app-license-snc',
+			'DefDescription' => '2015'
+		]);
 	
 	DB::table('SL_BusRules')->insert([
 			'RuleID' => 3,
