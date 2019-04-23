@@ -172,7 +172,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))
             && sizeof($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
             foreach ($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') as $forceType) {
-                if ($this->getForceEveID($forceType) <= 0) {
+                if ($this->getForceEveID($forceType) <= 0 && $this->coreID > 0) {
                     $this->addNewEveSeq('Force', $forceType);
                 }
                 $eveID = $this->getForceEveID($forceType);
@@ -260,7 +260,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
                             }
                         }
                     }
-                    if (!$foundType) {
+                    if (!$foundType && $this->coreID > 0) {
                         $newForce = $this->addNewEveSeq('Force', $forceType);
                         $newForce->ForAgainstAnimal = 'Y';
                         $newForce->ForAnimalDesc = $animalDesc;

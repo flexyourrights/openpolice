@@ -13046,14 +13046,14 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'app-url',
-			'DefDescription' => 'http://homestead.test'
+			'DefDescription' => 'http://localhost'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 3,
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'logo-url',
-			'DefDescription' => 'http://homestead.test'
+			'DefDescription' => 'http://localhost'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 4,
@@ -17573,6 +17573,7 @@ padding: 10px;
 			'TreeType' => 'Survey',
 			'TreeName' => 'Complaint',
 			'TreeDesc' => 'Open Police Complaint',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '3',
 			'TreeFirstPage' => '451',
 			'TreeLastPage' => '529',
@@ -17586,6 +17587,7 @@ padding: 10px;
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Complaint',
 			'TreeDesc' => 'Open Police Complaint',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '785',
 			'TreeCoreTable' => '112'
 		]);
@@ -17597,6 +17599,7 @@ padding: 10px;
 			'TreeType' => 'Survey',
 			'TreeName' => 'Compliment',
 			'TreeDesc' => 'Open Police Compliment',
+			'TreeSlug' => 'compliment',
 			'TreeRoot' => '752',
 			'TreeFirstPage' => '753',
 			'TreeLastPage' => '974',
@@ -17610,6 +17613,7 @@ padding: 10px;
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Compliment',
 			'TreeDesc' => 'Open Police Compliment',
+			'TreeSlug' => 'compliment',
 			'TreeRoot' => '983',
 			'TreeCoreTable' => '170'
 		]);
@@ -17621,6 +17625,7 @@ padding: 10px;
 			'TreeType' => 'Page',
 			'TreeName' => 'Filing Your Complaint',
 			'TreeDesc' => 'Complaint landing page',
+			'TreeSlug' => 'filing-your-police-complaint',
 			'TreeRoot' => '769',
 			'TreeFirstPage' => '769',
 			'TreeLastPage' => '769'
@@ -17633,6 +17638,7 @@ padding: 10px;
 			'TreeType' => 'Page',
 			'TreeName' => 'Filing Your Compliment',
 			'TreeDesc' => 'Compliment landing page',
+			'TreeSlug' => 'filing-your-police-compliment',
 			'TreeRoot' => '774',
 			'TreeFirstPage' => '774',
 			'TreeLastPage' => '774'
@@ -17644,6 +17650,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Allegations & Commendations Lists',
+			'TreeSlug' => 'allegations',
 			'TreeRoot' => '787',
 			'TreeFirstPage' => '787',
 			'TreeLastPage' => '787'
@@ -17655,6 +17662,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Recent Complaints',
+			'TreeSlug' => 'recent-complaints',
 			'TreeRoot' => '789',
 			'TreeFirstPage' => '789',
 			'TreeLastPage' => '789'
@@ -17666,6 +17674,7 @@ padding: 10px;
 			'TreeOpts' => '609',
 			'TreeType' => 'Page',
 			'TreeName' => 'Admin Dashboard',
+			'TreeSlug' => 'dashboard',
 			'TreeRoot' => '791',
 			'TreeFirstPage' => '791',
 			'TreeLastPage' => '791'
@@ -17678,6 +17687,7 @@ padding: 10px;
 			'TreeType' => 'Page',
 			'TreeName' => 'Open Police Complaints - You belong at the center of police oversight.',
 			'TreeDesc' => 'Home page',
+			'TreeSlug' => 'home',
 			'TreeRoot' => '793',
 			'TreeFirstPage' => '793',
 			'TreeLastPage' => '793'
@@ -17689,6 +17699,7 @@ padding: 10px;
 			'TreeOpts' => '19',
 			'TreeType' => 'Page',
 			'TreeName' => 'Contact',
+			'TreeSlug' => 'contact',
 			'TreeRoot' => '826',
 			'TreeFirstPage' => '826',
 			'TreeLastPage' => '826'
@@ -17700,6 +17711,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Privacy Options',
+			'TreeSlug' => 'complaint-privacy-options',
 			'TreeRoot' => '833',
 			'TreeFirstPage' => '833',
 			'TreeLastPage' => '833'
@@ -17711,6 +17723,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Terms, Policies, & Rules',
+			'TreeSlug' => 'privacy-policy',
 			'TreeRoot' => '835',
 			'TreeFirstPage' => '835',
 			'TreeLastPage' => '835'
@@ -17722,6 +17735,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Web App Technical Overview',
+			'TreeSlug' => 'web-app-technical-specs',
 			'TreeRoot' => '837',
 			'TreeFirstPage' => '837',
 			'TreeLastPage' => '837'
@@ -17733,6 +17747,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'FAQs',
+			'TreeSlug' => 'frequently-asked-questions',
 			'TreeRoot' => '839',
 			'TreeFirstPage' => '839',
 			'TreeLastPage' => '839'
@@ -17744,6 +17759,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Blog',
+			'TreeSlug' => 'articles',
 			'TreeRoot' => '843',
 			'TreeFirstPage' => '843',
 			'TreeLastPage' => '843'
@@ -17755,6 +17771,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Help Code Open Police Software: Installing Homestead & Laravel',
+			'TreeSlug' => 'how-to-install-laravel',
 			'TreeRoot' => '847',
 			'TreeFirstPage' => '847',
 			'TreeLastPage' => '847'
@@ -17766,6 +17783,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Police Departments and Their Accessibility',
+			'TreeSlug' => 'department-accessibility',
 			'TreeRoot' => '858',
 			'TreeFirstPage' => '858',
 			'TreeLastPage' => '858'
@@ -17777,6 +17795,7 @@ padding: 10px;
 			'TreeOpts' => '667',
 			'TreeType' => 'Page',
 			'TreeName' => 'My Profile',
+			'TreeSlug' => 'my-profile',
 			'TreeRoot' => '997',
 			'TreeFirstPage' => '997',
 			'TreeLastPage' => '997'
@@ -17788,6 +17807,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'About Us',
+			'TreeSlug' => 'about',
 			'TreeRoot' => '1005',
 			'TreeFirstPage' => '1005',
 			'TreeLastPage' => '1005'
@@ -17800,6 +17820,7 @@ padding: 10px;
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint or Compliment: Sharing Your Story',
 			'TreeDesc' => 'Choose Complaint or Compliment',
+			'TreeSlug' => 'complaint-or-compliment',
 			'TreeRoot' => '1096',
 			'TreeFirstPage' => '1096',
 			'TreeLastPage' => '1096'
@@ -17811,6 +17832,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => '[{ Complaint Police Department }] ([{ Police Department State Abbr }]) Complaint Info, History & File',
+			'TreeSlug' => 'dept',
 			'TreeRoot' => '1098',
 			'TreeFirstPage' => '1098',
 			'TreeLastPage' => '1098'
@@ -17822,6 +17844,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Site Map',
+			'TreeSlug' => 'site-map',
 			'TreeRoot' => '1105',
 			'TreeFirstPage' => '1105',
 			'TreeLastPage' => '1105'
@@ -17833,6 +17856,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'How We Rate Departments',
+			'TreeSlug' => 'how-we-rate-departments',
 			'TreeRoot' => '1126',
 			'TreeFirstPage' => '1126',
 			'TreeLastPage' => '1126'
@@ -17844,6 +17868,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => '"Go Gold" To Make Your Complaint As Strong As Possible',
+			'TreeSlug' => 'go-gold-make-your-complaint-strong',
 			'TreeRoot' => '1129',
 			'TreeFirstPage' => '1129',
 			'TreeLastPage' => '1129'
@@ -17855,6 +17880,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Testing',
+			'TreeSlug' => 'testing',
 			'TreeRoot' => '1189',
 			'TreeFirstPage' => '1189',
 			'TreeLastPage' => '1189'
@@ -17865,7 +17891,8 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Redirect',
-			'TreeDesc' => 'https://github.com/flexyourrights/openpolice'
+			'TreeDesc' => 'https://github.com/flexyourrights/openpolice',
+			'TreeSlug' => 'github'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 33,
@@ -17874,6 +17901,7 @@ padding: 10px;
 			'TreeOpts' => '3689',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Dashboard',
+			'TreeSlug' => 'volunteer',
 			'TreeRoot' => '1210',
 			'TreeFirstPage' => '1210',
 			'TreeLastPage' => '1210'
@@ -17885,6 +17913,7 @@ padding: 10px;
 			'TreeOpts' => '31',
 			'TreeType' => 'Page',
 			'TreeName' => 'Search',
+			'TreeSlug' => 'search',
 			'TreeRoot' => '1218'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -17894,6 +17923,7 @@ padding: 10px;
 			'TreeOpts' => '93',
 			'TreeType' => 'Page',
 			'TreeName' => 'Dashboard Search',
+			'TreeSlug' => 'search',
 			'TreeRoot' => '1220'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -17903,6 +17933,7 @@ padding: 10px;
 			'TreeOpts' => '4301',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Research Department',
+			'TreeSlug' => 'volunteers-research-departments',
 			'TreeRoot' => '1222',
 			'TreeFirstPage' => '1223',
 			'TreeLastPage' => '1339',
@@ -17915,6 +17946,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Research Department',
+			'TreeSlug' => 'volunteers-research-departments',
 			'TreeRoot' => '1224',
 			'TreeCoreTable' => '111'
 		]);
@@ -17925,6 +17957,7 @@ padding: 10px;
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Frequently Asked Volunteer Questions',
+			'TreeSlug' => 'volunteer-faqs',
 			'TreeRoot' => '1234',
 			'TreeFirstPage' => '1234',
 			'TreeLastPage' => '1234'
@@ -17936,6 +17969,7 @@ padding: 10px;
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Verify Next Department',
+			'TreeSlug' => 'verify-next-department',
 			'TreeRoot' => '1343',
 			'TreeFirstPage' => '1343',
 			'TreeLastPage' => '1343'
@@ -17947,6 +17981,7 @@ padding: 10px;
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Stars',
+			'TreeSlug' => 'volunteer-stars',
 			'TreeRoot' => '1345',
 			'TreeFirstPage' => '1345',
 			'TreeLastPage' => '1345'
@@ -17958,6 +17993,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Edits History',
+			'TreeSlug' => 'volunteer-edits-history',
 			'TreeRoot' => '1350',
 			'TreeFirstPage' => '1350',
 			'TreeLastPage' => '1350'
@@ -17969,6 +18005,7 @@ padding: 10px;
 			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint #1111',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '1362',
 			'TreeFirstPage' => '1362',
 			'TreeLastPage' => '1362',
@@ -17981,6 +18018,7 @@ padding: 10px;
 			'TreeOpts' => '287',
 			'TreeType' => 'Page',
 			'TreeName' => 'Partner',
+			'TreeSlug' => 'partner',
 			'TreeRoot' => '1413'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -17990,6 +18028,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'All Complete Complaints',
+			'TreeSlug' => 'all-complete-complaints',
 			'TreeRoot' => '1417',
 			'TreeFirstPage' => '1417',
 			'TreeLastPage' => '1417'
@@ -18001,6 +18040,7 @@ padding: 10px;
 			'TreeOpts' => '301',
 			'TreeType' => 'Page',
 			'TreeName' => 'Staff',
+			'TreeSlug' => 'staff',
 			'TreeRoot' => '1415'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -18010,6 +18050,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'All Incomplete Complaints',
+			'TreeSlug' => 'all-incomplete-complaints',
 			'TreeRoot' => '1419',
 			'TreeFirstPage' => '1419',
 			'TreeLastPage' => '1419'
@@ -18021,6 +18062,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer',
+			'TreeSlug' => 'volunteer',
 			'TreeRoot' => '1445',
 			'TreeFirstPage' => '1445',
 			'TreeLastPage' => '1445'
@@ -18032,6 +18074,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'departments',
+			'TreeSlug' => 'departments',
 			'TreeRoot' => '1453',
 			'TreeFirstPage' => '1453',
 			'TreeLastPage' => '1453'
@@ -18043,6 +18086,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Oversight Agencies',
+			'TreeSlug' => 'oversight',
 			'TreeRoot' => '1455',
 			'TreeFirstPage' => '1455',
 			'TreeLastPage' => '1455'
@@ -18054,6 +18098,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Officers',
+			'TreeSlug' => 'officers',
 			'TreeRoot' => '1457',
 			'TreeFirstPage' => '1457',
 			'TreeLastPage' => '1457'
@@ -18065,6 +18110,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorneys',
+			'TreeSlug' => 'attorneys',
 			'TreeRoot' => '1459',
 			'TreeFirstPage' => '1459',
 			'TreeLastPage' => '1459'
@@ -18076,6 +18122,7 @@ padding: 10px;
 			'TreeOpts' => '559',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint Review',
+			'TreeSlug' => 'complaint-review',
 			'TreeRoot' => '1461',
 			'TreeFirstPage' => '1461',
 			'TreeLastPage' => '1461'
@@ -18087,6 +18134,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'For Law Enforcement',
+			'TreeSlug' => 'for-law-enforcement',
 			'TreeRoot' => '1783',
 			'TreeFirstPage' => '1783',
 			'TreeLastPage' => '1783'
@@ -18098,6 +18146,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorneys FAQ',
+			'TreeSlug' => 'attorneys-faq',
 			'TreeRoot' => '1877',
 			'TreeFirstPage' => '1877',
 			'TreeLastPage' => '1877'
@@ -18109,6 +18158,7 @@ padding: 10px;
 			'TreeOpts' => '41',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorney Referral Listings',
+			'TreeSlug' => 'attorney-referral-listings',
 			'TreeRoot' => '1895',
 			'TreeFirstPage' => '1895',
 			'TreeLastPage' => '1895'
@@ -18120,6 +18170,7 @@ padding: 10px;
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorney Profile',
+			'TreeSlug' => 'attorney',
 			'TreeRoot' => '1897',
 			'TreeFirstPage' => '1897',
 			'TreeLastPage' => '1897',
@@ -18132,6 +18183,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Donate',
+			'TreeSlug' => 'donate',
 			'TreeRoot' => '1899',
 			'TreeFirstPage' => '1899',
 			'TreeLastPage' => '1899'
@@ -18143,6 +18195,7 @@ padding: 10px;
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Partner Profile',
+			'TreeSlug' => 'partner-profile',
 			'TreeRoot' => '1921',
 			'TreeFirstPage' => '1922',
 			'TreeLastPage' => '1954',
@@ -18155,6 +18208,7 @@ padding: 10px;
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Partner Profile',
+			'TreeSlug' => 'partner-profile',
 			'TreeRoot' => '1923',
 			'TreeCoreTable' => '110'
 		]);
@@ -18165,6 +18219,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Manage Partners',
+			'TreeSlug' => 'manage-partners',
 			'TreeRoot' => '1938',
 			'TreeFirstPage' => '1938',
 			'TreeLastPage' => '1938'
@@ -18176,6 +18231,7 @@ padding: 10px;
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Team Resources',
+			'TreeSlug' => 'team-resources',
 			'TreeRoot' => '1984',
 			'TreeFirstPage' => '1984',
 			'TreeLastPage' => '1984'
@@ -18187,6 +18243,7 @@ padding: 10px;
 			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Preparing Your Complaint for an Attorney',
+			'TreeSlug' => 'prepare-complaint-for-attorney',
 			'TreeRoot' => '1992',
 			'TreeFirstPage' => '1992',
 			'TreeLastPage' => '1992',
@@ -18199,6 +18256,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Open Data Resources',
+			'TreeSlug' => 'resources',
 			'TreeRoot' => '1999',
 			'TreeFirstPage' => '1999',
 			'TreeLastPage' => '1999'
@@ -18210,6 +18268,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Temporary Testing Grounds',
+			'TreeSlug' => 'tmp',
 			'TreeRoot' => '2012',
 			'TreeFirstPage' => '2012',
 			'TreeLastPage' => '2012'
@@ -18221,6 +18280,7 @@ padding: 10px;
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Organization Profile',
+			'TreeSlug' => 'org',
 			'TreeRoot' => '2059',
 			'TreeFirstPage' => '2059',
 			'TreeLastPage' => '2059',
@@ -18233,6 +18293,7 @@ padding: 10px;
 			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Preparing Your Complaint for an Organization',
+			'TreeSlug' => 'preparing-complaint-for-org',
 			'TreeRoot' => '2063',
 			'TreeFirstPage' => '2063',
 			'TreeLastPage' => '2063',
@@ -18245,6 +18306,7 @@ padding: 10px;
 			'TreeOpts' => '1333',
 			'TreeType' => 'Page',
 			'TreeName' => 'Staff Search',
+			'TreeSlug' => 'staff-search',
 			'TreeRoot' => '2090'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -18254,6 +18316,7 @@ padding: 10px;
 			'TreeOpts' => '1271',
 			'TreeType' => 'Page',
 			'TreeName' => 'Partner Search',
+			'TreeSlug' => 'partner-search',
 			'TreeRoot' => '2092'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -18262,7 +18325,8 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Redirect',
-			'TreeDesc' => 'http://homestead.test/complaint-or-compliment'
+			'TreeDesc' => 'http://localhost/complaint-or-compliment',
+			'TreeSlug' => 'sharing-your-story',
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 70,
@@ -18271,6 +18335,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint or Compliment: Sharing Your Story',
+			'TreeSlug' => 'share-complaint-or-compliment',
 			'TreeRoot' => '2094',
 			'TreeFirstPage' => '2094',
 			'TreeLastPage' => '2094'
@@ -18282,6 +18347,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Features',
+			'TreeSlug' => 'features',
 			'TreeRoot' => '2104',
 			'TreeFirstPage' => '2104',
 			'TreeLastPage' => '2104'
@@ -18293,6 +18359,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Principles',
+			'TreeSlug' => 'principles',
 			'TreeRoot' => '2106',
 			'TreeFirstPage' => '2106',
 			'TreeLastPage' => '2106'
@@ -18304,6 +18371,7 @@ padding: 10px;
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'OPC Partners',
+			'TreeSlug' => 'partners',
 			'TreeRoot' => '2149',
 			'TreeFirstPage' => '2149',
 			'TreeLastPage' => '2149'
@@ -22961,7 +23029,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<p>&nbsp;</p>
 <h2 class="slBlueDark">Terms, Policies, & Rules</h2>
-<p>This privacy policy discloses the privacy practices for http://homestead.test. This privacy policy applies solely to 
+<p>This privacy policy discloses the privacy practices for http://localhost. This privacy policy applies solely to 
 information collected by this web site. It will notify you of the following:</p>
 <ol><li>What personally identifiable information is collected from you through the web site, how it is used and with whom it may be shared.</li><li>What choices are available to you regarding the use of your data.</li>
 <li>The security procedures in place to protect against the misuse of your information.</li><li>How you can correct any inaccuracies in the information.</li></ol>
@@ -23011,13 +23079,13 @@ information collected by this web site. It will notify you of the following:</p>
 <h2>Open Police Complaints Technical Stuff</h2>
 <p><br></p>
 <h3 class="slBlueDark">About OPC’s Database Design</h3><p>
-We developed custom software in order to thoroughly <a href="http://homestead.test/db/OP">document our database design</a>.
+We developed custom software in order to thoroughly <a href="http://localhost/db/OP">document our database design</a>.
  This includes plain-English descriptions of every data table and field.
  It also includes details about the types of data stored as well as all 
 of the logical relationships between tables.</p><p>Our database design method is based upon recommendations presented in <a href="http://www.amazon.com/gp/product/0321884493/" target="_blank">Database Design for Mere Mortals: A Hands-On Guide to Relational Database Design (3rd Edition), by Michael J. Hernandez</a>.</p><p>The data requirements and emerging organizational policies and practices are based upon the guidelines presented in <a href="http://www.amazon.com/New-World-Police-Accountability/dp/1452286876/">The New World of Police Accountability by Sam Walker and Carol Archbold</a>. The <a href="https://www.sanjoseca.gov/DocumentCenter/View/29599" target="_blank">San Jose Independent Police Auditor (IPA) 2013 Year End Report</a>,
  which is the gold standard for government transparency regarding police
  misconduct complaints, provided essential guidance. We also reviewed 
-numerous <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70" target="_blank">Department of Justice (DOJ) reports on police-civilian contacts</a>. The most important of these was the <a href="http://www.justice.gov/sites/default/files/opa/press-releases/attachments/2015/03/04/ferguson_police_department_report.pdf" target="_blank">DOJ Investigation of the Ferguson Police Department</a>. We also receive ongoing guidance, from some of the <a href="http://homestead.test/about/" target="_blank">top national experts in the field of police oversight and accountability</a>.</p><p>
+numerous <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70" target="_blank">Department of Justice (DOJ) reports on police-civilian contacts</a>. The most important of these was the <a href="http://www.justice.gov/sites/default/files/opa/press-releases/attachments/2015/03/04/ferguson_police_department_report.pdf" target="_blank">DOJ Investigation of the Ferguson Police Department</a>. We also receive ongoing guidance, from some of the <a href="http://localhost/about/" target="_blank">top national experts in the field of police oversight and accountability</a>.</p><p>
 <br></p><h3 class="slBlueDark">OPC’s Software Specifications</h3><p>
 The database design software we built exports Laravel data models and
  migration files in order to quickly auto-load these data structures to 
@@ -23599,7 +23667,7 @@ $ composer global require "laravel/installer"
 $ composer create-project laravel/laravel OpenPolice "5.8.*"
 </pre></li></ol>
 <p><br></p>
-<p>Now you should be able to confirm your successful installation by pulling up http://homestead.test/ in your browser!</p><ul><li>If you like, you can now connect to your server\'s database with something like <a href="https://www.sequelpro.com/" target="_blank">Sequel Pro</a>,
+<p>Now you should be able to confirm your successful installation by pulling up http://localhost/ in your browser!</p><ul><li>If you like, you can now connect to your server\'s database with something like <a href="https://www.sequelpro.com/" target="_blank">Sequel Pro</a>,
  and the following default login info.... Host: 127.0.0.1 , Username: 
 homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 <p>And you\'re ready to start installing more Laravel packages and building your own world. Here, inside your virtual vagrant server via SSH, you can enter your new project\'s main composer directory (/home/vagrant/Code/OpenPolice), which displays in your actual machine\'s file system in ~/web/sites/OpenPolice/OpenPolice (that\'s within your main user account folder alongside Documents, Pictures, etc).</p><pre>$ cd OpenPolice</pre><p>Then, install Laravel\'s out-of-the-box user authentication tools:</p>
@@ -31133,7 +31201,7 @@ oversight!</p>
 <p>We believe that victims of police misconduct must control who has access to their private information. Different 
 users will have different privacy needs, so we\'ve developed three unique privacy options that control how we collect 
 and share and individual user\'s data. Victims can publish their complaint with full transparency, no names made 
-public, or complete anonymity. <a href="http://homestead.test/complaint-privacy-options">See how these privacy options 
+public, or complete anonymity. <a href="http://localhost/complaint-privacy-options">See how these privacy options 
 appear to new users</a>.</p>
 <p>No matter which option users select, we\'ll never publish anyone\'s private information. (This includes addresses, 
 phone numbers, emails, etc.) We will only share this with appropriate agencies who can investigate your complaint.</p>
@@ -33326,7 +33394,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeTree' => '72',
 			'NodeParentID' => '2106',
 			'NodeType' => 'Page Block',
-			'NodeDefault' => '#000;;#FFF;;#FFF;;http://homestead.test/openpolice/uploads/compass-us.jpg;;w100;;P;;left;;auto',
+			'NodeDefault' => '#000;;#FFF;;#FFF;;http://localhost/openpolice/uploads/compass-us.jpg;;w100;;P;;left;;auto',
 			'NodeOpts' => '71'
 		]);
 		DB::table('SL_Node')->insert([
@@ -42578,7 +42646,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_ConditionsArticles')->insert([
 			'ArticleID' => 8,
 			'ArticleCondID' => '7',
-			'ArticleURL' => 'http://homestead.test/go-gold-make-your-complaint-strong'
+			'ArticleURL' => 'http://localhost/go-gold-make-your-complaint-strong'
 		]);
 		DB::table('SL_ConditionsArticles')->insert([
 			'ArticleID' => 10,
@@ -42812,7 +42880,6 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'DataLoopPlural' => 'Types of Force',
 			'DataLoopSingular' => 'Type of Force',
 			'DataLoopTable' => 'EventSequence',
-			'DataLoopSortFld' => 'EveOrder',
 			'DataLoopIsStep' => '1',
 			'DataLoopAutoGen' => '0'
 		]);

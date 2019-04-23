@@ -813,25 +813,25 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getEveSeqOrd($eveSeqID)
     {
-        if (isset($this->sessData->dataSets["EventSequence"]) 
+        /* if (isset($this->sessData->dataSets["EventSequence"]) 
             && sizeof($this->sessData->dataSets["EventSequence"]) > 0) { 
             foreach ($this->sessData->dataSets["EventSequence"] as $i => $eveSeq) {
                 if ($eveSeq->EveID == $eveSeqID) {
                     return $eveSeq->EveOrder;
                 }
             }
-        }
+        } */
         return 0;
     }
     
     protected function getLastEveSeqOrd()
     {
         $newOrd = 0;
-        if (isset($this->sessData->dataSets["EventSequence"]) 
+        /* if (isset($this->sessData->dataSets["EventSequence"]) 
             && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
             $ind = sizeof($this->sessData->dataSets["EventSequence"])-1;
             $newOrd = $this->sessData->dataSets["EventSequence"][$ind]->EveOrder;
-        }
+        } */
         return $newOrd;
     }
     
@@ -884,20 +884,23 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function addNewEveSeq($eventType, $forceType = -3)
     {
-        $newEveSeq = new OPEventSequence;
-        $newEveSeq->EveComplaintID = $this->coreID;
-        $newEveSeq->EveType = $eventType;
-        $newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
-        $newEveSeq->save();
-        eval("\$newEvent = new App\\Models\\" . $GLOBALS["SL"]->tblModels[$eventType] . ";");
-        $newEvent->{ $GLOBALS["SL"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
-        if ($eventType == 'Force' && $forceType > 0) {
-            $newEvent->ForType = $forceType;
+        if ($this->coreID > 0) {
+            $newEveSeq = new OPEventSequence;
+            $newEveSeq->EveComplaintID = $this->coreID;
+            $newEveSeq->EveType = $eventType;
+            //$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
+            $newEveSeq->save();
+            eval("\$newEvent = new App\\Models\\" . $GLOBALS["SL"]->tblModels[$eventType] . ";");
+            $newEvent->{ $GLOBALS["SL"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
+            if ($eventType == 'Force' && $forceType > 0) {
+                $newEvent->ForType = $forceType;
+            }
+            $newEvent->save();
+            $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
+            $this->sessData->dataSets[$eventType][] = $newEvent;
+            return $newEvent;
         }
-        $newEvent->save();
-        $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
-        $this->sessData->dataSets[$eventType][] = $newEvent;
-        return $newEvent;
+        return null;
     }
     
     protected function getCivEventID($nID, $eveType, $civID)
@@ -1006,7 +1009,7 @@ class OpenPoliceUtils extends TreeSurvForm
                 if ($eveSeqID <= 0 || $eveSeqID == $eveSeq->EveID) {
                     $eveSeqs[] = [ 
                         "EveID"     => $eveSeq->EveID, 
-                        "EveOrder"  => $eveSeq->EveOrder, 
+                        //"EveOrder"  => $eveSeq->EveOrder, 
                         "EveType"   => $eveSeq->EveType, 
                         "Civilians" => $this->getLinkedToEvent('Civilian', $eveSeq->EveID), 
                         "Officers"  => $this->getLinkedToEvent('Officer', $eveSeq->EveID), 
