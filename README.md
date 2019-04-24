@@ -46,7 +46,7 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="getting-started"></a>Getting Started
 
-<h1 class="slBlueDark">How To Install OpenPolice with Laradock</h1>
+<h2 class="slBlueDark">How To Install OpenPolice with Laradock</h2>
 
 <p>First, <a href="https://www.docker.com/get-started" target="_blank">install Docker</a> on Mac, Windows, or an online server. Then grab a copy of Laravel (last tested with v5.8.3)...</p>
 <pre>$ git clone https://github.com/laravel/laravel.git opc
@@ -83,10 +83,10 @@ $ docker-compose exec workspace bash
 # chmod +x ./docker-openpolice/bin/*.sh
 # ./docker-openpolice/bin/openpolice-laradock-postinstall.sh
 </pre>
-<p>And if all has gone well, you'll be asked to create a master admin user account when you browse to <a href="http://localhost/" target="_blank">http://localhost/</a>.</p>
+<p>And if all has gone well, you'll be asked to create a master admin user account when you browse to <a href="http://localhost/" target="_blank">http://localhost/</a>. If it loads, but looks janky (without CSS), reload the page once... and hopefully it looks better on the fresh install.</p>
 
 
-<h1 class="slBlueDark">How To Install OpenPolice without Laradock</h1>
+<h2 class="slBlueDark">How To Install OpenPolice without Laradock</h2>
 
 The instructions below include the needed steps to install Laravel, SurvLoop, as well as the Open Police system.
 For more on creating environments to host Laravel, you can find more instructions on
