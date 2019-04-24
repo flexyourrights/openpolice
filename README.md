@@ -82,7 +82,7 @@ $ docker-compose exec workspace bash
 # git clone https://github.com/flexyourrights/docker-openpolice.git
 # chmod +x ./docker-openpolice/bin/*.sh
 # ./docker-openpolice/bin/openpolice-laradock-postinstall.sh
-# docker-compose exec workspace composer require flexyourrights/openpolice-website
+# docker-compose exec workspace
 </pre>
 <p>And if all has gone well, you'll be asked to create a master admin user account when you browse to <a href="http://localhost/" target="_blank">http://localhost/</a>.</p>
 

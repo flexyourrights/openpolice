@@ -24847,14 +24847,6 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</li></ul>
 			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/compliment">I Understand, Begin A New Compliment</a>'
 		]);
 		DB::table('SL_Node')->insert([
-			'NodeID' => 980,
-			'NodeTree' => '7',
-			'NodeParentID' => '1008',
-			'NodeParentOrder' => '3',
-			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<a class="btn btn-xl btn-primary nFldBtn mT10 mB10" href="[[DOMAIN]]/start/complaint">I Understand, Begin My Complaint</a>'
-		]);
-		DB::table('SL_Node')->insert([
 			'NodeID' => 982,
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',

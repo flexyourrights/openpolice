@@ -266,7 +266,9 @@ class OpenDepts extends OpenListing
             $logTxt = 'ComplaintDeptLinks - !New Department Added!';
             $this->sessData->logDataSave($nID, 'NEW', -3, $logTxt, $newDeptID);
         }
-        if ($newDeptID > 0) $this->chkDeptLinks($newDeptID);
+        if ($newDeptID > 0) {
+            $this->chkDeptLinks($newDeptID);
+        }
         return true;   
     }
 
