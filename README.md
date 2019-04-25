@@ -20,7 +20,7 @@
 
 * PHP Controllers ~ 385 KB (on disk)
 * Blade Template Views HTML with some JS CSS ~ 373 KB
-* SurvLoop-Generated PHP Eloquent Models ~ 311 KB
+* SurvLoop-Generated PHP Eloquent Data Table Models ~ 311 KB
 * SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 1.5 MB
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.9 MB
 
@@ -60,7 +60,7 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="getting-started"></a>Getting Started
 
-## Installing SurvLoop with Laradock
+## Installing Open Police Complaints with Laradock
 
 First, <a href="https://www.docker.com/get-started" target="_blank">install Docker</a> on Mac, Windows, or an online server. 
 Then grab a copy of Laravel (last tested with v5.8.3)...
@@ -86,7 +86,7 @@ mysql> exit;
 $ exit
 ```
 
-At this point, you should be able to browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> for PhpMyAdmin.
+At this point, you can optionally browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> for PhpMyAdmin.
 ```
 Server: mysql
 Username: default
@@ -164,6 +164,7 @@ Once installed, documentation of this system's database design can be found at /
 experience design for data entry can be found at /dashboard/tree/map?all=1&alt=1 
 or publicly visible links like those above.
 
+More on the SurvLoop level is also starting here: <a href="https://survloop.org/package-files-folders-classes" target="_blank">https://survloop.org/package-files-folders-classes</a>.
 
 # <a name="roadmap"></a>Roadmap
 
