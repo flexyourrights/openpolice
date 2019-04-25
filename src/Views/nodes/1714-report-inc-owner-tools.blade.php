@@ -180,13 +180,13 @@
             <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $complaint->ComPublicID 
                 }}" type="text" class="form-control w100 mB5">
             <div class="disIn mR10">
-                {!! view('vendor.survloop.inc-social-simple-tweet', [
+                {!! view('vendor.survloop.elements.inc-social-simple-tweet', [
                     "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $complaint->ComPublicID,
                     "title" => 'Check out this police complaint!'
                     ])->render() !!}
             </div>
             <div class="disIn">
-                {!! view('vendor.survloop.inc-social-simple-facebook', [
+                {!! view('vendor.survloop.elements.inc-social-simple-facebook', [
                     "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $complaint->ComPublicID
                     ])->render() !!}
             </div>

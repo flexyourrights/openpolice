@@ -15,6 +15,8 @@ U.S.. Open Police is built using <a href="https://github.com/wikiworldorder/surv
 
 It is currently in continued, heavy development, with the pilot program rolling now in early 2019. 
 I plan to provide more documentation in the coming weeks. Thank you for your interest and patience!
+This software began as an internal tool to design our database, then prototype survey generation. Then it was adapted to the 
+Laravel framework, and has continued to grow towards a content-management system for data-focused websites.
 
 The upcoming Open Police web app can be tested out here, 
 feedback welcome via the end of the <b>beta demo</b> submission process:<br />
@@ -40,145 +42,99 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="requirements"></a>Requirements
 
-* php: >=7.3
+* php: >=7.2
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 5.8.*
 * <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: 0.1.*
+* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
+* <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
 # <a name="getting-started"></a>Getting Started
 
-<h2 class="slBlueDark">How To Install OpenPolice with Laradock</h2>
+## Installing SurvLoop with Laradock
 
-<p>First, <a href="https://www.docker.com/get-started" target="_blank">install Docker</a> on Mac, Windows, or an online server. Then grab a copy of Laravel (last tested with v5.8.3)...</p>
-<pre>$ git clone https://github.com/laravel/laravel.git opc
+First, <a href="https://www.docker.com/get-started" target="_blank">install Docker</a> on Mac, Windows, or an online server. 
+Then grab a copy of Laravel (last tested with v5.8.3)...
+```
+$ git clone https://github.com/laravel/laravel.git opc
 $ cd opc
-</pre>
+```
 
-<p>Next, install and boot up Laradock (last tested with v7.14).</p>
-<pre>
+Next, install and boot up Laradock (last tested with v7.14).
+```
 $ git submodule add https://github.com/Laradock/laradock.git
 $ cd laradock
 $ cp env-example .env
 $ docker-compose up -d nginx mysql phpmyadmin redis workspace
-</pre>
+```
 
-<p>After Docker finishes booting up your containers, enter the mysql container with the root password, "root". This seems to fix things for the latest version of MYSQL.</p>
-<pre>
+After Docker finishes booting up your containers, enter the mysql container with the root password, "root". This seems to fix things for the latest version of MYSQL.
+```
 $ docker-compose exec mysql bash
 # mysql --user=root --password=root default
 mysql> ALTER USER 'default'@'%' IDENTIFIED WITH mysql_native_password BY 'secret';
 mysql> exit;
 $ exit
-</pre>
+```
 
-<p>At this point, you should be able to browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> for PhpMyAdmin.</p>
-<pre>Server: mysql
+At this point, you should be able to browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> for PhpMyAdmin.
+```
+Server: mysql
 Username: default
 Password: secret
-</pre>
+```
 
-<p>Finally, enter Laradock's workspace container to download and run the Open Police installation script.</p>
-<pre>
+Finally, enter Laradock's workspace container to download and run the Open Police installation script.
+```
 $ docker-compose exec workspace bash
-# git clone https://github.com/flexyourrights/docker-openpolice.git
+# git clone https://github.com/wikiworldorder/docker-openpolice.git
 # chmod +x ./docker-openpolice/bin/*.sh
 # ./docker-openpolice/bin/openpolice-laradock-postinstall.sh
-</pre>
-<p>And if all has gone well, you'll be asked to create a master admin user account when you browse to <a href="http://localhost/" target="_blank">http://localhost/</a>. If it loads, but looks janky (without CSS), reload the page once... and hopefully it looks better on the fresh install.</p>
+```
+And if all has gone well, you'll be asked to create a master admin user account when you browse to <a href="http://localhost/" target="_blank">http://localhost/</a>. If it loads, but looks janky (without CSS), reload the page once... and hopefully it looks like a fresh install.
 
 
-<h2 class="slBlueDark">How To Install OpenPolice without Laradock</h2>
+## Installing OpenPolice without Laradock
 
-The instructions below include the needed steps to install Laravel, SurvLoop, as well as the Open Police system.
-For more on creating environments to host Laravel, you can find more instructions on
-<a href="https://survloop.org/how-to-install-laravel-on-a-digital-ocean-server" target="_blank">SurvLoop.org</a>.
+The instructions below include the needed steps to install Laravel, SurvLoop, and Open Police Complaints.
+For more on creating environments to host Laravel, you can find more instructions 
+<a href="https://survloop.org/how-to-install-laravel-on-a-digital-ocean-server" target="_blank">on SurvLoop.org</a>.
+
+### Use OpenPolice Install Script
+
+If you've got PHP running, and Composer installed, you can just run this install script...
+
+```
+$ git clone https://github.com/flexyourrights/docker-openpolice.git
+$ chmod +x ./docker-openpolice/bin/*.sh
+$ ./docker-openpolice/bin/openpolice-compose-install.sh ProjectFolderName
+```
+
+* Load in the browser to create super admin account and get started.
+
+### Copy & Paste Install Commands
 
 * Use Composer to install Laravel with default user authentication, one required package:
 
 ```
 $ composer global require "laravel/installer"
-$ composer create-project laravel/laravel OpenPolice "5.8.*"
-$ cd OpenPolice
+$ composer create-project laravel/laravel ProjectFolderName "5.8.*"
+$ cd ProjectFolderName
+$ php artisan key:generate
 $ php artisan make:auth
-$ php artisan vendor:publish --tag=laravel-notifications
-```
-
-* Update `composer.json` to add requirements and an easier SurvLoop and OpenPolice reference:
-
-```
-$ nano composer.json
-```
-
-```
-...
-"require": {
-	...
-    "flexyourrights/openpolice": "^0.1.*",
-	...
-},
-...
-"autoload": {
-	...
-	"psr-4": {
-		...
-		"SurvLoop\\": "vendor/wikiworldorder/survloop/src/",
-		"OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
-	}
-	...
-},
-...
-```
-
-```
-$ composer update
-```
-
-* Add the package to your application service providers in `config/app.php`.
-
-```
-$ nano config/app.php
-```
-
-```php
-...
-    'name' => 'Open Police Complaints',
-...
-'providers' => [
-	...
-	SurvLoop\SurvLoopServiceProvider::class,
-	OpenPolice\OpenPoliceServiceProvider::class,
-	...
-],
-...
-'aliases' => [
-	...
-	'SurvLoop'	 => 'WikiWorldOrder\SurvLoop\SurvLoopFacade',
-	'OpenPolice' => 'FlexYourRights\OpenPolice\OpenPoliceFacade',
-	...
-],
-...
-```
-
-* Swap out the SurvLoop user model in `config/auth.php`.
-
-```
-$ nano config/auth.php
-```
-
-```php
-...
-'model' => App\Models\User::class,
-...
+$ composer require flexyourrights/openpolice
+$ sed -i 's/App\\User::class/App\\Models\\User::class/g' config/auth.php
 ```
 
 * Update composer, publish the package migrations, etc...
 
 ```
-$ php artisan vendor:publish --force
+$ echo "0" | php artisan vendor:publish --force
 $ php artisan migrate
 $ composer dump-autoload
 $ php artisan db:seed --class=SurvLoopSeeder
+$ php artisan db:seed --class=ZipCodeSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
-$ php artisan db:seed --class=OpenPoliceDepartmentSeeder
+$ php artisan db:seed --class=OpenPoliceDeptSeeder
 ```
 
 * For now, to apply database design changes to the same installation you are working in, depending on your server, 
@@ -189,14 +145,7 @@ $ chown -R www-data:33 app/Models
 $ chown -R www-data:33 database
 ```
 
-* Browse to load the style sheets, etc.. /dashboard/css-reload
-
-* Log into Open Police admin dashboard...
-
-```
-user: open@openpolice.org
-password: openpolice
-```
+* Load in the browser to create super admin account and get started.
 
 
 # <a name="documentation"></a>Documentation
@@ -210,10 +159,10 @@ or publicly visible links like those above.
 
 Here's the TODO list for the next release (**1.0**). It's my first time building on Laravel, or GitHub. So sorry.
 
-* [ ] Correct all issues needed for minimum viable product, and launch beta site.
+* [ ] Correct all issues needed for minimum viable product, and launch Open Police Complaints.
+* [ ] Integrate options for MFA using Laravel-compatible package.
 * [ ] Code commenting, learning and adopting more community norms.
-* [ ] Finish migrating all raw queries to use Laravel's process.
-* [ ] Adding tests.
+* [ ] Add decent levels of unit testing. Hopefully improve the organization of objects/classes.
 
 # <a name="change-logs"></a>Change Logs
 

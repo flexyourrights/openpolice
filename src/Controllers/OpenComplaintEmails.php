@@ -192,7 +192,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
                         $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
                         break;
                     case '[{ Complaint Number of Weeks Old }]':
-                        $dayCount = date_diff(mktime(), strtotime(
+                        $dayCount = date_diff(time(), strtotime(
                             $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted
                             ))->format('%a');
                         $swap = floor($dayCount/7);
