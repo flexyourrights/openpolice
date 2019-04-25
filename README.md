@@ -19,7 +19,7 @@
 # <a name="about"></a>About
 
 * PHP Controllers ~ 385 KB (on disk)
-* Blade Template Views HTML with some JS CSS ~ 373 KB total
+* Blade Template Views HTML with some JS CSS ~ 373 KB
 * SurvLoop-Generated PHP Eloquent Models ~ 311 KB
 * SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 1.5 MB
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.9 MB
@@ -96,7 +96,7 @@ Password: secret
 Finally, enter Laradock's workspace container to download and run the Open Police installation script.
 ```
 $ docker-compose exec workspace bash
-# git clone https://github.com/wikiworldorder/docker-openpolice.git
+# git clone https://github.com/flexyourrights/docker-openpolice.git
 # chmod +x ./docker-openpolice/bin/*.sh
 # ./docker-openpolice/bin/openpolice-laradock-postinstall.sh
 ```
