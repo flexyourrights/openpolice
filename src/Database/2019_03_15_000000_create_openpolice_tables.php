@@ -807,6 +807,7 @@ $table->integer('OverCivModel')->nullable();
 			$table->integer('ZedOverOverDeptID')->unsigned()->nullable();
 		$table->index('ZedOverOverDeptID');
 			$table->string('ZedOverOverAgncName')->nullable();
+			$table->integer('ZedOverOverCivModel')->nullable();
 			$table->dateTime('ZedOverOverVerified')->nullable();
 			$table->string('ZedOverOverNamePrefix', 20)->nullable();
 			$table->string('ZedOverOverNameFirst')->nullable();

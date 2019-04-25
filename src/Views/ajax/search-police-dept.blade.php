@@ -36,13 +36,13 @@
 </ul>
 <p>
     If you can't find the right department, 
-    <a id="addNewDept" href="javascript:;;">click here to add it to our database</a>.
+    <a id="hidivBtnAddNewDept" class="hidivBtn" href="javascript:;">click here to add it to our database</a>.
 </p><p>
     If you don't know the department name, 
-    <a href="javascript:;" class="deptLoad" id="dept18124">click here to use a temporary place holder</a>.
+    <a class="deptLoad" id="dept18124" href="javascript:;">click here to use a temporary place holder</a>.
 </p>
     
-<div id="addNewDeptForm" class="slCard disNon mT20 mB20">
+<div id="hidivAddNewDept" class="slCard disNon mT20 mB20">
     <div id="addNewDeptError" class="disNon alert alert-danger" role="alert">
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
         Please type the name of the new department, and select the state.

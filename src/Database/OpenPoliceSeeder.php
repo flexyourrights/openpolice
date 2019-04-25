@@ -16801,27 +16801,6 @@ padding: 10px;
 			'DefDescription' => '0'
 		]);
 		DB::table('SL_Definitions')->insert([
-			'DefID' => 513,
-			'DefDatabase' => '1',
-			'DefSet' => 'System Settings',
-			'DefSubset' => 'google-maps-key',
-			'DefDescription' => 'AIzaSyB7tJ9I5BATCCTia6FnUltG_M7Gev324yM'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 514,
-			'DefDatabase' => '1',
-			'DefSet' => 'System Settings',
-			'DefSubset' => 'google-map-key',
-			'DefDescription' => 'AIzaSyDM3ZpAP106gue_nVd8UwturOSKDPK-lUU'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 515,
-			'DefDatabase' => '1',
-			'DefSet' => 'System Settings',
-			'DefSubset' => 'google-map-key2',
-			'DefDescription' => 'AIzaSyCxvl1Od9PXI5xtWH-a0faGY4ZkrGAukrw'
-		]);
-		DB::table('SL_Definitions')->insert([
 			'DefID' => 516,
 			'DefDatabase' => '1',
 			'DefSubset' => 'Partner Types',
@@ -17268,20 +17247,6 @@ padding: 10px;
 			'DefSet' => 'Menu Settings',
 			'DefSubset' => 'main-navigation',
 			'DefOrder' => '24'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 580,
-			'DefDatabase' => '1',
-			'DefSet' => 'System Settings',
-			'DefSubset' => 'google-cod-key',
-			'DefDescription' => 'AIzaSyDM3ZpAP106gue_nVd8UwturOSKDPK-lUU'
-		]);
-		DB::table('SL_Definitions')->insert([
-			'DefID' => 581,
-			'DefDatabase' => '1',
-			'DefSet' => 'System Settings',
-			'DefSubset' => 'google-cod-key2',
-			'DefDescription' => 'AIzaSyCxvl1Od9PXI5xtWH-a0faGY4ZkrGAukrw'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 582,

@@ -5,10 +5,29 @@
 [![SurvLoop](https://img.shields.io/badge/SurvLoop-0.1-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+# Table of Contents
+* [About](#about)
+* [Requirements](#requirements)
+* [Getting Started](#getting-started)
+* [Documentation](#documentation)
+* [Roadmap](#roadmap)
+* [Change Logs](#change-logs)
+* [Contribution Guidelines](#contribution-guidelines)
+* [Reporting a Security Vulnerability](#security-help)
+
+
+# <a name="about"></a>About
+
+* PHP Controllers ~ 385 KB (on disk)
+* Blade Template Views HTML with some JS CSS ~ 373 KB total
+* SurvLoop-Generated PHP Eloquent Models ~ 311 KB
+* SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 1.5 MB
+* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.9 MB
+
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
 users to publish reports online, we aim to establish better public transparency and oversight of police activity in the 
-U.S.. Open Police is built using <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, atop
+U.S.. Open Police extends <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, which runs atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
 <a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
@@ -29,15 +48,6 @@ XML included an automatically generated schema, eg.<br />
 <a href="https://openpolice.org/complaint-xml-schema" target="_blank">/complaint-xml-schema</a><br />
 <a href="https://openpolice.org/complaint-xml-example" target="_blank">/complaint-xml-example</a><br />
 <a href="https://openpolice.org/complaint-xml-all" target="_blank">/complaint-xml-all</a>
-
-# Table of Contents
-* [Requirements](#requirements)
-* [Getting Started](#getting-started)
-* [Documentation](#documentation)
-* [Roadmap](#roadmap)
-* [Change Logs](#change-logs)
-* [Contribution Guidelines](#contribution-guidelines)
-* [Reporting a Security Vulnerability](#security-help)
 
 
 # <a name="requirements"></a>Requirements

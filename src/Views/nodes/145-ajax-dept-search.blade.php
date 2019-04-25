@@ -42,9 +42,6 @@ $(document).on("click", "a.deptLoad", function() {
     //return runFormSub();
 });
 
-$(document).on("click", "#addNewDept", function() {
-    $("#addNewDeptForm").slideToggle("fast");
-});
 $(document).on("click", "#newDeptSubmit", function() {
     $("#addNewDeptError").slideUp("fast");
     if (!document.getElementById('newDeptNameID') || document.getElementById('newDeptNameID').value.trim() == '' || !document.getElementById('newDeptAddressStateID') || document.getElementById('newDeptAddressStateID').value.trim() == '') {
