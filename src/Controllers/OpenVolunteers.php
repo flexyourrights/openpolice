@@ -7,9 +7,9 @@ use App\Models\OPPartners;
 use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use OpenPolice\Controllers\VolunteerLeaderboard;
-use OpenPolice\Controllers\OpenReportTools;
+use OpenPolice\Controllers\OpenDevelopment;
 
-class OpenVolunteers extends OpenReportTools
+class OpenVolunteers extends OpenDevelopment
 {
     protected function printSidebarLeaderboard() 
     {

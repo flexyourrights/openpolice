@@ -12,7 +12,7 @@ use OpenPolice\Controllers\OpenComplaintConditions;
 
 class OpenComplaintSaves extends OpenComplaintConditions
 {
-    protected function postNodePublicCustom($nID = -3, $tmpSubTier = [])
+    protected function postNodePublicCustom($nID = -3, $nIDtxt = '', $tmpSubTier = [])
     {
         if (empty($tmpSubTier)) {
             $tmpSubTier = $this->loadNodeSubTier($nID);
