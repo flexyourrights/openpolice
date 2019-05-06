@@ -58,9 +58,9 @@ class OpenPoliceSeeder extends Seeder
 			'TblDatabase' => '1',
 			'TblAbbr' => 'Over',
 			'TblName' => 'Oversight',
-			'TblEng' => 'Oversight Agencies',
+			'TblEng' => 'Investigative Agencies',
 			'TblDesc' => 'These are the organizations tasked with receiving and investigating Civilian Complaints against Officers. This information helps us keep track of who is investigating Complaints submitted through OPC.',
-			'TblNotes' => 'There are 2 types of Oversight Agencies: Internal Affairs (IA) & Citizen Oversight Agencies (COAs). Every police department has an Internal Affairs contact â?? but many medium and larger municipalities also have a COA tasked with receiving and investigating citizen complaints. COAs are generally more responsive than IAs. THEREFORE, if a police department has a NACOLE-approved COA, the table data must ONLY contain COA contact information â?? but no IA contact information.',
+			'TblNotes' => 'There are 2 types of Investigative Agencies: Internal Affairs (IA) & Citizen Investigative Agencies (COAs). Every police department has an Internal Affairs contact â?? but many medium and larger municipalities also have a COA tasked with receiving and investigating citizen complaints. COAs are generally more responsive than IAs. THEREFORE, if a police department has a NACOLE-approved COA, the table data must ONLY contain COA contact information â?? but no IA contact information.',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
 			'TblOrd' => '31',
 			'TblExtend' => '0',
@@ -358,7 +358,7 @@ Question list and fields coming soon...',
 			'TblAbbr' => 'LnkComOver',
 			'TblName' => 'LinksComplaintOversight',
 			'TblEng' => 'Complaint-Oversight Links',
-			'TblDesc' => 'Includes linkages between Oversight Agencies involved in a Complaint. This allows us to track the progress of Complaints being investigated by more than one Oversight Agency.',
+			'TblDesc' => 'Includes linkages between Investigative Agencies involved in a Complaint. This allows us to track the progress of Complaints being investigated by more than one Investigative Agency.',
 			'TblType' => 'Linking',
 			'TblGroup' => 'Complaint Linkage Tables',
 			'TblOrd' => '39',
@@ -708,7 +708,7 @@ Question list and fields coming soon...',
 			'TblDatabase' => '1',
 			'TblAbbr' => 'ZedOver',
 			'TblName' => 'Zedit_Oversight',
-			'TblEng' => 'Edits: Oversight Agencies',
+			'TblEng' => 'Edits: Investigative Agencies',
 			'TblDesc' => 'Each record stores a copy of individual edits made to unique records in the Oversight table.',
 			'TblType' => 'Validation',
 			'TblGroup' => 'Record Edit Histories',
@@ -969,7 +969,7 @@ Question list and fields coming soon...',
 			'FldSpecSource' => '0',
 			'FldName' => 'SubmitDeadline',
 			'FldEng' => 'Days Until Submission Deadline',
-			'FldDesc' => 'Indicates that there is a policy stipulating a maximum number of days between when the Incident occurred and when a Complaint must be submitted [or received?] by an Oversight Agency in order for it to be properly investigated. This information might help OPC Administrators prioritize the review of new complaints. For Departments without a time limit for submitting Complaints, this field is stored as -1.',
+			'FldDesc' => 'Indicates that there is a policy stipulating a maximum number of days between when the Incident occurred and when a Complaint must be submitted [or received?] by an Investigative Agency in order for it to be properly investigated. This information might help OPC Administrators prioritize the review of new complaints. For Departments without a time limit for submitting Complaints, this field is stored as -1.',
 			'FldNotes' => 'This is used to calculate deadlines for each Complaint in the Administrator tools.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -1014,7 +1014,7 @@ Question list and fields coming soon...',
 			'FldSpecSource' => '0',
 			'FldName' => 'Submitted',
 			'FldEng' => 'Submitted to Oversight',
-			'FldDesc' => 'Indicates date and time when an electronic Complaint was sent to an appropriate Oversight Agency. This is an essential for tracking an Oversight Agency\'s response -- or non-response -- rates to OPC-submitted Complaints.',
+			'FldDesc' => 'Indicates date and time when an electronic Complaint was sent to an appropriate Investigative Agency. This is an essential for tracking an Investigative Agency\'s response -- or non-response -- rates to OPC-submitted Complaints.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -1037,7 +1037,7 @@ Question list and fields coming soon...',
 			'FldSpecSource' => '0',
 			'FldName' => 'Received',
 			'FldEng' => 'Received by Oversight',
-			'FldDesc' => 'Indicates date and time when an electronic Complaint was received by an appropriate Oversight Agency. This is essential for tracking an Oversight Agency\'s  response time when acknowledging receipt of OPC-submitted Complaints.',
+			'FldDesc' => 'Indicates date and time when an electronic Complaint was received by an appropriate Investigative Agency. This is essential for tracking an Investigative Agency\'s  response time when acknowledging receipt of OPC-submitted Complaints.',
 			'FldNotes' => 'We don\'t yet know how many departments will opt to electronically indicate that they\'ve received OPC complaints. In fact, many will likely skip this process and directly contact Complainants.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -1062,7 +1062,7 @@ Question list and fields coming soon...',
 			'FldSpecSource' => '925',
 			'FldName' => 'OverID',
 			'FldEng' => 'Oversight ID',
-			'FldDesc' => 'The unique number of the Oversight Agency record involved with this Complaint. This number helps track the investigative progress of any Oversight Agencies who have jurisdiction over this Complaint.',
+			'FldDesc' => 'The unique number of the Investigative Agency record involved with this Complaint. This number helps track the investigative progress of any Investigative Agencies who have jurisdiction over this Complaint.',
 			'FldForeignTable' => '106',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => 'N',
@@ -1156,7 +1156,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'FldSpecSource' => '0',
 			'FldName' => 'AgencyComplaintNumber',
 			'FldEng' => 'Agency Complaint Number',
-			'FldDesc' => 'A unique number used to identify Complaints. It is assigned by the Oversight Agency investigating an OPC-generated Complaint.',
+			'FldDesc' => 'A unique number used to identify Complaints. It is assigned by the Investigative Agency investigating an OPC-generated Complaint.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -2576,7 +2576,7 @@ Q. Do we want mere frisks to trigger wrongful search Allegations? Because frisks
 			'FldSpecSource' => '0',
 			'FldName' => 'Findings',
 			'FldEng' => 'Allegation Findings',
-			'FldDesc' => 'The official final disposition of an Allegation. Important for tracking responsiveness of Police Departments, Oversight Agencies, and Complainants.',
+			'FldDesc' => 'The official final disposition of an Allegation. Important for tracking responsiveness of Police Departments, Investigative Agencies, and Complainants.',
 			'FldNotes' => 'Final Allegation status is categorized by Admins after reviewing official department documentation.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -2746,7 +2746,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '921',
 			'FldName' => 'UserID',
 			'FldEng' => 'User ID',
-			'FldDesc' => 'The primary User Authentication number connected to this Oversight Agency. This number allows Oversight Agency contacts to log into the OPC system.',
+			'FldDesc' => 'The primary User Authentication number connected to this Investigative Agency. This number allows Investigative Agency contacts to log into the OPC system.',
 			'FldForeignTable' => '167',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '11',
@@ -3515,7 +3515,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '837',
 			'FldName' => 'Email',
 			'FldEng' => 'Email',
-			'FldDesc' => 'The valid email address for an Oversight Agency contact. This is the primary way we communicate with them.',
+			'FldDesc' => 'The valid email address for an Investigative Agency contact. This is the primary way we communicate with them.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -3537,7 +3537,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '839',
 			'FldName' => 'PhoneWork',
 			'FldEng' => 'Work Phone',
-			'FldDesc' => 'The contact number where Oversight Agency contact can be reached.',
+			'FldDesc' => 'The contact number where Investigative Agency contact can be reached.',
 			'FldNotes' => 'We might need to add an "extension" field for some work phone numbers.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -3559,7 +3559,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '841',
 			'FldName' => 'Address',
 			'FldEng' => 'Street Address',
-			'FldDesc' => 'The first line of the postal location where an Oversight Agency contact receive mail. This is an integral component of an Oversight Agency contact\'s complete address.',
+			'FldDesc' => 'The first line of the postal location where an Investigative Agency contact receive mail. This is an integral component of an Investigative Agency contact\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -3579,7 +3579,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '842',
 			'FldName' => 'Address2',
 			'FldEng' => 'Street Address 2',
-			'FldDesc' => 'The second line, if needed, of the postal location where an Oversight Agency contact receives mail. This is an integral component of an Oversight Agency contact\'s complete address.',
+			'FldDesc' => 'The second line, if needed, of the postal location where an Investigative Agency contact receives mail. This is an integral component of an Investigative Agency contact\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -3599,7 +3599,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '843',
 			'FldName' => 'AddressCity',
 			'FldEng' => 'City',
-			'FldDesc' => 'The metropolitan area where an Oversight Agency contact receives mail. This is an integral component of an Oversight Agency contact\'s complete address.',
+			'FldDesc' => 'The metropolitan area where an Investigative Agency contact receives mail. This is an integral component of an Investigative Agency contact\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -3620,7 +3620,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '844',
 			'FldName' => 'AddressState',
 			'FldEng' => 'State',
-			'FldDesc' => 'The state or district where an Oversight Agency contact receives mail. This is an integral component of an Oversight Agency contact\'s complete address.',
+			'FldDesc' => 'The state or district where an Investigative Agency contact receives mail. This is an integral component of an Investigative Agency contact\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -3642,7 +3642,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '845',
 			'FldName' => 'AddressZip',
 			'FldEng' => 'Zip Code',
-			'FldDesc' => 'The postal code where an Oversight Agency contact receives mail. This is an integral component of an Oversight Agency contact\'s complete address.',
+			'FldDesc' => 'The postal code where an Investigative Agency contact receives mail. This is an integral component of an Investigative Agency contact\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -4037,7 +4037,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '0',
 			'FldName' => 'OversightReportEvidenceID',
 			'FldEng' => 'Oversight Investigation Report',
-			'FldDesc' => 'The Evidence record storing the final determination letter submitted by the Oversight Agency regarding an OPC-submitted Complaint. This report provides essential information for tracking how Oversight Agencies respond to citizen complaints.',
+			'FldDesc' => 'The Evidence record storing the final determination letter submitted by the Investigative Agency regarding an OPC-submitted Complaint. This report provides essential information for tracking how Investigative Agencies respond to citizen complaints.',
 			'FldNotes' => 'Complainants must scan these reports and upload them to their Complaint as Evidence.',
 			'FldForeignTable' => '119',
 			'FldForeignMin' => '0',
@@ -4113,7 +4113,7 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '926',
 			'FldName' => 'Verified',
 			'FldEng' => 'Contact Info Last Verified',
-			'FldDesc' => 'Indicates the date and time when an Oversight Agency\'s Police contact information was last verified. This is crucial for keeping track of the accuracy of Oversight Agency\'s contact information.',
+			'FldDesc' => 'Indicates the date and time when an Investigative Agency\'s Police contact information was last verified. This is crucial for keeping track of the accuracy of Investigative Agency\'s contact information.',
 			'FldNotes' => 'NULL value means unverified.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -4137,8 +4137,8 @@ Wikipedia Article on the topic: https://en.wikipedia.org/wiki/Personally_identif
 			'FldSpecSource' => '0',
 			'FldName' => 'Investigated',
 			'FldEng' => 'Investigated by Oversight',
-			'FldDesc' => 'Indicates the date and time when the Complainant was contacted by an Oversight Agency contact regarding the status of their Complaint or to investigate any Allegations contained in the Complaint.',
-			'FldNotes' => 'Complainants must provide OPC this information. So we must send Complainants regular follow up emails to track Oversight Agency response rates and response times.',
+			'FldDesc' => 'Indicates the date and time when the Complainant was contacted by an Investigative Agency contact regarding the status of their Complaint or to investigate any Allegations contained in the Complaint.',
+			'FldNotes' => 'Complainants must provide OPC this information. So we must send Complainants regular follow up emails to track Investigative Agency response rates and response times.',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
 			'FldForeign2Min' => '0',
@@ -4300,7 +4300,7 @@ If selected, we might want to email user article on How to Track Down CCTV Foota
 			'FldSpecSource' => '0',
 			'FldName' => 'CCTVDesc',
 			'FldEng' => 'Closed Circuit Camera Descriptions',
-			'FldDesc' => 'Narrative details about the type and location of any visible video surveillance cameras. Might help Oversight Agencies or Attorneys track down new Evidence of the Incident.',
+			'FldDesc' => 'Narrative details about the type and location of any visible video surveillance cameras. Might help Investigative Agencies or Attorneys track down new Evidence of the Incident.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -6518,7 +6518,7 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldSpecSource' => '971',
 			'FldName' => 'Nickname',
 			'FldEng' => 'Nickname',
-			'FldDesc' => 'Preferred first name of Oversight Agency contacts that we use in less-formal communications with them. Important for maintaining cordial relationships with these key contacts.',
+			'FldDesc' => 'Preferred first name of Investigative Agency contacts that we use in less-formal communications with them. Important for maintaining cordial relationships with these key contacts.',
 			'FldNotes' => 'Use only if selected. Field may otherwise be left blank',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
@@ -6585,13 +6585,13 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldSpecSource' => '0',
 			'FldName' => 'Type',
 			'FldEng' => 'Oversight Type',
-			'FldDesc' => 'Indicates category of Oversight Agency. This information is essential for determining if a given Oversight Agency is either an Internal Affairs Department or a Citizen Oversight Agency. (They cannot be both.)',
+			'FldDesc' => 'Indicates category of Investigative Agency. This information is essential for determining if a given Investigative Agency is either an Internal Affairs Department or a Citizen Investigative Agency. (They cannot be both.)',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
 			'FldForeign2Min' => '0',
 			'FldForeign2Max' => '0',
-			'FldValues' => 'Def::Oversight Agency Types',
+			'FldValues' => 'Def::Investigative Agency Types',
 			'FldType' => 'INT',
 			'FldDataType' => 'Numeric',
 			'FldDataLength' => '3',
@@ -6650,7 +6650,7 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldSpecSource' => '0',
 			'FldName' => 'AgncName',
 			'FldEng' => 'Agency Name',
-			'FldDesc' => 'The official name of an Oversight Agency. This is an essential component of a Oversight Agency\'s complete address.',
+			'FldDesc' => 'The official name of an Investigative Agency. This is an essential component of a Investigative Agency\'s complete address.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
@@ -6673,8 +6673,8 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldSpecSource' => '924',
 			'FldName' => 'Website',
 			'FldEng' => 'Website',
-			'FldDesc' => 'The page URL of the Civilian Oversight Agency or Internal Affairs Department. Ideally provides clear information about the Police Department\'s complaint process.',
-			'FldNotes' => 'IMPORTANT: Oversight Agencies include both Civilian Oversight Agencies (COAs) and Internal Affairs (IA) Departments. If a Police Department has a NACOLE-approved COA, use their URL instead of the Department\'s IA URL.
+			'FldDesc' => 'The page URL of the Civilian Investigative Agency or Internal Affairs Department. Ideally provides clear information about the Police Department\'s complaint process.',
+			'FldNotes' => 'IMPORTANT: Investigative Agencies include both Civilian Oversight Agencies (COAs) and Internal Affairs (IA) Departments. If a Police Department has a NACOLE-approved COA, use their URL instead of the Department\'s IA URL.
 https://nacole.org/resources/u-s-oversight-agency-websites/
 
 Keep in mind that a .gov URL with clear-cut police complaint information will frequently be absent or difficult to find. If that\'s the case, OPC\'s web form must clearly indicate this absence.',
@@ -6783,7 +6783,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '920',
 			'FldName' => 'DeptID',
 			'FldEng' => 'Department ID',
-			'FldDesc' => 'The unique number of the Department record related to this Complaint. This number helps us identify which Department this Complaint is directed and therefore which Oversight Agency should be contacted.',
+			'FldDesc' => 'The unique number of the Department record related to this Complaint. This number helps us identify which Department this Complaint is directed and therefore which Investigative Agency should be contacted.',
 			'FldForeignTable' => '111',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => 'N',
@@ -6877,7 +6877,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '1001',
 			'FldName' => 'WebComplaintInfo',
 			'FldEng' => 'Website Complaint Information URL',
-			'FldDesc' => 'Indicates whether or not the designated Oversight Agency URL (if there is one) has clear-cut info on how about how the complaints process works. (Most will not.)',
+			'FldDesc' => 'Indicates whether or not the designated Investigative Agency URL (if there is one) has clear-cut info on how about how the complaints process works. (Most will not.)',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
@@ -7247,7 +7247,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'ReportDate',
 			'FldEng' => 'Oversight Report Uploaded',
-			'FldDesc' => 'Indicates the date and time when an Oversight Agency contact regarding the status of their Complaint or to investigate any Allegations contained in the Complaint.',
+			'FldDesc' => 'Indicates the date and time when an Investigative Agency contact regarding the status of their Complaint or to investigate any Allegations contained in the Complaint.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
@@ -8138,7 +8138,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'StillNoResponse',
 			'FldEng' => 'No Response from Oversight',
-			'FldDesc' => 'Indicates date and time when a Complainant last confirmed that they have heard no response from the appropriate Oversight Agency. This is essential for tracking an Oversight Agency\'s response time when acknowledging receipt of OPC-submitted Complaints.',
+			'FldDesc' => 'Indicates date and time when a Complainant last confirmed that they have heard no response from the appropriate Investigative Agency. This is essential for tracking an Investigative Agency\'s response time when acknowledging receipt of OPC-submitted Complaints.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
@@ -8198,7 +8198,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'CivModel',
 			'FldEng' => 'Civilian Oversight Model',
-			'FldDesc' => 'Indicates subcategory of Civilian Oversight Agency, either Investigative, Review, or Audit. This information is essential for determining scope of a given Oversight Agency.',
+			'FldDesc' => 'Indicates subcategory of Civilian Investigative Agency, either Investigative, Review, or Audit. This information is essential for determining scope of a given Investigative Agency.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => '0',
@@ -9784,7 +9784,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '834',
 			'FldName' => 'NamePrefix',
 			'FldEng' => 'Name Prefix',
-			'FldDesc' => 'Letters placed before an Oversight Agency contact\'s first name that we use in all formal communications with Oversight Agency contacts or regarding Oversight Agency contacts.',
+			'FldDesc' => 'Letters placed before an Investigative Agency contact\'s first name that we use in all formal communications with Investigative Agency contacts or regarding Investigative Agency contacts.',
 			'FldNotes' => 'Use only if selected. Field may otherwise be left blank',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -9807,7 +9807,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '830',
 			'FldName' => 'NameFirst',
 			'FldEng' => 'First Name',
-			'FldDesc' => 'The legal given name of an Oversight Agency contact that we use to identify them. We also use this in all formal communications with Oversight Agency contacts and regarding Oversight Agency contacts.',
+			'FldDesc' => 'The legal given name of an Investigative Agency contact that we use to identify them. We also use this in all formal communications with Investigative Agency contacts and regarding Investigative Agency contacts.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -9829,7 +9829,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '832',
 			'FldName' => 'NameMiddle',
 			'FldEng' => 'Middle Name',
-			'FldDesc' => 'The name of an Oversight Agency contact, placed between their first name and before their surname, that we use in all formal communications with Oversight Agency contacts or regarding Oversight Agency contacts.',
+			'FldDesc' => 'The name of an Investigative Agency contact, placed between their first name and before their surname, that we use in all formal communications with Investigative Agency contacts or regarding Investigative Agency contacts.',
 			'FldNotes' => 'Use only if selected. Field may otherwise be left blank',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
@@ -9852,7 +9852,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '835',
 			'FldName' => 'NameLast',
 			'FldEng' => 'Last Name',
-			'FldDesc' => 'The legal surname of an Oversight Agency contact that we use in formal communications with or regarding an Oversight Agency contact.',
+			'FldDesc' => 'The legal surname of an Investigative Agency contact that we use in formal communications with or regarding an Investigative Agency contact.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -9874,7 +9874,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '833',
 			'FldName' => 'NameSuffix',
 			'FldEng' => 'Name Suffix',
-			'FldDesc' => 'Letters added after an Oversight Agency contact\'s last name -- which provide additional information about their title or inherited name -- that we use in all formal communications with Oversight Agency contacts or regarding Oversight Agency contacts.',
+			'FldDesc' => 'Letters added after an Investigative Agency contact\'s last name -- which provide additional information about their title or inherited name -- that we use in all formal communications with Investigative Agency contacts or regarding Investigative Agency contacts.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -9998,7 +9998,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '922',
 			'FldName' => 'Title',
 			'FldEng' => 'Title',
-			'FldDesc' => 'The job position of an Oversight Agency contact. We might use this in formal communications with Oversight Agency contacts or regarding Oversight Agency contacts.',
+			'FldDesc' => 'The job position of an Investigative Agency contact. We might use this in formal communications with Investigative Agency contacts or regarding Investigative Agency contacts.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -10019,7 +10019,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'IDnumber',
 			'FldEng' => 'ID Number',
-			'FldDesc' => 'A unique number used to identify each Oversight Agency. We assign a number to all active Oversight Agencies and remains with them for the duration of their existence.',
+			'FldDesc' => 'A unique number used to identify each Investigative Agency. We assign a number to all active Investigative Agencies and remains with them for the duration of their existence.',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '11',
 			'FldForeignMax' => '11',
@@ -10040,7 +10040,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '920',
 			'FldName' => 'DeptID',
 			'FldEng' => 'Department ID',
-			'FldDesc' => 'The unique number of the Department record related to this Oversight Agency. This information helps us identify the proper Oversight Agency with jurisdiction over an OPC Complaint directed at a specific Police Department.
+			'FldDesc' => 'The unique number of the Department record related to this Investigative Agency. This information helps us identify the proper Investigative Agency with jurisdiction over an OPC Complaint directed at a specific Police Department.
 
 ',
 			'FldForeignTable' => '111',
@@ -11027,7 +11027,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'DeptID',
 			'FldEng' => 'Department ID',
-			'FldDesc' => 'The unique number of the Department record related to this Complaint. This number helps us identify which Department this Complaint is directed and therefore which Oversight Agency should be contacted.',
+			'FldDesc' => 'The unique number of the Department record related to this Complaint. This number helps us identify which Department this Complaint is directed and therefore which Investigative Agency should be contacted.',
 			'FldForeignTable' => '111',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => 'N',
@@ -12513,7 +12513,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'FldSpecSource' => '0',
 			'FldName' => 'DeptID',
 			'FldEng' => 'Department ID',
-			'FldDesc' => 'The unique number of the Police Department record involved with this Complaint. This number helps track the investigative progress of the Oversight Agencies where this Complaint has been filed.',
+			'FldDesc' => 'The unique number of the Police Department record involved with this Complaint. This number helps track the investigative progress of the Investigative Agencies where this Complaint has been filed.',
 			'FldForeignTable' => '111',
 			'FldForeignMin' => '0',
 			'FldForeignMax' => 'N',
@@ -14048,7 +14048,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefOrder' => '4',
 			'DefIsActive' => '0',
 			'DefValue' => 'Pending Attorney',
-			'DefDescription' => 'Not published. This Complaint has NOT been submitted to any Oversight Agencies, because it has been determined to be a good prospect for an Attorney.'
+			'DefDescription' => 'Not published. This Complaint has NOT been submitted to any Investigative Agencies, because it has been determined to be a good prospect for an Attorney.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 199,
@@ -14900,14 +14900,14 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 302,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Oversight Agency Types',
+			'DefSubset' => 'Investigative Agency Types',
 			'DefIsActive' => '0',
 			'DefValue' => 'Civilian Oversight'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 303,
 			'DefDatabase' => '1',
-			'DefSubset' => 'Oversight Agency Types',
+			'DefSubset' => 'Investigative Agency Types',
 			'DefOrder' => '1',
 			'DefIsActive' => '0',
 			'DefValue' => 'Internal Affairs'
@@ -15391,7 +15391,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefSubset' => 'User Types',
 			'DefOrder' => '1',
 			'DefIsActive' => '0',
-			'DefValue' => 'Oversight Agency'
+			'DefValue' => 'Investigative Agency'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 373,
@@ -15842,7 +15842,7 @@ Keep in mind that a .gov URL with clear-cut police complaint information will fr
 			'DefDatabase' => '1',
 			'DefSubset' => 'How Did You Hear',
 			'DefOrder' => '10',
-			'DefValue' => 'A Police Oversight Agency'
+			'DefValue' => 'A Police Investigative Agency'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 435,
@@ -16812,7 +16812,7 @@ padding: 10px;
 			'DefDatabase' => '1',
 			'DefSubset' => 'Partner Types',
 			'DefOrder' => '5',
-			'DefValue' => 'Oversight Agency'
+			'DefValue' => 'Investigative Agency'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 518,
@@ -18057,7 +18057,7 @@ padding: 10px;
 			'TreeUser' => '1',
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
-			'TreeName' => 'Oversight Agencies',
+			'TreeName' => 'Investigative Agencies',
 			'TreeSlug' => 'oversight',
 			'TreeRoot' => '1455',
 			'TreeFirstPage' => '1455',
@@ -22612,7 +22612,7 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will help you to ...</h3>
 <ul>
 <li>Prepare and save a complete police misconduct report.</li>
-<li>File your report with the right police oversight agency.</li>
+<li>File your report with the right police investigative agency.</li>
 <li>Get matched with legal help.</li>
 <li>Publish your complaint online and share on social media.</li>
 <li>Upload photos, documents, video, and other evidence.</li>
@@ -22951,7 +22951,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodePromptText' => '<p>&nbsp;</p>
 <h2 class="slBlueDark">OPC User Privacy Options</h2>
 <p>Complainants should control who has access to their private information. That\'s why we\'ve created three unique options for how we collect and share their data.</p>
-<p>Whichever option they choose, all information complainants provide will be <i>privately</i> shared with the relevant oversight agencies responsible for investigating complaints against police.</p>
+<p>Whichever option they choose, all information complainants provide will be <i>privately</i> shared with the relevant investigative agencies responsible for investigating complaints against police.</p>
 <p>&nbsp;</p>
 <h3>1. Full Transparency</h3>
 <p><strong>The complainant will publish all the names of civilians and police officers on OpenPolice.org.</strong></p>
@@ -22963,14 +22963,14 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 <p>&nbsp;</p>
 <h3>3. Anonymous</h3>
 <p><strong>The complainant needs to be anonymous, even though it might limit investigation.</strong></p>
-<p>For complainants who select Anonymous, no personal information about them is requested or collected. Neither OPC staff nor investigators will be able to contact the complainant. While this makes it harder for oversight agencies to investigate, it’s an important option for complainants fearful of retaliation.</p>
+<p>For complainants who select Anonymous, no personal information about them is requested or collected. Neither OPC staff nor investigators will be able to contact the complainant. While this makes it harder for investigative agencies to investigate, it’s an important option for complainants fearful of retaliation.</p>
 <p>Complainants’ <a href="#glossary">multiple-choice responses</a> will be published. (This does not include responses to <a href="#glossary">open-ended questions</a>, which could reveal identities.) Any details that could be used for personal identification may be deleted from OPC\'s database.</p>
 <div class="nodeAnchor"><a id="attorneys" name="attorneys"></a></div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <h2>Documentation for Attorneys</h2>
 <p><strong>This is not a privacy setting, but complaints intended for attorneys’ eyes only are stored and published with <a href="#glossary">anonymized</a> data only.</strong></p>
-<p>Some people use OPC to prepare documentation for an attorney. In these cases, no information will be shared with oversight agencies. Complainants can print out their complete complaint and download it as a PDF or raw data file. After completing the entire process, OPC’s copy of their complaint is stripped of all data that might be personally identifiable. Only <a href="#glossary">multiple-choice question</a> data will be saved and publicly associated with the police department records.</p>
+<p>Some people use OPC to prepare documentation for an attorney. In these cases, no information will be shared with investigative agencies. Complainants can print out their complete complaint and download it as a PDF or raw data file. After completing the entire process, OPC’s copy of their complaint is stripped of all data that might be personally identifiable. Only <a href="#glossary">multiple-choice question</a> data will be saved and publicly associated with the police department records.</p>
 <p>When such complaints are <a href="#glossary">anonymized</a>, all <a href="#glossary">open-ended responses</a> are <i>permanently</i> deleted from OPC servers. But with the advice of their attorney — users can later upload their raw complaint data to publish their complete story.</p>
 <a name="glossary"></a>
 <p>&nbsp;</p>
@@ -23008,7 +23008,7 @@ information collected by this web site. It will notify you of the following:</p>
 <p><br></p>
 <h3>Information Collection, Use, and Sharing</h3>
 <p>We are the sole owners of the information collected on this site. We only collect information that you voluntarily give us via your use of our online forms, or other direct contact from you. While most users may choose to share most of their information publicly, we will not sell or rent any private information to anyone.</p>
-<p>We will use your information to respond to you, regarding your complaint. We will not share your information with any third parties outside of our organization, other than as necessary to fulfill your request (e.g. to submit your complaint to relevant policy oversight agencies).</p>
+<p>We will use your information to respond to you, regarding your complaint. We will not share your information with any third parties outside of our organization, other than as necessary to fulfill your request (e.g. to submit your complaint to relevant policy investigative agencies).</p>
 <p>Unless you ask us not to, we may contact you via email in the future to update you — or request updates from you — regarding your complaint, or changes to this privacy policy.</p>
 <p><br></p>
 <h3>Your Access to and Control Over Information</h3>
@@ -23429,7 +23429,7 @@ needed to make sure that our service could accommodate complaints that
 can be submitted to every one of the roughly 18,000 state and local law 
 enforcement agencies in the United States.</p><p>
 <br></p><p>I won’t bore you with details of the research I’ve done to identify 
-our data needs — but suffice it to say, I’ve reviewed every recent <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70">DOJ report on police-civilian contacts</a> I could find. I’ve examined the recent annual reports from the major <a href="https://nacole.org/resources/u-s-oversight-agency-websites/">civilian oversight agencies</a> that release&nbsp;reports. And I’ve been working with some of the <a href="https://openpolicecomplaints.org/about/#Advisory-Board">top experts in the field of police oversight</a>.</p><p>
+our data needs — but suffice it to say, I’ve reviewed every recent <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70">DOJ report on police-civilian contacts</a> I could find. I’ve examined the recent annual reports from the major <a href="https://nacole.org/resources/u-s-oversight-agency-websites/">civilian investigative agencies</a> that release&nbsp;reports. And I’ve been working with some of the <a href="https://openpolicecomplaints.org/about/#Advisory-Board">top experts in the field of police oversight</a>.</p><p>
 <br></p><p>These ongoing discussions with police oversight professionals reveal 
 some important technical challenges of maintaining&nbsp;a unified police 
 complaints platform. For example, many large municipal oversight 
@@ -23467,7 +23467,7 @@ includes these things, it will be immediately emailed to the appropriate
  oversight&nbsp;contact.<br>
 <a name="Openness"></a><br>
 <strong>How Openness Pushes Accountability</strong><br>
-In order to create additional&nbsp;transparency, every complaint submitted to an oversight agency will become <em>publicly</em>
+In order to create additional&nbsp;transparency, every complaint submitted to an investigative agency will become <em>publicly</em>
  searchable. Depending on the privacy settings selected by individual 
 complainants, some public complaints will reveal the names and 
 identities of individual officers. Complainants may also choose to 
@@ -26131,7 +26131,7 @@ setTimeout("checkYouFatal()", 1);
 			'NodeParentID' => '679',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<h2>We will help you organize everything a lawyer needs to <nobr>help you.</nobr></h2>
-<p>You might not know it, but some information you publish could hurt somebody\'s legal case. That\'s not what we want to happen, so you should share your complaint with a lawyer first. Later, you can file it with a police oversight agency.</p>
+<p>You might not know it, but some information you publish could hurt somebody\'s legal case. That\'s not what we want to happen, so you should share your complaint with a lawyer first. Later, you can file it with a police investigative agency.</p>
 <p>After you complete your complaint, you can save it in three ways ...</p>
 <table border=0 class="w100"><tr><td class="taC">
 <h1 class="slBlueDark" style="margin-top: 15px;"><i class="fa fa-print" aria-hidden="true"></i></h1>
@@ -26144,7 +26144,7 @@ Download it
 Email it
 </td></tr></table>
 <p>For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. <b>This will publish your full story and file it with a police oversight agency.</b></p>
+<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. <b>This will publish your full story and file it with a police investigative agency.</b></p>
 <h3 class="slBlueDark" style="margin-top: 20px;">Remember: The more details you share, the better we can match you with a lawyer.</h3>',
 			'NodeOpts' => '37'
 		]);
@@ -27274,7 +27274,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '36',
 			'NodeParentID' => '1265',
 			'NodeType' => 'Text',
-			'NodePromptText' => '<h3 class="slBlueDark">Civilian Oversight Agency Name</h3>',
+			'NodePromptText' => '<h3 class="slBlueDark">Civilian Investigative Agency Name</h3>',
 			'NodeDataStore' => 'Oversight:OverAgncName',
 			'NodeOpts' => '5'
 		]);
@@ -27461,14 +27461,14 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1719',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are reviewing this complaint. If there are no problems, we will try to file it with the department\'s oversight agency. Once it has been submitted, we can publish the complete report.</div>'
+			'NodePromptText' => '<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are reviewing this complaint. If there are no problems, we will try to file it with the department\'s investigative agency. Once it has been submitted, we can publish the complete report.</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1366,
 			'NodeTree' => '42',
 			'NodeParentID' => '1750',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pT5">&nbsp;</div><div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are reviewing this complaint. If there are no problems, we will try to file it with the department\'s oversight agency.</div>'
+			'NodePromptText' => '<div class="pT5">&nbsp;</div><div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are reviewing this complaint. If there are no problems, we will try to file it with the department\'s investigative agency.</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1367,
@@ -27476,7 +27476,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1719',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are waiting for the user to confirm that they submitted it to the department\'s oversight agency. Only then can we publish the complete report.</div>'
+			'NodePromptText' => '<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">We are waiting for the user to confirm that they submitted it to the department\'s investigative agency. Only then can we publish the complete report.</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1369,
@@ -27711,7 +27711,7 @@ You can get up to seven gold stars for each department that you help with, one f
 <h4>Sign up to help keep the database of police <nobr>departments up-to-date.</nobr></h4>
 <p>Every time someone submits a complaint or compliment here, we check if our database has recent information for the department(s) involved. If the department\'s complaint process needs to be researched, we alert our team of volunteers.</p>
 <div class="pull-right slBlueDark" style="font-size: 80px;">&nbsp;&nbsp;<i class="fa fa-users" aria-hidden="true"></i></div>
-<p>Volunteers help out by doing online research into the department\'s basic contact information and web presence. This is followed up by a phone call to the department (with non-emergency number) to confirm the information found online. Finally a phone call is made to the internal affairs department — or sometimes an independent civilian oversight agency — to fill in remaining questions, and confirm important info.</p>
+<p>Volunteers help out by doing online research into the department\'s basic contact information and web presence. This is followed up by a phone call to the department (with non-emergency number) to confirm the information found online. Finally a phone call is made to the internal affairs department — or sometimes an independent civilian investigative agency — to fill in remaining questions, and confirm important info.</p>
 <p>&nbsp;</p>',
 			'NodeOpts' => '67'
 		]);
@@ -27736,7 +27736,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '49',
 			'NodeType' => 'Page',
 			'NodePromptNotes' => 'oversight',
-			'NodePromptAfter' => 'Oversight Agencies::M::::M::::M::',
+			'NodePromptAfter' => 'Investigative Agencies::M::::M::::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27744,7 +27744,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '49',
 			'NodeParentID' => '1455',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2><br></h2><h2>Oversight Agencies Overview<br></h2>
+			'NodePromptText' => '<h2><br></h2><h2>Investigative Agencies Overview<br></h2>
 <p>Coming back real soon!<br></p>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -29531,7 +29531,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeParentID' => '1372',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Loop Cycle',
-			'NodeResponseSet' => 'LoopItems::Oversight Agencies',
+			'NodeResponseSet' => 'LoopItems::Investigative Agencies',
 			'NodeDataBranch' => 'LinksComplaintOversight'
 		]);
 		DB::table('SL_Node')->insert([
@@ -29625,7 +29625,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '42',
 			'NodeParentID' => '1711',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => 'Toolkit for Oversight Agency'
+			'NodePromptText' => 'Toolkit for Investigative Agency'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1714,
@@ -29698,7 +29698,7 @@ You can get up to seven gold stars for each department that you help with, one f
 			'NodeTree' => '42',
 			'NodeParentID' => '1724',
 			'NodeType' => 'Loop Cycle',
-			'NodeResponseSet' => 'LoopItems::Oversight Agencies',
+			'NodeResponseSet' => 'LoopItems::Investigative Agencies',
 			'NodeDataBranch' => 'LinksComplaintOversight'
 		]);
 		DB::table('SL_Node')->insert([
@@ -31260,7 +31260,7 @@ complainant to confirm their identity and corroborate their testimony. Then, wit
 users expect to receive a final disposition letter that includes the details of your investigation\'s findings.</p>
 <p>We encourage users to upload investigation findings and attach them to their complaints. This allows OpenPolice.org 
 visitors to see which allegations were sustained or unfounded.</p>
-<p>If your oversight agency creates an authenticated user account on OpenPolice.org, you will also be able to instantly 
+<p>If your investigative agency creates an authenticated user account on OpenPolice.org, you will also be able to instantly 
 upload the findings of your investigations. Participating in this clearinghouse for complaints is a great way to engage 
 with the community and build trust.</p>
 <p><b>If your office cannot investigate the complaint ...</b><br />
@@ -31278,10 +31278,10 @@ complaint another way.</p>
 <div id="hidivIntegrate" class="disNon brd mTn5 p15">
 <p>Yes! We make it easy to integrate OPC data into most police software systems.</p>
 <p>OPC provides a computer-readable XML export of all the data in the complaint.</p>
-<p>We will be building more exports to be imported in software commonly used by police oversight agencies. But a geek 
+<p>We will be building more exports to be imported in software commonly used by police investigative agencies. But a geek 
 on your team is already empowered to check out the <a href="/site-map#techstuff">tech stuff</a> and build a script to 
 instantly import every future complaint into your pre-existing software.</p>
-<p>A built-in API empowers the potential to automatically import OPC Complaints into your oversight agency\'s 
+<p>A built-in API empowers the potential to automatically import OPC Complaints into your investigative agency\'s 
 pre-existing software. The database design is well documented and the code is all open source.</p>
 <p>Please <a href="/contact?who=law-enforcement&inquiry=schedule">contact us</a> if you have any questions about OPC\'s 
 data integration tools. We might be able to help out.</p>
@@ -31376,7 +31376,7 @@ function bodyOnScroll() {
 			'NodeTree' => '1',
 			'NodeParentID' => '443',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<b>Did your lawyer say it\'s okay</b> to submit this complaint through Open Police Complaints? (This will file it with the appropriate police oversight agency and publish your complaint on this website.)',
+			'NodePromptText' => '<b>Did your lawyer say it\'s okay</b> to submit this complaint through Open Police Complaints? (This will file it with the appropriate police investigative agency and publish your complaint on this website.)',
 			'NodeDataStore' => 'Complaints:ComAttorneyOKedOPC',
 			'NodeOpts' => '5'
 		]);
@@ -32354,7 +32354,7 @@ James became fascinated with civil liberties while studying political science in
 <div class="w100" style="height: 30px;"></div>
 <h3>Your Privacy:</h3>
 <p>After you complete your complaint, you can download it, print it, or email it. For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. This will publish your full story and file it with a police oversight agency.</p>
+<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your complaint. This will publish your full story and file it with a police investigative agency.</p>
 </div>',
 			'NodePromptAfter' => '<style> #node1993 { padding: 0px; } </style>',
 			'NodeOpts' => '89'
@@ -32918,7 +32918,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodePromptText' => '<div class="row2" style="padding: 20px 20px 40px 20px; height: 365px; overflow: auto; resize: both;"><h3 class="m0">This free web app will help you to ...</h3>
 <ul>
 <li>Prepare and save a complete police misconduct report.</li>
-<li>File your report with the right police oversight agency.</li>
+<li>File your report with the right police investigative agency.</li>
 <li>Get matched with legal help.</li>
 <li>Publish your complaint online and share on social media.</li>
 <li>Upload photos, documents, video, and other evidence.</li>
@@ -33229,7 +33229,7 @@ James became fascinated with civil liberties while studying political science in
 <div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
 <img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
 </div></div><div class="col-9">
-<h3 class="slBlueDark">File your report with the right police oversight agency</h3>
+<h3 class="slBlueDark">File your report with the right police investigative agency</h3>
 <p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
 </div></div>
 <p>&nbsp;</p>
@@ -34483,7 +34483,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 166,
 			'NodeResNode' => '269',
-			'NodeResEng' => 'Yes, I want to submit my complaint to the appropriate police oversight agencies.',
+			'NodeResEng' => 'Yes, I want to submit my complaint to the appropriate police investigative agencies.',
 			'NodeResValue' => 'Y'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -37680,7 +37680,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1096,
 			'NodeResNode' => '971',
-			'NodeResEng' => 'Yes, I want to submit my compliment to the appropriate police oversight agencies. I also want to publish my compliment data on this website.',
+			'NodeResEng' => 'Yes, I want to submit my compliment to the appropriate police investigative agencies. I also want to publish my compliment data on this website.',
 			'NodeResValue' => 'Y'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -38994,7 +38994,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResID' => 1372,
 			'NodeResNode' => '2018',
 			'NodeResEng' => '<h2 class="disIn slBlueDark">Full Transparency</h2>
-<div class="privOptPadL"><ul><li>We will publish your FULL complaint on OpenPolice.org. This includes your written story, the names of civilians and police officers, and all survey answers.</li><li>We will try to send your full complaint to a police oversight agency.</li></ul></div>',
+<div class="privOptPadL"><ul><li>We will publish your FULL complaint on OpenPolice.org. This includes your written story, the names of civilians and police officers, and all survey answers.</li><li>We will try to send your full complaint to a police investigative agency.</li></ul></div>',
 			'NodeResValue' => '304'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -39002,7 +39002,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResNode' => '2018',
 			'NodeResOrd' => '1',
 			'NodeResEng' => '<h2 class="disIn slBlueDark">No Names Public</h2>
-<div class="privOptPadL"><ul><li>Only your multiple-choice answers will be published on OpenPolice.org. This will NOT include your written story or police officers\' names and badge numbers.</li><li>We will try to send your full complaint to a police oversight agency.</li></ul></div>',
+<div class="privOptPadL"><ul><li>Only your multiple-choice answers will be published on OpenPolice.org. This will NOT include your written story or police officers\' names and badge numbers.</li><li>We will try to send your full complaint to a police investigative agency.</li></ul></div>',
 			'NodeResValue' => '305'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -39010,7 +39010,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResNode' => '2018',
 			'NodeResOrd' => '2',
 			'NodeResEng' => '<h2 class="disIn slBlueDark">Anonymous</h2>
-<div class="privOptPadL"><ul><li>We will NOT ask for any personal information about you.</li><li>Neither OPC staff nor investigators will be able to contact you — so it will be harder to investigate your complaint.</li><li>Only your multiple-choice answers will be published on OpenPolice.org. This will NOT include your written story or police officers\' names and badge numbers.</li><li>We will try to send your full complaint to a police oversight agency.</li></ul></div>',
+<div class="privOptPadL"><ul><li>We will NOT ask for any personal information about you.</li><li>Neither OPC staff nor investigators will be able to contact you — so it will be harder to investigate your complaint.</li><li>Only your multiple-choice answers will be published on OpenPolice.org. This will NOT include your written story or police officers\' names and badge numbers.</li><li>We will try to send your full complaint to a police investigative agency.</li></ul></div>',
 			'NodeResValue' => '306'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -39302,7 +39302,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'NodeResID' => 1416,
 			'NodeResNode' => '2074',
 			'NodeResOrd' => '5',
-			'NodeResEng' => 'Oversight Agency',
+			'NodeResEng' => 'Investigative Agency',
 			'NodeResValue' => '517'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -40334,7 +40334,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'CondID' => 103,
 			'CondDatabase' => '1',
 			'CondTag' => '#StatusNoSubmitConfirm',
-			'CondDesc' => 'This complaint does not yet have confirmation of being submitted to the official oversight agency.',
+			'CondDesc' => 'This complaint does not yet have confirmation of being submitted to the official investigative agency.',
 			'CondOperator' => '}',
 			'CondOperDeet' => '0',
 			'CondField' => '405',
@@ -40394,7 +40394,7 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'CondID' => 113,
 			'CondDatabase' => '1',
 			'CondTag' => '#IsOversightAgency',
-			'CondDesc' => 'The current user has access as an Oversight Agency',
+			'CondDesc' => 'The current user has access as an Investigative Agency',
 			'CondOperator' => 'CUSTOM',
 			'CondOperDeet' => '0',
 			'CondField' => '0',
@@ -42948,8 +42948,8 @@ setTimeout(function() { checkVehicType(); }, 100);
 			'DataLoopID' => 27,
 			'DataLoopTree' => '1',
 			'DataLoopRoot' => '1701',
-			'DataLoopPlural' => 'Oversight Agencies',
-			'DataLoopSingular' => 'Oversight Agency',
+			'DataLoopPlural' => 'Investigative Agencies',
+			'DataLoopSingular' => 'Investigative Agency',
 			'DataLoopTable' => 'LinksComplaintOversight'
 		]);
 		DB::table('SL_DataLoop')->insert([

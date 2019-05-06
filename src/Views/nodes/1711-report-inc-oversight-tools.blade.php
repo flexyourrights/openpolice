@@ -86,7 +86,7 @@
                                 == 'Submitted to Oversight') CHECKED @endif > 
                         <span class="mL5" style="font-weight: normal;">Submitted to 
                         @if (isset($overRow->OverAgncName)) {{ $overRow->OverAgncName }} 
-                        @else this oversight agency @endif</span>
+                        @else this investigative agency @endif</span>
                         @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                             == 'Submitted to Oversight') <span class="mL5 slGrey">(Current Status)</span> @endif
                     </label>
@@ -98,7 +98,7 @@
                             == 'Received by Oversight') CHECKED @endif > 
                     <span class="mL5" style="font-weight: normal;">Received by 
                     @if (isset($overRow->OverAgncName)) {{ $overRow->OverAgncName }} 
-                    @else this oversight agency @endif</span>
+                    @else this investigative agency @endif</span>
                     @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                         == 'Received by Oversight') <span class="mL5 slGrey">(Current Status)</span> @endif
                 </label>
@@ -111,7 +111,7 @@
                                 == 'Investigated (Closed)') CHECKED @endif >
                             <span class="mL5" style="font-weight: normal;">Investigated by 
                             @if (isset($overRow->OverAgncName)) {{ $overRow->OverAgncName }} 
-                            @else this oversight agency @endif </span>
+                            @else this investigative agency @endif </span>
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                                 == 'Investigated (Closed)') <span class="mL5 slGrey">(Current Status)</span> @endif
                     </label>
@@ -136,7 +136,7 @@
                                 == 'OK to Submit to Oversight') CHECKED @endif > 
                         <span class="mL5" style="font-weight: normal;">
                         @if (isset($overRow->OverAgncName)) {{ $overRow->OverAgncName }} 
-                        @else This oversight agency @endif cannot investigate this complaint as is</span>
+                        @else This investigative agency @endif cannot investigate this complaint as is</span>
                     </label>
                 @endif
             </div>

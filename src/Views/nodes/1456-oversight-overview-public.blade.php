@@ -8,9 +8,9 @@
 
 <div class="slCard reportBlock">
 <h3 class="float-right m0 slGrey">Found {{ $oversights->count() }}</h3>
-<h2 class="mT0">Police Departments Oversight Agencies</h2>
+<h2 class="mT0">Police Departments Investigative Agencies</h2>
 <p>The OPC Accessibility Score is calculated by the policies and online tools run by each department and the 
-oversight agency where we submit reports.</p>
+investigative agency where we submit reports.</p>
 <table class="table table-striped">
 <tr><th>Department Name 
     <div class="slGrey fPerc66">Type</div></th>
@@ -19,7 +19,7 @@ oversight agency where we submit reports.</p>
 @if ($oversights->isNotEmpty())
     @foreach ($oversights as $i => $over)
         <tr><td><a href="/dept/{{ $over->DeptSlug }}">{{ str_replace('Department', 'Dept.', $over->DeptName) }}</a>
-            <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->def->getVal('Oversight Agency Types', $over->OverType) }}
+            <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->def->getVal('Investigative Agency Types', $over->OverType) }}
             </div></td>
         <td>{{ $over->OverAddressState }}, {{ $over->OverAddressCounty }}
             <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->printRowAddy($over, 'Dept') }}</span></td>

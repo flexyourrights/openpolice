@@ -1,15 +1,19 @@
 <!-- resources/views/vendor/survlooporg/inc-documentation-navigation.blade.php -->
 
-<h4 class="slBlueDark">Software Documentation</h4>
+<h4>Software Documentation</h4>
 
 @forelse ($docuNav as $i => $category)
     <div class="pT10"><b>{{ $category[0] }}</b></div>
     @forelse ($category[1] as $j => $nav)
-        <p><a href="{{ $nav[0] }}" class="btn btn-block taL
-            @if ($currPage == $nav[0]) btn-secondary @else btn-primary @endif ">{!! $nav[1] !!}</a></p>
+        <div class="pT5 pB5 pL15">
+            <a href="{{ $nav[0] }}" @if ($currPage == $nav[0]) class="bld" @endif >{!! $nav[1] !!}</a>
+        @if (sizeof($nav) > 2 && is_array($nav[2]) && sizeof($nav[2]) == 2)
+            <div class="pT5 pB5 pL15"><a href="{{ $nav[2][0] }}">{!! $nav[2][1] !!}</a></div>
+        @endif
+        </div>
     @empty
     @endforelse
 @empty
 @endforelse
 
-<p><a href="https://github.com/flexyourrights/openpolice" target="_blank" class="btn btn-primary btn-lg btn-block taL mB20"><i class="fa fa-github mR5" aria-hidden="true"></i> flexyourrights/openpolice</a></p>
+<div class="mT20"><a href="https://github.com/flexyourrights/openpolice" target="_blank"><nobr><i class="fa fa-github mR5" aria-hidden="true"></i> flexyourrights/openpolice</nobr></a></div>

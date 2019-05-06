@@ -116,28 +116,28 @@
                             value="Submitted to Oversight" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                                 == 'Submitted to Oversight') CHECKED @endif > 
-                            <span class="mL5">Submitted To Oversight Agency</span>
+                            <span class="mL5">Submitted To Investigative Agency</span>
                     </label>
                     <label class="finger">
                         <input type="radio" id="overStatus2" name="overStatus" autocomplete="off" 
                             value="Received by Oversight" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                                 == 'Received by Oversight') CHECKED @endif > 
-                        <span class="mL5">Received By Oversight Agency</span>
+                        <span class="mL5">Received By Investigative Agency</span>
                     </label>
                     <label class="finger">
                         <input type="radio" id="overStatus3" name="overStatus" autocomplete="off" 
                             value="Investigated (Closed)" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                                 == 'Investigated (Closed)') CHECKED @endif >
-                            <span class="mL5">Investigated By Oversight Agency</span>
+                            <span class="mL5">Investigated By Investigative Agency</span>
                     </label>
                     <label class="finger">
                         <input type="radio" id="overStatus4" name="overStatus" autocomplete="off" 
                             value="Declined To Investigate (Closed)" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
                                 == 'Declined To Investigate (Closed)') CHECKED @endif > 
-                            <span class="mL5">Oversight Agency Declined To Investigate</span>
+                            <span class="mL5">Investigative Agency Declined To Investigate</span>
                     </label>
                     <label class="finger">
                         <input type="radio" id="overStatus1" name="overStatus" autocomplete="off" 

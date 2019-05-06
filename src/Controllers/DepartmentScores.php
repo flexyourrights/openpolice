@@ -115,8 +115,7 @@ class DepartmentScores
             } elseif (isset($searchOpts["state"]) && trim($searchOpts["state"]) != '') {
                 $flts .= "->where('DeptAddressState', '" . trim($searchOpts["state"]) . "')";
             }
-            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptScoreOpenness', '>', 0)"
-                . "->where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
+            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
                 . "->orderBy('DeptScoreOpenness', 'desc')->get();";
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {
@@ -132,12 +131,12 @@ class DepartmentScores
                             ->orderBy('OverType', 'asc')
                             ->first();
                         if (isset($this->deptOvers[$dept->DeptID]->OverType) &&$this->deptOvers[$dept->DeptID]->OverType 
-                            == $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight')) {
+                            == $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight')) {
                             $this->deptScore[$dept->DeptID] = OPOversight::where('OverDeptID', $dept->DeptID)
                                 ->whereNotNull('OverAgncName')
                                 ->where('OverAgncName', 'NOT LIKE', '')
                                 ->where('OverType', 
-                                    $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                                    $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
                                 ->first();
                         }
                     }
@@ -148,25 +147,56 @@ class DepartmentScores
         return true;
     }
     
+    protected function recheckVerified()
+    {
+        $verifList = $verifDates = [];
+        $chk = OPZeditOversight::where(function ($query) {
+                $query->where('ZedOverOnlineResearch', '=', 1)
+                    ->orWhere('ZedOverMadeDeptCall', '=', 1)
+                    ->orWhere('ZedOverMadeIACall', '=', 1);
+            })
+            ->select('ZedOverZedDeptID', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $dept) {
+                if (isset($dept->ZedOverZedDeptID) && !in_array($dept->ZedOverZedDeptID, $verifList)) {
+                    $verifList[] = $dept->ZedOverZedDeptID;
+                    $verifDates[$dept->ZedOverZedDeptID] = $dept->created_at;
+                }
+            }
+            DB::table('OP_Departments')
+                ->update([ 'DeptVerified' => NULL ]);
+            foreach ($verifList as $i => $deptID) {
+                if (isset($verifDates[$deptID])) {
+                    $dept = OPDepartments::find($deptID);
+                    if ($dept && isset($dept->DeptID)) {
+                        $dept->DeptVerified = date("Y-m-d H:i:s", strtotime($verifDates[$deptID]));
+                        $dept->save();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
     public function recalcAllDepts()
     {
+        if ($GLOBALS["SL"]->REQ->has('refresh')) {
+            $this->recheckVerified();
+        }
+        // Recalculate all verified departments' scores
         $this->loadAllDepts();
         if ($this->scoreDepts->isNotEmpty()) {
             foreach ($this->scoreDepts as $i => $dept) {
-                $lastUpdate = OPZeditDepartments::where('ZedDeptDeptID', $dept->DeptID)
-                    ->orderBy('created_at', 'desc')
-                    ->first();
-                if ($lastUpdate && isset($lastUpdate->created_at)) {
-                    $this->scoreDepts[$i]->update([ "DeptVerified" => $lastUpdate->created_at ]);
-                }
                 if ($this->deptOvers[$dept->DeptID]) {
-                    $this->stats["count"]++;
                     $this->scoreDepts[$i]->DeptScoreOpenness = 0;
                     foreach ($this->vals as $type => $specs) {
                         $score = $this->checkRecFld($specs, $dept->DeptID);
                         if ($score != 0) {
                             $this->scoreDepts[$i]->DeptScoreOpenness += $score;
                             $this->stats[$type]++;
+                            $this->stats["count"]++;
                         }
                     }
                     $this->scoreDepts[$i]->save();
@@ -241,16 +271,16 @@ class DepartmentScores
             $d = [ "id" => $deptID ];
             $d["deptRow"] = OPDepartments::find($deptID);
             $d["iaRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
                 ->first();
             $d["civRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
                 ->first();
             if (!isset($d["iaRow"]) || !$d["iaRow"]) {
                 $d["iaRow"] = new OPOversight;
                 $d["iaRow"]->OverDeptID = $deptID;
                 if ($d["deptRow"] && isset($d["deptRow"]->DeptName)) {
-                    $d["iaRow"]->OverType = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
+                    $d["iaRow"]->OverType = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs');
                     $d["iaRow"]->OverAgncName = $d["deptRow"]->DeptName;
                     $d["iaRow"]->OverAddress = $d["deptRow"]->DeptAddress;
                     $d["iaRow"]->OverAddress2 = $d["deptRow"]->DeptAddress2;

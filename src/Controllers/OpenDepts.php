@@ -608,7 +608,7 @@ class OpenDepts extends OpenListing
                 } else {
                     foreach ($overs as $i => $ovr) {
                         if ($ovr && isset($ovr->OverType) && $ovr->OverType 
-                            == $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight')) {
+                            == $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight')) {
                             $this->v["currOverRow"] = $ovr;
                         }
                     }
@@ -646,7 +646,7 @@ class OpenDepts extends OpenListing
     
     protected function overWhichDefID($which = 'IA')
     {
-        return $GLOBALS["SL"]->def->getID('Oversight Agency Types', $this->overWhichEng($which));
+        return $GLOBALS["SL"]->def->getID('Investigative Agency Types', $this->overWhichEng($which));
     }
     
     protected function getOverRow($which = 'IA')

@@ -298,7 +298,7 @@ class OpenReportTools extends OpenReport
             switch ($this->sessData->dataSets["Complaints"][0]->ComStatus) {
                 case $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight'):
                     if ($isOverCompatible) {
-                        $this->v["emailID"] = 12; // Send to oversight agency
+                        $this->v["emailID"] = 12; // Send to investigative agency
                     } else {
                         $this->v["emailID"] = 9; // How to manually submit
                     }
@@ -310,7 +310,7 @@ class OpenReportTools extends OpenReport
                         ->where('EmailedEmailID', 7)
                         ->first();
                     if (!$chk || !isset($chk->created_at)) {
-                        $this->v["emailID"] = 7; // Sent to oversight agency
+                        $this->v["emailID"] = 7; // Sent to investigative agency
                     }
                     break;
             }

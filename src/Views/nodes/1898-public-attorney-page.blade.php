@@ -55,7 +55,7 @@
         </h3>
         <p>
         @if (isset($dat["Partners"][0]->PartBio))
-            {!! str_replace("\n", "</p><p>", $dat["Partners"][0]->PartBio) !!}
+            {!! str_replace('\r\n', "</p><p>", str_replace("\n", "</p><p>", $dat["Partners"][0]->PartBio)) !!}
         @endif
         </p>
         @if (isset($dat["Partners"][0]->PartBioUrl))

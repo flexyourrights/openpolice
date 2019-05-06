@@ -9,18 +9,26 @@ class OpenDevelopment extends OpenReportTools
     {
         $docuNav = [
             [
-                'Getting Started...', 
+                'About the Web App', 
                 [
-                    ['/how-to-install-open-police-complaints-with-docker', 'How To Install OPC with Docker']
+                    ['/web-app-workflows', 'Web App Workflows']
                 ]
-            ] /* ,
-            [
-                'Open Police Codebase Orientation...',
+            ], [
+                'Getting Started', 
                 [
-                    ['/package-files-folders-classes', 'Package Files, Folders, and Classes'],
-                    ['/developer-work-flows', 'Developer Work Flows']
+                    ['/how-to-install-open-police-complaints-with-docker', 'Install Copy of OPC with Docker', [
+                        ['#quick',     'Install Commands'],
+                        ['#video',     'Video'],
+                        ['#reference', 'Reference']
+                        ] ],
+                    ['/web-app-technical-specs', 'General Technical Background on App']
                 ]
-            ] */
+            ], [
+                'Open Police Codebase Orientation',
+                [
+                    ['https://survloop.org/package-files-folders-classes', 'Package Files, Folders, and Classes']
+                ]
+            ]
         ];
         return view('vendor.openpolice.inc-documentation-navigation', [
             "docuNav"  => $docuNav,

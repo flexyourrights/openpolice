@@ -419,7 +419,7 @@ class OpenPoliceUtils extends TreeSurvForm
         return [];
     }
     
-    // if oversight agency's email address doesn't have a User record, create one to link with tokens
+    // if investigative agency's email address doesn't have a User record, create one to link with tokens
     protected function chkDeptUsers()
     {
         if (isset($this->sessData->dataSets["LinksComplaintDept"]) 
@@ -1429,13 +1429,13 @@ class OpenPoliceUtils extends TreeSurvForm
                 'OverOfficialFormNotReq', 'OverOfficialAnon', 'OverWaySubNotary'
                 ];
             $ovrs = OPOversight::where('OverType', 
-                    $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                    $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
                 ->get();
             if ($ovrs->isNotEmpty()) {
                 foreach ($ovrs as $ovr) {
                     $ia = OPOversight::where('OverDeptID', $ovr->OverDeptID)
                         ->where('OverType', 
-                            $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                            $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
                         ->first();
                     if ($ia) {
                         foreach ($flds as $fld) {

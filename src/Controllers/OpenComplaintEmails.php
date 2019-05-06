@@ -89,7 +89,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
                 $this->loadDeptStuff($deptID);
             }
         }
-        if (strpos($emailBody, '[{ Complaint Oversight Agency }]') !== false) {
+        if (strpos($emailBody, '[{ Complaint Investigative Agency }]') !== false) {
             if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
                 $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
                 if (isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr])) {
@@ -98,7 +98,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
                     $forDept = (($overName != $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) 
                         ? ' (for the ' . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName . ')' 
                         : (($wchOvr == 'iaRow') ? ' Internal Affairs' : ''));
-                    $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Oversight Agency }]', $emailBody);
+                    $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Investigative Agency }]', $emailBody);
                     $emailBody = $splits[0] . $overName . $forDept;
                     if ($wchOvr == 'iaRow') $overName = 'Internal Affairs';
                     for ($i = 1; $i < sizeof($splits); $i++) $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
@@ -125,7 +125,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
             '[{ Complaint Police Department URL }]', 
             '[{ Complaint Police Department URL Link }]', 
             '[{ Police Department State Abbr }]',
-            '[{ Dear Primary Oversight Agency }]', 
+            '[{ Dear Primary Investigative Agency }]', 
             '[{ Complaint Investigability Score & Description }]', 
             '[{ Complaint Allegation List }]', 
             '[{ Complaint Allegation List Lower Bold }]', 
@@ -224,7 +224,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
                         }
                         break;
-                    case '[{ Dear Primary Oversight Agency }]':
+                    case '[{ Dear Primary Investigative Agency }]':
                         $swap = 'To Whom It May Concern,';
                         break;
                     case '[{ Complaint Officers Reference }]':
@@ -371,7 +371,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
         $deptID = -3;
         $overRow = OPOversight::where('OverEmail', $user->email)->first();
         if ($overRow && isset($overRow->OverDeptID)) $deptID = $overRow->OverDeptID;
-        $emailRow = SLEmails::where('EmailName', '21. Fresh MFA to Oversight Agency')->first();
+        $emailRow = SLEmails::where('EmailName', '21. Fresh MFA to Investigative Agency')->first();
         if ($emailRow && isset($emailRow->EmailBody)) {
             $body = $this->sendEmailBlurbsCustom($emailRow->EmailBody, $deptID);
             $subject = $this->sendEmailBlurbsCustom($emailRow->EmailSubject, $deptID);
@@ -402,16 +402,16 @@ class OpenComplaintEmails extends OpenPoliceUtils
                         $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
                         $this->v["comDepts"][$cnt]["deptRow"] = $deptRow;
                         $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                            ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs'))
+                            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
                             ->first();
                         $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                            ->where('OverType', $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Civilian Oversight'))
+                            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
                             ->first();
                         if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
                             $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
                             $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
                             $this->v["comDepts"][$cnt]["iaRow"]->OverType
-                                = $GLOBALS["SL"]->def->getID('Oversight Agency Types', 'Internal Affairs');
+                                = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs');
                             $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
                                 = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
                             $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
