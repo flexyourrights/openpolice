@@ -130,7 +130,7 @@ class DepartmentScores
                             ->where('OverAgncName', 'NOT LIKE', '')
                             ->orderBy('OverType', 'asc')
                             ->first();
-                        if (isset($this->deptOvers[$dept->DeptID]->OverType) &&$this->deptOvers[$dept->DeptID]->OverType 
+                        if (isset($this->deptOvers[$dept->DeptID]->OverType) && $this->deptOvers[$dept->DeptID]->OverType 
                             == $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight')) {
                             $this->deptScore[$dept->DeptID] = OPOversight::where('OverDeptID', $dept->DeptID)
                                 ->whereNotNull('OverAgncName')
@@ -149,20 +149,37 @@ class DepartmentScores
     
     protected function recheckVerified()
     {
-        $verifList = $verifDates = [];
+        $verifList = $verifDates = $verifCnt = [];
         $chk = OPZeditOversight::where(function ($query) {
-                $query->where('ZedOverOnlineResearch', '=', 1)
-                    ->orWhere('ZedOverMadeDeptCall', '=', 1)
-                    ->orWhere('ZedOverMadeIACall', '=', 1);
+                $query->where('ZedOverOnlineResearch', 1)
+                    ->orWhere('ZedOverMadeDeptCall', 1)
+                    ->orWhere('ZedOverMadeIACall', 1);
             })
-            ->select('ZedOverZedDeptID', 'created_at')
+            ->select('ZedOverOverDeptID', 'ZedOverOnlineResearch', 'ZedOverMadeDeptCall', 'ZedOverMadeIACall', 'created_at')
             ->orderBy('created_at', 'desc')
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $dept) {
-                if (isset($dept->ZedOverZedDeptID) && !in_array($dept->ZedOverZedDeptID, $verifList)) {
-                    $verifList[] = $dept->ZedOverZedDeptID;
-                    $verifDates[$dept->ZedOverZedDeptID] = $dept->created_at;
+                if (isset($dept->ZedOverOverDeptID)) {
+                    $deptID = $dept->ZedOverOverDeptID;
+                    if (!isset($verifCnt[$deptID])) {
+                        $verifCnt[$deptID] = 0;
+                    }
+                    if (isset($dept->ZedOverOnlineResearch) && intVal($dept->ZedOverOnlineResearch) == 1) {
+                        $verifCnt[$deptID]++;
+                    }
+                    if (isset($dept->ZedOverMadeDeptCall) && intVal($dept->ZedOverMadeDeptCall) == 1) {
+                        $verifCnt[$deptID]++;
+                    }
+                    if (isset($dept->ZedOverMadeIACall) && intVal($dept->ZedOverMadeIACall) == 1) {
+                        $verifCnt[$deptID]++;
+                    }
+                    if (!isset($verifDates[$deptID])) {
+                        $verifDates[$deptID] = $dept->created_at;
+                    }
+                    if ($verifCnt[$deptID] > 0 && !in_array($deptID, $verifList)) {
+                        $verifList[] = $deptID;
+                    }
                 }
             }
             DB::table('OP_Departments')
@@ -196,11 +213,11 @@ class DepartmentScores
                         if ($score != 0) {
                             $this->scoreDepts[$i]->DeptScoreOpenness += $score;
                             $this->stats[$type]++;
-                            $this->stats["count"]++;
                         }
                     }
                     $this->scoreDepts[$i]->save();
                     $this->stats["score"] += $this->scoreDepts[$i]->DeptScoreOpenness;
+                    $this->stats["count"]++;
                 }
             }
             if ($this->stats["count"] > 0) {
@@ -240,9 +257,14 @@ class DepartmentScores
         $datOut = $datTmp = [];
         foreach ($this->chartFlds as $fld) {
             $perc = 100;
-            if ($this->stats['count'] > 0) $perc = round(100*$this->stats[$fld[1]]/$this->stats['count']);
-            if ($fld[1] == 'Notary') $datTmp[] = [ strip_tags($fld[3]), 100-$perc, $fld[2]];
-            else $datTmp[] = [ strip_tags($fld[3]), $perc, $fld[2] ];
+            if ($this->stats['count'] > 0) {
+                $perc = round(100*$this->stats[$fld[1]]/$this->stats['count']);
+            }
+            if ($fld[1] == 'Notary') {
+                $datTmp[] = [ strip_tags($fld[3]), 100-$perc, $fld[2]];
+            } else {
+                $datTmp[] = [ strip_tags($fld[3]), $perc, $fld[2] ];
+            }
         }
         $done = [];
         for ($i = 0; $i < sizeof($datTmp); $i++) {
@@ -348,7 +370,9 @@ class DepartmentScores
     
     public function printMapScoreDesc($deptID = 0)
     {
-        if (!isset($GLOBALS["SL"]->x["depts"]) || !isset($GLOBALS["SL"]->x["depts"][$deptID])) return '';
+        if (!isset($GLOBALS["SL"]->x["depts"]) || !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+            return '';
+        }
         return view('vendor.openpolice.dept-kml-desc', [ "dept" => $GLOBALS["SL"]->x["depts"][$deptID] ])->render();
     }
     
