@@ -152,8 +152,7 @@
                     <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d[$d["whichOver"]]->OverPhoneWork }}</p>
                 @endif
                 
-                @if (isset($d["iaRow"]->OverWaySubOnline) && intVal($d["iaRow"]->OverWaySubOnline) == 1
-                    && isset($d["iaRow"]->OverComplaintWebForm) && trim($d["iaRow"]->OverComplaintWebForm) != '')
+                @if (isset($d["iaRow"]->OverComplaintWebForm) && trim($d["iaRow"]->OverComplaintWebForm) != '')
                     <p>You can submit your complaint through this investigative agency's online complaint form. 
                     (TIP: Drop in a link to your OPC complaint too!)<br />
                     {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintWebForm, false) !!}</a></p>
@@ -162,8 +161,14 @@
                     && isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '')
                     <p>You can submit your complaint by emailing this investigative agency. 
                     (We recommend you include a link to your OPC complaint in your email.)<br />
-                    <a href="mailto:{{ $d[$d['whichOver']]->OverEmail }}">{{ 
-                    $d[$d["whichOver"]]->OverEmail }}</a></p>
+                    @if (!isset($d[$d['whichOver']]->OverKeepEmailPrivate) || intVal($d[$d['whichOver']]->OverKeepEmailPrivate) == 0)
+                        <a href="mailto:{{ $d[$d['whichOver']]->OverEmail }}">{{ 
+                            $d[$d["whichOver"]]->OverEmail }}</a></p>
+                    @endif
+                @elseif (isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != ''
+                    && (!isset($d[$d['whichOver']]->OverKeepEmailPrivate) || intVal($d[$d['whichOver']]->OverKeepEmailPrivate) == 0))
+                    <p><a href="mailto:{{ $d[$d['whichOver']]->OverEmail }}">{{ 
+                            $d[$d["whichOver"]]->OverEmail }}</a></p>
                 @endif
                 @if (isset($d["iaRow"]->OverComplaintPDF) && trim($d["iaRow"]->OverComplaintPDF) != '')
                     <p>This investigative agency has a PDF form you can print 

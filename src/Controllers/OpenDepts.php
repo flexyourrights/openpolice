@@ -291,6 +291,11 @@ class OpenDepts extends OpenListing
                 ((in_array('PaperMail', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
             $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubPaperInPerson', 'update', 
                 ((in_array('PaperInPerson', $GLOBALS["SL"]->REQ->n1285fld) ) ? 1 : 0));
+        } else {
+            $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubEmail', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubVerbalPhone', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubPaperMail', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubPaperInPerson', 'update', 0);
         }
         return false;
     }
@@ -308,6 +313,11 @@ class OpenDepts extends OpenListing
             $this->sessData->currSessData($nID, 'Oversight', 'OverSubmitDeadline', 'update', 
                 ((in_array('TimeLimit', $GLOBALS["SL"]->REQ->n1287fld) ) 
                     ? (($GLOBALS["SL"]->REQ->has('n1288fld')) ? $GLOBALS["SL"]->REQ->n1288fld : 0) : 0));
+        } else {
+            $this->sessData->currSessData($nID, 'Oversight', 'OverOfficialFormNotReq', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverOfficialAnon', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverWaySubNotary', 'update', 0);
+            $this->sessData->currSessData($nID, 'Oversight', 'OverSubmitDeadline', 'update', 0);
         }
         return false;
     }

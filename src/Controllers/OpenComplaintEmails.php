@@ -92,16 +92,23 @@ class OpenComplaintEmails extends OpenPoliceUtils
         if (strpos($emailBody, '[{ Complaint Investigative Agency }]') !== false) {
             if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
                 $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr])) {
+                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
                     $overName = trim($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]->OverAgncName);
-                    if ($overName == '') $overName = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                    if ($overName == '') {
+                        $overName = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                    }
                     $forDept = (($overName != $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) 
                         ? ' (for the ' . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName . ')' 
                         : (($wchOvr == 'iaRow') ? ' Internal Affairs' : ''));
                     $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Investigative Agency }]', $emailBody);
                     $emailBody = $splits[0] . $overName . $forDept;
-                    if ($wchOvr == 'iaRow') $overName = 'Internal Affairs';
-                    for ($i = 1; $i < sizeof($splits); $i++) $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
+                    if ($wchOvr == 'iaRow') {
+                        $overName = 'Internal Affairs';
+                    }
+                    for ($i = 1; $i < sizeof($splits); $i++) {
+                        $emailBody .= (($i > 1) ? $overName : '') . $splits[$i];
+                    }
                 }
             }
         }
@@ -204,23 +211,27 @@ class OpenComplaintEmails extends OpenPoliceUtils
                         $swap = $this->v["user"]->email;
                         break;
                     case '[{ Complaint Police Department }]':
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                         }
                         break;
                     case '[{ Complaint Police Department URL }]':
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug)) {
                             $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/dept/' 
                                 . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug);
                         }
                         break;
                     case '[{ Complaint Police Department URL Link }]':
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                         }
                         break;
                     case '[{ Police Department State Abbr }]':
-                        if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState)) {
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
                         }
                         break;

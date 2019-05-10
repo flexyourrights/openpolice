@@ -97,6 +97,7 @@
     @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
         $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
             <a href="/switch/1/{{ $complaint->ComID }}" class="btn btn-lg btn-primary btn-block mB10 taL" id="ownBtnCont"
+                onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"
                 ><i class="fa fa-pencil mR5"></i> Continue</a>
             <a href="javascript:;" class="btn btn-lg btn-danger w100 taL" id="ownBtnDel"
                 onClick="if (confirm('{!! $warning !!}')) { window.location='/delSess/1/{{ $complaint->ComID }}'; }"
@@ -105,7 +106,8 @@
         @if (!in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), 
             ['Hold', 'New', 'Reviewed']))
             <div class="mB10"><a id="hidivBtnUpdateStatus" class="btn btn-lg btn-primary btn-block taL hidivBtn"
-                style="color: #FFF;" href="javascript:;"><i class="fa fa-refresh mR5" aria-hidden="true"></i> 
+                onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"
+                href="javascript:;"><i class="fa fa-refresh mR5" aria-hidden="true"></i> 
                 Update Complaint Status</a></div>
             <div id="hidivUpdateStatus" class="mTn10 mB20 disNon">
                 <form method="post" name="accessCode" action="?ownerUpdate=1">
@@ -153,7 +155,8 @@
                     <small class="slGrey mTn5">
                     This is for administrators of Open Police Complaints. We will not make it public.</small>
                 </div>
-                <center><input type="submit" value="Save Status Changes" class="btn btn-lg btn-primary"></center>
+                <center><input type="submit" value="Save Status Changes" class="btn btn-lg btn-primary"
+                    onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"></center>
                 </form>
                 <div class="pT10"><hr></div>
             </div>

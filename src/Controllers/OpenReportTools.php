@@ -183,6 +183,9 @@ class OpenReportTools extends OpenReport
                 if (in_array($GLOBALS["SL"]->REQ->revStatus, ['Hold: Go Gold', 'Hold: Not Sure'])) {
                     $this->sessData->dataSets["Complaints"][0]->ComStatus 
                         = $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold');
+                } elseif ($GLOBALS["SL"]->REQ->revStatus == 'Needs More Work') {
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus 
+                        = $GLOBALS["SL"]->def->getID('Complaint Status', 'Needs More Work');
                 } elseif (in_array($GLOBALS["SL"]->REQ->revStatus, [
                     'Pending Attorney: Needed', 'Pending Attorney: Hook-Up'])) {
                     $this->sessData->dataSets["Complaints"][0]->ComStatus 
@@ -198,7 +201,9 @@ class OpenReportTools extends OpenReport
             if ($GLOBALS["SL"]->REQ->has('revComplaintType')) {
                 $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
                     $GLOBALS["SL"]->REQ->revComplaintType);
-                if ($newTypeVal != 'Police Complaint') $newRev->ComRevStatus = $newTypeVal;
+                if ($newTypeVal != 'Police Complaint') {
+                    $newRev->ComRevStatus = $newTypeVal;
+                }
                 $this->sessData->dataSets["Complaints"][0]->ComType = $GLOBALS["SL"]->REQ->revComplaintType;
             }
             $newRev->save();
@@ -237,8 +242,8 @@ class OpenReportTools extends OpenReport
         $this->v["emailList"] = SLEmails::orderBy('EmailName', 'asc')
             ->orderBy('EmailType', 'asc')
             ->get();
-        $emails = SLEmailed::where('EmailedTree', 1)
-            ->where('EmailedRecID', $this->coreID)
+        $emails = SLEmailed::whereIn('EmailedTree', [1, 42])
+            ->where('EmailedRecID', $this->coreID) //corePublicID
             ->orderBy('created_at', 'asc')
             ->get();
         if ($emails->isNotEmpty()) {
@@ -246,11 +251,9 @@ class OpenReportTools extends OpenReport
                 if (!isset($allUserNames[$e->EmailedFromUser])) {
                     $allUserNames[$e->EmailedFromUser] = $this->printUserLnk($e->EmailedFromUser);
                 }
-                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">' 
-                    . $e->EmailedSubject . '</a> <i>to ' . substr($e->EmailedTo, 0, strpos($e->EmailedTo, '<'))  
-                    . '<span class="fPerc66">&lt; ' 
-                    . str_replace('>', '', substr($e->EmailedTo, 1+strpos($e->EmailedTo, '<'))) . ' &gt;</span></i>'
-                    . '<div id="hidFldEma' . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">' . $e->EmailedSubject 
+                    . '</a> <i><span class="fPerc66"> to ' . $e->EmailedTo . '</span></i><div id="hidFldEma' . $e->EmailedID 
+                    . '" class="disNon p10">' . $e->EmailedBody . '</div>';
                 $this->v["history"][] = [
                     "type" => 'Email', 
                     "date" => strtotime($e->created_at), 
@@ -305,7 +308,7 @@ class OpenReportTools extends OpenReport
                     break;
                 case $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'):
                 case $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'):
-                    $chk = SLEmailed::where('EmailedTree', 1)
+                    $chk = SLEmailed::whereIn('EmailedTree', [1, 42])
                         ->where('EmailedRecID', $this->coreID)
                         ->where('EmailedEmailID', 7)
                         ->first();
@@ -337,14 +340,16 @@ class OpenReportTools extends OpenReport
             && trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . '')) != '') {
             $userToID = -3;
             $chk = User::where('email', trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . '')))->first();
-            if ($chk && isset($chk->id)) $userToID = $chk->id;
+            if ($chk && isset($chk->id)) {
+                $userToID = $chk->id;
+            }
             $coreID = ((isset($this->coreID)) ? $this->coreID : -3);
             $emaTo = trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . ''));
             if ($emaTo == '--CUSTOM--') {
                 $emaTo = trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . 'CustEmail'));
                 //trim($GLOBALS["SL"]->REQ->get('emailTo' . $emaInd . 'CustName'))
             }
-            $this->sendNewEmailSimple(trim($GLOBALS["SL"]->REQ->get('emailBodyCust' . $emaInd . '')), 
+            $this->sendNewEmailFromCurrUser(trim($GLOBALS["SL"]->REQ->get('emailBodyCust' . $emaInd . '')), 
                 trim($GLOBALS["SL"]->REQ->get('emailSubj' . $emaInd . '')), $emaTo, $GLOBALS["SL"]->REQ->get('emailID'), 
                 $GLOBALS["SL"]->treeID, $coreID, $userToID);
             if (intVal($GLOBALS["SL"]->REQ->get('emailID')) == 12) {

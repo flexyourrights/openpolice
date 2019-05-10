@@ -4,31 +4,37 @@
 
 @elseif ($firstReview)
     
-    <div class="slCard mT10">
+    <div class="slCard mT10" style="background: #FFF;">
         <a id="hidivBtnComplaintTypes" class="hidivBtn pull-right" href="javascript:;"
             ><i class="fa fa-question-circle-o" aria-hidden="true"></i></a>
         <h2 class="mT0">Complaint #{{ $complaintRec->ComPublicID }}: What Type Of Submission Is This?</h2>
         <div class="row">
             <div class="col-md-6">
-                <a class="btn btn-lg btn-primary disBlo mT10 mB10" href="?firstReview=296" id="stfBtn1">
+                <a class="btn btn-lg btn-primary disBlo mT10 mB10" href="?firstReview=296" id="stfBtn1" style="color: #FFF;"
+                    onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';">
                     Police Complaint</a>
-                <a class="btn btn-lg btn-secondary disBlo mT10" href="?firstReview=297" id="stfBtn2">
+                <a class="btn btn-lg btn-secondary disBlo mT10" href="?firstReview=297" id="stfBtn2"
+                    onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';">
                     Not About Police</a>
             </div><div class="col-md-6">
                 <div class="row mB0 pB0">
                     <div class="col-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=298" id="stfBtn3">
-                        Abuse</a>
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=298" id="stfBtn3"
+                            onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';">
+                            Abuse</a>
                     </div><div class="col-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=299" id="stfBtn4">
-                        Spam</a>
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=299" id="stfBtn4"
+                            onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';">
+                            Spam</a>
                     </div><div class="col-4">
-                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=300" id="stfBtn5">
-                        Test</a>
+                        <a class="btn btn-lg btn-secondary disBlo mT10 mB10" href="?firstReview=300" id="stfBtn5"
+                            onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';">
+                            Test</a>
                     </div>
                 </div>
-                <a class="btn btn-lg btn-secondary disBlo" href="?firstReview=301" id="stfBtn6">
-                Not Sure</a>
+                <a class="btn btn-lg btn-secondary disBlo" href="?firstReview=301" id="stfBtn6"
+                    onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';">
+                    Not Sure</a>
             </div>
         </div>
         <div id="hidivComplaintTypes" class="disNon p20">
@@ -70,15 +76,6 @@
         </div>
     </div>
     <div class="mB20">&nbsp;</div>
-    <style> 
-    a#stfBtn1:link, a#stfBtn1:active, a#stfBtn1:visited
-    a#hidivBtnComplaintTypes:link, a#hidivBtnComplaintTypes:active, a#hidivBtnComplaintTypes:visited { color: #FFF; }
-    a#stfBtn1:hover, a#hidivBtnComplaintTypes:hover { color: #2b3493; }
-    a#stfBtn2:link, a#stfBtn2:active, a#stfBtn2:visited, a#stfBtn3:link, a#stfBtn3:active, a#stfBtn3:visited,
-    a#stfBtn4:link, a#stfBtn4:active, a#stfBtn4:visited, a#stfBtn5:link, a#stfBtn5:active, a#stfBtn5:visited,
-    a#stfBtn6:link, a#stfBtn6:active, a#stfBtn6:visited { color: #2b3493; }
-    a#stfBtn2:hover, a#stfBtn3:hover, a#stfBtn4:hover, a#stfBtn5:hover, a#stfBtn6:hover { color: #FFF; }
-    </style>
     
 @elseif (in_array($view, ['', 'history', 'update', 'emails', 'emailsType']))
 
@@ -87,7 +84,7 @@
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             
-            <div class="slCard nodeWrap">
+            <div class="slCard nodeWrap" style="background: #FFF;">
                 <form action="/complaint/read-{{ $complaintRec->ComPublicID }}?view=emails" method="post" 
                     onSubmit="return chkEmaForm();" >
                 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
@@ -158,6 +155,7 @@
                     @endif
                     
                     <div class="m20 taC"><input type="submit" class="btn btn-lg btn-xl btn-primary w66" id="stfBtn9"
+                        onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
                         value="Send Email"></div>
                     
                 </div>
@@ -178,7 +176,7 @@
         
         @else
             
-            <div class="slCard mB10">
+            <div class="slCard mB10" style="background: #FFF;">
                 <h2 class="mT0">Complaint #{{ $complaintRec->ComPublicID }}:&nbsp;&nbsp;&nbsp;History</h2>
                 {!! view('vendor.openpolice.nodes.1712-report-inc-history', [ "history" => $history ])->render() !!}
             </div>
@@ -188,17 +186,21 @@
         </div><div class="col-4">
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
-            <div class="slCard nodeWrap">
+            <div class="slCard nodeWrap" style="background: #FFF;">
                 <h2 class="mT0">History</h2>
                 {!! view('vendor.openpolice.nodes.1712-report-inc-history', [ "history" => $history ])->render() !!}
             </div>
         @endif
             
-            <div class="slCard nodeWrap">
-                @if ($firstRevDone) <h3 class="mBn10"><span class="txtDanger">Next, Update Complaint Status:</span></h3>
+            <div class="slCard nodeWrap" style="background: #FFF;">
+                @if ($firstRevDone) <h5 class="mBn10"><span class="txtDanger">Next, Update Complaint Status:</span></h5>
                 @else <a id="hidivBtnStatus" href="javascript:;" 
                     class="hidivBtn btn btn-lg @if ($firstRevDone) btn-primary @else btn-secondary @endif disBlo taL" 
-                    @if ($firstRevDone) style="color: #FFF;" @endif >
+                    @if ($firstRevDone) 
+                        onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
+                    @else
+                        onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';" style="color: #2b3493;"
+                    @endif >
                     <i class="fa fa-sign-in mR5" aria-hidden="true"></i> Update Complaint Status</a>
                 @endif
                 <div id="hidivStatus" class=" @if ($firstRevDone) disBlo @else disNon @endif ">
@@ -236,16 +238,18 @@
                     <textarea name="revNote" class="form-control form-control-lg" style="height: 70px;" ></textarea>
                     
                     <div class="w100 taC mT20">
-                        <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" 
+                        <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" style="color: #FFF;" 
+                            onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
                             onClick="document.comUpdate.submit();" >Save Status Update</a>
                     </div>
                     </form>
                 </div>
             </div>
             
-            <div class="slCard">
-                <a id="hidivBtnEmails" class="btn btn-lg btn-secondary hidivBtn disBlo taL" href="javascript:;">
-                    <i class="fa fa-envelope mR5" aria-hidden="true"></i> Send Emails
+            <div class="slCard" style="background: #FFF;">
+                <a id="hidivBtnEmails" class="btn btn-lg btn-secondary hidivBtn disBlo taL" href="javascript:;"
+                    style="color: #2b3493;" onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"
+                    ><i class="fa fa-envelope mR5" aria-hidden="true"></i> Send Emails
                 </a>
                 <div id="hidivEmails" class=" @if ($emailID > 0) disBlo @else disNon @endif ">
                     <div class="nFld">
@@ -261,7 +265,9 @@
                             @empty @endforelse
                         </select>
                     </div>
-                    <div class="mT20 taC"><a href="javascript:;" class="btn btn-lg btn-primary" id="stfBtn8"
+                    <div class="mT20 taC"><a href="javascript:;" class="btn btn-lg btn-primary" id="stfBtn8" 
+                        style="color: #fff;"
+                        onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
                         onClick="window.location='/complaint/read-{{ $complaintRec->ComPublicID 
                             }}?email='+document.getElementById('emailID').value+'#emailer';"
                         >Load Email Template</a>
@@ -272,13 +278,5 @@
     
         </div>
     </div>
-    <style>
-    a#hidivBtnStatus:link, a#hidivBtnStatus:active, a#hidivBtnStatus:visited,
-    a#hidivBtnEmails:link, a#hidivBtnEmails:active, a#hidivBtnEmails:visited { color: #2b3493; }
-    a#hidivBtnStatus:hover, a#hidivBtnEmails:hover { color: #FFF; }
-    a#stfBtn7:link, a#stfBtn7:active, a#stfBtn7:visited,
-    a#stfBtn8:link, a#stfBtn8:active, a#stfBtn8:visited { color: #FFF; }
-    a#stfBtn7:hover, a#stfBtn8:hover, a#stfBtn9:hover { color: #2b3493; }
-    </style>
         
 @endif

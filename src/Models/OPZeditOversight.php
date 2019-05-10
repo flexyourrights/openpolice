@@ -38,6 +38,7 @@ class OPZeditOversight extends Model
 		'ZedOverOverComplaintPDF', 
 		'ZedOverOverComplaintWebForm', 
 		'ZedOverOverEmail', 
+		'ZedOverOverKeepEmailPrivate', 
 		'ZedOverOverPhoneWork', 
 		'ZedOverOverAddress', 
 		'ZedOverOverAddress2', 

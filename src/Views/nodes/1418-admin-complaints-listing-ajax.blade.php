@@ -1,6 +1,6 @@
 /* resources/views/vendor/openpolice/nodes/1418-admin-complaints-listing-ajax.blade.php */
 
-$("#applyFilts").on('click', function(event) {
+$(".applyFilts").on('change', function(event) {
     var url = "/";
     if (document.getElementById("baseUrlID")) url = document.getElementById("baseUrlID").value;
     var params = new Array();

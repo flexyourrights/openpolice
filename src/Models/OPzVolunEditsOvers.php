@@ -41,6 +41,7 @@ class OPzVolunEditsOvers extends Model
         'EditOverComplaintPDF', 
         'EditOverComplaintWebForm', 
         'EditOverEmail', 
+        'EditOverKeepEmailPrivate', 
         'EditOverPhoneWork', 
         'EditOverAddress', 
         'EditOverAddress2', 

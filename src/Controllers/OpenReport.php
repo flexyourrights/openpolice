@@ -242,11 +242,15 @@ class OpenReport extends OpenDepts
     
     protected function getCivReportName($civID, $ind = 0, $type = 'Subject', $prsn = NULL)
     {
-        if (!isset($this->v["civNames"])) $this->v["civNames"] = [];
+        if (!isset($this->v["civNames"])) {
+            $this->v["civNames"] = [];
+        }
         if (!isset($this->v["civNames"][$civID]) || trim($this->v["civNames"][$civID]) == '') {
-            if (!$prsn) list($prsn, $phys) = $this->queuePeopleSubsets($civID);
+            if (!$prsn) {
+                list($prsn, $phys) = $this->queuePeopleSubsets($civID);
+            }
             $name = '';
-            if ($GLOBALS["SL"]->x["pageView"] != 'public') {
+            if ($this->canPrintFullReport()) {
                 if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
                     && (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
                     || $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306) ) {
@@ -259,15 +263,18 @@ class OpenReport extends OpenDepts
                         $name = trim($prsn->PrsnNickname);
                     } else {
                         $name = '<span style="color: #2b3493;" title="This complainant wanted to publicly provide '
-                            . 'their name.">' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameLast 
-                            . '</span>'; // ' . $prsn->PrsnNameMiddle . ' 
-                    }
+                            . 'their name.">' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameLast . '</span>';
+                    } // ' . $prsn->PrsnNameMiddle . '
                 }
             }
             $label = 'Complainant';
+            $civRow = $this->sessData->getRowById('Civilians', $civID);
             if ($this->sessData->dataSets["Civilians"][0]->CivID != $civID) {
-                if ($type == 'Subject') $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
-                else $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                if ($civRow && isset($civRow->CivRole) && $civRow->CivRole == 'Victim') {
+                    $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+                } else {
+                    $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                }
             } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Victim') {
                 $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
             } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Witness') {

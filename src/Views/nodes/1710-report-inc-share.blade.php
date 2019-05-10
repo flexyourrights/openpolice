@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1710-report-inc-share.blade.php -->
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-6 pB20">
         <h3 class="slBlueDark mT0 mB15">Read, Print, Download...</h3>
         <div id="readPrintLnks">
             <a class="noUnd" href="/complaint/read-{{ $pubID }}" 
@@ -13,7 +13,7 @@
                 Download Raw Complaint Data As XML File</a>
         </div>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 pB20">
     @if (isset($published) && $published && isset($GLOBALS["SL"]->x["pageView"]) 
         && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'full']))
         <h3 class="slBlueDark mT0 mB20">Share...</h3>

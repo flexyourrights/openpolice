@@ -305,7 +305,8 @@ class OpenPoliceUtils extends TreeSurvForm
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Submitted to Oversight'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Received by Oversight'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Declined To Investigate (Closed)'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)')
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
             ];
         } elseif ($coreTbl == 'Compliments') {
             return [
@@ -342,6 +343,20 @@ class OpenPoliceUtils extends TreeSurvForm
         return [];
     }
     
+    protected function complaintHasPublishedStatus()
+    {
+        if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, $this->getPublishedStatusList('Complaints'))) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    protected function canPrintFullReport()
+    {
+        return ($this->v["isAdmin"] || $this->v["isOwner"] || ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly') && $this->complaintHasPublishedStatus() == 1));
+    }
+    
     public function tblsInPackage()
     {
         if ($this->dbID == 1) {
@@ -368,7 +383,9 @@ class OpenPoliceUtils extends TreeSurvForm
             if (isset($this->sessData->dataSets["Civilians"]) 
                 && $this->v["uID"] == $this->sessData->dataSets["Civilians"][0]->CivUserID) {
                 //$this->v["isOwner"] = true;
-                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) $GLOBALS["SL"]->x["pageView"] = 'full';
+                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) {
+                    $GLOBALS["SL"]->x["pageView"] = 'full';
+                }
             } elseif ($this->v["user"]->hasRole('administrator|staff')) {
                 $GLOBALS["SL"]->x["pageView"] = 'full';
             } elseif ($this->v["user"]->hasRole('partner') && $this->v["user"]->hasRole('oversight')) {
@@ -775,9 +792,8 @@ class OpenPoliceUtils extends TreeSurvForm
                             if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->AlleID])) {
                                 $ret .= ' <span class="mL20 slGrey">' . $allegOffs[$alleg->AlleID] . '</span>';
                             }
-                            $ret .= '</div>' 
-                            . (($showWhy) ? '<div class="slGrey mTn10 pL20">' . $alleg->AlleDescription . '</div>' : '')
-                            . '<div class="p5"></div>';
+                            $ret .= '</div>' . (($showWhy) ? '<div class="slGrey mTn10 pL20">' 
+                                . $alleg->AlleDescription . '</div>' : '') . '<div class="p5"></div>';
                         }
                     }
                 }

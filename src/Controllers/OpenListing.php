@@ -133,6 +133,7 @@ class OpenListing extends OpenAjax
                     . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') . "'";
                 break;
         }
+        $qman .= " ORDER BY c.`ComRecordSubmitted` DESC";
         $this->v["complaints"] = $this->v["comInfo"] = $this->v["lastNodes"] = $this->v["ajaxRefreshs"] = [];
         $compls = DB::select( DB::raw($qman) );
         if ($compls && sizeof($compls) > 0) {

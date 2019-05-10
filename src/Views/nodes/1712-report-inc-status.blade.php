@@ -2,6 +2,9 @@
 <option value="Hold: Go Gold" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Hold: Go Gold') SELECTED @endif 
     >Invite To Go Gold (On Hold)</option>
+<option value="Needs More Work" @if (!$firstReview && isset($lastReview->ComRevStatus) 
+    && trim($lastReview->ComRevStatus) == 'Needs More Work') SELECTED @endif 
+    >Needs More Work (On Hold)</option>
 <option value="Pending Attorney: Needed" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Pending Attorney: Needed') SELECTED @endif 
     >Defense Attorney Needed (Un-Publish, On Hold)</option>

@@ -154,16 +154,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
                     != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
                 return 0;
             } // else Full Transparency, but check status first...
-            if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, [
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Declined To Investigate (Closed)'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Investigated (Closed)'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
-                    ])) {
-                return 1;
-            }
-            return 0;
+            return $this->complaintHasPublishedStatus();
         } elseif ($condition == '#PrintAnonOnly') {
             if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
                 && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
@@ -175,6 +166,11 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)
                 && $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
                     != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+                return 1;
+            }
+            return 0;
+        } elseif ($condition == '#PrintFullReport') {
+            if ($this->canPrintFullReport()) {
                 return 1;
             }
             return 0;

@@ -32,6 +32,7 @@ class OPOversight extends Model
 		'OverComplaintPDF', 
 		'OverComplaintWebForm', 
 		'OverEmail', 
+		'OverKeepEmailPrivate', 
 		'OverPhoneWork', 
 		'OverAddress', 
 		'OverAddress2', 
