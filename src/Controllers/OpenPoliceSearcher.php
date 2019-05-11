@@ -9,8 +9,8 @@
   */
 namespace OpenPolice\Controllers;
 
-use App\Models\OPComplaints;
-use App\Models\OPLinksComplaintDept;
+use Storage\App\Models\OPComplaints;
+use Storage\App\Models\OPLinksComplaintDept;
 use SurvLoop\Controllers\Searcher;
 
 class OpenPoliceSearcher extends Searcher

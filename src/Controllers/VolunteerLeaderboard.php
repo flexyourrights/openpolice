@@ -3,9 +3,9 @@ namespace OpenPolice\Controllers;
 
 use DB;
 
-use App\Models\User;
+use Storage\App\Models\User;
 
-use App\Models\OPzVolunUserInfo;
+use Storage\App\Models\OPzVolunUserInfo;
 
 class VolunteerLeaderboard
 {

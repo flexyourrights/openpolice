@@ -3,8 +3,8 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use App\Models\OPAllegations;
-use App\Models\OPAllegSilver;
+use Storage\App\Models\OPAllegations;
+use Storage\App\Models\OPAllegSilver;
 use OpenPolice\Controllers\OpenComplaintEmails;
 
 class OpenComplaintPrints extends OpenComplaintEmails
@@ -167,7 +167,6 @@ class OpenComplaintPrints extends OpenComplaintEmails
     
     protected function getLoopItemLabelCustom($loop, $itemRow = null, $itemInd = -3)
     {
-//echo '<br /><br /><br />getLoopItemLabelCustom(' . $loop . '<br /><pre>'; print_r($itemRow); echo '</pre>';
         //if ($itemIndex < 0) return '';
         if (!$itemRow) {
             return '';

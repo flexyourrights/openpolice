@@ -41,7 +41,7 @@
     <p>Please understand that we do not provide direct legal services. 
     But the work you put into your complaint could help your lawyer. So please save and print your complaint.</p>
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'OK to Submit to Oversight')
-    @if (sizeof($oversights) > 0 && isset($oversights[0]->OverEmail) && trim($oversights[0]->OverEmail) != ''
+    @if (isset($oversights) && sizeof($oversights) > 0 && isset($oversights[0]->OverEmail) && trim($oversights[0]->OverEmail) != ''
         && isset($oversights[0]->OverWaySubEmail) && intVal($oversights[0]->OverWaySubEmail) == 1)
         <p><b>Congratulations, {{ $user->name }}!</b></p>
         <p>Within the next week, we will review your complaint. 
@@ -106,7 +106,7 @@
         @if (!in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), 
             ['Hold', 'New', 'Reviewed']))
             <div class="mB10"><a id="hidivBtnUpdateStatus" class="btn btn-lg btn-primary btn-block taL hidivBtn"
-                onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"
+                onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
                 href="javascript:;"><i class="fa fa-refresh mR5" aria-hidden="true"></i> 
                 Update Complaint Status</a></div>
             <div id="hidivUpdateStatus" class="mTn10 mB20 disNon">

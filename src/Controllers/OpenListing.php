@@ -2,10 +2,10 @@
 namespace OpenPolice\Controllers;
 
 use DB;
-use App\Models\OPComplaints;
-use App\Models\OPCompliments;
-use App\Models\SLNode;
-use App\Models\OPTesterBeta;
+use Storage\App\Models\OPComplaints;
+use Storage\App\Models\OPCompliments;
+use Storage\App\Models\SLNode;
+use Storage\App\Models\OPTesterBeta;
 use OpenPolice\Controllers\OpenAjax;
 
 class OpenListing extends OpenAjax
@@ -57,7 +57,7 @@ class OpenListing extends OpenAjax
         }
         $this->v["fltStatus"] = (($GLOBALS["SL"]->REQ->has('fltStatus')) ? $GLOBALS["SL"]->REQ->fltStatus : 0);
         $sort = "date";
-        $qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, i.* 
+        $qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, p.`PrsnEmail`, i.* 
             FROM `OP_Complaints` c 
             JOIN `OP_Incidents` i ON c.`ComIncidentID` LIKE i.`IncID` 
             LEFT OUTER JOIN `OP_Civilians` civ ON c.`ComID` LIKE civ.`CivComplaintID` 

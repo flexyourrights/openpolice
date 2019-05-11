@@ -3,11 +3,11 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use App\Models\OPDepartments;
-use App\Models\OPZeditDepartments;
-use App\Models\OPZeditOversight;
-use App\Models\OPzVolunTmp;
-use App\Models\OPOversight;
+use Storage\App\Models\OPDepartments;
+use Storage\App\Models\OPZeditDepartments;
+use Storage\App\Models\OPZeditOversight;
+use Storage\App\Models\OPzVolunTmp;
+use Storage\App\Models\OPOversight;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenDepts;
 
@@ -69,7 +69,7 @@ class OpenReport extends OpenDepts
             if (!in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf'])) {
                 $previewMax = 1800;
                 if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
-                    $brkPos = strpos($this->sessData->dataSets["Complaints"][0]->ComSummary, ' ', $previewMax);
+                    $brkPos = strpos($this->sessData->dataSets["Complaints"][0]->ComSummary, ' ', $previewMax-200);
                     if ($brkPos > 0) {
                         $ret = '<div id="hidivStoryLess" class="' 
                             . (($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more')
@@ -109,7 +109,9 @@ class OpenReport extends OpenDepts
     
     protected function chkGetReportDept($overLnkID)
     {
-        if (!isset($this->v["reportDepts"])) $this->v["reportDepts"] = [];
+        if (!isset($this->v["reportDepts"])) {
+            $this->v["reportDepts"] = [];
+        }
         $overLnk = $this->sessData->getRowById('LinksComplaintOversight', $overLnkID);
         if ($overLnk && isset($overLnk->LnkComOverDeptID) && intVal($overLnk->LnkComOverDeptID) > 0
             && !in_array($overLnk->LnkComOverDeptID, $this->v["reportDepts"])) {
@@ -142,7 +144,7 @@ class OpenReport extends OpenDepts
             $ret = 'Anonymous';
         } elseif (isset($this->sessData->dataSets["Civilians"]) 
             && isset($this->sessData->dataSets["Civilians"][0]->CivID) 
-            && ($GLOBALS["SL"]->x["pageView"] == 'full'
+            && (in_array($GLOBALS["SL"]->x["pageView"], ['full', 'full-pdf'])
             || ($this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
                 && $this->sessData->dataSets['Complaints'][0]->ComPrivacy 
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')))) {
@@ -168,9 +170,9 @@ class OpenReport extends OpenDepts
             if ($this->sessData->dataSets["Incidents"][0]->IncTimeStart !== null) {
                 $timeStart = date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
                 if ($timeStart != '' && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
-                    $date .= ' at ' . $timeStart;
+                    $date .= ' <nobr>at ' . $timeStart . '</nobr>';
                     if ($timeEnd != '' && $timeStart != $timeEnd) {
-                        $date .= ' until ' . $timeEnd;
+                        $date .= ' <nobr>until ' . $timeEnd . '</nobr>';
                     }
                 }
             }

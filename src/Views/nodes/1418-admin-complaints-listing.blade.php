@@ -51,16 +51,15 @@
 
     <div class="w100 p15">
         <div class="row slGrey">
-            <div class="col-sm-4 pB5">ID# Status @if ($listView == 'incomplete') - Last Page @endif</div>
+            <div class="col-sm-3 pB5">ID# Status @if ($listView == 'incomplete') - Last Page @endif</div>
+            <div class="col-sm-3 pB5">Complainant</div>
             <div class="col-sm-2 pB5">City</div>
-            <div class="col-sm-2 pB5">Complainant</div>
-            <div class="col-sm-2 pB5">Privacy, Level</div>
             <div class="col-sm-1 pB5">Incident</div>
-            <div class="col-sm-1"><nobr>Submitted</nobr></div>
+            <div class="col-sm-1 pB5"><nobr>Submitted</nobr></div>
+            <div class="col-sm-2">Privacy, Level</div>
         </div>
-        <div class="row slGrey">
-            <div class="col-md-4 pT5">Allegation(s)</div>
-            <div class="col-md-8 pT5">Narrative</div>
+        <div class="slGrey">
+            Allegation(s), Narrative
         </div>
     </div>
     
@@ -69,7 +68,7 @@
     <?php $cnt++; ?>
     <a @if ($com->ComPublicID > 0) href="/complaint/read-{{ $com->ComPublicID }}"
         @else href="/complaint/readi-{{ $com->ComID }}" @endif class="noUnd" style="color: #333;" >
-    <div class="w100 p15 mB5 round5 @if ($cnt%2 == 1) row2 @endif " style="border-left: 2px 
+    <div class="w100 p15 mB5 @if ($cnt%2 == 1) row2 @endif " style="border-left: 2px 
         @if (in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
             ['New', 'Hold']))
             #EC2327
@@ -84,9 +83,9 @@
             #006D36
         @else #888888 @endif solid;">
         <div class="row">
-            <div class="col-sm-4 pB5 clrLnk">
+            <div class="col-sm-3 pB5 clrLnk">
                 @if ($com->ComPublicID <= 0)
-                    #i{{ number_format($com->ComID) }}
+                    <b>#i{{ number_format($com->ComID) }}</b>
                     @if ($com->ComSubmissionProgress > 0 && isset($lastNodes[$com->ComSubmissionProgress]))
                         /{{ $lastNodes[$com->ComSubmissionProgress] }}
                     @endif
@@ -99,8 +98,21 @@
                     ({{ $GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) }})
                 @endif
             </div>
+            <div class="col-sm-3 pB5">
+                {{ $com->PrsnNameFirst }} {{ $com->PrsnNameLast }} 
+                <div class="slGrey fPerc66 mBn5">{{ $com->PrsnEmail }}</div>
+            </div>
             <div class="col-sm-2 pB5">{{ $com->IncAddressCity }}, {{ $com->IncAddressState }}</div>
-            <div class="col-sm-2 pB5">{{ $com->PrsnNameFirst }} {{ $com->PrsnNameLast }}</div>
+            <div class="col-sm-1 pB5">
+                @if (trim($com->IncTimeStart) != '')
+                    {{ date("n/j/y", strtotime($com->IncTimeStart)) }}
+                @endif
+            </div>
+            <div class="col-sm-1 pB5">
+                @if (isset($com->ComRecordSubmitted))
+                    {{ date("n/j/y", strtotime($com->ComRecordSubmitted)) }}
+                @endif
+            </div>
             <div class="col-sm-2 pB5">
                 @if ($com->ComPrivacy == 304) Open,
                 @elseif ($com->ComPrivacy == 305) No Names,
@@ -109,33 +121,17 @@
                 @endif
                 {{ $com->ComAwardMedallion }}
             </div>
-            <div class="col-sm-1 pB5">
-                @if (trim($com->IncTimeStart) != '')
-                    {{ date("n/j/y", strtotime($com->IncTimeStart)) }}
-                @endif
-            </div>
-            <div class="col-sm-1">
-                @if (isset($com->ComRecordSubmitted))
-                    {{ date("n/j/y", strtotime($com->ComRecordSubmitted)) }}
-                @endif
-            </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 pT5">
-                @if (isset($comInfo[$com->ComID]["depts"]) && trim($comInfo[$com->ComID]["depts"]) != '')
-                    {{ $comInfo[$com->ComID]["depts"] }}<br />
-                @endif 
-                {!! $com->ComAllegList !!}
-            </div>
-            <div class="col-md-8 pT5">
-                @if (isset($com->ComSummary) && trim($com->ComSummary) != '')
-                    @if (strlen(strip_tags($com->ComSummary)) > 180)
-                        {{ substr(strip_tags($com->ComSummary), 0, 180) }}...
-                    @else
-                        {{ $com->ComSummary }}
-                    @endif
+        <div class="mBn15">
+            <p>{!! $com->ComAllegList !!}<br /><span class="slGrey">
+            @if (isset($com->ComSummary) && trim($com->ComSummary) != '')
+                @if (strlen(strip_tags($com->ComSummary)) > 150)
+                    {{ substr(strip_tags($com->ComSummary), 0, 150) }}...
+                @else
+                    {{ strip_tags($com->ComSummary) }}
                 @endif
-            </div>
+            @endif
+            </span></p>
         </div>
     </div>
     </a>

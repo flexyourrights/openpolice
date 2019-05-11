@@ -3,9 +3,9 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
-use App\Models\OPPartners;
-use App\Models\OPDepartments;
-use App\Models\OPZeditDepartments;
+use Storage\App\Models\OPPartners;
+use Storage\App\Models\OPDepartments;
+use Storage\App\Models\OPZeditDepartments;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenDevelopment;
 

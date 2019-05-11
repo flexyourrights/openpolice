@@ -8,21 +8,22 @@
     <div class="col-md-2">Invited</div>
 </div></div>
 @forelse ($betas as $i => $beta)
-    <div class="p15 @if ($i%2 == 0) row2 @endif "><div class="row">
-        <div class="col-md-4">
-            {{ $beta->BetaName }} {{ $beta->BetaLastName }}<br />
-            <a href="mailto:{{ $beta->BetaEmail }}">{{ $beta->BetaEmail }}</a>
-        </div><div class="col-md-4">
-            @if (isset($beta->BetaYear)) {{ $beta->BetaYear }} - @endif
-            {{ $beta->BetaNarrative }}
-        </div><div class="col-md-2">
-            {{ $GLOBALS["SL"]->printTimeZoneShift($beta->created_at) }}<br />
-            @if (isset($beta->BetaHowHear)) <span class="slGrey">{{ $beta->BetaHowHear }}</span> @endif
-        </div><div class="col-md-2">
-            @if (isset($beta->BetaInvited)) {{ date('n/j', strtotime($beta->BetaInvited)) }}
-            @else <a href="?invite={{ $beta->BetaID }}">Invited</a> @endif
+    <div class="p15 @if ($i%2 == 0) row2 @endif ">
+        <div class="row">
+            <div class="col-md-4">
+                <b>{{ $beta->BetaName }} {{ $beta->BetaLastName }}</b><br />
+                <a href="mailto:{{ $beta->BetaEmail }}">{{ $beta->BetaEmail }}</a>
+            </div><div class="col-md-4">
+                {{ $GLOBALS["SL"]->printTimeZoneShift($beta->created_at) }}<br />
+                @if (isset($beta->BetaHowHear)) <span class="slGrey">{{ $beta->BetaHowHear }}</span> @endif
+            </div><div class="col-md-4">
+                @if (isset($beta->BetaInvited)) {{ date('n/j', strtotime($beta->BetaInvited)) }}
+                @else <a href="?invite={{ $beta->BetaID }}">Invited</a> @endif
+            </div>
         </div>
-    </div></div>
+        @if (isset($beta->BetaYear)) {{ $beta->BetaYear }} - @endif
+        {{ $beta->BetaNarrative }}
+    </div>
 @empty
     <i>None found</i>
 @endforelse

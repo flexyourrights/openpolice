@@ -5,13 +5,13 @@ use DB;
 use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\OPComplaints;
-use App\Models\OPDepartments;
-use App\Models\OPLinksComplaintDept;
-use App\Models\OPPersonContact;
-use App\Models\OPPhysicalDesc;
-use App\Models\OPzVolunUserInfo;
+use Storage\App\Models\User;
+use Storage\App\Models\OPComplaints;
+use Storage\App\Models\OPDepartments;
+use Storage\App\Models\OPLinksComplaintDept;
+use Storage\App\Models\OPPersonContact;
+use Storage\App\Models\OPPhysicalDesc;
+use Storage\App\Models\OPzVolunUserInfo;
 use OpenPolice\Controllers\OpenDashAdmin;
 use OpenPolice\Controllers\OpenInitExtras;
 
@@ -83,7 +83,7 @@ class OpenPolice extends OpenInitExtras
             return $this->reportAllegsWhy($nID);
         } elseif ($nID == 1373) {
             return $this->reportStory($nID);
-        } elseif (in_array($nID, [1466, 1728])) {
+        } elseif (in_array($nID, [2330, 2332])) {
             return $this->chkGetReportDept($this->sessData->getLatestDataBranchID());
         } elseif (in_array($nID, [1382, 1734])) {
             return $this->getReportDept($this->sessData->getLatestDataBranchID());
@@ -99,7 +99,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getCivReportNameHeader($nID);
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
-        } elseif (in_array($nID, [1795, 2266])) {
+        } elseif (in_array($nID, [1795, 2266, 2335])) {
             $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
             return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
                 . view('vendor.survloop.reports.inc-uploads', [ "uploads" => $uploads ])->render();

@@ -3,11 +3,11 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
-use App\Models\OPPartners;
-use App\Models\OPOversight;
-use App\Models\OPLinksComplaintDept;
-use App\Models\OPPartnerCaseTypes;
-use App\Models\OPPartnerCapac;
+use Storage\App\Models\OPPartners;
+use Storage\App\Models\OPOversight;
+use Storage\App\Models\OPLinksComplaintDept;
+use Storage\App\Models\OPPartnerCaseTypes;
+use Storage\App\Models\OPPartnerCapac;
 use OpenPolice\Controllers\VolunteerLeaderboard;
 use OpenPolice\Controllers\OpenVolunteers;
 

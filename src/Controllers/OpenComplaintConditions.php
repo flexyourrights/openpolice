@@ -3,8 +3,8 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use App\Models\OPPartners;
-use App\Models\SLEmailed;
+use Storage\App\Models\OPPartners;
+use Storage\App\Models\SLEmailed;
 use OpenPolice\Controllers\OpenSessDataOverride;
 
 class OpenComplaintConditions extends OpenSessDataOverride
@@ -141,7 +141,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#HasUploads') {
             return $this->complaintHasUploads();
         } elseif ($condition == '#ShowUploads') {
-            if ($this->complaintHasUploads() == 0 || !isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)) {
+            if ($this->complaintHasUploads() == 0) {
                 return 0;
             }
             if ($this->v["isAdmin"] || $this->v["isOwner"]) {
@@ -155,6 +155,10 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 return 0;
             } // else Full Transparency, but check status first...
             return $this->complaintHasPublishedStatus();
+        } elseif ($condition == '#CanEditUploads') {
+            if ($this->v["isAdmin"]) {
+                return 1;
+            }
         } elseif ($condition == '#PrintAnonOnly') {
             if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
                 && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)

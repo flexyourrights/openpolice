@@ -27,9 +27,7 @@ class OpenPoliceServiceProvider extends ServiceProvider
             __DIR__.'/Views'   => base_path('resources/views/vendor/openpolice'),
             __DIR__.'/Public'  => base_path('public/openpolice'),
             __DIR__.'/Uploads' => base_path('storage/app/up/openpolice'),
-            __DIR__.'/Models'  => base_path('storage/app/models/openpolice'),
-            __DIR__.'/Models'  => base_path('app/Models/OpenPolice'),
-            __DIR__.'/Models'  => base_path('app/Models'),
+            __DIR__.'/Models'  => base_path('storage/app/models'),
 
             __DIR__.'/Database/2019_03_15_000000_create_openpolice_tables.php'
                 => base_path('database/migrations/2019_03_15_000000_create_openpolice_tables.php'),

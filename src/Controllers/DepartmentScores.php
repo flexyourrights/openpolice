@@ -3,14 +3,14 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use App\Models\User;
-use App\Models\OPDepartments;
-use App\Models\OPOversight;
-use App\Models\OPzComplaintReviews;
-use App\Models\OPZeditDepartments;
-use App\Models\OPZeditOversight;
+use Storage\App\Models\User;
+use Storage\App\Models\OPDepartments;
+use Storage\App\Models\OPOversight;
+use Storage\App\Models\OPzComplaintReviews;
+use Storage\App\Models\OPZeditDepartments;
+use Storage\App\Models\OPZeditOversight;
 
-use App\Models\OPOversightModels;
+use Storage\App\Models\OPOversightModels;
 
 class DepartmentScores
 {
