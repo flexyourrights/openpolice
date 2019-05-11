@@ -3,8 +3,8 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\OPPartners;
-use Storage\App\Models\SLEmailed;
+use OpenPolice\Models\OPPartners;
+use SurvLoop\Models\SLEmailed;
 use OpenPolice\Controllers\OpenSessDataOverride;
 
 class OpenComplaintConditions extends OpenSessDataOverride

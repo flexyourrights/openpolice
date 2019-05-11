@@ -3,9 +3,9 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\OPAllegSilver;
-use Storage\App\Models\OPDepartments;
-use Storage\App\Models\OPOversight;
+use OpenPolice\Models\OPAllegSilver;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPOversight;
 use OpenPolice\Controllers\OpenPoliceUtils;
 
 class OpenComplaintEmails extends OpenPoliceUtils

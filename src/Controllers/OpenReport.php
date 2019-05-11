@@ -3,11 +3,11 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\OPDepartments;
-use Storage\App\Models\OPZeditDepartments;
-use Storage\App\Models\OPZeditOversight;
-use Storage\App\Models\OPzVolunTmp;
-use Storage\App\Models\OPOversight;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPZeditDepartments;
+use OpenPolice\Models\OPZeditOversight;
+use OpenPolice\Models\OPzVolunTmp;
+use OpenPolice\Models\OPOversight;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenDepts;
 

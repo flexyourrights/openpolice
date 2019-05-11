@@ -3,11 +3,11 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\OPStops;
-use Storage\App\Models\OPInjuries;
-use Storage\App\Models\OPLinksCivilianEvents;
-use Storage\App\Models\OPLinksCivilianVehicles;
-use Storage\App\Models\OPLinksOfficerVehicles;
+use OpenPolice\Models\OPStops;
+use OpenPolice\Models\OPInjuries;
+use OpenPolice\Models\OPLinksCivilianEvents;
+use OpenPolice\Models\OPLinksCivilianVehicles;
+use OpenPolice\Models\OPLinksOfficerVehicles;
 use OpenPolice\Controllers\OpenComplaintConditions;
 
 class OpenComplaintSaves extends OpenComplaintConditions

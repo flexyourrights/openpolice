@@ -3,14 +3,13 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\User;
-use Storage\App\Models\OPDepartments;
-use Storage\App\Models\OPOversight;
-use Storage\App\Models\OPzComplaintReviews;
-use Storage\App\Models\OPZeditDepartments;
-use Storage\App\Models\OPZeditOversight;
-
-use Storage\App\Models\OPOversightModels;
+use SurvLoop\Models\User;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPOversight;
+use OpenPolice\Models\OPzComplaintReviews;
+use OpenPolice\Models\OPZeditDepartments;
+use OpenPolice\Models\OPZeditOversight;
+use OpenPolice\Models\OPOversightModels;
 
 class DepartmentScores
 {
@@ -115,7 +114,7 @@ class DepartmentScores
             } elseif (isset($searchOpts["state"]) && trim($searchOpts["state"]) != '') {
                 $flts .= "->where('DeptAddressState', '" . trim($searchOpts["state"]) . "')";
             }
-            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
+            $eval = "\$this->scoreDepts = OpenPolice\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
                 . "->orderBy('DeptScoreOpenness', 'desc')->get();";
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {

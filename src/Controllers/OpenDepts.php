@@ -5,12 +5,12 @@ use DB;
 use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Storage\App\Models\OPDepartments;
-use Storage\App\Models\OPZeditDepartments;
-use Storage\App\Models\OPZeditOversight;
-use Storage\App\Models\OPzVolunTmp;
-use Storage\App\Models\OPOversight;
-use Storage\App\Models\OPLinksComplaintOversight;
+use OpenPolice\Models\OPDepartments;
+use OpenPolice\Models\OPZeditDepartments;
+use OpenPolice\Models\OPZeditOversight;
+use OpenPolice\Models\OPzVolunTmp;
+use OpenPolice\Models\OPOversight;
+use OpenPolice\Models\OPLinksComplaintOversight;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenListing;
 

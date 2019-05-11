@@ -3,8 +3,8 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use Storage\App\Models\OPAllegations;
-use Storage\App\Models\OPAllegSilver;
+use OpenPolice\Models\OPAllegations;
+use OpenPolice\Models\OPAllegSilver;
 use OpenPolice\Controllers\OpenComplaintEmails;
 
 class OpenComplaintPrints extends OpenComplaintEmails

@@ -2,10 +2,8 @@
 namespace OpenPolice\Controllers;
 
 use DB;
-
-use Storage\App\Models\User;
-
-use Storage\App\Models\OPzVolunUserInfo;
+use SurvLoop\Models\User;
+use OpenPolice\Models\OPzVolunUserInfo;
 
 class VolunteerLeaderboard
 {
