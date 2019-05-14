@@ -3,21 +3,21 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
-use SurvLoop\Models\User;
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPCompliments;
-use OpenPolice\Models\OPIncidents;
-use OpenPolice\Models\OPEventSequence;
-use OpenPolice\Models\OPStops;
-use OpenPolice\Models\OPSearches;
-use OpenPolice\Models\OPArrests;
-use OpenPolice\Models\OPForce;
-use OpenPolice\Models\OPOversight;
-use OpenPolice\Models\OPLinksComplaintDept;
-use OpenPolice\Models\OPLinksOfficerEvents;
-use OpenPolice\Models\OPLinksCivilianEvents;
-use OpenPolice\Models\OPPersonContact;
-use OpenPolice\Models\OPzVolunUserInfo;
+use App\Models\User;
+use App\Models\OPComplaints;
+use App\Models\OPCompliments;
+use App\Models\OPIncidents;
+use App\Models\OPEventSequence;
+use App\Models\OPStops;
+use App\Models\OPSearches;
+use App\Models\OPArrests;
+use App\Models\OPForce;
+use App\Models\OPOversight;
+use App\Models\OPLinksComplaintDept;
+use App\Models\OPLinksOfficerEvents;
+use App\Models\OPLinksCivilianEvents;
+use App\Models\OPPersonContact;
+use App\Models\OPzVolunUserInfo;
 use SurvLoop\Controllers\Tree\TreeSurvForm;
 
 class OpenPoliceUtils extends TreeSurvForm

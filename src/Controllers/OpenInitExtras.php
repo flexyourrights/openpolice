@@ -3,13 +3,13 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
-use SurvLoop\Models\User;
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPDepartments;
-use OpenPolice\Models\OPLinksComplaintDept;
-use OpenPolice\Models\OPLinksComplimentDept;
-use OpenPolice\Models\OPPersonContact;
-use OpenPolice\Models\OPzVolunUserInfo;
+use App\Models\User;
+use App\Models\OPComplaints;
+use App\Models\OPDepartments;
+use App\Models\OPLinksComplaintDept;
+use App\Models\OPLinksComplimentDept;
+use App\Models\OPPersonContact;
+use App\Models\OPzVolunUserInfo;
 use OpenPolice\Controllers\OpenPartners;
 
 class OpenInitExtras extends OpenPartners

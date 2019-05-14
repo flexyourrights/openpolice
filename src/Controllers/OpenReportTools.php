@@ -1,12 +1,12 @@
 <?php
 namespace OpenPolice\Controllers;
 
-use SurvLoop\Models\User;
-use SurvLoop\Models\SLEmails;
-use SurvLoop\Models\SLEmailed;
-use OpenPolice\Models\OPOversight;
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPzComplaintReviews;
+use App\Models\User;
+use App\Models\SLEmails;
+use App\Models\SLEmailed;
+use App\Models\OPOversight;
+use App\Models\OPComplaints;
+use App\Models\OPzComplaintReviews;
 use SurvLoop\Controllers\SessAnalysis;
 use OpenPolice\Controllers\OpenReport;
 

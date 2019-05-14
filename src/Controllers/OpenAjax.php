@@ -4,9 +4,9 @@ namespace OpenPolice\Controllers;
 use DB;
 use Auth;
 use Illuminate\Http\Request;
-use SurvLoop\Models\User;
-use OpenPolice\Models\OPDepartments;
-use SurvLoop\Models\SLZips;
+use App\Models\User;
+use App\Models\OPDepartments;
+use App\Models\SLZips;
 use OpenPolice\Controllers\OpenComplaintSaves;
 
 class OpenAjax extends OpenComplaintSaves

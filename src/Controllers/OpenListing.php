@@ -2,10 +2,10 @@
 namespace OpenPolice\Controllers;
 
 use DB;
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPCompliments;
-use SurvLoop\Models\SLNode;
-use OpenPolice\Models\OPTesterBeta;
+use App\Models\OPComplaints;
+use App\Models\OPCompliments;
+use App\Models\SLNode;
+use App\Models\OPTesterBeta;
 use OpenPolice\Controllers\OpenAjax;
 
 class OpenListing extends OpenAjax

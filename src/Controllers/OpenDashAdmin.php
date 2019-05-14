@@ -2,13 +2,13 @@
 namespace OpenPolice\Controllers;
 
 use DB;
-use SurvLoop\Models\User;
-use OpenPolice\Models\OPComplaints;
-use OpenPolice\Models\OPLinksComplaintOversight;
-use OpenPolice\Models\OPDepartments;
-use OpenPolice\Models\OPZeditDepartments;
-use OpenPolice\Models\OPZeditOversight;
-use OpenPolice\Models\OPzVolunStatDays;
+use App\Models\User;
+use App\Models\OPComplaints;
+use App\Models\OPLinksComplaintOversight;
+use App\Models\OPDepartments;
+use App\Models\OPZeditDepartments;
+use App\Models\OPZeditOversight;
+use App\Models\OPzVolunStatDays;
 use SurvLoop\Controllers\Stats\SurvTrends;
 
 class OpenDashAdmin

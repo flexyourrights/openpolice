@@ -2,7 +2,7 @@
 namespace OpenPolice\Controllers;
 
 use Auth;
-use SurvLoop\Models\SLNodeSavesPage;
+use App\Models\SLNodeSavesPage;
 use OpenPolice\Controllers\OpenComplaintPrints;
 
 class OpenSessDataOverride extends OpenComplaintPrints
