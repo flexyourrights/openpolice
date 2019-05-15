@@ -114,7 +114,7 @@ class DepartmentScores
             } elseif (isset($searchOpts["state"]) && trim($searchOpts["state"]) != '') {
                 $flts .= "->where('DeptAddressState', '" . trim($searchOpts["state"]) . "')";
             }
-            $eval = "\$this->scoreDepts = OpenPolice\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
+            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
                 . "->orderBy('DeptScoreOpenness', 'desc')->get();";
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {

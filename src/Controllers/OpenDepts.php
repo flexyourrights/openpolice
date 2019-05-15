@@ -335,20 +335,21 @@ class OpenDepts extends OpenListing
             'ZedDeptDeptID'   => $this->coreID,
             ]);
         $over = $this->getOverRow('IA');
+        $newResearch = [];
+        if ($GLOBALS["SL"]->REQ->has('n1329fld') && is_array($GLOBALS["SL"]->REQ->get('n1329fld'))) {
+            $newResearch = $GLOBALS["SL"]->REQ->get('n1329fld');
+        }
         $this->sessData->createTblExtendFlds('Oversight', $over->getKey(), 'Zedit_Oversight', [
             'ZedOverZedDeptID'      => $this->sessData->dataSets['Zedit_Departments'][0]->getKey(),
-            'ZedOverOnlineResearch' => (($GLOBALS["SL"]->REQ->has('n1329fld') 
-                && in_array('Online', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
-            'ZedOverMadeDeptCall'   => (($GLOBALS["SL"]->REQ->has('n1329fld') 
-                && in_array('DeptCall', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
-            'ZedOverMadeIACall'     => (($GLOBALS["SL"]->REQ->has('n1329fld') 
-                && in_array('IACall', $GLOBALS["SL"]->REQ->n1329fld)) ? 0 : 1),
+            'ZedOverOnlineResearch' => ((in_array('Online', $newResearch)) ? 1 : 0),
+            'ZedOverMadeDeptCall'   => ((in_array('DeptCall', $newResearch)) ? 1 : 0),
+            'ZedOverMadeIACall'     => ((in_array('IACall', $newResearch)) ? 1 : 0),
             'ZedOverNotes'          => (($GLOBALS["SL"]->REQ->has('n1334fld')) ? $GLOBALS["SL"]->REQ->n1334fld : '')
             ]);
         $over = $this->getOverRow('Civ');
         if ($over && isset($over->OverID)) {
             $this->sessData->createTblExtendFlds('Oversight', $over->getKey(), 'Zedit_Oversight', [
-                'ZedOverZedDeptID'      => $this->sessData->dataSets['Zedit_Departments'][0]->getKey()
+                'ZedOverZedDeptID' => $this->sessData->dataSets['Zedit_Departments'][0]->getKey()
                 ]);
         }
         return false;

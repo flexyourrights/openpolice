@@ -7,6 +7,12 @@
     @endforeach
     <td>Complaint Status</td>
 </tr>
+<tr>
+    @foreach ($statRanges as $j => $range)
+        <td>{{ $dashBetaStats[$j] }}</td>
+    @endforeach
+    <td>Beta Tester Invites</td>
+</tr>
 @foreach ($statusDefs as $def)
     <tr>
         @foreach ($statRanges as $j => $range)

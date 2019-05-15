@@ -906,7 +906,7 @@ class OpenPoliceUtils extends TreeSurvForm
             $newEveSeq->EveType = $eventType;
             //$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
             $newEveSeq->save();
-            eval("\$newEvent = new OpenPolice\\Models\\" . $GLOBALS["SL"]->tblModels[$eventType] . ";");
+            eval("\$newEvent = new App\\Models\\" . $GLOBALS["SL"]->tblModels[$eventType] . ";");
             $newEvent->{ $GLOBALS["SL"]->tblAbbr[$eventType].'EventSequenceID' } = $newEveSeq->getKey();
             if ($eventType == 'Force' && $forceType > 0) {
                 $newEvent->ForType = $forceType;

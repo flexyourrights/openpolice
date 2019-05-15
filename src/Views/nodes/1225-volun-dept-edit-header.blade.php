@@ -6,8 +6,7 @@
         <div class="col-8">
             <h4 class="m0 slBlueDark">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h4>
         </div><div class="col-4">
-            <h4 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ 
-                intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h4>
+            <h4 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h4>
         </div>
     </div>
 </div>
@@ -80,29 +79,6 @@ $(document).ready(function(){
             }
             document.getElementById("n1226FldID").value = score;
             document.getElementById("opcScore").innerHTML = score;
-        }
-        if (document.getElementById("n1329fld0") && document.getElementById("n1329fld0").checked) {
-            if (document.getElementById("saveStar1")) document.getElementById("saveStar1").src="/openpolice/star1.png";
-        } else {
-            if (document.getElementById("saveStar1")) document.getElementById("saveStar1").src="/openpolice/star1-gry.png";
-        }
-        if (document.getElementById("n1329fld1") && document.getElementById("n1329fld1").checked) {
-            if (document.getElementById("saveStar2")) document.getElementById("saveStar2").src="/openpolice/star1.png";
-            if (document.getElementById("saveStar2b")) document.getElementById("saveStar2b").src="/openpolice/star1.png";
-            if (document.getElementById("saveStar2c")) document.getElementById("saveStar2c").src="/openpolice/star1.png";
-        } else {
-            if (document.getElementById("saveStar2")) document.getElementById("saveStar2").src="/openpolice/star1-gry.png";
-            if (document.getElementById("saveStar2b")) document.getElementById("saveStar2b").src="/openpolice/star1-gry.png";
-            if (document.getElementById("saveStar2c")) document.getElementById("saveStar2c").src="/openpolice/star1-gry.png";
-        }
-        if (document.getElementById("n1329fld2") && document.getElementById("n1329fld2").checked) {
-            if (document.getElementById("saveStar3")) document.getElementById("saveStar3").src="/openpolice/star1.png";
-            if (document.getElementById("saveStar3b")) document.getElementById("saveStar3b").src="/openpolice/star1.png";
-            if (document.getElementById("saveStar3c")) document.getElementById("saveStar3c").src="/openpolice/star1.png";
-        } else {
-            if (document.getElementById("saveStar3")) document.getElementById("saveStar3").src="/openpolice/star1-gry.png";
-            if (document.getElementById("saveStar3b")) document.getElementById("saveStar3b").src="/openpolice/star1-gry.png";
-            if (document.getElementById("saveStar3c")) document.getElementById("saveStar3c").src="/openpolice/star1-gry.png";
         }
         if (document.getElementById("admMenuCustBot")) {
             var newHgt = Math.round($(window).height())-335;

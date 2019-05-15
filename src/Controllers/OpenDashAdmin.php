@@ -9,6 +9,7 @@ use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunStatDays;
+use App\Models\OPTesterBeta;
 use SurvLoop\Controllers\Stats\SurvTrends;
 
 class OpenDashAdmin
@@ -68,7 +69,9 @@ class OpenDashAdmin
         $this->v["dashTopStats"] = [];
         foreach ($this->v["statRanges"] as $j => $range) {
             $this->v["dashTopStats"][$j] = [];
-            foreach ($this->v["statusDefs"] as $def) $this->v["dashTopStats"][$j][$def->DefID] = 0;
+            foreach ($this->v["statusDefs"] as $def) {
+                $this->v["dashTopStats"][$j][$def->DefID] = 0;
+            }
         }
         $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'created_at')
             ->where('ComStatus', '>', 0)
@@ -78,6 +81,23 @@ class OpenDashAdmin
                 foreach ($this->v["statRanges"] as $j => $range) {
                     if (strtotime($complaint->created_at) > $range[1]) {
                         $this->v["dashTopStats"][$j][$complaint->ComStatus]++;
+                    }
+                }
+            }
+        }
+        $this->v["dashBetaStats"] = [0, 0, 0];
+        //$chk = OPTesterBeta::select('ComID', 'ComPublicID', 'ComStatus', 'created_at')
+        //    ->where('ComStatus', '>', 0)
+        //    ->get();
+        $chk = DB::table('OP_TesterBeta')
+            ->whereNotNull('BetaInvited')
+            ->distinct('BetaEmail')
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $i => $complaint) {
+                foreach ($this->v["statRanges"] as $j => $range) {
+                    if (strtotime($complaint->BetaInvited) > $range[1]) {
+                        $this->v["dashBetaStats"][$j]++;
                     }
                 }
             }
