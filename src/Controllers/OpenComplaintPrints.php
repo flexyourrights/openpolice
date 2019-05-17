@@ -229,22 +229,47 @@ class OpenComplaintPrints extends OpenComplaintEmails
         return '';
     }
     
+    protected function getReportUploads($nID)
+    {
+        $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
+        return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
+            . view('vendor.survloop.reports.inc-uploads', [ "uploads" => $uploads ])->render();
+    }
+    
+    /* Double-Checking [For Now] */
+    protected function canShowUpload($nID, $upDeets, $isAdmin = false, $isOwner = false)
+    {
+        if ($isAdmin || $isOwner) {
+            return true;
+        }
+        if (isset($this->sessData->dataSets["Complaints"]) && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)) {
+            if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, $this->getPublishedStatusList())
+                && $this->sessData->dataSets['Complaints'][0]->ComPrivacy 
+                    == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+                if ($upDeets["privacy"] == 'Block') {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
     protected function loadUpDeetPrivacy($upRow = NULL)
     {
         if ($upRow && isset($upRow->UpPrivacy)) {
             if ($upRow->UpTreeID == 1) {
+                if ($upRow->UpPrivacy == 'Private') {
+                    if (in_array($GLOBALS["SL"]->x["pageView"], ['sensitive', 'internal'])) {
+                        return 'Public';
+                    }
+                    return 'Block';
+                }
                 if ($GLOBALS["SL"]->x["dataPerms"] == 'public') {
                     return 'Block';
                 }
                 if ($GLOBALS["SL"]->x["pageView"] == 'public') {
                     return 'Public';
-                }
-                if ($upRow->UpPrivacy == 'Private') {
-                    if (in_array($GLOBALS["SL"]->x["pageView"], ['sensitive', 'internal'])) {
-                        return 'Public';
-                    } else {
-                        return 'Block';
-                    }
                 }
             }
             return $upRow->UpPrivacy;

@@ -86,9 +86,6 @@ class OpenDashAdmin
             }
         }
         $this->v["dashBetaStats"] = [0, 0, 0];
-        //$chk = OPTesterBeta::select('ComID', 'ComPublicID', 'ComStatus', 'created_at')
-        //    ->where('ComStatus', '>', 0)
-        //    ->get();
         $chk = DB::table('OP_TesterBeta')
             ->whereNotNull('BetaInvited')
             ->distinct('BetaEmail')

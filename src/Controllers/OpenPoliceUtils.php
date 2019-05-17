@@ -306,13 +306,14 @@ class OpenPoliceUtils extends TreeSurvForm
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Received by Oversight'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Declined To Investigate (Closed)'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)'),
-                $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Closed')
             ];
         } elseif ($coreTbl == 'Compliments') {
             return [
                 $GLOBALS["SL"]->def->getID('Compliment Status', 'Reviewed'), 
                 $GLOBALS["SL"]->def->getID('Compliment Status', 'Submitted to Oversight'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight')
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight'),
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Closed')
             ];
         }
         return [];
@@ -330,14 +331,12 @@ class OpenPoliceUtils extends TreeSurvForm
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Pending Attorney'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Attorney\'d'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Reviewed'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Closed')
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight')
             ];
         } elseif ($coreTbl == 'Compliments') {
             return [
                 $GLOBALS["SL"]->def->getID('Compliment Status', 'Hold'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'New'),
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Closed')
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'New')
             ];
         }
         return [];
@@ -1509,6 +1508,26 @@ class OpenPoliceUtils extends TreeSurvForm
             }
         }
         return true;
+    }
+    
+    protected function printComplaintStatus($defID)
+    {
+        switch ($defID) {
+            case 194: return 'Incomplete';
+            case 196: return 'New';
+            case 195: return 'Hold';
+            case 197: return 'Reviewed';
+            case 627: return 'Needs More Work';
+            case 198: return 'Pending Attorney';
+            case 199: return 'Attorney\'d';
+            case 202: return 'OK to Submit to Investigative Agency';
+            case 200: return 'Submitted to Investigative Agency';
+            case 201: return 'Received by Investigative Agency';
+            case 203: return 'Declined To Investigate (Closed)';
+            case 204: return 'Investigated (Closed)';
+            case 205: return 'Closed';
+        }
+        return $GLOBALS["SL"]->def->getVal('Complaint Status', $defID);
     }
     
 }

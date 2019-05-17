@@ -46,17 +46,19 @@ class OpenReport extends OpenDepts
 
     protected function reportAllegsWhy($nID = -3)
     {
-        return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 
-            'Allegations</h3><div class="mTn10 slGrey">Including comments from the complainant</div>'
+        return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 'Allegations</h3>' 
+            . '<div class="slGrey">Including comments from the complainant</div>'
             . '<h3 class="disNon">');
     }
 
     protected function reportCivAddy($nID)
     {
-        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
+        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow())
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
             $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->getLatestDataBranchRow(), 'Prsn');
-            if (trim($addy) != '') return [ 'Address', $addy ];
+            if (trim($addy) != '') {
+                return [ 'Address', $addy ];
+            }
         }
         return [];
     }
@@ -69,35 +71,24 @@ class OpenReport extends OpenDepts
             if (!in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf'])) {
                 $previewMax = 1800;
                 if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
-                    $brkPos = strpos($this->sessData->dataSets["Complaints"][0]->ComSummary, ' ', $previewMax-200);
+                    $more = ($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more');
+                    $story = $this->sessData->dataSets["Complaints"][0]->ComSummary;
+                    $brkPos = strpos($story, ' ', $previewMax-200);
                     if ($brkPos > 0) {
-                        $ret = '<div id="hidivStoryLess" class="' 
-                            . (($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more')
-                                ? 'disNon' : 'disBlo') . '">' . str_replace("\n", '<br />', 
-                            substr($this->sessData->dataSets["Complaints"][0]->ComSummary, 0, $brkPos+1)) . ' ...<br />'
-                            . '<a id="hidivBtnStoryMore" class="btn btn-primary mT20" href="javascript:;">Read More</a>'
-                            . '</div>'
-                            . '<div id="hidivStoryMore" class="' 
-                            . (($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more')
-                                ? 'disBlo' : 'disNon') . '">' . str_replace("\n", '<br />', 
-                            $this->sessData->dataSets["Complaints"][0]->ComSummary, $brkPos) 
-                            . '<br /><a id="hidivBtnStryLessBtn" class="btn btn-primary mT20" href="javascript:;">'
-                            . 'Read Less</a></div>';
-                        $GLOBALS["SL"]->pageAJAX .= '$(document).on("click", "#hidivBtnStoryMore", function() { '
-                            . 'document.getElementById("hidivStoryMore").style.display="block"; setTimeout(function() { '
-                            . 'document.getElementById("hidivStoryLess").style.display="none"; }, 5); });'
-                            . '$(document).on("click", "#hidivBtnStryLessBtn", function() { '
-                            . 'document.getElementById("hidivStoryLess").style.display="block"; setTimeout(function() { '
-                            . 'document.getElementById("hidivStoryMore").style.display="none"; }, 5); });';
+                        $ret = view('vendor.openpolice.nodes.1373-story-read-more', [
+                            "more"      => $more,
+                            "storyLess" => $GLOBALS["SL"]->textSaferHtml(substr($story, 0, $brkPos+1)),
+                            "storyMore" => $GLOBALS["SL"]->textSaferHtml($story)
+                        ])->render();
+                        $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.1373-story-read-more-ajax')->render();
                     }
                 }
             }
             if (trim($ret) == '') {
-                $ret = str_replace("\n", '<br />', $this->sessData->dataSets["Complaints"][0]->ComSummary);
+                $ret = $GLOBALS["SL"]->textSaferHtml($this->sessData->dataSets["Complaints"][0]->ComSummary);
             }
         }
-        return '<h3 class="slBlueDark mT0">Story</h3><p>' . $ret . '</p>';
-        
+        return '<h3 class="slBlueDark mT0 mB10">Story</h3><p>' . $ret . '</p>';
     }
     
     protected function queuePeopleSubsets($id, $type = 'Civilians')
@@ -126,10 +117,9 @@ class OpenReport extends OpenDepts
         $dept = $this->sessData->getRowById('Departments', $deptID);
         if ($dept && isset($dept->DeptName)) {
             return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->DeptSlug . '" class="slBlueDark">' 
-                 . $dept->DeptName . '</a></h3><div class="mB10">Complaint #' 
-                . $this->sessData->dataSets["Complaints"][0]->ComPublicID . ': <b>' 
-                . $GLOBALS["SL"]->def->getVal('Complaint Status', 
-                    $this->sessData->dataSets["Complaints"][0]->ComStatus) 
+                 . $dept->DeptName . '</a></h3><div class="mB10"><b>Complaint #' 
+                . $this->sessData->dataSets["Complaints"][0]->ComPublicID . ': ' 
+                . $this->printComplaintStatus($this->sessData->dataSets["Complaints"][0]->ComStatus)
                 . '</b></div>';
         }
         $this->v["reportDepts"][] = $deptID;
@@ -298,7 +288,9 @@ class OpenReport extends OpenDepts
     
     protected function getOffReportName($off, $ind = 0, $prsn = NULL)
     {
-        if (!isset($this->v["offNames"])) $this->v["offNames"] = [];
+        if (!isset($this->v["offNames"])) {
+            $this->v["offNames"] = [];
+        }
         if ($off && isset($off->OffID)) {
             if (sizeof($this->v["offNames"]) == 0 || !isset($this->v["offNames"][$off->OffID]) 
                 || trim($this->v["offNames"][$off->OffID]) == '') {
@@ -334,10 +326,18 @@ class OpenReport extends OpenDepts
             && $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 304) {
             $info .= ', Name';
         }
-        if (isset($prsn->PrsnAddress) && trim($prsn->PrsnAddress) != '')   $info .= ', Address';
-        if (isset($prsn->PrsnPhoneHome) && trim($prsn->PrsnPhoneHome) != '') $info .= ', Phone Number'; 
-        if (isset($prsn->PrsnEmail) && trim($prsn->PrsnEmail) != '')     $info .= ', Email'; 
-        if (isset($prsn->PrsnFacebook) && trim($prsn->PrsnFacebook) != '')  $info .= ', Facebook';
+        if (isset($prsn->PrsnAddress) && trim($prsn->PrsnAddress) != '')  {
+            $info .= ', Address';
+        }
+        if (isset($prsn->PrsnPhoneHome) && trim($prsn->PrsnPhoneHome) != '') {
+            $info .= ', Phone Number'; 
+        }
+        if (isset($prsn->PrsnEmail) && trim($prsn->PrsnEmail) != '') {
+            $info .= ', Email'; 
+        }
+        if (isset($prsn->PrsnFacebook) && trim($prsn->PrsnFacebook) != '') {
+            $info .= ', Facebook';
+        }
         if (isset($prsn->PrsnBirthday) && trim($prsn->PrsnBirthday) != '' && trim($prsn->PrsnBirthday) != '0000-00-00' 
             && trim($prsn->PrsnBirthday) != '1970-01-01') {
             $info .= ', Birthday';
@@ -356,7 +356,9 @@ class OpenReport extends OpenDepts
         $info = (((isset($prsn->PrsnNameFirst) && trim($prsn->PrsnNameFirst) != '') 
             || (isset($prsn->PrsnNameLast) && $prsn->PrsnNameLast != '')) ? ', Name' : '')
             . ((isset($off->OffBadgeNumber) && intVal($off->OffBadgeNumber) > 0) ? ', Badge Number' : '');
-        if (trim($info) != '') return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
+        if (trim($info) != '') {
+            return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
+        }
         return '';
     }
     
@@ -425,7 +427,7 @@ class OpenReport extends OpenDepts
             "emojiTags" => $this->printEmojiTags(),
             "published" => $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0]),
             "viewPrfx"  => (($GLOBALS["SL"]->x["pageView"] == 'full') ? 'full-' : '')
-            ])->render();
+        ])->render();
     }
     
     protected function fillGlossary()
@@ -474,21 +476,24 @@ class OpenReport extends OpenDepts
     {
         $this->loadRelatedArticles();
         return view('vendor.openpolice.nodes.1708-report-flex-articles', [
-            "allUrls" => $this->v["allUrls"] ])->render();
+            "allUrls" => $this->v["allUrls"]
+        ])->render();
     }
     
     protected function printFlexVids()
     {
         $this->loadRelatedArticles();
         return view('vendor.openpolice.nodes.1753-report-flex-videos', [
-            "allUrls" => $this->v["allUrls"] ])->render();
+            "allUrls" => $this->v["allUrls"]
+        ])->render();
     }
     
-    protected function printValCustom($nID, $val) {
+    protected function printValCustom($nID, $val)
+    {
         if (in_array($nID, [1486, 1528])) {
             return $GLOBALS["SL"]->printHeight(intVal($val));
         }
         return $val;
     }
-    
+
 }
