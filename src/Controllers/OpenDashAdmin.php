@@ -16,6 +16,19 @@ class OpenDashAdmin
 {
     public $v = [];
     
+    public function printDashTopLevStats()
+    {
+        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
+            ->where('ComStatus', '>', 0)
+            ->whereIn('ComType', [
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+            ])
+            ->get();
+        
+    }
+    
     public function printDashSessGraph()
     {
         $this->v["isDash"] = true;
@@ -25,15 +38,21 @@ class OpenDashAdmin
         $grapher->addDataLineType('incomplete', 'Incomplete', '', '#2b3493', '#2b3493');
         $recentAttempts = OPComplaints::whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
-            ->where('created_at', '>=', $grapher->getPastStartDate() . ' 00:00:00')
-            ->select('ComStatus', 'created_at')
+            ->whereIn('ComType', [
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+            ])
+            ->where('ComRecordSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->select('ComStatus', 'ComRecordSubmitted')
             ->get();
+//echo '<pre>'; print_r($recentAttempts); echo '</pre>';
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
                 if ($rec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
-                    $grapher->addDayTally('incomplete', $rec->created_at);
+                    $grapher->addDayTally('incomplete', $rec->ComRecordSubmitted);
                 } else {
-                    $grapher->addDayTally('complete', $rec->created_at);
+                    $grapher->addDayTally('complete', $rec->ComRecordSubmitted);
                 }
             }
         }
@@ -61,10 +80,10 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $this->v["statRanges"] = [
-            ['Last 24 Hrs', mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))],
-            ['This Week', mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))],
+            ['Last 24 Hrs',     mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))],
+            ['This Week',       mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))],
             ['All-Time Totals', mktime(0, 0, 0, 1, 1, 1900)]
-            ];
+        ];
         $this->v["statusDefs"] = $GLOBALS["SL"]->def->getSet('Complaint Status');
         $this->v["dashTopStats"] = [];
         foreach ($this->v["statRanges"] as $j => $range) {
@@ -73,13 +92,18 @@ class OpenDashAdmin
                 $this->v["dashTopStats"][$j][$def->DefID] = 0;
             }
         }
-        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'created_at')
+        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
             ->where('ComStatus', '>', 0)
+            ->whereIn('ComType', [
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+            ])
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $i => $complaint) {
                 foreach ($this->v["statRanges"] as $j => $range) {
-                    if (strtotime($complaint->created_at) > $range[1]) {
+                    if (strtotime($complaint->ComRecordSubmitted) > $range[1]) {
                         $this->v["dashTopStats"][$j][$complaint->ComStatus]++;
                     }
                 }

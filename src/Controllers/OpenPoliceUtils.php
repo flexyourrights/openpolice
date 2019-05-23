@@ -48,32 +48,38 @@ class OpenPoliceUtils extends TreeSurvForm
         [127, 'Policy or Procedure Violation',  'AlleSilProcedure'], 
         [131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
         [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
-        ];
-    public $eventTypes         = [
+    ];
+    public $eventTypes = [
         'Stops',
         'Searches',
         'Force',
         'Arrests'
-        ];
-    public $eveTypIDs          = [
+    ];
+    public $eveTypIDs = [
         252 => 'Stops',
         253 => 'Searches',
         254 => 'Force',
         255 => 'Arrests'
-        ];
-    protected $eventTypeLabel  = [
+    ];
+    protected $eventTypeLabel = [
         'Stops'    => 'Stop/Questioning',
         'Searches' => 'Search/Seizure',
         'Force'    => 'Use of Force',
         'Arrests'  => 'Arrest'
-        ];
+    ];
     protected $eventGoldAllegs = [
         'Stops'    => [117, 118],
         'Searches' => [119, 120, 496],
         'Force'    => [115],
         'Arrests'  => [116, 122]
-        ];
-    protected $cmplntUpNodes   = [280, 324, 317, 413, 371];
+    ];
+    protected $cmplntUpNodes   = [
+        280,
+        324,
+        317,
+        413,
+        371
+    ];
     protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))
     

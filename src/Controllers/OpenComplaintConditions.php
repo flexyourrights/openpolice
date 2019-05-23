@@ -125,6 +125,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
             } else {
                 return 0;
             }
+        } elseif ($condition == '#AllegationsMany') {
+            return (($this->hasTooManyAllegations()) ? 1 : 0);
+        } elseif ($condition == '#AllegationsNone') {
+            return (($this->hasNoAllegations()) ? 1 : 0);
+        } elseif ($condition == '#NeedsAudit') {
+            return (($this->hasTooManyAllegations() || $this->hasNoAllegations()) ? 1 : 0);
         } elseif ($condition == '#EmailConfirmSentToday') {
             if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
                 $cutoff = date("Y-m-d H:i:s", 
@@ -204,6 +210,25 @@ class OpenComplaintConditions extends OpenSessDataOverride
             return 1;
         }
         return 0;
+    }
+    
+    protected function hasTooManyAllegations()
+    {
+        return $GLOBALS["SL"]->REQ->has('toomany');
+        return (sizeof($GLOBALS["SL"]->mexplode(',', $this->commaAllegationList())) > 5);
+    }
+    
+    protected function hasNoAllegations()
+    {
+        return !$GLOBALS["SL"]->REQ->has('toomany');
+        return (sizeof($GLOBALS["SL"]->mexplode(',', $this->commaAllegationList())) == 0);
+    }
+    
+    protected function printAllegAudit()
+    {
+        
+        
+        
     }
     
 }

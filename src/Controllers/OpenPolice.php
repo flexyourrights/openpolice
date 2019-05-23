@@ -26,6 +26,8 @@ class OpenPolice extends OpenInitExtras
             $this->initBlnkAllegsSilv();
         } elseif (in_array($nID, [270, 973])) {
             return $this->printEndOfComplaintRedirect($nID);
+        } elseif ($nID == 2341) {
+            return $this->printAllegAudit();
             
         // Home Page
         } elseif ($nID == 1876) {
@@ -191,6 +193,9 @@ class OpenPolice extends OpenInitExtras
             return $this->v["openDash"]->volunDepts();
             
         // Admin Dashboard Page
+        } elseif ($nID == 1359) {
+            $this->initAdmDash();
+            return $this->v["openDash"]->printDashTopLevStats();
         } elseif ($nID == 1359) {
             $this->initAdmDash();
             return $this->v["openDash"]->printDashSessGraph();
