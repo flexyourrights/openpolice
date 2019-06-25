@@ -63,7 +63,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $spin = $GLOBALS["SL"]->sysOpts["spinner-code"];
         $this->restartSess($GLOBALS["SL"]->REQ);
         return '<br /><br /><center><h1>All Done!<br />Taking you to <a href="' . $url . '">your finished '
-            . (($nID == 270) ? 'complaint' : 'compliment') . '</a> ...</h1>' . $spin 
+            . (($nID == 270) ? 'complaint' : 'compliment') . '</a>...</h1>' . $spin 
             . '</center><script id="noExtract" type="text/javascript"> setTimeout("window.location=\'' . $url 
             . '\'", 1500); </script><style> #nodeSubBtns, #sessMgmt, #dontWorry { display: none; } </style>';
     }
@@ -79,10 +79,12 @@ class OpenComplaintPrints extends OpenComplaintEmails
             if (isset($event[0]) && isset($event[0]["EveID"])) {
                 if (strpos($str, '[LoopItemLabel]') !== false) {
                     $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
-                    if (trim($civName) == '' && isset($event[0]["Civilians"]) && sizeof($event[0]["Civilians"]) > 0) {
+                    if (trim($civName) == '' && isset($event[0]["Civilians"]) 
+                        && sizeof($event[0]["Civilians"]) > 0) {
                         $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
                     }
-                    $str = str_replace('[LoopItemLabel]', '<span class="slBlueDark"><b>' . $civName . '</b></span>', 
+                    $str = str_replace('[LoopItemLabel]', 
+                        '<span class="slBlueDark"><b>' . $civName . '</b></span>', 
                         $str);
                 }
                 if (strpos($str, '[ForceType]') !== false) {
@@ -96,7 +98,9 @@ class OpenComplaintPrints extends OpenComplaintEmails
                             $forceDesc .= ' used on ' . $this->getCivNamesFromEvent($eveSeq->EveID);
                         }
                     }
-                    $str = str_replace('[ForceType]', '<span class="slBlueDark"><b>' . $forceDesc .'</b></span>', $str);
+                    $str = str_replace('[ForceType]', 
+                        '<span class="slBlueDark"><b>' . $forceDesc .'</b></span>',
+                        $str);
                 }
             } elseif (strpos($str, '[LoopItemLabel]') !== false) {
                 $row = $this->sessData->getLatestDataBranchRow();
@@ -105,6 +109,8 @@ class OpenComplaintPrints extends OpenComplaintEmails
                 } elseif (isset($row->InjCareSubjectID)) {
                     $civ = $this->sessData->getRowById('Civilians', $row->InjCareSubjectID);
                     $str = str_replace('[LoopItemLabel]', $this->getCivName('Victims', $civ), $str);
+                } elseif (isset($row->OffID)) {
+                    $str = str_replace('[LoopItemLabel]', $this->getOfficerNameFromID($row->OffID), $str);
                 }
             }
             if (strpos($str, '[[List of Allegations]]') !== false) {
@@ -157,7 +163,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
             $url = $GLOBALS["SL"]->sysOpts["app-url"] . '/';
             switch ($this->sessData->dataSets["Partners"][0]->PartType) {
                 case $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'): $url .= 'attorney/'; break;
-                case $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'): $url .= 'org/'; break;
+                case $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'): $url .= 'org/';  break;
             }
             $url .= $this->sessData->dataSets["Partners"][0]->PartSlug;
             $str = str_replace('[[PartnerUrl]]', $GLOBALS["SL"]->swapURLwrap($url, false), $str);
@@ -209,7 +215,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
                 "loopItem" => $this->sessData->getChildRow('LinksComplaintDept', $loopItem->getKey(), 'Departments'), 
                 "setIndex" => $setIndex, 
                 "itemID"   => $loopItem->getKey()
-                ])->render();
+            ])->render();
         }
         return '';
     }
@@ -225,15 +231,18 @@ class OpenComplaintPrints extends OpenComplaintEmails
                     ? ' ' . $rec->VehicVehicleModel : '') . ' (Vehicle #' . (1+$ind) . ')';
         } elseif ($tbl == 'Civilians' && isset($rec->CivID)) {
             return $this->getCivilianNameFromID($rec->CivID);
+        } elseif ($tbl == 'Officers' && isset($rec->OffID)) {
+            return $this->getOfficerNameFromID($rec->OffID);
         }
         return '';
     }
     
     protected function getReportUploads($nID)
     {
-        $uploads = $this->getUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
-        return '<h3 class="mT0 slBlueDark">' . (($uploads && sizeof($uploads) > 1) ? 'Uploads' : 'Upload') . '</h3>'
-            . view('vendor.survloop.reports.inc-uploads', [ "uploads" => $uploads ])->render();
+        $ret = $this->reportUploadsMultNodes($this->cmplntUpNodes, $this->v["isAdmin"], $this->v["isOwner"]);
+        $cnt = $this->v["uploadPrintMap"]["img"]+$this->v["uploadPrintMap"]["vid"]
+            +$this->v["uploadPrintMap"]["fil"];
+        return '<h3 class="mT0 slBlueDark">' . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>' . $ret;
     }
     
     /* Double-Checking [For Now] */

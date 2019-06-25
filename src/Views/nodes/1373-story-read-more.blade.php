@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1373-story-read-more.blade.php -->
 <div id="showStoryLess" class=" @if ($more) disNon @else disBlo @endif ">
-    {!! $storyLess !!} ...
+    {!! $storyLess !!}...
     <div class="mT20">
         <a id="showBtnStoryMore" class="btn btn-primary" href="javascript:;">Read More</a>
     </div>

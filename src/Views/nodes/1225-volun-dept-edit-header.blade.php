@@ -4,20 +4,17 @@
 <div id="fixedHeader" class="fixed">
     <div class="row">
         <div class="col-8">
-            <h4 class="m0 slBlueDark">{{ str_replace('Department', 'Dept', $deptRow->DeptName) }}</h4>
+            <h3 class="m0 slBlueDark">{{ str_replace('Police Dept', 'PD', str_replace('Department', 'Dept', $deptRow->DeptName)) }}</h3>
         </div><div class="col-4">
-            <h4 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h4>
+            <h3 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3>
         </div>
     </div>
 </div>
 <div style="margin: 20px 0px -80px 0px;">
-    <div class="slCard nodeWrap slGrey">
-        <a href="/dept/{{ $deptRow->DeptSlug }}" target="_blank">
-            <i class="fa fa-external-link mR5" aria-hidden="true"></i>
-            openpolice.org/dept/{{ $deptRow->DeptSlug }}</a><br />
-        {{ $deptRow->DeptAddressCity }}, {{ $deptRow->DeptAddressState }} {{ $deptRow->DeptAddressZip }}
-        {!! $editsSummary[0] !!}
-    </div>
+    <a href="/dept/{{ $deptRow->DeptSlug }}" target="_blank">
+        <i class="fa fa-external-link mR5" aria-hidden="true"></i>
+        openpolice.org/dept/{{ $deptRow->DeptSlug }}</a><br />
+    {!! $editsSummary[0] !!}
 </div>
 <style>
 #pageTopGapID { display: none; }

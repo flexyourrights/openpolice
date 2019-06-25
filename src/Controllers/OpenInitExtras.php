@@ -234,6 +234,14 @@ class OpenInitExtras extends OpenPartners
         return true;
     }
     
+    public function initAdmMenuExtras()
+    {
+        if (in_array($this->treeID, [99, 46])) { // admin area view of complaint reports
+            return '/dash/all-complete-complaints';
+        }
+        return '';
+    }
+    
     public function initPowerUser($uID = -3)
     {
         if ($uID <= 0) {

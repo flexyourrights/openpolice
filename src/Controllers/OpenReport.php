@@ -169,7 +169,7 @@ class OpenReport extends OpenDepts
         } elseif (isset($this->sessData->dataSets["Incidents"][0])) {
             $date = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
         }
-        return ['When', $date];
+        return ['Indicent Date', $date];
     }
     
     protected function chkPrintWhereLine($nID = -3)
@@ -193,7 +193,7 @@ class OpenReport extends OpenDepts
         if (isset($this->sessData->dataSets["Incidents"])) {
             $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->dataSets["Incidents"][0], 'Inc');
             if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
-                return ['Where', $addy];
+                return ['Indicent Location', $addy];
             }
             if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressState)) {
                 $c = '';
@@ -206,7 +206,10 @@ class OpenReport extends OpenDepts
                         $state);
                 }
                 if (trim($c) != '') {
-                    return ['Where', $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state];
+                    return [
+                        'Indicent Location',
+                        $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state
+                    ];
                 }
             }
         }

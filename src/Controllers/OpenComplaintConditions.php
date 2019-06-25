@@ -166,10 +166,11 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 return 1;
             }
         } elseif ($condition == '#PrintAnonOnly') {
+            $unPub = $this->getUnPublishedStatusList();
+            $unPub[] = $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight');
             if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
                 && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
-                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComStatus), 
-                    $this->getUnPublishedStatusList())) {
+                && in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, $unPub)) {
                 return 1;
             }
             if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
@@ -189,6 +190,15 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 return 1;
             }
             return 0;
+        } elseif ($condition == '#PrintPublishingOnHold') {
+            if ($this->v["isAdmin"] || $this->v["isOwner"]) {
+                return 0;
+            }
+            if (isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
+                && in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, $this->getUnPublishedStatusList())) {
+                return 1;
+            }
+            return 0;
         } elseif ($condition == '#IsOversightAgency') {
             return (($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) ? 1 : 0);
         } elseif ($condition == '#ComplaintNotIncompleteOrCurrIsStaff') {
@@ -200,7 +210,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
             }
             return 0;
         }
-        return -1; 
+        return -1;
     }
     
     protected function complaintHasUploads()
@@ -214,21 +224,17 @@ class OpenComplaintConditions extends OpenSessDataOverride
     
     protected function hasTooManyAllegations()
     {
-        return $GLOBALS["SL"]->REQ->has('toomany');
         return (sizeof($GLOBALS["SL"]->mexplode(',', $this->commaAllegationList())) > 5);
     }
     
     protected function hasNoAllegations()
     {
-        return !$GLOBALS["SL"]->REQ->has('toomany');
         return (sizeof($GLOBALS["SL"]->mexplode(',', $this->commaAllegationList())) == 0);
     }
     
     protected function printAllegAudit()
     {
-        
-        
-        
+        return $this->commaAllegationList(true);
     }
     
 }

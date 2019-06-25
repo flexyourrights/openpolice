@@ -6,18 +6,21 @@
 
         <div class="slCard">
             <h2 class="m0">
-                @if (!isset($complaint->ComPublicID) || intVal($complaint->ComPublicID) <= 0)
-                    Incomplete Complaint #{{ $complaint->ComID }}
-                @else Complaint #{{ $complaint->ComPublicID }} @endif </h2>
-            @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
-                $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
-                <h4 class="mT5 txtDanger">Current Status: Incomplete</h4>
-            @else
-                <h4 class="mT5">Current Status: 
-                @if (isset($overUpdateRow->LnkComOverReceived) && trim($overUpdateRow->LnkComOverReceived) != '')
-                    Received by Oversight
-                @else {{ $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) }} @endif </h4>
-            @endif
+            @if (!isset($complaint->ComPublicID) || intVal($complaint->ComPublicID) <= 0)
+                Incomplete Complaint #{{ $complaint->ComID }}
+            @else Complaint #{{ $complaint->ComPublicID }} @endif </h2>
+        @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
+            $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
+            <h4 class="mT5 txtDanger">Current Status: Incomplete</h4>
+        @else
+            <h4 class="mT5">Current Status: 
+            @if (isset($overUpdateRow->LnkComOverReceived) 
+                && trim($overUpdateRow->LnkComOverReceived) != '')
+                Received by Oversight
+            @else 
+                {{ $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) }}
+            @endif </h4>
+        @endif
             
 @if (in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), ['Hold', 'New', 'Reviewed']))
     <h2 class="mT0">Congratulations, {{ $user->name }}!</h2>
@@ -97,9 +100,10 @@
     @if (!isset($complaint->ComStatus) || intVal($complaint->ComStatus) <= 0 || 
         $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Incomplete')
             <a href="/switch/1/{{ $complaint->ComID }}" class="btn btn-lg btn-primary btn-block mB10 taL" id="ownBtnCont"
-                onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"
+                onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
                 ><i class="fa fa-pencil mR5"></i> Continue</a>
             <a href="javascript:;" class="btn btn-lg btn-danger w100 taL" id="ownBtnDel"
+                onMouseOver="this.style.color='#EC2327';" onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
                 onClick="if (confirm('{!! $warning !!}')) { window.location='/delSess/1/{{ $complaint->ComID }}'; }"
                 ><i class="fa fa-trash-o mR5"></i> Delete</a>
     @else
@@ -156,7 +160,8 @@
                     This is for administrators of Open Police Complaints. We will not make it public.</small>
                 </div>
                 <center><input type="submit" value="Save Status Changes" class="btn btn-lg btn-primary"
-                    onMouseOver="this.style.color='#FFF';" onMouseOut="this.style.color='#2b3493';"></center>
+                    onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
+                    style="color: #FFF;"></center>
                 </form>
                 <div class="pT10"><hr></div>
             </div>
@@ -201,10 +206,7 @@
     </div>
 </div>
 
+
 <style>
-a#ownBtnDel:link, a#ownBtnDel:visited, a#ownBtnDel:active { color: #FFF; }
-a#ownBtnDel:hover { color: #EC2327; }
-a#ownBtnPrnt:hover, a#ownBtnDwnl:hover, a#ownBtnSend:hover { color: #FFF; }
-a#ownBtnCont:link, a#ownBtnCont:visited, a#ownBtnCont:active { color: #FFF; }
-a#ownBtnCont:hover { color: #2b3493; }
+
 </style>

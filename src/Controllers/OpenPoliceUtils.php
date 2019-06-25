@@ -46,7 +46,7 @@ class OpenPoliceUtils extends TreeSurvForm
         [129, 'Discourtesy',                    'AlleSilDiscourteous'],
         [127, 'Neglect of Duty',                'AlleSilNeglectDuty'], 
         [127, 'Policy or Procedure Violation',  'AlleSilProcedure'], 
-        [131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
+        //[131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
         [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
     ];
     public $eventTypes = [
@@ -303,7 +303,7 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl)) {
+        if (!isset($coreTbl) || trim($coreTbl) == '') {
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         if ($coreTbl == 'Complaints') {
@@ -327,7 +327,7 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getUnPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl)) {
+        if (trim($coreTbl) == '') {
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         if ($coreTbl == 'Complaints') {
@@ -336,8 +336,8 @@ class OpenPoliceUtils extends TreeSurvForm
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'New'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Pending Attorney'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Attorney\'d'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Reviewed'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight')
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Reviewed')
+                //$GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight')
             ];
         } elseif ($coreTbl == 'Compliments') {
             return [
@@ -358,8 +358,11 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function canPrintFullReport()
     {
-        return ($this->v["isAdmin"] || $this->v["isOwner"] || ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly') && $this->complaintHasPublishedStatus() == 1));
+        return ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])
+            || ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
+                && $this->complaintHasPublishedStatus() == 1));
     }
     
     public function tblsInPackage()
@@ -589,6 +592,22 @@ class OpenPoliceUtils extends TreeSurvForm
             }
         }
         return $ret;
+    }
+    
+    public function commaAllegationListSplit()
+    {
+        $allegs = ['', ''];
+        $this->simpleAllegationList();
+        if (sizeof($this->allegations) > 0) { // special printing...
+            foreach ($this->allegations as $i => $alleg) {
+                if ($i > 0) {
+                    $allegs[1] .= (($i > 1) ? ', ' : '') . $alleg[0];
+                } else {
+                    $allegs[0] .= $alleg[0];
+                }
+            }
+        }
+        return $allegs;
     }
     
     public function commaTopThreeAllegationList()
@@ -1225,7 +1244,8 @@ class OpenPoliceUtils extends TreeSurvForm
         }
         $name = trim($name);
         if ($name != '' && $name != 'You') {
-            $name .= ' (' . $civ->CivRole . ' #' . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) . ')';
+            $name .= ' (' . $civ->CivRole . ' #' 
+                . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) . ')';
         }
         if ($name == '') {
             

@@ -5,6 +5,7 @@
 <option value="Needs More Work" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Needs More Work') SELECTED @endif 
     >Needs More Work (On Hold)</option>
+<option DISABLED ></option>
 <option value="Pending Attorney: Needed" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Pending Attorney: Needed') SELECTED @endif 
     >Defense Attorney Needed (Un-Publish, On Hold)</option>
@@ -21,7 +22,6 @@
 <option value="Submitted to Oversight" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Submitted to Oversight') SELECTED @endif 
     >Submitted to Oversight (Full Transparency Public, Email Sent or Complainant Confirmed)</option>
-<option DISABLED ></option>
 <option value="Received by Oversight" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Received by Oversight') SELECTED @endif 
     >Received by Oversight (Full Transparency Public, Confirmed)</option>
@@ -31,7 +31,6 @@
 <option value="Investigated (Closed)" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Investigated (Closed)') SELECTED @endif 
     >Investigated (Full Transparency Public, Closed)</option>
-<option DISABLED ></option>
 <option value="Declined To Investigate (Closed)" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Declined To Investigate (Closed)') SELECTED @endif 
     >Declined To Investigate (Full Transparency Public, Closed)</option>

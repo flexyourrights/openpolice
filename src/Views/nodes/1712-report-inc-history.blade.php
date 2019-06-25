@@ -9,9 +9,9 @@
                         @elseif ($h["type"] == 'Email') <i class="fa fa-envelope" aria-hidden="true"></i> @endif
             </h4></td>
             <td class="w100">
-                <h4 class="m0 slBlueDark">{!! $h["desc"] !!}</h4>
-                <div class="fPerc80 slGrey">{{ date("n/j/y h:ia", $h["date"]) }}, {!! $h["who"] !!}</div>
-                @if (isset($h["note"]) && trim($h["note"]) != '') {!! $h["note"] !!} @endif
+                {!! $h["desc"] !!}<br />
+                {{ date("n/j/y h:ia", $h["date"]) }}, {!! $h["who"] !!}
+                @if (isset($h["note"]) && trim($h["note"]) != '') <br />{!! $h["note"] !!} @endif
             </td>
         </tr>
     @endforeach

@@ -18,6 +18,17 @@ class OpenDashAdmin
     
     public function printDashTopLevStats()
     {
+        $stats = [
+            "betas"      => 0,
+            "incomplete" => 0,
+            "complete"   => 0,
+            "processed"  => 0,
+            "submitted"  => 0
+        ];
+        $stats["betas"] = DB::table('OP_TesterBeta')
+            ->whereNotNull('BetaInvited')
+            ->distinct('BetaEmail')
+            ->count();
         $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
             ->where('ComStatus', '>', 0)
             ->whereIn('ComType', [
@@ -26,7 +37,37 @@ class OpenDashAdmin
                 $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
             ])
             ->get();
-        
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $com) {
+                switch (intVal($com->ComStatus)) {
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'):
+                        $stats["incomplete"]++;
+                        break;
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'New'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Needs More Work'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'):
+                        $stats["complete"]++;
+                        break;
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight'):
+                        $stats["processed"]++;
+                        $stats["complete"]++;
+                        break;
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Declined To Investigate (Closed)'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Investigated (Closed)'):
+                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed'):
+                        $stats["submitted"]++;
+                        $stats["processed"]++;
+                        $stats["complete"]++;
+                        break;
+                }
+            }
+        }
+        return view('vendor.openpolice.nodes.2345-dash-top-stats', $stats)->render();
     }
     
     public function printDashSessGraph()

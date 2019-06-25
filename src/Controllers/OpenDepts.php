@@ -154,14 +154,14 @@ class OpenDepts extends OpenListing
     public function loadDeptEditsSummary()
     {
         $this->v["editsSummary"] = [
-            '<b class="mL20">Last Verified: ' 
+            'Last Verified: ' 
             . (($this->v["neverEdited"]) ? 'Never' : date('n/j/y', strtotime($this->v["deptRow"]->DeptVerified))) 
-            . '</b> <span class="mL20"><nobr>' . intVal($this->v["editTots"]["online"]) 
-            . '<span class="fPerc80">x</span><i class="fa fa-laptop"></i> Online Research,</nobr></span> '
+            . ' <span class="mL20"><nobr>' . intVal($this->v["editTots"]["online"]) 
+            . '<span class="fPerc80 mL3 mR3">x</span> Online Research,</nobr></span> '
             . '<span class="mL20"><nobr>' . intVal($this->v["editTots"]["callDept"]) 
-            . '<span class="fPerc80">x</span><i class="fa fa-phone"></i> Department Calls,</nobr></span> '
+            . '<span class="fPerc80 mL3 mR3">x</span> Department Calls,</nobr></span> '
             . '<span class="mL20"><nobr>' . intVal($this->v["editTots"]["callIA"]) 
-            . '<span class="fPerc80">x</span><i class="fa fa-phone"></i> Internal Affairs Calls</nobr></span>',
+            . '<span class="fPerc80 mL3 mR3">x</span> Internal Affairs Calls</nobr></span>',
             
             (($this->v["neverEdited"]) ? '<span class="slGrey">' : '') 
             . intVal($this->v["editTots"]["online"]) . '<i class="fa fa-laptop"></i>, ' 
@@ -399,7 +399,6 @@ class OpenDepts extends OpenListing
             for ($i = 0; $i < 5; $i++) {
                 $colors[$i] = $GLOBALS["SL"]->printColorFadeHex($i/7, '#EC2327', '#FFFFFF');
             }
-                
             for ($i = 5; $i < 11; $i++) {
                 $colors[$i] = $GLOBALS["SL"]->printColorFadeHex((11-$i)/7, '#2B3493', '#FFFFFF');
             }
@@ -479,7 +478,7 @@ class OpenDepts extends OpenListing
             "nID"        => $nID,
             "deptScores" => $this->v["deptScores"],
             "state"      => $state
-            ])->render();
+        ])->render();
     }
     
     protected function printDeptAccScoreTitleDesc($nID)
@@ -493,7 +492,7 @@ class OpenDepts extends OpenListing
         return view('vendor.openpolice.nodes.1968-accss-grades-title-desc', [
             "nID"   => $nID,
             "state" => (($GLOBALS["SL"]->REQ->has('state')) ? $GLOBALS["SL"]->REQ->state : '')
-            ])->render();
+        ])->render();
     }
     
     protected function printDeptAccScoreBars($nID)
@@ -540,7 +539,7 @@ class OpenDepts extends OpenListing
         $this->loadDeptStuff($this->v["deptID"]);
         */
         if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
-            $GLOBALS["SL"]->addTopNavItem('pencil', 
+            $GLOBALS["SL"]->addSideNavItem('Edit Department', 
                 '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
         }
         $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
@@ -558,7 +557,7 @@ class OpenDepts extends OpenListing
             "nID"      => $nID,
             "d"        => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]],
             "previews" => $previews
-            ])->render();
+        ])->render();
     }
     
     protected function printDeptComplaints($nID)
@@ -579,8 +578,8 @@ class OpenDepts extends OpenListing
             $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
             $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
             $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed')
-            ];
-        return $this->printComplaintListing();
+        ];
+        return $this->printComplaintListing($nID);
     }
 
     public function deptPage(Request $request, $deptSlug = '')
@@ -603,7 +602,9 @@ class OpenDepts extends OpenListing
     {
         $this->loadPageVariation($request, 1, 24, '/complaint-or-compliment/' . $deptSlug);
         $deptRow = OPDepartments::where('DeptSlug', $deptSlug)->first();
-        if ($deptRow && isset($deptRow->DeptID)) session()->put('opcDeptID', $deptRow->DeptID);
+        if ($deptRow && isset($deptRow->DeptID)) {
+            session()->put('opcDeptID', $deptRow->DeptID);
+        }
         return $this->index($request);
     }
     
@@ -638,13 +639,17 @@ class OpenDepts extends OpenListing
                 $this->v["currOverUpdateRow"]->save();
             }
         }
-        if (!isset($this->v["currOverUpdateRow"])) $this->v["currOverUpdateRow"] = null;
+        if (!isset($this->v["currOverUpdateRow"])) {
+            $this->v["currOverUpdateRow"] = null;
+        }
         return $this->v["currOverUpdateRow"];
     }
     
     public function logOverUpDate($cid, $deptID, $type = 'Submitted', $row = [])
     {
-        if (!$row || !isset($row->LnkComOverID)) $row = $this->getOverUpdateRow($cid, $deptID);
+        if (!$row || !isset($row->LnkComOverID)) {
+            $row = $this->getOverUpdateRow($cid, $deptID);
+        }
         $row->{ 'LnkComOver' . $type } = date("Y-m-d H:i:s");
         $row->save();
         return true;
@@ -665,7 +670,9 @@ class OpenDepts extends OpenListing
         if (isset($this->v["overRow" . $which])) {
             return $this->v["overRow" . $which];
         }
-        $rows = $this->sessData->getRowIDsByFldVal('Oversight', [ 'OverType' => $this->overWhichDefID($which) ], true);
+        $rows = $this->sessData->getRowIDsByFldVal('Oversight', [
+            'OverType' => $this->overWhichDefID($which)
+        ], true);
         if (sizeof($rows) > 0) {
             $this->v["overRow" . $which] = $rows[0];
             return $this->v["overRow" . $which];

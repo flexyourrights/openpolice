@@ -154,9 +154,6 @@ class OpenReportTools extends OpenReport
     protected function printComplaintAdmin()
     {
         $this->v["firstRevDone"] = false;
-        if ($this->v["user"]->hasRole('administrator|databaser|staff')) {
-            $GLOBALS["SL"]->addTopNavItem('All Complaints', '/dash/all-complete-complaints');
-        }
         if ($GLOBALS["SL"]->REQ->has('firstReview') && intVal($GLOBALS["SL"]->REQ->firstReview) > 0) {
             $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
                 $GLOBALS["SL"]->REQ->firstReview);
@@ -236,7 +233,7 @@ class OpenReportTools extends OpenReport
                     "desc" => $desc, 
                     "who"  => $allUserNames[$r->ComRevUser],
                     "note" => ((isset($r->ComRevNote)) ? trim($r->ComRevNote) : '')
-                    ];
+                ];
             }
         }
         $this->v["emailList"] = SLEmails::orderBy('EmailName', 'asc')
@@ -251,15 +248,15 @@ class OpenReportTools extends OpenReport
                 if (!isset($allUserNames[$e->EmailedFromUser])) {
                     $allUserNames[$e->EmailedFromUser] = $this->printUserLnk($e->EmailedFromUser);
                 }
-                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">' . $e->EmailedSubject 
-                    . '</a> <i><span class="fPerc66"> to ' . $e->EmailedTo . '</span></i><div id="hidFldEma' . $e->EmailedID 
+                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">"' . $e->EmailedSubject 
+                    . '"</a><br />email sent to ' . $e->EmailedTo . '<div id="hidFldEma' . $e->EmailedID 
                     . '" class="disNon p10">' . $e->EmailedBody . '</div>';
                 $this->v["history"][] = [
                     "type" => 'Email', 
                     "date" => strtotime($e->created_at), 
                     "desc" => $desc, 
                     "who"  => $allUserNames[$e->EmailedFromUser]
-                    ];
+                ];
             }
         }
         $this->v["history"] = $GLOBALS["SL"]->sortArrByKey($this->v["history"], 'date', 'desc');

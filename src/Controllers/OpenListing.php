@@ -4,6 +4,11 @@ namespace OpenPolice\Controllers;
 use DB;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
+use App\Models\OPIncidents;
+use App\Models\OPAllegSilver;
+use App\Models\OPAllegations;
+use App\Models\OPDepartments;
+use App\Models\OPStops;
 use App\Models\SLNode;
 use App\Models\OPTesterBeta;
 use OpenPolice\Controllers\OpenAjax;
@@ -15,15 +20,12 @@ class OpenListing extends OpenAjax
         $coreAbbr = $GLOBALS["SL"]->coreTblAbbr();
         if (!isset($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl]) 
             || !isset($this->sessData->dataSets["Incidents"])) {
+
             return '';
         }
-        $storyPrev = $GLOBALS["SL"]->wordLimitDotDotDot($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ 
-            $coreAbbr . 'Summary' }, 100);
-        $comDate = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-        if ($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0]->{ $coreAbbr . 'Privacy' } == 304 
-            || $this->v["isAdmin"]) {
-            $comDate = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-        }
+        $complaint = $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0];
+        $comDate = $this->getComplaintPrevDate($this->sessData->dataSets["Incidents"][0], $complaint);
+        $comDateFiledOPC = $this->getComplaintPrevDateFiledOPC($this->sessData->dataSets["Incidents"][0], $complaint);
         $where = $this->getReportWhereLine();
         $deptList = '';
         $depts = ((isset($this->sessData->dataSets["Departments"])) ? $this->sessData->dataSets["Departments"] : null);
@@ -37,25 +39,106 @@ class OpenListing extends OpenAjax
         }
         return view('vendor.openpolice.complaint-report-preview', [
             "uID"         => $this->v["uID"],
-            "storyPrev"   => $storyPrev,
+            "storyPrev"   => $complaint->{ $coreAbbr . 'Summary' },
             "coreAbbr"    => $coreAbbr,
             "complaint"   => $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0], 
             "incident"    => $this->sessData->dataSets["Incidents"][0], 
             "comDate"     => $comDate, 
+            "comDateFile" => $comDateFiledOPC, 
             "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
-            "allegations" => $this->commaAllegationList(),
+            "allegations" => $this->commaAllegationListSplit(),
             "featureImg"  => '',
             "deptList"    => $deptList
-            ])->render();
+        ])->render();
     }
     
-    protected function printComplaintListing($view = 'all')
+    protected function getComplaintPrevDate($incident, $complaint)
+    {
+        $comDate = date('F Y', strtotime($incident->IncTimeStart));
+        if ($complaint->ComPrivacy == 304 || $this->v["isAdmin"]) {
+            $comDate = date('m/d/Y', strtotime($incident->IncTimeStart));
+        }
+        return $comDate;
+    }
+    
+    protected function getComplaintPrevDateFiledOPC($incident, $complaint)
+    {
+        $comDate = date('F Y', strtotime($incident->ComRecordSubmitted));
+        if ($complaint->ComPrivacy == 304 || $this->v["isAdmin"]) {
+            $comDate = date('m/d/Y', strtotime($incident->ComRecordSubmitted));
+        }
+        return $comDate;
+    }
+    
+    protected function getComplaintPreviewByRow($complaint)
+    {
+        $this->allegations = [];
+        foreach (['Complaints', 'Incidents', 'AllegSilver', 'Allegations', 'Departments', 'Stops']
+            as $tbl) {
+            $this->sessData->dataSets[$tbl] = [];
+        }
+        $this->sessData->dataSets["Complaints"][0] = $complaint;
+        $this->sessData->dataSets["Incidents"][0] = OPIncidents::find($complaint->ComIncidentID);
+        $this->sessData->dataSets["AllegSilver"][0] = OPAllegSilver::where('AlleSilComplaintID', $complaint->ComID)
+            ->first();
+        $this->sessData->dataSets["Allegations"] 
+            = OPAllegations::where('AlleComplaintID', $complaint->ComID)
+            ->get();
+        $this->sessData->dataSets["Departments"] = DB::table('OP_Departments')
+            ->join('OP_LinksComplaintDept', 'OP_Departments.DeptID', '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
+            ->where('OP_LinksComplaintDept.LnkComDeptComplaintID', $complaint->ComID)
+            ->select('OP_Departments.*')
+            ->get();
+        $this->sessData->dataSets["Stops"] = DB::table('OP_Stops')
+            ->join('OP_EventSequence', 'OP_Stops.StopEventSequenceID', '=', 'OP_EventSequence.EveID')
+            ->where('OP_EventSequence.EveComplaintID', $complaint->ComID)
+            ->select('OP_Stops.*')
+            ->get();
+        return $this->printPreviewReportCustom();
+    }
+    
+    protected function printComplaintsPreviews()
+    {
+        $ret = '';
+        //$GLOBALS["SL"]->x["pageView"] = 'public';
+        $this->initSearcher();
+        $this->searcher->getSearchFilts();
+        $xtra = "whereIn('ComStatus', [" . implode(", ", 
+            $this->getPublishedStatusList('Complaints')) . "])->";
+        $this->searcher->loadAllComplaintsPublic($xtra);
+        if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
+            foreach ($this->searcher->v["allcomplaints"] as $i => $com) {
+                $ret .= '<div class="pB20 mB10"><div class="slCard">' 
+                    . $this->getComplaintPreviewByRow($com) . '</div></div>';
+            }
+        }
+        return $ret;
+    }
+    
+    protected function printComplaintsFilters($nID, $view = 'all')
+    {
+        $GLOBALS["SL"]->loadStates();
+        $state = '';
+        return view('vendor.openpolice.complaint-listing-filters', [
+            "nID"        => $nID,
+            "view"       => $view,
+            "fltStatus"  => $this->v["fltStatus"],
+            "stateDrop"  => $GLOBALS["SL"]->states->stateDrop($state),
+            "allegTypes" => $this->worstAllegations,
+            "races"      => $GLOBALS["SL"]->def->getSet('Races')
+        ])->render();
+    }
+    
+    protected function printComplaintListing($nID, $view = 'all')
     {
         $this->v["listView"] = $view;
         if ($GLOBALS["SL"]->REQ->has('fltView')) {
             $this->v["listView"] = $GLOBALS["SL"]->REQ->fltView;
         }
-        $this->v["fltStatus"] = (($GLOBALS["SL"]->REQ->has('fltStatus')) ? $GLOBALS["SL"]->REQ->fltStatus : 0);
+        $this->v["fltStatus"] = (($GLOBALS["SL"]->REQ->has('fltStatus')) 
+            ? $GLOBALS["SL"]->REQ->fltStatus : 0);
+        $this->v["listPrintFilters"] = $this->printComplaintsFilters($nID, $view);
+
         $sort = "date";
         $qman = "SELECT c.*, p.`PrsnNameFirst`, p.`PrsnNameLast`, p.`PrsnEmail`, i.* 
             FROM `OP_Complaints` c 
@@ -74,7 +157,9 @@ class OpenListing extends OpenAjax
             switch (trim($GLOBALS["SL"]->REQ->get('type'))) {
                 case 'notsure':
                     $GLOBALS["SL"]->setCurrPage('/dash/all-complete-complaints?type=notsure');
-                    $comTypes = [ $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure') ];
+                    $comTypes = [
+                        $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                    ];
                     break;
                 case 'notpolice':
                     $GLOBALS["SL"]->setCurrPage('/dash/all-complete-complaints?type=notpolice');
@@ -86,7 +171,7 @@ class OpenListing extends OpenAjax
                         $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Abuse'),
                         $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Spam'),
                         $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Test')
-                        ];
+                    ];
                     break;
             }
         }
@@ -95,7 +180,7 @@ class OpenListing extends OpenAjax
                 $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
-                ];
+            ];
         }
         $qman .= " AND c.`ComType` IN ('" . implode("', '", $comTypes) . "') ";
         if ($this->v["fltStatus"] > 0) {
@@ -134,7 +219,8 @@ class OpenListing extends OpenAjax
                 break;
         }
         $qman .= " ORDER BY c.`ComRecordSubmitted` DESC";
-        $this->v["complaints"] = $this->v["comInfo"] = $this->v["lastNodes"] = $this->v["ajaxRefreshs"] = [];
+        $this->v["complaints"] = $this->v["comInfo"] = $this->v["lastNodes"] 
+            = $this->v["ajaxRefreshs"] = [];
         $compls = DB::select( DB::raw($qman) );
         if ($compls && sizeof($compls) > 0) {
             foreach ($compls as $com) {
@@ -260,7 +346,7 @@ class OpenListing extends OpenAjax
                 ->orWhere('BetaHowHear', 'LIKE', '')
                 ->count(),
             "totLoads"   => OPTesterBeta::count()
-            ])->render();
+        ])->render();
     }
     
     protected function sortBetas($betas, $divName)
@@ -293,7 +379,7 @@ class OpenListing extends OpenAjax
         $GLOBALS["SL"]->pageJAVA .= view('vendor.survloop.reports.graph-bar-plot', [
             "graph"  => $graph,
             "height" => 700
-            ])->render();
+        ])->render();
         return $graph;
     }
     

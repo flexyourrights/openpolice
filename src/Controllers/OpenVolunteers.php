@@ -21,7 +21,6 @@ class OpenVolunteers extends OpenDevelopment
     
     public function printVolunPriorityList()
     {
-        $this->loadDeptPriorityRows();
         return view('vendor.openpolice.nodes.1755-volun-home-priority-depts', $this->v)->render();
     }
     
@@ -31,6 +30,7 @@ class OpenVolunteers extends OpenDevelopment
             $this->v["deptScores"] = new DepartmentScores;
             $this->v["deptScores"]->recalcAllDepts();
         }
+        $this->loadDeptPriorityRows();
         if ($GLOBALS["SL"]->REQ->has('newDept') && intVal($GLOBALS["SL"]->REQ->get('newDept')) == 1
             && $GLOBALS["SL"]->REQ->has('deptName') && trim($GLOBALS["SL"]->REQ->get('deptName')) != '') {
             $newDept = $this->newDeptAdd($GLOBALS["SL"]->REQ->get('deptName'), 

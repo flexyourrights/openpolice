@@ -31,7 +31,8 @@ class OpenPolice extends OpenInitExtras
             
         // Home Page
         } elseif ($nID == 1876) {
-            return view('vendor.openpolice.nodes.1876-home-page-hero-credit')->render();
+            return view('vendor.openpolice.nodes.1876-home-page-hero-credit')
+                ->render();
         //} elseif ($nID == 1848) {
         //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
                 
@@ -48,7 +49,8 @@ class OpenPolice extends OpenInitExtras
             return $this->publicDeptAccessMap($nID);
             
         } elseif ($nID == 1907) { // Donate Social Media Buttons
-            return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
+            return view('vendor.openpolice.nodes.1907-donate-share-social')
+                ->render();
         } elseif (in_array($nID, [859, 1454])) {
             return $this->printDeptOverPublic($nID);
                 
@@ -136,11 +138,26 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2164) {
             return $this->printComplaintSessPath();
             
+        // Complaint Listings
+        } elseif (in_array($nID, [2381, 2387])) {
+            return $this->printComplaintsFilters($nID);
+        } elseif ($nID == 2377) {
+            if ($this->coreID > 0) {
+                $GLOBALS["SL"]->pageAJAX .= 'setTimeout(function() {
+                document.getElementById("com' . $nID . 'cid' . $this->coreID . '").innerHTML=getSpinner();
+                }, 10);
+                $("#com' . $nID . 'cid' . $this->coreID 
+                    . '").load("/complaint/read-' . $this->coreID . '/full?ajax=1&wdg=1");' . "\n";
+                return '<div id="com' . $nID . 'cid' . $this->coreID . '" class="w100"></div>';
+            }
+            return '&nbsp;';
+            //return $this->printComplaintsPreviews();
+
         // Staff Area Nodes
         } elseif ($nID == 1418) {
-            return $this->printComplaintListing();
+            return $this->printComplaintListing($nID);
         } elseif ($nID == 1420) {
-            return $this->printComplaintListing('incomplete');
+            return $this->printComplaintListing($nID, 'incomplete');
         } elseif ($nID == 1939) {
             return $this->printPartnersOverview();
         } elseif ($nID == 2169) {
@@ -193,7 +210,7 @@ class OpenPolice extends OpenInitExtras
             return $this->v["openDash"]->volunDepts();
             
         // Admin Dashboard Page
-        } elseif ($nID == 1359) {
+        } elseif ($nID == 2345) {
             $this->initAdmDash();
             return $this->v["openDash"]->printDashTopLevStats();
         } elseif ($nID == 1359) {
