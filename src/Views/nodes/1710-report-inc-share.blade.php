@@ -46,7 +46,7 @@
         </div>
         @if (isset($emojiTags) && trim($emojiTags) != '') <div class="mT5">{!! $emojiTags !!}</div> @endif
     @elseif (in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf']))
-        <h3 class="slBlueDark mT0">What is Open Police Complaints?</h3>
+        <h3 class="slBlueDark mT20">What is Open Police Complaints?</h3>
         <p class="pR20">OPC is a web app that helps people to prepare, file, and track police conduct reports. It's designed to serve the needs of oversight investigators, attorneys, police chiefs, and others working to advance constitutional and community policing.</p>
     @endif
     </div>

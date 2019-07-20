@@ -147,8 +147,13 @@
     z-index: 100;
     padding: 10px 20px 0px 20px;
     width: 1150px;
-    margin: @if (isset($state) && trim($state) != '') -509px @else -972px @endif 0px 0px -20px;
+    margin: @if (isset($state) && trim($state) != '') -509px @else -948px @endif 0px 0px -20px;
     background: #FFF;
+}
+@-moz-document url-prefix() {
+    .deptScrHeadScroll {
+        margin-top: @if (isset($state) && trim($state) != '') -509px @else -957px @endif ;
+    }
 }
 .deptScrHead1, .deptScrHead2 { background: #FFF; width: 100%; margin-left: -6px; }
 .deptScrHead1 { display: block; }
@@ -177,8 +182,18 @@
 a.deptScrLnk:link, a.deptScrLnk:visited, a.deptScrLnk:active, a.deptScrLnk:hover { font-size: 14pt; }
     
 @media screen and (max-width: 1200px) {
-    .deptScrHeadScroll { width: 963px; margin-top: @if (isset($state) && trim($state) != '') -535px; @else -990px; @endif }
-    .deptScrHeadScroll .deptScrHead1 .deptScrMore .row .col-8 .deptHeadWrap { padding-left: 3px; }
+    .deptScrHeadScroll {
+        width: 965px;
+        margin-top: @if (isset($state) && trim($state) != '') -535px; @else -970px; @endif
+    }
+    @-moz-document url-prefix() {
+        .deptScrHeadScroll {
+            margin-top: @if (isset($state) && trim($state) != '') -509px; @else -980px; @endif
+        }
+    }
+    .deptScrHeadScroll .deptScrHead1 .deptScrMore .row .col-8 .deptHeadWrap {
+        padding-left: 3px;
+    }
     @-moz-document url-prefix() {
         .deptScrHeadScroll .deptScrHead1 .deptScrMore .row .col-8 .deptHeadWrap {
             padding-left: 28px; margin-right: -4px;

@@ -51,7 +51,7 @@ class OpenInitExtras extends OpenPartners
         
         $this->minorSections = [ [], [], [], [], [] ];
         $this->minorSections[0][] = [157, 'Start Your Story'];
-        $this->minorSections[0][] = [437, 'Privacy Options'];
+        $this->minorSections[0][] = [437, 'Legal & Options'];
         $this->minorSections[0][] = [158, 'When & Where'];
         $this->minorSections[0][] = [707, 'The Scene'];
         
@@ -88,7 +88,7 @@ class OpenInitExtras extends OpenPartners
         
         $this->minorSections = array( [], [], [], [], [] );
         $this->minorSections[0][] = array(753, 'Start Your Story');
-        $this->minorSections[0][] = array(867, 'Privacy Options');
+        $this->minorSections[0][] = array(867, 'Legal & Options');
         $this->minorSections[0][] = array(877, 'When & Where');
         $this->minorSections[0][] = array(887, 'The Scene');
         

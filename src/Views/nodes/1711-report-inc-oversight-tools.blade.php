@@ -74,7 +74,8 @@
 */ ?>
 
             <h3 class="mT5 mB0">Please confirm the status of this complaint:</h3>
-            <form method="post" name="accessCode" action="?overUpdate=1">
+            <form method="post" name="accessCode" action="?overUpdate=1{{
+                (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
             <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
             <div class="nFld mT0">
                 @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 

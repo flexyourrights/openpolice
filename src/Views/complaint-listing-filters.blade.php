@@ -7,50 +7,43 @@
 </div>
 */ ?>
 
-<div id="hidivCompFilts{{ $nID }}" class="disBlo pB15">
+<div id="hidivCompFilts{{ $nID }}" class="disBlo @if ($view == 'list') pB15 @endif ">
+    <div class="row">
+        <div class="col-6">
+            <h4>Filter Listings</h4>
+        </div><div class="col-6 taR">
+            <a id="compFiltBtn{{ $nID }}" class="btn btn-secondary btn-sm updateSearchFilts"
+                href="javascript:;">Apply Filters</a>
+        </div>
+    </div>
+    <div class="p0"><br /></div>
+
+@if ($view == 'list')
 	<div class="row">
 		<div class="col-sm-6">
+@endif
 
-		    @if ($view != 'incomplete')
-				<p><b>By Complaint Status</b>
-		        <select name="fltStatus" id="fltStatusID" class="form-control applyFilts" autocomplete="off">
-		            <option value="0" @if (!isset($fltStatus) || intVal($fltStatus) <= 0) SELECTED @endif 
-		                >Any Status</option>
-		            {!! $GLOBALS["SL"]->def->getSetDrop('Complaint Status', $fltStatus,
-		                ((isset($statusSkips)) ? $statusSkips : [])) !!}
-		        </select></p>
-		    @endif
-			<p><b>By State</b>
-			<select class="form-control" name="filtState">{!! $stateDrop !!}</select>
-			</p>
-			<p><b>By Allegation</b><br />
-			@foreach ($allegTypes as $i => $alleg)
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtAllegs[]" value="{{ $alleg[0] }}"> {{ $alleg[1] }}</label>
-			@endforeach
-			</p>
+            {!! $statusFilts !!}
+            <div class="mTn10 mBn10"><hr></div>
+            {!! $stateFilts !!}
 
+@if ($view == 'list')
 		</div>
 		<div class="col-sm-6">
+            <div class="mTn20"></div>
+@else
+            <div class="mTn10 mBn10"><hr></div>
+@endif
 
-			<p><b>By Victim Description</b><br />
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="M"> Male</label>
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="F"> Female</label>
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="T"> Transgender/Other</label>
-			@foreach ($races as $i => $race)
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictRace[]" value="T"> {{ $race->DefValue }}</label>
-			@endforeach
-			</p>
-			<p><b>By Officer Description</b><br />
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="M"> Male</label>
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="F"> Female</label>
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictGend[]" value="T"> Transgender/Other</label>
-			@foreach ($races as $i => $race)
-				<label class="disBlo pB5 pT5"><input type="checkbox" class="mR5" name="filtVictRace[]" value="T"> {{ $race->DefValue }}</label>
-			@endforeach
-			</p>
+            {!! $allegFilts !!}
+            <div class="mTn10 mBn10"><hr></div>
+            {!! $victFilts !!}
+            <div class="mTn10 mBn10"><hr></div>
+            {!! $offFilts !!}
 
+@if ($view == 'list')
 		</div>
 	</div>
+@endif
 
-	<a href="javascript:;" id="compFiltBtn{{ $nID }}" class="btn btn-primary btn-block btn-lg mT20">Filter Results</a>
 </div>

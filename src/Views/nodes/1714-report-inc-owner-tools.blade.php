@@ -114,7 +114,8 @@
                 href="javascript:;"><i class="fa fa-refresh mR5" aria-hidden="true"></i> 
                 Update Complaint Status</a></div>
             <div id="hidivUpdateStatus" class="mTn10 mB20 disNon">
-                <form method="post" name="accessCode" action="?ownerUpdate=1">
+                <form method="post" name="accessCode" action="?ownerUpdate=1{{
+                    (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
                 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
                 <div class="nFld mT0">
                     <label class="finger">

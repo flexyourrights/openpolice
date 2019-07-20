@@ -421,7 +421,7 @@ class OpenDepts extends OpenListing
         $GLOBALS["SL"]->loadStates();
         if (!isset($this->v["deptScores"])) {
             $this->v["deptScores"] = new DepartmentScores;
-            $this->v["deptScores"]->loadAllDepts($this->searcher->searchOpts);
+            $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
         }
         if ($GLOBALS["SL"]->REQ->has('state') && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
             $ret .= '<!-- not yet for state filter -->';
@@ -471,8 +471,8 @@ class OpenDepts extends OpenListing
     protected function printDeptOverPublic($nID)
     {
         $state = '';
-        if (isset($this->searcher->searchOpts["state"])) {
-            $state = $this->searcher->searchOpts["state"];
+        if (isset($this->searcher->searchFilts["state"])) {
+            $state = $this->searcher->searchFilts["state"];
         }
         return view('vendor.openpolice.nodes.859-depts-overview-public', [
             "nID"        => $nID,
@@ -487,7 +487,7 @@ class OpenDepts extends OpenListing
         $this->searcher->getSearchFilts();
         if (!isset($this->v["deptScores"])) {
             $this->v["deptScores"] = new DepartmentScores;
-            $this->v["deptScores"]->loadAllDepts($this->searcher->searchOpts);
+            $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
         }
         return view('vendor.openpolice.nodes.1968-accss-grades-title-desc', [
             "nID"   => $nID,
@@ -528,31 +528,28 @@ class OpenDepts extends OpenListing
     
     protected function printDeptPage1099($nID)
     {
-        /*
         if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
-            if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
-                $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
-            } else {
-                $this->v["deptID"] = -3;
-            }
+            return 'Department Not Found';
         }
-        $this->loadDeptStuff($this->v["deptID"]);
-        */
+        //if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+        //    if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
+        //        $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
+        //    } else {
+        //        $this->v["deptID"] = -3;
+        //    }
+        //}
+        //$this->loadDeptStuff($this->v["deptID"]);
         if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
             $GLOBALS["SL"]->addSideNavItem('Edit Department', 
                 '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
         }
-        $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
-            . '</div>';
-        
-        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' . $this->v["deptID"] 
-            . '&limit=20");' . "\n";
-        
-        /*
-        if (trim($previews) == '') {
-            $previews = '<p><i>No complaints have been submitted for this deparment.</i></p>';
-        }
-        */
+        $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">'
+            . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
+        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' 
+            . $this->v["deptID"] . '&limit=20");' . "\n";
+        //if (trim($previews) == '') {
+        //    $previews = '<p><i>No complaints have been submitted for this deparment.</i></p>';
+        //}
         return view('vendor.openpolice.dept-page', [
             "nID"      => $nID,
             "d"        => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]],

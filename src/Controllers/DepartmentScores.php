@@ -105,22 +105,22 @@ class DepartmentScores
         return true;
     }
     
-    public function loadAllDepts($searchOpts = [])
+    public function loadAllDepts($searchFilts = [])
     {
         if (!$this->loaded) {
             $flts = "";
-            if (isset($searchOpts["deptID"]) && trim($searchOpts["deptID"]) != '') {
-                $flts .= "->where('DeptID', '" . trim($searchOpts["deptID"]) . "')";
-            } elseif (isset($searchOpts["state"]) && trim($searchOpts["state"]) != '') {
-                $flts .= "->where('DeptAddressState', '" . trim($searchOpts["state"]) . "')";
+            if (isset($searchFilts["deptID"]) && trim($searchFilts["deptID"]) != '') {
+                $flts .= "->where('DeptID', '" . trim($searchFilts["deptID"]) . "')";
+            } elseif (isset($searchFilts["state"]) && trim($searchFilts["state"]) != '') {
+                $flts .= "->where('DeptAddressState', '" . trim($searchFilts["state"]) . "')";
             }
-            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" . $flts 
-                . "->orderBy('DeptScoreOpenness', 'desc')->get();";
+            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" 
+                . $flts . "->orderBy('DeptScoreOpenness', 'desc')->get();";
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {
                 foreach ($this->scoreDepts as $i => $dept) {
-                    if (sizeof($searchOpts) == 0 || !isset($searchOpts["state"]) 
-                        || $searchOpts["state"] == $dept->DeptAddressState) {
+                    if (sizeof($searchFilts) == 0 || !isset($searchFilts["state"]) 
+                        || $searchFilts["state"] == $dept->DeptAddressState) {
                         $this->deptNames[$dept->DeptID] = trim(str_replace('Department', 'Dept', 
                             str_replace('Police Department', '', str_replace('Police Dept', '', $dept->DeptName))))
                             . ', ' . $dept->DeptAddressState;

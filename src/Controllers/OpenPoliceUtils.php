@@ -709,6 +709,18 @@ class OpenPoliceUtils extends TreeSurvForm
         return -3;
     }
     
+    protected function getAllegFldName($allegID)
+    {
+        if ($allegID > 0 && sizeof($this->worstAllegations) > 0) {
+            foreach ($this->worstAllegations as $a) {
+                if ($a[0] == $allegID) {
+                    return $a[2];
+                }
+            }
+        }
+        return '';
+    }
+    
     protected function getAllegSilvRec($allegName, $allegID = -3)
     {
         if ($allegID <= 0) {

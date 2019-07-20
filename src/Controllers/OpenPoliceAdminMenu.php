@@ -36,7 +36,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                 if ($GLOBALS["SL"]->REQ->has('cid')) {
                     $deptSubMenu = $this->subLinksVerifDept();
                 }
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
+                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-frown-o" aria-hidden="true"></i>', 1, [
                     $this->admMenuLnk('/dash/all-complete-complaints', 'Manage Complaints', '', 1, 
                         $this->subLinksComplaintTypes()), 
                     $this->admMenuLnk('/dash/volunteer', 'Manage Departments', '', 1, $deptSubMenu),
@@ -49,7 +49,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                 ]);
             } elseif ($this->currUser->hasRole('partner')) {
                 $treeMenu[] = $this->admMenuLnk('/dash/partner', 'Dashboard', '<i class="fa fa-home"></i>');
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-star"></i>', 1, [
+                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-frown-o" aria-hidden="true"></i>', 1, [
                     $this->admMenuLnk('/dash/all-complete-complaints', 'Manage Complaints', '', 1, 
                         $this->subLinksComplaintTypes()), 
                     $this->admMenuLnk('/dash/volunteer', 'Manage Departments'),

@@ -38,7 +38,8 @@ class OpenReportTools extends OpenReport
                     $newReview->ComRevStatus = $GLOBALS["SL"]->REQ->overStatus;
                 }
                 $newReview->save();
-            } elseif ($GLOBALS["SL"]->REQ->has('upResult') && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
+            } elseif ($GLOBALS["SL"]->REQ->has('upResult') 
+                && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
                 
             }
         }
@@ -46,7 +47,7 @@ class OpenReportTools extends OpenReport
             "user"        => $this->v["user"],
             "complaint"   => $this->sessData->dataSets["Complaints"][0],
             "overRow"     => $overRow
-            ])->render();
+        ])->render();
     }
     
     protected function printComplaintSessPath()
@@ -59,8 +60,8 @@ class OpenReportTools extends OpenReport
             $coreTots = $analyze->analyzeCoreSessions($this->coreID);
             return '<div class="pT20 pB20"><div class="slCard mT20 mB20"><h2>Incomplete: Session Attempt History</h2>'
                 . view('vendor.survloop.admin.tree.tree-session-attempt-history', [
-                "core"     => $coreTots,
-                "nodeTots" => $nodeTots
+                    "core"     => $coreTots,
+                    "nodeTots" => $nodeTots
                 ])->render() . '<br /></div></div>';
         }
         return '';
@@ -122,13 +123,14 @@ class OpenReportTools extends OpenReport
                 ? $this->sessData->dataSets["LinksComplaintOversight"] : []),
             "overList"    => $this->oversightList(),
             "warning"     => $this->multiRecordCheckDelWarn()
-            ])->render();
+        ])->render();
     }
     
     protected function oversightList()
     {
         $ret = '';
-        if (isset($this->sessData->dataSets["Oversight"]) && sizeof($this->sessData->dataSets["Oversight"]) > 0) {
+        if (isset($this->sessData->dataSets["Oversight"]) 
+            && sizeof($this->sessData->dataSets["Oversight"]) > 0) {
             $cnt = 0;
             foreach ($this->sessData->dataSets["Oversight"] as $i => $o) {
                 if (isset($o->OverAgncName) && trim($o->OverAgncName) != '') {
@@ -146,7 +148,7 @@ class OpenReportTools extends OpenReport
             return view('vendor.openpolice.nodes.1780-mfa-instructions', [
                 "user" => $this->v["tokenUser"],
                 "mfa"  => $this->processTokenAccess(false)
-                ])->render();
+            ])->render();
         }
         return '';
     }
@@ -154,9 +156,11 @@ class OpenReportTools extends OpenReport
     protected function printComplaintAdmin()
     {
         $this->v["firstRevDone"] = false;
-        if ($GLOBALS["SL"]->REQ->has('firstReview') && intVal($GLOBALS["SL"]->REQ->firstReview) > 0) {
+        $this->v["firstReview"] = true;
+        if ($GLOBALS["SL"]->REQ->has('n1712fld') && intVal($GLOBALS["SL"]->REQ->n1712fld) > 0) {
+
             $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
-                $GLOBALS["SL"]->REQ->firstReview);
+                $GLOBALS["SL"]->REQ->n1712fld);
             $newRev = new OPzComplaintReviews;
             $newRev->ComRevComplaint = $this->coreID;
             $newRev->ComRevUser      = $this->v["user"]->id;
@@ -165,10 +169,13 @@ class OpenReportTools extends OpenReport
             $newRev->ComRevStatus    = $newTypeVal;
             $newRev->save();
             $com = OPComplaints::find($this->coreID);
-            $com->comType = $GLOBALS["SL"]->REQ->firstReview;
+            $com->comType = intVal($GLOBALS["SL"]->REQ->n1712fld);
             $com->save();
             $this->v["firstRevDone"] = true;
+            $this->v["firstReview"] = false;
+
         } elseif ($GLOBALS["SL"]->REQ->has('save')) {
+
             $newRev = new OPzComplaintReviews;
             $newRev->ComRevComplaint = $this->coreID;
             $newRev->ComRevUser      = $this->v["user"]->id;
@@ -206,7 +213,6 @@ class OpenReportTools extends OpenReport
             $newRev->save();
             $this->sessData->dataSets["Complaints"][0]->save();
         }
-        $this->v["firstReview"] = true;
         $this->v["lastReview"]  = true;
         $this->v["history"]     = [];
         $allUserNames = [];
@@ -225,8 +231,8 @@ class OpenReportTools extends OpenReport
                 }
                 $desc = '<span class="slBlueDark">' 
                     . ((isset($r->ComRevNextAction) && trim($r->ComRevNextAction) == 'Complaint Received'
-                        && $r->ComRevStatus == 'Submitted to Oversight') ? $r->ComRevNextAction : $r->ComRevStatus)
-                    . '</span>';
+                        && $r->ComRevStatus == 'Submitted to Oversight') 
+                        ? $r->ComRevNextAction : $r->ComRevStatus) . '</span>';
                 $this->v["history"][] = [
                     "type" => 'Status', 
                     "date" => strtotime($r->ComRevDate), 
@@ -248,9 +254,10 @@ class OpenReportTools extends OpenReport
                 if (!isset($allUserNames[$e->EmailedFromUser])) {
                     $allUserNames[$e->EmailedFromUser] = $this->printUserLnk($e->EmailedFromUser);
                 }
-                $desc = '<a href="javascript:;" id="hidFldBtnEma' . $e->EmailedID . '" class="hidFldBtn">"' . $e->EmailedSubject 
-                    . '"</a><br />email sent to ' . $e->EmailedTo . '<div id="hidFldEma' . $e->EmailedID 
-                    . '" class="disNon p10">' . $e->EmailedBody . '</div>';
+                $desc = '<a href="javascript:;" id="hidivBtnEma' . $e->EmailedID . '" class="hidivBtn">"' 
+                    . $e->EmailedSubject . '"</a><br />sent to ' . $e->EmailedTo . '<div id="hidivEma' 
+                    . $e->EmailedID . '" class="disNon p10">' . $e->EmailedBody 
+                    . '</div><div style="margin-bottom: -36px;"></div>';
                 $this->v["history"][] = [
                     "type" => 'Email', 
                     "date" => strtotime($e->created_at), 
@@ -288,12 +295,13 @@ class OpenReportTools extends OpenReport
             ];
         }
         $this->v["emailMap"] = [ // 'Review Status' => Email ID#
-                'Submitted to Oversight'    => [7, 12], 
-                'Hold: Go Gold'             => [6],
-                'Pending Attorney: Needed'  => [17],
-                'Pending Attorney: Hook-Up' => [18]
-            ];
-        $this->v["emailID"] = ($GLOBALS["SL"]->REQ->has('email') ? $GLOBALS["SL"]->REQ->email : -3);
+            'Submitted to Oversight'    => [7, 12], 
+            'Hold: Go Gold'             => [6],
+            'Pending Attorney: Needed'  => [17],
+            'Pending Attorney: Hook-Up' => [18]
+        ];
+        $this->v["emailID"] = ($GLOBALS["SL"]->REQ->has('email') 
+            ? intVal($GLOBALS["SL"]->REQ->email) : -3);
         if ($this->v["emailID"] <= 0) {
             switch ($this->sessData->dataSets["Complaints"][0]->ComStatus) {
                 case $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight'):
@@ -324,9 +332,9 @@ class OpenReportTools extends OpenReport
                 $this->v["currEmail"][] = $this->processEmail($this->v["emailID"], $deptLnk->LnkComDeptDeptID);
             }
         }
-        if (sizeof($this->v["currEmail"]) > 0) { 
+        if ($this->v["emailID"] > 0 && sizeof($this->v["currEmail"]) > 0) { 
+            $this->v["needsWsyiwyg"] = true;
             foreach ($this->v["currEmail"] as $j => $email) {
-                $this->v["needsWsyiwyg"] = true;
                 $GLOBALS["SL"]->pageAJAX .= ' $("#emailBodyCust' . $j . 'ID").summernote({ height: 350 }); ';
             }
         }

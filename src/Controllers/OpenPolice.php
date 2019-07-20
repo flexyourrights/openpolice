@@ -139,19 +139,16 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintSessPath();
             
         // Complaint Listings
-        } elseif (in_array($nID, [2381, 2387])) {
-            return $this->printComplaintsFilters($nID);
+        //} elseif (in_array($nID, [2387])) {
+        //    return $this->printComplaintsFilters($nID);
         } elseif ($nID == 2377) {
             if ($this->coreID > 0) {
-                $GLOBALS["SL"]->pageAJAX .= 'setTimeout(function() {
-                document.getElementById("com' . $nID . 'cid' . $this->coreID . '").innerHTML=getSpinner();
-                }, 10);
-                $("#com' . $nID . 'cid' . $this->coreID 
-                    . '").load("/complaint/read-' . $this->coreID . '/full?ajax=1&wdg=1");' . "\n";
-                return '<div id="com' . $nID . 'cid' . $this->coreID . '" class="w100"></div>';
+                return '<iframe src="/complaint/read-' . $this->coreID . '/full?frame=1&wdg=1" '
+                    . 'id="reportAdmPreview" frameborder="0" '
+                    . 'style="width: 100%; height: 100%; overflow-y: visible;"></iframe>'
+                    . '<style> body { overflow-y: hidden; } </style>';
             }
-            return '&nbsp;';
-            //return $this->printComplaintsPreviews();
+            return '<br /><br /><br /><i>Complaint Not Found</i><br /><br /><br />';
 
         // Staff Area Nodes
         } elseif ($nID == 1418) {
