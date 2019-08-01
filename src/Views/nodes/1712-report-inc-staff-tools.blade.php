@@ -1,16 +1,19 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools.blade.php -->
-<div class="pT5">
+<div style="margin-top: -10px;"></div>
 
 @if (!isset($complaintRec->ComStatus) || intVal($complaintRec->ComStatus) <= 0 || 
     $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->ComStatus) == 'Incomplete')
 
+
 @elseif ($firstReview)
     
-    <div class="pB20">
-    {!! $GLOBALS["SL"]->printAccard(
+    <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+    {!! $GLOBALS["SL"]->printAccordian(
         '#' . $complaintRec->ComPublicID . ': Is this a complaint?',
         view('vendor.openpolice.nodes.1712-report-inc-staff-tools-first-review')->render(),
-        true
+        true,
+        false,
+        'text'
     ) !!}
     </div>
     
@@ -20,7 +23,7 @@
         
         @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
             
-            <div class="pB20">
+            <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
             {!! view('vendor.openpolice.nodes.1712-report-inc-staff-tools-email', [
                 "complaintRec" => $complaintRec,
                 "currEmail"    => $currEmail,
@@ -31,37 +34,47 @@
 
         @endif
 
-        <div class="pB20">
-        {!! $GLOBALS["SL"]->printAccard(
+        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        {!! $GLOBALS["SL"]->printAccordian(
             'Complaint History',
             view('vendor.openpolice.nodes.1712-report-inc-history', [
                 "history" => $history
-            ])->render()
+            ])->render(),
+            false,
+            false,
+            'text'
         ) !!}
         </div>
-            
-        <div class="pB20">
-        {!! $GLOBALS["SL"]->printAccard(
+
+        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        {!! $GLOBALS["SL"]->printAccordian(
             (($firstRevDone) ? 'Next, Update Complaint Status:' : 'Update Complaint Status'),
             view('vendor.openpolice.nodes.1712-report-inc-staff-tools-status', [
-                "complaintRec" => $complaintRec,
-                "lastReview"   => $lastReview
+                "complaintRec"   => $complaintRec,
+                "lastReview"     => $lastReview,
+                "comDepts"       => $comDepts,
+                "oversightDates" => $oversightDateLookups
             ])->render(),
-            (($firstRevDone) ? true : false)
+            (($firstRevDone) ? true : false),
+            false,
+            'text'
         ) !!}
         </div>
-            
-        <div class="pB20">
-        {!! $GLOBALS["SL"]->printAccard(
+
+        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        {!! $GLOBALS["SL"]->printAccordian(
             'Send Email',
             view('vendor.openpolice.nodes.1712-report-inc-staff-tools-choose-email', [
                 "complaintRec" => $complaintRec,
                 "emailList"    => $emailList,
                 "emailID"      => $emailID
-            ])->render()
+            ])->render(),
+            false,
+            false,
+            'text'
         ) !!}
         </div>
+
+    </div>
         
 @endif
-
-</div>

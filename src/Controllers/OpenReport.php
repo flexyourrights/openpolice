@@ -116,8 +116,9 @@ class OpenReport extends OpenDepts
     {
         $dept = $this->sessData->getRowById('Departments', $deptID);
         if ($dept && isset($dept->DeptName)) {
-            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->DeptSlug . '" class="slBlueDark">' 
-                 . $dept->DeptName . '</a></h3><div class="mB10"><b>Complaint #' 
+            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->DeptSlug 
+                . '" class="slBlueDark">Misconduct Incident Report for ' 
+                . $dept->DeptName . '</a></h3><div class="mB10"><b>Complaint #' 
                 . $this->sessData->dataSets["Complaints"][0]->ComPublicID . ': ' 
                 . $this->printComplaintStatus($this->sessData->dataSets["Complaints"][0]->ComStatus)
                 . '</b></div>';
@@ -146,12 +147,19 @@ class OpenReport extends OpenDepts
         return [];
     }
     
+    protected function shouldPrintFullDate($complaint = null)
+    {
+        if (!$complaint && isset($this->sessData->dataSets['Complaints'])) {
+            $complaint = $this->sessData->dataSets['Complaints'][0];
+        }
+        return ($this->v["isOwner"] || $this->v["isAdmin"] || ($GLOBALS["SL"]->x["pageView"] != 'public' 
+            && $complaint->ComPrivacy == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')));
+    }
+    
     protected function getReportWhenLine()
     {
         $date = '';
-        if ($this->v["isOwner"] || $this->v["isAdmin"] || ($GLOBALS["SL"]->x["pageView"] != 'public' 
-            && $this->sessData->dataSets['Complaints'][0]->ComPrivacy
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'))) {
+        if ($this->shouldPrintFullDate()) {
             $date = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
             $timeStart = $timeEnd = '';
             if ($this->sessData->dataSets["Incidents"][0]->IncTimeEnd !== null) {
@@ -206,10 +214,9 @@ class OpenReport extends OpenDepts
                         $state);
                 }
                 if (trim($c) != '') {
-                    return [
-                        'Indicent Location',
-                        $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state
-                    ];
+                    $ret = $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state;
+                    $ret = str_replace('District Of Columbia County, DC', 'Washington, DC', $ret);
+                    return [ 'Indicent Location', $ret ];
                 }
             }
         }

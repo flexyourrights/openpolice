@@ -311,15 +311,13 @@ class OpenPoliceUtils extends TreeSurvForm
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Submitted to Oversight'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Received by Oversight'), 
                 $GLOBALS["SL"]->def->getID('Complaint Status',  'Declined To Investigate (Closed)'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)'),
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Closed')
+                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)')
             ];
         } elseif ($coreTbl == 'Compliments') {
             return [
                 $GLOBALS["SL"]->def->getID('Compliment Status', 'Reviewed'), 
                 $GLOBALS["SL"]->def->getID('Compliment Status', 'Submitted to Oversight'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight'),
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Closed')
+                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight')
             ];
         }
         return [];
@@ -496,28 +494,28 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function simpleAllegationList()
     {
-        if (empty($this->allegations) && isset($this->sessData->dataSets["AllegSilver"]) 
+        if (sizeof($this->allegations) == 0 
+            && isset($this->sessData->dataSets["AllegSilver"]) 
             && isset($this->sessData->dataSets["AllegSilver"][0])) {
             foreach ($this->worstAllegations as $i => $alleg) {
                 $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
                 switch ($alleg[1]) {
                     case 'Sexual Assault':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilSexualAssault', $alleg[1], $alleg[0]);
-                        break;
                     case 'Unreasonable Force':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilForceUnreason', $alleg[1], $alleg[0]);
-                        break;
                     case 'Wrongful Arrest':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilArrestWrongful', $alleg[1], $alleg[0]);
-                        break;
                     case 'Wrongful Property Seizure':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilPropertyWrongful', $alleg[1], $alleg[0]);
-                        break;
                     case 'Intimidating Display of Weapon':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilIntimidatingWeapon', $alleg[1], $alleg[0]);
-                        break;
                     case 'Wrongful Search':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilSearchWrongful', $alleg[1], $alleg[0]);
+                    case 'Wrongful Detention':
+                    case 'Bias-Based Policing':
+                    case 'Repeat Harassment':
+                    case 'Excessive Arrest Charges':
+                    case 'Conduct Unbecoming an Officer':
+                    case 'Discourtesy':
+                    case 'Neglect of Duty':
+                    case 'Policy or Procedure Violation':
+                    case 'Excessive Citation':
+                        $allegInfo[1] .= $this->chkSilvAlleg($alleg[2], $alleg[1], $alleg[0]);
                         break;
                     case 'Wrongful Entry':
                         if (isset($this->sessData->dataSets["Stops"]) 
@@ -529,33 +527,6 @@ class OpenPoliceUtils extends TreeSurvForm
                                 }
                             }
                         }
-                        break;
-                    case 'Wrongful Detention':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilStopWrongful', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Bias-Based Policing':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilBias', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Repeat Harassment':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilRepeatHarass', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Excessive Arrest Charges':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilArrestRetaliatory', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Conduct Unbecoming an Officer':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilUnbecoming', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Discourtesy':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilDiscourteous', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Neglect of Duty':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilNeglectDuty', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Policy or Procedure Violation':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilProcedure', $alleg[1], $alleg[0]);
-                        break;
-                    case 'Excessive Citation':
-                        $allegInfo[1] .= $this->chkSilvAlleg('AlleSilCitationExcessive', $alleg[1], $alleg[0]);
                         break;
                     case 'Miranda Rights':
                         if (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestMiranda)
@@ -1566,6 +1537,18 @@ class OpenPoliceUtils extends TreeSurvForm
             case 205: return 'Closed';
         }
         return $GLOBALS["SL"]->def->getVal('Complaint Status', $defID);
+    }
+
+    protected function loadOversightDateLookups()
+    {
+        $this->v["oversightDateLookups"] = [
+            ['LnkComOverSubmitted',       'Submitted to Investigative Agency'],
+            ['LnkComOverReceived',        'Received by Investigative Agency'],
+            ['LnkComOverStillNoResponse', 'Still No Response from Agency'],
+            ['LnkComOverInvestigated',    'Investigated by Investigative Agency'],
+            ['LnkComOverReportDate',      'Investigative Agency Report Uploaded']
+        ];
+        return $this->v["oversightDateLookups"];
     }
     
 }

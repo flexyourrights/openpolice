@@ -6,6 +6,7 @@ use Auth;
 use App\Models\OPAllegSilver;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
+use App\Models\OPLinksComplaintOversight;
 use OpenPolice\Controllers\OpenPoliceUtils;
 
 class OpenComplaintEmails extends OpenPoliceUtils
@@ -76,13 +77,17 @@ class OpenComplaintEmails extends OpenPoliceUtils
                 && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
                 foreach ($this->sessData->dataSets["LinksComplaintDept"] as $i => $deptLnk) {
                     $this->loadDeptStuff($deptLnk->LnkComDeptDeptID);
-                    if ($i == 0) $deptID = $deptLnk->LnkComDeptDeptID;
+                    if ($i == 0) {
+                        $deptID = $deptLnk->LnkComDeptDeptID;
+                    }
                 }
             }
         } else {
             if ($deptID <= 0) {
                 foreach ($GLOBALS["SL"]->x["depts"] as $dID => $stuff) {
-                    if ($deptID <= 0) $deptID = $dID;
+                    if ($deptID <= 0) {
+                        $deptID = $dID;
+                    }
                 }
             }
             if (!isset($GLOBALS["SL"]->x["depts"][$deptID])) {
@@ -410,57 +415,63 @@ class OpenComplaintEmails extends OpenPoliceUtils
                 if (isset($lnk->LnkComDeptDeptID) && intVal($lnk->LnkComDeptDeptID) > 0) {
                     $deptRow = OPDepartments::find($lnk->LnkComDeptDeptID);
                     if ($deptRow && isset($deptRow->DeptName) && trim($deptRow->DeptName) != '') {
-                        $this->v["comDepts"][$cnt] = [ "id" => $lnk->LnkComDeptDeptID ];
-                        $this->v["comDepts"][$cnt]["deptRow"] = $deptRow;
-                        $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
-                            ->first();
-                        $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
-                            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
-                            ->first();
-                        if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
-                            $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverType
-                                = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs');
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptName;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddress2;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressCity;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressState;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptAddressZip;
-                            $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork
-                                = $this->v["comDepts"][$cnt]["deptRow"]->DeptPhoneWork;
-                            $this->v["comDepts"][$cnt]["iaRow"]->save();
-                        }
-                        $this->v["comDepts"][$cnt]["whichOver"] = '';
-                        if (isset($this->v["comDepts"][0]["civRow"]) 
-                            && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)
-                            && trim($this->v["comDepts"][0]["civRow"]->OverAgncName) != '') {
-                            $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
-                        } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
-                            && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
-                            $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
-                        }
-                        $this->v["comDepts"][$cnt]["overInfo"] = '';
-                        if (isset($this->v["comDepts"][$cnt])) {
-                            $w = $this->v["comDepts"][$cnt]["whichOver"];
-                            if (isset($this->v["comDepts"][$cnt][$w])) {
-                                $this->v["comDepts"][$cnt]["overInfo"] 
-                                    = $this->getOversightInfo($this->v["comDepts"][$cnt][$w]);
-                            }
-                        }
+                        $this->prepEmailComDataRow($deptRow, $lnk, $cnt);
                         $cnt++;
                     }
                 }
             }
         }
+        return true;
+    }
+    
+    public function prepEmailComDataRow($deptRow, $lnk, $cnt)
+    {
+        $this->v["comDepts"][$cnt] = [
+            "id"      => $lnk->LnkComDeptDeptID,
+            "deptRow" => $deptRow
+        ];
+        $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
+            ->first();
+        $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('OverDeptID', $lnk->LnkComDeptDeptID)
+            ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
+            ->first();
+        if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
+            $this->v["comDepts"][$cnt]["iaRow"] = new OPOversight;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverDeptID = $lnk->LnkComDeptDeptID;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverType
+                = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs');
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAgncName     = $deptRow->DeptName;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress      = $deptRow->DeptAddress;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAddress2     = $deptRow->DeptAddress2;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressCity  = $deptRow->DeptAddressCity;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressState = $deptRow->DeptAddressState;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverAddressZip   = $deptRow->DeptAddressZip;
+            $this->v["comDepts"][$cnt]["iaRow"]->OverPhoneWork    = $deptRow->DeptPhoneWork;
+            $this->v["comDepts"][$cnt]["iaRow"]->save();
+        }
+        $this->v["comDepts"][$cnt]["whichOver"] = '';
+        if (isset($this->v["comDepts"][0]["civRow"]) 
+            && isset($this->v["comDepts"][0]["civRow"]->OverAgncName)
+            && trim($this->v["comDepts"][0]["civRow"]->OverAgncName) != '') {
+            $this->v["comDepts"][$cnt]["whichOver"] = "civRow";
+        } elseif (isset($this->v["comDepts"][0]["iaRow"]) 
+            && isset($this->v["comDepts"][0]["iaRow"]->OverAgncName)) {
+            $this->v["comDepts"][$cnt]["whichOver"] = "iaRow";
+        }
+        $this->v["comDepts"][$cnt]["overInfo"] = '';
+        if (isset($this->v["comDepts"][$cnt])) {
+            $w = $this->v["comDepts"][$cnt]["whichOver"];
+            if (isset($this->v["comDepts"][$cnt][$w])) {
+                $this->v["comDepts"][$cnt]["overInfo"] 
+                    = $this->getOversightInfo($this->v["comDepts"][$cnt][$w]);
+            }
+        }
+        $this->v["comDepts"][$cnt]["overDates"] 
+            = OPLinksComplaintOversight::where('LnkComOverComplaintID', $lnk->LnkComDeptComplaintID)
+                ->where('LnkComOverDeptID', $lnk->LnkComDeptDeptID)
+                ->where('LnkComOverOverID', $this->v["comDepts"][0][$this->v["comDepts"][$cnt]["whichOver"]]->OverID)
+                ->first();
         return true;
     }
     

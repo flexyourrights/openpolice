@@ -7,7 +7,7 @@
     </div></div>
 @else
     @foreach($depts as $i => $dept)
-        <div class="slCard nodeWrap row2">
+        <div class="deptWrap">
             @if ($dept->DeptType == 366) 
                 <h3 @if ($i == 0) class="mT0" @endif >{{ $dept->DeptName }}</h3>
                 <div class="mTn10"><b><i>(Federal)</i></b></div>
@@ -28,6 +28,7 @@
     @endforeach
 @endif
 
+<p>&nbsp;</p>
 <h2>Tips for finding the right department</h2>
 <ul>
     <li>Type the name of the county instead of the city</li>

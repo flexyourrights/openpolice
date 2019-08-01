@@ -4,13 +4,15 @@
     class="fltSortTypeBtn dropdown-item @if ($sortLab == 'date') active @endif "
     >by Date Submitted to OPC</button>
 
-<button type="button" data-sort-type="first-name"
-    class="fltSortTypeBtn dropdown-item @if ($sortLab == 'first-name') active @endif "
-    >by Complainant First Name</button>
+@if (!$GLOBALS["SL"]->x["isPublicList"])
+    <button type="button" data-sort-type="first-name"
+        class="fltSortTypeBtn dropdown-item @if ($sortLab == 'first-name') active @endif "
+        >by Complainant First Name</button>
 
-<button type="button" data-sort-type="last-name"
-    class="fltSortTypeBtn dropdown-item @if ($sortLab == 'last-name') active @endif "
-    >by Complainant Last Name</button>
+    <button type="button" data-sort-type="last-name"
+        class="fltSortTypeBtn dropdown-item @if ($sortLab == 'last-name') active @endif "
+        >by Complainant Last Name</button>
+@endif
 
 <button type="button" data-sort-type="city"
     class="fltSortTypeBtn dropdown-item @if ($sortLab == 'city') active @endif "

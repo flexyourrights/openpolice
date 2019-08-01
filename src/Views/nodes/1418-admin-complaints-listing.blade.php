@@ -3,22 +3,26 @@
 <div class="h100">
 
 <div class="admDashTopCard">
+@if ($GLOBALS["SL"]->x["isPublicList"]) <div class="slCard"> @endif
     <div class="row">
-        <div class="col-7">
+        <div class="col-8">
         @if (isset($fltDept) && intVal($fltDept) > 0)
             <input type="hidden" name="baseUrl" id="baseUrlID" value="/my-profile">
             <h4 class="disIn mR20">Department Complaints</h4>
         @else
             <input type="hidden" name="baseUrl" id="baseUrlID" value="/dash/all-complete-complaints">
-            <h4 class="disIn mR20">Manage Complaints</h4>
+            @if ($GLOBALS["SL"]->x["isPublicList"]) <h4>Browse & Search Published Complaints</h4>
+            @else <h4>Manage Complaints</h4>
+            @endif
         @endif
             {{ number_format(sizeof($complaints)) }} Found
             @if (isset($filtersDesc) && trim($filtersDesc) != '')
-                <span class="mL5 slGrey">{{ trim($filtersDesc) }}</span>
+                <span class="mL5 slGrey">{{ $GLOBALS["SL"]->wordLimitDotDotDot(trim($filtersDesc), 20) }}</span>
             @endif
         </div>
-        <div class="col-5">
-            <div class="fR">
+        <div class="col-4">
+        @if (!$GLOBALS["SL"]->x["isPublicList"])
+            <div class="fR pL15">
                 <div class="btn-group">
                     <button type="button" id="hidivBtnDashViewList" class="btn btn-sm 
                         @if ($sView == 'list') btn-secondary @else btn-outline-secondary @endif "
@@ -28,7 +32,8 @@
                         ><i class="fa fa-th-large" aria-hidden="true"></i></button>
                 </div>
             </div>
-            <div class="fR pR15">
+        @endif
+            <div class="fR">
                 <div class="relDiv">
                     <div class="dropdown">
                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
@@ -57,6 +62,7 @@
         @endif
         </div>
     </div>
+@if ($GLOBALS["SL"]->x["isPublicList"]) </div> <!-- end slCard --> @endif
 </div>
 
 @if ($sView == 'lrg')

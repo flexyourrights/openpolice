@@ -13,10 +13,10 @@
 
 @endif
 
-    <h4 class="slBlueDark">
+    <a href="{{ $url }}"><h4 class="slBlueDark">
         @if (trim($allegations[0]) == '') Incident @else {!! $allegations[0] !!} @endif 
         in {!! $comWhere !!}
-    </h4>
+    </h4></a>
 @if ($uID > 0 && (isset($complaint->{ $coreAbbr . 'UserID' }) && $complaint->{ $coreAbbr . 'UserID' } == $uID)
     || $GLOBALS["SL"]->isAdmin)
     <p>Complaint Status: 
@@ -54,8 +54,7 @@
 <div>
 @if (isset($complaint->{ $coreAbbr . 'PublicID' }) && intVal($complaint->{ $coreAbbr . 'PublicID' }) > 0)
 
-    <a href="/{{ (($coreAbbr == 'Com') ? 'complaint' : 'compliment') }}/read-{{
-        $complaint->{ $coreAbbr . 'PublicID' } }}" class="btn btn-secondary"
+    <a href="{{ $url }}" class="btn btn-secondary"
         >View @if ($coreAbbr == 'Com') Complaint @else Compliment @endif 
         #{{ $complaint->{ $coreAbbr . 'PublicID' } }}</a>
 

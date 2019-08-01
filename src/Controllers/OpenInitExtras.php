@@ -310,5 +310,11 @@ class OpenInitExtras extends OpenPartners
         }
         return true;
     }
-    
+
+    protected function loadSessionClear($coreTbl = '', $coreID = -3)
+    {
+        $this->allegations = [];
+        return true;
+    }    
+
 }

@@ -139,8 +139,13 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintSessPath();
             
         // Complaint Listings
-        //} elseif (in_array($nID, [2387])) {
-        //    return $this->printComplaintsFilters($nID);
+        } elseif (in_array($nID, [1418, 2384])) {
+            $GLOBALS["SL"]->x["isPublicList"] = false;
+            if ($nID == 2384) {
+                $GLOBALS["SL"]->x["isPublicList"] = true;
+                $GLOBALS["SL"]->x["pageView"] = 'public';
+            }
+            return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
             if ($this->coreID > 0) {
                 return '<iframe src="/complaint/read-' . $this->coreID . '/full?frame=1&wdg=1" '
@@ -151,8 +156,6 @@ class OpenPolice extends OpenInitExtras
             return '<br /><br /><br /><i>Complaint Not Found</i><br /><br /><br />';
 
         // Staff Area Nodes
-        } elseif ($nID == 1418) {
-            return $this->printComplaintListing($nID);
         } elseif ($nID == 1420) {
             return $this->printComplaintListing($nID, 'incomplete');
         } elseif ($nID == 1939) {

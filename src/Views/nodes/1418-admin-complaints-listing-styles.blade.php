@@ -19,8 +19,8 @@ body {
     margin-bottom: 15px;
 }
 .admDashTopCard h4, .admDashTopCard .row .col-md-8 h4 {
-    margin-top: 5px;
-    margin-left: 15px;
+    display: inline;
+    margin: 5px 10px 0px 0px;
 }
 #admDashListView {
     margin-bottom: -40px;

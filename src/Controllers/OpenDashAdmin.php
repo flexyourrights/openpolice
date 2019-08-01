@@ -105,7 +105,7 @@ class OpenDashAdmin
                 $grapher->addDayTally('submitted', $rec->LnkComOverSubmitted);
             }
         }
-        return $grapher->printDailyGraph(350);
+        return '<div class="mTn20">' . $grapher->printDailyGraph(420) . '</div>';
     }
     
     public function printDashPercCompl()
