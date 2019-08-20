@@ -67,7 +67,6 @@ class OpenListing extends OpenAjax
     protected function getComplaintDate($incident, $complaint)
     {
         $comDate = date('F Y', strtotime($incident->IncTimeStart));
-//echo '<pre>'; print_r($complaint); echo '</pre>'; exit;
         if ($this->shouldPrintFullDate($complaint)) {
             $comDate = date('m/d/Y', strtotime($incident->IncTimeStart));
         }
@@ -88,6 +87,7 @@ class OpenListing extends OpenAjax
         $ret = '';
         $cacheName = 'complaint' . $complaint->ComID . '-preview-' 
             . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
+//echo 'cacheName: ' . $cacheName . ', isPublicList: ' . $GLOBALS["SL"]->x["isPublicList"]; exit;
         if (!$GLOBALS["SL"]->REQ->has('refresh')) {
             $ret = Cache::get($cacheName, '');
             if ($ret != '') {
@@ -126,7 +126,7 @@ class OpenListing extends OpenAjax
     protected function printComplaintsPreviews()
     {
         $ret = '';
-        //$GLOBALS["SL"]->x["pageView"] = 'public';
+        //$GLOBALS["SL"]->pageView = 'public';
         $this->initSearcher();
         $this->searcher->getSearchFilts();
         $xtra = "whereIn('ComStatus', [" . implode(", ", 
@@ -135,7 +135,8 @@ class OpenListing extends OpenAjax
         if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
             foreach ($this->searcher->v["allcomplaints"] as $i => $com) {
                 $ret .= '<div class="pB20 mB10"><div class="slCard">' 
-                    . $this->getComplaintPreviewByRow($com) . '</div></div>';
+                    . $this->getComplaintPreviewByRow($com) 
+                    . '</div></div>';
             }
         }
         return $ret;
@@ -236,6 +237,9 @@ class OpenListing extends OpenAjax
     
     protected function printComplaintListing($nID, $view = 'list')
     {
+        if (!isset($GLOBALS["SL"]->x["isHomePage"])) {
+            $GLOBALS["SL"]->x["isHomePage"] = false;
+        }
         $this->v["sView"] = $view;
         if ($GLOBALS["SL"]->REQ->has('sView')) {
             $this->v["sView"] = $GLOBALS["SL"]->REQ->sView;
@@ -326,29 +330,35 @@ class OpenListing extends OpenAjax
         }
 
         if ($this->v["sView"] == 'lrg' && sizeof($this->v["complaints"]) > 0) {
-            foreach ($this->v["complaints"] as $com) {
-                $ret = '';
-                $cacheName = 'complaint' . $com->ComID . '-preview-' 
-                    . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
-                if (!$GLOBALS["SL"]->REQ->has('refresh')) {
-                    $ret = Cache::get($cacheName, '');
+            foreach ($this->v["complaints"] as $i => $com) {
+                if (!$GLOBALS["SL"]->x["isHomePage"] 
+                    || sizeof($this->v["complaintsPreviews"]) < 3) {
+                    $ret = '';
+                    $cacheName = 'complaint' . $com->ComID . '-preview-' 
+                        . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
+                    if (!$GLOBALS["SL"]->REQ->has('refresh')) {
+                        $ret = Cache::get($cacheName, '');
+                    }
+                    if ($ret == '') {
+                        $this->loadAllSessData('Complaints', $com->ComID);
+                        $ret = $this->printPreviewReport();
+                        Cache::put($cacheName, $ret);
+                        //$this->printPreviewReportCustom($isAdmin);
+                    }
+                    $this->v["complaintsPreviews"][] = '<div id="reportPreview' . $com->ComID 
+                        . '" class="reportPreview">' . $ret . '</div>';
                 }
-                if ($ret == '') {
-                    $this->loadAllSessData('Complaints', $com->ComID);
-                    $ret = $this->printPreviewReport();
-                    Cache::put($cacheName, $ret);
-                    //$this->printPreviewReportCustom($isAdmin);
-                }
-                $this->v["complaintsPreviews"][] = '<div id="reportPreview' . $com->ComID 
-                    . '" class="reportPreview">' . $ret . '</div>';
             }
         }
         $this->v["sortLab"]    = $this->searcher->v["sortLab"];
         $this->v["sortDir"]    = $this->searcher->v["sortDir"];
         $this->v["allegTypes"] = $this->worstAllegations;
 
-        $GLOBALS["SL"]->pageAJAX 
-            .= view('vendor.openpolice.nodes.1418-admin-complaints-listing-ajax', $this->v)->render();
+        if (!$GLOBALS["SL"]->x["isHomePage"]) {
+            $GLOBALS["SL"]->pageAJAX 
+                .= view('vendor.openpolice.nodes.1418-admin-complaints-listing-ajax', $this->v)
+                ->render();
+        }
         return view('vendor.openpolice.nodes.1418-admin-complaints-listing', $this->v)->render()
             . view('vendor.openpolice.nodes.1418-admin-complaints-listing-styles', $this->v)->render();
     }

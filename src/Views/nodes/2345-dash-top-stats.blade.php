@@ -1,11 +1,28 @@
 <!-- resources/views/vendor/openpolice/nodes/2345-dash-top-stats.blade.php -->
-<h2>OPC All-Time Stats</h2>
-<p><a href="/dash/all-complete-complaints">Manage Complaints</a></p>
-<div class="row bld mT10">
-    <div class="col-2 taC"><h2>{{ number_format($betas)      }}</h2>Beta Invites</div>
-    <div class="col-2 taC"><h2>{{ number_format($incomplete) }}</h2>Incomplete</div>
-    <div class="col-2 taC"><h2>{{ number_format($complete)   }}</h2>Completed</div>
-    <div class="col-2 taC"><h2>{{ number_format($processed)  }}</h2>Processed</div>
-    <div class="col-2 taC"><h2>{{ number_format($submitted)  }}</h2>Investigation Filed</div>
-    <div class="col-2"></div>
+<div class="relDiv w100">
+
+<div class="absDiv" style="top: 250px; right: 15px; z-index: 100;">
+    <p><b>Current Weekly Metrics:</b><br />
+    {{ number_format(sizeof($statsWeek["contactsU"])) }} User talked to<br />
+    {{ number_format(sizeof($statsWeek["activeU"])) }} WAUs
+    </p>
+</div>
+
+<table id="opcAllTimeStats" cellpadding=0 cellspacing=0 border=0 ><tr>
+    <td class="pL20 pR20">
+        <h2 class="m0"><nobr>OPC All-Time Stats</nobr></h2>
+        <p><a href="/dash/all-complete-complaints"><nobr>Manage Complaints</nobr></a></p>
+    </td>
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["betas"])
+        }}</h2><nobr>Beta Invites</nobr></td>
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["incomplete"]) 
+        }}</h2>Incomplete</td>
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["complete"])   
+        }}</h2>Completed</td>
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["processed"])  
+        }}</h2>Processed</td>
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["submitted"])  
+        }}</h2><nobr>Investigation Filed</nobr></td>
+</tr></table>
+
 </div>

@@ -20,19 +20,6 @@
 @elseif (in_array($view, ['', 'history', 'update', 'emails', 'emailsType']))
 
     <div id="analystHistory">
-        
-        @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
-            
-            <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
-            {!! view('vendor.openpolice.nodes.1712-report-inc-staff-tools-email', [
-                "complaintRec" => $complaintRec,
-                "currEmail"    => $currEmail,
-                "emailID"      => $emailID,
-                "emailsTo"     => $emailsTo
-            ])->render() !!}
-            </div>
-
-        @endif
 
         <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
         {!! $GLOBALS["SL"]->printAccordian(
@@ -63,7 +50,7 @@
 
         <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
         {!! $GLOBALS["SL"]->printAccordian(
-            'Send Email',
+            'Select Email Template',
             view('vendor.openpolice.nodes.1712-report-inc-staff-tools-choose-email', [
                 "complaintRec" => $complaintRec,
                 "emailList"    => $emailList,
@@ -74,6 +61,23 @@
             'text'
         ) !!}
         </div>
+        
+        @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
+            <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+            {!! $GLOBALS["SL"]->printAccordian(
+                'Send Email',
+                view('vendor.openpolice.nodes.1712-report-inc-staff-tools-email', [
+                    "complaintRec" => $complaintRec,
+                    "currEmail"    => $currEmail,
+                    "emailID"      => $emailID,
+                    "emailsTo"     => $emailsTo
+                ])->render(),
+                true,
+                false,
+                'text'
+            ) !!}
+            </div>
+        @endif
 
     </div>
         

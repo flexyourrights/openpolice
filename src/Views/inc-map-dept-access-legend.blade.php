@@ -6,7 +6,7 @@
         <div class="col-2">0</div>
         <div class="col-3 taC">-</div>
         <div class="col-2 taC">50</div>
-        <div class="col-3 taC">-</div>
+        <div class="col-3 taC"><span class="pL15">-</span></div>
         <div class="col-2 taR">100</div>
     </div>
     @for ($i = 0; $i <= 10; $i++)

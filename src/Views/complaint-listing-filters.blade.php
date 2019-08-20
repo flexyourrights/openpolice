@@ -10,7 +10,7 @@
 <div id="hidivCompFilts{{ $nID }}" class="disBlo @if ($view == 'list') pB15 @endif ">
     <div class="row">
         <div class="col-6">
-            <h4>Filter Listings</h4>
+            <h4>Filter</h4>
         </div><div class="col-6 taR">
             <a id="compFiltBtn{{ $nID }}" class="btn btn-secondary btn-sm updateSearchFilts"
                 href="javascript:;">Apply Filters</a>
@@ -23,15 +23,17 @@
 		<div class="col-sm-6">
 @endif
 
+@if (!$GLOBALS["SL"]->x["isPublicList"])
             {!! $statusFilts !!}
             <div class="mTn10 mBn10"><hr></div>
             {!! $stateFilts !!}
+@endif
 
 @if ($view == 'list')
 		</div>
 		<div class="col-sm-6">
             <div class="mTn20"></div>
-@else
+@elseif (!$GLOBALS["SL"]->x["isPublicList"])
             <div class="mTn10 mBn10"><hr></div>
 @endif
 
@@ -40,6 +42,13 @@
             {!! $victFilts !!}
             <div class="mTn10 mBn10"><hr></div>
             {!! $offFilts !!}
+
+@if ($GLOBALS["SL"]->x["isPublicList"])
+            <div class="mTn10 mBn10"><hr></div>
+            {!! $stateFilts !!}
+            <div class="mTn10 mBn10"><hr></div>
+            {!! $statusFilts !!}
+@endif
 
 @if ($view == 'list')
 		</div>

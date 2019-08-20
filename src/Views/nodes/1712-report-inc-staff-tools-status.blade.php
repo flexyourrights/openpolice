@@ -52,7 +52,8 @@
     "oversightDates" => $oversightDates
 ])->render() !!}
 
-<h4 class="mT20 mB10">Notes for other evaluators:</h4>
+<p><hr></p>
+<p><b>Notes for other evaluators</b></p>
 <textarea name="revNote" class="form-control form-control-lg" style="height: 70px;" ></textarea>
 
 <div class="w100 mT20 mB20">

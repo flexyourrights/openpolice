@@ -4,7 +4,7 @@
         @if ($i > 0) <hr> @endif
         <p>
         @if ($h["type"] == 'Status') Status: @elseif ($h["type"] == 'Email') Email: @endif
-        {!! $h["desc"] !!}<br />
+        {!! str_replace('Oversight', 'Investigative Agency', $h["desc"]) !!}<br />
         {{ date("n/j/y g:ia", $h["date"]) }} by {!! $h["who"] !!}
         @if (isset($h["note"]) && trim($h["note"]) != '') 
             <br />{!! str_replace("\n", "<br />", $h["note"]) !!}

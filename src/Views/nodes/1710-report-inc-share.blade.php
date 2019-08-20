@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-lg-6 pB20">
         <h3 class="slBlueDark mT0 mB15">Read, Print, or Download</h3>
-    @if (in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf']))
+    @if (in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))
         <div id="readPrintLnks">
             <div class="pT10 pB10"><a class="noUnd" href="/complaint/read-{{ $pubID }}" 
                 ><i class="fa fa-link mR5" aria-hidden="true"></i> {{ $GLOBALS['SL']->sysOpts['app-url'] 
@@ -31,9 +31,9 @@
     @endif
     </div>
     <div class="col-lg-6 pB20">
-    @if (isset($published) && $published && isset($GLOBALS["SL"]->x["pageView"]) 
-        && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'full'])
-        && !in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf']))
+    @if (isset($published) && $published && isset($GLOBALS["SL"]->pageView) 
+        && in_array($GLOBALS["SL"]->pageView, ['public', 'full'])
+        && !in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))
         <h3 class="slBlueDark mT0">Share</h3>
         <div class="disBlo">
             <div class="disIn mR10">
@@ -45,7 +45,7 @@
             </div>
         </div>
         @if (isset($emojiTags) && trim($emojiTags) != '') <div class="mT5">{!! $emojiTags !!}</div> @endif
-    @elseif (in_array($GLOBALS["SL"]->x["pageView"], ['pdf', 'full-pdf']))
+    @elseif (in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))
         <h3 class="slBlueDark mT20">What is Open Police Complaints?</h3>
         <p class="pR20">OPC is a web app that helps people to prepare, file, and track police conduct reports. It's designed to serve the needs of oversight investigators, attorneys, police chiefs, and others working to advance constitutional and community policing.</p>
     @endif

@@ -269,15 +269,15 @@ class OpenComplaintPrints extends OpenComplaintEmails
         if ($upRow && isset($upRow->UpPrivacy)) {
             if ($upRow->UpTreeID == 1) {
                 if ($upRow->UpPrivacy == 'Private') {
-                    if (in_array($GLOBALS["SL"]->x["pageView"], ['sensitive', 'internal'])) {
+                    if (in_array($GLOBALS["SL"]->pageView, ['sensitive', 'internal'])) {
                         return 'Public';
                     }
                     return 'Block';
                 }
-                if ($GLOBALS["SL"]->x["dataPerms"] == 'public') {
+                if ($GLOBALS["SL"]->dataPerms == 'public') {
                     return 'Block';
                 }
-                if ($GLOBALS["SL"]->x["pageView"] == 'public') {
+                if ($GLOBALS["SL"]->pageView == 'public') {
                     return 'Public';
                 }
             }

@@ -18,13 +18,13 @@
 <option DISABLED ></option>
 <option value="OK to Submit to Oversight" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'OK to Submit to Oversight') SELECTED @endif 
-    >OK to Submit to Oversight (Reviewed)</option>
+    >OK to Submit to Investigative Agency (Reviewed)</option>
 <option value="Submitted to Oversight" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Submitted to Oversight') SELECTED @endif 
-    >Submitted to Oversight (Full Transparency Public, Email Sent or Complainant Confirmed)</option>
+    >Submitted to Investigative Agency (Full Transparency Public, Email Sent or Complainant Confirmed)</option>
 <option value="Received by Oversight" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Received by Oversight') SELECTED @endif 
-    >Received by Oversight (Full Transparency Public, Confirmed)</option>
+    >Received by Investigative Agency (Full Transparency Public, Confirmed)</option>
 <option value="Pending Oversight Investigation" @if (!$firstReview && isset($lastReview->ComRevStatus) 
     && trim($lastReview->ComRevStatus) == 'Pending Oversight Investigation') SELECTED @endif 
     >Being Investigated (Full Transparency Public, Presumably)</option>

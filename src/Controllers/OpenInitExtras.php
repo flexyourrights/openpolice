@@ -288,11 +288,14 @@ class OpenInitExtras extends OpenPartners
     {
         if (isset($this->sessData->dataSets["Complaints"]) 
             && $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
-            && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)
-            && $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
+            && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)) {
+            if ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff')) {
+                
+            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
-            if ($GLOBALS["SL"]->x["dataPerms"] == 'public') {
-                $GLOBALS["SL"]->x["dataPerms"] = 'private';
+                if (in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
+                    $GLOBALS["SL"]->dataPerms = 'private';
+                }
             }
         }
         return true;
@@ -301,11 +304,11 @@ class OpenInitExtras extends OpenPartners
     protected function runPageExtra($nID = -3)
     {
         if ($nID == 1362) { // Loading Complaint Report: Check for oversight permissions
-            if (!isset($GLOBALS["SL"]->x["pageView"])) {
+            if (!isset($GLOBALS["SL"]->pageView)) {
                 $this->maxUserView(); // shouldn't be needed?
             }
             if ($this->chkOverUserHasCore()) {
-                $GLOBALS["SL"]->x["dataPerms"] = 'sensitive';
+                $GLOBALS["SL"]->dataPerms = 'sensitive';
             }
         }
         return true;

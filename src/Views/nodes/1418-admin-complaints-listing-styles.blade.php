@@ -80,11 +80,13 @@ a.complaintRowA:active .float-right, a.complaintRowA:hover .float-right {
     min-width: 30px;
     max-width: 30px;
 }
-.complaintAlert .litRedDot {
+.complaintAlert .litRedDot, .complaintAlert .litRedDottie {
     margin-top: -16px;
 }
-.complaintRowWrp a.complaintRowFull:link, .complaintRowWrp a.complaintRowFull:visited, .complaintRowWrp a.complaintRowFull:active, .complaintRowWrp a.complaintRowFull:hover,
-.complaintRowWrpActive a.complaintRowFull:link, .complaintRowWrpActive a.complaintRowFull:visited, .complaintRowWrpActive a.complaintRowFull:active, .complaintRowWrpActive a.complaintRowFull:hover {
+.complaintRowWrp a.complaintRowFull:link, .complaintRowWrp a.complaintRowFull:visited, 
+.complaintRowWrp a.complaintRowFull:active, .complaintRowWrp a.complaintRowFull:hover,
+.complaintRowWrpActive a.complaintRowFull:link, .complaintRowWrpActive a.complaintRowFull:visited, 
+.complaintRowWrpActive a.complaintRowFull:active, .complaintRowWrpActive a.complaintRowFull:hover {
     position: absolute;
     top: 15px;
     right: 15px;

@@ -4,6 +4,7 @@ namespace OpenPolice\Controllers;
 use DB;
 use App\Models\User;
 use App\Models\OPComplaints;
+use App\Models\OPzComplaintReviews;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPDepartments;
 use App\Models\OPZeditDepartments;
@@ -67,16 +68,70 @@ class OpenDashAdmin
                 }
             }
         }
-        return view('vendor.openpolice.nodes.2345-dash-top-stats', $stats)->render();
+        $statsWeek = [
+            "activeU"   => [],
+            "contactsU" => []
+        ];
+        $chk = OPComplaints::select('ComID', 'ComUserID', 'ComStatus', 'ComRecordSubmitted')
+            ->where('ComStatus', '>', 0)
+            ->whereNotNull('ComSummary')
+            ->where('ComSummary', 'NOT LIKE', '')
+            ->whereIn('ComType', [
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+            ])
+            ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $com) {
+                if (intVal($com->ComUserID) > 0) {
+                    $statsWeek["activeU"][] = $com->ComUserID;
+                }
+            }
+        }
+        /* $contacts = DB::table('OP_zComplaintReviews')
+            ->join('OP_zComplaintReviews', 'OP_Complaints.ComID', 
+                '=', 'OP_zComplaintReviews.ComRevComplaint')
+            ->where('OP_zComplaintReviews.ComRevType', 'LIKE', 'Update')
+            ->whereNotNull('OP_zComplaintReviews.ComRevNote')
+            ->where('OP_zComplaintReviews.ComRevNote', 'NOT LIKE', 'Update')
+            ->where('OP_zComplaintReviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->select('OP_Complaints.ComUserID', 'OP_zComplaintReviews.*')
+            ->get(); */
+        $contacts = OPzComplaintReviews::where('OP_zComplaintReviews.ComRevType', 'LIKE', 'Update')
+            ->whereNotNull('OP_zComplaintReviews.ComRevNote')
+            ->where('OP_zComplaintReviews.ComRevNote', 'NOT LIKE', 'Update')
+            ->where('OP_zComplaintReviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->get();
+        if ($contacts->isNotEmpty()) {
+            foreach ($contacts as $i => $rec) {
+                $com = OPComplaints::find($rec->ComRevComplaint);
+                if ($com && isset($com->ComUserID) && intVal($com->ComUserID) > 0) {
+                    if (!in_array($com->ComUserID, $statsWeek["activeU"])) {
+                        $statsWeek["activeU"][] = $com->ComUserID;
+                    }
+                    if (!in_array($com->ComUserID, $statsWeek["contactsU"])) {
+                        $statsWeek["contactsU"][] = $com->ComUserID;
+                    }
+                }
+            }
+        }
+        return view('vendor.openpolice.nodes.2345-dash-top-stats', [
+            "stats"     => $stats,
+            "statsWeek" => $statsWeek
+        ])->render();
     }
     
     public function printDashSessGraph()
     {
         $this->v["isDash"] = true;
         $grapher = new SurvTrends('' . rand(1000000, 10000000) . '');
-        $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
-        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#c3ffe1', '#c3ffe1');
-        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#2b3493', '#2b3493');
+        $grapher->addDataLineType('complete', 'Complete', '', '#006D36', '#006D36');
+        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#F0AD4E', '#F0AD4E');
+        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
+        $grapher->addDataLineType('received', 'Received by Oversight', '', '#333333', '#333333');
+        $grapher->addDataLineType('contacts', 'Followup Contacts', '', '#63C6FF', '#63C6FF');
         $recentAttempts = OPComplaints::whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
             ->whereIn('ComType', [
@@ -105,7 +160,28 @@ class OpenDashAdmin
                 $grapher->addDayTally('submitted', $rec->LnkComOverSubmitted);
             }
         }
-        return '<div class="mTn20">' . $grapher->printDailyGraph(420) . '</div>';
+        $recentAttempts = OPLinksComplaintOversight::select('LnkComOverReceived')
+            ->where('LnkComOverReceived', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->get();
+        if ($recentAttempts->isNotEmpty()) {
+            foreach ($recentAttempts as $i => $rec) {
+                $grapher->addDayTally('received', $rec->LnkComOverReceived);
+            }
+        }
+        $contacts = DB::table('OP_zComplaintReviews')
+            ->where('ComRevType', 'LIKE', 'Update')
+            ->whereNotNull('ComRevNote')
+            ->where('ComRevNote', 'NOT LIKE', 'Update')
+            ->where('created_at', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->distinct('ComRevComplaint')
+            ->get();
+        if ($contacts->isNotEmpty()) {
+            foreach ($contacts as $i => $rec) {
+                $grapher->addDayTally('contacts', $rec->created_at);
+            }
+        }
+
+        return '<div id="dailyGraphWrap">' . $grapher->printDailyGraph(420) . '</div>';
     }
     
     public function printDashPercCompl()
@@ -113,7 +189,7 @@ class OpenDashAdmin
         $this->v["isDash"] = true;
         $GLOBALS["SL"]->x["needsCharts"] = true;
         $GLOBALS["SL"]->pageAJAX .= '$("#1342graph").load("/dashboard/surv-1/sessions/graph-durations"); ';
-        return '<div id="1342graph" class="w100" style="height: 420px;"></div><div class="p10">&nbsp;</div>'
+        return '<div id="1342graph" class="w100" style="height: 740px;"></div><div class="p10">&nbsp;</div>'
             . '<div class="pT10"><a href="/dashboard/surv-1/sessions?refresh=1">Full Session Stats Report</a></div>';
     }
     

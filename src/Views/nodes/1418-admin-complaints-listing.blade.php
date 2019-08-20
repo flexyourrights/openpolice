@@ -1,5 +1,21 @@
 <!-- resources/views/vendor/openpolice/nodes/1418-admin-complaints-listing.blade.php -->
 
+@if ($GLOBALS["SL"]->x["isHomePage"])
+
+    <div id="complaintPreviews" class="w100">
+        @if (sizeof($complaintsPreviews) == 0)
+            No complaints found in this filter
+        @else
+            @foreach ($complaintsPreviews as $prev)
+            <div class="slCard nodeWrap"><div class="mTn20 mBn10">
+                {!! $prev !!}
+            </div></div>
+            @endforeach
+        @endif
+    </div>
+
+@else 
+
 <div class="h100">
 
 <div class="admDashTopCard">
@@ -120,9 +136,12 @@
                         || ($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) 
                             == 'Police Complaint'
                         && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
-                            ['New', 'Hold', 'Reviewed', 'Needs More Work', 
-                            'Pending Attorney', 'OK to Submit to Oversight'])))
+                            ['New', 'Hold', 'Reviewed'])))
                         <div class="litRedDot"></div>
+                    @elseif ($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) == 'Police Complaint'
+                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
+                            ['Needs More Work', 'Pending Attorney', 'OK to Submit to Oversight']))
+                        <div class="litRedDottie"></div>
                     @endif
                     </div>
                 </div>
@@ -190,5 +209,7 @@
 @endif
     
 </div> <!-- end outer height div -->
+
+@endif
 
 @if ($sView == 'list') <style> body { overflow-y: hidden; } </style> @endif

@@ -12,6 +12,18 @@ use OpenPolice\Controllers\OpenReport;
 
 class OpenReportTools extends OpenReport
 {
+    protected function logComplaintReview($type, $note, $status = 0)
+    {
+        $newReview = new OPzComplaintReviews;
+        $newReview->ComRevComplaint = $this->coreID;
+        $newReview->ComRevUser      = $this->v["user"]->id;
+        $newReview->ComRevDate      = date("Y-m-d H:i:s");
+        $newReview->ComRevType      = $type;
+        $newReview->ComRevNote      = $note;
+        $newReview->ComRevStatus    = $status;
+        $newReview->save();
+    }
+
     protected function printComplaintOversight()
     {
         $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)
@@ -20,24 +32,21 @@ class OpenReportTools extends OpenReport
             if ($GLOBALS["SL"]->REQ->has('overUpdate') && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1
                 && $overRow && isset($overRow->OverDeptID)) {
                 $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->OverID);
-                $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) ? trim($GLOBALS["SL"]->REQ->overNote) : '');
-                $newReview = new OPzComplaintReviews;
-                $newReview->ComRevComplaint = $this->coreID;
-                $newReview->ComRevUser      = $this->v["user"]->id;
-                $newReview->ComRevDate      = date("Y-m-d H:i:s");
-                $newReview->ComRevType      = 'Oversight';
-                $newReview->ComRevNote      = $evalNotes;
+                $status = 0;
+                $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                    ? trim($GLOBALS["SL"]->REQ->overNote) : '');
                 if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
                     if ($GLOBALS["SL"]->REQ->overStatus == 'Received by Oversight') {
                         $this->logOverUpDate($this->coreID, $overRow->OverID, 'Received', $overUpdateRow);
                     } elseif ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
                         $this->logOverUpDate($this->coreID, $overRow->OverID, 'Investigated', $overUpdateRow);
                     }
-                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', trim($GLOBALS["SL"]->REQ->overStatus));
+                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', 
+                        trim($GLOBALS["SL"]->REQ->overStatus));
                     $this->sessData->dataSets["Complaints"][0]->update([ "ComStatus" => $statusID ]);
-                    $newReview->ComRevStatus = $GLOBALS["SL"]->REQ->overStatus;
+                    $status = $GLOBALS["SL"]->REQ->overStatus;
                 }
-                $newReview->save();
+                $this->logComplaintReview('Oversight', $evalNotes, $status);
             } elseif ($GLOBALS["SL"]->REQ->has('upResult') 
                 && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
                 
@@ -58,7 +67,8 @@ class OpenReportTools extends OpenReport
             $analyze = new SessAnalysis(1);
             $nodeTots = $analyze->loadNodeTots($this->custReport);
             $coreTots = $analyze->analyzeCoreSessions($this->coreID);
-            return '<div class="pT20 pB20"><div class="slCard mT20 mB20"><h2>Incomplete: Session Attempt History</h2>'
+            return '<div class="pT20 pB20"><div class="slCard mT20 mB20">'
+                . '<h2>Incomplete: Session Attempt History</h2>'
                 . view('vendor.survloop.admin.tree.tree-session-attempt-history', [
                     "core"     => $coreTots,
                     "nodeTots" => $nodeTots
@@ -79,25 +89,31 @@ class OpenReportTools extends OpenReport
                         $dateFld = $fldID . $d . 'date';
                         $dbFld = $this->v["oversightDateLookups"][$d][0];
                         $oldDate = ((isset($this->v["comDepts"][$c]["overDates"]->{ $dbFld }))
-                            ? $GLOBALS["SL"]->dateToTime($this->v["comDepts"][$c]["overDates"]->{ $dbFld }) : 0);
+                            ? $GLOBALS["SL"]->dateToTime(
+                                $this->v["comDepts"][$c]["overDates"]->{ $dbFld })
+                            : 0);
                         $newDate = 0;
-                        if ($GLOBALS["SL"]->REQ->has($fldID) && is_array($GLOBALS["SL"]->REQ->get($fldID))
-                            && in_array($d, $GLOBALS["SL"]->REQ->get($fldID)) && $GLOBALS["SL"]->REQ->has($dateFld)) {
+                        if ($GLOBALS["SL"]->REQ->has($fldID) 
+                            && is_array($GLOBALS["SL"]->REQ->get($fldID))
+                            && in_array($d, $GLOBALS["SL"]->REQ->get($fldID)) 
+                            && $GLOBALS["SL"]->REQ->has($dateFld)) {
                             $newDate = $GLOBALS["SL"]->dateToTime($GLOBALS["SL"]->REQ->get($dateFld));
                         }
                         if ($oldDate != $newDate) {
                             if (intVal($newDate) > 0) {
-                                $this->v["comDepts"][$c]["overDates"]->{ $dbFld } 
-                                    = date("Y-m-d", $newDate) . ' 00:00:00';
+                                $this->v["comDepts"][$c]["overDates"]->update([
+                                    $dbFld => date("Y-m-d", $newDate) . ' 00:00:00'
+                                ]);
                             } else {
-                                $this->v["comDepts"][$c]["overDates"]->{ $dbFld } = NULL;
+                                $this->v["comDepts"][$c]["overDates"]->update([
+                                    $dbFld => NULL
+                                ]);
                             }
                             $evalNotes .= 'Status with the ' . str_replace("Police Department", "PD", 
                                 str_replace("Sheriff's Office", "Sheriff", $dept["deptRow"]->DeptName)) 
                                 . ' date of ' . $this->v["oversightDateLookups"][$d][1] . ' changed from '
                                 . str_replace('1/1', 'N/A', date('n/j', $oldDate)) . ' to ' 
                                 . str_replace('1/1', 'N/A', date('n/j', $newDate)) . '. ';
-                            $this->v["comDepts"][$c]["overDates"]->save();
                         }
                     }
                 }
@@ -110,10 +126,59 @@ class OpenReportTools extends OpenReport
     {
         $this->loadOversightDateLookups();
         $this->prepEmailComData();
-        if ($this->v["isOwner"] && $GLOBALS["SL"]->REQ->has('ownerUpdate') 
+        if ($this->v["isOwner"]) {
+            $this->processOwnerUpdate();
+            $this->processOwnerPrivacy();
+        }
+        $depts = ((isset($this->sessData->dataSets["Departments"])) 
+            ? $this->sessData->dataSets["Departments"] : []);
+        $oversights = ((isset($this->sessData->dataSets["Oversight"]))
+            ? $this->sessData->dataSets["Oversight"] : []);
+        $overUpdates = ((isset($this->sessData->dataSets["LinksComplaintOversight"]))
+            ? $this->sessData->dataSets["LinksComplaintOversight"] : []);
+        $ret = view('vendor.openpolice.nodes.1714-report-inc-owner-tools', [
+            "user"        => $this->v["user"],
+            "complaint"   => $this->sessData->dataSets["Complaints"][0],
+            "depts"       => $depts,
+            "oversights"  => $oversights,
+            "overUpdates" => $overUpdates,
+            "overList"    => $this->oversightList(),
+            "warning"     => $this->multiRecordCheckDelWarn(),
+            "comDepts"    => $this->v["comDepts"],
+            "oversightDates" => $this->v["oversightDateLookups"]
+        ])->render();
+        $title = $this->getCurrComplaintEngLabel() . ': Your Toolkit';
+        return '<div class="pT20 pB20">'
+            . $GLOBALS["SL"]->printAccard($title, $ret, true)
+            . '</div>';
+    }
+
+    protected function processOwnerPrivacy()
+    {
+        if ($GLOBALS["SL"]->REQ->has('ownerPublish') 
+            && intVal($GLOBALS["SL"]->REQ->get('ownerPublish')) == 1
+            && $GLOBALS["SL"]->REQ->has('n2018fld') 
+            && intVal($GLOBALS["SL"]->REQ->get('n2018fld')) > 0) {
+            $evalNotes = $GLOBALS["SL"]->def->getVal('Privacy Types', $GLOBALS["SL"]->REQ->get('n2018fld'))
+                . ' Privacy Option Selected';
+            $this->logComplaintReview('Owner', $evalNotes, 'OK to Submit to Oversight');
+            $this->sessData->dataSets["Complaints"][0]->update([ 
+                "ComPrivacy" => $GLOBALS["SL"]->REQ->get('n2018fld'),    
+                "ComStatus"  => $GLOBALS["SL"]->def->getID('Complaint Status', 
+                    'OK to Submit to Oversight')
+            ]);
+            return true;
+        }
+        return false;
+    }
+
+    protected function processOwnerUpdate()
+    {
+        if ($GLOBALS["SL"]->REQ->has('ownerUpdate') 
             && intVal($GLOBALS["SL"]->REQ->get('ownerUpdate')) == 1 
             && isset($this->sessData->dataSets["Oversight"])) {
-            $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) ? trim($GLOBALS["SL"]->REQ->overNote) : '')
+            $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                ? trim($GLOBALS["SL"]->REQ->overNote) : '')
                 . $this->processComplaintOverDates();
             $overID = $this->sessData->dataSets["Oversight"][0]->OverID;
             if (isset($this->sessData->dataSets["Oversight"][1]) 
@@ -121,15 +186,7 @@ class OpenReportTools extends OpenReport
                 $overID = $this->sessData->dataSets["Oversight"][1]->OverID;
             }
             $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overID);
-            
-            $newReview = new OPzComplaintReviews;
-            $newReview->ComRevComplaint = $this->coreID;
-            $newReview->ComRevUser      = $this->v["user"]->id;
-            $newReview->ComRevDate      = date("Y-m-d H:i:s");
-            $newReview->ComRevType      = 'Owner';
-            $newReview->ComRevNote      = $evalNotes;
-            $newReview->ComRevStatus    = $GLOBALS["SL"]->REQ->overStatus;
-            $newReview->save();
+            $this->logComplaintReview('Owner', $evalNotes, $GLOBALS["SL"]->REQ->overStatus);
             if ($GLOBALS["SL"]->REQ->has('overStatus')) {
                 if (trim($GLOBALS["SL"]->REQ->overStatus) == 'Received by Oversight') {
                     $this->logOverUpDate($this->coreID, $overID, 'Received', $overUpdateRow);
@@ -150,29 +207,14 @@ class OpenReportTools extends OpenReport
                         }
                     }
                     $this->sessData->dataSets["Complaints"][0]->update([ 
-                        "ComStatus" => $GLOBALS["SL"]->def->getID('Complaint Status', $GLOBALS["SL"]->REQ->overStatus)
-                        ]);
+                        "ComStatus" => $GLOBALS["SL"]->def->getID('Complaint Status', 
+                            $GLOBALS["SL"]->REQ->overStatus)
+                    ]);
                 }
             }
+            return true;
         }
-        return '<div class="pT20 pB20">' . $GLOBALS["SL"]->printAccard(
-                $this->getCurrComplaintEngLabel() . ': Complainant\'s Toolkit',
-                view('vendor.openpolice.nodes.1714-report-inc-owner-tools', [
-                    "user"        => $this->v["user"],
-                    "complaint"   => $this->sessData->dataSets["Complaints"][0],
-                    "depts"       => ((isset($this->sessData->dataSets["Departments"])) 
-                        ? $this->sessData->dataSets["Departments"] : []),
-                    "oversigts"   => ((isset($this->sessData->dataSets["Oversight"]))
-                        ? $this->sessData->dataSets["Oversight"] : []),
-                    "overUpdates" => ((isset($this->sessData->dataSets["LinksComplaintOversight"]))
-                        ? $this->sessData->dataSets["LinksComplaintOversight"] : []),
-                    "overList"    => $this->oversightList(),
-                    "warning"     => $this->multiRecordCheckDelWarn(),
-                    "comDepts"    => $this->v["comDepts"],
-                    "oversightDates" => $this->v["oversightDateLookups"]
-                ])->render(),
-                true
-            ) . '</div>';
+        return false;
     }
 
     protected function getCurrComplaintEngLabel()
@@ -225,13 +267,7 @@ class OpenReportTools extends OpenReport
 
             $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
                 $GLOBALS["SL"]->REQ->n1712fld);
-            $newRev = new OPzComplaintReviews;
-            $newRev->ComRevComplaint = $this->coreID;
-            $newRev->ComRevUser      = $this->v["user"]->id;
-            $newRev->ComRevDate      = date("Y-m-d H:i:s");
-            $newRev->ComRevType      = 'First';
-            $newRev->ComRevStatus    = $newTypeVal;
-            $newRev->save();
+            $this->logComplaintReview('First', '', $newTypeVal);
             $com = OPComplaints::find($this->coreID);
             $com->comType = intVal($GLOBALS["SL"]->REQ->n1712fld);
             $com->save();
@@ -239,17 +275,11 @@ class OpenReportTools extends OpenReport
             $this->v["firstReview"] = false;
 
         } elseif ($GLOBALS["SL"]->REQ->has('save')) {
-
+            $status = 0;
             $evalNotes = (($GLOBALS["SL"]->REQ->has('revNote')) ? trim($GLOBALS["SL"]->REQ->revNote) : '')
                 . $this->processComplaintOverDates();
-            $newRev = new OPzComplaintReviews;
-            $newRev->ComRevComplaint = $this->coreID;
-            $newRev->ComRevUser      = $this->v["user"]->id;
-            $newRev->ComRevDate      = date("Y-m-d H:i:s");
-            $newRev->ComRevType      = 'Update';
-            $newRev->ComRevNote      = $evalNotes;
             if ($GLOBALS["SL"]->REQ->has('revStatus')) {
-                $newRev->ComRevStatus = $GLOBALS["SL"]->REQ->revStatus;
+                $status = $GLOBALS["SL"]->REQ->revStatus;
                 if (in_array($GLOBALS["SL"]->REQ->revStatus, ['Hold: Go Gold', 'Hold: Not Sure'])) {
                     $this->sessData->dataSets["Complaints"][0]->ComStatus 
                         = $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold');
@@ -274,7 +304,7 @@ class OpenReportTools extends OpenReport
                     $this->sessData->dataSets["Complaints"][0]->ComStatus = $GLOBALS["SL"]->REQ->revComplaintType;
                     $this->sessData->dataSets["Complaints"][0]->ComType 
                         = $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed');
-                } else {
+                } else { 
                     $newTypeVal = $GLOBALS["SL"]->def->getVal('OPC Staff/Internal Complaint Type', 
                         $GLOBALS["SL"]->REQ->revComplaintType);
                     if ($newTypeVal != 'Police Complaint') {
@@ -283,7 +313,7 @@ class OpenReportTools extends OpenReport
                     $this->sessData->dataSets["Complaints"][0]->ComType = $GLOBALS["SL"]->REQ->revComplaintType;
                 }
             }
-            $newRev->save();
+            $this->logComplaintReview('Update', $evalNotes, $status);
             $this->sessData->dataSets["Complaints"][0]->save();
         }
         $this->v["lastReview"] = true;
@@ -348,7 +378,10 @@ class OpenReportTools extends OpenReport
                 $isOverCompatible = $this->isOverCompatible($this->v["comDepts"][0][$w]);
             }
         }
-        $this->v["emailsTo"] = [ "To Complainant" => [], "To Oversight" => [] ];
+        $this->v["emailsTo"] = [
+            "To Complainant" => [],
+            "To Oversight"   => []
+        ];
         $complainantUser = User::find($this->sessData->dataSets["Complaints"][0]->ComUserID);
         if ($complainantUser && isset($complainantUser->email)) {
             $name = $complainantUser->name;

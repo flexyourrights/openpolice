@@ -168,12 +168,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#PrintAnonOnly') {
             $unPub = $this->getUnPublishedStatusList();
             $unPub[] = $GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight');
-            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
+            if (isset($GLOBALS["SL"]->pageView) && in_array($GLOBALS["SL"]->pageView, ['public', 'pdf'])
                 && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)
                 && in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, $unPub)) {
                 return 1;
             }
-            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['public', 'pdf'])
+            if (isset($GLOBALS["SL"]->pageView) && in_array($GLOBALS["SL"]->pageView, ['public', 'pdf'])
                 && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)
                 && $this->sessData->dataSets["Complaints"][0]->ComPrivacy 
                     != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
@@ -186,7 +186,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
             }
             return 0;
         } elseif ($condition == '#PrintSensitiveReport') {
-            if (isset($GLOBALS["SL"]->x["pageView"]) && in_array($GLOBALS["SL"]->x["pageView"], ['full', 'full-pdf'])) {
+            if (isset($GLOBALS["SL"]->pageView) && in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf'])) {
                 return 1;
             }
             return 0;

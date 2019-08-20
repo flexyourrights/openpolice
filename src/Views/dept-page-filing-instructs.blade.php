@@ -8,7 +8,7 @@
         && isset($d["iaRow"]->OverWaySubEmail) && intVal($d["iaRow"]->OverWaySubEmail) == 1
         && isset($d[$d["whichOver"]]->OverEmail) && trim($d[$d["whichOver"]]->OverEmail) != '')
         <div class="alert alert-success mT10" role="alert"><h4 class="m0">
-            <i class="fa fa-trophy mR5" aria-hidden="true"></i> OPC-Compatible Department
+            <i class="fa fa-smile-o mR5" aria-hidden="true"></i> OPC-Compatible Department
         </h4></div>
         <p class="mB20">
             This police department's policy permits them to investigate complaints sent via email. 
@@ -17,18 +17,28 @@
             <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
                 <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
                 >share your story</a>.</b>
-        </p><p>
+        </p>
+        <p>
             The information below includes other ways to submit a formal complaint to the 
             {{ $d[$d["whichOver"]]->OverAgncName }}.
         </p>
     @else
+        @if (isset($d["iaRow"]->OverWaySubPaperInPerson) && intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1)
+            <div class="alert alert-danger mT10" role="alert">
+                <i class="fa fa-frown-o mR5" aria-hidden="true"></i> 
+                This department only investigates complaints submitted in-person.
+            </div>
+        @endif
         <p>
-            This department does not investigate OPC reports sent by email. We recommend you 
-            <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
-                <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
-                >share your story on OpenPolice.org</a>.
-            Then use the information below to submit a formal complaint 
-            to the {{ $d[$d["whichOver"]]->OverAgncName }}.
+            This department does not investigate OPC reports sent by email.
+            @if (!isset($ownerTools) || !$ownerTools)
+                We recommend you 
+                <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
+                    <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                    >share your story on OpenPolice.org</a>.
+                Then use the information below to submit a formal complaint 
+                to the {{ $d[$d["whichOver"]]->OverAgncName }}.
+            @endif
         </p>
     @endif
 </div>
@@ -82,38 +92,47 @@
         {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverComplaintPDF, false) !!}</p>
     @endif
     
+@if (!isset($d["iaRow"]->OverWaySubPaperInPerson) || intVal($d["iaRow"]->OverWaySubPaperInPerson) != 1)
     <p>If you submit your complaint on paper, we recommend that you staple a copy of your full OPC complaint 
     together with the department form.</p>
+@endif
     
     @if (isset($d["iaRow"]->OverWebComplaintInfo) && trim($d["iaRow"]->OverWebComplaintInfo) != '')
         <p>Complaint process information:<br />
         {!! $GLOBALS["SL"]->swapURLwrap($d["iaRow"]->OverWebComplaintInfo, false) !!}</p>
     @endif
 
+@if (isset($d["iaRow"]->OverWaySubPaperInPerson) && intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1)
+
+    <p>
+    This department only investigates complaints submitted in-person. Regardless, we recommend you print and send your paper complaint to the department by USPS Certified Mail. When you get confirmation of receipt, please login to your account to let us know.
+    </p>
+
+@else
+
     <ul style="padding-left: 30px;">
-    @if (!isset($d["iaRow"]->OverOfficialFormNotReq) || intVal($d["iaRow"]->OverOfficialFormNotReq) == 0)
-        <li>Only complaints submitted on department forms will be investigated.</li>
-    @endif
-    @if (isset($d["iaRow"]->OverWaySubNotary) && intVal($d["iaRow"]->OverWaySubNotary) == 1)
-        <li>Submitted complaints may require a notary to be investigated.</li>
-    @endif
-    @if (!isset($d["iaRow"]->OverOfficialAnon) || intVal($d["iaRow"]->OverOfficialAnon) == 0)
-        <li>Anonymous complaints will not be investigated.</li>
-    @endif
-    @if (isset($d["iaRow"]->OverWaySubVerbalPhone) && intVal($d["iaRow"]->OverWaySubVerbalPhone) == 1)
-        <li>Complaints submitted by phone will be investigated.</li>
-    @endif
-    @if (isset($d["iaRow"]->OverWaySubPaperMail) && intVal($d["iaRow"]->OverWaySubPaperMail) == 1)
-        <li>Complaints submitted by postal mail will be investigated.</li>
-    @endif
-    @if (isset($d["iaRow"]->OverWaySubPaperInPerson) && intVal($d["iaRow"]->OverWaySubPaperInPerson) == 1)
-        <li>Complaints submitted in person will be investigated.</li>
-    @endif
+        @if (!isset($d["iaRow"]->OverOfficialAnon) || intVal($d["iaRow"]->OverOfficialAnon) == 0)
+            <li>Anonymous complaints will not be investigated.</li>
+        @elseif (!isset($d["iaRow"]->OverOfficialFormNotReq) || intVal($d["iaRow"]->OverOfficialFormNotReq) == 0)
+            <li>Only complaints submitted on department forms will be investigated.</li>
+        @endif
+        @if (isset($d["iaRow"]->OverWaySubNotary) && intVal($d["iaRow"]->OverWaySubNotary) == 1)
+            <li>Submitted complaints may require a notary to be investigated.</li>
+        @endif
+        @if (isset($d["iaRow"]->OverWaySubVerbalPhone) && intVal($d["iaRow"]->OverWaySubVerbalPhone) == 1)
+            <li>Complaints submitted by phone will be investigated.</li>
+        @endif
+        @if (isset($d["iaRow"]->OverWaySubPaperMail) && intVal($d["iaRow"]->OverWaySubPaperMail) == 1)
+            <li>Complaints submitted by postal mail will be investigated. Send using certified mail.</li>
+        @endif
     @if (isset($d["iaRow"]->OverSubmitDeadline) && intVal($d["iaRow"]->OverSubmitDeadline) > 0)
         <li>Complaints must be submitted within {{ number_format($d["iaRow"]->OverSubmitDeadline) 
         }} days of your incident to be investigated.</li>
     @endif
     </ul>
+
+@endif
+
 </div>
 
     

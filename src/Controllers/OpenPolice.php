@@ -33,6 +33,11 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1876) {
             return view('vendor.openpolice.nodes.1876-home-page-hero-credit')
                 ->render();
+        } elseif ($nID == 808) { // overwrite preview results
+            $GLOBALS["SL"]->x["isHomePage"] = true;
+            $GLOBALS["SL"]->x["isPublicList"] = true;
+            $GLOBALS["SL"]->pageView = 'public';
+            return $this->printComplaintListing($nID);
         //} elseif ($nID == 1848) {
         //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
                 
@@ -97,7 +102,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportWhenLine();
         } elseif (in_array($nID, [1688, 1732])) {
             return $this->getReportWhereLine($nID);
-        } elseif (in_array($nID, [1467, 1733])) {
+        } elseif (in_array($nID, [1691, 1733])) {
             return ['Privacy Setting', $this->getReportPrivacy($nID)];
         } elseif ($nID == 1468) {
             return $this->getCivReportNameHeader($nID);
@@ -143,7 +148,7 @@ class OpenPolice extends OpenInitExtras
             $GLOBALS["SL"]->x["isPublicList"] = false;
             if ($nID == 2384) {
                 $GLOBALS["SL"]->x["isPublicList"] = true;
-                $GLOBALS["SL"]->x["pageView"] = 'public';
+                $GLOBALS["SL"]->pageView = 'public';
             }
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {

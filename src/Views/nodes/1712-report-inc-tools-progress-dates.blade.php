@@ -1,5 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-tools-progress-dates.blade.php -->
 
+<!-- <pre> {!! print_r($comDepts) !!} </pre> -->
+
 @if (isset($comDepts) && sizeof($comDepts) > 0)
     @foreach ($comDepts as $c => $dept)
         @if (isset($dept["deptRow"]) && isset($dept["deptRow"]->DeptName))
@@ -43,6 +45,9 @@ $(document).ready(function(){
         if (document.getElementById(fldID) && document.getElementById(fldID+"dateFlds")) {
             if (document.getElementById(fldID).checked) {
                 document.getElementById(fldID+"dateFlds").style.display="block";
+                if (document.getElementById('over'+deptID+'Status'+d+'dateID') && document.getElementById('over'+deptID+'Status'+d+'dateID').value.trim() == '') {
+                    document.getElementById('over'+deptID+'Status'+d+'dateID').value = '{{ date("m/d/Y") }}';
+                }
             } else {
                 document.getElementById(fldID+"dateFlds").style.display="none";
             }

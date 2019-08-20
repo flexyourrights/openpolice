@@ -472,6 +472,16 @@ class OpenComplaintEmails extends OpenPoliceUtils
                 ->where('LnkComOverDeptID', $lnk->LnkComDeptDeptID)
                 ->where('LnkComOverOverID', $this->v["comDepts"][0][$this->v["comDepts"][$cnt]["whichOver"]]->OverID)
                 ->first();
+        if (!$this->v["comDepts"][$cnt]["overDates"] 
+            || !isset($this->v["comDepts"][$cnt]["overDates"]->LnkComOverID)) {
+
+            $this->v["comDepts"][$cnt]["overDates"] = new OPLinksComplaintOversight;
+            $this->v["comDepts"][$cnt]["overDates"]->LnkComOverComplaintID = $lnk->LnkComDeptComplaintID;
+            $this->v["comDepts"][$cnt]["overDates"]->LnkComOverDeptID = $lnk->LnkComDeptDeptID;
+            $this->v["comDepts"][$cnt]["overDates"]->LnkComOverOverID
+                = $this->v["comDepts"][0][$this->v["comDepts"][$cnt]["whichOver"]]->OverID;
+            $this->v["comDepts"][$cnt]["overDates"]->save();
+        }
         return true;
     }
     
