@@ -11,6 +11,7 @@ use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
+use App\Models\OPLinksComplimentOversight;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenListing;
 
@@ -22,7 +23,8 @@ class OpenDepts extends OpenListing
         $searchSuggest = [];
         $deptCitys = OPDepartments::select('DeptAddressCity')
             ->distinct()
-            ->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)
+            ->where('DeptAddressState', 
+                $this->sessData->dataSets["Incidents"][0]->IncAddressState)
             ->get();
         if ($deptCitys->isNotEmpty()) {
             foreach ($deptCitys as $dept) {
@@ -33,7 +35,8 @@ class OpenDepts extends OpenListing
         }
         $deptCounties = OPDepartments::select('DeptAddressCounty')
             ->distinct()
-            ->where('DeptAddressState', $this->sessData->dataSets["Incidents"][0]->IncAddressState)
+            ->where('DeptAddressState', 
+                $this->sessData->dataSets["Incidents"][0]->IncAddressState)
             ->get();
         if ($deptCounties->isNotEmpty()) {
             foreach ($deptCounties as $dept) {
@@ -67,7 +70,8 @@ class OpenDepts extends OpenListing
     protected function getNextDept()
     {
         $this->v["nextDept"] = array(0, '', '');
-        $recentDate = date("Y-m-d H:i:s", time(date("H")-3, date("i"), date("s"), date("n"), date("j"), date("Y")));
+        $recentDate = date("Y-m-d H:i:s", 
+            time(date("H")-3, date("i"), date("s"), date("n"), date("j"), date("Y")));
         /*
         OPzVolunTmp::where('TmpType', 'ZedDept')
             ->where('TmpDate', '<', $recentDate)
@@ -85,15 +89,20 @@ class OpenDepts extends OpenListing
             $this->loadDeptPriorityRows();
             if (sizeof($this->v["deptPriorityRows"]) > 0) {
                 $nextRow = $this->v["deptPriorityRows"][0];
-                $this->v["nextDept"] = [ $nextRow->DeptID, $nextRow->DeptName, $nextRow->DeptSlug ];
+                $this->v["nextDept"] = [
+                    $nextRow->DeptID, 
+                    $nextRow->DeptName, 
+                    $nextRow->DeptSlug 
+                ];
             } else {
                 $nextRow = NULL;
                 $qmen = [];
                 $qBase = "SELECT `DeptID`, `DeptName`, `DeptSlug` FROM `OP_Departments` WHERE ";
                 $qReserves = " AND `DeptID` NOT IN (SELECT `TmpVal` FROM `OP_zVolunTmp` WHERE "
-                    . "`TmpType` LIKE 'ZedDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id . "')";
-                $qmen[] = $qBase . "(`DeptVerified` < '2015-01-01 00:00:00' OR `DeptVerified` IS NULL) " 
-                    . $qReserves . " ORDER BY RAND()";
+                    . "`TmpType` LIKE 'ZedDept' AND `TmpUser` NOT LIKE '" . Auth::user()->id 
+                    . "')";
+                $qmen[] = $qBase . "(`DeptVerified` < '2015-01-01 00:00:00' "
+                    . "OR `DeptVerified` IS NULL) " . $qReserves . " ORDER BY RAND()";
                 $qmen[] = $qBase . "1 " . $qReserves . " ORDER BY `DeptVerified`";
                 $qmen[] = $qBase . "1 ORDER BY RAND()"; // worst-case backup
                 for ($i = 0; ($i < sizeof($qmen) && !$nextRow); $i++) {
@@ -130,7 +139,7 @@ class OpenDepts extends OpenListing
                 ->where('DeptAddressState', $deptState)
                 ->first();
             if ($newDept && isset($newDept->DeptSlug)) {
-                return $this->redir('/dashboard/volunteer/verify/'.$newDept->DeptSlug);
+                return $this->redir('/dashboard/volunteer/verify/' . $newDept->DeptSlug);
             }
             $newDept = new OPDepartments;
             $newIA   = new OPOversight;
@@ -155,7 +164,8 @@ class OpenDepts extends OpenListing
     {
         $this->v["editsSummary"] = [
             'Last Verified: ' 
-            . (($this->v["neverEdited"]) ? 'Never' : date('n/j/y', strtotime($this->v["deptRow"]->DeptVerified))) 
+            . (($this->v["neverEdited"]) ? 'Never' 
+                : date('n/j/y', strtotime($this->v["deptRow"]->DeptVerified))) 
             . ' <span class="mL20"><nobr>' . intVal($this->v["editTots"]["online"]) 
             . '<span class="fPerc80 mL3 mR3">x</span> Online Research,</nobr></span> '
             . '<span class="mL20"><nobr>' . intVal($this->v["editTots"]["callDept"]) 
@@ -176,25 +186,35 @@ class OpenDepts extends OpenListing
     {
         $this->v["deptRow"]     = $this->sessData->dataSets["Departments"][0];
         $this->v["deptSlug"]    = $this->v["deptRow"]->DeptSlug;
-        $this->v["editsIA"]     = $this->v["editsCiv"] = $this->v["userEdits"] = $this->v["userNames"] = [];
-        $this->v["editTots"]    = [ "notes" => 0, "online" => 0, "callDept" => 0, "callIA" => 0 ];
+        $this->v["editsIA"]     = $this->v["editsCiv"] 
+            = $this->v["userEdits"] = $this->v["userNames"] = [];
         $this->v["user"]        = Auth::user();
         $this->v["neverEdited"] = false;
         $this->v["recentEdits"] = '';
+        $this->v["editTots"] = [
+            "notes"    => 0, 
+            "online"   => 0, 
+            "callDept" => 0, 
+            "callIA"   => 0 
+        ];
         
-        if (!isset($this->v["deptRow"]->DeptID) || intVal($this->v["deptRow"]->DeptID) <= 0) {
+        if (!isset($this->v["deptRow"]->DeptID) 
+            || intVal($this->v["deptRow"]->DeptID) <= 0) {
             return $this->redir('/dashboard/volunteer');
         }
         
-        $this->v["editsDept"] = OPZeditDepartments::where('ZedDeptDeptID', $this->v["deptRow"]->DeptID)
+        $this->v["editsDept"] = OPZeditDepartments::where('ZedDeptDeptID', 
+                $this->v["deptRow"]->DeptID)
             ->orderBy('ZedDeptDeptVerified', 'desc')
             ->get();
         if ($this->v["editsDept"]->isNotEmpty()) {
             foreach ($this->v["editsDept"] as $i => $edit) {
-                $this->v["editsIA"][$i]  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                $this->v["editsIA"][$i]  = OPZeditOversight::where('ZedOverZedDeptID', 
+                        $edit->ZedDeptID)
                     ->where('ZedOverOverType', $this->overWhichDefID('IA'))
                     ->first();
-                $this->v["editsCiv"][$i] = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
+                $this->v["editsCiv"][$i] = OPZeditOversight::where('ZedOverZedDeptID', 
+                        $edit->ZedDeptID)
                     ->where('ZedOverOverType', $this->overWhichDefID('Civ'))
                     ->first();
                 if ($this->v["editsIA"][$i]) {
@@ -219,10 +239,11 @@ class OpenDepts extends OpenListing
                         "user"     => $this->v["userNames"][$edit->ZedDeptUserID], 
                         "deptRow"  => $this->v["deptRow"], 
                         "deptEdit" => $edit, 
-                        "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $edit->DeptType),
                         "iaEdit"   => $this->v["editsIA"][$i], 
-                        "civEdit"  => $this->v["editsCiv"][$i]
-                        ])->render();
+                        "civEdit"  => $this->v["editsCiv"][$i],
+                        "deptType" => $GLOBALS["SL"]
+                            ->def->getVal('Department Types', $edit->DeptType)
+                    ])->render();
                 }
             }
         } else {
@@ -254,16 +275,19 @@ class OpenDepts extends OpenListing
     
     protected function saveNewDept($nID)
     {
+        $tbl = (($nID == 145) ? 'LinksComplaintDept' : 'LinksComplimentDept');
         $newDeptID = -3;
         if (intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
             $newDeptID = intVal($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
-            $this->sessData->logDataSave($nID, 'NEW', -3, 'ComplaintDeptLinks', 
-                $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
-        } elseif ($GLOBALS["SL"]->REQ->has('newDeptName') && trim($GLOBALS["SL"]->REQ->newDeptName) != '') {
-            $newDept = $this->newDeptAdd($GLOBALS["SL"]->REQ->newDeptName, 
-                $GLOBALS["SL"]->REQ->newDeptAddressState);
+            $this->sessData->logDataSave($nID, 'NEW', -3, $tbl, $newDeptID);
+        } elseif ($GLOBALS["SL"]->REQ->has('newDeptName') 
+            && trim($GLOBALS["SL"]->REQ->newDeptName) != '') {
+            $newDept = $this->newDeptAdd(
+                $GLOBALS["SL"]->REQ->newDeptName, 
+                $GLOBALS["SL"]->REQ->newDeptAddressState
+            );
             $newDeptID = $newDept->DeptID;
-            $logTxt = 'ComplaintDeptLinks - !New Department Added!';
+            $logTxt = $tbl . ' - !New Department Added!';
             $this->sessData->logDataSave($nID, 'NEW', -3, $logTxt, $newDeptID);
         }
         if ($newDeptID > 0) {
@@ -607,17 +631,18 @@ class OpenDepts extends OpenListing
     
     public function getOverUpdateRow($cid, $deptID)
     {
+        $civDef = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight');
         if (!isset($this->v["currOverRow"])) {
             $this->v["currOverRow"] = NULL;
             $overs = OPOversight::where('OverDeptID', $deptID)
+                ->orderBy('created_at', 'asc')
                 ->get();
             if ($overs->isNotEmpty()) {
                 if ($overs->count() == 1) {
                     $this->v["currOverRow"] = $overs[0];
                 } else {
                     foreach ($overs as $i => $ovr) {
-                        if ($ovr && isset($ovr->OverType) && $ovr->OverType 
-                            == $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight')) {
+                        if ($ovr && isset($ovr->OverType) && $ovr->OverType == $civDef) {
                             $this->v["currOverRow"] = $ovr;
                         }
                     }
@@ -625,15 +650,32 @@ class OpenDepts extends OpenListing
             }
         }
         if ($this->v["currOverRow"] && isset($this->v["currOverRow"]->OverID)) {
-            $this->v["currOverUpdateRow"] = OPLinksComplaintOversight::where('LnkComOverComplaintID', $cid)
-                ->where('LnkComOverOverID', $this->v["currOverRow"]->OverID)
-                ->first();
-            if (!$this->v["currOverUpdateRow"]) {
-                $this->v["currOverUpdateRow"] = new OPLinksComplaintOversight;
-                $this->v["currOverUpdateRow"]->LnkComOverComplaintID = $cid;
-                $this->v["currOverUpdateRow"]->LnkComOverDeptID = $deptID;
-                $this->v["currOverUpdateRow"]->LnkComOverOverID = $this->v["currOverRow"]->OverID;
-                $this->v["currOverUpdateRow"]->save();
+            if ($this->treeID == 5) {
+                $this->v["currOverUpdateRow"] 
+                    = OPLinksComplimentOversight::where('LnkCompliOverComplimentID', $cid)
+                    ->where('LnkCompliOverOverID', $this->v["currOverRow"]->OverID)
+                    ->first();
+                if (!$this->v["currOverUpdateRow"]) {
+                    $this->v["currOverUpdateRow"] = new OPLinksComplimentOversight;
+                    $this->v["currOverUpdateRow"]->LnkCompliOverComplimentID = $cid;
+                    $this->v["currOverUpdateRow"]->LnkCompliOverDeptID = $deptID;
+                    $this->v["currOverUpdateRow"]->LnkCompliOverOverID 
+                        = $this->v["currOverRow"]->OverID;
+                    $this->v["currOverUpdateRow"]->save();
+                }
+            } else {
+                $this->v["currOverUpdateRow"] 
+                    = OPLinksComplaintOversight::where('LnkComOverComplaintID', $cid)
+                    ->where('LnkComOverOverID', $this->v["currOverRow"]->OverID)
+                    ->first();
+                if (!$this->v["currOverUpdateRow"]) {
+                    $this->v["currOverUpdateRow"] = new OPLinksComplaintOversight;
+                    $this->v["currOverUpdateRow"]->LnkComOverComplaintID = $cid;
+                    $this->v["currOverUpdateRow"]->LnkComOverDeptID = $deptID;
+                    $this->v["currOverUpdateRow"]->LnkComOverOverID 
+                        = $this->v["currOverRow"]->OverID;
+                    $this->v["currOverUpdateRow"]->save();
+                }
             }
         }
         if (!isset($this->v["currOverUpdateRow"])) {
@@ -644,11 +686,19 @@ class OpenDepts extends OpenListing
     
     public function logOverUpDate($cid, $deptID, $type = 'Submitted', $row = [])
     {
-        if (!$row || !isset($row->LnkComOverID)) {
-            $row = $this->getOverUpdateRow($cid, $deptID);
+        if ($this->treeID == 5) {
+            if (!$row || !isset($row->LnkCompliOverID)) {
+                $row = $this->getOverUpdateRow($cid, $deptID);
+            }
+            $row->{ 'LnkCompliOver' . $type } = date("Y-m-d H:i:s");
+            $row->save();
+        } else {
+            if (!$row || !isset($row->LnkComOverID)) {
+                $row = $this->getOverUpdateRow($cid, $deptID);
+            }
+            $row->{ 'LnkComOver' . $type } = date("Y-m-d H:i:s");
+            $row->save();
         }
-        $row->{ 'LnkComOver' . $type } = date("Y-m-d H:i:s");
-        $row->save();
         return true;
     }
     
@@ -659,7 +709,10 @@ class OpenDepts extends OpenListing
     
     protected function overWhichDefID($which = 'IA')
     {
-        return $GLOBALS["SL"]->def->getID('Investigative Agency Types', $this->overWhichEng($which));
+        return $GLOBALS["SL"]->def->getID(
+            'Investigative Agency Types', 
+            $this->overWhichEng($which)
+        );
     }
     
     protected function getOverRow($which = 'IA')

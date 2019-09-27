@@ -48,6 +48,7 @@ class OPComplaints extends Model
 		'ComUniqueStr', 
 		'ComIPaddy', 
 		'ComPublicID', 
+		'ComShareData', 
     ];
     
     // END SurvLoop auto-generated portion of Model

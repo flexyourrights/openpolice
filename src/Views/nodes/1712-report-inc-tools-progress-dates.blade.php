@@ -1,11 +1,9 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-tools-progress-dates.blade.php -->
 
-<!-- <pre> {!! print_r($comDepts) !!} </pre> -->
-
 @if (isset($comDepts) && sizeof($comDepts) > 0)
     @foreach ($comDepts as $c => $dept)
         @if (isset($dept["deptRow"]) && isset($dept["deptRow"]->DeptName))
-            <p><hr></p>
+            @if ($c > 0) <p><hr></p> @endif
             <p><b>Status with the {!! str_replace("Police Department", "PD", 
                 str_replace("Sheriff's Office", "Sheriff", $dept["deptRow"]->DeptName)) !!}</b></p>
             <div class="nFld mT0">

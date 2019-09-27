@@ -1,17 +1,24 @@
 <!-- resources/views/vendor/openpolice/inc-static-privacy-page.blade.php -->
 
+
+<form method="post" name="ownerPublish" action="?ownerPublish=1&refresh=1{{
+    (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
+<input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
+
 <div id="nodeStaticPrivacy" class="nodeWrap">
     <input type="hidden" name="n2018radioCurr" id="n2018radioCurrID" value="">
     <div id="nLabel2018" class="nPrompt">
         <!--- <h2 class="slBlueDark">Publishing Privacy Options</h2> --->
-        <!--- <b>No matter which one you choose, we <nobr>will ...</nobr></b> --->
+        <p>After filing your complaint for investigation, your full story can be published on OpenPolice.org. Please select your privacy option.</p>
+        <p><b>No matter which one you choose, we <nobr>will ...</nobr></b></p>
         <ul>
             <li>Publish no one’s private information. That includes addresses, phone numbers, <nobr>emails, etc.</nobr></li>
             <li>Try to send your full complaint to a police investigative agency.</li>
         </ul>
         <p>
-            You have three options for how we collect your data and how we share it. 
-            <!--- <span id="req2018" class="rqd"><nobr>*required</nobr></span> --->
+            You have @if ($twoOptions) two @else three @endif
+            options for how we collect your data and how we share it. 
+        <!--- <span id="req2018" class="rqd"><nobr>*required</nobr></span> --->
         </p>
     </div>
     <div class="nFld" style="margin-top: 12px;">
@@ -40,6 +47,7 @@
                 </ul>
             </div>
         </label>
+    @if (!$twoOptions)
         <label for="n2018fld2" id="n2018fld2lab" class="finger">
             <div class="disIn mR5">
                 <input id="n2018fld2" value="306" type="radio" name="n2018fld" data-nid="2018" 
@@ -48,14 +56,25 @@
             <h4 class="disIn slBlueDark">Anonymous</h4>
             <div class="privOptPadL">
                 <ul>
-                    <li>Investigators cannot contact you. That will make it harder to investigate your complaint.</li>
-                    <li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officers’ identities.</li>
+                    <li>Investigators cannot contact you. 
+                    That will make it harder to investigate your complaint.</li>
+                    <li>You will only publish your multiple-choice answers on OpenPolice.org. 
+                    That will NOT include your written story nor information 
+                    showing police officers’ identities.</li>
                     <li>We will delete all personal information from our records.</li>
                 </ul>
             </div>
         </label>
+    @endif
     </div>
+
+    <center><input type="submit" value="Save Privacy Options" class="btn btn-lg btn-primary mT20"
+        onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
+        style="color: #FFF;"></center>
+    </form>
+    
 </div>
+
 <style>
 h4.disIn { padding-top: 5px; }
 .privOptPadL { padding-top: 10px; }

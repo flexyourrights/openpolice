@@ -2,15 +2,19 @@
 <div class="alert alert-danger fade in alert-dismissible show" 
     style="padding: 10px 15px; margin: 20px 0px 20px 0px; color: #a94442;">
     <b>NOTICE TO 
-    @if (isset($overRow->OverAgncName)) {{ strtoupper($overRow->OverAgncName) }} @else OVERSIGHT @endif STAFF:</b>
-    This view may contain sensitive personal information. Please share with appropriate oversight staff only.
+    @if (isset($overRow->OverAgncName)) {{ strtoupper($overRow->OverAgncName) }} 
+    @else OVERSIGHT @endif STAFF:</b>
+    This view may contain sensitive personal information. 
+    Please share with appropriate oversight staff only.
 </div>
 
 <div class="row">
     <div class="col-8">
 
         <div class="slCard">
-            <h2 class="mT0" style="color: #2B3493;">OpenPolice.org Complaint #{{ $complaint->ComPublicID }}</h2>
+            <h2 class="mT0" style="color: #2B3493;">
+                OpenPolice.org Complaint #{{ $complaint->ComPublicID }}
+            </h2>
             <?php /*
             <p><span class="slGrey">
             Current Status:
@@ -31,9 +35,9 @@
     @else
         <p><b>Hi, {{ $user->name }},</b></p>
         <p>We're almost done — but we need you to do one more important thing as soon as possible. 
-        Open Police Complaints (OPC) is working to get all police departments to accept complaints sent by email. 
-        Unfortunately, the {{ $overList }} does not investigate OPC complaints sent by email.</p>
-        <p>The good news is you can easily copy information from your OPC complaint to their required forms. 
+        OpenPolice.org is working to get all police departments to accept complaints sent by email. 
+        Unfortunately, the {{ $overList }} does not investigate OpenPolice.org complaints sent by email.</p>
+        <p>The good news is you can easily copy information from your OpenPolice.org complaint to their required forms. 
         And you can find the instructions for formally submitting your complaint to the department here:</p><p>
         @forelse ($depts as $i => $d)
             <a href="/dept/{{ $d->DeptSlug }}" target="_blank">{{ $d->DeptName }}</a><br />
@@ -56,7 +60,7 @@
         <a href="/dept/{{ $d->DeptSlug }}" target="_blank">{{ $d->DeptName }}</a><br />
     @empty
     @endforelse
-    </p><p>Thank you so much for using Open Police Complaints!</p>
+    </p><p>Thank you so much for using OpenPolice.org!</p>
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) == 'Received by Oversight')
     <p><b>Hi, {{ $user->name }},</b></p>
     The {{ $overList }} received your complaint! But this shouldn't be the end of the road for you. 
@@ -74,7 +78,7 @@
 */ ?>
 
             <h3 class="mT5 mB0">Please confirm the status of this complaint:</h3>
-            <form method="post" name="accessCode" action="?overUpdate=1{{
+            <form method="post" name="accessCode" action="?overUpdate=1&refresh=1{{
                 (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
             <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
             <div class="nFld mT0">

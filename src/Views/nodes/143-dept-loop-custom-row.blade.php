@@ -1,5 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/143-dept-loop-custom-row.blade.php -->
 
+@if (isset($loopItem->DeptName))
 <div class="wrapLoopItem"><a name="item{{ $setIndex }}"></a>
     <div id="wrapItem{{ $itemID }}On" class="slCard nodeWrap">
         <h3 class="m0">{{ $loopItem->DeptName }}</h3>
@@ -29,3 +30,4 @@
         <div class="fC"></div>
     </div>
 </div>
+@endif

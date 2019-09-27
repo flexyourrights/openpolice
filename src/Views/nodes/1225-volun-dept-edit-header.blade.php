@@ -1,16 +1,16 @@
 <!-- resources/views/vendor/openpolice/nodes/1225-volun-dept-edit-header.blade.php -->
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
 <div id="fixedHeadWidth" class="w100"> </div>
-<div id="fixedHeader" class="fixed">
+<div id="fixedHeader" class="fixed" style="margin-top: 43px;">
     <div class="row">
         <div class="col-8">
             <h3 class="m0 slBlueDark">{{ str_replace('Police Dept', 'PD', str_replace('Department', 'Dept', $deptRow->DeptName)) }}</h3>
         </div><div class="col-4">
-            <h3 class="m0 slGreenDark"><nobr>OPC Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3>
+            <h3 class="m0 slGreenDark"><nobr>Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3>
         </div>
     </div>
 </div>
-<div style="margin: 20px 0px -80px 0px;">
+<div style="margin: 90px 0px -100px 0px;">
     <a href="/dept/{{ $deptRow->DeptSlug }}" target="_blank">
         <i class="fa fa-external-link mR5" aria-hidden="true"></i>
         openpolice.org/dept/{{ $deptRow->DeptSlug }}</a><br />

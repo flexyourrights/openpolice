@@ -52,9 +52,6 @@ Current Status:
     @else
 
         <?php $hideUpdate = true; ?>
-        <form method="post" name="ownerPublish" action="?ownerPublish=1{{
-            (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
-        <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
         <p><b>Hi {{ $user->name }},</b></p>
         <p>Although your police experience was awful, we were unable to find a qualified 
         attorney who will take your case. Unfortunately, there are few skilled civil rights 
@@ -65,14 +62,7 @@ Current Status:
         with the {{ $overList }}. We also recommend that you publish it on OpenPolice.org.</b>
         We can help you do both things.</p>
         <p>First, to publish your story on OpenPolice.org, please select your privacy option. 
-        <b>No matter which one you choose, we <nobr>will ...</nobr></b></p>
-        {!! view('vendor.openpolice.inc-static-privacy-page', [
-            "complaint" => $complaint
-        ])->render() !!}
-        <center><input type="submit" value="Save Privacy Options" class="btn btn-lg btn-primary mT20"
-            onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
-            style="color: #FFF;"></center>
-        </form>
+        {!! $privacyForm !!}
 
     @endif
 
@@ -103,9 +93,9 @@ Current Status:
 
         <p><b>Hi, {{ $user->name }},</b></p>
         <p>We're almost done — but we need you to do one more important thing as soon as 
-        possible. Open Police Complaints (OPC) is working to get all police departments 
+        possible. OpenPolice.org is working to get all police departments 
         to accept complaints sent by email. Unfortunately, the {{ $overList }} does not 
-        investigate OPC complaints sent by email.</p>
+        investigate OpenPolice.org complaints sent by email.</p>
         <p>
         @if (isset($oversights) && sizeof($oversights) > 0 
             && isset($oversights[0]->OverWaySubPaperInPerson)
@@ -113,25 +103,33 @@ Current Status:
             You
         @else
             The good news is you can easily copy information from your 
-            OPC complaint to their required forms. And you
+            OpenPolice.org complaint to their required forms. And you
         @endif
         can find the instructions for formally submitting your complaint to the department 
         below. After you submit your complaint with the {{ $overList }}, please log back 
         in to update the community. Also, please let us know whenever they receive or 
         investigate your complaint.
         </p>
+
+        @if (!isset($complaint->ComPrivacy) || intVal($complaint->ComPrivacy) == 0)
+            <p><hr></p>
+            <h4>Publishing Privacy Options</h4>
+            {!! $privacyForm !!}
+            <div class="p10"></div>
+        @endif
+        
         @if (isset($GLOBALS["SL"]->x["depts"]) && sizeof($GLOBALS["SL"]->x["depts"]) > 0)
             @foreach ($GLOBALS["SL"]->x["depts"] as $d)
                 <p><hr></p>
-                <p><a href="/dept/{!! $d["deptRow"]->DeptSlug !!}" target="_blank"
-                    ><i class="fa fa-university" aria-hidden="true"></i>
-                    {!! $d["deptRow"]->DeptName !!}</a></p>
                 {!! str_replace('slCard mT20', '', str_replace('<h3 class="mT0">', '<h4>', 
                     str_replace('<h3>', '<h4>', str_replace('</h3>', '</h4>', 
                     view('vendor.openpolice.dept-page-filing-instructs', [
                         "d"          => $d,
                         "ownerTools" => true
                 ])->render())))) !!}
+                <p><a href="/dept/{!! $d["deptRow"]->DeptSlug !!}" target="_blank"
+                    ><i class="fa fa-university" aria-hidden="true"></i>
+                    {!! $d["deptRow"]->DeptName !!}</a></p>
             @endforeach
         @endif
 
@@ -155,7 +153,7 @@ Current Status:
     @empty
     @endforelse
     </p>
-    <p>Thank you so much for using Open Police Complaints!</p>
+    <p>Thank you so much for using OpenPolice.org!</p>
 
 @elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus) 
     == 'Received by Oversight')
@@ -180,15 +178,24 @@ Current Status:
     <p><b>Hi, {{ $user->name }},</b></p>
 
 @endif
-
 <div class="p10"></div>
+
+@if (in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), [ 
+    'Submitted to Oversight',
+    'Received by Oversight'
+    ]) && (!isset($complaint->ComPrivacy) || intVal($complaint->ComPrivacy) == 0))
+    <p><hr></p>
+    <h4>Publishing Privacy Options</h4>
+    {!! $privacyForm !!}
+    <div class="p10"></div>
+@endif
 
 @if (!in_array($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->ComStatus), 
     ['Hold', 'New', 'Reviewed']) && !$hideUpdate)
 
     <p><hr></p>
     <h4>Update Your Complaint Status</h4>
-    <form method="post" name="accessCode" action="?ownerUpdate=1{{
+    <form method="post" name="accessCode" action="?ownerUpdate=1&refresh=1{{
         (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
 
@@ -202,7 +209,7 @@ Current Status:
         Notes about the status of this complaint:<br />
         <textarea name="overNote" class="w100 mT5"></textarea>
         <small class="slGrey mTn5">
-        This is for administrators of Open Police Complaints. We will not make it public.</small>
+        This is for administrators of OpenPolice.org. We will not make it public.</small>
     </div>
     <center><input type="submit" value="Save Status Changes" class="btn btn-lg btn-primary"
         onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
@@ -227,12 +234,15 @@ Current Status:
 @else
 
     <p>
-        <a href="/complaint/read-{{ $complaint->ComPublicID }}/full-pdf" target="_blank" id="ownBtnPrnt"
-            ><i class="fa fa-print mR5" aria-hidden="true"></i> Print Complaint / Save as PDF</a>
+        <a href="/complaint/read-{{ $complaint->ComPublicID }}/full-pdf" 
+            target="_blank" id="ownBtnPrnt"
+            ><i class="fa fa-print mR5" aria-hidden="true"></i> 
+            Print Complaint / Save as PDF</a>
     </p>
-    <p><a href="/complaint/read-{{ $complaint->ComPublicID }}/full-xml" target="_blank"
-        id="ownBtnDwnl"
-        ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> Download Raw Data File</a>
+    <p><a href="/complaint/read-{{ $complaint->ComPublicID }}/full-xml" 
+        id="ownBtnDwnl" target="_blank"
+        ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> 
+        Download Raw Data File</a>
     </p>
         
     <p>Email Complaint To:</p>
@@ -246,17 +256,20 @@ Current Status:
     </div>
     
     <p class="pT20">Link To Share:</p>
-    <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $complaint->ComPublicID 
+    <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] 
+        }}/complaint/read-{{ $complaint->ComPublicID 
         }}" type="text" class="form-control w100 mB5">
     <div class="disIn mR10">
         {!! view('vendor.survloop.elements.inc-social-simple-tweet', [
-            "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $complaint->ComPublicID,
+            "link"  => $GLOBALS['SL']->sysOpts['app-url'] 
+                . '/complaint/read-' . $complaint->ComPublicID,
             "title" => 'Check out this police complaint!'
         ])->render() !!}
     </div>
     <div class="disIn">
         {!! view('vendor.survloop.elements.inc-social-simple-facebook', [
-            "link"  => $GLOBALS['SL']->sysOpts['app-url'] . '/complaint/read-' . $complaint->ComPublicID
+            "link"  => $GLOBALS['SL']->sysOpts['app-url'] 
+                . '/complaint/read-' . $complaint->ComPublicID
         ])->render() !!}
     </div>
 

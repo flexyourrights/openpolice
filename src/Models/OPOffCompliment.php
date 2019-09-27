@@ -3,13 +3,14 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPOffCompliments extends Model
+class OPOffCompliment extends Model
 {
-    protected $table      = 'OP_OffCompliments';
+    protected $table      = 'OP_OffCompliment';
     protected $primaryKey = 'OffCompID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
+		'OffCompComplimentID', 
 		'OffCompOffID', 
 		'OffCompValor', 
 		'OffCompLifesaving', 

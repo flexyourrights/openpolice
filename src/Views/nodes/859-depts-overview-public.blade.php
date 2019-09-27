@@ -30,7 +30,9 @@
                 </div>
                 <div class="col-1"></div>
                 <div class="col-8"><div class="deptHeadWrap">
-                @foreach ($deptScores->chartFlds as $i => $fld) <div class="fldLabIco">{!! $fld[2] !!}</div> @endforeach
+                @foreach ($deptScores->chartFlds as $i => $fld) 
+                    <div class="fldLabIco">{!! $fld[2] !!}</div>
+                @endforeach
                 </div></div>
             </div>
         </div>
@@ -45,7 +47,7 @@
         <div class="deptScrMore @if ($i%2 == 0) row2 @endif " data-dept="{{ $dept->DeptID }}">
             <div class="row @if ($i%2 == 0) row2 @endif ">
                 <div class="col-md-3 col-sm-12 
-                    <?php /* @if (strlen($deptScores->deptNames[$dept->DeptID]) > 33) deptScrLab2 @else */ ?> 
+                <?php /* @if (strlen($deptScores->deptNames[$dept->DeptID]) > 33) deptScrLab2 @else */ ?> 
                     deptScrLab <?php /* @endif */ ?> ">
                     <b>{{ $deptScores->deptNames[$dept->DeptID] }}</b>
                 </div>
@@ -65,12 +67,14 @@
                     @if (!$good)
                         <div class="fldBad"><div>
                             <i class="fa fa-times" aria-hidden="true"></i>
-                            <span class="chrtIco">{!! $fld[2] !!}&nbsp;&nbsp;{!! strip_tags($fld[0]) !!}</span>
+                            <span class="chrtIco">{!! $fld[2] !!}&nbsp;&nbsp;{!! 
+                                strip_tags($fld[0]) !!}</span>
                         </div></div>
                     @else
                         <div class="fldGood"><div>
                             <i class="fa fa-check" aria-hidden="true"></i>
-                            <span class="chrtIco">{!! $fld[2] !!}&nbsp;&nbsp;{!! strip_tags($fld[0]) !!}</span>
+                            <span class="chrtIco">{!! $fld[2] !!}&nbsp;&nbsp;{!! 
+                                strip_tags($fld[0]) !!}</span>
                         </div></div>
                     @endif
                 @endforeach
@@ -84,7 +88,8 @@
                         {!! $GLOBALS["SL"]->printRowAddy($dept, 'Dept', true) !!}<br />
                         {{ $dept->DeptAddressCounty }} County
                     </div><div class="col-6">
-                        OPC Accessibility Score: <b class="slBlueDark">{{ $dept->DeptScoreOpenness }}</b><br />
+                        Accessibility Score: 
+                        <b class="slBlueDark">{{ $dept->DeptScoreOpenness }}</b><br />
                         @if (isset($dept->DeptType) && intVal($dept->DeptType) > 0)
                             {{ $GLOBALS["SL"]->def->getVal('Department Types', $dept->DeptType) }},
                         @endif

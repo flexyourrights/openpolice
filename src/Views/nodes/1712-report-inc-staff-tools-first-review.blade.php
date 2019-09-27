@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-first-review.blade.php -->
 <form name="firstReviewForm" 
-	src="?firstReview=1{{ (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
+	src="?firstReview=1&refresh=1{{ (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
 <div class="row">
     <div class="col-sm-6">
 

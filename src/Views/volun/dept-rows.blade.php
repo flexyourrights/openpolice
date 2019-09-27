@@ -3,29 +3,32 @@
     <p>Click a department below to verify it's information and 
     <a href="/department-accessibility">Accessibility Score</a>:</p>
     <div class="p10"><div class="row">
-        <div class="col-md-5"><b>Department Name<br />City, State</b></div>
-        <div class="col-md-3"><b></b></div>
-        <div class="col-md-1"><b>Score</b></div>
-        <div class="col-md-3"><b>Last Researched</b></div>
+        <div class="col-5"><b>Department Name<br />City, State</b></div>
+        <div class="col-3"><b></b></div>
+        <div class="col-1"><b>Score</b></div>
+        <div class="col-3"><b>Researched</b></div>
     </div></div>
     @forelse ($deptRows as $i => $dept)
         @if ($i < 500)
         <div class="p10 @if ($i%2 == 0) row2 @endif "><div class="row">
-            <div class="col-md-5">
+            <div class="col-5">
                 <a href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-                    @if (isset($dept->DeptName)) {{ str_replace('Police Dept', 'PD', str_replace('Department', 'Dept', $dept->DeptName)) }}
+                    @if (isset($dept->DeptName)) {{ str_replace('Police Dept', 'PD',
+                        str_replace('Department', 'Dept', $dept->DeptName)) }}
                     @else <span class="slGrey">(empty)</span> @endif </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-3">
                 {{ $dept->DeptAddressCity }}, {{ $dept->DeptAddressState }}
             </div>
-            <div class="col-md-1">
+            <div class="col-1">
                 @if (intVal($dept->DeptScoreOpenness) > 0) <b>{{ $dept->DeptScoreOpenness }}</b>
                 @else <span class="slGery">0</span>
                 @endif
             </div>
-            <div class="col-md-3">
-                {!! view('vendor.openpolice.volun.volunteer-recent-edits', [ "deptID" => $dept->DeptID ])->render() !!}
+            <div class="col-3">
+                {!! view('vendor.openpolice.volun.volunteer-recent-edits', [
+                    "deptID" => $dept->DeptID
+                ])->render() !!}
                 @if (trim($dept->DeptVerified) != '' 
                     && !in_array($dept->DeptVerified, ['0000-00-00 00:00:00', '2001-01-01 00:00:00']))
                     {{ date("n/j/y", strtotime($dept->DeptVerified)) }}
@@ -35,7 +38,8 @@
             </div>
         </div></div>
         @endif
-    @empty @endforelse
+    @empty
+    @endforelse
     @if (sizeof($deptRows) > 500)
         <div class="p10"><i>First 500 results printed above.</i></div>
     @endif

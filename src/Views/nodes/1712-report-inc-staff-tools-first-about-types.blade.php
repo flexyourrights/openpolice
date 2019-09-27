@@ -2,7 +2,7 @@
 <p><b>Police Complaint</b><br />
 Every legitimate submission will receive our 
 <a href="/web-app-workflows" target="_blank"
-    ><i class="fa fa-external-link" aria-hidden="true"></i> primary OPC workflow</a>
+    ><i class="fa fa-external-link" aria-hidden="true"></i> primary OpenPolice.org workflow</a>
 and will be included in the site's main 
 dataset. These must involve a specific incident, with attempts to identify officers 
 from a specific law enforcement agency or private security force.</p>
@@ -14,8 +14,8 @@ by law enforcement agency or private security...
 <li><b>Not About Law Enforcement</b><br />
 These submissions will not be filed anywhere for formal investigation, but will be published in a 
 secondary anonymized dataset on OpenPolice.org. The complainant has the option to download their 
-report and publish it on other websites. (OPC was carefully designed, but not to handle complaints 
-focused on the CIA, NSA, paranormal activity, etc.)
+report and publish it on other websites. (OpenPolice.org was carefully designed, 
+but not to handle complaints focused on the CIA, NSA, paranormal activity, etc.)
 </li>
 <li><b>Abuse</b><br />
 Non-submissions most intended to harass OpenPolice.org, it’s staff, partners, users, 

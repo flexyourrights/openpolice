@@ -23,24 +23,38 @@ class OpenReport extends OpenDepts
             && isset($this->sessData->dataSets["Allegations"]) 
             && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
             foreach ($this->worstAllegations as $i => $alleg) {
-                if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] })
-                    && trim($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] }) == 'Y') {
-                    $alle = '';
-                    if (!in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
-                        $foundWhy = false;
-                        $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
-                        foreach ($this->sessData->dataSets["Allegations"] as $j => $all) {
-                            if (!$foundWhy && $all && isset($all->AlleType) 
-                                && $all->AlleType == $alleg[0]
-                                && trim($all->AlleDescription) != '') {
-                                $alle .= $all->AlleDescription . '<br />';
-                                $foundWhy = true;
-                            }
+                if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] })) {
+                    $show = (trim($this->sessData->dataSets["AllegSilver"][0]
+                        ->{ $alleg[2] }) == 'Y');
+                    if ($alleg[1] == 'Intimidating Display of Weapon') {
+                        $allegVal = intVal($this->sessData->dataSets["AllegSilver"][0]
+                            ->{ $alleg[2] });
+                        if (!in_array($allegVal, [
+                            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'N/A'),
+                            $GLOBALS["SL"]->def
+                                ->getID('Intimidating Displays Of Weapon', 'Don\'t Know')
+                            ])) {
+                            $show = true;
                         }
-                    } else {
-                        $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
                     }
-                    $deets[] = [ $alle ];
+                    if ($show) {
+                        $alle = '';
+                        if (!in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
+                            $foundWhy = false;
+                            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
+                            foreach ($this->sessData->dataSets["Allegations"] as $j => $all) {
+                                if (!$foundWhy && $all && isset($all->AlleType) 
+                                    && $all->AlleType == $alleg[0] 
+                                    && trim($all->AlleDescription) != '') {
+                                    $alle .= $all->AlleDescription . '<br />';
+                                    $foundWhy = true;
+                                }
+                            }
+                        } else {
+                            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
+                        }
+                        $deets[] = [ $alle ];
+                    }
                 }
             }
         }
@@ -49,16 +63,24 @@ class OpenReport extends OpenDepts
 
     protected function reportAllegsWhy($nID = -3)
     {
-        return $this->printReportDeetsBlock($this->reportAllegsWhyDeets($nID), 'Allegations</h3>' 
-            . '<div class="slGrey mTn10">Including comments from the complainant</div>'
-            . '<h3 class="disNon">');
+        $deets = 'Allegations</h3><div class="slGrey mTn10">' 
+            . 'Including comments from the complainant' 
+            . '</div><h3 class="disNon">';
+        return $this->printReportDeetsBlock(
+            $this->reportAllegsWhyDeets($nID), 
+            $deets
+        );
     }
 
     protected function reportCivAddy($nID)
     {
-        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow())
+        if ($nID > 0 && isset($this->allNodes[$nID]) 
+            && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow())
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
-            $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->getLatestDataBranchRow(), 'Prsn');
+            $addy = $GLOBALS["SL"]->printRowAddy(
+                $this->sessData->getLatestDataBranchRow(), 
+                'Prsn'
+            );
             if (trim($addy) != '') {
                 return [ 'Address', $addy ];
             }
@@ -69,12 +91,14 @@ class OpenReport extends OpenDepts
     protected function reportStory($nID)
     {
         $ret = '';
-        if ($nID > 0 && isset($this->allNodes[$nID]) && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
+        if ($nID > 0 && isset($this->allNodes[$nID]) 
+            && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
             if (!in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf'])) {
                 $previewMax = 1800;
                 if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
-                    $more = ($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more');
+                    $more = ($GLOBALS["SL"]->REQ->has('read') 
+                        && $GLOBALS["SL"]->REQ->get('read') == 'more');
                     $story = $this->sessData->dataSets["Complaints"][0]->ComSummary;
                     $brkPos = strpos($story, ' ', $previewMax-200);
                     if ($brkPos > 0) {

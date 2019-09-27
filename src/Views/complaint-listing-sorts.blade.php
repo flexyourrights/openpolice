@@ -2,7 +2,7 @@
 
 <button type="button" data-sort-type="date"
     class="fltSortTypeBtn dropdown-item @if ($sortLab == 'date') active @endif "
-    >by Date Submitted to OPC</button>
+    >by Date Submitted to OpenPolice.org</button>
 
 @if (!$GLOBALS["SL"]->x["isPublicList"])
     <button type="button" data-sort-type="first-name"

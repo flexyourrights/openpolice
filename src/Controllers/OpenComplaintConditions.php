@@ -13,7 +13,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function checkNodeConditionsCustom($nID, $condition = '')
     {
         if ($condition == '#VehicleStop') { // could be replaced by OR functionality
-            if (isset($this->sessData->dataSets["Scenes"]) && sizeof($this->sessData->dataSets["Scenes"]) > 0) {
+            if (isset($this->sessData->dataSets["Scenes"]) 
+                && sizeof($this->sessData->dataSets["Scenes"]) > 0) {
                 if (isset($this->sessData->dataSets["Scenes"][0]->ScnIsVehicle) 
                     && trim($this->sessData->dataSets["Scenes"][0]->ScnIsVehicle) == 'Y') {
                     return 1;
@@ -35,7 +36,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
                 && intVal($this->sessData->dataSets["Complaints"][0]->ComAttID) > 0) {
                 $partner = OPPartners::find(intVal($this->sessData->dataSets["Complaints"][0]->ComAttID));
                 if ($partner && isset($partner->PartType) 
-                    && $partner->PartType == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) {
+                    && $partner->PartType 
+                        == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) {
                     return 1;
                 }
             }
@@ -44,7 +46,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
             if ((isset($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas) 
                 && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyHas), ['Y', '?']))
                 || (isset($this->sessData->dataSets["Complaints"][0]->ComAttorneyWant) 
-                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyWant), ['Y', '?']))) {
+                && in_array(trim($this->sessData->dataSets["Complaints"][0]->ComAttorneyWant), ['Y']))) {
                 return 1;
             }
             if ((isset($this->sessData->dataSets["Complaints"][0]->ComAnyoneCharged) 

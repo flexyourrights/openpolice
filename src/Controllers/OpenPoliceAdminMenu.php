@@ -2,7 +2,7 @@
 /**
   * OpenPoliceAdminMenu is responsible for building the menu inside the dashboard area for all user types.
   *
-  * Open Police Complaints
+  * OpenPolice.org
   * @package  flexyourrights/openpolice
   * @author  Morgan Lesko <wikiworldorder@protonmail.com>
   * @since 0.0

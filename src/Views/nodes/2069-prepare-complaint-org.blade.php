@@ -2,7 +2,7 @@
 @if ($dat["PersonContact"][0]->PrsnNickname == 'An Attorney')
     <h3 class="slBlueDark">Share your story with an attorney</h3>
     <div class="mT10 mBn15"><p>
-    Open Police Complaints (OPC) will help you prepare your story for your attorney.
+    OpenPolice.org will help you prepare your story for your attorney.
     </p></div>
 @else
     <h3 class="slBlueDark">Share your <nobr>story with</nobr><br />
@@ -10,6 +10,6 @@
     <div class="mT10 mBn15"><p>
     @if (isset($dat["Partners"][0]->PartHelpReqs)) {!! $dat["Partners"][0]->PartHelpReqs !!} @endif
     <?php /* <a href="/org/{{ $dat['Partners'][0]->PartSlug }}">Organization Profile</a> */ ?>
-    We partnered with Open Police Complaints (OPC) to help determine what help you need.
+    We partnered with OpenPolice.org to help determine what help you need.
     </p></div>
 @endif

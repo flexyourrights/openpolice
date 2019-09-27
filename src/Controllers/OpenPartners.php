@@ -34,7 +34,9 @@ class OpenPartners extends OpenVolunteers
                     ->count()
                 ];
         }
-        return view('vendor.openpolice.nodes.2169-partner-overview-capabilities', [ "capac" => $capac ])->render();
+        return view('vendor.openpolice.nodes.2169-partner-overview-capabilities', [
+            "capac" => $capac
+        ])->render();
     }
     
     protected function printManageAttorneys($type = 'Attorney')
@@ -119,7 +121,7 @@ class OpenPartners extends OpenVolunteers
         return view('vendor.openpolice.nodes.2179-list-organizations', [
             "orgs"  => $this->getPartnersOfType($GLOBALS["SL"]->def->getID('Partner Types', 'Organization')),
             "capab" => $this->loadPartnerCapabLookups(true)
-            ])->render();
+        ])->render();
     }
 
     protected function loadPartnerPage(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 56)
@@ -151,7 +153,7 @@ class OpenPartners extends OpenVolunteers
             "dat" => $this->sessData->dataSets,
             "slg" => (($this->sessData->dataSets['Partners'][0]->PartType 
                 == $GLOBALS['SL']->def->getID('Partner Types', 'Attorney')) ? 'attorney' : 'org')
-            ])->render();
+        ])->render();
     }
     
     protected function partnerShareStory(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 62)

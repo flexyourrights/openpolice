@@ -19,6 +19,7 @@ class OpenInitExtras extends OpenPartners
     {
         // Establishing Main Navigation Organization, with Node ID# and Section Titles
         $this->loadYourContact();
+        $this->v["reportUploadFolder"] = '../storage/app/up/reports/';
         $this->majorSections = [];
         if (!isset($GLOBALS["SL"]->treeID)) {
             return true;
@@ -117,11 +118,14 @@ class OpenInitExtras extends OpenPartners
             $this->majorSections[3][2] = 'active';
         }
         if ($this->treeID == 1 || $GLOBALS["SL"]->getReportTreeID() == 1) {
-            if ($this->v["user"] && intVal($this->v["user"]->id) > 0 && isset($this->sessData->dataSets["Civilians"]) 
+            if ($this->v["user"] && intVal($this->v["user"]->id) > 0 
+                && isset($this->sessData->dataSets["Civilians"]) 
                 && isset($this->sessData->dataSets["Civilians"][0])
                 && (!isset($this->sessData->dataSets["Civilians"][0]->CivUserID) 
                     || intVal($this->sessData->dataSets["Civilians"][0]->CivUserID) <= 0)) {
-                $this->sessData->dataSets["Civilians"][0]->update([ 'CivUserID' => $this->v["user"]->id ]);
+                $this->sessData->dataSets["Civilians"][0]->update([
+                    'CivUserID' => $this->v["user"]->id
+                ]);
             }
             $this->chkPersonRecs();
             if (isset($this->sessData->dataSets["Departments"]) && 
@@ -137,7 +141,8 @@ class OpenInitExtras extends OpenPartners
                 $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted 
                     = $this->sessData->dataSets["Complaints"][0]->created_at;
                 $chk = DB::table('SL_NodeSavesPage')
-                    ->join('SL_Sess', 'SL_Sess.SessID', '=', 'SL_NodeSavesPage.PageSaveSession')
+                    ->join('SL_Sess', 'SL_Sess.SessID', '=', 
+                        'SL_NodeSavesPage.PageSaveSession')
                     ->where('SL_Sess.SessTree', 1)
                     ->where('SL_Sess.SessCoreID', $this->coreID)
                     ->select('SL_NodeSavesPage.created_at')
@@ -165,57 +170,68 @@ class OpenInitExtras extends OpenPartners
         if (session()->has('opcDeptID') && intVal(session()->get('opcDeptID')) > 0) {
             if ($this->treeID == 1) {
                 if (isset($this->sessData->dataSets["Complaints"])
-                    && intVal($this->sessData->dataSets["Complaints"][0]->ComSubmissionProgress) > 0) {
+                    && intVal($this->sessData->dataSets["Complaints"][0]
+                        ->ComSubmissionProgress) > 0) {
                     if (!isset($this->sessData->dataSets["LinksComplaintDept"])) {
                         $this->sessData->dataSets["LinksComplaintDept"] = [];
                     }
                     if (empty($this->sessData->dataSets["LinksComplaintDept"])) {
                         $newDept = new OPLinksComplaintDept;
                         $newDept->LnkComDeptComplaintID = $this->coreID;
-                        $newDept->LnkComDeptDeptID      = intVal(session()->get('opcDeptID'));
+                        $newDept->LnkComDeptDeptID
+                            = intVal(session()->get('opcDeptID'));
                         $newDept->save();
                         session()->forget('opcDeptID');
                     }
                 }
             } elseif ($this->treeID == 5) {
                 if (isset($this->sessData->dataSets["Compliments"])
-                    && intVal($this->sessData->dataSets["Compliments"][0]->ComSubmissionProgress) > 0) {
+                    && intVal($this->sessData->dataSets["Compliments"][0]
+                        ->ComSubmissionProgress) > 0) {
                     if (!isset($this->sessData->dataSets["LinksComplimentDept"])) {
                         $this->sessData->dataSets["LinksComplimentDept"] = [];
                     }
                     if (empty($this->sessData->dataSets["LinksComplimentDept"])) {
                         $newDept = new OPLinksComplimentDept;
                         $newDept->LnkCompliDeptComplimentID = $this->coreID;
-                        $newDept->LnkCompliDeptDeptID       = intVal(session()->get('opcDeptID'));
+                        $newDept->LnkCompliDeptDeptID = intVal(session()->get('opcDeptID'));
                         $newDept->save();
                         session()->forget('opcDeptID');
                     }
                 }
             }
         }
-        if ($this->treeID == 1 && session()->has('opcPartID') && intVal(session()->get('opcPartID')) > 0
+        if ($this->treeID == 1 && session()->has('opcPartID') 
+            && intVal(session()->get('opcPartID')) > 0
             && isset($this->sessData->dataSets["Complaints"]) 
             && intVal($this->sessData->dataSets["Complaints"][0]->ComSubmissionProgress) > 0) {
-            $this->sessData->dataSets["Complaints"][0]->ComAttID = intVal(session()->get('opcPartID'));
+            $this->sessData->dataSets["Complaints"][0]->ComAttID 
+                = intVal(session()->get('opcPartID'));
             $this->sessData->dataSets["Complaints"][0]->save();
         }
         $this->v["isPublic"] = $this->isPublic();
         
         // used to be admin initializations:
-        $this->v["allowEdits"] = ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff'));
-        $this->v["management"] = ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff'));
+        $this->v["allowEdits"] = ($this->v["uID"] > 0 && $this->v["user"] 
+            && $this->v["user"]->hasRole('administrator|staff'));
+        $this->v["management"] = ($this->v["uID"] > 0 && $this->v["user"] 
+            && $this->v["user"]->hasRole('administrator|staff'));
         $this->v["volunOpts"] = 1;
         if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
             $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
         }
-        if ((!session()->has('opcChks') || !session()->get('opcChks') || $GLOBALS["SL"]->REQ->has('refresh'))
+        if ((!session()->has('opcChks') || !session()->get('opcChks') 
+            || $GLOBALS["SL"]->REQ->has('refresh'))
             && $this->treeID == 1) {
             $chk = OPComplaints::where('ComPublicID', null)
-                ->where('ComStatus', 'NOT LIKE', $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
+                ->where('ComStatus', 'NOT LIKE', 
+                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
                 ->get();
             if ($chk->isNotEmpty()) {
                 foreach ($chk as $i => $complaint) {
-                    $complaint->update([ 'ComPublicID' => $GLOBALS["SL"]->genNewCorePubID('Complaints') ]);
+                    $complaint->update([
+                        'ComPublicID' => $GLOBALS["SL"]->genNewCorePubID('Complaints')
+                    ]);
                 }
             }
             session()->put('opcChks', true);
@@ -223,14 +239,20 @@ class OpenInitExtras extends OpenPartners
         
         // Department Research Survey
         if ($this->treeID == 36) {
-            if (isset($this->sessData->dataSets['Oversight']) && sizeof($this->sessData->dataSets['Oversight']) == 1) {
-                $new = $this->sessData->newDataRecord('Oversight', 'OverDeptID', 
-                    $this->sessData->dataSets['Departments'][0]->DeptID, true);
+            if (isset($this->sessData->dataSets['Oversight']) 
+                && sizeof($this->sessData->dataSets['Oversight']) == 1) {
+                $new = $this->sessData->newDataRecord(
+                    'Oversight', 
+                    'OverDeptID', 
+                    $this->sessData->dataSets['Departments'][0]->DeptID, 
+                    true
+                );
                 $new->OverType = 302;
                 $new->save();
                 $this->sessData->refreshDataSets();
             }
         }
+//echo '<pre>'; print_r($this->sessData->dataSets); echo '</pre>'; exit;
         return true;
     }
     
@@ -248,8 +270,8 @@ class OpenInitExtras extends OpenPartners
             $uID = $this->v["uID"];
         }
         if ($uID > 0) {
-            $GLOBALS["SL"]->x["yourUserInfo"] = OPzVolunUserInfo::where('UserInfoUserID', $uID)
-                ->first();
+            $GLOBALS["SL"]->x["yourUserInfo"] 
+                = OPzVolunUserInfo::where('UserInfoUserID', $uID)->first();
             if (!$GLOBALS["SL"]->x["yourUserInfo"]) {
                 $GLOBALS["SL"]->x["yourUserInfo"] = new OPzVolunUserInfo;
                 $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoUserID = $uID;
@@ -265,10 +287,14 @@ class OpenInitExtras extends OpenPartners
                 $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID = $this->v["yourUserContact"]->PrsnID;
                 $GLOBALS["SL"]->x["yourUserInfo"]->save();
             } else {
-                $this->v["yourUserContact"] 
-                    = OPPersonContact::find($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID);
+                $this->v["yourUserContact"] = OPPersonContact::find(
+                    $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoPersonContactID
+                );
             }
-            return [ $GLOBALS["SL"]->x["yourUserInfo"], $this->v["yourUserContact"] ];
+            return [
+                $GLOBALS["SL"]->x["yourUserInfo"],
+                $this->v["yourUserContact"]
+            ];
         }
         return [ [], [] ];
     }

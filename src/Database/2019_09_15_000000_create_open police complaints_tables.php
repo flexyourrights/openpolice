@@ -4,7 +4,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOpenPoliceTables extends Migration
+class OPCreateTables extends Migration
 {
     /**
      * Run the migrations.
@@ -18,9 +18,9 @@ class CreateOpenPoliceTables extends Migration
 			$table->increments('ComID');
 			$table->integer('ComUserID')->unsigned()->nullable();
 			$table->integer('ComStatus')->unsigned()->nullable();
-		$table->index('ComStatus');
+			$table->index('ComStatus');
 			$table->integer('ComType')->unsigned()->nullable();
-		$table->index('ComType');
+			$table->index('ComType');
 			$table->integer('ComIncidentID')->unsigned()->nullable();
 			$table->integer('ComSceneID')->unsigned()->nullable();
 			$table->integer('ComPrivacy')->unsigned()->nullable();
@@ -44,12 +44,12 @@ class CreateOpenPoliceTables extends Migration
 			$table->integer('ComOfficerDisciplineType')->unsigned()->nullable();
 			$table->longText('ComMediaLinks')->nullable();
 			$table->integer('ComAdminID')->unsigned()->nullable();
-		$table->index('ComAdminID');
+			$table->index('ComAdminID');
 			$table->integer('ComAttID')->unsigned()->nullable();
 			$table->longText('ComNotes')->nullable();
 			$table->string('ComSlug', 255)->nullable();
 			$table->dateTime('ComRecordSubmitted')->nullable();
-		$table->index('ComRecordSubmitted');
+			$table->index('ComRecordSubmitted');
 			$table->string('ComSubmissionProgress')->nullable();
 			$table->string('ComVersionAB')->nullable();
 			$table->string('ComTreeVersion', 50)->nullable();
@@ -61,37 +61,22 @@ class CreateOpenPoliceTables extends Migration
 			$table->boolean('ComIsDemo')->default('0')->nullable();
 			$table->timestamps();
 		});
-		Schema::create('OP_Compliments', function(Blueprint $table)
+		Schema::create('OP_CivCompliments', function(Blueprint $table)
 		{
-			$table->increments('CompliID');
-			$table->integer('CompliUserID')->unsigned()->nullable();
-			$table->integer('CompliStatus')->unsigned()->nullable();
-			$table->integer('CompliType')->nullable();
-			$table->integer('CompliIncidentID')->unsigned()->nullable();
-			$table->integer('CompliSceneID')->unsigned()->nullable();
-			$table->integer('CompliPrivacy')->unsigned()->nullable();
-			$table->longText('CompliSummary')->nullable();
-			$table->string('CompliHowHear')->nullable();
-			$table->longText('CompliFeedback')->nullable();
-			$table->string('CompliSlug')->nullable();
-			$table->longText('CompliNotes')->nullable();
-			$table->dateTime('CompliRecordSubmitted')->nullable();
-			$table->string('CompliSubmissionProgress')->nullable();
-			$table->string('CompliVersionAB')->nullable();
-			$table->string('CompliTreeVersion', 50)->nullable();
-			$table->string('CompliHoneyPot')->nullable();
-			$table->boolean('CompliIsMobile')->nullable();
-			$table->string('CompliUniqueStr', 20)->nullable();
-			$table->string('CompliIPaddy')->nullable();
-			$table->integer('CompliPublicID')->nullable();
-			$table->boolean('CompliIsDemo')->default('0')->nullable();
+			$table->increments('CivCompID');
+			$table->integer('CivCompComplimentID')->unsigned()->nullable();
+			$table->integer('CivCompUserID')->unsigned()->nullable();
+			$table->char('CivCompIsCreator', 1)->default('N')->nullable();
+			$table->string('CivCompRole', 10)->nullable();
+			$table->integer('CivCompPersonID')->unsigned()->nullable();
+			$table->integer('CivCompPhysDesc')->unsigned()->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Incidents', function(Blueprint $table)
 		{
 			$table->increments('IncID');
 			$table->integer('IncComplaintID')->unsigned()->nullable();
-		$table->index('IncComplaintID');
+			$table->index('IncComplaintID');
 			$table->string('IncAddress')->nullable();
 			$table->string('IncAddress2')->nullable();
 			$table->string('IncAddressCity')->nullable();
@@ -157,32 +142,18 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('AlleID');
 			$table->integer('AlleComplaintID')->unsigned()->nullable();
-		$table->index('AlleComplaintID');
+			$table->index('AlleComplaintID');
 			$table->integer('AlleType')->unsigned()->nullable();
 			$table->integer('AlleEventSequenceID')->unsigned()->nullable();
 			$table->longText('AlleDescription')->nullable();
 			$table->integer('AlleFindings')->unsigned()->nullable();
 			$table->timestamps();
 		});
-		Schema::create('OP_OffCompliments', function(Blueprint $table)
-		{
-			$table->increments('OffCompID');
-			$table->integer('OffCompOffID')->unsigned()->nullable();
-			$table->char('OffCompValor', 1)->nullable();
-			$table->char('OffCompLifesaving', 1)->nullable();
-			$table->char('OffCompDeescalation', 1)->nullable();
-			$table->char('OffCompProfessionalism', 1)->nullable();
-			$table->char('OffCompFairness', 1)->nullable();
-			$table->char('OffCompConstitutional', 1)->nullable();
-			$table->char('OffCompCompassion', 1)->nullable();
-			$table->char('OffCompCommunity', 1)->nullable();
-			$table->timestamps();
-		});
 		Schema::create('OP_EventSequence', function(Blueprint $table)
 		{
 			$table->increments('EveID');
 			$table->integer('EveComplaintID')->unsigned()->nullable();
-		$table->index('EveComplaintID');
+			$table->index('EveComplaintID');
 			$table->string('EveType')->nullable();
 			$table->timestamps();
 		});
@@ -363,7 +334,7 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('SurvID');
 			$table->integer('SurvComplaintID')->unsigned()->nullable();
-		$table->index('SurvComplaintID');
+			$table->index('SurvComplaintID');
 			$table->integer('SurvAuthUserID')->unsigned()->nullable();
 			$table->timestamps();
 		});
@@ -371,9 +342,9 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('NoteID');
 			$table->integer('NoteComplaintID')->unsigned()->nullable();
-		$table->index('NoteComplaintID');
+			$table->index('NoteComplaintID');
 			$table->integer('NoteUserID')->unsigned()->nullable();
-			$table->dateTime('NoteTimestamp')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable();
+			$table->dateTime('NoteTimestamp')->default('NOW()')->nullable();
 			$table->longText('NoteContent')->nullable();
 			$table->timestamps();
 		});
@@ -381,7 +352,7 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('CivID');
 			$table->integer('CivComplaintID')->unsigned()->nullable();
-		$table->index('CivComplaintID');
+			$table->index('CivComplaintID');
 			$table->integer('CivUserID')->unsigned()->nullable();
 			$table->char('CivIsCreator', 1)->default('N')->nullable();
 			$table->string('CivRole', 10)->nullable();
@@ -410,12 +381,12 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('OffID');
 			$table->boolean('OffIsVerified')->nullable();
-		$table->index('OffIsVerified');
+			$table->index('OffIsVerified');
 			$table->integer('OffComplaintID')->unsigned()->nullable();
-		$table->index('OffComplaintID');
+			$table->index('OffComplaintID');
 			$table->string('OffRole')->nullable();
 			$table->integer('OffDeptID')->unsigned()->nullable();
-		$table->index('OffDeptID');
+			$table->index('OffDeptID');
 			$table->integer('OffPersonID')->unsigned()->nullable();
 			$table->integer('OffPhysDescID')->unsigned()->nullable();
 			$table->char('OffGiveName', 1)->nullable();
@@ -525,11 +496,9 @@ class CreateOpenPoliceTables extends Migration
 			$table->integer('OverType')->unsigned()->nullable();
 			$table->integer('OverUserID')->unsigned()->nullable();
 			$table->integer('OverDeptID')->unsigned()->nullable();
-		$table->index('OverDeptID');
+			$table->index('OverDeptID');
 			$table->string('OverAgncName')->nullable();
 			$table->dateTime('OverVerified')->nullable();
-$table->integer('OverCivModel')->nullable();
-
 			$table->string('OverNamePrefix', 20)->nullable();
 			$table->string('OverNameFirst')->nullable();
 			$table->string('OverNickname')->nullable();
@@ -562,6 +531,7 @@ $table->integer('OverCivModel')->nullable();
 			$table->boolean('OverWaySubPaperMail')->nullable();
 			$table->boolean('OverWaySubPaperInPerson')->nullable();
 			$table->boolean('OverWaySubNotary')->nullable();
+			$table->boolean('OverKeepEmailPrivate')->default('0')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_OversightModels', function(Blueprint $table)
@@ -654,31 +624,24 @@ $table->integer('OverCivModel')->nullable();
 			$table->increments('LnkComDeptID');
 			$table->integer('LnkComDeptComplaintID')->unsigned()->nullable();
 			$table->integer('LnkComDeptDeptID')->unsigned()->nullable();
-		$table->index('LnkComDeptDeptID');
+			$table->index('LnkComDeptDeptID');
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksComplaintOversight', function(Blueprint $table)
 		{
 			$table->increments('LnkComOverID');
 			$table->integer('LnkComOverComplaintID')->unsigned()->nullable();
-		$table->index('LnkComOverComplaintID');
+			$table->index('LnkComOverComplaintID');
 			$table->integer('LnkComOverDeptID')->unsigned()->nullable();
 			$table->integer('LnkComOverOverID')->unsigned()->nullable();
-		$table->index('LnkComOverOverID');
+			$table->index('LnkComOverOverID');
 			$table->dateTime('LnkComOverSubmitted')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverStillNoResponse')->nullable();
 			$table->dateTime('LnkComOverReceived')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverInvestigated')->default(NULL)->nullable();
 			$table->dateTime('LnkComOverReportDate')->nullable();
-			$table->integer('LnkComOverOversightReportEvidenceID')->unsigned()->nullable();
+			$table->integer('LnkComOverOversightReportEvidenceID')->nullable();
 			$table->integer('LnkComOverAgencyComplaintNumber')->nullable();
-			$table->timestamps();
-		});
-		Schema::create('OP_LinksComplimentDept', function(Blueprint $table)
-		{
-			$table->increments('LnkCompliDeptID');
-			$table->integer('LnkCompliDeptComplimentID')->unsigned()->nullable();
-			$table->integer('LnkCompliDeptDeptID')->unsigned()->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_LinksOfficerAllegations', function(Blueprint $table)
@@ -725,6 +688,53 @@ $table->integer('OverCivModel')->nullable();
 			$table->integer('LnkCivVehicRole')->unsigned()->nullable();
 			$table->timestamps();
 		});
+		Schema::create('OP_Compliments', function(Blueprint $table)
+		{
+			$table->increments('CompliID');
+			$table->integer('CompliUserID')->unsigned()->nullable();
+			$table->integer('CompliStatus')->unsigned()->nullable();
+			$table->integer('CompliType')->nullable();
+			$table->integer('CompliIncidentID')->unsigned()->nullable();
+			$table->integer('CompliSceneID')->unsigned()->nullable();
+			$table->integer('CompliPrivacy')->unsigned()->nullable();
+			$table->longText('CompliSummary')->nullable();
+			$table->string('CompliHowHear')->nullable();
+			$table->longText('CompliFeedback')->nullable();
+			$table->string('CompliSlug')->nullable();
+			$table->longText('CompliNotes')->nullable();
+			$table->dateTime('CompliRecordSubmitted')->nullable();
+			$table->string('CompliSubmissionProgress')->nullable();
+			$table->string('CompliVersionAB')->nullable();
+			$table->string('CompliTreeVersion', 50)->nullable();
+			$table->string('CompliHoneyPot')->nullable();
+			$table->boolean('CompliIsMobile')->nullable();
+			$table->string('CompliUniqueStr', 20)->nullable();
+			$table->string('CompliIPaddy')->nullable();
+			$table->integer('CompliPublicID')->nullable();
+			$table->boolean('CompliIsDemo')->default('0')->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_LinksComplimentDept', function(Blueprint $table)
+		{
+			$table->increments('LnkCompliDeptID');
+			$table->integer('LnkCompliDeptComplimentID')->unsigned()->nullable();
+			$table->integer('LnkCompliDeptDeptID')->unsigned()->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_OffCompliments', function(Blueprint $table)
+		{
+			$table->increments('OffCompID');
+			$table->integer('OffCompOffID')->unsigned()->nullable();
+			$table->char('OffCompValor', 1)->nullable();
+			$table->char('OffCompLifesaving', 1)->nullable();
+			$table->char('OffCompDeescalation', 1)->nullable();
+			$table->char('OffCompProfessionalism', 1)->nullable();
+			$table->char('OffCompFairness', 1)->nullable();
+			$table->char('OffCompConstitutional', 1)->nullable();
+			$table->char('OffCompCompassion', 1)->nullable();
+			$table->char('OffCompCommunity', 1)->nullable();
+			$table->timestamps();
+		});
 		Schema::create('OP_Visitors', function(Blueprint $table)
 		{
 			$table->increments('VisID');
@@ -742,9 +752,9 @@ $table->integer('OverCivModel')->nullable();
 			$table->increments('PrivID');
 			$table->integer('PrivUserID')->unsigned()->nullable();
 			$table->integer('PrivComplaintID')->unsigned()->nullable();
-		$table->index('PrivComplaintID');
+			$table->index('PrivComplaintID');
 			$table->integer('PrivDeptID')->unsigned()->nullable();
-		$table->index('PrivDeptID');
+			$table->index('PrivDeptID');
 			$table->string('PrivAccessLevel')->nullable();
 			$table->timestamps();
 		});
@@ -752,7 +762,7 @@ $table->integer('OverCivModel')->nullable();
 		{
 			$table->increments('AdmActID');
 			$table->integer('AdmActUserID')->unsigned()->nullable();
-			$table->dateTime('AdmActTimestamp')->default(DB::raw('CURRENT_TIMESTAMP'))->nullable();
+			$table->dateTime('AdmActTimestamp')->default('NOW()')->nullable();
 			$table->string('AdmActTable')->nullable();
 			$table->integer('AdmActRecordID')->nullable();
 			$table->longText('AdmActOldData')->nullable();
@@ -805,9 +815,8 @@ $table->integer('OverCivModel')->nullable();
 			$table->integer('ZedOverOverType')->unsigned()->nullable();
 			$table->integer('ZedOverOverUserID')->unsigned()->nullable();
 			$table->integer('ZedOverOverDeptID')->unsigned()->nullable();
-		$table->index('ZedOverOverDeptID');
+			$table->index('ZedOverOverDeptID');
 			$table->string('ZedOverOverAgncName')->nullable();
-			$table->integer('ZedOverOverCivModel')->nullable();
 			$table->dateTime('ZedOverOverVerified')->nullable();
 			$table->string('ZedOverOverNamePrefix', 20)->nullable();
 			$table->string('ZedOverOverNameFirst')->nullable();
@@ -841,6 +850,7 @@ $table->integer('OverCivModel')->nullable();
 			$table->boolean('ZedOverOverWaySubPaperMail')->nullable();
 			$table->boolean('ZedOverOverWaySubPaperInPerson')->nullable();
 			$table->boolean('ZedOverOverWaySubNotary')->nullable();
+			$table->boolean('ZedOverOverKeepEmailPrivate')->default('0')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_zVolunStatDays', function(Blueprint $table)
@@ -912,12 +922,11 @@ $table->integer('OverCivModel')->nullable();
     public function down()
     {
     	Schema::drop('OP_Complaints');
-		Schema::drop('OP_Compliments');
+		Schema::drop('OP_CivCompliments');
 		Schema::drop('OP_Incidents');
 		Schema::drop('OP_Scenes');
 		Schema::drop('OP_AllegSilver');
 		Schema::drop('OP_Allegations');
-		Schema::drop('OP_OffCompliments');
 		Schema::drop('OP_EventSequence');
 		Schema::drop('OP_Stops');
 		Schema::drop('OP_StopReasons');
@@ -953,13 +962,15 @@ $table->integer('OverCivModel')->nullable();
 		Schema::drop('OP_Administrators');
 		Schema::drop('OP_LinksComplaintDept');
 		Schema::drop('OP_LinksComplaintOversight');
-		Schema::drop('OP_LinksComplimentDept');
 		Schema::drop('OP_LinksOfficerAllegations');
 		Schema::drop('OP_LinksOfficerEvents');
 		Schema::drop('OP_LinksOfficerVehicles');
 		Schema::drop('OP_LinksCivilianAllegations');
 		Schema::drop('OP_LinksCivilianEvents');
 		Schema::drop('OP_LinksCivilianVehicles');
+		Schema::drop('OP_Compliments');
+		Schema::drop('OP_LinksComplimentDept');
+		Schema::drop('OP_OffCompliments');
 		Schema::drop('OP_Visitors');
 		Schema::drop('OP_PrivilegeProfiles');
 		Schema::drop('OP_AdminActions');

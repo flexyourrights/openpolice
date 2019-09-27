@@ -14,17 +14,37 @@ class OpenComplaintEmails extends OpenPoliceUtils
     protected function postContactEmail($nID)
     {
         $this->postNodeLoadEmail($nID);
-        if ($GLOBALS["SL"]->REQ->has('n831fld') && trim($GLOBALS["SL"]->REQ->n831fld) != '') {
+        if ($GLOBALS["SL"]->REQ->has('n831fld') 
+            && trim($GLOBALS["SL"]->REQ->n831fld) != '') {
             return true;
         }
         $emaSubject = $this->postDumpFormEmailSubject();
         $emaContent = view('vendor.openpolice.contact-form-email-admin')->render();
-        $this->sendEmail($emaContent, $emaSubject, $this->v["emaTo"], $this->v["emaCC"], $this->v["emaBCC"],
-            ['noreply@openpolice.org', 'OPC Contact']);
+        $this->sendEmail(
+            $emaContent, 
+            $emaSubject, 
+            $this->v["emaTo"], 
+            $this->v["emaCC"], 
+            $this->v["emaBCC"],
+            ['noreply@openpolice.org', 'OPC Contact']
+        );
         $emaID = ((isset($currEmail->EmailID)) ? $currEmail->EmailID : -3);
-        $this->logEmailSent($emaContent, $emaSubject, $this->v["toList"], $emaID, $this->treeID, $this->coreID,
-            $this->v["uID"]);
-        $this->manualLogContact($nID, $emaContent, $emaSubject, $this->v["toList"], $GLOBALS["SL"]->REQ->n829fld);
+        $this->logEmailSent(
+            $emaContent, 
+            $emaSubject, 
+            $this->v["toList"], 
+            $emaID, 
+            $this->treeID, 
+            $this->coreID,
+            $this->v["uID"]
+        );
+        $this->manualLogContact(
+            $nID, 
+            $emaContent, 
+            $emaSubject, 
+            $this->v["toList"], 
+            $GLOBALS["SL"]->REQ->n829fld
+        );
         return true;
     }
     
@@ -40,13 +60,19 @@ class OpenComplaintEmails extends OpenPoliceUtils
     {
         if ($this->treeID == 13 && $GLOBALS["SL"]->REQ->has('n829fld')) {
             return $GLOBALS["SL"]->REQ->n829fld 
-                . (($GLOBALS["SL"]->REQ->has('n1879fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1879fld : '')
-                . (($GLOBALS["SL"]->REQ->has('n1880fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1880fld : '')
-                . (($GLOBALS["SL"]->REQ->has('n1881fld')) ? ': ' . $GLOBALS["SL"]->REQ->n1881fld : '')
-                . (($GLOBALS["SL"]->REQ->has('n1873fld')) ? ': ' . implode(', ', $GLOBALS["SL"]->REQ->n1873fld) : '')
-                . (($GLOBALS["SL"]->REQ->has('n1872fld')) ? ' -' . $GLOBALS["SL"]->REQ->n1872fld : '');
+                . (($GLOBALS["SL"]->REQ->has('n1879fld')) 
+                    ? ': ' . $GLOBALS["SL"]->REQ->n1879fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1880fld')) 
+                    ? ': ' . $GLOBALS["SL"]->REQ->n1880fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1881fld')) 
+                    ? ': ' . $GLOBALS["SL"]->REQ->n1881fld : '')
+                . (($GLOBALS["SL"]->REQ->has('n1873fld')) 
+                    ? ': ' . implode(', ', $GLOBALS["SL"]->REQ->n1873fld) : '')
+                . (($GLOBALS["SL"]->REQ->has('n1872fld')) 
+                    ? ' -' . $GLOBALS["SL"]->REQ->n1872fld : '');
         }
-        return $GLOBALS["SL"]->sysOpts["site-name"] . ': ' . $GLOBALS["SL"]->treeRow->TreeName;
+        return $GLOBALS["SL"]->sysOpts["site-name"] . ': '
+            . $GLOBALS["SL"]->treeRow->TreeName;
     }
     
     protected function processTokenAccessRedirExtra()
@@ -136,7 +162,9 @@ class OpenComplaintEmails extends OpenPoliceUtils
             '[{ Complaint Police Department }]', 
             '[{ Complaint Police Department URL }]', 
             '[{ Complaint Police Department URL Link }]', 
+            '[{ Complaint Police Department URL How }]', 
             '[{ Police Department State Abbr }]',
+            '[{ Police Department Zip Code }]',
             '[{ Dear Primary Investigative Agency }]', 
             '[{ Complaint Investigability Score & Description }]', 
             '[{ Complaint Allegation List }]', 
@@ -160,8 +188,8 @@ class OpenComplaintEmails extends OpenPoliceUtils
                         $swap = $this->corePublicID;
                         break;
                     case '[{ Complaint URL }]':
-                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' 
-                            . $this->corePublicID);
+                        $swap = $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->sysOpts["app-url"] 
+                            . '/complaint/read-' . $this->corePublicID);
                         break;
                     case '[{ Complaint URL Link }]':
                         $swap = $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $this->corePublicID;
@@ -234,10 +262,24 @@ class OpenComplaintEmails extends OpenPoliceUtils
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                         }
                         break;
+                    case '[{ Complaint Police Department URL How }]':
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug)) {
+                            $url = $GLOBALS["SL"]->sysOpts["app-url"] . '/dept/' 
+                                . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug . '#how';
+                            $swap = $GLOBALS["SL"]->swapURLwrap($url);
+                        }
+                        break;
                     case '[{ Police Department State Abbr }]':
                         if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                             && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState)) {
                             $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
+                        }
+                        break;
+                    case '[{ Police Department Zip Code }]':
+                        if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                            && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip)) {
+                            $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
                         }
                         break;
                     case '[{ Dear Primary Investigative Agency }]':
@@ -290,7 +332,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
                     case '[{ Oversight Complaint Secure MFA }]':
                         $deptUser = $this->getDeptUser($deptID);
                         if (!isset($deptUser->id)) {
-                            $swap = '<span style="color: red;">* DEPARTMENT IS NOT OPC-COMPLIANT *</span>';
+                            $swap = '<span style="color: red;">* DEPARTMENT IS NOT OPENPOLICE-COMPATIBLE *</span>';
                         } else {
                             $swap = $this->createToken('MFA', $this->treeID, $this->coreID, $deptUser->id);
                         }
@@ -360,8 +402,11 @@ class OpenComplaintEmails extends OpenPoliceUtils
             "rec"     => false,
             "body"    => '',
             "subject" => '',
-            "deptID"  => $deptID
-            ];
+            "deptID"  => $deptID,
+            "to"      => '',
+            "cc"      => '',
+            "bcc"     => ''
+        ];
         if ($emailID > 0) {
             if (sizeof($this->v["emailList"]) > 0) {
                 foreach ($this->v["emailList"] as $e) {
@@ -373,7 +418,8 @@ class OpenComplaintEmails extends OpenPoliceUtils
                     && trim($email["rec"]->EmailBody) != '') {
                     $email["body"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailBody);
                     $email["body"] = $this->sendEmailBlurbsCustom($email["body"], $deptID);
-                    $email["subject"] = $GLOBALS["SL"]->swapEmailBlurbs($email["rec"]->EmailSubject);
+                    $email["subject"] = $GLOBALS["SL"]->swapEmailBlurbs(
+                        $email["rec"]->EmailSubject);
                     $email["subject"] = $this->sendEmailBlurbsCustom($email["subject"], $deptID);
                 }
             }

@@ -5,13 +5,8 @@ use DB;
 use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\OPComplaints;
-use App\Models\OPDepartments;
-use App\Models\OPLinksComplaintDept;
 use App\Models\OPPersonContact;
 use App\Models\OPPhysicalDesc;
-use App\Models\OPzVolunUserInfo;
 use OpenPolice\Controllers\OpenDashAdmin;
 use OpenPolice\Controllers\OpenInitExtras;
 
@@ -142,6 +137,14 @@ class OpenPolice extends OpenInitExtras
             return $this->printMfaInstruct();
         } elseif ($nID == 2164) {
             return $this->printComplaintSessPath();
+        } elseif ($nID == 2632) {
+            $this->saveComplaintAdmin();
+        } elseif ($nID == 2633) {
+            $this->saveComplaintOversight();
+        } elseif ($nID == 2634) {
+            $this->processOwnerUpdate();
+        } elseif ($nID == 2635) {
+            $this->v["needsWsyiwyg"] = true;
             
         // Complaint Listings
         } elseif (in_array($nID, [1418, 2384])) {
@@ -153,10 +156,14 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
             if ($this->coreID > 0) {
-                return '<iframe src="/complaint/read-' . $this->coreID . '/full?frame=1&wdg=1" '
-                    . 'id="reportAdmPreview" frameborder="0" '
-                    . 'style="width: 100%; height: 100%; overflow-y: visible;"></iframe>'
-                    . '<style> body { overflow-y: hidden; } </style>';
+                return '<iframe src="/complaint/read-' . $this->coreID . '/full?frame=1&wdg=1'
+                    . (($GLOBALS["SL"]->REQ->has('refresh')) 
+                        ? '&refresh=' . $GLOBALS["SL"]->REQ->get('refresh') : '') . '" '
+                    . 'id="reportAdmPreviewFull" frameborder="0" '
+                    . 'style="width: 100%; height: 100%; overflow-y: visible;'
+                    . 'margin: -15px 0px 0px -15px;"></iframe> <style> '
+                    . 'body { overflow-y: hidden; } #ajaxWrap { padding-bottom: 0px; } '
+                    . '#hidivBtnAdmFoot { display: none; } </style>';
             }
             return '<br /><br /><br /><i>Complaint Not Found</i><br /><br /><br />';
 

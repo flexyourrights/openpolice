@@ -28,69 +28,94 @@ class DepartmentScores
     public function __construct()
     {
         $this->vals = [
-            "WebForm"     => new DeptFldScore(20,  'OverComplaintWebForm',      '', '',
+            "WebForm"     => new DeptFldScore(20, 'OverComplaintWebForm', '', '',
                 'Has online-submittable complaint form (not just a PDF)'),
             
-            "WebInfo"     => new DeptFldScore(14,  'OverWebComplaintInfo',      '', '',
+            "WebInfo"     => new DeptFldScore(14, 'OverWebComplaintInfo', '', '',
                 'Has complaint information on unique web page (not just on PDF)'),
             
-            "WebInfoHome" => new DeptFldScore(10,  'OverHomepageComplaintLink', '', 'Y',
+            "WebInfoHome" => new DeptFldScore(10, 'OverHomepageComplaintLink', '', 'Y',
                 'Has complaint information linked from home page'),
             
-            "PdfForm"     => new DeptFldScore(10,  'OverComplaintPDF',          '', '',
+            "PdfForm"     => new DeptFldScore(10, 'OverComplaintPDF', '', '',
                 'Has complaint form PDF on website'),
             
-            "ByEmail"     => new DeptFldScore(10,  'OverWaySubEmail',           '', '1',
+            "ByEmail"     => new DeptFldScore(10, 'OverWaySubEmail', '', '1',
                 'Investigates complaints sent via email'),
             
-            "OfficForm"   => new DeptFldScore(10,  'OverOfficialFormNotReq',    '', '1',
+            "OfficForm"   => new DeptFldScore(10, 'OverOfficialFormNotReq', '', '1',
                 'Official department form not required for investigation'),
             
-            "Anonymous"   => new DeptFldScore(10,  'OverOfficialAnon',          '', '1',
+            "Anonymous"   => new DeptFldScore(10, 'OverOfficialAnon', '', '1',
                 'Anonymous complaints investigated'),
             
-            "HasWebsite"  => new DeptFldScore(3,   'OverWebsite',               '', '',
+            "HasWebsite"  => new DeptFldScore(3, 'OverWebsite', '', '',
                 'Has unique department website'),
             
-            "HasFace"     => new DeptFldScore(3,   'OverFacebook',              '', '',
+            "HasFace"     => new DeptFldScore(3, 'OverFacebook', '', '',
                 'Has a Facebook page (with public comments on)'),
             
-            "HasTwit"     => new DeptFldScore(3,   'OverTwitter',               '', '',
+            "HasTwit"     => new DeptFldScore(3, 'OverTwitter', '', '',
                 'Has a Twitter account'),
             
-            "HasYou"      => new DeptFldScore(3,   'OverYouTube',               '', '',
+            "HasYou"      => new DeptFldScore(3, 'OverYouTube', '', '',
                 'Has a YouTube channel'),
             
-            "ByPhone"     => new DeptFldScore(2,   'OverWaySubVerbalPhone',     '', '1',
+            "ByPhone"     => new DeptFldScore(2, 'OverWaySubVerbalPhone', '', '1',
                 'Investigates complaints sent via phone'),
             
-            "ByPostal"    => new DeptFldScore(2,   'OverWaySubPaperMail',       '', '1',
+            "ByPostal"    => new DeptFldScore(2, 'OverWaySubPaperMail', '', '1',
                 'Investigates complaints sent via postal mail'),
             
-            "InPerson"    => new DeptFldScore(0,   'OverWaySubPaperInPerson',   '', '1',
+            "InPerson"    => new DeptFldScore(0, 'OverWaySubPaperInPerson', '', '1',
                 'Requires complaints to be filed in person'),
             
-            "Notary"      => new DeptFldScore(-10, 'OverWaySubNotary',          '', '1',
+            "Notary"      => new DeptFldScore(-10, 'OverWaySubNotary', '', '1',
                 'Requires notary (for one or more types of complaint)')
             ];
         $this->chartFlds = [ // column title, field name, trimmed fail value
-            ['Complaint Web Form',   'WebForm',    '<i class="fa fa-cloud-upload" aria-hidden="true"></i>',
-                'Have an Online Form to Submit Complaints'],
-            ['Complaint Info Unique Page',  'WebInfo',    '<i class="fa fa-info-circle" aria-hidden="true"></i>',
-                'Have Complaint Info on Unique Web Page'],
-            ['Complaints Via Email', 'ByEmail',    '<i class="fa fa-at" aria-hidden="true"></i>',
-                'Investigate Complaints Sent Via Email'],
-            ['Official Form Optional',     'OfficForm',  '<i class="fa fa-file-text" aria-hidden="true"></i>',
-                'Investigate Complaints Not on Official Form'],
-            ['Anonymous Complaints', 'Anonymous',  '<i class="fa fa-user-secret" aria-hidden="true"></i>',
-                'Investigate Anonymous Complaints'],
-            ['On Facebook',          'HasFace', '<i class="fa fa-facebook-official" aria-hidden="true"></i>',
-                'Have a Facebook Page'],
-            ['On Twitter',     'HasTwit',    '<i class="fa fa-twitter" aria-hidden="true"></i>',
-                'Have a Twitter Feed'],
-            ['Never Requires Notary',      'Notary',     '<i class="fa fa-certificate" aria-hidden="true"></i>',
-                'Never Require Notary to Submit Complaint']
-            ];
+            [
+                'Complaint Web Form',
+                'WebForm',
+                '<i class="fa fa-cloud-upload" aria-hidden="true"></i>',
+                'Have an Online Form to Submit Complaints'
+            ], [
+                'Complaint Info Unique Page',
+                'WebInfo',
+                '<i class="fa fa-info-circle" aria-hidden="true"></i>',
+                'Have Complaint Info on Unique Web Page'
+            ], [
+                'Complaints Via Email',
+                'ByEmail',
+                '<i class="fa fa-at" aria-hidden="true"></i>',
+                'Investigate Complaints Sent Via Email'
+            ], [
+                'Official Form Optional',
+                'OfficForm',
+                '<i class="fa fa-file-text" aria-hidden="true"></i>',
+                'Investigate Complaints Not on Official Form'
+            ], [
+                'Anonymous Complaints',
+                'Anonymous',
+                '<i class="fa fa-user-secret" aria-hidden="true"></i>',
+                'Investigate Anonymous Complaints'
+            ], [
+                'On Facebook',
+                'HasFace',
+                '<i class="fa fa-facebook-official" aria-hidden="true"></i>',
+                'Have a Facebook Page'
+            ], [
+                'On Twitter',
+                'HasTwit',
+                '<i class="fa fa-twitter" aria-hidden="true"></i>',
+                'Have a Twitter Feed'
+            ], [
+                'Never Requires Notary', 
+                'Notary', 
+                '<i class="fa fa-certificate" aria-hidden="true"></i>',
+                'Never Require Notary to Submit Complaint'
+            ]
+        ];
         $this->gradeColors = [
             '#2B3493',
             $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#2B3493'),
@@ -98,7 +123,10 @@ class DepartmentScores
             $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#EC2327'),
             '#EC2327'
             ];
-        $this->stats = [ "count" => 0, "score" => 0 ];
+        $this->stats = [
+            "count" => 0,
+            "score" => 0
+        ];
         foreach ($this->vals as $type => $specs) {
             $this->stats[$type] = 0;
         }

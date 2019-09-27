@@ -1,7 +1,8 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-status.blade.php -->
 
-<form name="comUpdate" action="/complaint/read-{{ $complaintRec->ComPublicID }}?save=1" 
-    method="post" >
+<form name="comUpdate" method="post" 
+    action="/complaint/read-{{ $complaintRec->ComPublicID 
+        . '?save=1&refresh=1' . $GLOBALS['SL']->getReqParams() }}">
 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
 <input type="hidden" name="revType" value="Update">
@@ -13,19 +14,26 @@
                 <option value="">Select complaint type...</option>
                 <option value="194" @if ($complaintRec->ComStatus == 194) SELECTED @endif 
                     >Incomplete</option>
-                <option value="295" @if ($complaintRec->ComType == 295 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="295" @if ($complaintRec->ComType == 295 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Unreviewed</option>
-                <option value="296" @if ($complaintRec->ComType == 296 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="296" @if ($complaintRec->ComType == 296 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Complaint About Police</option>
-                <option value="297" @if ($complaintRec->ComType == 297 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="297" @if ($complaintRec->ComType == 297 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Not About Police</option>
-                <option value="298" @if ($complaintRec->ComType == 298 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="298" @if ($complaintRec->ComType == 298 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Abuse</option>
-                <option value="299" @if ($complaintRec->ComType == 299 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="299" @if ($complaintRec->ComType == 299 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Spam</option>
-                <option value="300" @if ($complaintRec->ComType == 300 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="300" @if ($complaintRec->ComType == 300 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Test Submission</option>
-                <option value="301" @if ($complaintRec->ComType == 301 && $complaintRec->ComStatus != 194) SELECTED @endif 
+                <option value="301" @if ($complaintRec->ComType == 301 
+                    && $complaintRec->ComStatus != 194) SELECTED @endif 
                     >Not Sure</option>
             </select>
         </div>
@@ -41,7 +49,7 @@
     <div class="col-md-4 col-sm-12 pB20">
         Complaint Type:<br />
         <a href="javascript:;" id="legitTypeBtn">{{ 
-            $GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $complaintRec->ComType)
+            $GLOBALS['SL']->def->getVal('Complaint Type', $complaintRec->ComType)
             }} <i class="fa fa-pencil fPerc66"></i></a>
     </div>
 </div>

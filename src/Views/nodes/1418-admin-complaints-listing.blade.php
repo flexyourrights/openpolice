@@ -119,7 +119,7 @@
         <div id="dashResultsWrap" class="fL h100 ovrFloY" style="width: 40%;">
             <div class="pB10 pL15 slGrey">
                 Incident Location, Complainant Name<br />
-                Complaint ID# and Status, Date Submitted to OPC
+                Complaint ID# and Status, Date Submitted to OpenPolice.org
             </div>
             <div id="dashResultsWrap">
     <?php $cnt = 0; ?>
@@ -131,14 +131,14 @@
                 data-com-id="{{ $com->ComID }}" data-com-pub-id="{{ intVal($com->ComPublicID) }}">
                 <div class="float-left complaintAlert">
                     <div>&nbsp;
-                    @if (in_array($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', 
+                    @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', 
                         $com->ComType), ['Unreviewed', 'Not Sure'])
-                        || ($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) 
+                        || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) 
                             == 'Police Complaint'
                         && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
                             ['New', 'Hold', 'Reviewed'])))
                         <div class="litRedDot"></div>
-                    @elseif ($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) == 'Police Complaint'
+                    @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) == 'Police Complaint'
                         && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
                             ['Needs More Work', 'Pending Attorney', 'OK to Submit to Oversight']))
                         <div class="litRedDottie"></div>
@@ -158,15 +158,15 @@
                         @endif
                     @else
                         #{{ number_format($com->ComPublicID) }}
-                        @if ($GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) 
+                        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) 
                             == 'Police Complaint')
                             {{ $GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus) }}
                         @endif
                     @endif
                     @if ($com->ComStatus != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete') 
                         && $com->ComType 
-                        != $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type',  'Police Complaint'))
-                        ({{ $GLOBALS['SL']->def->getVal('OPC Staff/Internal Complaint Type', $com->ComType) }})
+                        != $GLOBALS["SL"]->def->getID('Complaint Type',  'Police Complaint'))
+                        ({{ $GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) }})
                     @endif
                     </span>
                 </div>

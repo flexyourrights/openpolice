@@ -33,9 +33,9 @@ class OpenDashAdmin
         $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
             ->where('ComStatus', '>', 0)
             ->whereIn('ComType', [
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->get();
         if ($chk->isNotEmpty()) {
@@ -77,9 +77,9 @@ class OpenDashAdmin
             ->whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
             ->whereIn('ComType', [
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
             ->get();
@@ -135,9 +135,9 @@ class OpenDashAdmin
         $recentAttempts = OPComplaints::whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
             ->whereIn('ComType', [
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->where('ComRecordSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
             ->select('ComStatus', 'ComRecordSubmitted')
@@ -212,9 +212,9 @@ class OpenDashAdmin
         $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
             ->where('ComStatus', '>', 0)
             ->whereIn('ComType', [
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed'),
-                $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Not Sure')
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->get();
         if ($chk->isNotEmpty()) {

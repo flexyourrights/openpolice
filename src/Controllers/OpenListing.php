@@ -42,19 +42,23 @@ class OpenListing extends OpenAjax
         $url = '';
         if (isset($complaint->{ $coreAbbr . 'PublicID' }) 
             && intVal($complaint->{ $coreAbbr . 'PublicID' }) > 0) {
-            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') . '/read-'
-                . $complaint->{ $coreAbbr . 'PublicID' };
+            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') 
+                . '/read-' . $complaint->{ $coreAbbr . 'PublicID' };
         } else {
-            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') . '/readi-'
-                . $complaint->{ $coreAbbr . 'ID' };
+            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') 
+                . '/readi-' . $complaint->{ $coreAbbr . 'ID' };
         }
+        $comDate = $this->getComplaintDate(
+            $this->sessData->dataSets["Incidents"][0], 
+            $complaint
+        );
         return view('vendor.openpolice.complaint-report-preview', [
             "uID"         => $this->v["uID"],
             "storyPrev"   => $complaint->{ $coreAbbr . 'Summary' },
             "coreAbbr"    => $coreAbbr,
             "complaint"   => $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0], 
             "incident"    => $this->sessData->dataSets["Incidents"][0], 
-            "comDate"     => $this->getComplaintDate($this->sessData->dataSets["Incidents"][0], $complaint), 
+            "comDate"     => $comDate, 
             "comDateFile" => $this->getComplaintDateOPC($complaint), 
             "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
             "allegations" => $this->commaAllegationListSplit(),
@@ -296,7 +300,7 @@ class OpenListing extends OpenAjax
                         ->update([ "ComStatus" => $com->ComStatus ]);
                 }
                 if (!isset($com->ComType) || intVal($com->ComType) <= 0) {
-                    $com->ComType = $GLOBALS['SL']->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed');
+                    $com->ComType = $GLOBALS['SL']->def->getID('Complaint Type', 'Unreviewed');
                     OPComplaints::find($com->ComID)
                         ->update([ "ComType" => $com->ComType ]);
                 }
@@ -594,8 +598,9 @@ class OpenListing extends OpenAjax
     
     protected function printBetaTesters($nID)
     {
-        if ($GLOBALS["SL"]->REQ->has('invite') && intVal($GLOBALS["SL"]->REQ->get('invite')) > 0) {
-            OPTesterBeta::find(intVal($GLOBALS["SL"]->REQ->get('invite')))
+        if ($GLOBALS["SL"]->REQ->has('invited') 
+            && intVal($GLOBALS["SL"]->REQ->get('invited')) > 0) {
+            OPTesterBeta::find(intVal($GLOBALS["SL"]->REQ->get('invited')))
                 ->update([ 'BetaInvited' => date('Y-m-d') ]);
         }
         $betas = OPTesterBeta::whereNotNull('BetaEmail')
@@ -609,12 +614,35 @@ class OpenListing extends OpenAjax
         $GLOBALS["SL"]->x["needsPlots"] = true;
         $this->sortBetas($betas, 'betaSignups');
         $this->sortBetas($empties, 'betaClicks');
+        $betaLinks = [];
+        if (sizeof($betas) > 0) {
+            foreach ($betas as $i => $beta) {
+                $betaLinks[$beta->BetaID] = '/dashboard/send-email?emaTemplate=28&emaTo='
+                    . urlencode($beta->BetaEmail) . '&emaCC=' 
+                    . urlencode($this->v["user"]->email) . '&emaBCC='
+                    . (($this->v["user"]->email != 'morgan@flexyourrights.org') 
+                        ? 'morgan@flexyourrights.org' : '')
+                    . '&emaSwapName=' . urlencode($beta->BetaName);
+                if (isset($this->v["yourUserContact"])) {
+                    $analystName = ((isset($this->v["yourUserContact"]->PrsnNameFirst)) 
+                        ? $this->v["yourUserContact"]->PrsnNameFirst : '') . ' ' 
+                        . ((isset($this->v["yourUserContact"]->PrsnNameLast)) 
+                            ? $this->v["yourUserContact"]->PrsnNameLast : '');
+                    $betaLinks[$beta->BetaID] .= '&emaSwapAnalyst=' 
+                        . urlencode(trim($analystName));
+                }
+                $betaLinks[$beta->BetaID] .= '&redir='
+                    . urlencode('/dash/beta-test-signups?invited='
+                        . $beta->BetaID . '#beta' . $beta->BetaID);
+            }
+        }
         return view('vendor.openpolice.nodes.2234-beta-listing', [
-            "betas" => $betas,
+            "betas"      => $betas,
             "emptyNoRef" => OPTesterBeta::whereNull('BetaHowHear')
                 ->orWhere('BetaHowHear', 'LIKE', '')
                 ->count(),
-            "totLoads"   => OPTesterBeta::count()
+            "totLoads"   => OPTesterBeta::count(),
+            "betaLinks"  => $betaLinks
         ])->render();
     }
     

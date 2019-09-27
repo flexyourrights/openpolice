@@ -30,6 +30,7 @@ class OPCompliments extends Model
 		'CompliUniqueStr', 
 		'CompliIPaddy', 
 		'CompliPublicID', 
+        'CompliShareData', 
     ];
     
     // END SurvLoop auto-generated portion of Model

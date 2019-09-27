@@ -31,7 +31,7 @@ class OpenSessDataOverride extends OpenComplaintPrints
             } else {
                 return [];
             }
-        } elseif ($nID == 39) {
+        } elseif (in_array($nID, [39, 907])) {
             if ($currNodeSessionData == '') {
                 $user = Auth::user();
                 if ($user && isset($user->email)) {
@@ -42,7 +42,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif ($nID == 671) { // Officers Used Profanity?
             $currVals = [];
             foreach ($this->sessData->dataSets["Officers"] as $i => $off) {
-                if (isset($off->OffUsedProfanity) && $off->OffUsedProfanity == 'Y') {
+                if (isset($off->OffUsedProfanity) 
+                    && $off->OffUsedProfanity == 'Y') {
                     $currVals[] = $off->getKey();
                 }
             }
@@ -52,7 +53,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
             $civs = $this->sessData->getLoopRows('Victims');
             if ($civs && sizeof($civs) > 0) {
                 foreach ($civs as $i => $civ) {
-                    if ($civ->CivRole == 'Victim' && trim($civ->CivGivenCitation) == 'Y') {
+                    if ($civ->CivRole == 'Victim' 
+                        && trim($civ->CivGivenCitation) == 'Y') {
                         $ret[] = $civ->CivID;
                     }
                 }
@@ -71,7 +73,9 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif ($nID == 676) { // Victim Used Profanity?
             $civInd = $this->getFirstVictimCivInd();
             if ($civInd >= 0) {
-                return [trim($this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity)];
+                return [
+                    trim($this->sessData->dataSets["Civilians"][$civInd]->CivUsedProfanity)
+                ];
             }
         } elseif (in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
             if (!isset($this->v["firstTimeGoGoldDeets"])) {
@@ -113,7 +117,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
             return $ret;
         } elseif (in_array($nID, [742, 2044])) { // Use of Force on Victims: Sub-Types
             $ret = [];
-            if (isset($this->sessData->dataSets["Force"]) && sizeof($this->sessData->dataSets["Force"]) > 0) {
+            if (isset($this->sessData->dataSets["Force"]) 
+                && sizeof($this->sessData->dataSets["Force"]) > 0) {
                 foreach ($this->sessData->dataSets["Force"] as $force) {
                     if (isset($force->ForType) && intVal($force->ForType) > 0 
                         && (!isset($force->ForAgainstAnimal) || trim($force->ForAgainstAnimal) != 'Y')) {
@@ -124,7 +129,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
             return $ret;
         } elseif ($nID == 2043) {
             $force = $this->sessData->getDataBranchRow('Force');
-            if ($force && isset($force->ForEventSequenceID) && intVal($force->ForEventSequenceID) > 0) {
+            if ($force && isset($force->ForEventSequenceID) 
+                && intVal($force->ForEventSequenceID) > 0) {
                 return $this->getLinkedToEvent('Civilian', $force->ForEventSequenceID);
             }
             return [];
@@ -167,17 +173,22 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif (in_array($nID, [401, 334, 409, 356, 384])) { // Gold Allegations: Pre-Load "Why" From Silver
             if (trim($currNodeSessionData) == '') {
                 $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Detention'); // 401
-                switch ($nID) {
-                    case 334: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Search'); break;
-                    case 409: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Property Seizure');break;
-                    case 356: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Unreasonable Force'); break;
-                    case 384: $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Arrest'); break;
+                if ($nID == 334) {
+                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Search');
+                } elseif ($nID == 409) {
+                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Property Seizure');
+                } elseif ($nID == 356) {
+                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Unreasonable Force');
+                } elseif ($nID == 384) {
+                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Arrest');
                 }
                 if (isset($this->sessData->dataSets["Allegations"]) 
                     && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
                     foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                        if (isset($alleg->AlleType) && $alleg->AlleType == $defID && isset($alleg->AlleDescription)
-                            && (!isset($alleg->AlleEventSequenceID) || intVal($alleg->AlleEventSequenceID) == 0)) {
+                        if (isset($alleg->AlleType) && $alleg->AlleType == $defID 
+                            && isset($alleg->AlleDescription)
+                            && (!isset($alleg->AlleEventSequenceID) 
+                                || intVal($alleg->AlleEventSequenceID) == 0)) {
                             return [$alleg->AlleDescription];
                         }
                     }
@@ -188,7 +199,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
                 != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) ? 'Y' : '')];
             
         } elseif ($nID == 2245) { // How Hear?
-            if ($GLOBALS["SL"]->REQ->has('from') && trim($GLOBALS["SL"]->REQ->get('from')) != '') {
+            if ($GLOBALS["SL"]->REQ->has('from') 
+                && trim($GLOBALS["SL"]->REQ->get('from')) != '') {
                 $this->sessData->dataSets["TesterBeta"][0]->update([
                     'BetaHowHear' => $GLOBALS["SL"]->REQ->get('from')
                     ]);
@@ -199,7 +211,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif ($nID == 1285) {
             $this->getOverRow('IA');
             $currNodeSessionData = [];
-            if (isset($this->v["overRowIA"]->OverWaySubEmail) && intVal($this->v["overRowIA"]->OverWaySubEmail) > 0) {
+            if (isset($this->v["overRowIA"]->OverWaySubEmail) 
+                && intVal($this->v["overRowIA"]->OverWaySubEmail) > 0) {
                 $currNodeSessionData[] = 'Email';
             }
             if (isset($this->v["overRowIA"]->OverWaySubVerbalPhone) 
@@ -237,7 +250,8 @@ class OpenSessDataOverride extends OpenComplaintPrints
         } elseif ($nID == 1229) {
             $civOver = $this->getOverRow('Civ');
 //echo '<pre>'; print_r($civOver); print_r($this->sessData->dataSets["Oversight"]); echo '</pre>'; exit;
-            if (isset($civOver) && isset($civOver->OverAgncName) && trim($civOver->OverAgncName) != '') {
+            if (isset($civOver) && isset($civOver->OverAgncName) 
+                && trim($civOver->OverAgncName) != '') {
                 return ['Y'];
             }
             return ['N'];

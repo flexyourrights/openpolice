@@ -25,17 +25,18 @@
     @if (isset($o->OverWaySubOnline) && intVal($o->OverWaySubOnline) == 1 && isset($o->OverComplaintWebForm) 
         && trim($o->OverComplaintWebForm) != '')
         You can submit your complaint through your investigative agency's online complaint form.
-        Pro Tip: Somewhere in their official form, include a link to your OPC complaint.<br />
+        Somewhere in their official form, 
+        include a link to your OpenPolice.org complaint.<br />
         <a href="{{ $o->OverComplaintWebForm }}" target="_blank">{{ $o->OverComplaintWebForm }}</a><br /><br />
     @endif
     @if (isset($o->OverWaySubEmail) && intVal($o->OverWaySubEmail) == 1 && isset($o->OverEmail) 
         && trim($o->OverEmail) != '')
         You can submit your complaint by emailing your investigative agency. We recommend you include a link to your 
-        OPC complaint in your email.<br /><a href="mailto:{{ $o->OverEmail }}">{{ $o->OverEmail }}</a><br /><br />
+        OpenPolice.org complaint in your email.<br /><a href="mailto:{{ $o->OverEmail }}">{{ $o->OverEmail }}</a><br /><br />
     @endif
     @if (isset($o->OverComplaintPDF) && trim($o->OverComplaintPDF) != '')
         You can print out and use your investigative agency\'s official complaint form online. We recommend you also print
-        your full OPC complaint and submit it along with their official form.<br />
+        your full OpenPolice.org complaint and submit it along with their official form.<br />
         <a href="{{ $o->OverComplaintPDF }}" target="_blank">{{ $o->OverComplaintPDF }}</a><br /><br />
     @endif
     <i>More about this complaint process:</i><br />

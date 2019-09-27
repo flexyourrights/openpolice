@@ -35,7 +35,7 @@
 
         <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
         {!! $GLOBALS["SL"]->printAccordian(
-            (($firstRevDone) ? 'Next, Update Complaint Status:' : 'Update Complaint Status'),
+            (($firstRevDone) ? 'Next, Update Complaint Status' : 'Update Complaint Status'),
             view('vendor.openpolice.nodes.1712-report-inc-staff-tools-status', [
                 "complaintRec"   => $complaintRec,
                 "lastReview"     => $lastReview,
@@ -78,6 +78,20 @@
             ) !!}
             </div>
         @endif
+
+        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        {!! $GLOBALS["SL"]->printAccordian(
+            'Upload Reports',
+            view('vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', [
+                "complaintRec"       => $complaintRec,
+                "reportUploadTypes"  => $reportUploadTypes,
+                "reportUploadFolder" => $reportUploadFolder
+            ])->render(),
+            false,
+            false,
+            'text'
+        ) !!}
+        </div>
 
     </div>
         

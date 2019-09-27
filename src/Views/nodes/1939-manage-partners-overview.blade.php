@@ -1,5 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1939-manage-partners-overview.blade.php -->
-<h2>OPC Partners</h2>
+<h2>OpenPolice.org Partners</h2>
 <div class="p10"><div class="row">
     <div class="col-md-4">Partner Type</div>
     <div class="col-md-2 taR">Total Active</div>

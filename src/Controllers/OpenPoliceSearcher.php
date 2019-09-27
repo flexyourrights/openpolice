@@ -2,7 +2,7 @@
 /**
   * OpenPoliceSearcher extends the SurvLoop Searcher for some hard-coded overrides.
   *
-  * Open Police Complaints
+  * OpenPolice.org
   * @package  flexyourrights/openpolice
   * @author  Morgan Lesko <wikiworldorder@protonmail.com>
   * @since 0.0
@@ -46,7 +46,7 @@ class OpenPoliceSearcher extends Searcher
     {
         $eval = "\$this->v['allcomplaints'] = " . $GLOBALS["SL"]->modelPath('Complaints') 
             . "::where('ComType', "
-            . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint') 
+            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
             . ")->" . $xtra . "orderBy('" . $this->v["sort"][0] . "', '" . $this->v["sort"][1]
             . "')->get();";
         eval($eval);
@@ -62,11 +62,11 @@ class OpenPoliceSearcher extends Searcher
                 if (!$GLOBALS["SL"]->x["isPublicList"] || in_array($status, [200, 201, 203, 204])) {
                     if ($status == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) { // 194
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('ComType', '"
-                            . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Unreviewed') 
+                            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed') 
                             . "')->where('ComStatus', '" . $status . "'); })";
                     } elseif (in_array($status, [195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 627])) {
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('ComType', '"
-                            . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint') 
+                            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
                             . "')->where('ComStatus', '" . $status . "'); })";
                     } else {
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('ComType', '" 
@@ -80,7 +80,7 @@ class OpenPoliceSearcher extends Searcher
             $eval = "->where(function (\$query) { \$query->where" . substr($eval, 9) . "; })";
         } elseif ($GLOBALS["SL"]->x["isPublicList"]) {
             $eval = "->where('ComType', '"
-                . $GLOBALS["SL"]->def->getID('OPC Staff/Internal Complaint Type', 'Police Complaint') . "')
+                . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') . "')
                 ->whereIn('ComStatus', [200, 201, 203, 204])";
         }
 //echo 'eval' . str_replace("})", "<br />})", str_replace("->", "<br />->", $eval)) . '<br />comstatus: <pre>'; print_r($this->searchFilts["comstatus"]); echo '</pre>'; exit;

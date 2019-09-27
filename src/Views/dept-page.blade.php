@@ -60,7 +60,7 @@
                 
                 <a class="toggleScoreInfo btn btn-secondary btn-lg w100 taL" href="javascript:;"
                     ><i id="scoreChev" class="fa fa-chevron-right" aria-hidden="true" style="width: 18px;"></i>
-                    OPC Accessibility Score: <b class="mL5" style="font-weight: bold;">{{ 
+                    Accessibility Score: <b class="mL5" style="font-weight: bold;">{{ 
                     $d["deptRow"]->DeptScoreOpenness }}</b></a>
                 <div id="toggleScoreInfoDeets" class="disNon">
                     {!! view('vendor.openpolice.dept-inc-scores', [
