@@ -1,8 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-status.blade.php -->
 
 <form name="comUpdate" method="post" 
-    action="/complaint/read-{{ $complaintRec->ComPublicID 
-        . '?save=1&refresh=1' . $GLOBALS['SL']->getReqParams() }}">
+    action="?save=1&refresh=1{{ $GLOBALS['SL']->getReqParams() }}">
 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
 <input type="hidden" name="revType" value="Update">
@@ -10,9 +9,11 @@
 <div class="row">
     <div class="col-md-8 col-sm-12">
         <div id="legitTypeDrop" class="disNon">
-            <select name="revComplaintType" class="form-control form-control-lg" autocomplete=off >
+            <select name="revComplaintType" class="form-control form-control-lg" 
+                autocomplete=off >
                 <option value="">Select complaint type...</option>
-                <option value="194" @if ($complaintRec->ComStatus == 194) SELECTED @endif 
+                <option value="194" 
+                    @if ($complaintRec->ComStatus == 194) SELECTED @endif 
                     >Incomplete</option>
                 <option value="295" @if ($complaintRec->ComType == 295 
                     && $complaintRec->ComStatus != 194) SELECTED @endif 
@@ -37,13 +38,14 @@
                     >Not Sure</option>
             </select>
         </div>
-        <select name="revStatus" class="form-control form-control-lg mB20" autocomplete="off">
+        <select name="revStatus" class="form-control form-control-lg mB20" 
+            autocomplete="off">
             <option value="">Select complaint status...</option>
             {!! view('vendor.openpolice.nodes.1712-report-inc-status', [
                 "firstReview" => false, 
                 "lastReview"  => $lastReview, 
                 "fullList"    => true
-                ])->render() !!}
+            ])->render() !!}
         </select>
     </div>
     <div class="col-md-4 col-sm-12 pB20">
@@ -62,14 +64,31 @@
 
 <p><hr></p>
 <p><b>Notes for other evaluators</b></p>
-<textarea name="revNote" class="form-control form-control-lg" style="height: 70px;" ></textarea>
+<textarea name="revNote" class="form-control form-control-lg" 
+    style="height: 70px;" ></textarea>
 
 <div class="w100 mT20 mB20">
     <a href="/switch/1/{{ $complaintRec->ComID }}"
         class="btn btn-lg btn-secondary pull-right"
         ><i class="fa fa-pencil" aria-hidden="true"></i> Edit Complaint</a>
-    <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" style="color: #FFF;" 
-        onMouseOver="this.style.color='#2b3493';" onMouseOut="this.style.color='#FFF';"
-        onClick="document.comUpdate.submit();" >Save Status Update</a>
+    <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" 
+        onMouseOver="this.style.color='#2b3493';" 
+        onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
+        onClick="document.comUpdate.submit();">Save Status Update</a>
 </div>
 </form>
+
+<div class="p20"> </div>
+{!! view('vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', [
+    "complaintRec"       => $complaintRec,
+    "reportUploadTypes"  => $reportUploadTypes,
+    "reportUploadFolder" => $reportUploadFolder
+])->render() !!}
+
+<div class="p20"> </div>
+{!! view('vendor.openpolice.nodes.1712-report-inc-staff-tools-report-dept', [
+    "complaintRec"  => $complaintRec,
+    "incidentState" => $incidentState
+])->render() !!}
+
+

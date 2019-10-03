@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenVolunteers is a mid-level class with functions to
+  * manage volunteers and track their research aid.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;

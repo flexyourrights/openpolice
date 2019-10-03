@@ -5,7 +5,7 @@
   * OpenPolice.org
   * @package  flexyourrights/openpolice
   * @author  Morgan Lesko <wikiworldorder@protonmail.com>
-  * @since 0.0
+  * @since v0.0.12
   */
 namespace OpenPolice\Controllers;
 

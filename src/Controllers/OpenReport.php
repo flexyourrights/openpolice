@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenReport is mid-level class which manages some of the specific 
+  * reporting customizations.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -8,52 +17,35 @@ use App\Models\OPZeditDepartments;
 use App\Models\OPZeditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
-use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenDepts;
 
 use OpenPolice\Controllers\VolunteerLeaderboard;
 
 class OpenReport extends OpenDepts
 {
+    /**
+     * Load detail blocks for big printing of allegations on complaint reports.
+     *
+     * @param  int $nID
+     * @return array
+     */
     protected function reportAllegsWhyDeets($nID = -3)
     {
         $deets = [];
         if (isset($this->sessData->dataSets["AllegSilver"]) 
-            && $this->sessData->dataSets["AllegSilver"][0]
-            && isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
+            && isset($this->sessData->dataSets["AllegSilver"][0])) {
+            $silv = $this->sessData->dataSets["AllegSilver"][0];
             foreach ($this->worstAllegations as $i => $alleg) {
-                if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $alleg[2] })) {
-                    $show = (trim($this->sessData->dataSets["AllegSilver"][0]
-                        ->{ $alleg[2] }) == 'Y');
+                if (isset($silv->{ $alleg[2] })) {
+                    $show = (trim($silv->{ $alleg[2] }) == 'Y');
                     if ($alleg[1] == 'Intimidating Display of Weapon') {
-                        $allegVal = intVal($this->sessData->dataSets["AllegSilver"][0]
-                            ->{ $alleg[2] });
-                        if (!in_array($allegVal, [
-                            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'N/A'),
-                            $GLOBALS["SL"]->def
-                                ->getID('Intimidating Displays Of Weapon', 'Don\'t Know')
-                            ])) {
+                        $allegVal = intVal($silv->{ $alleg[2] });
+                        if (!in_array($allegVal, $this->intimidWeaponNos())) {
                             $show = true;
                         }
                     }
                     if ($show) {
-                        $alle = '';
-                        if (!in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
-                            $foundWhy = false;
-                            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
-                            foreach ($this->sessData->dataSets["Allegations"] as $j => $all) {
-                                if (!$foundWhy && $all && isset($all->AlleType) 
-                                    && $all->AlleType == $alleg[0] 
-                                    && trim($all->AlleDescription) != '') {
-                                    $alle .= $all->AlleDescription . '<br />';
-                                    $foundWhy = true;
-                                }
-                            }
-                        } else {
-                            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
-                        }
-                        $deets[] = [ $alle ];
+                        $deets[] = $this->printAllegsWhyDeet($alleg);
                     }
                 }
             }
@@ -61,26 +53,61 @@ class OpenReport extends OpenDepts
         return $deets;
     }
 
+    /**
+     * Load one allegation detail row for big printing on complaint reports.
+     *
+     * @param  array $alleg
+     * @return array
+     */
+    protected function printAllegsWhyDeet($alleg)
+    {
+        $alle = '';
+        if (!in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
+            $foundWhy = false;
+            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
+            foreach ($this->sessData->dataSets["Allegations"] as $j => $all) {
+                if (!$foundWhy && $all && isset($all->AlleType) 
+                    && $all->AlleType == $alleg[0] 
+                    && trim($all->AlleDescription) != '') {
+                    $alle .= $all->AlleDescription . '<br />';
+                    $foundWhy = true;
+                }
+            }
+        } else {
+            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
+        }
+        $deets[] = [ $alle ];
+
+    }
+
+    /**
+     * Print out big block of allegations on complaint report.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function reportAllegsWhy($nID = -3)
     {
+        $why = $this->reportAllegsWhyDeets($nID);
         $deets = 'Allegations</h3><div class="slGrey mTn10">' 
             . 'Including comments from the complainant' 
             . '</div><h3 class="disNon">';
-        return $this->printReportDeetsBlock(
-            $this->reportAllegsWhyDeets($nID), 
-            $deets
-        );
+        return $this->printReportDeetsBlock($why, $deets);
     }
 
+    /**
+     * Print out civilian's address. (Only run if already allowed.)
+     *
+     * @param  int $nID
+     * @return array
+     */
     protected function reportCivAddy($nID)
     {
         if ($nID > 0 && isset($this->allNodes[$nID]) 
             && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow())
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
-            $addy = $GLOBALS["SL"]->printRowAddy(
-                $this->sessData->getLatestDataBranchRow(), 
-                'Prsn'
-            );
+            $prsn = $this->sessData->getLatestDataBranchRow();
+            $addy = $GLOBALS["SL"]->printRowAddy($prsn, 'Prsn');
             if (trim($addy) != '') {
                 return [ 'Address', $addy ];
             }
@@ -88,50 +115,72 @@ class OpenReport extends OpenDepts
         return [];
     }
 
+    /**
+     * Print out report's main narrative story, potentially with read more button.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function reportStory($nID)
     {
         $ret = '';
         if ($nID > 0 && isset($this->allNodes[$nID]) 
             && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
+            $story = $this->sessData->dataSets["Complaints"][0]->ComSummary;
             if (!in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf'])) {
                 $previewMax = 1800;
-                if (strlen($this->sessData->dataSets["Complaints"][0]->ComSummary) > $previewMax) {
+                if (strlen($story) > $previewMax) {
                     $more = ($GLOBALS["SL"]->REQ->has('read') 
                         && $GLOBALS["SL"]->REQ->get('read') == 'more');
-                    $story = $this->sessData->dataSets["Complaints"][0]->ComSummary;
                     $brkPos = strpos($story, ' ', $previewMax-200);
                     if ($brkPos > 0) {
                         $ret = view('vendor.openpolice.nodes.1373-story-read-more', [
                             "more"      => $more,
-                            "storyLess" => $GLOBALS["SL"]->textSaferHtml(substr($story, 0, $brkPos+1)),
+                            "storyLess" => $GLOBALS["SL"]->textSaferHtml(
+                                substr($story, 0, $brkPos+1)),
                             "storyMore" => $GLOBALS["SL"]->textSaferHtml($story)
                         ])->render();
-                        $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.1373-story-read-more-ajax')->render();
+                        $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.1373-story-read-more-ajax'
+                        )->render();
                     }
                 }
             }
             if (trim($ret) == '') {
-                $ret = $GLOBALS["SL"]->textSaferHtml($this->sessData->dataSets["Complaints"][0]->ComSummary);
+                $ret = $GLOBALS["SL"]->textSaferHtml($story);
             }
         }
         return '<h3 class="slBlueDark mT0 mB10">Story</h3><p>' . $ret . '</p>';
     }
     
+    /**
+     * Load a civlian record's subset records for person contact information
+     * and physical description information.
+     *
+     * @param  int $overLnkID
+     * @return string
+     */
     protected function queuePeopleSubsets($id, $type = 'Civilians')
     {
         $prsn = $this->sessData->getChildRow($type, $id, 'PersonContact');
         $phys = $this->sessData->getChildRow($type, $id, 'PhysicalDesc');
-        return [$prsn, $phys];
+        return [ $prsn, $phys ];
     }
     
+    /**
+     * Load department IDs responsible for this report.
+     *
+     * @param  int $overLnkID
+     * @return string
+     */
     protected function chkGetReportDept($overLnkID)
     {
         if (!isset($this->v["reportDepts"])) {
             $this->v["reportDepts"] = [];
         }
         $overLnk = $this->sessData->getRowById('LinksComplaintOversight', $overLnkID);
-        if ($overLnk && isset($overLnk->LnkComOverDeptID) && intVal($overLnk->LnkComOverDeptID) > 0
+        if ($overLnk && isset($overLnk->LnkComOverDeptID) 
+            && intVal($overLnk->LnkComOverDeptID) > 0
             && !in_array($overLnk->LnkComOverDeptID, $this->v["reportDepts"])) {
             $this->v["reportDepts"][] = $overLnk->LnkComOverDeptID;
             return '';
@@ -139,32 +188,47 @@ class OpenReport extends OpenDepts
         return '<!-- skipping overLnk #' . $overLnkID . ' -->';
     }
     
+    /**
+     * Print the report headline a department responsible for this report.
+     *
+     * @param  int $deptID
+     * @return string
+     */
     protected function getReportDept($deptID)
     {
         $dept = $this->sessData->getRowById('Departments', $deptID);
         if ($dept && isset($dept->DeptName)) {
-            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->DeptSlug 
-                . '" class="slBlueDark">Misconduct Incident Report for ' 
-                . $dept->DeptName . '</a></h3><div class="mB10"><b>Complaint #' 
+            return '<h3 class="mT0 mB5">'
+                . '<a href="/dept/' . $dept->DeptSlug . '" class="slBlueDark">'
+                . 'Misconduct Incident Report for ' . $dept->DeptName 
+                . '</a></h3><div class="mB10"><b>Complaint #' 
                 . $this->sessData->dataSets["Complaints"][0]->ComPublicID . ': ' 
-                . $this->printComplaintStatus($this->sessData->dataSets["Complaints"][0]->ComStatus)
+                . $this->printComplaintStatus(
+                    $this->sessData->dataSets["Complaints"][0]->ComStatus)
                 . '</b></div>';
         }
         $this->v["reportDepts"][] = $deptID;
         return '';
     }
     
+    /**
+     * Get the label and value for who submitted a report,
+     * depending on the current permissions and available info.
+     *
+     * @return array
+     */
     protected function getReportByLine()
     {
         $ret = '';
-        if ($this->sessData->dataSets['Complaints'][0]->ComPrivacy 
+        $com = $this->sessData->dataSets['Complaints'][0];
+        if ($com->ComPrivacy 
             == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
             $ret = 'Anonymous';
         } elseif (isset($this->sessData->dataSets["Civilians"]) 
             && isset($this->sessData->dataSets["Civilians"][0]->CivID) 
             && (in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf'])
-            || ($this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
-                && $this->sessData->dataSets['Complaints'][0]->ComPrivacy 
+            || ($this->isPublished('Complaints', $this->coreID, $com)
+                && $com->ComPrivacy 
                 == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')))) {
             $ret = $this->getCivReportName($this->sessData->dataSets["Civilians"][0]->CivID);
         }
@@ -174,6 +238,12 @@ class OpenReport extends OpenDepts
         return [];
     }
     
+    /**
+     * Check the current permissions on printing the incident's detailed time.
+     *
+     * @param  App\Models\OPComplaints $complaint
+     * @return boolean
+     */
     protected function shouldPrintFullDate($complaint = null)
     {
         if (!$complaint && isset($this->sessData->dataSets['Complaints'])) {
@@ -184,30 +254,47 @@ class OpenReport extends OpenDepts
                 || !$GLOBALS["SL"]->x["isPublicList"]));
     }
     
+    /**
+     * Get the label and value for when an incident occured,
+     * depending on the current permissions and available info.
+     *
+     * @param  int $nID
+     * @return array
+     */
     protected function getReportWhenLine()
     {
         $date = '';
-        if ($this->shouldPrintFullDate()) {
-            $date = date('n/j/Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-            $timeStart = $timeEnd = '';
-            if ($this->sessData->dataSets["Incidents"][0]->IncTimeEnd !== null) {
-                $timeEnd = date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeEnd));
-            }
-            if ($this->sessData->dataSets["Incidents"][0]->IncTimeStart !== null) {
-                $timeStart = date('g:ia', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
-                if ($timeStart != '' && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
-                    $date .= ' <nobr>at ' . $timeStart . '</nobr>';
-                    if ($timeEnd != '' && $timeStart != $timeEnd) {
-                        $date .= ' <nobr>until ' . $timeEnd . '</nobr>';
+        if (isset($this->sessData->dataSets["Incidents"][0])) {
+            $inc = $this->sessData->dataSets["Incidents"][0];
+            if ($this->shouldPrintFullDate()) {
+                $date = date('n/j/Y', strtotime($inc->IncTimeStart));
+                $timeStart = $timeEnd = '';
+                if ($inc->IncTimeEnd !== null) {
+                    $timeEnd = date('g:ia', strtotime($inc->IncTimeEnd));
+                }
+                if ($inc->IncTimeStart !== null) {
+                    $timeStart = date('g:ia', strtotime($inc->IncTimeStart));
+                    if ($timeStart != '' 
+                        && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
+                        $date .= ' <nobr>at ' . $timeStart . '</nobr>';
+                        if ($timeEnd != '' && $timeStart != $timeEnd) {
+                            $date .= ' <nobr>until ' . $timeEnd . '</nobr>';
+                        }
                     }
                 }
+            } else {
+                $date = date('F Y', strtotime($inc->IncTimeStart));
             }
-        } elseif (isset($this->sessData->dataSets["Incidents"][0])) {
-            $date = date('F Y', strtotime($this->sessData->dataSets["Incidents"][0]->IncTimeStart));
         }
-        return ['Indicent Date', $date];
+        return [ 'Indicent Date', $date ];
     }
     
+    /**
+     * Check the current permissions on printing the incident's full address.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function chkPrintWhereLine($nID = -3)
     {
         $show = false;
@@ -218,46 +305,72 @@ class OpenReport extends OpenDepts
                 $show = true;
             } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncPublic) 
                 && $this->sessData->dataSets["Incidents"][0]->IncPublic == 'Y'
-                && $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])) {
+                && $this->isPublished('Complaints', $this->coreID, 
+                    $this->sessData->dataSets["Complaints"][0])) {
                 $show = true;
             }
         }
         return $show;
     }
     
+    /**
+     * Get the label and value for where an incident occured,
+     * depending on the current permissions and available info.
+     *
+     * @param  int $nID
+     * @return array
+     */
     protected function getReportWhereLine($nID = -3)
     {
         if (isset($this->sessData->dataSets["Incidents"])) {
-            $addy = $GLOBALS["SL"]->printRowAddy($this->sessData->dataSets["Incidents"][0], 'Inc');
+            $inc = $this->sessData->dataSets["Incidents"][0];
+            $addy = $GLOBALS["SL"]->printRowAddy($inc, 'Inc');
             if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
-                return ['Indicent Location', $addy];
+                return [ 'Indicent Location', $addy ];
             }
-            if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressState)) {
+            if (isset($inc->IncAddressState)) {
                 $c = '';
-                $state = $this->sessData->dataSets["Incidents"][0]->IncAddressState;
-                if (isset($this->sessData->dataSets["Incidents"][0]->IncAddressZip)) {
-                    $c = $GLOBALS["SL"]->getZipProperty($this->sessData->dataSets["Incidents"][0]->IncAddressZip,
-                        'County');
-                } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncAddressCity)) {
-                    $c = $GLOBALS["SL"]->getCityCounty($this->sessData->dataSets["Incidents"][0]->IncAddressZip,
-                        $state);
+                $state = $inc->IncAddressState;
+                if (isset($inc->IncAddressZip) && strlen($inc->IncAddressZip) > 4) {
+                    $c = $GLOBALS["SL"]->getZipProperty($inc->IncAddressZip, 'County');
+                }
+                if ($c == '' && isset($inc->IncAddressCity)) {
+                    $c = $GLOBALS["SL"]->getCityCounty($inc->IncAddressCity, $state);
                 }
                 if (trim($c) != '') {
                     $ret = $GLOBALS["SL"]->allCapsToUp1stChars($c) . ' County, ' . $state;
-                    $ret = str_replace('District Of Columbia County, DC', 'Washington, DC', $ret);
-                    return [ 'Indicent Location', $ret ];
+                    return [ 'Indicent Location', $this->fixWhereError($ret) ];
                 }
             }
         }
         return [];
     }
     
+    /**
+     * Check the location description, and correct specific problems.
+     *
+     * @param  string $str
+     * @return string
+     */
+    protected function fixWhereError($str)
+    {
+        $ret = str_replace('District Of Columbia County, DC', 'Washington, DC', $str);
+        return $ret;
+    }
+    
+    /**
+     * Get the english name for this report's privacy setting.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function getReportPrivacy($nID)
     {
         switch ($this->sessData->dataSets["Complaints"][0]->ComPrivacy) {
             case $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'): 
                 return 'Full Transparency';
-            case $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public'): 
+            case $GLOBALS["SL"]->def->getID('Privacy Types', 
+                'Names Visible to Police but not Public'): 
                 return 'No Names Public';
             case $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'): 
                 return 'Anonymous';
@@ -265,18 +378,110 @@ class OpenReport extends OpenDepts
         return '';
     }
     
+    /**
+     * Whether or not names should be printed on this complaint report.
+     *
+     * @return boolean
+     */
+    protected function showNames()
+    {
+        return ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 
+            || in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf']));
+    }
+    
+    /**
+     * Whether or not witness names should be printed on this complaint report.
+     *
+     * @param  App\Models\OPOversight $civRow
+     * @return boolean
+     */
+    protected function hideWitnessName($civRow)
+    {
+        return ($civRow->CivRole == 'Witness' && $civRow->CivIsCreator != 'Y'
+            && ($GLOBALS["SL"]->dataPerms != 'sensitive'
+                || !in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf'])));
+    }
+    
+    /**
+     * Print civilians name for reports, when needed in a row format.
+     *
+     * @param  int $nID
+     * @return array
+     */
+    protected function getCivReportNameRow($nID)
+    {
+        $civRow = $this->sessData->getDataBranchRow('Civilians');
+        if (isset($civRow->CivRole) && isset($civRow->CivIsCreator)) {
+            if ($nID == 1507) {
+                $prsn = $this->sessData->getChildRow(
+                    'Civilians', 
+                    $civRow->CivID, 
+                    'PersonContact'
+                );
+                if ($prsn && isset($prsn->PrsnNickname)) {
+                    $nick = trim(strtolower($prsn->PrsnNickname));
+                    $first = $middle = $last = '';
+                    if (isset($prsn->PrsnNameFirst)) {
+                        $first = trim(strtolower($prsn->PrsnNameFirst));
+                    }
+                    if (isset($prsn->PrsnNameMiddle)) {
+                        $middle = trim(strtolower($prsn->PrsnNameMiddle));
+                    }
+                    if (isset($prsn->PrsnNameLast)) {
+                        $last = trim(strtolower($prsn->PrsnNameLast));
+                    }
+                    if ($first == $nick || $middle == $nick || $last == $nick
+                        || ($first . ' ' . $last) == $nick
+                        || ($first . ' ' . $middle . ' ' . $last) == $nick) {
+                        return [ '', '', 0 ];
+                    }
+                }
+            }
+            if ($this->hideWitnessName($civRow)) {
+                $deetLabel = 'First Name';
+                if ($nID == 2637) {
+                    $deetLabel = 'Middle Name';
+                } elseif ($nID == 1506) {
+                    $deetLabel = 'Last Name';
+                } elseif ($nID == 1507) {
+                    $deetLabel = 'Nickname';
+                }
+                return [ $deetLabel, '<i class="slGrey">Not public</i>', $nID ];
+            }
+        }
+        return '';
+    }
+    
+    /**
+     * Print civilians name for section headers in reports.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function getCivReportNameHeader($nID)
     {
         return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
-            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '</h3>';
+            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) 
+            . '</h3>';
     }
     
+    /**
+     * Determine the most appropriate name printing for a civilian in reports.
+     *
+     * @param  int $civID
+     * @param  int $ind
+     * @param  string $type
+     * @param  App\Models\OPPersonContact $prsn
+     * @return string
+     */
     protected function getCivReportName($civID, $ind = 0, $type = 'Subject', $prsn = NULL)
     {
         if (!isset($this->v["civNames"])) {
             $this->v["civNames"] = [];
         }
-        if (!isset($this->v["civNames"][$civID]) || trim($this->v["civNames"][$civID]) == '') {
+        if (!isset($this->v["civNames"][$civID]) 
+            || trim($this->v["civNames"][$civID]) == '') {
+            $civRow = $this->sessData->getRowById('Civilians', $civID);
             if (!$prsn) {
                 list($prsn, $phys) = $this->queuePeopleSubsets($civID);
             }
@@ -285,84 +490,111 @@ class OpenReport extends OpenDepts
                 if ( $civID == $this->sessData->dataSets["Civilians"][0]->CivID 
                     && (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) == ''
                     || $this->sessData->dataSets["Complaints"][0]->ComPrivacy == 306) ) {
-                    $name = '<span style="color: #2b3493;" title="This complainant did not provide their name to '
-                        . 'investigators.">Complainant</span>';
+                    $name = '<span style="color: #2b3493;" title="'
+                        . 'This complainant did not provide their name to investigators.'
+                        . '">Complainant</span>';
                 } elseif (trim($prsn->PrsnNameFirst . $prsn->PrsnNameLast) != '' 
-                    && ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 
-                    || $GLOBALS["SL"]->pageView == 'full')) {
+                    && $this->showNames() && !$this->hideWitnessName($civRow)) {
                     if (trim($prsn->PrsnNickname) != '') {
                         $name = trim($prsn->PrsnNickname);
                     } else {
-                        $name = '<span style="color: #2b3493;" title="This complainant wanted to publicly provide '
-                            . 'their name.">' . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameLast . '</span>';
+                        $name = '<span style="color: #2b3493;" title="'
+                            . 'This complainant wanted to publicly provide their name.">' 
+                            . $prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameLast . '</span>';
                     } // ' . $prsn->PrsnNameMiddle . '
                 }
             }
             $label = 'Complainant';
-            $civRow = $this->sessData->getRowById('Civilians', $civID);
             if ($this->sessData->dataSets["Civilians"][0]->CivID != $civID) {
                 if ($civRow && isset($civRow->CivRole) && $civRow->CivRole == 'Victim') {
-                    $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+                    $label = 'Victim #' 
+                        . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
                 } else {
-                    $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                    $label = 'Witness #' 
+                        . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
                 }
             } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Victim') {
-                $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+                $label = 'Victim #' 
+                    . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
             } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Witness') {
-                $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                $label = 'Witness #' 
+                    . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
             }
             $this->v["civNames"][$civID] = $label . ((trim($name) != '') ? ': ' . $name : '');
         }
         return $this->v["civNames"][$civID];
     }
     
+    /**
+     * Print an officer's name for reports.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function getOffReportNameHeader($nID)
     {
         list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('Officers');
+        //$offID = $this->sessData->getLatestDataBranchID();
+        $offRow = $this->sessData->getRowById('Officers', $itemID);
         return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
-            . $this->getOffReportName($this->sessData->getRowById('Officers', $this->sessData->getLatestDataBranchID()),
-                $itemInd)
-            . '</h3>';
+            . $this->getOffReportName($offRow, $itemInd) . '</h3>';
     }
     
+    /**
+     * Determine the most appropriate name printing for a officer in reports.
+     *
+     * @param  App\Models\OPOfficers $off
+     * @param  int $ind
+     * @param  App\Models\OPPersonContact $prsn
+     * @return string
+     */
     protected function getOffReportName($off, $ind = 0, $prsn = NULL)
     {
         if (!isset($this->v["offNames"])) {
             $this->v["offNames"] = [];
         }
         if ($off && isset($off->OffID)) {
-            if (sizeof($this->v["offNames"]) == 0 || !isset($this->v["offNames"][$off->OffID]) 
+            if (sizeof($this->v["offNames"]) == 0 
+                || !isset($this->v["offNames"][$off->OffID]) 
                 || trim($this->v["offNames"][$off->OffID]) == '') {
-                if (!$prsn) list($prsn, $phys) = $this->queuePeopleSubsets($off->OffID, 'Officers');
+                if (!$prsn) {
+                    list($prsn, $phys) = $this->queuePeopleSubsets($off->OffID, 'Officers');
+                }
                 $name = ' ';
-                if ($GLOBALS["SL"]->pageView != 'public') {
-                    if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == 304 
-                        || $GLOBALS["SL"]->pageView == 'full') {
-                        if (trim($prsn->PrsnNickname) != '') {
-                            $name = trim($prsn->PrsnNickname);
-                        } else {
-                            $name = trim($prsn->PrsnNameFirst . ' ' . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast);
-                            if (trim($name) == '' && trim($off->OffBadgeNumber) != '' 
-                                && trim($off->OffBadgeNumber) != '0') {
-                                $name = 'Badge #' . $off->OffBadgeNumber;
-                            }
+                if ($this->showNames()) {
+                    if (trim($prsn->PrsnNickname) != '') {
+                        $name = trim(str_ireplace('Officer ', '', $prsn->PrsnNickname));
+                    } else {
+                        $name = trim($prsn->PrsnNameFirst . ' ' 
+                            . $prsn->PrsnNameMiddle . ' ' . $prsn->PrsnNameLast);
+                        if ($name == '' && trim($off->OffBadgeNumber) != '' 
+                            && trim($off->OffBadgeNumber) != '0') {
+                            $name = 'Badge #' . $off->OffBadgeNumber;
                         }
                     }
                 }
-                $this->v["offNames"][$off->OffID] = 'Officer #' . (1+$ind) . ((trim($name) != '') ? ': ' . $name : '');
+                $this->v["offNames"][$off->OffID] = 'Officer #' . (1+$ind) 
+                    . ((trim($name) != '') ? ': ' . $name : '');
             }
             return $this->v["offNames"][$off->OffID];
         }
         return '';
     }
     
+    /**
+     * Create a list of civilian information fields which are not to be printed
+     * with current permissions.
+     *
+     * @param  int $civID
+     * @return string
+     */
     protected function getCivSnstvFldsNotPrinted($civID)
     {
         $info = '';
         $prsn = $this->sessData->getChildRow('Civilians', $civID, 'PersonContact');
-        if ((((isset($prsn->PrsnNameFirst) && trim($prsn->PrsnNameFirst) != '') 
-            || (isset($prsn->PrsnNameLast) && $prsn->PrsnNameLast != '')) ? ', Name' : '')
-            && $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 304) {
+        if ((isset($prsn->PrsnNameFirst) && trim($prsn->PrsnNameFirst) != '') 
+            || (isset($prsn->PrsnNameLast) && $prsn->PrsnNameLast != '')) {
+            //&& $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 304) {
             $info .= ', Name';
         }
         if (isset($prsn->PrsnAddress) && trim($prsn->PrsnAddress) != '')  {
@@ -377,17 +609,26 @@ class OpenReport extends OpenDepts
         if (isset($prsn->PrsnFacebook) && trim($prsn->PrsnFacebook) != '') {
             $info .= ', Facebook';
         }
-        if (isset($prsn->PrsnBirthday) && trim($prsn->PrsnBirthday) != '' && trim($prsn->PrsnBirthday) != '0000-00-00' 
+        if (isset($prsn->PrsnBirthday) && trim($prsn->PrsnBirthday) != '' 
+            && trim($prsn->PrsnBirthday) != '0000-00-00' 
             && trim($prsn->PrsnBirthday) != '1970-01-01') {
             $info .= ', Birthday';
         }
         if (($civID != $this->sessData->dataSets["Civilians"][0]->CivID 
-            || $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 306) && trim($info) != '') {
+            || $this->sessData->dataSets["Complaints"][0]->ComPrivacy != 306) 
+            && trim($info) != '') {
             return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
         }
         return '';
     }
     
+    /**
+     * Create a list of officer information fields which are not to be printed
+     * with current permissions.
+     *
+     * @param  int $offID
+     * @return string
+     */
     protected function getOffSnstvFldsNotPrinted($offID)
     {
         $off = $this->sessData->getRowById('Officers', $offID);
@@ -402,6 +643,11 @@ class OpenReport extends OpenDepts
         return '';
     }
     
+    /**
+     * Create a written list of officer's that used profanity during this incident.
+     *
+     * @return array
+     */
     protected function getOffProfan()
     {
         $cnt = 0;
@@ -424,6 +670,11 @@ class OpenReport extends OpenDepts
         return [];
     }
     
+    /**
+     * Create a written list of civilian's that used profanity during this incident.
+     *
+     * @return array
+     */
     protected function getCivProfan()
     {
         $cnt = 0;
@@ -446,16 +697,29 @@ class OpenReport extends OpenDepts
         return [];
     }
     
+    /**
+     * Get report details block for officer's age range.
+     *
+     * @return array
+     */
     protected function getReportOffAge($nID)
     {
         $phys = $this->sessData->getLatestDataBranchRow();
         if ($phys && isset($phys->PhysAge) && intVal($phys->PhysAge) > 0) {
-            return ['<span class="slGrey">Age Range</span>', 
-                $GLOBALS["SL"]->def->getVal('Age Ranges Officers', $phys->PhysAge), $nID];
+            return [
+                '<span class="slGrey">Age Range</span>', 
+                $GLOBALS["SL"]->def->getVal('Age Ranges Officers', $phys->PhysAge), 
+                $nID
+            ];
         }
         return [];
     }
     
+    /**
+     * Print out report section header for gold event descriptions.
+     *
+     * @return string
+     */
     protected function reportEventTitle($eveID)
     {
         $h3 = '<h3 class="slBlueDark mT0 mB20">';
@@ -468,47 +732,52 @@ class OpenReport extends OpenDepts
         return '';
     }
     
+    /**
+     * Print out sharing and social media section of the report.
+     *
+     * @return string
+     */
     protected function printReportShare()
     {
+        $com = $this->sessData->dataSets["Complaints"][0];
         return view('vendor.openpolice.nodes.1710-report-inc-share', [
-            "pubID"     => $this->sessData->dataSets["Complaints"][0]->ComPublicID,
+            "pubID"     => $com->ComPublicID,
             "emojiTags" => $this->printEmojiTags(),
-            "published" => $this->isPublished(
-                'Complaints', 
-                $this->coreID, 
-                $this->sessData->dataSets["Complaints"][0]
-            ),
+            "published" => $this->isPublished('Complaints', $this->coreID, $com),
             "viewPrfx"  => (($GLOBALS["SL"]->pageView == 'full') ? 'full-' : '')
         ])->render();
     }
     
+    /**
+     * Fill in the SurvLoop glossary with everything worthy in this report.
+     *
+     * @return string
+     */
     protected function fillGlossary()
     {
         $this->v["glossaryList"] = [];
         if ((in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1)
             && isset($this->sessData->dataSets["Complaints"])) {
-            $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
-            if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
-                $this->v["glossaryList"][] = ['<b>Full Transparency</b>', 
-                    $prvLnk . 'User opts to publish the names of civilians and police officers on this website.'];
-            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public')) {
-                $this->v["glossaryList"][] = ['<b>No Names Public</b>', 
-                    $prvLnk . 'User doesn\'t want to publish any names on this website. 
-                    This includes police officers\' names and badge numbers too.'];
-            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')) {
-                $this->v["glossaryList"][] = ['<b>Anonymous</b> ', 
-                    $prvLnk . 'User needs complaint to be completely anonymous, even though it will be harder to '
-                        . 'investigate. No names will be published on this website. Neither OPC staff nor investigators'
-                        . ' will be able to contact them. Any details that could be used for personal identification '
-                        . 'may be deleted from the database.'];
-            }
+            $prvLnk = '<a href="/complaint-privacy-options" '
+                . 'target="_blank">Privacy Setting</a>: ';
+            $prvType = $GLOBALS["SL"]->def->getVal('Privacy Types', 
+                $this->sessData->dataSets["Complaints"][0]->ComPrivacy);
+            $prvType = str_replace('Names Visible to Police but not Public', 
+                'No Names Public', str_replace('Completely ', '', $prvType));
+            $this->v["glossaryList"][] = [
+                '<b>' . $prvType . '</b>',
+                view('vendor.openpolice.report-inc-fill-glossary', [
+                    "glossaryType" => $prvType,
+                    "prvLnk"       => $prvLnk
+                ])->render()
+            ];
             if ($this->sessData->dataSets["Complaints"][0]->ComAwardMedallion == 'Gold') {
-                $this->v["glossaryList"][] = ['<b>Gold-Level Complaint</b>', 
-                    '<a href="/go-gold-make-your-complaint-strong">Optional</a>: This user opted '
-                        . 'to share more complete details about their police experience than a Basic Complaint.'];
+                $this->v["glossaryList"][] = [
+                    '<b>Gold-Level Complaint</b>', 
+                    view('vendor.openpolice.report-inc-fill-glossary', [
+                        "glossaryType" => 'Gold-Level Complaint'
+                    ])->render()
+                ];
             }
             $this->simpleAllegationList();
             if (sizeof($this->allegations) > 0) {
@@ -524,6 +793,12 @@ class OpenReport extends OpenDepts
         return true;
     }
     
+    /**
+     * Print out Flex Your Rights articles associated with responses
+     * included in this report.
+     *
+     * @return string
+     */
     protected function printFlexArts()
     {
         $this->loadRelatedArticles();
@@ -532,6 +807,12 @@ class OpenReport extends OpenDepts
         ])->render();
     }
     
+    /**
+     * Print out Flex Your Rights videos associated with responses
+     * included in this report.
+     *
+     * @return string
+     */
     protected function printFlexVids()
     {
         $this->loadRelatedArticles();
@@ -540,6 +821,14 @@ class OpenReport extends OpenDepts
         ])->render();
     }
     
+    /**
+     * This SurvLoop function provides customization of values reported
+     * in detail blocks.
+     *
+     * @param  int $nID
+     * @param  string $val
+     * @return string
+     */
     protected function printValCustom($nID, $val)
     {
         if (in_array($nID, [1486, 1528])) {

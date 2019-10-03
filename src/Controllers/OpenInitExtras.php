@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenInitExtras is a mid-level class which handles variable
+  * and lookup initializations used throughout the engine.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.15
+  */
 namespace OpenPolice\Controllers;
 
 use DB;

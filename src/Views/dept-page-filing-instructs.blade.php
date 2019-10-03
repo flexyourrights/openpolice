@@ -125,7 +125,8 @@
         @if (!isset($d["iaRow"]->OverOfficialAnon) 
             || intVal($d["iaRow"]->OverOfficialAnon) == 0)
             <li>Anonymous complaints will not be investigated.</li>
-        @elseif (!isset($d["iaRow"]->OverOfficialFormNotReq) || intVal($d["iaRow"]->OverOfficialFormNotReq) == 0)
+        @endif
+        @if (!isset($d["iaRow"]->OverOfficialFormNotReq) || intVal($d["iaRow"]->OverOfficialFormNotReq) == 0)
             <li>Only complaints submitted on department forms will be investigated.</li>
         @endif
         @if (isset($d["iaRow"]->OverWaySubNotary) && intVal($d["iaRow"]->OverWaySubNotary) == 1)

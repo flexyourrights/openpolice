@@ -1,9 +1,18 @@
 <?php
+/**
+  * OpenDevelopment is a mid-level class which handles the
+  * public area of the website for development documentation.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.2.1
+  */
 namespace OpenPolice\Controllers;
 
-use OpenPolice\Controllers\OpenReportTools;
+use OpenPolice\Controllers\OpenReportToolsAdmin;
 
-class OpenDevelopment extends OpenReportTools
+class OpenDevelopment extends OpenReportToolsAdmin
 {
     protected function printNavDevelopmentArea($nID)
     {

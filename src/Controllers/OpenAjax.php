@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenAjax is a mid-level class which handles custom requests
+  * via Ajax/jQuery patterns.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;

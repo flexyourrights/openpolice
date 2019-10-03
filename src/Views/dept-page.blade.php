@@ -32,18 +32,21 @@
             
             <div class="slCard mT20 mB20">
                 <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}"
-                    <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
-                    class="btn btn-primary btn-lg w100">Share Your Complaint or Compliment with the 
-                    {!! str_replace('Department', 'Dept', $d["deptRow"]->DeptName) !!}</a>
+            <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                    class="btn btn-primary btn-lg w100">Share Your Complaint or Compliment with the {!! 
+                        str_replace('Police Dept', '<nobr>Police Dept</nobr>', 
+                            str_replace('Department', 'Dept', $d["deptRow"]->DeptName))
+                    !!}</a>
             </div>
             
             <div class="slCard mT20 mB20">
                 <h3 class="mT0">Recent Complaints & Compliments</h3>
                 {!! $previews !!}
-                <div class="mBn5"><p><i class="slGrey">
-                OpenPolice.org is currently only beta testing with individual complainants.<br />
-                Use the button above to sign up.
-                </i></p></div>
+                <div class="mBn5"><p>
+                <a href="/join-beta-test/{{ $d['deptRow']->DeptSlug }}">
+            <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->DeptSlug }}" */ ?>
+                OpenPolice.org is currently beta testing with individual complainants.
+                </a></p></div>
             </div>
             
         </div>

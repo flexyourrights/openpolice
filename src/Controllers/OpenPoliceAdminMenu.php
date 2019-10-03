@@ -1,11 +1,12 @@
 <?php
 /**
-  * OpenPoliceAdminMenu is responsible for building the menu inside the dashboard area for all user types.
+  * OpenPoliceAdminMenu is responsible for building the menu inside the 
+  * dashboard area for all user types.
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
   * @author  Morgan Lesko <wikiworldorder@protonmail.com>
-  * @since 0.0
+  * @since v0.0.1
   */
 namespace OpenPolice\Controllers;
 
@@ -21,74 +22,20 @@ class OpenPoliceAdminMenu extends AdminMenu
         if (isset($this->currUser)) {
             $published = $flagged = 0;
             if ($this->currUser->hasRole('administrator|staff|databaser|brancher')) {
-                if ($this->currUser->hasRole('staff')) {
-                    $treeMenu[] = $this->admMenuLnk('/dash/staff', 'Dashboard', 
-                        '<i class="fa fa-home"></i>');
-                } else {
-                    $treeMenu[] = $this->admMenuLnk('/dashboard', 'Dashboard', 
-                        '<i class="fa fa-home"></i>');
-                }
-                $deptSubMenu = [
-                    $this->admMenuLnk('/dash/verify-next-department', 'Verify A Department'),
-                    $this->admMenuLnk('/dash/volunteer-edits-history', 'Volunteer History'),
-                    $this->admMenuLnk('/department-accessibility', 'Accessibility Scores Report')
-                ];
-                if ($GLOBALS["SL"]->REQ->has('cid')) {
-                    $deptSubMenu = $this->subLinksVerifDept();
-                }
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-frown-o" aria-hidden="true"></i>', 1, [
-                    $this->admMenuLnk('/dash/all-complete-complaints', 'Manage Complaints', '', 1, 
-                        $this->subLinksComplaintTypes()), 
-                    $this->admMenuLnk('/dash/volunteer', 'Manage Departments', '', 1, $deptSubMenu),
-                    $this->admMenuLnk('/dash/manage-partners', 'Manage Partners', '', 1, [
-                        $this->admMenuLnk('/dash/manage-attorneys', 'Attorneys'),
-                        $this->admMenuLnk('/dash/manage-organizations', 'Organizations'),
-                        $this->admMenuLnk('/dash/beta-test-signups', 'Beta Signups')
-                    ]),
-                    $this->admMenuLnk('/dash/team-resources', 'Team Resources')
-                ]);
+
+                return $this->loadAdmMenuStaff($currUser);
+
             } elseif ($this->currUser->hasRole('partner')) {
-                $treeMenu[] = $this->admMenuLnk('/dash/partner', 'Dashboard', '<i class="fa fa-home"></i>');
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Complaints', '<i class="fa fa-frown-o" aria-hidden="true"></i>', 1, [
-                    $this->admMenuLnk('/dash/all-complete-complaints', 'Manage Complaints', '', 1, 
-                        $this->subLinksComplaintTypes()), 
-                    $this->admMenuLnk('/dash/volunteer', 'Manage Departments'),
-                    $this->admMenuLnk('/dash/team-resources', 'Team Resources')
-                ]);
-                return $treeMenu;
+
+                return $this->loadAdmMenuPartner();
+
             } elseif ($this->currUser->hasRole('volunteer')) {
-                $treeMenu[] = $this->addAdmMenuCollapse();
-                $treeMenu[] = $this->admMenuLnk('/dash/volunteer', 'Dashboard', '<i class="fa fa-home"></i>');
-                $stars = '';
-                if (isset($GLOBALS["SL"]->x["yourUserInfo"]) 
-                    && isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars)) {
-                    $stars = '<nobr>';
-                    for ($s = 0; $s < $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars; $s++) {
-                        if ($s > 0 && $s%25 == 0) {
-                            $stars .= '</nobr><nobr>';
-                        }
-                        $stars .= '<img src="/openpolice/star1.png" border=0 height=15 '
-                            . 'class="mLn10" alt="Gold Star"> ';
-                    }
-                    $stars .= '</nobr>';
-                }
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Department List', 
-                    '<i class="fa fa-university" aria-hidden="true"></i>', 1, [
-                    $this->admMenuLnk('/dash/volunteer', 'All Departments'),
-                    $this->admMenuLnk('/dash/verify-next-department', 'Verify A Department', '', 1, 
-                        $this->subLinksVerifDept()),
-                    $this->admMenuLnk('/department-accessibility', 'Department Scores Report')
-                ]);
-                $treeMenu[] = $this->admMenuLnk('javascript:;', 'Volunteers', '<i class="fa fa-users"></i>', 1, [
-                    $this->admMenuLnk('/dash/volunteer-stars', 'All-Stars List'),
-                    $this->admMenuLnk('/my-profile', 'My Profile')
-                ]);
-                return $treeMenu;
+
+                return $this->loadAdmMenuVolunteer();
+
             }
         }
-        //$treeMenu = $this->addAdmMenuHome();
-        //return $treeMenu;
-        return $this->addAdmMenuBasics($treeMenu);
+        return $treeMenu;
     }
     
     private function subLinksVerifDept()
@@ -112,5 +59,183 @@ class OpenPoliceAdminMenu extends AdminMenu
             $this->admMenuLnk('/dash/all-incomplete-complaints', 'Incomplete Complaints')
         ]; */
     }
+
+    protected function loadAdmMenuStaff($currUser = null)
+    {
+        $treeMenu = [];
+        if ($this->currUser->hasRole('staff')) {
+            $treeMenu[] = $this->admMenuLnk(
+                '/dash/staff', 
+                'Dashboard', 
+                '<i class="fa fa-home"></i>'
+            );
+        } else {
+            $treeMenu[] = $this->addAdmMenuHome();
+        }
+        $deptSubMenu = [
+            $this->admMenuLnk(
+                '/dash/verify-next-department', 
+                'Verify A Department'
+            ),
+            $this->admMenuLnk(
+                '/dash/volunteer-edits-history', 
+                'Volunteer History'
+            ),
+            $this->admMenuLnk(
+                '/department-accessibility', 
+                'Accessibility Scores Report'
+            )
+        ];
+        if ($GLOBALS["SL"]->REQ->has('cid')) {
+            $deptSubMenu = $this->subLinksVerifDept();
+        }
+        $treeMenu[] = $this->admMenuLnk(
+            'javascript:;', 
+            'Complaints', 
+            '<i class="fa fa-frown-o" aria-hidden="true"></i>', 
+            1, 
+            [
+                $this->admMenuLnk(
+                    '/dash/all-complete-complaints', 
+                    'Manage Complaints', 
+                    '', 
+                    1, 
+                    $this->subLinksComplaintTypes()
+                ), 
+                $this->admMenuLnk(
+                    '/dash/volunteer', 
+                    'Manage Departments', 
+                    '', 
+                    1, 
+                    $deptSubMenu
+                ),
+                $this->admMenuLnk(
+                    '/dash/manage-partners', 
+                    'Manage Partners', 
+                    '', 
+                    1, 
+                    [
+                        $this->admMenuLnk(
+                            '/dash/manage-organizations', 
+                            'Organizations'
+                        ),
+                        $this->admMenuLnk(
+                            '/dash/manage-attorneys', 
+                            'Attorneys'
+                        ),
+                        $this->admMenuLnk(
+                            '/dash/beta-test-signups', 
+                            'Beta Signups'
+                        )
+                    ]
+                ),
+                $this->admMenuLnk(
+                    '/dash/team-resources', 
+                    'Team Resources'
+                )
+            ]
+        );
+        return $this->addAdmMenuBasics($treeMenu);
+    }
+
+    protected function loadAdmMenuPartner()
+    {
+        $treeMenu = [];
+        $treeMenu[] = $this->addAdmMenuCollapse();
+        $treeMenu[] = $this->admMenuLnk(
+            '/dash/partner', 
+            'Dashboard', 
+            '<i class="fa fa-home"></i>'
+        );
+        $treeMenu[] = $this->admMenuLnk(
+            'javascript:;', 
+            'Complaints', 
+            '<i class="fa fa-frown-o" aria-hidden="true"></i>', 
+            1, 
+            [
+                $this->admMenuLnk(
+                    '/dash/all-complete-complaints', 
+                    'Manage Complaints', 
+                    '', 
+                    1, 
+                    $this->subLinksComplaintTypes()
+                ), 
+                $this->admMenuLnk(
+                    '/dash/volunteer', 
+                    'Manage Departments'
+                ),
+                $this->admMenuLnk(
+                    '/dash/team-resources', 
+                    'Team Resources'
+                )
+            ]
+        );
+        return $treeMenu;
+    }
+
+    protected function loadAdmMenuVolunteer()
+    {
+        $treeMenu = [];
+        $treeMenu[] = $this->addAdmMenuCollapse();
+        $treeMenu[] = $this->admMenuLnk(
+            '/dash/volunteer', 
+            'Dashboard', 
+            '<i class="fa fa-home"></i>'
+        );
+        $stars = '';
+        if (isset($GLOBALS["SL"]->x["yourUserInfo"]) 
+            && isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars)) {
+            $stars = '<nobr>';
+            for ($s = 0; $s < $GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars; $s++) {
+                if ($s > 0 && $s%25 == 0) {
+                    $stars .= '</nobr><nobr>';
+                }
+                $stars .= '<img src="/openpolice/star1.png" border=0 height=15 '
+                    . 'class="mLn10" alt="Gold Star"> ';
+            }
+            $stars .= '</nobr>';
+        }
+        $treeMenu[] = $this->admMenuLnk(
+            'javascript:;', 
+            'Department List', 
+            '<i class="fa fa-university" aria-hidden="true"></i>', 
+            1, 
+            [
+                $this->admMenuLnk(
+                    '/dash/volunteer', 
+                    'All Departments'
+                ),
+                $this->admMenuLnk(
+                    '/dash/verify-next-department', 
+                    'Verify A Department', 
+                    '', 
+                    1, 
+                    $this->subLinksVerifDept()
+                ),
+                $this->admMenuLnk(
+                    '/department-accessibility', 
+                    'Department Scores Report'
+                )
+            ]
+        );
+        $treeMenu[] = $this->admMenuLnk(
+            'javascript:;', 
+            'Volunteers', 
+            '<i class="fa fa-users"></i>', 
+            1, 
+            [
+                $this->admMenuLnk(
+                    '/dash/volunteer-stars', 
+                    'All-Stars List'
+                ),
+                $this->admMenuLnk(
+                    '/my-profile', 
+                    'My Profile'
+                )
+            ]
+        );
+        return $treeMenu;
+    }
     
+
 }

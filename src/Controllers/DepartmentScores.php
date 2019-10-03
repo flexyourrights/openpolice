@@ -1,4 +1,13 @@
 <?php
+/**
+  * DepartmentScores is a side-class with functions to calculate,
+  * manage, and print out department accessibility scores.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.7
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -27,6 +36,11 @@ class DepartmentScores
     
     public function __construct()
     {
+        $GLOBALS["SL"]->x["defOverIA"] = $GLOBALS["SL"]->def
+            ->getID('Investigative Agency Types', 'Internal Affairs');
+        $GLOBALS["SL"]->x["defOverCiv"] = $GLOBALS["SL"]->def
+            ->getID('Investigative Agency Types', 'Civilian Oversight');
+
         $this->vals = [
             "WebForm"     => new DeptFldScore(20, 'OverComplaintWebForm', '', '',
                 'Has online-submittable complaint form (not just a PDF)'),
@@ -72,7 +86,7 @@ class DepartmentScores
             
             "Notary"      => new DeptFldScore(-10, 'OverWaySubNotary', '', '1',
                 'Requires notary (for one or more types of complaint)')
-            ];
+        ];
         $this->chartFlds = [ // column title, field name, trimmed fail value
             [
                 'Complaint Web Form',
@@ -122,7 +136,7 @@ class DepartmentScores
             $GLOBALS["SL"]->printColorFadeHex(0.6, '#FFFFFF', '#2B3493'),
             $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#EC2327'),
             '#EC2327'
-            ];
+        ];
         $this->stats = [
             "count" => 0,
             "score" => 0
@@ -137,34 +151,44 @@ class DepartmentScores
     {
         if (!$this->loaded) {
             $flts = "";
-            if (isset($searchFilts["deptID"]) && trim($searchFilts["deptID"]) != '') {
+            if (isset($searchFilts["deptID"]) 
+                && trim($searchFilts["deptID"]) != '') {
                 $flts .= "->where('DeptID', '" . trim($searchFilts["deptID"]) . "')";
-            } elseif (isset($searchFilts["state"]) && trim($searchFilts["state"]) != '') {
-                $flts .= "->where('DeptAddressState', '" . trim($searchFilts["state"]) . "')";
+            } elseif (isset($searchFilts["state"]) 
+                && trim($searchFilts["state"]) != '') {
+                $flts .= "->where('DeptAddressState', '" 
+                    . trim($searchFilts["state"]) . "')";
             }
-            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments::where('DeptVerified', '>', '2015-08-01 00:00:00')" 
+            $eval = "\$this->scoreDepts = App\\Models\\OPDepartments"
+                . "::where('DeptVerified', '>', '2015-08-01 00:00:00')" 
                 . $flts . "->orderBy('DeptScoreOpenness', 'desc')->get();";
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {
                 foreach ($this->scoreDepts as $i => $dept) {
-                    if (sizeof($searchFilts) == 0 || !isset($searchFilts["state"]) 
+                    if (sizeof($searchFilts) == 0 
+                        || !isset($searchFilts["state"]) 
                         || $searchFilts["state"] == $dept->DeptAddressState) {
-                        $this->deptNames[$dept->DeptID] = trim(str_replace('Department', 'Dept', 
-                            str_replace('Police Department', '', str_replace('Police Dept', '', $dept->DeptName))))
-                            . ', ' . $dept->DeptAddressState;
-                        $this->deptOvers[$dept->DeptID] = OPOversight::where('OverDeptID', $dept->DeptID)
-                            ->whereNotNull('OverAgncName')
-                            ->where('OverAgncName', 'NOT LIKE', '')
-                            ->orderBy('OverType', 'asc')
-                            ->first();
-                        if (isset($this->deptOvers[$dept->DeptID]->OverType) && $this->deptOvers[$dept->DeptID]->OverType 
-                            == $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight')) {
-                            $this->deptScore[$dept->DeptID] = OPOversight::where('OverDeptID', $dept->DeptID)
+                        $this->deptNames[$dept->DeptID] = trim(
+                            str_replace('Department', 'Dept',
+                            str_replace('Police Department', '', 
+                            str_replace('Police Dept', '', 
+                                $dept->DeptName)))
+                            ) . ', ' . $dept->DeptAddressState;
+                        $this->deptOvers[$dept->DeptID] 
+                            = OPOversight::where('OverDeptID', $dept->DeptID)
                                 ->whereNotNull('OverAgncName')
                                 ->where('OverAgncName', 'NOT LIKE', '')
-                                ->where('OverType', 
-                                    $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
+                                ->orderBy('OverType', 'asc')
                                 ->first();
+                        if (isset($this->deptOvers[$dept->DeptID]->OverType) 
+                            && $this->deptOvers[$dept->DeptID]->OverType 
+                                == $GLOBALS["SL"]->x["defOverCiv"]) {
+                            $this->deptScore[$dept->DeptID] 
+                                = OPOversight::where('OverDeptID', $dept->DeptID)
+                                    ->whereNotNull('OverAgncName')
+                                    ->where('OverAgncName', 'NOT LIKE', '')
+                                    ->where('OverType', $GLOBALS["SL"]->x["defOverIA"])
+                                    ->first();
                         }
                     }
                 }
@@ -182,7 +206,8 @@ class DepartmentScores
                     ->orWhere('ZedOverMadeDeptCall', 1)
                     ->orWhere('ZedOverMadeIACall', 1);
             })
-            ->select('ZedOverOverDeptID', 'ZedOverOnlineResearch', 'ZedOverMadeDeptCall', 'ZedOverMadeIACall', 'created_at')
+            ->select('ZedOverOverDeptID', 'ZedOverOnlineResearch', 
+                'ZedOverMadeDeptCall', 'ZedOverMadeIACall', 'created_at')
             ->orderBy('created_at', 'desc')
             ->get();
         if ($chk->isNotEmpty()) {
@@ -192,30 +217,36 @@ class DepartmentScores
                     if (!isset($verifCnt[$deptID])) {
                         $verifCnt[$deptID] = 0;
                     }
-                    if (isset($dept->ZedOverOnlineResearch) && intVal($dept->ZedOverOnlineResearch) == 1) {
+                    if (isset($dept->ZedOverOnlineResearch) 
+                        && intVal($dept->ZedOverOnlineResearch) == 1) {
                         $verifCnt[$deptID]++;
                     }
-                    if (isset($dept->ZedOverMadeDeptCall) && intVal($dept->ZedOverMadeDeptCall) == 1) {
+                    if (isset($dept->ZedOverMadeDeptCall) 
+                        && intVal($dept->ZedOverMadeDeptCall) == 1) {
                         $verifCnt[$deptID]++;
                     }
-                    if (isset($dept->ZedOverMadeIACall) && intVal($dept->ZedOverMadeIACall) == 1) {
+                    if (isset($dept->ZedOverMadeIACall) 
+                        && intVal($dept->ZedOverMadeIACall) == 1) {
                         $verifCnt[$deptID]++;
                     }
                     if (!isset($verifDates[$deptID])) {
                         $verifDates[$deptID] = $dept->created_at;
                     }
-                    if ($verifCnt[$deptID] > 0 && !in_array($deptID, $verifList)) {
+                    if ($verifCnt[$deptID] > 0 
+                        && !in_array($deptID, $verifList)) {
                         $verifList[] = $deptID;
                     }
                 }
             }
-            DB::table('OP_Departments')
-                ->update([ 'DeptVerified' => NULL ]);
+            DB::table('OP_Departments')->update([
+                'DeptVerified' => NULL
+            ]);
             foreach ($verifList as $i => $deptID) {
                 if (isset($verifDates[$deptID])) {
                     $dept = OPDepartments::find($deptID);
                     if ($dept && isset($dept->DeptID)) {
-                        $dept->DeptVerified = date("Y-m-d H:i:s", strtotime($verifDates[$deptID]));
+                        $dept->DeptVerified = date("Y-m-d H:i:s", 
+                            strtotime($verifDates[$deptID]));
                         $dept->save();
                     }
                 }
@@ -243,12 +274,14 @@ class DepartmentScores
                         }
                     }
                     $this->scoreDepts[$i]->save();
-                    $this->stats["score"] += $this->scoreDepts[$i]->DeptScoreOpenness;
+                    $this->stats["score"] 
+                        += $this->scoreDepts[$i]->DeptScoreOpenness;
                     $this->stats["count"]++;
                 }
             }
             if ($this->stats["count"] > 0) {
-                $this->stats["scoreAvg"] = $this->stats["score"]/$this->stats["count"];
+                $this->stats["scoreAvg"] 
+                    = $this->stats["score"]/$this->stats["count"];
             }
         }
         return true;
@@ -260,13 +293,15 @@ class DepartmentScores
             if ($deptID <= 0) {
                 return 0;
             }
-            $overrow = ((isset($this->deptScore[$deptID])) ? $this->deptScore[$deptID] : $this->deptOvers[$deptID]);
+            $overrow = ((isset($this->deptScore[$deptID])) 
+                ? $this->deptScore[$deptID] : $this->deptOvers[$deptID]);
             if (!$overrow) {
                 return 0;
             }
         }
         if (trim($specs->ifIs) != '') {
-            if (isset($overrow->{ $specs->fld }) && trim($overrow->{ $specs->fld }) == $specs->ifIs) {
+            if (isset($overrow->{ $specs->fld }) 
+                && trim($overrow->{ $specs->fld }) == $specs->ifIs) {
                 return $specs->score;
             }
         } else { // score defined by absence of value
@@ -310,26 +345,28 @@ class DepartmentScores
             "datOut" => $datOut,
             "colorG" => $this->gradeColors[0],
             "colorB" => $this->gradeColors[4]
-            ])->render();
+        ])->render();
     }
     
     public function loadDeptStuff($deptID = -3)
     {
-        if (!isset($GLOBALS["SL"]->x["depts"])) $GLOBALS["SL"]->x["depts"] = [];
+        if (!isset($GLOBALS["SL"]->x["depts"])) {
+            $GLOBALS["SL"]->x["depts"] = [];
+        }
         if ($deptID > 0 && !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
             $d = [ "id" => $deptID ];
             $d["deptRow"] = OPDepartments::find($deptID);
             $d["iaRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs'))
+                ->where('OverType', $GLOBALS["SL"]->x["defOverIA"])
                 ->first();
             $d["civRow"] = OPOversight::where('OverDeptID', $deptID)
-                ->where('OverType', $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight'))
+                ->where('OverType', $GLOBALS["SL"]->x["defOverCiv"])
                 ->first();
             if (!isset($d["iaRow"]) || !$d["iaRow"]) {
                 $d["iaRow"] = new OPOversight;
                 $d["iaRow"]->OverDeptID = $deptID;
                 if ($d["deptRow"] && isset($d["deptRow"]->DeptName)) {
-                    $d["iaRow"]->OverType = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Internal Affairs');
+                    $d["iaRow"]->OverType = $GLOBALS["SL"]->x["defOverIA"];
                     $d["iaRow"]->OverAgncName = $d["deptRow"]->DeptName;
                     $d["iaRow"]->OverAddress = $d["deptRow"]->DeptAddress;
                     $d["iaRow"]->OverAddress2 = $d["deptRow"]->DeptAddress2;
@@ -340,54 +377,68 @@ class DepartmentScores
                 }
                 $d["iaRow"]->save();
             }
-            if (isset($d["deptRow"]->DeptName)&& trim($d["deptRow"]->DeptName) != '') {
-                if (!isset($d["iaRow"]->OverAgncName) || trim($d["iaRow"]->OverAgncName) == '') {
+            if (isset($d["deptRow"]->DeptName)
+                && trim($d["deptRow"]->DeptName) != '') {
+                if (!isset($d["iaRow"]->OverAgncName) 
+                    || trim($d["iaRow"]->OverAgncName) == '') {
                     $d["iaRow"]->OverAgncName= $d["deptRow"]->DeptName;
                     $d["iaRow"]->save();
                 }
                 if ($d["deptRow"] && isset($d["deptRow"]->DeptAddress)) {
                     $d["deptAddy"] = $d["deptRow"]->DeptAddress . ', ';
-                    if (isset($d["deptRow"]->DeptAddress2) && trim($d["deptRow"]->DeptAddress2) != '') {
+                    if (isset($d["deptRow"]->DeptAddress2) 
+                        && trim($d["deptRow"]->DeptAddress2) != '') {
                         $d["deptAddy"] .= $d["deptRow"]->DeptAddress2 . ', ';
                     }
-                    $d["deptAddy"] .= $d["deptRow"]->DeptAddressCity . ', ' . $d["deptRow"]->DeptAddressState . ' ' 
-                        . $d["deptRow"]->DeptAddressZip;
+                    $d["deptAddy"] .= $d["deptRow"]->DeptAddressCity 
+                        . ', ' . $d["deptRow"]->DeptAddressState 
+                        . ' ' . $d["deptRow"]->DeptAddressZip;
                     $d["iaAddy"] = '';
-                    if (isset($d["iaRow"]->OverAddress) && trim($d["iaRow"]->OverAddress) != '') {
+                    if (isset($d["iaRow"]->OverAddress) 
+                        && trim($d["iaRow"]->OverAddress) != '') {
                         $d["iaAddy"] = $d["iaRow"]->OverAddress . ', ';
-                        if (isset($d["iaRow"]->OverAddress2) && trim($d["iaRow"]->OverAddress2) != '') {
+                        if (isset($d["iaRow"]->OverAddress2) 
+                            && trim($d["iaRow"]->OverAddress2) != '') {
                             $d["iaAddy"] .= $d["iaRow"]->OverAddress2 . ', ';
                         }
-                        $d["iaAddy"] .= $d["iaRow"]->OverAddressCity . ', ' . $d["iaRow"]->OverAddressState . ' ' 
-                            . $d["iaRow"]->OverAddressZip;
+                        $d["iaAddy"] .= $d["iaRow"]->OverAddressCity 
+                            . ', ' . $d["iaRow"]->OverAddressState 
+                            . ' ' . $d["iaRow"]->OverAddressZip;
                     }
                     $d["civAddy"]  = '';
-                    if (isset($d["civRow"]->OverAddress) && trim($d["civRow"]->OverAddress) != '') {
+                    if (isset($d["civRow"]->OverAddress) 
+                        && trim($d["civRow"]->OverAddress) != '') {
                         $d["civAddy"] = $d["civRow"]->OverAddress . ', ';
-                        if (isset($d["civRow"]->OverAddress2) && trim($d["civRow"]->OverAddress2) != '') {
+                        if (isset($d["civRow"]->OverAddress2) 
+                            && trim($d["civRow"]->OverAddress2) != '') {
                             $d["civAddy"] .= $d["civRow"]->OverAddress2 . ', ';
                         }
-                        $d["civAddy"] .= $d["civRow"]->OverAddressCity . ', ' . $d["civRow"]->OverAddressState . ' ' 
-                            . $d["civRow"]->OverAddressZip;
+                        $d["civAddy"] .= $d["civRow"]->OverAddressCity 
+                            . ', ' . $d["civRow"]->OverAddressState 
+                            . ' ' . $d["civRow"]->OverAddressZip;
                     }
                 }
             }
             
-            $d["whichOver"] = $which = ((isset($d["civRow"]) && isset($d["civRow"]->OverAgncName)
-                && trim($d["civRow"]->OverAgncName) != '') ? "civRow" :"iaRow");
+            $d["whichOver"] = $which = 'iaRow';
+            if (isset($d["civRow"]) && isset($d["civRow"]->OverAgncName)
+                && trim($d["civRow"]->OverAgncName) != '') {
+                $d["whichOver"] = $which = 'civRow';
+            }
             $d["overUser"] = $d["score"] = [];
             if (isset($d[$which]) && isset($d[$which]->OverEmail)) {
                 $email = $d[$which]->OverEmail;
-                $d["overUser"] = User::where('email', $email)->first();
+                $d["overUser"] = User::where('email', $email)
+                    ->first();
             }
-            if (isset($d) && isset($d["iaRow"])) { // isset($GLOBALS["SL"]->x["depts"])
+            if (isset($d) && isset($d["iaRow"])) {
+                // isset($GLOBALS["SL"]->x["depts"])
                 foreach ($this->vals as $type => $specs) {
                     $d["score"][] = [
                         $specs->score,
                         $specs->label,
-                        ($this->checkRecFld($specs, -3, $d["iaRow"])
-                            != 0)
-                        ];
+                        ($this->checkRecFld($specs, -3, $d["iaRow"]) != 0)
+                    ];
                 }
             }
             $GLOBALS["SL"]->x["depts"][$deptID] = $d;
@@ -397,10 +448,13 @@ class DepartmentScores
     
     public function printMapScoreDesc($deptID = 0)
     {
-        if (!isset($GLOBALS["SL"]->x["depts"]) || !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+        if (!isset($GLOBALS["SL"]->x["depts"]) 
+            || !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
             return '';
         }
-        return view('vendor.openpolice.dept-kml-desc', [ "dept" => $GLOBALS["SL"]->x["depts"][$deptID] ])->render();
+        return view('vendor.openpolice.dept-kml-desc', [
+            "dept" => $GLOBALS["SL"]->x["depts"][$deptID]
+        ])->render();
     }
     
     

@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenVolunteers is a side-class with functions to
+  * manage and print volunteers rankings.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.1
+  */
 namespace OpenPolice\Controllers;
 
 use DB;

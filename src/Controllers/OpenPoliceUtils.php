@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenPoliceUtils is the bottom-level class extending SurvLoop
+  * that performs smaller data translation, lookup functions.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -510,6 +519,7 @@ class OpenPoliceUtils extends TreeSurvForm
         if (sizeof($this->allegations) == 0 
             && isset($this->sessData->dataSets["AllegSilver"]) 
             && isset($this->sessData->dataSets["AllegSilver"][0])) {
+            $allegSilv = $this->sessData->dataSets["AllegSilver"][0];
             foreach ($this->worstAllegations as $i => $alleg) {
                 $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
                 switch ($alleg[1]) {
@@ -517,7 +527,6 @@ class OpenPoliceUtils extends TreeSurvForm
                     case 'Unreasonable Force':
                     case 'Wrongful Arrest':
                     case 'Wrongful Property Seizure':
-                    case 'Intimidating Display of Weapon':
                     case 'Wrongful Search':
                     case 'Wrongful Detention':
                     case 'Bias-Based Policing':
@@ -530,6 +539,10 @@ class OpenPoliceUtils extends TreeSurvForm
                     case 'Excessive Citation':
                         $allegInfo[1] .= $this->chkSilvAlleg($alleg[2], $alleg[1], $alleg[0]);
                         break;
+                    case 'Intimidating Display of Weapon':
+                        if ($this->checkAllegIntimidWeaponSilver($allegSilv)) {
+                            $allegInfo[1] .= ', ' . $this->getAllegDesc($allegName, $allegID);
+                        }
                     case 'Wrongful Entry':
                         if (isset($this->sessData->dataSets["Stops"]) 
                             && sizeof($this->sessData->dataSets["Stops"]) > 0) {
@@ -537,20 +550,21 @@ class OpenPoliceUtils extends TreeSurvForm
                                 if (isset($stop->StopAllegWrongfulEntry) 
                                     && $stop->StopAllegWrongfulEntry == 'Y') {
                                     $allegRec = $this->getAllegGoldRec($alleg[1], $alleg[0]);
-                                    $allegInfo[1] .= ', ' . $this->getAllegDesc($alleg[1], $alleg[0], $allegRec);
+                                    $allegInfo[1] .= ', ' 
+                                        . $this->getAllegDesc($alleg[1], $alleg[0], $allegRec);
                                 }
                             }
                         }
                         break;
                     case 'Miranda Rights':
-                        if (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestMiranda)
-                            && $this->sessData->dataSets["AllegSilver"][0]->AlleSilArrestMiranda == 'Y') {
+                        if (isset($allegSilv->AlleSilArrestMiranda)
+                            && $allegSilv->AlleSilArrestMiranda == 'Y') {
                             $allegInfo[1] .= ' ';
                         }
                         break;
                     case 'Officer Refused To Provide ID':
-                        if (isset($this->sessData->dataSets["AllegSilver"][0]->AlleSilOfficerRefuseID)
-                            && $this->sessData->dataSets["AllegSilver"][0]->AlleSilOfficerRefuseID == 'Y') {
+                        if (isset($allegSilv->AlleSilOfficerRefuseID)
+                            && $allegSilv->AlleSilOfficerRefuseID == 'Y') {
                             $allegInfo[1] .= ' ';
                         }
                         break;
@@ -683,13 +697,28 @@ class OpenPoliceUtils extends TreeSurvForm
         return $ret;
     }
     
+    protected function intimidWeaponNos()
+    {
+        return [
+            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'No'),
+            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'Not sure')
+        ];
+    }
+    
+    protected function checkAllegIntimidWeaponSilver($allegSilv)
+    {
+        if (isset($allegSilv->AlleSilIntimidatingWeapon) 
+            && in_array(intVal($allegSilv->AlleSilIntimidatingWeapon), $this->intimidWeaponNos())) {
+
+        }
+
+    }
+    
     protected function checkAllegIntimidWeapon($alleg)
     {
-        $defA = $GLOBALS["SL"]->def->getID('Allegation Type', 'Intimidating Display of Weapon');
-        $defB = $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'N/A');
-        $defC = $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'Don\'t Know');
-        return ($alleg->AlleType != $defA 
-            || !in_array($alleg->AlleIntimidatingWeapon, [$defB, $defC]));
+        $def = $GLOBALS["SL"]->def->getID('Allegation Type', 'Intimidating Display of Weapon');
+        return ($alleg->AlleType != $def 
+            || !in_array($alleg->AlleIntimidatingWeapon, $this->intimidWeaponNos()));
     }
     
     protected function getAllegID($allegName)

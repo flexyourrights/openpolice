@@ -1,4 +1,14 @@
 <?php
+/**
+  * OpenSessDataOverride is a mid-level class which provides
+  * custom overrides for data which is pre-loaded
+  * in survey form fields.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.15
+  */
 namespace OpenPolice\Controllers;
 
 use Auth;

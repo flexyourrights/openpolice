@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenComplaintSaves is a mid-level class which handles custom overrides 
+  * for storing survey form field submissions.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -19,7 +28,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
         if ($this->treeID == 1 && isset($this->sessData->dataSets["Complaints"])) {
-            $this->sessData->dataSets["Complaints"][0]->update([ "updated_at" => date("Y-m-d H:i:s") ]);
+            $this->sessData->dataSets["Complaints"][0]->update([
+                "updated_at" => date("Y-m-d H:i:s")
+            ]);
         }
         // Main Complaint Survey...
         if ($nID == 439) {
@@ -55,7 +66,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
             
         // Department Editor Survey ...
         } elseif ($nID == 2232) {
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', date('Y-m-d H:i:s'));
+            $date = date('Y-m-d H:i:s');
+            $this->sessData->currSessData($nID, $tbl, $fld, 'update', $date);
             return true;
         } elseif ($nID == 1285) {
             return $this->saveDeptSubWays1($nID);
@@ -96,9 +108,13 @@ class OpenComplaintSaves extends OpenComplaintConditions
     
     protected function saveStartTime($nID, $tbl, $fld)
     {
-        $time = $this->postFormTimeStr($nID);
         $dateNode = ((in_array($nID, [16, 17])) ? 15 : 2261);
-        $date = date("Y-m-d", strtotime($this->getRawFormDate($dateNode)));
+        $date = $this->getRawFormDate($dateNode);
+        if (trim($date) == '') {
+            $date = '0000-00-00';
+        }
+        $date = date("Y-m-d", strtotime($date));
+        $time = $this->postFormTimeStr($nID);
         if ($time === null) {
             $date .= ' 00:00:00';
         } else {
@@ -110,11 +126,17 @@ class OpenComplaintSaves extends OpenComplaintConditions
     
     protected function saveCitationVictim($nID)
     {
-        if (isset($this->sessData->dataSets["Civilians"]) && sizeof($this->sessData->dataSets["Civilians"]) == 1) {
-            if ($GLOBALS["SL"]->REQ->has('n234fld') && trim($GLOBALS["SL"]->REQ->get('n234fld')) == 'Y') {
-                $this->sessData->dataSets["Civilians"][0]->update([ 'CivGivenCitation' => 'Y' ]);
+        if (isset($this->sessData->dataSets["Civilians"]) 
+            && sizeof($this->sessData->dataSets["Civilians"]) == 1) {
+            if ($GLOBALS["SL"]->REQ->has('n234fld') 
+                && trim($GLOBALS["SL"]->REQ->get('n234fld')) == 'Y') {
+                $this->sessData->dataSets["Civilians"][0]->update([
+                    'CivGivenCitation' => 'Y'
+                ]);
             } else {
-                $this->sessData->dataSets["Civilians"][0]->update([ 'CivGivenCitation' => 'N' ]);
+                $this->sessData->dataSets["Civilians"][0]->update([
+                    'CivGivenCitation' => 'N'
+                ]);
             }
         }
         return false;
@@ -128,7 +150,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
         $civs = $this->sessData->getLoopRows('Victims');
         if ($civs && sizeof($civs) > 0) {
             foreach ($civs as $i => $civ) {
-                if ($isEmpty || !in_array($civ->CivID, $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))) {
+                $reqArr = $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld');
+                if ($isEmpty || !in_array($civ->CivID, $reqArr)) {
                     $civ->update([ 'CivGivenCitation' => 'N' ]);
                 } else {
                     $civ->update([ 'CivGivenCitation' => 'Y' ]);
@@ -169,7 +192,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
     protected function saveForceTypes($nID)
     {
         $GLOBALS["SL"]->def->loadDefs('Force Type');
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') && is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))
+        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
+            && is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))
             && sizeof($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
             foreach ($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') as $forceType) {
                 if ($this->getForceEveID($forceType) <= 0 && $this->coreID > 0) {
@@ -184,23 +208,25 @@ class OpenComplaintSaves extends OpenComplaintConditions
                         }
                     }
                     $currCivs = $this->getLinkedToEvent('Civilian', $eveID);
-                    if ($GLOBALS["SL"]->REQ->has('n2043res' . $fInd . 'fld') 
-                        && is_array($GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld'))
-                        && sizeof($GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld')) > 0) {
-                        foreach ($GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld') as $civID) {
-                            if (!in_array($civID, $currCivs)) {
-                                $newLnk = new OPLinksCivilianEvents;
-                                $newLnk->LnkCivEveEveID = $eveID;
-                                $newLnk->LnkCivEveCivID = $civID;
-                                $newLnk->save();
+                    if ($GLOBALS["SL"]->REQ->has('n2043res' . $fInd . 'fld')) {
+                        $reqArr = $GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld');
+                        if (is_array($reqArr) && sizeof($reqArr) > 0) {
+                            foreach ($reqArr as $civID) {
+                                if (!in_array($civID, $currCivs)) {
+                                    $newLnk = new OPLinksCivilianEvents;
+                                    $newLnk->LnkCivEveEveID = $eveID;
+                                    $newLnk->LnkCivEveCivID = $civID;
+                                    $newLnk->save();
+                                }
                             }
                         }
                     }
                     if (sizeof($currCivs) > 0) {
                         foreach ($currCivs as $currCivID) {
-                            if (!$GLOBALS["SL"]->REQ->has('n2043res' . $fInd . 'fld') 
-                                || !is_array($GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld'))
-                                || !in_array($currCivID, $GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld'))) {
+                            $fld = 'n2043res' . $fInd . 'fld';
+                            if (!$GLOBALS["SL"]->REQ->has($fld) 
+                                || !is_array($GLOBALS["SL"]->REQ->get($fld))
+                                || !in_array($currCivID, $GLOBALS["SL"]->REQ->get($fld))) {
                                 OPLinksCivilianEvents::where('LnkCivEveEveID', $eveID)
                                     ->where('LnkCivEveCivID', $currCivID)
                                     ->delete();
@@ -286,15 +312,19 @@ class OpenComplaintSaves extends OpenComplaintConditions
             if (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) <= 0) {
                 $newInj = new OPInjuries;
                 $newInj->InjType = $handcuffDefID;
-                $newInj->InjSubjectID = ((isset($stopRow[0]["Civilians"][0])) ? $stopRow[0]["Civilians"][0] : -3);
+                $newInj->InjSubjectID = ((isset($stopRow[0]["Civilians"][0])) 
+                    ? $stopRow[0]["Civilians"][0] : -3);
                 $newInj->save();
                 $this->sessData->dataSets["Injuries"]["Handcuff"][] = $newInj;
                 OPStops::find($stopRow[0]["Event"]->StopID)
                     ->update(array('StopSubjectHandcuffInjury' => $newInj->InjID));
             }
         } elseif (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) > 0) {
-            OPStops::find($stopRow[0]["Event"]->StopID)->update(array('StopSubjectHandcuffInjury' => NULL));
-            $this->sessData->deleteDataItem($nID, 'Injuries', $stopRow[0]["Event"]->StopSubjectHandcuffInjury);
+            OPStops::find($stopRow[0]["Event"]->StopID)->update([
+                'StopSubjectHandcuffInjury' => NULL
+            ]);
+            $inj = $stopRow[0]["Event"]->StopSubjectHandcuffInjury;
+            $this->sessData->deleteDataItem($nID, 'Injuries', $inj);
         }
         return false;
     }
@@ -304,7 +334,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
         if ($GLOBALS["SL"]->REQ->get('step') != 'next') {
             return true;
         }
-        $this->sessData->dataSets['Complaints'][0]->ComStatus = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
+        $this->sessData->dataSets['Complaints'][0]->ComStatus 
+            = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
         $this->sessData->dataSets['Complaints'][0]->save();
         return false;
     }

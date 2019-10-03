@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenDashAdmin is a side-class which handles calculations and printing
+  * of graphs and reports for the main staff dashboard.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -99,10 +108,10 @@ class OpenDashAdmin
             ->where('OP_zComplaintReviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
             ->select('OP_Complaints.ComUserID', 'OP_zComplaintReviews.*')
             ->get(); */
-        $contacts = OPzComplaintReviews::where('OP_zComplaintReviews.ComRevType', 'LIKE', 'Update')
-            ->whereNotNull('OP_zComplaintReviews.ComRevNote')
-            ->where('OP_zComplaintReviews.ComRevNote', 'NOT LIKE', 'Update')
-            ->where('OP_zComplaintReviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+        $contacts = OPzComplaintReviews::where('ComRevType', 'LIKE', 'Update')
+            ->whereNotNull('ComRevNote')
+            ->where('ComRevNote', 'NOT LIKE', 'Update')
+            ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
             ->get();
         if ($contacts->isNotEmpty()) {
             foreach ($contacts as $i => $rec) {
@@ -420,8 +429,12 @@ class OpenDashAdmin
                     $days[$day]["callsIAV"]        += intVal($e->ZedOverMadeIACall);
                     $days[$day]["callsTotV"]       += intVal($e->ZedOverMadeDeptCall) + intVal($e->ZedOverMadeIACall);
                 }
-                if (!in_array($e->ZedDeptUserID, $days[$day]["users"])) $days[$day]["users"][] = $e->ZedDeptUserID;
-                if (!in_array($e->ZedOverDeptID, $days[$day]["depts"])) $days[$day]["depts"][] = $e->ZedOverDeptID;
+                if (!in_array($e->ZedDeptUserID, $days[$day]["users"])) {
+                    $days[$day]["users"][] = $e->ZedDeptUserID;
+                }
+                if (!in_array($e->ZedOverDeptID, $days[$day]["depts"])) {
+                    $days[$day]["depts"][] = $e->ZedOverDeptID;
+                }
             }
         }
         

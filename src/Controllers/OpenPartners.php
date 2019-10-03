@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenPartners is mid-level class with functions for managing various
+  * organizational partners, include those for their custom pages.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -13,14 +22,23 @@ use OpenPolice\Controllers\OpenVolunteers;
 
 class OpenPartners extends OpenVolunteers
 {
+    /**
+     * Print the top-level overview dashboard
+     * for managing all types of partners.
+     *
+     * @return string
+     */
     protected function printPartnersOverview()
     {
         $this->loadPartnerTypes();
         foreach ($this->v["prtnTypes"] as $i => $p) {
-            $this->v["prtnTypes"][$i]["tot"] = OPPartners::where('PartType', $p["defID"])
-                ->count();
+            $this->v["prtnTypes"][$i]["tot"] 
+                = OPPartners::where('PartType', $p["defID"])->count();
         }
-        return view('vendor.openpolice.nodes.1939-manage-partners-overview', $this->v)->render();
+        return view(
+            'vendor.openpolice.nodes.1939-manage-partners-overview', 
+            $this->v
+        )->render();
     }
     
     protected function printPartnerCapabilitiesOverview()
@@ -32,11 +50,12 @@ class OpenPartners extends OpenVolunteers
                 "def" => $def->DefValue,
                 "tot" => OPPartnerCapac::where('PrtCapCapacity', $def->DefID)
                     ->count()
-                ];
+            ];
         }
-        return view('vendor.openpolice.nodes.2169-partner-overview-capabilities', [
-            "capac" => $capac
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.2169-partner-overview-capabilities', 
+            [ "capac" => $capac ]
+        )->render();
     }
     
     protected function printManageAttorneys($type = 'Attorney')
@@ -55,7 +74,10 @@ class OpenPartners extends OpenVolunteers
             if ($p["defID"] == $defAtt) {
                 $this->v["partners"] = $this->getPartnersOfType($p["defID"]);
                 $this->v["prtnType"] = $p;
-                return view('vendor.openpolice.nodes.2166-manage-attorneys', $this->v)->render();
+                return view(
+                    'vendor.openpolice.nodes.2166-manage-attorneys', 
+                    $this->v
+                )->render();
             }
         }
         return '';
@@ -64,13 +86,15 @@ class OpenPartners extends OpenVolunteers
     protected function getPartnersOfType($partTypeDef = 584, $statusIn = [1])
     {
         return DB::table('OP_Partners')
-            ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', '=', 'OP_Partners.PartPersonID')
+            ->join('OP_PersonContact', 'OP_PersonContact.PrsnID', 
+                '=', 'OP_Partners.PartPersonID')
             ->leftJoin('users', 'users.id', '=', 'OP_Partners.PartUserID')
             ->where('OP_Partners.PartType', $partTypeDef)
             ->whereIn('OP_Partners.PartStatus', $statusIn)
             ->select('OP_Partners.*', 'users.name', 'users.email', 'OP_PersonContact.PrsnNickname', 
                 'OP_PersonContact.PrsnNameFirst', 'OP_PersonContact.PrsnNameLast',
-                'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState')
+                'OP_PersonContact.PrsnAddressCity', 'OP_PersonContact.PrsnAddressState',
+                'OP_PersonContact.PrsnEmail')
             ->orderBy('OP_PersonContact.PrsnNickname', 'asc')
             ->get();
     }
@@ -81,14 +105,18 @@ class OpenPartners extends OpenVolunteers
         $links = OPPartnerCapac::get();
         if ($links->isNotEmpty()) {
             foreach ($links as $lnk) {
-                if (isset($lnk->PrtCapPartID) && intVal($lnk->PrtCapPartID) > 0 && isset($lnk->PrtCapCapacity)
+                if (isset($lnk->PrtCapPartID) 
+                    && intVal($lnk->PrtCapPartID) > 0 
+                    && isset($lnk->PrtCapCapacity)
                     && intVal($lnk->PrtCapCapacity) > 0) {
                     if (!isset($lookup[$lnk->PrtCapPartID])) {
                         $lookup[$lnk->PrtCapPartID] = [];
                     }
                     if ($inEnglish) {
-                        $lookup[$lnk->PrtCapPartID][] 
-                            = $GLOBALS["SL"]->def->getVal('Organization Capabilities', $lnk->PrtCapCapacity);
+                        $lookup[$lnk->PrtCapPartID][] = $GLOBALS["SL"]->def->getVal(
+                            'Organization Capabilities', 
+                            $lnk->PrtCapCapacity
+                        );
                     } else {
                         $lookup[$lnk->PrtCapPartID][] = $lnk->PrtCapCapacity;
                     }
@@ -109,17 +137,20 @@ class OpenPartners extends OpenVolunteers
                 $this->sessData->dataSets["PartnerCaseTypes"][$i]->save();
             }
         }
-        if ($GLOBALS["SL"]->REQ->has('nv2074') && intVal($GLOBALS["SL"]->REQ->get('nv2074')) > 0
+        if ($GLOBALS["SL"]->REQ->has('nv2074') 
+            && intVal($GLOBALS["SL"]->REQ->get('nv2074')) > 0
             && isset($this->sessData->dataSets["Partners"])) {
-            $this->sessData->dataSets["Partners"][0]->PartType = intVal($GLOBALS["SL"]->REQ->get('nv2074'));
+            $this->sessData->dataSets["Partners"][0]->PartType 
+                = intVal($GLOBALS["SL"]->REQ->get('nv2074'));
         }
         return '';
     }
     
     protected function printPartnersOverviewPublic($nID = -3)
     {
+        $orgDef = $GLOBALS["SL"]->def->getID('Partner Types', 'Organization');
         return view('vendor.openpolice.nodes.2179-list-organizations', [
-            "orgs"  => $this->getPartnersOfType($GLOBALS["SL"]->def->getID('Partner Types', 'Organization')),
+            "orgs"  => $this->getPartnersOfType($orgDef),
             "capab" => $this->loadPartnerCapabLookups(true)
         ])->render();
     }
@@ -148,34 +179,48 @@ class OpenPartners extends OpenVolunteers
         if (!isset($this->sessData->dataSets["Partners"])) {
             return '';
         }
+        $attDef = $GLOBALS['SL']->def->getID('Partner Types', 'Attorney');
+        $slg = (($this->sessData->dataSets['Partners'][0]->PartType == $attDef)
+            ? 'attorney' : 'org');
         return view('vendor.openpolice.nodes.1961-public-attorney-header', [
             "nID" => $nID,
             "dat" => $this->sessData->dataSets,
-            "slg" => (($this->sessData->dataSets['Partners'][0]->PartType 
-                == $GLOBALS['SL']->def->getID('Partner Types', 'Attorney')) ? 'attorney' : 'org')
+            "slg" => $slg
         ])->render();
+    }
+
+    protected function getPartnerCoreID(Request $request)
+    {
+        $coreID = (($this->coreID > 0) ? $this->coreID : -3);
+        if (session()->has('opcPartID')) {
+            $coreID = session()->get('opcPartID');
+        }
+        if ($request->has('atr') && intVal($request->get('atr'))) {
+            $coreID = intVal($request->get('atr'));
+        }
+        return $coreID;
     }
     
     protected function partnerShareStory(Request $request, $prtnSlug = '', $type = 'attorney', $tree = 62)
     {
-        $this->loadPageVariation($request, 1, $tree, '/preparing-complaint-for-' . $type . '/' . $prtnSlug);
+        $pageUrl = '/preparing-complaint-for-' . $type . '/' . $prtnSlug;
+        $this->loadPageVariation($request, 1, $tree, $pageUrl);
         $partRow = OPPartners::where('PartSlug', $prtnSlug)
             ->first();
         if ($partRow && isset($partRow->PartID)) {
             session()->put('opcPartID', $partRow->PartID);
+            $request->cid = $partRow->PartID;
+        }
+        $coreID = $this->getPartnerCoreID($GLOBALS["SL"]->REQ);
+        if ($coreID > 0) {
+            $this->loadSessionData('Partners', $coreID);
         }
         return $this->index($request);
     }
     
     protected function printPreparePartnerHeader($nID = -3)
     {
-        $coreID = (($this->coreID > 0) ? $this->coreID : -3);
-        if (session()->has('opcPartID')) {
-            $coreID = session()->get('opcPartID');
-        }
-        if ($GLOBALS["SL"]->REQ->has('atr') && intVal($GLOBALS["SL"]->REQ->get('atr'))) {
-            $coreID = intVal($GLOBALS["SL"]->REQ->get('atr'));
-        }
+        $coreID = $this->getPartnerCoreID($GLOBALS["SL"]->REQ);
         // link partner with [new] complaint record
         
         $this->loadSessionData('Partners', $coreID);
@@ -187,15 +232,14 @@ class OpenPartners extends OpenVolunteers
         return view('vendor.openpolice.nodes.2069-prepare-complaint-org', [
             "nID" => $nID,
             "dat" => $this->sessData->dataSets
-            ])->render();
+        ])->render();
     }
     
     protected function printAttorneyReferrals($nID = -3)
     {
-        
         return view('vendor.openpolice.nodes.1896-attorney-referral-listings', [
             "nID" => $nID
-            ])->render();
+        ])->render();
     }
     
     public function attorneyPage(Request $request, $prtnSlug = '')
@@ -227,14 +271,23 @@ class OpenPartners extends OpenVolunteers
             "nID"  => $nID,
             "dat"  => $this->sessData->dataSets,
             "type" => $this->sessData->dataSets["Partners"][0]->PartType
-            ])->render();
+        ])->render();
+    }
+    
+    protected function publicPartnerPageClinicOnly($nID = -3)
+    {
+        return view('vendor.openpolice.nodes.2677-partner-clinic-only', [
+            "dat"  => $this->sessData->dataSets,
+            "type" => $this->sessData->dataSets["Partners"][0]->PartType
+        ])->render();
     }
     
     protected function volunStars()
     {
         $this->v["leaderboard"] = new VolunteerLeaderboard;
         $this->v["yourStats"] = [];
-        if ($this->v["leaderboard"]->UserInfoStars && sizeof($this->v["leaderboard"]->UserInfoStars) > 0) {
+        if ($this->v["leaderboard"]->UserInfoStars 
+            && sizeof($this->v["leaderboard"]->UserInfoStars) > 0) {
             foreach ($this->v["leaderboard"]->UserInfoStars as $i => $volunUser) {
                 if ($volunUser->UserInfoUserID == $this->v["uID"]) {
                     $this->v["yourStats"] = $volunUser;
@@ -250,9 +303,11 @@ class OpenPartners extends OpenVolunteers
             $this->v["fltIDs"] = [];
         }
         $this->v["fltDept"] = -3;
-        if ($this->v["user"]->hasRole('partner') && $this->v["user"]->hasRole('oversight')) {
+        if ($this->v["user"]->hasRole('partner') 
+            && $this->v["user"]->hasRole('oversight')) {
             $this->v["fltIDs"][0] = [];
-            $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)->first();
+            $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)
+                ->first();
             if ($overRow && isset($overRow->OverDeptID)) {
                 $this->v["fltDept"] = $overRow->OverDeptID;
                 $lnkChk = OPLinksComplaintDept::select('LnkComDeptComplaintID')

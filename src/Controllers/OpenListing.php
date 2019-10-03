@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenListing is a mid-level class which handles the printing
+  * of listings of conduct reports, mostly in preview.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -91,7 +100,6 @@ class OpenListing extends OpenAjax
         $ret = '';
         $cacheName = 'complaint' . $complaint->ComID . '-preview-' 
             . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
-//echo 'cacheName: ' . $cacheName . ', isPublicList: ' . $GLOBALS["SL"]->x["isPublicList"]; exit;
         if (!$GLOBALS["SL"]->REQ->has('refresh')) {
             $ret = Cache::get($cacheName, '');
             if ($ret != '') {

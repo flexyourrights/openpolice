@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenComplaintPrints is a mid-level class which handles custom 
+  * printing of data, especially functions which override SurvLoop defaults.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -34,6 +43,11 @@ class OpenComplaintPrints extends OpenComplaintEmails
             }
         }
         return true;
+    }
+    
+    protected function printAllegAudit()
+    {
+        return $this->commaAllegationList(true);
     }
     
     protected function printEndOfComplaintRedirect($nID)

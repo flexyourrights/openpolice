@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenDepts is a mid-level class which handles most functions
+  * for managing the departments database.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -464,24 +473,34 @@ class OpenDepts extends OpenListing
                         $cnt++;
                     }
                 }
-                if (isset($dept->DeptAddressLat) && $dept->DeptAddressLat != 0 && isset($dept->DeptAddressLng) 
-                    && $dept->DeptAddressLng != 0 && $dept->DeptScoreOpenness > 0) {
-                    $GLOBALS["SL"]->states->addMapMarker($dept->DeptAddressLat, $dept->DeptAddressLng, 
+                if (isset($dept->DeptAddressLat) && $dept->DeptAddressLat != 0 
+                    && isset($dept->DeptAddressLng) && $dept->DeptAddressLng != 0 
+                    && $dept->DeptScoreOpenness > 0) {
+                    $GLOBALS["SL"]->states->addMapMarker(
+                        $dept->DeptAddressLat, 
+                        $dept->DeptAddressLng, 
                         'RBgradient' . round($dept->DeptScoreOpenness/10), 
                         $dept->DeptName . ': ' . $dept->DeptScoreOpenness, '',
-                        '/ajax/dept-kml-desc?deptID=' . $dept->DeptID);
+                        '/ajax/dept-kml-desc?deptID=' . $dept->DeptID
+                    );
                 }
             }
             for ($g = 0; $g < 11; $g++) {
-                $GLOBALS["SL"]->states->addMarkerType('RBgradient' . $g,
-                    $GLOBALS["SL"]->sysOpts["app-url"] . '/openpolice/uploads/map-marker-redblue-' . $g . '.png');
+                $url = $GLOBALS["SL"]->sysOpts["app-url"] 
+                    . '/openpolice/uploads/map-marker-redblue-' . $g . '.png';
+                $GLOBALS["SL"]->states->addMarkerType('RBgradient' . $g, $url);
             }
-            $ret = $GLOBALS["SL"]->states->embedMap($nID, 'dept-access-scores-all-' . date("Ymd"), 
-                'All Department Accessibility Scores', $this->embedMapDeptLegend());
+            $ret = $GLOBALS["SL"]->states->embedMap(
+                $nID, 
+                'dept-access-scores-all-' . date("Ymd"), 
+                'All Department Accessibility Scores', 
+                $this->embedMapDeptLegend()
+            );
             if ($ret == '') {
                 $ret = "\n\n <!-- no map markers found --> \n\n";
             } elseif ($nID == 2013 && $GLOBALS["SL"]->REQ->has('test')) {
-                $GLOBALS["SL"]->pageAJAX .= '$("#map' . $nID . 'ajax").load("/ajax/dept-kml-desc?deptID=13668");';
+                $GLOBALS["SL"]->pageAJAX .= '$("#map' . $nID 
+                    . 'ajax").load("/ajax/dept-kml-desc?deptID=13668");';
             }
         }
         return $ret;
@@ -515,14 +534,17 @@ class OpenDepts extends OpenListing
         }
         return view('vendor.openpolice.nodes.1968-accss-grades-title-desc', [
             "nID"   => $nID,
-            "state" => (($GLOBALS["SL"]->REQ->has('state')) ? $GLOBALS["SL"]->REQ->state : '')
+            "state" => (($GLOBALS["SL"]->REQ->has('state')) 
+                ? $GLOBALS["SL"]->REQ->state : '')
         ])->render();
     }
     
     protected function printDeptAccScoreBars($nID)
     {
-        if (!$GLOBALS["SL"]->REQ->has('state') || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
-            $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
+        if (!$GLOBALS["SL"]->REQ->has('state') 
+            || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
+            $param = 'onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"';
+            $GLOBALS["SL"]->addBodyParams($param);
         }
         return $GLOBALS["SL"]->extractStyle($this->v["deptScores"]->printTotsBars(), $nID);
         /*
@@ -556,7 +578,8 @@ class OpenDepts extends OpenListing
             return 'Department Not Found';
         }
         //if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
-        //    if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
+        //    if ($GLOBALS["SL"]->REQ->has('d') 
+        //        && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
         //        $this->v["deptID"] = $GLOBALS["SL"]->REQ->get('d');
         //    } else {
         //        $this->v["deptID"] = -3;
@@ -565,12 +588,13 @@ class OpenDepts extends OpenListing
         //$this->loadDeptStuff($this->v["deptID"]);
         if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
             $GLOBALS["SL"]->addSideNavItem('Edit Department', 
-                '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments');
+                '/dashboard/start-' . $this->v["deptID"] 
+                . '/volunteers-research-departments');
         }
         $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">'
             . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
-        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' 
-            . $this->v["deptID"] . '&limit=20");' . "\n";
+        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("'
+            . '/record-prevs/1?d=' . $this->v["deptID"] . '&limit=20");' . "\n";
         //if (trim($previews) == '') {
         //    $previews = '<p><i>No complaints have been submitted for this deparment.</i></p>';
         //}
@@ -631,7 +655,10 @@ class OpenDepts extends OpenListing
     
     public function getOverUpdateRow($cid, $deptID)
     {
-        $civDef = $GLOBALS["SL"]->def->getID('Investigative Agency Types', 'Civilian Oversight');
+        $civDef = $GLOBALS["SL"]->def->getID(
+            'Investigative Agency Types', 
+            'Civilian Oversight'
+        );
         if (!isset($this->v["currOverRow"])) {
             $this->v["currOverRow"] = NULL;
             $overs = OPOversight::where('OverDeptID', $deptID)
@@ -642,7 +669,8 @@ class OpenDepts extends OpenListing
                     $this->v["currOverRow"] = $overs[0];
                 } else {
                     foreach ($overs as $i => $ovr) {
-                        if ($ovr && isset($ovr->OverType) && $ovr->OverType == $civDef) {
+                        if ($ovr && isset($ovr->OverType) 
+                            && $ovr->OverType == $civDef) {
                             $this->v["currOverRow"] = $ovr;
                         }
                     }

@@ -10,18 +10,24 @@
 
 <table id="opcAllTimeStats" cellpadding=0 cellspacing=0 border=0 ><tr>
     <td class="pL20 pR20">
-        <h2 class="m0"><nobr>OPC All-Time Stats</nobr></h2>
-        <p><a href="/dash/all-complete-complaints"><nobr>Manage Complaints</nobr></a></p>
+        <h2 class="m0"><nobr>All-Time Stats</nobr></h2>
+        <p><a href="/dash/all-complete-complaints"
+            ><nobr>Manage Complaints</nobr></a></p>
     </td>
-    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["betas"])
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ 
+        number_format($stats["betas"])
         }}</h2><nobr>Beta Invites</nobr></td>
-    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["incomplete"]) 
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ 
+        number_format($stats["incomplete"]) 
         }}</h2>Incomplete</td>
-    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["complete"])   
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ 
+        number_format($stats["complete"])   
         }}</h2>Completed</td>
-    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["processed"])  
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ 
+        number_format($stats["processed"])  
         }}</h2>Processed</td>
-    <td class="taC pL20 pR20"><h2 class="mTn10">{{ number_format($stats["submitted"])  
+    <td class="taC pL20 pR20"><h2 class="mTn10">{{ 
+        number_format($stats["submitted"])  
         }}</h2><nobr>Investigation Filed</nobr></td>
 </tr></table>
 

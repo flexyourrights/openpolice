@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenComplaintEmails is a mid-level class which handles custom emailing
+  * functions, lookups, and language swaps.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.12
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -96,7 +105,8 @@ class OpenComplaintEmails extends OpenPoliceUtils
     
     public function sendEmailBlurbsCustom($emailBody, $deptID = -3)
     {
-        if (!isset($GLOBALS["SL"]->x["depts"]) || empty($GLOBALS["SL"]->x["depts"])) {
+        if (!isset($GLOBALS["SL"]->x["depts"]) 
+            || empty($GLOBALS["SL"]->x["depts"])) {
             if ($deptID > 0) {
                 $this->loadDeptStuff($deptID);
             } elseif (isset($this->sessData->dataSets["LinksComplaintDept"]) 
@@ -122,17 +132,19 @@ class OpenComplaintEmails extends OpenPoliceUtils
         }
         if (strpos($emailBody, '[{ Complaint Investigative Agency }]') !== false) {
             if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
-                $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]) 
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
-                    $overName = trim($GLOBALS["SL"]->x["depts"][$deptID][$wchOvr]->OverAgncName);
+                $d = $GLOBALS["SL"]->x["depts"][$deptID];
+                if (isset($d[$d["whichOver"]]) && isset($d["deptRow"]->DeptName)) {
+                    $overName = trim($d[$d["whichOver"]]->OverAgncName);
                     if ($overName == '') {
-                        $overName = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
+                        $overName = $d["deptRow"]->DeptName;
                     }
-                    $forDept = (($overName != $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName) 
-                        ? ' (for the ' . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName . ')' 
+                    $forDept = (($overName != $d["deptRow"]->DeptName) 
+                        ? ' (for the ' . $d["deptRow"]->DeptName . ')' 
                         : (($wchOvr == 'iaRow') ? ' Internal Affairs' : ''));
-                    $splits = $GLOBALS["SL"]->mexplode('[{ Complaint Investigative Agency }]', $emailBody);
+                    $splits = $GLOBALS["SL"]->mexplode(
+                        '[{ Complaint Investigative Agency }]', 
+                        $emailBody
+                    );
                     $emailBody = $splits[0] . $overName . $forDept;
                     if ($wchOvr == 'iaRow') {
                         $overName = 'Internal Affairs';

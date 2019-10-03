@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenPoliceAdmin extends SurvLoop's AdminController for
+  * pages and internal systems requiring a user login — or more.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.1
+  */
 namespace OpenPolice\Controllers;
 
 use DB;

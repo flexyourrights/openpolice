@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenPolice the core top-level class for which extends both SurvLoop,
+  * and most functions specific to OpenPolice.org.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <wikiworldorder@protonmail.com>
+  * @since v0.0.1
+  */
 namespace OpenPolice\Controllers;
 
 use DB;
@@ -12,6 +21,18 @@ use OpenPolice\Controllers\OpenInitExtras;
 
 class OpenPolice extends OpenInitExtras
 {
+    /**
+     * Overrides primary SurvLoop printing of individual nodes from 
+     * surveys and site pages. This is one of the main routing hubs
+     * for OpenPolice.org customizations beyond SurvLoop defaults.
+     *
+     * @param  int $nID
+     * @param  array $tmpSubTier
+     * @param  string $nIDtxt
+     * @param  string $nSffx
+     * @param  int $currVisib
+     * @return string
+     */
     protected function customNodePrint($nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
     {
         // Main Complaint Survey
@@ -77,6 +98,8 @@ class OpenPolice extends OpenInitExtras
             return $this->publicPartnerPage($nID);
         } elseif (in_array($nID, [2115, 2069])) {
             return $this->printPreparePartnerHeader($nID);
+        } elseif ($nID == 2677) {
+            return $this->publicPartnerPageClinicOnly($nID);
                
         // User Profile
         } elseif ($nID == 1893) {
@@ -101,6 +124,9 @@ class OpenPolice extends OpenInitExtras
             return ['Privacy Setting', $this->getReportPrivacy($nID)];
         } elseif ($nID == 1468) {
             return $this->getCivReportNameHeader($nID);
+        } elseif (in_array($nID, [1505, 2637, 1506, 1507])) {
+            return $this->getCivReportNameRow($nID);
+
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
         } elseif (in_array($nID, [1795, 2266, 2335])) {
@@ -244,11 +270,37 @@ class OpenPolice extends OpenInitExtras
         // Software Development Area
         } elseif (in_array($nID, [2297])) {
             return $this->printNavDevelopmentArea($nID);
-            
+         
+
+        } elseif ($nID == 1190) {
+            echo '<html><head><!-- Matomo -->
+            <script type="text/javascript">
+              var _paq = window._paq || [];
+              /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+              _paq.push([\'trackPageView\']);
+              _paq.push([\'enableLinkTracking\']);
+              (function() {
+                var u="//analytics.openpolice.org/";
+                _paq.push([\'setTrackerUrl\', u+\'matomo.php\']);
+                _paq.push([\'setSiteId\', \'1\']);
+                var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
+                g.type=\'text/javascript\'; g.async=true; g.defer=true; g.src=u+\'matomo.js\'; s.parentNode.insertBefore(g,s);
+              })();
+            </script>
+            <!-- End Matomo Code --></head><body>Testing Analytics!</body></html>'; 
+            exit;
+
         }
         return '';
     }
     
+    /**
+     * Overrides default SurvLoop behavior for responses to multiple-choice questions.
+     *
+     * @param  int $nID
+     * @param  SLNode $curr
+     * @return string
+     */
     protected function customResponses($nID, $curr)
     {
         if ($nID == 2126) {
@@ -284,6 +336,11 @@ class OpenPolice extends OpenInitExtras
         return $curr;
     }
     
+    /**
+     * Initializes the admin dashboard side-class.
+     *
+     * @return boolean
+     */
     protected function initAdmDash()
     {
         $this->v["isDash"] = true;
@@ -292,7 +349,14 @@ class OpenPolice extends OpenInitExtras
         }
         return true;
     }
-            
+    
+    /**
+     * Overrides or disables the default printing of survey Back/Next buttons.
+     *
+     * @param  int $nID
+     * @param  string $promptNotes
+     * @return string
+     */
     protected function customNodePrintButton($nID = -3, $promptNotes = '')
     { 
         if (in_array($nID, [270, 973])) {
@@ -301,17 +365,27 @@ class OpenPolice extends OpenInitExtras
         return '';
     }
     
-
-    
+    /**
+     * Look up the person contact record and physical description record
+     * for a civilian or officer.
+     *
+     * @return boolean
+     */
     protected function chkPersonRecs()
     {
         // This should've been automated via the data table subset option
         // but for now, I'm replacing that complication with this check...
         $found = false;
-        foreach ([ ['Civilians', 'Civ'], ['Officers', 'Off'] ] as $type) {
-            if (isset($this->sessData->dataSets[$type[0]]) && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
+        $types = [
+            ['Civilians', 'Civ'],
+            ['Officers',  'Off']
+        ];
+        foreach ($types as $type) {
+            if (isset($this->sessData->dataSets[$type[0]]) 
+                && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
                 foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
-                    if (!isset($civ->{ $type[1] . 'PersonID' }) || intVal($civ->{ $type[1] . 'PersonID' }) <= 0) {
+                    if (!isset($civ->{ $type[1] . 'PersonID' }) 
+                        || intVal($civ->{ $type[1] . 'PersonID' }) <= 0) {
                         $new = new OPPersonContact;
                         $new->save();
                         $this->sessData->dataSets[$type[0]][$i]->update([
@@ -336,6 +410,13 @@ class OpenPolice extends OpenInitExtras
         return true;
     }
     
+    /**
+     * Double-check behavior after a new item has been created for a data loop.
+     *
+     * @param  string $tbl
+     * @param  int $itemID
+     * @return boolean
+     */
     protected function afterCreateNewDataLoopItem($tbl = '', $itemID = -3)
     {
         if (in_array($tbl, ['Civilians', 'Officers']) && $itemID > 0) {
@@ -344,6 +425,12 @@ class OpenPolice extends OpenInitExtras
         return true;
     }
     
+    /**
+     * Print warning message for uploading tool.
+     *
+     * @param  int $nID
+     * @return string
+     */
     protected function uploadWarning($nID)
     {
         return 'WARNING: If documents show sensitive personal information, set this to "private." 
