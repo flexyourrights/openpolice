@@ -82,13 +82,16 @@ a.slNavLnk, a.slNavLnk:link, a.slNavLnk:active, a.slNavLnk:visited, a.slNavLnk:h
     margin-top: -4px;
 	background: #EDF8FF;
 }
-#slNavMain .panel-body, #slNavMain div .panel .panel-body {
+#slNavMain .panel-body, 
+#slNavMain div .panel .panel-body {
     padding: 5px 0px 0px 0px;
 }
-#slNavMain .panel-body, #slNavMain div .panel .panel-body .list-group {
+#slNavMain .panel-body, 
+#slNavMain div .panel .panel-body .list-group {
     margin: 0px;
 }
-.list-group-item.completed, .list-group-item.completed:hover, .list-group-item.completed:focus {
+.list-group-item.completed, .list-group-item.completed:hover, 
+.list-group-item.completed:focus {
     z-index: 2;
     color: #333;
     background-color: #EDF8FF;
@@ -597,7 +600,7 @@ a.facebookShareBig:link, a.facebookShareBig:visited, a.facebookShareBig:active, 
 .basicTier6, .basicTier7 { border-left: 2px #EDF8FF dotted; }
 .basicTier8, .basicTier9 { border-left: 1px #EDF8FF dotted; }
 .basicTier0, .basicTier0.basicTierBranch {
-	border: 1px #006D36 dotted;
+	border: 1px #29B76F dotted;
 }
 .basicTierBranch {
 	border: 2px #2B3493 dotted;
@@ -616,10 +619,10 @@ a.facebookShareBig:link, a.facebookShareBig:visited, a.facebookShareBig:active, 
 }
 .basicTierData, .basicTierBranch.basicTierData, .basicTierPage.basicTierData,
 .basicTierLoop.basicTierData, .basicTier1.basicTierLoop.basicTierData, .basicTier2.basicTierLoop.basicTierData, .basicTier3.basicTierLoop.basicTierData, .basicTier4.basicTierLoop.basicTierData, .basicTier5.basicTierLoop.basicTierData {
-	border-right: 3px #006D36 dotted;
+	border-right: 3px #29B76F dotted;
 }
 .dbColor {
-    color: #006D36;
+    color: #29B76F;
 }
 
 .circleBtn1 {
@@ -1301,7 +1304,7 @@ h1.m0, h2.m0, h3.m0 { margin: 0px; }
 }
 
 .slGreenDark, a.slGreenDark:link, a.slGreenDark:visited, a.slGreenDark:active, a.slGreenDark:hover {
-	color: #006D36;
+	color: #29B76F;
 }
 .slGreenLight, a.slGreenLight:link, a.slGreenLight:visited, a.slGreenLight:active, a.slGreenLight:hover {
 	color: #29B76F;

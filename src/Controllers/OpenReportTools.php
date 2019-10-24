@@ -56,7 +56,7 @@ class OpenReportTools extends OpenReport
     protected function printComplaintOwner()
     {
         $this->loadOversightDateLookups();
-        $this->prepEmailComData();
+        $this->prepEmailComplaintData();
         $depts = ((isset($this->sessData->dataSets["Departments"])) 
             ? $this->sessData->dataSets["Departments"] : []);
         $oversights = ((isset($this->sessData->dataSets["Oversight"]))
@@ -144,7 +144,7 @@ class OpenReportTools extends OpenReport
                 && intVal($GLOBALS["SL"]->REQ->get('n2018fld')) > 0);
             if ($hasUpdate || $hasPrivacy) {
                 $this->loadOversightDateLookups();
-                $this->prepEmailComData();
+                $this->prepEmailComplaintData();
                 if ($hasUpdate) {
                     $this->processOwnerUpdateStatus();
                 } elseif ($hasPrivacy) {

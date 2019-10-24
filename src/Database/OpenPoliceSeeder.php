@@ -13914,7 +13914,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'DefSet' => 'Style Settings',
 			'DefSubset' => 'color-success-on',
 			'DefOrder' => '13',
-			'DefDescription' => '#006D36'
+			'DefDescription' => '#29B76F'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 283,

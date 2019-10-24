@@ -1,11 +1,15 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-report-department.blade.php -->
-<form action="?fixDepts=1&refresh=1{{ $GLOBALS['SL']->getReqParams() }}" 
-    method="post">
-<input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
+<form name="fixDeptsForm" method="get" action="?fixDepts=1">
+<input type="hidden" name="fixDepts" value="1">
+<input type="hidden" name="refresh" value="1">
 <input type="hidden" name="cID" value="{{ $complaintRec->ComID }}">
+{!! $GLOBALS['SL']->getReqHiddenInputs() !!}
+
 <div class="nodeAnchor"><a name="reportUpload"></a></div>
 <h4>Associated Department(s)</h4>
-
+<p>
+    Add or remove departments responsible for this complaint.
+</p>
 <div class="row mB10">
     <div class="col-md-6">
 @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
@@ -64,7 +68,7 @@
         class="btn btn-lg btn-primary" style="color: #FFF;"
         onMouseOver="this.style.color='#2b3493';" 
         onMouseOut="this.style.color='#FFF';"
-        value="Correct Departments">
+        value="Apply Department Changes">
 </div>
 
 </form>
@@ -92,9 +96,8 @@ $(document).ready(function(){
         setTimeout(function() {
             var loadUrl = "/ajax/?policeDept="+encodeURIComponent(document.getElementById("fixDeptsSearchInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateSearchID").value)+"&loadNewFixDept=1";
             $("#ajaxSearchFixDepts").load(loadUrl);
-//alert("submitAjaxSearchFixDepts() " + loadUrl + "");
             return true;
-        }, 10);
+        }, 800);
     }
     $(document).on("click", "#ajaxSubmitFixDepts", function() {
         return submitAjaxSearchFixDepts();

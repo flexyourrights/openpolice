@@ -6,7 +6,7 @@
   * OpenPolice.org
   * @package  flexyourrights/openpolice
   * @author  Morgan Lesko <wikiworldorder@protonmail.com>
-  * @since v0.0.1
+  * @since  v0.0.1
   */
 namespace OpenPolice\Controllers;
 
@@ -49,7 +49,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1876) {
             return view('vendor.openpolice.nodes.1876-home-page-hero-credit')
                 ->render();
-        } elseif ($nID == 808) { // overwrite preview results
+        } elseif ($nID == 2685) { // overwrite preview results
             $GLOBALS["SL"]->x["isHomePage"] = true;
             $GLOBALS["SL"]->x["isPublicList"] = true;
             $GLOBALS["SL"]->pageView = 'public';
@@ -66,7 +66,7 @@ class OpenPolice extends OpenInitExtras
             return $this->printDeptAccScoreTitleDesc($nID);
         } elseif ($nID == 1816) {
             return $this->printDeptAccScoreBars($nID);
-        } elseif (in_array($nID, [1863, 1858]) || $nID == 2013) {
+        } elseif (in_array($nID, [1863, 1858, 2013])) {
             return $this->publicDeptAccessMap($nID);
             
         } elseif ($nID == 1907) { // Donate Social Media Buttons
@@ -106,7 +106,7 @@ class OpenPolice extends OpenInitExtras
             return $this->printProfileMyComplaints($nID);
             
         // Complaint Report
-        } elseif (in_array($nID, [1374, 1729])) {
+        } elseif ($nID == 1374) {
             return $this->reportAllegsWhy($nID);
         } elseif ($nID == 1373) {
             return $this->reportStory($nID);
@@ -114,14 +114,17 @@ class OpenPolice extends OpenInitExtras
             return $this->chkGetReportDept($this->sessData->getLatestDataBranchID());
         } elseif (in_array($nID, [1382, 1734])) {
             return $this->getReportDept($this->sessData->getLatestDataBranchID());
-        } elseif (in_array($nID, [1690, 1747])) {
+        } elseif ($nID == 1690) {
             return $this->getReportByLine();
-        } elseif (in_array($nID, [1687, 1731])) {
+        } elseif ($nID == 1687) {
             return $this->getReportWhenLine();
         } elseif (in_array($nID, [1688, 1732])) {
             return $this->getReportWhereLine($nID);
-        } elseif (in_array($nID, [1691, 1733])) {
-            return ['Privacy Setting', $this->getReportPrivacy($nID)];
+        } elseif ($nID == 1691) {
+            return [
+                'Privacy Setting', 
+                $this->getReportPrivacy($nID)
+            ];
         } elseif ($nID == 1468) {
             return $this->getCivReportNameHeader($nID);
         } elseif (in_array($nID, [1505, 2637, 1506, 1507])) {
@@ -169,8 +172,9 @@ class OpenPolice extends OpenInitExtras
             $this->saveComplaintOversight();
         } elseif ($nID == 2634) {
             $this->processOwnerUpdate();
-        } elseif ($nID == 2635) {
-            $this->v["needsWsyiwyg"] = true;
+        } elseif (in_array($nID, [2635, 2378])) {
+            $GLOBALS["SL"]->x["needsWsyiwyg"] 
+                = $this->v["needsWsyiwyg"] = true;
             
         // Complaint Listings
         } elseif (in_array($nID, [1418, 2384])) {
@@ -181,17 +185,7 @@ class OpenPolice extends OpenInitExtras
             }
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
-            if ($this->coreID > 0) {
-                return '<iframe src="/complaint/read-' . $this->coreID . '/full?frame=1&wdg=1'
-                    . (($GLOBALS["SL"]->REQ->has('refresh')) 
-                        ? '&refresh=' . $GLOBALS["SL"]->REQ->get('refresh') : '') . '" '
-                    . 'id="reportAdmPreviewFull" frameborder="0" '
-                    . 'style="width: 100%; height: 100%; overflow-y: visible;'
-                    . 'margin: -15px 0px 0px -15px;"></iframe> <style> '
-                    . 'body { overflow-y: hidden; } #ajaxWrap { padding-bottom: 0px; } '
-                    . '#hidivBtnAdmFoot { display: none; } </style>';
-            }
-            return '<br /><br /><br /><i>Complaint Not Found</i><br /><br /><br />';
+            return $this->printComplaintReportForAdmin($nID);
 
         // Staff Area Nodes
         } elseif ($nID == 1420) {
@@ -270,25 +264,6 @@ class OpenPolice extends OpenInitExtras
         // Software Development Area
         } elseif (in_array($nID, [2297])) {
             return $this->printNavDevelopmentArea($nID);
-         
-
-        } elseif ($nID == 1190) {
-            echo '<html><head><!-- Matomo -->
-            <script type="text/javascript">
-              var _paq = window._paq || [];
-              /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-              _paq.push([\'trackPageView\']);
-              _paq.push([\'enableLinkTracking\']);
-              (function() {
-                var u="//analytics.openpolice.org/";
-                _paq.push([\'setTrackerUrl\', u+\'matomo.php\']);
-                _paq.push([\'setSiteId\', \'1\']);
-                var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
-                g.type=\'text/javascript\'; g.async=true; g.defer=true; g.src=u+\'matomo.js\'; s.parentNode.insertBefore(g,s);
-              })();
-            </script>
-            <!-- End Matomo Code --></head><body>Testing Analytics!</body></html>'; 
-            exit;
 
         }
         return '';

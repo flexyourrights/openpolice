@@ -19,7 +19,14 @@ use OpenPolice\Controllers\OpenSessDataOverride;
 
 class OpenComplaintConditions extends OpenSessDataOverride
 {
-    // CUSTOM={OnlyIfNoAllegationsOtherThan:WrongStop,Miranda,PoliceRefuseID]
+    /**
+     * Delegate the conditional checks which are customized from
+     * the simpler default SurvLoop existing thus far.
+     *
+     * @param  int $nID
+     * @param  string $condition
+     * @return int
+     */
     protected function checkNodeConditionsCustom($nID, $condition = '')
     {
         $complaint = null;
@@ -115,6 +122,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return -1;
     }
     
+    /**
+     * Checks whether or not this incident began 
+     * with a vehicle stop.
+     *
+     * @return int
+     */
     protected function condVehicleStop()
     {
         if (isset($this->sessData->dataSets["Scenes"]) 
@@ -132,19 +145,35 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
 
+    /**
+     * Checks whether or not this complaint is 
+     * associated with a partner's intake process.
+     *
+     * @return int
+     */
     protected function condPartnerIntake($complaint)
     {
-        if (isset($complaint->ComAttID) && intVal($complaint->ComAttID) > 0) {
+        if (isset($complaint->ComAttID) 
+            && intVal($complaint->ComAttID) > 0) {
             return 1;
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint is 
+     * associated with an attorney partner's intake process.
+     *
+     * @return int
+     */
     protected function condAttorneyIntake($complaint)
     {
-        if (isset($complaint->ComAttID) && intVal($complaint->ComAttID) > 0) {
-            $attDef = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
-            $partner = OPPartners::where('PartID', intVal($complaint->ComAttID))
+        if (isset($complaint->ComAttID) 
+            && intVal($complaint->ComAttID) > 0) {
+            $attID = intVal($complaint->ComAttID);
+            $attDef = $GLOBALS["SL"]->def
+                ->getID('Partner Types', 'Attorney');
+            $partner = OPPartners::where('PartID', $attID)
                 ->where('PartType', $attDef)
                 ->first();
             if ($partner && isset($partner->PartType)) {
@@ -154,6 +183,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint has or needs
+     * a lawyer to be involved.
+     *
+     * @return int
+     */
     protected function condLawyerInvolved($complaint)
     {
         if ((isset($complaint->ComAttorneyHas) 
@@ -177,6 +212,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks if no sexual allegations were made 
+     * related to this complaint.
+     *
+     * @return int
+     */
     protected function condNoSexualAllegation()
     {
         $noSexAlleg = true;
@@ -195,16 +236,30 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return ($noSexAlleg) ? 1 : 0;
     }
     
+    /**
+     * Checks whether or not this incident
+     * has an associated street address.
+     *
+     * @return int
+     */
     protected function condIncidentHasAddress()
     {
-        if (isset($this->sessData->dataSets["Incidents"]) 
-            && isset($this->sessData->dataSets["Incidents"][0]->IncAddress)
-            && trim($this->sessData->dataSets["Incidents"][0]->IncAddress) != '') {
-            return 1;
+        if (isset($this->sessData->dataSets["Incidents"])) {
+            $inc = $this->sessData->dataSets["Incidents"][0];
+            if (isset($inc->IncAddress) 
+                && trim($inc->IncAddress) != '') {
+                return 1;
+            }
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint includes
+     * an arrest of any use of force.
+     *
+     * @return int
+     */
     protected function condHasArrestOrForce()
     {
         if ($this->sessData->dataHas('Arrests') 
@@ -214,14 +269,27 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint includes
+     * any use of force.
+     *
+     * @return int
+     */
     protected function condCivHasForce()
     {
         if (isset($GLOBALS["SL"]->closestLoop["itemID"])) {
-            return $this->chkCivHasForce($GLOBALS["SL"]->closestLoop["itemID"]);
+            return $this->chkCivHasForce(
+                $GLOBALS["SL"]->closestLoop["itemID"]);
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint includes
+     * any use of force on civilians (not animals).
+     *
+     * @return int
+     */
     protected function condHasForceHuman()
     {
         $ret = 0;
@@ -237,20 +305,36 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return $ret;
     }
     
+    /**
+     * Checks whether or not this complaint includes
+     * any civilian injuries reported.
+     *
+     * @return int
+     */
     protected function condHasInjury()
     {
-        if (isset($this->sessData->dataSets["Civilians"]) 
-            && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $civ) {
-                if ($civ->CivRole == 'Victim' && isset($civ->CivHasInjury) 
-                    && trim($civ->CivHasInjury) == 'Y') {
-                    return 1;
+        if (isset($this->sessData->dataSets["Civilians"])) {
+            $civs = $this->sessData->dataSets["Civilians"];
+            if (sizeof($civs) > 0) {
+                foreach ($civs as $civ) {
+                    if ($civ->CivRole == 'Victim' 
+                        && isset($civ->CivHasInjury) 
+                        && trim($civ->CivHasInjury) == 'Y') {
+                        return 1;
+                    }
                 }
             }
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not the current civilian is not
+     * the complainant. This helps avoid impossibly asking 
+     * if the user had fatal injuries.
+     *
+     * @return int
+     */
     protected function condMedicalCareNotYou()
     {
         $civ = $this->sessData->getDataBranchRow('Civilians');
@@ -261,6 +345,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return -1;
     }
     
+    /**
+     * Checks whether or not the complaint involved
+     * property seizure and/or damage.
+     *
+     * @return int
+     */
     protected function condProperty()
     {
         $search = $this->sessData->getChildRow(
@@ -268,39 +358,75 @@ class OpenComplaintConditions extends OpenSessDataOverride
             $GLOBALS["SL"]->closestLoop["itemID"], 
             'Searches'
         );
-        if ((isset($search->SrchSeized) && trim($search->SrchSeized) == 'Y')
-            || (isset($search->SrchDamage) && trim($search->SrchDamage) == 'Y')) {
+        if ((isset($search->SrchSeized) 
+                && trim($search->SrchSeized) == 'Y')
+            || (isset($search->SrchDamage) 
+                && trim($search->SrchDamage) == 'Y')) {
             return 1;
         }
         return 0;
     }
 
+    /**
+     * Retrieves a count of how many allegations are
+     * included in this complaint.
+     *
+     * @return int
+     */
     protected function cntAllegations()
     {
-        return sizeof($GLOBALS["SL"]->mexplode(',', $this->commaAllegationList()));
+        $allegs = $GLOBALS["SL"]->mexplode(',', 
+            $this->commaAllegationList());
+        return sizeof($allegs);
     }
     
+    /**
+     * Checks whether or not this complaint has 
+     * "too many" allegations selected.
+     *
+     * @return boolean
+     */
     protected function hasTooManyAllegations()
     {
         return ($this->cntAllegations() > 5);
     }
     
+    /**
+     * Checks whether or not this complaint has 
+     * no allegations selected.
+     *
+     * @return boolean
+     */
     protected function hasNoAllegations()
     {
         return ($this->cntAllegations() == 0);
     }
     
+    /**
+     * Checks whether or not this complaint passes an audit.
+     * If not they should be alerted to fix things.
+     *
+     * @return int
+     */
     protected function condNeedsAudit()
     {
-        if ($this->hasTooManyAllegations() || $this->hasNoAllegations()) {
+        if ($this->hasTooManyAllegations() 
+            || $this->hasNoAllegations()) {
             return 1;
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this user has had a
+     * confirmationed email send to them today.
+     *
+     * @return int
+     */
     protected function condEmailConfirmSentToday()
     {
-        if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
+        if (isset($this->v["user"]) 
+            && isset($this->v["user"]->id)) {
             $cutoff = date("Y-m-d H:i:s", 
                 mktime(date("H"), date("i"), date("s"), 
                     date("n"), date("j")-1, date("Y")));
@@ -315,6 +441,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint has any uploaded
+     * photos, documents, or linked videos.
+     *
+     * @return int
+     */
     protected function complaintHasUploads()
     {
         $uploads = $this->getUploadsMultNodes(
@@ -328,6 +460,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint's uploads
+     * should be shown to the current user.
+     *
+     * @param  App\Models\OPComplaints $complaint
+     * @return int
+     */
     protected function complaintShowUploads($complaint)
     {
         if ($this->complaintHasUploads() == 0) {
@@ -336,17 +475,25 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if ($this->v["isAdmin"] || $this->v["isOwner"]) {
             return 1;
         }
-        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
+        if ($this->v["uID"] > 0 
+            && $this->v["user"]->hasRole('oversight')) {
             // needs more strength here
             return 1;
         }
-        $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
+        $pubDef = $GLOBALS["SL"]->def
+            ->getID('Privacy Types', 'Submit Publicly');
         if ($complaint->ComPrivacy != $pubDef) {
             return 0;
         } // else Full Transparency, but check status first...
         return $this->complaintHasPublishedStatus();
     }
     
+    /**
+     * Checks whether or not this complaint's uploads
+     * can be editted by the current user.
+     *
+     * @return int
+     */
     protected function complaintCanEditUploads()
     {
         if ($this->v["isAdmin"]) {
@@ -355,6 +502,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return -1;
     }
     
+    /**
+     * Checks whether or not this complaint should only
+     * be printed with anonymized data.
+     *
+     * @param  App\Models\OPComplaints $complaint
+     * @return int
+     */
     protected function condPrintAnonOnly($complaint)
     {
         $unPub = $this->getUnPublishedStatusList();
@@ -362,21 +516,29 @@ class OpenComplaintConditions extends OpenSessDataOverride
             'Complaint Status',  
             'OK to Submit to Oversight'
         );
+        $types = ['public', 'pdf'];
         if (isset($GLOBALS["SL"]->pageView) 
-            && in_array($GLOBALS["SL"]->pageView, ['public', 'pdf'])
+            && in_array($GLOBALS["SL"]->pageView, $types)
             && isset($complaint->ComStatus)
             && in_array($complaint->ComStatus, $unPub)) {
             return 1;
         }
         if (isset($GLOBALS["SL"]->pageView) 
-            && in_array($GLOBALS["SL"]->pageView, ['public', 'pdf'])
-            && isset($complaint->ComPrivacy) && $complaint->ComPrivacy 
-                != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
+            && in_array($GLOBALS["SL"]->pageView, $types)
+            && isset($complaint->ComPrivacy) 
+            && $complaint->ComPrivacy != $GLOBALS["SL"]->def
+                ->getID('Privacy Types', 'Submit Publicly')) {
             return 1;
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint should only
+     * be printed in full — though still not sensitive data.
+     *
+     * @return int
+     */
     protected function condPrintFullReport()
     {
         if ($this->canPrintFullReport()) {
@@ -385,6 +547,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint should only
+     * be printed in full including sensitive data.
+     *
+     * @return int
+     */
     protected function condPrintSensitiveReport()
     {
         if (isset($GLOBALS["SL"]->pageView) 
@@ -394,6 +562,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint's 
+     * publishing is on hold.
+     *
+     * @param  App\Models\OPComplaints $complaint
+     * @return int
+     */
     protected function condPrintPublishingOnHold($complaint)
     {
         if ($this->v["isAdmin"] || $this->v["isOwner"]) {
@@ -408,18 +583,34 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not the current user is a
+     * partner investigative agency.
+     *
+     * @return int
+     */
     protected function condIsOversightAgency()
     {
-        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
+        if ($this->v["uID"] > 0 
+            && $this->v["user"]->hasRole('oversight')) {
             return 1;
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this complaint is complete,
+     * or the current user has staff permissions of higher.
+     *
+     * @param  App\Models\OPComplaints $complaint
+     * @return int
+     */
     protected function condComplaintNotIncompleteOrCurrIsStaff($complaint)
     {
-        $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
-        if (isset($complaint->ComStatus) && $complaint->ComStatus != $incDef) {
+        $incDef = $GLOBALS["SL"]->def
+            ->getID('Complaint Status', 'Incomplete');
+        if (isset($complaint->ComStatus) 
+            && $complaint->ComStatus != $incDef) {
             return 1;
         }
         if ($this->v["uID"] > 0 
@@ -429,6 +620,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
         return 0;
     }
     
+    /**
+     * Checks whether or not this partner only helps users 
+     * of OpenPolice.org via in-person clinics.
+     *
+     * @param  int $nID
+     * @return int
+     */
     protected function condPartnerDoesOnlyClinics($nID)
     {
         $capDef = $GLOBALS["SL"]->def->getID(
@@ -444,12 +642,20 @@ class OpenComplaintConditions extends OpenSessDataOverride
             $caps = OPPartnerCapac::where('PrtCapPartID', $partID)
                 ->get();
         }
-        if (sizeof($caps) == 1 && $caps[0]->PrtCapCapacity == $capDef) {
+        if (sizeof($caps) == 1 
+            && $caps[0]->PrtCapCapacity == $capDef) {
             return 1;
         }
         return 0;
     }
     
+    /**
+     * Checks whether or not this partner 
+     * is actively working with OpenPolice.org, 
+     * or the current URL has the ?test=1 parameter.
+     *
+     * @return int
+     */
     protected function condPartnerActiveOrTestLink()
     {
         if (isset($this->sessData->dataSets["Partners"])

@@ -3,8 +3,8 @@
     <p>Click a department below to verify it's information and 
     <a href="/department-accessibility">Accessibility Score</a>:</p>
     <div class="p10"><div class="row">
-        <div class="col-5"><b>Department Name<br />City, State</b></div>
-        <div class="col-3"><b></b></div>
+        <div class="col-5"><b>Department Name</b></div>
+        <div class="col-3"><b>City, State</b></div>
         <div class="col-1"><b>Score</b></div>
         <div class="col-3"><b>Researched</b></div>
     </div></div>

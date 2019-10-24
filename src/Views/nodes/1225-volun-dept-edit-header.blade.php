@@ -1,14 +1,14 @@
 <!-- resources/views/vendor/openpolice/nodes/1225-volun-dept-edit-header.blade.php -->
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
 <div id="fixedHeadWidth" class="w100"> </div>
-<div id="fixedHeader" class="fixed" style="margin-top: 43px;">
-    <div class="row">
-        <div class="col-8">
-            <h3 class="m0 slBlueDark">{{ str_replace('Police Dept', 'PD', str_replace('Department', 'Dept', $deptRow->DeptName)) }}</h3>
-        </div><div class="col-4">
-            <h3 class="m0 slGreenDark"><nobr>Accessibility Score: <b id="opcScore" class="mL10">{{ intVal($deptRow->DeptScoreOpenness) }}</b></nobr></h3>
-        </div>
-    </div>
+<div id="fixedHeader" class="fixed" style="margin-top: 38px;">
+    <h3 class="disIn m0 slBlueDark">{{ str_replace('Police Dept', 'PD', 
+        str_replace('Department', 'Dept', $deptRow->DeptName)) }}</h3>
+    <b class="mL20 slGreenDark"><nobr>Accessibility Score: 
+        <div id="opcScore" class="disIn mL10">{{ 
+            intVal($deptRow->DeptScoreOpenness)
+        }}</div></nobr>
+    </b>
 </div>
 <div style="margin: 90px 0px -100px 0px;">
     <a href="/dept/{{ $deptRow->DeptSlug }}" target="_blank">
@@ -17,9 +17,13 @@
     {!! $editsSummary[0] !!}
 </div>
 <style>
-#pageTopGapID { display: none; }
+#pageTopGapID { 
+    display: none; 
+}
 #fixedHeader, #fixedHeader.fixed {
     margin: 55px 0px 0px -16px;
+}
+#slTopTabsWrap, #slTopTabsWrap .slTopTabs, #fixedHeader, #fixedHeader.fixed {
     background: #F5FBFF;
 }
 @media screen and (max-width: 480px) {
@@ -75,7 +79,7 @@ $(document).ready(function(){
                 score{{ str_replace('-', '-=', $deptScores->vals["Notary"]->score) }};
             }
             document.getElementById("n1226FldID").value = score;
-            document.getElementById("opcScore").innerHTML = score;
+            document.getElementById("opcScore").innerHTML = "<b>"+score+"</b>";
         }
         if (document.getElementById("admMenuCustBot")) {
             var newHgt = Math.round($(window).height())-335;

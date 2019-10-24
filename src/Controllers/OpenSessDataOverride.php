@@ -17,7 +17,17 @@ use OpenPolice\Controllers\OpenComplaintPrints;
 
 class OpenSessDataOverride extends OpenComplaintPrints
 {
-    // returns an array of overrides for ($currNodeSessionData, ???... 
+    /**
+     * Delegate the custom overrides for SurvLoop default 
+     * methods to retrieve current session data required
+     * by the current node.
+     *
+     * @param  int $nID
+     * @param  array $tmpSubTier
+     * @param  string $condition
+     * @param  string $currNodeSessionData
+     * @return array
+     */
     protected function printNodeSessDataOverride($nID = -3, $tmpSubTier = [], $nIDtxt = '', $currNodeSessionData = '')
     {
         if (empty($this->sessData->dataSets)) {

@@ -23,7 +23,7 @@
 
 @foreach ($GLOBALS["SL"]->def->getSet('Complaint Status') as $i => $status)
     @if ($status->DefID != 194 && (!$GLOBALS["SL"]->x["isPublicList"] 
-        || in_array($status->DefID, [200, 201, 203, 204])))
+        || in_array($status->DefID, [200, 201, 202, 203, 204])))
         <label class="disBlo pB5 pT5">
             <input type="checkbox" id="fltStatus{{ (2+$i) }}" name="fltStatus[]" 
                 value="{{ $status->DefID }}" class="mR5 searchDeetFld fltStatus" autocomplete="off"
@@ -35,6 +35,14 @@
 @endforeach
 
 @if (!$GLOBALS["SL"]->x["isPublicList"])
+    <label class="disBlo pB5 pT5">
+        <input type="checkbox" name="fltStatus[]" value="194"
+            id="fltStatus{{ (6+sizeof($GLOBALS["SL"]->def->getSet('Complaint Status'))) }}" 
+            @if (in_array(194, $srchFilts["comstatus"])) CHECKED @endif 
+            class="mR5 searchDeetFld fltStatus" autocomplete="off">
+            Incomplete Complaints
+    </label>
+    
     <div class="pT20 mB0 slGrey">Archives:</div>
     <label class="disBlo pB5 pT5">
         <input type="checkbox" name="fltStatus[]" value="297"
@@ -63,12 +71,5 @@
             @if (in_array(300, $srchFilts["comstatus"])) CHECKED @endif 
             class="mR5 searchDeetFld fltStatus" autocomplete="off">
             Test Submissions
-    </label>
-    <label class="disBlo pB5 pT5">
-        <input type="checkbox" name="fltStatus[]" value="194"
-            id="fltStatus{{ (6+sizeof($GLOBALS["SL"]->def->getSet('Complaint Status'))) }}" 
-            @if (in_array(194, $srchFilts["comstatus"])) CHECKED @endif 
-            class="mR5 searchDeetFld fltStatus" autocomplete="off">
-            Incomplete Complaints
     </label>
 @endif

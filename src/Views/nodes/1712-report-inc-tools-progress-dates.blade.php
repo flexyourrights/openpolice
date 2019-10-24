@@ -4,31 +4,31 @@
     @foreach ($comDepts as $c => $dept)
         @if (isset($dept["deptRow"]) && isset($dept["deptRow"]->DeptName))
             @if ($c > 0) <p><hr></p> @endif
-            <p><b>Status with the {!! str_replace("Police Department", "PD", 
+            <p><b>Progress with the {!! str_replace("Police Department", "PD", 
                 str_replace("Sheriff's Office", "Sheriff", $dept["deptRow"]->DeptName)) !!}</b></p>
             <div class="nFld mT0">
             @foreach ($oversightDates as $d => $date)
-                <div class="row">
-                    <div class="col-8">
-                        <label class="finger">
-                            <input type="checkbox" id="over{{ $dept['id'] }}Status{{ $d }}" 
-                                name="over{{ $dept['id'] }}Status[]" value="{{ $d }}"
-                                @if (isset($dept["overDates"]->{ $date[0] }) 
-                                    && trim($dept["overDates"]->{ $date[0] }) != '') CHECKED @endif
-                                class="chkOverStatus" autocomplete="off"> 
-                            <span class="mL5">{{ $date[1] }}</span>
-                        </label>
-                    </div>
-                    <div class="col-4">
-                        <div id="over{{ $dept['id'] }}Status{{ $d }}dateFlds"  class="disNon pT5">
-                        {!! $GLOBALS["SL"]->printDatePicker(
-                            ((isset($dept["overDates"]->{ $date[0] })) 
-                                ? $dept["overDates"]->{ $date[0] } : ''),
-                            'over' . $dept["id"] . 'Status' . $d . 'date'
-                        ) !!}
-                        </div>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-8">
+        <label class="finger">
+            <input type="checkbox" id="over{{ $dept['id'] }}Status{{ $d }}" 
+                name="over{{ $dept['id'] }}Status[]" value="{{ $d }}"
+                @if (isset($dept["overDates"]->{ $date[0] }) 
+                    && trim($dept["overDates"]->{ $date[0] }) != '') CHECKED @endif
+                class="chkOverStatus" autocomplete="off"> 
+            <span class="mL5">{{ $date[1] }}</span>
+        </label>
+    </div>
+    <div class="col-4">
+        <div id="over{{ $dept['id'] }}Status{{ $d }}dateFlds"  class="disNon pT5">
+        {!! $GLOBALS["SL"]->printDatePicker(
+            ((isset($dept["overDates"]->{ $date[0] })) 
+                ? $dept["overDates"]->{ $date[0] } : ''),
+            'over' . $dept["id"] . 'Status' . $d . 'date'
+        ) !!}
+        </div>
+    </div>
+</div>
             @endforeach
             </div>
         @endif

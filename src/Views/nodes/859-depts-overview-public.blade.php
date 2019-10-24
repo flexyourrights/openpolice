@@ -16,7 +16,10 @@
                 <div class="col-1"><div id="fldLabB" class="mT0"></div>Grade</div>
                 <div class="col-8"><div class="deptHeadWrap">
                 @foreach ($deptScores->chartFlds as $i => $fld) 
-                    <div class="fldLab"><div id="fldLab{{ $i }}" class="mT0"></div>{!! $fld[0] !!}</div>
+                    <div class="fldLab">
+                        <div id="fldLab{{ $i }}" class="mT0"></div>
+                        {!! $fld[0] !!}
+                    </div>
                  @endforeach
                 </div></div>
             </div>

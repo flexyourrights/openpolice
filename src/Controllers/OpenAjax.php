@@ -20,18 +20,31 @@ use OpenPolice\Controllers\OpenComplaintSaves;
 
 class OpenAjax extends OpenComplaintSaves
 {
+    /**
+     * Check for ajax requests customized beyond 
+     * SurvLoop's default behavior.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  string $over
+     * @return boolean
+     */
     public function runAjaxChecksCustom(Request $request, $over = '')
     {
-        if ($request->has('email') && $request->has('password')) {
-            echo $this->ajaxEmailPass($request);
-            exit;
-        } elseif ($request->has('policeDept')) {
+        if ($request->has('policeDept')) {
             echo $this->ajaxPoliceDeptSearch($request);
             exit;
         }
         return false;
     }
     
+    /**
+     * Check for ajax requests customized beyond 
+     * SurvLoop's default behavior, called via /ajax/{type}.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  string $type
+     * @return boolean
+     */
     public function ajaxChecksCustom(Request $request, $type = '')
     {
         if ($type == 'dept-kml-desc') {
@@ -40,19 +53,18 @@ class OpenAjax extends OpenComplaintSaves
         return '';
     }
     
-    public function ajaxEmailPass(Request $request)
-    {
-        print_r($request);
-        $chk = User::where('email', $request->email)->get();
-        if ($chk->isNotEmpty()) echo 'found';
-        echo 'not found';
-        exit;
-    }
-    
+    /**
+     * Run the ajax request to search police departments 
+     * and return clickable results.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
     public function ajaxPoliceDeptSearch(Request $request)
     {
         if (trim($request->get('policeDept')) == '') {
-            return '<i>Please type part of the department\'s name to find it.</i>';
+            return '<i>Please type part of the '
+                . 'department\'s name to find it.</i>';
         }
         $depts = $deptIDs = [];
         // Prioritize by Incident City first, also by Department size (# of officers)
@@ -61,29 +73,33 @@ class OpenAjax extends OpenComplaintSaves
             $request->policeDept = 'Washington';
         }
         if (!in_array($reqState, ['', 'US'])) {
-            $deptsRes = OPDepartments::where('DeptName', 'LIKE', '%' . $request->policeDept . '%')
+            $deptsRes = OPDepartments::where('DeptName', 
+                    'LIKE', '%' . $request->policeDept . '%')
                 ->where('DeptAddressState', $reqState)
                 ->orderBy('DeptJurisdictionPopulation', 'desc')
                 ->orderBy('DeptTotOfficers', 'desc')
                 ->orderBy('DeptName', 'asc')
                 ->get();
-            list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-            $deptsRes = OPDepartments::where('DeptAddressCity', 'LIKE', '%' . $request->policeDept . '%')
+            $this->addDeptToResults($deptIDs, $depts, $deptsRes);
+            $deptsRes = OPDepartments::where('DeptAddressCity', 
+                    'LIKE', '%' . $request->policeDept . '%')
                 ->where('DeptAddressState', $reqState)
                 ->orderBy('DeptJurisdictionPopulation', 'desc')
                 ->orderBy('DeptTotOfficers', 'desc')
                 ->orderBy('DeptName', 'asc')
                 ->get();
-            list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-            $deptsRes = OPDepartments::where('DeptAddress', 'LIKE', '%' . $request->policeDept . '%')
+            $this->addDeptToResults($deptIDs, $depts, $deptsRes);
+            $deptsRes = OPDepartments::where('DeptAddress', 
+                    'LIKE', '%' . $request->policeDept . '%')
                 ->where('DeptAddressState', $reqState)
                 ->orderBy('DeptJurisdictionPopulation', 'desc')
                 ->orderBy('DeptTotOfficers', 'desc')
                 ->orderBy('DeptName', 'asc')
                 ->get();
-            list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsRes);
+            $this->addDeptToResults($deptIDs, $depts, $deptsRes);
             $zips = $counties = [];
-            $cityZips = SLZips::where('ZipCity', 'LIKE', '%' . $request->policeDept . '%')
+            $cityZips = SLZips::where('ZipCity', 
+                    'LIKE', '%' . $request->policeDept . '%')
                 ->where('ZipState', 'LIKE', $reqState)
                 ->get();
             if ($cityZips->isNotEmpty()) {
@@ -94,42 +110,54 @@ class OpenAjax extends OpenComplaintSaves
                 $deptsMore = OPDepartments::whereIn('DeptAddressZip', $zips)
                     ->orderBy('DeptName', 'asc')
                     ->get();
-                list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
+                $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                 foreach ($counties as $c) {
-                    $deptsMore = OPDepartments::where('DeptName', 'LIKE', '%' . $c . '%')
+                    $deptsMore = OPDepartments::where('DeptName', 
+                            'LIKE', '%' . $c . '%')
                         ->where('DeptAddressState', $reqState)
                         ->orderBy('DeptJurisdictionPopulation', 'desc')
                         ->orderBy('DeptTotOfficers', 'desc')
                         ->orderBy('DeptName', 'asc')
                         ->get();
-                    list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
-                    $deptsMore = OPDepartments::where('DeptAddressCounty', 'LIKE', '%' . $c . '%')
+                    $this->addDeptToResults($deptIDs, $depts, $deptsMore);
+                    $deptsMore = OPDepartments::where('DeptAddressCounty', 
+                            'LIKE', '%' . $c . '%')
                         ->where('DeptAddressState', $reqState)
                         ->orderBy('DeptJurisdictionPopulation', 'desc')
                         ->orderBy('DeptTotOfficers', 'desc')
                         ->orderBy('DeptName', 'asc')
                         ->get();
-                    list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsMore);
+                    $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                 }
             }
         }
-        $deptsFed = OPDepartments::where('DeptName', 'LIKE', '%' . $request->policeDept . '%')
+        $deptsFed = OPDepartments::where('DeptName', 
+            'LIKE', '%' . $request->policeDept . '%')
             ->where('DeptType', 366)
             ->orderBy('DeptJurisdictionPopulation', 'desc')
             ->orderBy('DeptTotOfficers', 'desc')
             ->orderBy('DeptName', 'asc')
             ->get();
-        list($deptIDs, $depts) = $this->addDeptToResults($deptIDs, $depts, $deptsFed);
+        $this->addDeptToResults($deptIDs, $depts, $deptsFed);
         $GLOBALS["SL"]->loadStates();
         echo view('vendor.openpolice.ajax.search-police-dept', [
-            "depts"            => $depts, 
-            "search"           => $request->get('policeDept'), 
-            "stateName"        => $GLOBALS["SL"]->states->getState($request->get('policeState')), 
-            "newDeptStateDrop" => $GLOBALS["SL"]->states->stateDrop($request->get('policeState'), true)
+            "depts" => $depts, 
+            "search" => $request->get('policeDept'), 
+            "stateName" => $GLOBALS["SL"]->states
+                ->getState($request->get('policeState')), 
+            "newDeptStateDrop" => $GLOBALS["SL"]->states
+                ->stateDrop($request->get('policeState'), true)
         ])->render();
         exit;
     }
     
+    /**
+     * Pull and print the department description to appear when
+     * clicking it inside the Google map.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
     public function ajaxDeptKmlDesc(Request $request)
     {
         if ($request->has('deptID') && intVal($request->deptID) > 0) {
@@ -140,7 +168,16 @@ class OpenAjax extends OpenComplaintSaves
         return '';
     }
     
-    protected function addDeptToResults($deptIDs, $depts, $deptsIn)
+    /**
+     * Add a new set of departments ($deptsIn) into the larger
+     * sets of results.
+     *
+     * @param  array &$deptIDs
+     * @param  array &$depts
+     * @param  array $deptsIn
+     * @return boolean
+     */
+    protected function addDeptToResults(&$deptIDs, &$depts, $deptsIn)
     {
         if ($deptsIn->isNotEmpty()) {
             foreach ($deptsIn as $d) {
@@ -150,7 +187,7 @@ class OpenAjax extends OpenComplaintSaves
                 }
             }
         }
-        return [$deptIDs, $depts];
+        return true;
     }
     
 }

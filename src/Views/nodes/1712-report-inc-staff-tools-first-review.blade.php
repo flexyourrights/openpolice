@@ -1,6 +1,18 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-first-review.blade.php -->
-<form name="firstReviewForm" 
-	src="?firstReview=1&refresh=1{{ (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
+@if ($GLOBALS['SL']->REQ->has('ajax') 
+    || $GLOBALS['SL']->REQ->has('wdg'))
+    <form name="firstReviewForm" method="get" src="/dash/complaint/read-{{ 
+        $complaintRec->ComID }}?firstReview=1">
+@else
+    <form name="firstReviewForm" method="get" src="?firstReview=1">
+    @if ($GLOBALS['SL']->REQ->has('frame'))
+        <input type="hidden" name="frame" value="1">
+    @endif
+@endif
+<input type="hidden" name="firstReview" value="1">
+<input type="hidden" name="refresh" value="1">
+
+
 <div class="row">
     <div class="col-sm-6">
 
@@ -61,7 +73,9 @@
 
 <div class="mT20 mB10">{!! $GLOBALS["SL"]->printAccordTxt(
     'About these complaint types',
-    view('vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types')->render()
+    view(
+        'vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types'
+    )->render()
 ) !!}</div>
 
 </form>

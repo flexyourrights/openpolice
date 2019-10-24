@@ -21,6 +21,15 @@ use OpenPolice\Controllers\OpenComplaintConditions;
 
 class OpenComplaintSaves extends OpenComplaintConditions
 {
+    /**
+     * Override default behavior for submitting survey forms,
+     * delegateing specifc saving procedures for custom nodes.
+     *
+     * @param  int $nID
+     * @param  string $nIDtxt
+     * @param  array $tmpSubTier
+     * @return boolean
+     */
     protected function postNodePublicCustom($nID = -3, $nIDtxt = '', $tmpSubTier = [])
     {
         if (empty($tmpSubTier)) {
@@ -33,9 +42,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
             ]);
         }
         // Main Complaint Survey...
-        if ($nID == 439) {
-            return $this->saveUnresolvedCharges($nID);
-        } elseif (in_array($nID, [16, 17])) {
+        if (in_array($nID, [16, 17])) {
             return $this->saveStartTime($nID, $tbl, $fld);
         } elseif (in_array($nID, [2262, 2263])) {
             return $this->saveStartTime($nID, $tbl, $fld);
@@ -83,29 +90,14 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return false; // false to continue standard post processing
     }
     
-    protected function saveUnresolvedCharges($nID)
-    {
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld')) {
-            $defID = $GLOBALS["SL"]->def->getID('Unresolved Charges Actions', 'Full complaint to print or save');
-            if ($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld') == $defID) {
-                $defID = $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized');
-                if ($this->sessData->dataSets["Complaints"][0]->ComPrivacy == $defID) {
-                    $this->sessData->dataSets["Complaints"][0]->update([
-                        "ComPrivacy" => $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
-                    ]);
-                }
-            } else {
-                $defID = $GLOBALS["SL"]->def->getID('Unresolved Charges Actions', 'Anonymous complaint data only');
-                if ($GLOBALS["SL"]->REQ->input('n' . $nID . 'fld') == $defID) {
-                    $this->sessData->dataSets["Complaints"][0]->update([
-                        "ComPrivacy" => $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized')
-                    ]);
-                }
-            }
-        }
-        return false;
-    }
-    
+    /**
+     * Store the start date — and optionally start time — of the incident.
+     *
+     * @param  int $nID
+     * @param  string $tbl
+     * @param  string $fld
+     * @return boolean
+     */
     protected function saveStartTime($nID, $tbl, $fld)
     {
         $dateNode = ((in_array($nID, [16, 17])) ? 15 : 2261);
@@ -124,6 +116,13 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return true;
     }
     
+    /**
+     * If there is only one civilian involved, store whether or not
+     * they were given any citations.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveCitationVictim($nID)
     {
         if (isset($this->sessData->dataSets["Civilians"]) 
@@ -142,15 +141,23 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return false;
     }
     
+    /**
+     * Since there are more than one civilian involved, store 
+     * which of them were given any citations.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveCitationVictims($nID)
     {
-        $isEmpty = (!$GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
-            || !is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) 
-            || sizeof($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) == 0);
+        $nodeFld = 'n' . $nID . 'fld';
+        $isEmpty = (!$GLOBALS["SL"]->REQ->has($nodeFld) 
+            || !is_array($GLOBALS["SL"]->REQ->get($nodeFld)) 
+            || sizeof($GLOBALS["SL"]->REQ->get($nodeFld)) == 0);
         $civs = $this->sessData->getLoopRows('Victims');
         if ($civs && sizeof($civs) > 0) {
             foreach ($civs as $i => $civ) {
-                $reqArr = $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld');
+                $reqArr = $GLOBALS["SL"]->REQ->get($nodeFld);
                 if ($isEmpty || !in_array($civ->CivID, $reqArr)) {
                     $civ->update([ 'CivGivenCitation' => 'N' ]);
                 } else {
@@ -160,49 +167,77 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
-    
+    /**
+     * If there is only one of a type of person involved, 
+     * store whether or not they were given any citations.
+     *
+     * @param  int $nID
+     * @param  string $type
+     * @return boolean
+     */
     protected function saveProfanePerson($nID, $type = 'Off')
     {
         $tbl = (($type == 'Off') ? 'Officers' : 'Civilians');
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld')) {
-            $this->sessData->dataSets[$tbl][0]->{ $type . 'UsedProfanity' } 
-                = trim($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'));
+        $nodeFld = 'n' . $nID . 'fld';
+        $profFld = $type . 'UsedProfanity';
+        if ($GLOBALS["SL"]->REQ->has($nodeFld)) {
+            $this->sessData->dataSets[$tbl][0]->{ $profFld } 
+                = trim($GLOBALS["SL"]->REQ->get($nodeFld));
         } else {
-            $this->sessData->dataSets[$tbl][0]->{ $type . 'UsedProfanity' } = '';
+            $this->sessData->dataSets[$tbl][0]->{ $profFld } = '';
         }
         $this->sessData->dataSets[$tbl][0]->save();
         return true;
     }
     
+    /**
+     * Since there are more than one of a type of person 
+     * civilian involved, store which of them used profanity.
+     *
+     * @param  int $nID
+     * @param  string $type
+     * @return boolean
+     */
     protected function saveProfanePersons($nID, $type = 'Off')
     {
         $tbl = (($type == 'Off') ? 'Officers' : 'Civilians');
+        $nodeFld = 'n' . $nID . 'fld';
+        $profFld = $type . 'UsedProfanity';
         foreach ($this->sessData->dataSets[$tbl] as $i => $off) {
-            if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
-                && in_array($off->getKey(), $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))) {
-                $this->sessData->dataSets[$tbl][$i]->{ $type . 'UsedProfanity' } = 'Y';
+            if ($GLOBALS["SL"]->REQ->has($nodeFld) 
+                && in_array($off->getKey(), $GLOBALS["SL"]->REQ->get($nodeFld))) {
+                $this->sessData->dataSets[$tbl][$i]->{ $profFld } = 'Y';
             } else {
-                $this->sessData->dataSets[$tbl][$i]->{ $type . 'UsedProfanity' } = '';
+                $this->sessData->dataSets[$tbl][$i]->{ $profFld } = '';
             }
             $this->sessData->dataSets[$tbl][$i]->save();
         }
         return true;
     }
     
+    /**
+     * Store the different types of force used against which civilians.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveForceTypes($nID)
     {
         $GLOBALS["SL"]->def->loadDefs('Force Type');
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
-            && is_array($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))
-            && sizeof($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld')) > 0) {
-            foreach ($GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') as $forceType) {
-                if ($this->getForceEveID($forceType) <= 0 && $this->coreID > 0) {
+        $nodeFld = 'n' . $nID . 'fld';
+        $forceTypes = $GLOBALS["SL"]->def->defValues["Force Type"];
+        if ($GLOBALS["SL"]->REQ->has($nodeFld) 
+            && is_array($GLOBALS["SL"]->REQ->get($nodeFld))
+            && sizeof($GLOBALS["SL"]->REQ->get($nodeFld)) > 0) {
+            foreach ($GLOBALS["SL"]->REQ->get($nodeFld) as $forceType) {
+                if ($this->getForceEveID($forceType) <= 0 
+                    && $this->coreID > 0) {
                     $this->addNewEveSeq('Force', $forceType);
                 }
                 $eveID = $this->getForceEveID($forceType);
                 if ($nID == 742) {
                     $fInd = 0;
-                    foreach ($GLOBALS["SL"]->def->defValues["Force Type"] as $i => $typ) {
+                    foreach ($forceTypes as $i => $typ) {
                         if ($typ->DefID == $forceType) {
                             $fInd = $i;
                         }
@@ -244,9 +279,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
                 }
             }
         }
-        foreach ($GLOBALS["SL"]->def->defValues["Force Type"] as $i => $def) {
-            if (!$GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') 
-                || !in_array($def->DefID, $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld'))) {
+        foreach ($forceTypes as $i => $def) {
+            if (!$GLOBALS["SL"]->REQ->has($nodeFld) 
+                || !in_array($def->DefID, $GLOBALS["SL"]->REQ->get($nodeFld))) {
                 $e = $this->getForceEveID($def->DefID);
                 $this->deleteEventByID($e);
             }
@@ -255,9 +290,17 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return true;
     }
     
+    /**
+     * Store whether or not force was used against an animal.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveForceAnimYN($nID)
     {
-        if (!$GLOBALS["SL"]->REQ->has('n' . $nID . 'fld') || $GLOBALS["SL"]->REQ->get('n' . $nID . 'fld') == 'N') {
+        $nodeFld = 'n' . $nID . 'fld';
+        if (!$GLOBALS["SL"]->REQ->has($nodeFld) 
+            || $GLOBALS["SL"]->REQ->get($nodeFld) == 'N') {
             $animalsForce = $this->getCivAnimalForces();
             if ($animalsForce && sizeof($animalsForce) > 0) {
                 foreach ($animalsForce as $force) {
@@ -268,14 +311,26 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return false;
     }
     
+    /**
+     * Store the types of force used against an animal.
+     *
+     * @param  int $nID1
+     * @param  int $nID2
+     * @param  int $nID3
+     * @return boolean
+     */
     protected function saveForceTypesAnim($nID1, $nID2, $nID3)
     {
-        if ($GLOBALS["SL"]->REQ->has('n' . $nID2 . 'fld') && $GLOBALS["SL"]->REQ->get('n' . $nID2 . 'fld') == 'Y') { 
-            if ($GLOBALS["SL"]->REQ->has('n' . $nID1 . 'fld') 
-                && is_array($GLOBALS["SL"]->REQ->get('n' . $nID1 . 'fld')) 
-                && sizeof($GLOBALS["SL"]->REQ->get('n' . $nID1 . 'fld')) > 0) {
-                $animalDesc = (($GLOBALS["SL"]->REQ->has('n' . $nID3 . 'fld')) 
-                    ? trim($GLOBALS["SL"]->REQ->get('n' . $nID3 . 'fld')) : '');
+        $fld1 = 'n' . $nID1 . 'fld';
+        $fld2 = 'n' . $nID2 . 'fld';
+        $fld3 = 'n' . $nID3 . 'fld';
+        if ($GLOBALS["SL"]->REQ->has($fld2) 
+            && $GLOBALS["SL"]->REQ->get($fld2) == 'Y') { 
+            if ($GLOBALS["SL"]->REQ->has($fld1) 
+                && is_array($GLOBALS["SL"]->REQ->get($fld1)) 
+                && sizeof($GLOBALS["SL"]->REQ->get($fld1)) > 0) {
+                $animalDesc = (($GLOBALS["SL"]->REQ->has($fld3)) 
+                    ? trim($GLOBALS["SL"]->REQ->get($fld3)) : '');
                 $animalsForce = $this->getCivAnimalForces();
                 foreach ($GLOBALS["SL"]->REQ->n744fld as $forceType) {
                     $foundType = false;
@@ -294,32 +349,50 @@ class OpenComplaintSaves extends OpenComplaintConditions
                     }
                 }
             }
-            foreach ($GLOBALS["SL"]->def->defValues["Force Type"] as $i => $def) {
-                if (!$GLOBALS["SL"]->REQ->has('n' . $nID1 . 'fld') 
-                    || !in_array($def->DefID, $GLOBALS["SL"]->REQ->get('n' . $nID1 . 'fld'))) {
-                    $this->deleteEventByID($this->getForceEveID($def->DefID, true));
+            $types = $GLOBALS["SL"]->def->defValues["Force Type"];
+            foreach ($types as $i => $def) {
+                if (!$GLOBALS["SL"]->REQ->has($fld1) 
+                    || !in_array($def->DefID, 
+                        $GLOBALS["SL"]->REQ->get($fld1))) {
+                    $this->deleteEventByID(
+                        $this->getForceEveID($def->DefID, true));
                 }
             }
         }
         return true;
     }
     
+    /**
+     * Store whether or not there was an injury related to handcuffs.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveHandcuffInjury($nID)
     {
-        $handcuffDefID = $GLOBALS["SL"]->def->getID('Injury Types', 'Handcuff Injury');
-        $stopRow = $this->getEventSequence($this->sessData->dataBranches[1]["itemID"]);
-        if ($GLOBALS["SL"]->REQ->has('n316fld') && trim($GLOBALS["SL"]->REQ->n316fld) == 'Y') {
-            if (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) <= 0) {
+        $handcuffDefID = $GLOBALS["SL"]->def->getID(
+            'Injury Types', 
+            'Handcuff Injury'
+        );
+        $stopRow = $this->getEventSequence(
+            $this->sessData->dataBranches[1]["itemID"]);
+        $injID = $stopRow[0]["Event"]->StopSubjectHandcuffInjury;
+        if ($GLOBALS["SL"]->REQ->has('n316fld') 
+            && trim($GLOBALS["SL"]->REQ->n316fld) == 'Y') {
+            if (intVal($injID) <= 0) {
                 $newInj = new OPInjuries;
                 $newInj->InjType = $handcuffDefID;
-                $newInj->InjSubjectID = ((isset($stopRow[0]["Civilians"][0])) 
-                    ? $stopRow[0]["Civilians"][0] : -3);
+                $newInj->InjSubjectID 
+                    = ((isset($stopRow[0]["Civilians"][0])) 
+                        ? $stopRow[0]["Civilians"][0] : -3);
                 $newInj->save();
-                $this->sessData->dataSets["Injuries"]["Handcuff"][] = $newInj;
-                OPStops::find($stopRow[0]["Event"]->StopID)
-                    ->update(array('StopSubjectHandcuffInjury' => $newInj->InjID));
+                $this->sessData->dataSets["Injuries"]["Handcuff"][] 
+                    = $newInj;
+                OPStops::find($stopRow[0]["Event"]->StopID)->update([
+                    'StopSubjectHandcuffInjury' => $newInj->InjID
+                ]);
             }
-        } elseif (intVal($stopRow[0]["Event"]->StopSubjectHandcuffInjury) > 0) {
+        } elseif (intVal($injID) > 0) {
             OPStops::find($stopRow[0]["Event"]->StopID)->update([
                 'StopSubjectHandcuffInjury' => NULL
             ]);
@@ -329,6 +402,12 @@ class OpenComplaintSaves extends OpenComplaintConditions
         return false;
     }
     
+    /**
+     * Update the complaint status to 'New', AKA complete.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
     protected function saveStatusCompletion($nID)
     {
         if ($GLOBALS["SL"]->REQ->get('step') != 'next') {

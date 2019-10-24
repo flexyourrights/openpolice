@@ -257,7 +257,7 @@ class DepartmentScores
     
     public function recalcAllDepts()
     {
-        if ($GLOBALS["SL"]->REQ->has('refresh')) {
+        if ($GLOBALS["SL"]->REQ->has('recalc')) {
             $this->recheckVerified();
         }
         // Recalculate all verified departments' scores

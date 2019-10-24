@@ -198,14 +198,19 @@ class OpenPoliceUtils extends TreeSurvForm
     {
         $ret = '';
         if ($this->treeID == 1) {
-            if (isset($coreRecord[1]->ComSummary) && trim($coreRecord[1]->ComSummary) != '') {
+            if (isset($coreRecord[1]->ComSummary) 
+                && trim($coreRecord[1]->ComSummary) != '') {
                 $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->ComSummary, 10);
             } else {
                 $ret .= '(empty)';
             }
         } elseif ($this->treeID == 5) {
-            if (isset($coreRecord[1]->CompliSummary) && trim($coreRecord[1]->CompliSummary) != '') {
-                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->CompliSummary, 10);
+            if (isset($coreRecord[1]->CompliSummary) 
+                && trim($coreRecord[1]->CompliSummary) != '') {
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot(
+                    $coreRecord[1]->CompliSummary, 
+                    10
+                );
             } else {
                 $ret .= '(empty)';
             }
@@ -215,7 +220,8 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function multiRecordCheckRowSummary($coreRecord)
     {
-        $ret = 'Started ' . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
+        $ret = 'Started ' . date('n/j/y, g:ia', 
+            strtotime($coreRecord[1]->created_at));
         if ($this->treeID == 1) {
             $incident = OPIncidents::find($coreRecord[1]->ComIncidentID);
             if ($incident && isset($incident->IncAddressCity)) {
@@ -236,7 +242,8 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function multiRecordCheckDelWarn()
     {
-        return 'Are you sure you want to delete this complaint? Deleting it CANNOT be undone.';
+        return 'Are you sure you want to delete this complaint? '
+            . 'Deleting it CANNOT be undone.';
     }
     
     public function chkCoreRecEmpty($coreID = -3, $coreRec = NULL)
@@ -250,10 +257,12 @@ class OpenPoliceUtils extends TreeSurvForm
         if (!$coreRec) {
             return false;
         }
-        if (!isset($coreRec->ComSubmissionProgress) || intVal($coreRec->ComSubmissionProgress) <= 0) {
+        if (!isset($coreRec->ComSubmissionProgress) 
+            || intVal($coreRec->ComSubmissionProgress) <= 0) {
             return true;
         }
-        if (!isset($coreRec->ComSummary) || trim($coreRec->ComSummary) == '') {
+        if (!isset($coreRec->ComSummary) 
+            || trim($coreRec->ComSummary) == '') {
             return true;
         }
         return false;
@@ -271,11 +280,13 @@ class OpenPoliceUtils extends TreeSurvForm
             return false;
         }
         if ($this->treeID == 1) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+            if ($coreRec->ComStatus == $GLOBALS["SL"]
+                ->def->getID('Complaint Status', 'Incomplete')) {
                 return true;
             }
         } elseif ($this->treeID == 5) {
-            if ($coreRec->ComStatus == $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete')) {
+            if ($coreRec->ComStatus == $GLOBALS["SL"]
+                ->def->getID('Compliment Status', 'Incomplete')) {
                 return true;
             }
         }
@@ -290,13 +301,15 @@ class OpenPoliceUtils extends TreeSurvForm
         }
         $this->allPublicCoreIDs = $list = [];
         if ($coreTbl == 'Complaints') {
-            $list = OPComplaints::whereIn('ComStatus', $this->getPublishedStatusList($coreTbl))
+            $list = OPComplaints::whereIn('ComStatus', 
+                    $this->getPublishedStatusList($coreTbl))
                 //->where('ComType', $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'))
                 ->select('ComID', 'ComPublicID')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } elseif ($coreTbl == 'Compliments') {
-            $list = OPCompliments::whereIn('CompliStatus', $this->getPublishedStatusList($coreTbl))
+            $list = OPCompliments::whereIn('CompliStatus', 
+                    $this->getPublishedStatusList($coreTbl))
                 //->where('CompliType', $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'))
                 ->select('CompliID') //, 'CompliPublicID')
                 ->orderBy('created_at', 'desc')
@@ -313,21 +326,25 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl) || trim($coreTbl) == '') {
+        if (!isset($coreTbl) 
+            || trim($coreTbl) == '') {
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         if ($coreTbl == 'Complaints') {
+            $set = 'Complaint Status';
             return [
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Submitted to Oversight'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Received by Oversight'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Declined To Investigate (Closed)'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Investigated (Closed)')
+                $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight'), 
+                $GLOBALS["SL"]->def->getID($set, 'Submitted to Oversight'), 
+                $GLOBALS["SL"]->def->getID($set, 'Received by Oversight'), 
+                $GLOBALS["SL"]->def->getID($set, 'Declined To Investigate (Closed)'), 
+                $GLOBALS["SL"]->def->getID($set, 'Investigated (Closed)')
             ];
         } elseif ($coreTbl == 'Compliments') {
+            $set = 'Compliment Status';
             return [
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Reviewed'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Submitted to Oversight'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Received by Oversight')
+                $GLOBALS["SL"]->def->getID($set, 'Reviewed'), 
+                $GLOBALS["SL"]->def->getID($set, 'Submitted to Oversight'), 
+                $GLOBALS["SL"]->def->getID($set, 'Received by Oversight')
             ];
         }
         return [];
@@ -335,22 +352,24 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getUnPublishedStatusList($coreTbl = '')
     {
-        if (trim($coreTbl) == '') {
+        if (!isset($coreTbl) 
+            || trim($coreTbl) == '') {
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         if ($coreTbl == 'Complaints') {
+            $set = 'Complaint Status';
             return [
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Hold'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'New'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Pending Attorney'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Attorney\'d'), 
-                $GLOBALS["SL"]->def->getID('Complaint Status',  'Reviewed')
-                //$GLOBALS["SL"]->def->getID('Complaint Status',  'OK to Submit to Oversight')
+                $GLOBALS["SL"]->def->getID($set, 'Hold'), 
+                $GLOBALS["SL"]->def->getID($set, 'New'), 
+                $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'), 
+                $GLOBALS["SL"]->def->getID($set, 'Attorney\'d'), 
+                $GLOBALS["SL"]->def->getID($set, 'Reviewed')
             ];
         } elseif ($coreTbl == 'Compliments') {
+            $set = 'Compliment Status';
             return [
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'Hold'), 
-                $GLOBALS["SL"]->def->getID('Compliment Status', 'New')
+                $GLOBALS["SL"]->def->getID($set, 'Hold'), 
+                $GLOBALS["SL"]->def->getID($set, 'New')
             ];
         }
         return [];
@@ -358,8 +377,8 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function complaintHasPublishedStatus()
     {
-        if (in_array($this->sessData->dataSets["Complaints"][0]->ComStatus, 
-            $this->getPublishedStatusList('Complaints'))) {
+        $status = $this->sessData->dataSets["Complaints"][0]->ComStatus;
+        if (in_array($status, $this->getPublishedStatusList('Complaints'))) {
             return 1;
         }
         return 0;
@@ -367,11 +386,16 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function canPrintFullReport()
     {
-        return ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])
-            || ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
-                && $this->complaintHasPublishedStatus() == 1));
+        if ((isset($this->v["isAdmin"]) 
+                && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) 
+                && $this->v["isOwner"])) {
+            return true;
+        }
+        $com = $this->sessData->dataSets["Complaints"][0];
+        return ($com->ComPrivacy == $GLOBALS["SL"]->def
+                ->getID('Privacy Types', 'Submit Publicly')
+            && in_array($com->ComStatus, [200, 201, 203, 204]));
     }
     
     public function tblsInPackage()
@@ -1676,7 +1700,8 @@ class OpenPoliceUtils extends TreeSurvForm
     {
         $this->v["reportUploadTypes"] = [
             ['full',          'Full Sensitive Report'],
-            ['public',        'Public Report']
+            ['public',        'Public Report'],
+            ['findings',      'Investigative Findings Report']
         ];
         return $this->v["reportUploadTypes"];
     }

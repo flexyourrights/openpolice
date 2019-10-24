@@ -23,10 +23,17 @@ use OpenPolice\Controllers\OpenPartners;
 
 class OpenInitExtras extends OpenPartners
 {
-    // Initializing a bunch of things which are not [yet] automatically determined by the software
+    /**
+     * Initializing a bunch of things which are not [yet] automatically 
+     * determined by the SurvLoop, nor the OpenPolice.org instance.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return boolean
+     */
     protected function initExtra(Request $request)
     {
-        // Establishing Main Navigation Organization, with Node ID# and Section Titles
+        // Establishing Main Navigation Organization, 
+        // with Node ID# and Section Titles
         $this->loadYourContact();
         $this->v["reportUploadFolder"] = '../storage/app/up/reports/';
         $this->majorSections = [];
@@ -38,18 +45,29 @@ class OpenInitExtras extends OpenPartners
         } elseif ($GLOBALS["SL"]->treeID == 5) {
             $this->navMenuCompliment();
         } elseif ($GLOBALS["SL"]->treeID == 36) {
-            if ($request->has('d') && trim($request->get('d')) != '') {
-                $chk = OPDepartments::where('DeptSlug', 'LIKE', trim($request->get('d')))
+            if ($request->has('d') 
+                && trim($request->get('d')) != '') {
+                $chk = OPDepartments::where(
+                    'DeptSlug', 'LIKE', trim($request->get('d')))
                     ->first();
                 if ($chk && isset($chk->DeptID)) {
-                    $this->loadAllSessData($GLOBALS["SL"]->coreTbl, $chk->DeptID);
+                    $this->loadAllSessData(
+                        $GLOBALS["SL"]->coreTbl, 
+                        $chk->DeptID
+                    );
                 }
             }
         }
         return true;
     }
     
-    // Maps survey tree nodes which wrap navigational sections
+    /**
+     * Mapping the Survey Tree Nodes which wrap navigational sections.
+     * for the complaint process.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return boolean
+     */
     protected function navMenuComplaint()
     {
         $this->majorSections = [];
@@ -89,6 +107,13 @@ class OpenInitExtras extends OpenPartners
         return true;
     }
     
+    /**
+     * Mapping the Survey Tree Nodes which wrap navigational sections
+     * for the compliment process.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return boolean
+     */
     protected function navMenuCompliment()
     {
         $this->majorSections[] = array(752,    'Your Story',        'active');
@@ -113,14 +138,12 @@ class OpenInitExtras extends OpenPartners
         $this->minorSections[3][] = array(964, 'Submit Complaint');
         return true;
     }
-    
-    protected function overrideMinorSection($nID = -3, $majorSectInd = -3)
-    {
-        //if ($nID == 482) return 148;
-        return -1;
-    }
-        
-    // Initializing a bunch of things which are not [yet] automatically determined by the software
+
+    /**
+     * Load anything else needed after default loading of a Tree Session.
+     *
+     * @return boolean
+     */
     protected function loadExtra()
     {
         if ($this->treeID == 1 && $this->isGold()) {
@@ -176,7 +199,8 @@ class OpenInitExtras extends OpenPartners
                 $this->sessData->dataSets["Complaints"][0]->save();
             }
         }
-        if (session()->has('opcDeptID') && intVal(session()->get('opcDeptID')) > 0) {
+        if (session()->has('opcDeptID') 
+            && intVal(session()->get('opcDeptID')) > 0) {
             if ($this->treeID == 1) {
                 if (isset($this->sessData->dataSets["Complaints"])
                     && intVal($this->sessData->dataSets["Complaints"][0]
@@ -261,18 +285,29 @@ class OpenInitExtras extends OpenPartners
                 $this->sessData->refreshDataSets();
             }
         }
-//echo '<pre>'; print_r($this->sessData->dataSets); echo '</pre>'; exit;
         return true;
     }
     
+    /**
+     * Override current page as represented in the admin menu.
+     *
+     * @return string
+     */
     public function initAdmMenuExtras()
     {
-        if (in_array($this->treeID, [99, 46])) { // admin area view of complaint reports
+        if (in_array($this->treeID, [99, 46])) {
+            // admin area view of complaint reports
             return '/dash/all-complete-complaints';
         }
         return '';
     }
     
+    /**
+     * Load additional data related to users who are logged in.
+     *
+     * @param   int  $uID
+     * @return  array
+     */
     public function initPowerUser($uID = -3)
     {
         if ($uID <= 0) {
@@ -305,40 +340,75 @@ class OpenInitExtras extends OpenPartners
                 $this->v["yourUserContact"]
             ];
         }
-        return [ [], [] ];
+        return [
+            [], 
+            [] 
+        ];
     }
     
+    /**
+     * Override the default behavior for wrapping a tree which has
+     * been called through an ajax call.
+     *
+     * @return string
+     */
     protected function ajaxContentWrapCustom($str, $nID = -3)
     {
         if ($this->treeID == 1) {
-            if ($GLOBALS["SL"]->REQ->has('treeSlug') && trim($GLOBALS["SL"]->REQ->get('treeSlug')) == 'complaint'
-                && $GLOBALS["SL"]->REQ->has('nodeSlug') && trim($GLOBALS["SL"]->REQ->get('nodeSlug')) == 'login') {
+            if ($GLOBALS["SL"]->REQ->has('treeSlug') 
+                && trim($GLOBALS["SL"]->REQ->get('treeSlug')) == 'complaint'
+                && $GLOBALS["SL"]->REQ->has('nodeSlug') 
+                && trim($GLOBALS["SL"]->REQ->get('nodeSlug')) == 'login') {
                 return $this->redir('/u/complaint/when-and-where', true);
             }
         }
         return $str;
     }
     
+    /**
+     * Override the default data permissions for this page load.
+     *
+     * @return boolean
+     */
     protected function tweakPageViewPerms()
     {
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return false;
+        }
+        $isPublished = $this->isPublished(
+            'Complaints', 
+            $this->coreID, 
+            $this->sessData->dataSets["Complaints"][0]
+        );
+        $defPub = $GLOBALS["SL"]->def
+            ->getID('Privacy Types', 'Submit Publicly');
         if (isset($this->sessData->dataSets["Complaints"]) 
-            && $this->isPublished('Complaints', $this->coreID, $this->sessData->dataSets["Complaints"][0])
-            && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)) {
-            if ($this->v["uID"] > 0 && $this->v["user"] && $this->v["user"]->hasRole('administrator|staff')) {
-                
-            } elseif ($this->sessData->dataSets["Complaints"][0]->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')) {
-                if (in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
-                    $GLOBALS["SL"]->dataPerms = 'private';
+            && $isPublished) {
+            $com = $this->sessData->dataSets["Complaints"][0];
+            if (isset($com->ComPrivacy)) {
+                if ($this->v["uID"] > 0 && $this->v["user"] 
+                    && $this->v["user"]->hasRole('administrator|staff')) {
+                    
+                } elseif ($com->ComPrivacy == $defPub 
+                    && in_array($com->ComStatus, [200, 201, 203, 204])) {
+                    if (in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
+                        $GLOBALS["SL"]->dataPerms = 'private';
+                    }
                 }
             }
         }
         return true;
     }
     
+    /**
+     * Run anything else extra which needs to be run for this page load.
+     *
+     * @return boolean
+     */
     protected function runPageExtra($nID = -3)
     {
-        if ($nID == 1362) { // Loading Complaint Report: Check for oversight permissions
+        if ($nID == 1362) { 
+            // Loading Complaint Report: Check for oversight permissions
             if (!isset($GLOBALS["SL"]->pageView)) {
                 $this->maxUserView(); // shouldn't be needed?
             }
@@ -349,6 +419,11 @@ class OpenInitExtras extends OpenPartners
         return true;
     }
 
+    /**
+     * Run anything else extra needed to clear data in between sessions.
+     *
+     * @return boolean
+     */
     protected function loadSessionClear($coreTbl = '', $coreID = -3)
     {
         $this->allegations = [];

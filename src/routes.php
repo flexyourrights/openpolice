@@ -13,16 +13,37 @@
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::get( '/join-beta-test/{campaign}', 'OpenPolice\Controllers\OpenPolice@joinBetaLink');
+    Route::get(
+        '/join-beta-test/{campaign}', 
+        'OpenPolice\Controllers\OpenPolice@joinBetaLink'
+    );
     
-    Route::get( '/dept/{deptSlug}',                    'OpenPolice\Controllers\OpenPolice@deptPage');
-    Route::get( '/complaint-or-compliment/{deptSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryDept');
+    Route::get(
+        '/dept/{deptSlug}',
+        'OpenPolice\Controllers\OpenPolice@deptPage'
+    );
+    Route::get(
+        '/complaint-or-compliment/{deptSlug}',
+        'OpenPolice\Controllers\OpenPolice@shareStoryDept'
+    );
     
-    Route::get( '/attorney/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@attorneyPage');
-    Route::get( '/prepare-complaint-for-attorney/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryAttorney');
+    Route::get(
+        '/attorney/{prtnSlug}',
+        'OpenPolice\Controllers\OpenPolice@attorneyPage'
+    );
+    Route::get(
+        '/prepare-complaint-for-attorney/{prtnSlug}', 
+        'OpenPolice\Controllers\OpenPolice@shareStoryAttorney'
+    );
 
-    Route::get( '/org/{prtnSlug}',                       'OpenPolice\Controllers\OpenPolice@orgPage');
-    Route::get( '/prepare-complaint-for-org/{prtnSlug}', 'OpenPolice\Controllers\OpenPolice@shareStoryOrg');
+    Route::get(
+        '/org/{prtnSlug}',
+        'OpenPolice\Controllers\OpenPolice@orgPage'
+    );
+    Route::get(
+        '/prepare-complaint-for-org/{prtnSlug}', 
+        'OpenPolice\Controllers\OpenPolice@shareStoryOrg'
+    );
     
 });    
 

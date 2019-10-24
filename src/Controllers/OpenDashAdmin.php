@@ -136,7 +136,7 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $grapher = new SurvTrends('' . rand(1000000, 10000000) . '');
-        $grapher->addDataLineType('complete', 'Complete', '', '#006D36', '#006D36');
+        $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
         $grapher->addDataLineType('incomplete', 'Incomplete', '', '#F0AD4E', '#F0AD4E');
         $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
         $grapher->addDataLineType('received', 'Received by Oversight', '', '#333333', '#333333');

@@ -14,6 +14,11 @@ use OpenPolice\Controllers\OpenReportToolsAdmin;
 
 class OpenDevelopment extends OpenReportToolsAdmin
 {
+    /**
+     * Map and print the navigation for the software documentation are.
+     *
+     * @return string
+     */
     protected function printNavDevelopmentArea($nID)
     {
         $docuNav = [
@@ -25,17 +30,27 @@ class OpenDevelopment extends OpenReportToolsAdmin
             ], [
                 'Getting Started', 
                 [
-                    ['/how-to-install-open-police-complaints-with-docker', 'Install Copy of OPC with Docker', [
-                        ['#quick',     'Install Commands'],
-                        ['#video',     'Video'],
-                        ['#reference', 'Reference']
-                        ] ],
-                    ['/web-app-technical-specs', 'General Technical Background on App']
+                    [
+                        '/how-to-install-open-police-complaints-with-docker', 
+                        'Install Copy of OPC with Docker', 
+                        [
+                            ['#quick',     'Install Commands'],
+                            ['#video',     'Video'],
+                            ['#reference', 'Reference']
+                        ]
+                    ],
+                    [
+                        '/web-app-technical-specs', 
+                        'General Technical Background on App'
+                    ]
                 ]
             ], [
                 'Open Police Codebase Orientation',
                 [
-                    ['https://survloop.org/package-files-folders-classes', 'Package Files, Folders, and Classes']
+                    [
+                        'https://survloop.org/package-files-folders-classes', 
+                        'Package Files, Folders, and Classes'
+                    ]
                 ]
             ]
         ];

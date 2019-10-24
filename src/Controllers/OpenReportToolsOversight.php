@@ -24,11 +24,14 @@ class OpenReportToolsOversight extends OpenReportTools
     {
         $overRow = OPOversight::where('OverEmail', $this->v["user"]->email)
             ->first();
-        return view('vendor.openpolice.nodes.1711-report-inc-oversight-tools', [
-            "user"        => $this->v["user"],
-            "complaint"   => $this->sessData->dataSets["Complaints"][0],
-            "overRow"     => $overRow
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.1711-report-inc-oversight-tools', 
+            [
+                "user"      => $this->v["user"],
+                "complaint" => $this->sessData->dataSets["Complaints"][0],
+                "overRow"   => $overRow
+            ]
+        )->render();
     }
 
     /**
@@ -39,10 +42,13 @@ class OpenReportToolsOversight extends OpenReportTools
     protected function printMfaInstruct()
     {
         if (isset($this->v["tokenUser"]) && $this->v["tokenUser"]) {
-            return view('vendor.openpolice.nodes.1780-mfa-instructions', [
-                "user" => $this->v["tokenUser"],
-                "mfa"  => $this->processTokenAccess(false)
-            ])->render();
+            return view(
+                'vendor.openpolice.nodes.1780-mfa-instructions', 
+                [
+                    "user" => $this->v["tokenUser"],
+                    "mfa"  => $this->processTokenAccess(false)
+                ]
+            )->render();
         }
         return '';
     }
@@ -60,19 +66,22 @@ class OpenReportToolsOversight extends OpenReportTools
             if ($GLOBALS["SL"]->REQ->has('overUpdate') 
                 && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1
                 && $overRow && isset($overRow->OverDeptID)) {
-                $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->OverID);
+                $overUpdateRow = $this
+                    ->getOverUpdateRow($this->coreID, $overRow->OverID);
                 $status = 0;
                 $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) 
                     ? trim($GLOBALS["SL"]->REQ->overNote) : '');
                 if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
-                    if ($GLOBALS["SL"]->REQ->overStatus == 'Received by Oversight') {
+                    if ($GLOBALS["SL"]->REQ->overStatus 
+                        == 'Received by Oversight') {
                         $this->logOverUpDate(
                             $this->coreID, 
                             $overRow->OverID, 
                             'Received', 
                             $overUpdateRow
                         );
-                    } elseif ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
+                    } elseif ($GLOBALS["SL"]->REQ->overStatus 
+                        == 'Investigated (Closed)') {
                         $this->logOverUpDate(
                             $this->coreID, 
                             $overRow->OverID, 
@@ -80,8 +89,10 @@ class OpenReportToolsOversight extends OpenReportTools
                             $overUpdateRow
                         );
                     }
-                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', 
-                        trim($GLOBALS["SL"]->REQ->overStatus));
+                    $statusID = $GLOBALS["SL"]->def->getID(
+                        'Complaint Status', 
+                        trim($GLOBALS["SL"]->REQ->overStatus)
+                    );
                     $this->sessData->dataSets["Complaints"][0]->update([
                         "ComStatus" => $statusID
                     ]);
