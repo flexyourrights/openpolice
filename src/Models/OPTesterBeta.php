@@ -12,17 +12,18 @@ class OPTesterBeta extends Model
     [    
 		'BetaEmail', 
 		'BetaName', 
-		'BetaLastName',
-		'BetaYear',
+		'BetaLastName', 
+		'BetaYear', 
 		'BetaNarrative', 
-		'BetaHowHear',
+		'BetaHowHear', 
 		'BetaInvited', 
-		'BetaSubmissionProgress', 
+		'BetaUserID', 
 		'BetaVersionAB', 
-		'BetaTreeVersion', 
-		'BetaIsMobile', 
-		'BetaUniqueStr', 
+		'BetaSubmissionProgress', 
 		'BetaIPaddy', 
+		'BetaTreeVersion', 
+		'BetaUniqueStr', 
+		'BetaIsMobile', 
     ];
     
     // END SurvLoop auto-generated portion of Model

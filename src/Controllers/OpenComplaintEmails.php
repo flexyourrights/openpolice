@@ -16,9 +16,9 @@ use App\Models\OPAllegSilver;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
-use OpenPolice\Controllers\OpenPoliceUtils;
+use OpenPolice\Controllers\OpenPoliceEvents;
 
-class OpenComplaintEmails extends OpenPoliceUtils
+class OpenComplaintEmails extends OpenPoliceEvents
 {
     protected function postContactEmail($nID)
     {
@@ -99,6 +99,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
     public function emailRecordSwap($emaTxt)
     {
         $deptID = -3;
+        $this->loadDeptStuff();
         if (isset($this->sessData->dataSets["LinksComplaintDept"]) 
             && sizeof($this->sessData->dataSets["LinksComplaintDept"]) > 0) {
             foreach ($this->sessData->dataSets["LinksComplaintDept"] as $deptLnk) {
@@ -112,6 +113,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
     
     public function sendEmailBlurbsCustom($emailBody, $deptID = -3)
     {
+        $this->loadDeptStuff();
         if (isset($this->v["deptID"]) 
             && intVal($this->v["deptID"]) > 0
             && $deptID <= 0) {
@@ -178,6 +180,7 @@ class OpenComplaintEmails extends OpenPoliceUtils
     {
         if (!isset($GLOBALS["SL"]->x["depts"]) 
             || empty($GLOBALS["SL"]->x["depts"])) {
+            $this->loadDeptStuff();
             if ($deptID > 0) {
                 $this->loadDeptStuff($deptID);
             } elseif (isset($this->sessData->dataSets["LinksComplaintDept"])) {

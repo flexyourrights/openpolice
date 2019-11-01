@@ -33,7 +33,6 @@ use App\Models\SLEmailed;
 use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
 use OpenPolice\Controllers\OpenPolice;
-use OpenPolice\Controllers\VolunteerLeaderboard;
 use SurvLoop\Controllers\Admin\AdminController;
 
 class OpenPoliceAdmin extends AdminController

@@ -48,6 +48,7 @@ class OPComplaints extends Model
 		'ComUniqueStr', 
 		'ComIPaddy', 
 		'ComPublicID', 
+		'ComIsDemo', 
 		'ComShareData', 
     ];
     

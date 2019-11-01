@@ -32,7 +32,6 @@ class OPOversight extends Model
 		'OverComplaintPDF', 
 		'OverComplaintWebForm', 
 		'OverEmail', 
-		'OverKeepEmailPrivate', 
 		'OverPhoneWork', 
 		'OverAddress', 
 		'OverAddress2', 
@@ -48,6 +47,7 @@ class OPOversight extends Model
 		'OverWaySubPaperMail', 
 		'OverWaySubPaperInPerson', 
 		'OverWaySubNotary', 
+		'OverKeepEmailPrivate', 
     ];
     
     // END SurvLoop auto-generated portion of Model

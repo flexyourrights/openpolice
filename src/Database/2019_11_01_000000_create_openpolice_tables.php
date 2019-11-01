@@ -59,17 +59,7 @@ class OPCreateTables extends Migration
 			$table->string('ComIPaddy')->nullable();
 			$table->integer('ComPublicID')->nullable();
 			$table->boolean('ComIsDemo')->default('0')->nullable();
-			$table->timestamps();
-		});
-		Schema::create('OP_CivCompliments', function(Blueprint $table)
-		{
-			$table->increments('CivCompID');
-			$table->integer('CivCompComplimentID')->unsigned()->nullable();
-			$table->integer('CivCompUserID')->unsigned()->nullable();
-			$table->char('CivCompIsCreator', 1)->default('N')->nullable();
-			$table->string('CivCompRole', 10)->nullable();
-			$table->integer('CivCompPersonID')->unsigned()->nullable();
-			$table->integer('CivCompPhysDesc')->unsigned()->nullable();
+			$table->boolean('ComShareData')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Incidents', function(Blueprint $table)
@@ -380,8 +370,7 @@ class OPCreateTables extends Migration
 		Schema::create('OP_Officers', function(Blueprint $table)
 		{
 			$table->increments('OffID');
-			$table->boolean('OffIsVerified')->nullable();
-			$table->index('OffIsVerified');
+			$table->integer('OffVerifiedID')->unsigned()->nullable();
 			$table->integer('OffComplaintID')->unsigned()->nullable();
 			$table->index('OffComplaintID');
 			$table->string('OffRole')->nullable();
@@ -402,6 +391,24 @@ class OPCreateTables extends Migration
 			$table->char('OffUsedProfanity', 1)->nullable();
 			$table->longText('OffAdditionalDetails')->nullable();
 			$table->char('OffGaveCompliment', 1)->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_OfficersVerified', function(Blueprint $table)
+		{
+			$table->increments('OffVerID');
+			$table->integer('OffVerStatus')->unsigned()->nullable();
+			$table->integer('OffVerPersonID')->unsigned()->nullable();
+			$table->integer('OffVerCntComplaints')->default('0')->nullable();
+			$table->integer('OffVerCntAllegations')->default('0')->nullable();
+			$table->integer('OffVerCntCompliments')->default('0')->nullable();
+			$table->integer('OffVerCntCommends')->default('0')->nullable();
+			$table->string('OffVerUniqueStr')->nullable();
+			$table->integer('OffVerSubmissionProgress')->nullable();
+			$table->string('OffVerVersionAB')->nullable();
+			$table->string('OffVerTreeVersion')->nullable();
+			$table->string('OffVerIPaddy')->nullable();
+			$table->string('OffVerIsMobile')->nullable();
+			$table->integer('OffVerUserID')->unsigned()->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_PersonContact', function(Blueprint $table)
@@ -619,6 +626,14 @@ class OPCreateTables extends Migration
 			$table->integer('AdmPersonID')->unsigned()->nullable();
 			$table->timestamps();
 		});
+		Schema::create('OP_LinksOfficerDept', function(Blueprint $table)
+		{
+			$table->increments('LnkOffDeptID');
+			$table->integer('LnkOffDeptOfficerID')->unsigned()->nullable();
+			$table->integer('LnkOffDeptDeptID')->unsigned()->nullable();
+			$table->date('LnkOffDeptDateVerified')->nullable();
+			$table->timestamps();
+		});
 		Schema::create('OP_LinksComplaintDept', function(Blueprint $table)
 		{
 			$table->increments('LnkComDeptID');
@@ -712,18 +727,24 @@ class OPCreateTables extends Migration
 			$table->string('CompliIPaddy')->nullable();
 			$table->integer('CompliPublicID')->nullable();
 			$table->boolean('CompliIsDemo')->default('0')->nullable();
+			$table->boolean('CompliShareData')->nullable();
 			$table->timestamps();
 		});
-		Schema::create('OP_LinksComplimentDept', function(Blueprint $table)
+		Schema::create('OP_CivCompliment', function(Blueprint $table)
 		{
-			$table->increments('LnkCompliDeptID');
-			$table->integer('LnkCompliDeptComplimentID')->unsigned()->nullable();
-			$table->integer('LnkCompliDeptDeptID')->unsigned()->nullable();
+			$table->increments('CivCompID');
+			$table->integer('CivCompComplimentID')->unsigned()->nullable();
+			$table->integer('CivCompUserID')->unsigned()->nullable();
+			$table->char('CivCompIsCreator', 1)->default('N')->nullable();
+			$table->string('CivCompRole', 10)->nullable();
+			$table->integer('CivCompPersonID')->unsigned()->nullable();
+			$table->integer('CivCompPhysDescID')->unsigned()->nullable();
 			$table->timestamps();
 		});
-		Schema::create('OP_OffCompliments', function(Blueprint $table)
+		Schema::create('OP_OffCompliment', function(Blueprint $table)
 		{
 			$table->increments('OffCompID');
+			$table->integer('OffCompComplimentID')->unsigned()->nullable();
 			$table->integer('OffCompOffID')->unsigned()->nullable();
 			$table->char('OffCompValor', 1)->nullable();
 			$table->char('OffCompLifesaving', 1)->nullable();
@@ -733,6 +754,23 @@ class OPCreateTables extends Migration
 			$table->char('OffCompConstitutional', 1)->nullable();
 			$table->char('OffCompCompassion', 1)->nullable();
 			$table->char('OffCompCommunity', 1)->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_LinksComplimentDept', function(Blueprint $table)
+		{
+			$table->increments('LnkCompliDeptID');
+			$table->integer('LnkCompliDeptComplimentID')->unsigned()->nullable();
+			$table->integer('LnkCompliDeptDeptID')->unsigned()->nullable();
+			$table->timestamps();
+		});
+		Schema::create('OP_LinksComplimentOversight', function(Blueprint $table)
+		{
+			$table->increments('LnkCompliOverID');
+			$table->integer('LnkCompliOverComplimentID')->unsigned()->nullable();
+			$table->integer('LnkCompliOverDeptID')->unsigned()->nullable();
+			$table->integer('LnkCompliOverOverID')->unsigned()->nullable();
+			$table->dateTime('LnkCompliOverSubmitted')->nullable();
+			$table->dateTime('LnkCompliOverReceived')->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_Visitors', function(Blueprint $table)
@@ -922,7 +960,6 @@ class OPCreateTables extends Migration
     public function down()
     {
     	Schema::drop('OP_Complaints');
-		Schema::drop('OP_CivCompliments');
 		Schema::drop('OP_Incidents');
 		Schema::drop('OP_Scenes');
 		Schema::drop('OP_AllegSilver');
@@ -946,6 +983,7 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_ComplaintNotes');
 		Schema::drop('OP_Civilians');
 		Schema::drop('OP_Officers');
+		Schema::drop('OP_OfficersVerified');
 		Schema::drop('OP_PersonContact');
 		Schema::drop('OP_PhysicalDesc');
 		Schema::drop('OP_PhysicalDescRace');
@@ -960,6 +998,7 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_PartnerFilters');
 		Schema::drop('OP_TesterBeta');
 		Schema::drop('OP_Administrators');
+		Schema::drop('OP_LinksOfficerDept');
 		Schema::drop('OP_LinksComplaintDept');
 		Schema::drop('OP_LinksComplaintOversight');
 		Schema::drop('OP_LinksOfficerAllegations');
@@ -969,8 +1008,10 @@ class OPCreateTables extends Migration
 		Schema::drop('OP_LinksCivilianEvents');
 		Schema::drop('OP_LinksCivilianVehicles');
 		Schema::drop('OP_Compliments');
+		Schema::drop('OP_CivCompliment');
+		Schema::drop('OP_OffCompliment');
 		Schema::drop('OP_LinksComplimentDept');
-		Schema::drop('OP_OffCompliments');
+		Schema::drop('OP_LinksComplimentOversight');
 		Schema::drop('OP_Visitors');
 		Schema::drop('OP_PrivilegeProfiles');
 		Schema::drop('OP_AdminActions');

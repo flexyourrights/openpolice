@@ -29,9 +29,12 @@ class OpenVolunteers extends OpenDevelopment
     protected function printSidebarLeaderboard() 
     {
         $this->v["leaderboard"] = new VolunteerLeaderboard;
-        return view('vendor.openpolice.volun.volun-sidebar-leaderboard', [
-            "leaderboard" => $this->v["leaderboard"]
-        ])->render();
+        return view(
+            'vendor.openpolice.volun.volun-sidebar-leaderboard', 
+            [
+                "leaderboard" => $this->v["leaderboard"]
+            ]
+        )->render();
     }
     
     /**
@@ -134,13 +137,15 @@ class OpenVolunteers extends OpenDevelopment
                 $this->v["deptRows"] = $GLOBALS["SL"]->x["srchRes"]["depts"];
                 unset($GLOBALS["SL"]->x["srchRes"]["depts"]);
             } elseif ($this->v["state"] != '') {
-                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 'DeptVerified', 
+                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 
+                    'DeptScoreOpenness', 'DeptVerified', 
                     'DeptAddressCity', 'DeptAddressState')
                     ->where('DeptAddressState', $this->v["state"])
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
             } else {
-                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 'DeptScoreOpenness', 'DeptVerified', 
+                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 
+                    'DeptScoreOpenness', 'DeptVerified', 
                     'DeptAddressCity', 'DeptAddressState')
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
@@ -173,6 +178,7 @@ class OpenVolunteers extends OpenDevelopment
     public function printVolunAllList()
     {
         if ($GLOBALS["SL"]->REQ->has('refresh')) {
+            $this->chkAllOfficerVerifiedRecords();
             $this->v["deptScores"] = new DepartmentScores;
             $this->v["deptScores"]->recalcAllDepts();
             unset($this->v["chkVolunInitLists"]);

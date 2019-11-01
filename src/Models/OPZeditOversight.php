@@ -38,7 +38,6 @@ class OPZeditOversight extends Model
 		'ZedOverOverComplaintPDF', 
 		'ZedOverOverComplaintWebForm', 
 		'ZedOverOverEmail', 
-		'ZedOverOverKeepEmailPrivate', 
 		'ZedOverOverPhoneWork', 
 		'ZedOverOverAddress', 
 		'ZedOverOverAddress2', 
@@ -54,6 +53,7 @@ class OPZeditOversight extends Model
 		'ZedOverOverWaySubPaperMail', 
 		'ZedOverOverWaySubPaperInPerson', 
 		'ZedOverOverWaySubNotary', 
+		'ZedOverOverKeepEmailPrivate', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -84,8 +84,22 @@ class OpenPolice extends OpenInitExtras
         // Department Profile
         } elseif ($nID == 1779) {
             return $this->printDeptComplaints($nID);
-        } elseif ($nID == 1099) {
-            return $this->printDeptPage1099($nID);
+        } elseif ($nID == 2706) {
+            return $this->printDeptHeaderLoad($nID);
+        } elseif ($nID == 2711) {
+            return $this->printBasicDeptInfo($nID);
+        } elseif ($nID == 2713) {
+            return $this->printDeptCallsToAction($nID);
+        } elseif ($nID == 2715) {
+            return $this->printDeptReportsRecent($nID);
+        } elseif ($nID == 2717) {
+            return $this->printDeptProfileAccScore($nID);
+        } elseif ($nID == 2718) {
+            return $this->printDeptProfileHowToFile($nID);
+        } elseif ($nID == 2720) {
+            return $this->printDeptOfficerComplaints();
+
+
             
         // Partner Profiles
         } elseif ($nID == 2179) {
@@ -262,7 +276,7 @@ class OpenPolice extends OpenInitExtras
             return $this->v["openDash"]->volunStatsTable();
             
         // Software Development Area
-        } elseif (in_array($nID, [2297])) {
+        } elseif (in_array($nID, [2690, 2703, 2297])) {
             return $this->printNavDevelopmentArea($nID);
 
         }

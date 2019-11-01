@@ -10,89 +10,21 @@
   */
 namespace OpenPolice\Controllers;
 
-use DB;
 use Auth;
 use App\Models\User;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
 use App\Models\OPIncidents;
-use App\Models\OPEventSequence;
-use App\Models\OPStops;
-use App\Models\OPSearches;
-use App\Models\OPArrests;
-use App\Models\OPForce;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
-use App\Models\OPLinksOfficerEvents;
-use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
 use App\Models\OPzVolunUserInfo;
-use SurvLoop\Controllers\Tree\TreeSurvForm;
+use OpenPolice\Controllers\OpenPoliceVars;
 
-class OpenPoliceUtils extends TreeSurvForm
+class OpenPoliceUtils extends OpenPoliceVars
 {
-    public $classExtension     = 'OpenPoliceUtils';
-    public $treeID             = 1;
-    
-    protected $allCivs         = [];
-    protected $allegations     = [];
-    public $worstAllegations   = [ // Allegations in descending order of severity, Definition IDs
-        [126, 'Sexual Assault',                 'AlleSilSexualAssault'],
-        [115, 'Unreasonable Force',             'AlleSilForceUnreason'],
-        [116, 'Wrongful Arrest',                'AlleSilArrestWrongful'], 
-        [480, 'Sexual Harassment',              'AlleSilSexualHarass'], 
-        [120, 'Wrongful Property Seizure',      'AlleSilPropertyWrongful'],
-        [496, 'Wrongful Property Damage',       'AlleSilPropertyDamage'],
-        [125, 'Intimidating Display of Weapon', 'AlleSilIntimidatingWeapon'], 
-        [119, 'Wrongful Search',                'AlleSilSearchWrongful'],
-        [118, 'Wrongful Entry',                 'AlleSilWrongfulEntry'],
-        [117, 'Wrongful Detention',             'AlleSilStopWrongful'], 
-        [121, 'Bias-Based Policing',            'AlleSilBias'],
-        [122, 'Excessive Arrest Charges',       'AlleSilArrestRetaliatory'],
-        [124, 'Excessive Citation',             'AlleSilCitationExcessive'],
-        [608, 'Repeat Harassment',              'AlleSilRepeatHarass'],
-        [128, 'Conduct Unbecoming an Officer',  'AlleSilUnbecoming'],
-        [129, 'Discourtesy',                    'AlleSilDiscourteous'],
-        [127, 'Neglect of Duty',                'AlleSilNeglectDuty'], 
-        [127, 'Policy or Procedure Violation',  'AlleSilProcedure'], 
-        //[131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
-        [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
-    ];
-    public $eventTypes = [
-        'Stops',
-        'Searches',
-        'Force',
-        'Arrests'
-    ];
-    public $eveTypIDs = [
-        252 => 'Stops',
-        253 => 'Searches',
-        254 => 'Force',
-        255 => 'Arrests'
-    ];
-    protected $eventTypeLabel = [
-        'Stops'    => 'Stop/Questioning',
-        'Searches' => 'Search/Seizure',
-        'Force'    => 'Use of Force',
-        'Arrests'  => 'Arrest'
-    ];
-    protected $eventGoldAllegs = [
-        'Stops'    => [117, 118],
-        'Searches' => [119, 120, 496],
-        'Force'    => [115],
-        'Arrests'  => [116, 122]
-    ];
-    protected $cmplntUpNodes   = [
-        280,
-        324,
-        317,
-        413,
-        371
-    ];
-    protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
-    protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))
-    
+
     public function comStatus($defVal)
     {
         return $GLOBALS["SL"]->def->getID('Complaint Status', $defVal);
@@ -109,9 +41,12 @@ class OpenPoliceUtils extends TreeSurvForm
     
     public function isOverCompatible($overRow)
     {
-        return ($overRow && isset($overRow->OverEmail) && trim($overRow->OverEmail) != '' 
-            && isset($overRow->OverWaySubEmail) && intVal($overRow->OverWaySubEmail) == 1
-            && isset($overRow->OverOfficialFormNotReq) && intVal($overRow->OverOfficialFormNotReq) == 1);
+        return ($overRow && isset($overRow->OverEmail) 
+            && trim($overRow->OverEmail) != '' 
+            && isset($overRow->OverWaySubEmail) 
+            && intVal($overRow->OverWaySubEmail) == 1
+            && isset($overRow->OverOfficialFormNotReq) 
+            && intVal($overRow->OverOfficialFormNotReq) == 1);
     }
     
     protected function isSilver()
@@ -152,22 +87,6 @@ class OpenPoliceUtils extends TreeSurvForm
         }
         return false;
     }
-
-    protected function moreThan1Victim()
-    { 
-        if (!isset($this->sessData->loopItemIDs['Victims'])) {
-            return false;
-        }
-        return (sizeof($this->sessData->loopItemIDs['Victims']) > 1); 
-    }
-    
-    protected function moreThan1Officer() 
-    { 
-        if (!isset($this->sessData->loopItemIDs['Officers'])) {
-            return false;
-        }
-        return (sizeof($this->sessData->loopItemIDs["Officers"]) > 1); 
-    }
     
     protected function isAnonyLogin()
     {
@@ -187,9 +106,11 @@ class OpenPoliceUtils extends TreeSurvForm
     {
         $ret = '<h3 class="slBlueDark">' . $this->v["user"]->name . ', You Have ';
         if ($this->treeID == 1) {
-            $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');
+            $ret .= (($cnt == 1) ? 'An Unfinished Complaint'
+                : 'Unfinished Complaints');
         } elseif ($this->treeID == 5) {
-            $ret .= (($cnt == 1) ? 'An Unfinished Compliment' : 'Unfinished Compliments');
+            $ret .= (($cnt == 1) ? 'An Unfinished Compliment'
+                : 'Unfinished Compliments');
         }
         return $ret . '</h3>';
     }
@@ -200,7 +121,10 @@ class OpenPoliceUtils extends TreeSurvForm
         if ($this->treeID == 1) {
             if (isset($coreRecord[1]->ComSummary) 
                 && trim($coreRecord[1]->ComSummary) != '') {
-                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->ComSummary, 10);
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot(
+                    $coreRecord[1]->ComSummary, 
+                    10
+                );
             } else {
                 $ret .= '(empty)';
             }
@@ -352,8 +276,7 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function getUnPublishedStatusList($coreTbl = '')
     {
-        if (!isset($coreTbl) 
-            || trim($coreTbl) == '') {
+        if (!isset($coreTbl) || trim($coreTbl) == '') {
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         if ($coreTbl == 'Complaints') {
@@ -377,15 +300,21 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function complaintHasPublishedStatus()
     {
-        $status = $this->sessData->dataSets["Complaints"][0]->ComStatus;
-        if (in_array($status, $this->getPublishedStatusList('Complaints'))) {
-            return 1;
+        if (isset($this->sessData->dataSets["Complaints"])
+            && isset($this->sessData->dataSets["Complaints"][0]->ComStatus)) {
+            $status = $this->sessData->dataSets["Complaints"][0]->ComStatus;
+            if (in_array($status, $this->getPublishedStatusList('Complaints'))) {
+                return 1;
+            }
         }
         return 0;
     }
     
     protected function canPrintFullReport()
     {
+        if (!isset($this->sessData->dataSets["Complaints"])) {
+            return false;
+        }
         if ((isset($this->v["isAdmin"]) 
                 && $this->v["isAdmin"])
             || (isset($this->v["isOwner"]) 
@@ -448,10 +377,13 @@ class OpenPoliceUtils extends TreeSurvForm
     
     protected function loadYourContact()
     {
-        if (Auth::user() && isset(Auth::user()->id) && Auth::user()->id > 0) {
-            $this->v["yourContact"] = OPPersonContact::where('PrsnUserID', Auth::user()->id)
+        if (Auth::user() && isset(Auth::user()->id) 
+            && Auth::user()->id > 0) {
+            $uID = Auth::user()->id;
+            $this->v["yourContact"] = OPPersonContact::where('PrsnUserID', $uID)
                 ->first();
-            if (!$this->v["yourContact"] || !isset($this->v["yourContact"]->PrsnID)) {
+            if (!$this->v["yourContact"] 
+                || !isset($this->v["yourContact"]->PrsnID)) {
                 $this->v["yourContact"] = new OPPersonContact;
                 $this->v["yourContact"]->PrsnUserID = Auth::user()->id;
                 $this->v["yourContact"]->save();
@@ -531,1067 +463,6 @@ class OpenPoliceUtils extends TreeSurvForm
         return false;
     }
     
-    
-    
-    
-/*****************************************************************************
-// START Processes Which Handle Allegations
-*****************************************************************************/
-    
-    public function simpleAllegationList()
-    {
-        if (sizeof($this->allegations) == 0 
-            && isset($this->sessData->dataSets["AllegSilver"]) 
-            && isset($this->sessData->dataSets["AllegSilver"][0])) {
-            $allegSilv = $this->sessData->dataSets["AllegSilver"][0];
-            foreach ($this->worstAllegations as $i => $alleg) {
-                $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
-                switch ($alleg[1]) {
-                    case 'Sexual Assault':
-                    case 'Unreasonable Force':
-                    case 'Wrongful Arrest':
-                    case 'Wrongful Property Seizure':
-                    case 'Wrongful Search':
-                    case 'Wrongful Detention':
-                    case 'Bias-Based Policing':
-                    case 'Repeat Harassment':
-                    case 'Excessive Arrest Charges':
-                    case 'Conduct Unbecoming an Officer':
-                    case 'Discourtesy':
-                    case 'Neglect of Duty':
-                    case 'Policy or Procedure Violation':
-                    case 'Excessive Citation':
-                        $allegInfo[1] .= $this->chkSilvAlleg($alleg[2], $alleg[1], $alleg[0]);
-                        break;
-                    case 'Intimidating Display of Weapon':
-                        if ($this->checkAllegIntimidWeaponSilver($allegSilv)) {
-                            $allegInfo[1] .= ', ' . $this->getAllegDesc($allegName, $allegID);
-                        }
-                    case 'Wrongful Entry':
-                        if (isset($this->sessData->dataSets["Stops"]) 
-                            && sizeof($this->sessData->dataSets["Stops"]) > 0) {
-                            foreach ($this->sessData->dataSets["Stops"] as $stop) {
-                                if (isset($stop->StopAllegWrongfulEntry) 
-                                    && $stop->StopAllegWrongfulEntry == 'Y') {
-                                    $allegRec = $this->getAllegGoldRec($alleg[1], $alleg[0]);
-                                    $allegInfo[1] .= ', ' 
-                                        . $this->getAllegDesc($alleg[1], $alleg[0], $allegRec);
-                                }
-                            }
-                        }
-                        break;
-                    case 'Miranda Rights':
-                        if (isset($allegSilv->AlleSilArrestMiranda)
-                            && $allegSilv->AlleSilArrestMiranda == 'Y') {
-                            $allegInfo[1] .= ' ';
-                        }
-                        break;
-                    case 'Officer Refused To Provide ID':
-                        if (isset($allegSilv->AlleSilOfficerRefuseID)
-                            && $allegSilv->AlleSilOfficerRefuseID == 'Y') {
-                            $allegInfo[1] .= ' ';
-                        }
-                        break;
-                }
-                if ($allegInfo[1] != '') {
-                    $this->allegations[] = $allegInfo;
-                }
-            }
-        }
-        return $this->allegations;
-    }
-    
-    public function commaAllegationList($ulist = false)
-    {
-        $ret = '';
-        $this->simpleAllegationList();
-        if (sizeof($this->allegations) > 0) {
-            foreach ($this->allegations as $i => $alleg) {
-                if ($ulist) {
-                    $ret .= '<li>' . $alleg[0] . '</li>';
-                } else {
-                    $ret .= (($i > 0) ? ', ' : '') . $alleg[0];
-                }
-            }
-        }
-        return $ret;
-    }
-    
-    public function commaAllegationListSplit()
-    {
-        $allegs = ['', ''];
-        $this->simpleAllegationList();
-        if (sizeof($this->allegations) > 0) { // special printing...
-            foreach ($this->allegations as $i => $alleg) {
-                if ($i > 0) {
-                    $allegs[1] .= (($i > 1) ? ', ' : '') . $alleg[0];
-                } else {
-                    $allegs[0] .= $alleg[0];
-                }
-            }
-        }
-        return $allegs;
-    }
-    
-    public function commaTopThreeAllegationList()
-    {
-        $ret = '';
-        $this->simpleAllegationList();
-        if (sizeof($this->allegations) > 0) {
-            if (sizeof($this->allegations) == 1) {
-                return $this->allegations[0][0];
-            }
-            if (sizeof($this->allegations) == 2) {
-                return $this->allegations[0][0] . ' and ' . $this->allegations[1][0];
-            }
-            return $this->allegations[0][0] . ', ' . $this->allegations[1][0] 
-                . ', and ' . $this->allegations[2][0];
-        }
-        return $ret;
-    }
-    
-    protected function commaComplimentList()
-    {
-        $types = [];
-        if (isset($this->sessData->dataSets["OffCompliments"]) 
-            && sizeof($this->sessData->dataSets["OffCompliments"]) > 0) {
-            foreach ($this->sessData->dataSets["OffCompliments"] as $off) {
-                if (isset($off->OffCompValor) 
-                    && trim($off->OffCompValor) == 'Y') {
-                    $types[] = 'Valor';
-                }
-                if (isset($off->OffCompLifesaving) 
-                    && trim($off->OffCompLifesaving) == 'Y') {
-                    $types[] = 'Lifesaving';
-                }
-                if (isset($off->OffCompDeescalation) 
-                    && trim($off->OffCompDeescalation) == 'Y') {
-                    $types[] = 'De-escalation';
-                }
-                if (isset($off->OffCompProfessionalism) 
-                    && trim($off->OffCompProfessionalism) == 'Y') {
-                    $types[] = 'Professionalism';
-                }
-                if (isset($off->OffCompFairness) 
-                    && trim($off->OffCompFairness) == 'Y') {
-                    $types[] = 'Fairness';
-                }
-                if (isset($off->OffCompConstitutional) 
-                    && trim($off->OffCompConstitutional) == 'Y') {
-                    $types[] = 'Constitutional';
-                }
-                if (isset($off->OffCompCompassion) 
-                    && trim($off->OffCompCompassion) == 'Y') {
-                    $types[] = 'Compassion';
-                }
-                if (isset($off->OffCompCommunity) 
-                    && trim($off->OffCompCommunity) == 'Y') {
-                    $types[] = 'Community';
-                }
-            }
-        }
-        $ret = '';
-        if (in_array('Valor', $types)) {
-            $ret .= ', Valor';
-        }
-        if (in_array('Lifesaving', $types)) {
-            $ret .= ', Lifesaving';
-        }
-        if (in_array('De-escalation', $types)) {
-            $ret .= ', De-escalation';
-        }
-        if (in_array('Professionalism', $types)) {
-            $ret .= ', Professionalism';
-        }
-        if (in_array('Fairness', $types)) {
-            $ret .= ', Fairness';
-        }
-        if (in_array('Constitutional', $types)) {
-            $ret .= ', Constitutional Policing';
-        }
-        if (in_array('Compassion', $types)) {
-            $ret .= ', Compassion';
-        }
-        if (in_array('Community', $types)) {
-            $ret .= ', Community Service';
-        }
-        if (trim($ret) != '') {
-            $ret = trim(substr($ret, 1));
-        }
-        return $ret;
-    }
-    
-    protected function intimidWeaponNos()
-    {
-        return [
-            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'No'),
-            $GLOBALS["SL"]->def->getID('Intimidating Displays Of Weapon', 'Not sure')
-        ];
-    }
-    
-    protected function checkAllegIntimidWeaponSilver($allegSilv)
-    {
-        if (isset($allegSilv->AlleSilIntimidatingWeapon) 
-            && in_array(intVal($allegSilv->AlleSilIntimidatingWeapon), $this->intimidWeaponNos())) {
-
-        }
-
-    }
-    
-    protected function checkAllegIntimidWeapon($alleg)
-    {
-        $def = $GLOBALS["SL"]->def->getID('Allegation Type', 'Intimidating Display of Weapon');
-        return ($alleg->AlleType != $def 
-            || !in_array($alleg->AlleIntimidatingWeapon, $this->intimidWeaponNos()));
-    }
-    
-    protected function getAllegID($allegName)
-    {
-        if (sizeof($this->worstAllegations) > 0) {
-            foreach ($this->worstAllegations as $a) {
-                if ($a[1] == $allegName) {
-                    return $a[0];
-                }
-            }
-        }
-        return -3;
-    }
-    
-    protected function getAllegFldName($allegID)
-    {
-        if ($allegID > 0 && sizeof($this->worstAllegations) > 0) {
-            foreach ($this->worstAllegations as $a) {
-                if ($a[0] == $allegID) {
-                    return $a[2];
-                }
-            }
-        }
-        return '';
-    }
-    
-    protected function getAllegSilvRec($allegName, $allegID = -3)
-    {
-        if ($allegID <= 0) {
-            $allegID = $this->getAllegID($allegName);
-        }
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
-            foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                if ($alleg->AlleType == $allegID 
-                    && (!isset($alleg->AlleEventSequenceID) 
-                        || intVal($alleg->AlleEventSequenceID) <= 0)) {
-                    return $alleg;
-                }
-            }
-        }
-        return [];
-    }
-    
-    protected function getAllegGoldRec($allegName, $allegID = -3)
-    {
-        if ($allegID <= 0) {
-            $allegID = $this->getAllegID($allegName);
-        }
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
-            foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                if ($alleg->AlleType == $allegID 
-                    && isset($alleg->AlleEventSequenceID) 
-                    && intVal($alleg->AlleEventSequenceID) > 0) {
-                    return $alleg;
-                }
-            }
-        }
-        return [];
-    }
-    
-    protected function getAllegDesc($allegName, $allegID = -3, $allegRec = [])
-    {
-        if (!$allegRec || !isset($allegRec->AlleDescription)) {
-            $allegRec = $this->getAllegSilvRec($allegName, $allegID);
-        }
-        if ($allegRec && isset($allegRec->AlleDescription)) {
-            return trim($allegRec->AlleDescription);
-        }
-        return '';
-    }
-    
-    protected function chkSilvAlleg($fldName, $allegName, $allegID = -3)
-    {
-        if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $fldName })
-            && trim($this->sessData->dataSets["AllegSilver"][0]->{ $fldName }) == 'Y') {
-            return ', ' . $this->getAllegDesc($allegName, $allegID);
-        }
-        return '';
-    }    
-    
-    
-    protected function basicAllegationList($showWhy = false, $isAnon = false)
-    {
-        $ret = '';
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
-            $printedOfficers = false;
-            $allegOffs = [];
-            // if there's only one Officer on the Complaint, then it is associated with all Allegations
-            if (!$isAnon && isset($this->sessData->dataSets["Officers"]) 
-                && sizeof($this->sessData->dataSets["Officers"]) == 1) {
-                /*
-                $ret .= '<div class="pL5 pB10">Officer '
-                    . $this->getOfficerNameFromID($this->sessData->dataSets["Officers"][0]->OffID) . '</div>';
-                */
-                $printedOfficers = true;
-            } else { // Load Officer names for each Allegation
-                foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                    if ($this->checkAllegIntimidWeapon($alleg)) {
-                        $allegOffs[$alleg->AlleID] = '';
-                        $offs = $this->getLinkedToEvent('Officer', $alleg->AlleID);
-                        if (sizeof($offs) > 0) {
-                            foreach ($offs as $off) {
-                                $allegOffs[$alleg->AlleID] .= ', '
-                                    . $this->getOfficerNameFromID($off);
-                            }
-                        }
-                        if (trim($allegOffs[$alleg->AlleID]) != '') {
-                            $allegOffs[$alleg->AlleID] = substr($allegOffs[$alleg->AlleID], 1); 
-                            // 'Officer'.((sizeof($offs) > 1) ? 's' : '').
-                        }
-                    }
-                }
-                // now let's check if all allegations are against the same officers, so we only print them once
-                $allOfficersSame = true; $prevAllegOff = '*START*';
-                foreach ($allegOffs as $allegOff) {
-                    if ($prevAllegOff == '*START*') {
-                    
-                    } elseif ($prevAllegOff != $allegOff) {
-                        $allOfficersSame = false;
-                    }
-                    $prevAllegOff = $allegOff;
-                }
-                if (!$isAnon && $allOfficersSame) { // all the same, so print once at the top
-                    $ret .= '<div class="pL5 pB10 fPerc125">' 
-                        . $allegOffs[$this->sessData->dataSets["Allegations"][0]->AlleID] 
-                        . '</div>';
-                    $printedOfficers = true;
-                }
-            }
-            foreach ($this->worstAllegations as $allegType) { // printing Allegations in order of severity...
-                foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                    if ($alleg->AlleType 
-                        == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
-                        if ($this->checkAllegIntimidWeapon($alleg)) {
-                            $ret .= '<div class="fPerc125">' . $allegType;
-                            if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->AlleID])) {
-                                $ret .= ' <span class="mL20 slGrey">' 
-                                    . $allegOffs[$alleg->AlleID] . '</span>';
-                            }
-                            $ret .= '</div>' . (($showWhy) ? '<div class="slGrey mTn10 pL20">' 
-                                . $alleg->AlleDescription . '</div>' : '') 
-                                . '<div class="p5"></div>';
-                        }
-                    }
-                }
-            }
-        } else {
-            $ret = '<i>No allegations found.</i>';
-        }
-        return $ret;
-    }
-    
-/*****************************************************************************
-// END Processes Which Handle Allegations
-*****************************************************************************/
-
-
-
-    
-/*****************************************************************************
-// START Processes Which Handle The Event Sequence
-*****************************************************************************/
-
-    // get Incident Event Type from Node location in the Gold process
-    protected function getEveSeqTypeFromNode($nID)
-    {
-        $eveSeqLoop = [
-            'Stops'    => 149, 
-            'Searches' => 150, 
-            'Force'    => 151,
-            'Arrests'  => 152
-        ];
-        foreach ($eveSeqLoop as $eventType => $nodeRoot) {
-            if ($this->allNodes[$nID]->checkBranch($this->allNodes[$nodeRoot]->nodeTierPath)) {
-                return $eventType;
-            }
-        }
-        return '';
-    }
-    
-    protected function getEveSeqOrd($eveSeqID)
-    {
-        /* if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) { 
-            foreach ($this->sessData->dataSets["EventSequence"] as $i => $eveSeq) {
-                if ($eveSeq->EveID == $eveSeqID) {
-                    return $eveSeq->EveOrder;
-                }
-            }
-        } */
-        return 0;
-    }
-    
-    protected function getLastEveSeqOrd()
-    {
-        $newOrd = 0;
-        /* if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            $ind = sizeof($this->sessData->dataSets["EventSequence"])-1;
-            $newOrd = $this->sessData->dataSets["EventSequence"][$ind]->EveOrder;
-        } */
-        return $newOrd;
-    }
-    
-    protected function checkHasEventSeq($nID)
-    {
-        //if (sizeof($this->eventCivLookup) > 0) return $this->eventCivLookup;
-        $this->eventCivLookup = [
-            'Stops'        => [], 
-            'Searches'     => [], 
-            'Force'        => [], 
-            'Force Animal' => [], 
-            'Arrests'      => [], 
-            'Citations'    => [], 
-            'Warnings'     => [], 
-            'No Punish'    => []
-        ];
-        $loopRows = $this->sessData->getLoopRows('Victims');
-        foreach ($loopRows as $i => $civ) {
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Stops') > 0) {
-                $this->eventCivLookup["Stops"][] = $civ->CivID;
-            }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Searches') > 0) {
-                $this->eventCivLookup["Searches"][] = $civ->CivID;
-            }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Force') > 0) {
-                $this->eventCivLookup["Force"][] = $civ->CivID;
-            }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Arrests') > 0) {
-                $this->eventCivLookup["Arrests"][] = $civ->CivID;
-            } elseif (($civ->CivGivenCitation == 'N' || trim($civ->CivGivenCitation) == '') 
-                && ($civ->CivGivenWarning == 'N' || trim($civ->CivGivenWarning) == '')) {
-                $this->eventCivLookup["No Punish"][] = $civ->CivID;
-            }
-            if ($civ->CivGivenCitation == 'Y') {
-                $this->eventCivLookup["Citations"][] = $civ->CivID;
-            }
-            if ($civ->CivGivenWarning == 'Y') {
-                $this->eventCivLookup["Warnings"][] = $civ->CivID;
-            }
-        }
-        if (isset($this->sessData->dataSets["Force"]) 
-            && sizeof($this->sessData->dataSets["Force"]) > 0) {
-            foreach ($this->sessData->dataSets["Force"] as $forceRow) {
-                if ($forceRow->ForAgainstAnimal == 'Y') {
-                    $this->eventCivLookup["Force Animal"][] = $forceRow->ForID;
-                }
-            }
-        }
-        return true;
-    }
-    
-    protected function addNewEveSeq($eventType, $forceType = -3)
-    {
-        if ($this->coreID > 0) {
-            $newEveSeq = new OPEventSequence;
-            $newEveSeq->EveComplaintID = $this->coreID;
-            $newEveSeq->EveType = $eventType;
-            //$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
-            $newEveSeq->save();
-            eval("\$newEvent = new App\\Models\\" 
-                . $GLOBALS["SL"]->tblModels[$eventType] . ";");
-            $newEvent->{ $GLOBALS["SL"]->tblAbbr[$eventType].'EventSequenceID' } 
-                = $newEveSeq->getKey();
-            if ($eventType == 'Force' && $forceType > 0) {
-                $newEvent->ForType = $forceType;
-            }
-            $newEvent->save();
-            $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
-            $this->sessData->dataSets[$eventType][] = $newEvent;
-            return $newEvent;
-        }
-        return null;
-    }
-    
-    protected function getCivEventID($nID, $eveType, $civID)
-    {
-        $civLnk = DB::table('OP_LinksCivilianEvents')
-            ->join('OP_EventSequence', 'OP_EventSequence.EveID', 
-                '=', 'OP_LinksCivilianEvents.LnkCivEveEveID')
-            ->where('OP_EventSequence.EveType', $eveType)
-            ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
-            ->select('OP_EventSequence.*')
-            ->first();
-        if ($civLnk && isset($civLnk->EveID)) {
-            return $civLnk->EveID;
-        }
-        return -3;
-    }
-    
-    protected function getForceEveID($forceType, $animal = false)
-    {
-        if (isset($this->sessData->dataSets["Force"]) 
-            && sizeof($this->sessData->dataSets["Force"]) > 0) {
-            foreach ($this->sessData->dataSets["Force"] as $force) {
-                if (isset($force->ForType) && $force->ForType == $forceType) {
-                    if ($animal) {
-                        if (isset($force->ForAgainstAnimal) 
-                            && trim($force->ForAgainstAnimal) == 'Y') {
-                            return $force->ForEventSequenceID;
-                        }
-                    } elseif (!isset($force->ForAgainstAnimal) 
-                        || trim($force->ForAgainstAnimal) != 'Y') {
-                        return $force->ForEventSequenceID;
-                    }
-                }
-            }
-        }
-        return -3;
-    }
-    
-    protected function getCivAnimalForces()
-    {
-        return DB::table('OP_EventSequence')
-            ->join('OP_Force', 'OP_Force.ForEventSequenceID', 
-                '=', 'OP_EventSequence.EveID')
-            ->where('OP_EventSequence.EveComplaintID', $this->coreID)
-            ->where('OP_EventSequence.EveType', 'Force')
-            ->where('OP_Force.ForAgainstAnimal', 'Y')
-            ->select('OP_Force.*')
-            ->get();
-    }
-    
-    protected function createCivAnimalForces()
-    {
-        $eve = new OPEventSequence;
-        $eve->EveComplaintID = $this->coreID;
-        $eve->EveType = 'Force';
-        $eve->save();
-        $frc = new OPForce;
-        $frc->ForEventSequenceID = $eve->getKey();
-        $frc->ForAgainstAnimal = 'Y';
-        $frc->save();
-        if (!isset($this->sessData->dataSets["Force"])) {
-            $this->sessData->dataSets["Force"] = [];
-        }
-        $this->sessData->dataSets["Force"][] = $frc;
-        if (!isset($this->sessData->dataSets["EventSequence"])) {
-            $this->sessData->dataSets["EventSequence"] = [];
-        }
-        $this->sessData->dataSets["EventSequence"][] = $eve;
-        return $eve;
-    }
-    
-    protected function delCivEvent($nID, $eveType, $civID)
-    {
-        return $this->deleteEventByID($this->getCivEventID($nID, $eveType, $civID));
-    }
-    
-    protected function deleteEventByID($eveSeqID)
-    {
-        if ($eveSeqID > 0) {
-            $chk = OPEventSequence::find($eveSeqID);
-            if ($chk && isset($chk->EveID)) {
-                OPEventSequence::find($eveSeqID)->delete();
-                OPStops::where('StopEventSequenceID', $eveSeqID)->delete();
-                OPSearches::where('SrchEventSequenceID', $eveSeqID)->delete();
-                OPArrests::where('ArstEventSequenceID', $eveSeqID)->delete();
-                OPForce::where('ForEventSequenceID', $eveSeqID)->delete();
-                OPLinksCivilianEvents::where('LnkCivEveEveID', $eveSeqID)->delete();
-                OPLinksOfficerEvents::where('LnkOffEveEveID', $eveSeqID)->delete();
-            }
-        }
-        return true;
-    }
-    
-/*****************************************************************************
-// END Processes Which Handle The Event Sequence
-*****************************************************************************/
-
-
-
-    
-/*****************************************************************************
-// START Processes Which Handle People/Officer Linkages
-*****************************************************************************/
-    
-    protected function getEventSequence($eveSeqID = -3)
-    {
-        $eveSeqs = [];
-        if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                if ($eveSeqID <= 0 || $eveSeqID == $eveSeq->EveID) {
-                    $eveSeqs[] = [ 
-                        "EveID"     => $eveSeq->EveID, 
-                        //"EveOrder"  => $eveSeq->EveOrder, 
-                        "EveType"   => $eveSeq->EveType, 
-                        "Civilians" => $this->getLinkedToEvent('Civilian', $eveSeq->EveID), 
-                        "Officers"  => $this->getLinkedToEvent('Officer', $eveSeq->EveID), 
-                        "Event"     => $this->sessData->getChildRow(
-                            'EventSequence', $eveSeq->EveID, $eveSeq->EveType)
-                    ];
-                }
-            }
-        }
-        return $eveSeqs;
-    }
-    
-    protected function getEventLabel($eveSeqID = -3)
-    {
-        if ($eveSeqID > 0) {
-            $eveSeq = $this->getEventSequence($eveSeqID);
-            return $this->printEventSequenceLine($eveSeq);
-        }
-        return '';
-    }
-    
-    protected function printEventSequenceLine($eveSeq, $info = '')
-    {
-        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) {
-            $eveSeq = $eveSeq[0];
-        }
-        if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) {
-            return '';
-        }
-        $ret = '<span class="slBlueDark">';
-        if ($eveSeq["EveType"] == 'Force' && isset($eveSeq["Event"]->ForType) 
-            && trim($eveSeq["Event"]->ForType) != ''){
-            if ($eveSeq["Event"]->ForType 
-                == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
-                $ret .= $eveSeq["Event"]->ForTypeOther . ' Force ';
-            } else {
-                $ret .= $GLOBALS["SL"]->def->getVal('Force Type', $eveSeq["Event"]->ForType) 
-                    . ' Force ';
-            }
-        } elseif (isset($this->eventTypeLabel[$eveSeq["EveType"]])) {
-            $ret .= $this->eventTypeLabel[$eveSeq["EveType"]] . ' ';
-        }
-        if ($eveSeq["EveType"] == 'Force' && $eveSeq["Event"]->ForAgainstAnimal == 'Y') {
-            $ret .= '<span class="blk">on</span> ' . $eveSeq["Event"]->ForAnimalDesc;
-        } else {
-            $civNames = $offNames = '';
-            if ($this->moreThan1Victim() && in_array($info, array('', 'Civilians'))) { 
-                foreach ($eveSeq["Civilians"] as $civ) {
-                    $civNames .= ', ' . $this->getCivilianNameFromID($civ);
-                }
-                if (trim($civNames) != '') {
-                    $ret .= '<span class="blk">' . (($eveSeq["EveType"] == 'Force') 
-                        ? 'on ' : 'of ') . '</span>' . substr($civNames, 1);
-                }
-            }
-            if ($this->moreThan1Officer() && in_array($info, array('', 'Officers'))) { 
-                foreach ($eveSeq["Officers"] as $off) {
-                    $offNames .= ', ' . $this->getOfficerNameFromID($off);
-                }
-                if (trim($offNames) != '') {
-                    $ret .= ' <span class="blk">by</span> ' . substr($offNames, 1);
-                }
-            }
-        }
-        $ret .= '</span>';
-        return $ret;
-    }
-
-    protected function getLinkedToEvent($Ptype = 'Officer', $eveSeqID = -3)
-    {
-        $retArr = [];
-        $abbr = (($Ptype == 'Officer') ? 'Off' : 'Civ');
-        if ($eveSeqID > 0 && isset($this->sessData->dataSets["Links" . $Ptype . "Events"]) 
-            && sizeof($this->sessData->dataSets["Links" . $Ptype . "Events"]) > 0) {
-            foreach ($this->sessData->dataSets["Links" . $Ptype . "Events"] as $PELnk) {
-                if ($PELnk->{ 'Lnk' . $abbr . 'EveEveID' } == $eveSeqID) {
-                    $retArr[] = $PELnk->{ 'Lnk' . $abbr . 'Eve' . $abbr . 'ID' };
-                }
-            }
-        }
-        return $retArr;
-    }
-    
-    protected function getCivEveSeqIdByType($civID, $eventType)
-    {
-        if ($eventType != '' && isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                if ($eveSeq->EveType == $eventType
-                    && in_array($civID, $this->getLinkedToEvent('Civilian', $eveSeq->EveID))) {
-                    return $eveSeq->EveID;
-                }
-            }
-        }
-        return -3;
-    }
-    
-    protected function getEveSeqRowType($eveSeqID = -3)
-    {
-        $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-        if ($eveSeq) {
-            return $eveSeq->EveType;
-        }
-        return '';
-    }
-    
-    protected function chkCivHasForce($civID = -3)
-    {
-        if ($civID > 0 && isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eve) {
-                if ($eve->EveType == 'Force') {
-                    $chk = OPLinksCivilianEvents::where('LnkCivEveEveID', $eve->EveID)
-                        ->where('LnkCivEveCivID', $civID)
-                        ->first();
-                    if ($chk && isset($chk->LnkCivEveID)) {
-                        return 1;
-                    }
-                }
-            }
-        }
-        return 0;
-    }
-    
-    protected function isEventAnimalForce($eveSeqID = -3, $force = [])
-    {
-        if (empty($force)) {
-            $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-            if ($eveSeq && $eveSeq->EveType == 'Force') {
-                $force = $this->sessData->getChildRow('EventSequence', $eveSeq->EveID, $eveSeq->EveType);
-            }
-        }
-        if ($force && isset($force->ForAgainstAnimal) && $force->ForAgainstAnimal == 'Y') {
-            return $force->ForAnimalDesc;
-        }
-        return '';
-    }
-    
-/*****************************************************************************
-// END Processes Which Handle People/Officer Linkages
-*****************************************************************************/
-
-
-
-
-/*****************************************************************************
-// START Processes Which Manage Lists of People
-*****************************************************************************/
-
-    protected function getPersonLabel($type = 'Civilians', $id = -3, $row = [])
-    {
-        $name = '';
-        $persID = 0;
-        if (isset($row->{ substr($type, 0, 3) . 'PersonID' })) {
-            $persID = intVal($row->{ substr($type, 0, 3) . 'PersonID' });
-        } elseif (isset($row->CivCompPersonID)) {
-            $persID = intVal($row->CivCompPersonID);
-        }
-        $civ2 = $this->sessData->dataFind('PersonContact', $persID);
-        //$civ2 = $this->sessData->getChildRow($type, $id, 'PersonContact');
-//echo 'type: ' . $type . ', id: ' . $id . '<pre>'; print_r($civ2); echo '</pre>';
-        if ($civ2 && trim($civ2->PrsnNickname) != '') {
-            $name = $civ2->PrsnNickname;
-        } elseif ($civ2 && (trim($civ2->PrsnNameFirst) != '' 
-            || trim($civ2->PrsnNameLast) != '')) {
-            $name = $civ2->PrsnNameFirst . ' ' . $civ2->PrsnNameLast 
-                . ' ' . $name;
-        } else {
-            if ($type == 'Officers' && isset($row->OffBadgeNumber) 
-                && intVal($row->OffBadgeNumber) > 0) {
-                $name = 'Badge #' . $row->OffBadgeNumber . ' ' . $name;
-            }
-        }
-        return trim($name);
-    }
-
-    protected function youLower($civName = '')
-    {
-        return str_replace('You', 'you', $civName);
-    }
-    
-    // converts Civilians row into identifying name used in most of the complaint process
-    protected function getCivName($loop, $civ = [], $itemInd = -3)
-    {
-        $name = '';
-        if (!isset($civ->CivID)) {
-            if (isset($civ->InjSubjectID)) {
-                $civ = $this->sessData
-                    ->getRowById('Civilians', $civ->InjSubjectID);
-            } elseif (isset($civ->InjCareSubjectID)) {
-                $civ = $this->sessData
-                    ->getRowById('Civilians', $civ->InjCareSubjectID);
-            }
-        }
-        if ($civ->CivIsCreator == 'Y' 
-            && (($loop == 'Victims' && $civ->CivRole == 'Victim') 
-            || ($loop == 'Witnesses' && $civ->CivRole == 'Witness'))) {
-            if ($this->isReport) {
-                if (isset($civ->CivPersonID) && intVal($civ->CivPersonID) > 0) {
-                    $contact = $this->sessData->getChildRow(
-                        'Civilians', 
-                        $civ->CivPersonID, 
-                        'PersonContact'
-                    );
-                    $name = $contact->PrsnNameFirst . ' ' 
-                        . $contact->PrsnNameLast;
-                }
-                if (trim($name) == '') {
-                    $name = 'Complainant';
-                }
-            } else {
-                $name = 'You ' . $name;
-            }
-        } else {
-            $name = $this->getPersonLabel('Civilians', $civ->CivID, $civ);
-        }
-        $name = trim($name);
-        if ($name != '' && $name != 'You') {
-            $name .= ' (' . $civ->CivRole . ' #' 
-                . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) 
-                . ')';
-        }
-        if ($name == '') {
-            
-        }
-        return trim($name);
-    }
-    
-    public function getCivilianNameFromID($civID)
-    {
-        if ($this->sessData->dataSets["Civilians"][0]->CivID == $civID) {
-            $role = '';
-            if ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Victim') {
-                $role = 'Victims';
-            } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Witness') {
-                $role = 'Witnesses';
-            }
-            return $this->getCivName($role, $this->sessData->dataSets["Civilians"][0], 1);
-        }
-        $civInd = $this->sessData->getLoopIndFromID('Victims', $civID);
-        if ($civInd >= 0) {
-            $name = $this->getCivName('Victims', 
-                $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
-            if ($name == '') {
-                $name = 'Victim #' . (1+$civInd);
-            }
-            return $name;
-        }
-        $civInd = $this->sessData->getLoopIndFromID('Witnesses', $civID);
-        if ($civInd >= 0) {
-            $name = $this->getCivName('Witnesses', 
-                $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
-            if ($name == '') {
-                $name = 'Witness #' . (1+$civInd);
-            }
-            return $name;
-        }
-        return '';
-    }
-    
-    protected function getCivNamesFromEvent($eveID)
-    {
-        $ret = '';
-        $lnks = OPLinksCivilianEvents::where('LnkCivEveEveID', $eveID)
-            ->get();
-        if ($lnks->isNotEmpty()) {
-            $civs = [];
-            foreach ($lnks as $lnk) {
-                if (!in_array($lnk->LnkCivEveCivID, $civs)) {
-                    $civs[] = $lnk->LnkCivEveCivID;
-                }
-            }
-            foreach ($civs as $i => $civID) {
-                $ret .= (($i > 0) ? ', ' 
-                    . ((sizeof($civs) > 2 && $i == (sizeof($civs)-1)) ? 'and ' : '') : '')
-                    . $this->getPersonLabel('Civilians', $civID);
-            }
-        }
-        return $ret;
-    }
-    
-    // converts Officer row into identifying name used in most of the complaint process
-    protected function getOfficerName($officer = [], $itemIndex = -3)
-    {
-        if (isset($officer->OffCompOffID) && intVal($officer->OffCompOffID) > 0) {
-            $officer = $this->sessData->dataFind('Officers', $officer->OffCompOffID);
-        }
-        $name = $this->getPersonLabel('Officers', $officer->OffID, $officer);
-        if (trim($name) == '') {
-            $name = 'Officer #' . (1+$itemIndex);
-        } else {
-            $name .= ' (Officer #' . (1+$itemIndex) . ')';
-        }
-        return trim($name);
-    }
-    
-    protected function getOfficerNameFromID($offID)
-    {
-        $offInd = $this->sessData->getLoopIndFromID('Officers', $offID);
-        if ($offInd >= 0) {
-            return $this->getOfficerName(
-                $this->sessData->getRowById('Officers', $offID), 
-                (1+$offInd)
-            );
-        }
-        return '';
-    }
-    
-    protected function getFirstVictimCivInd()
-    {
-        $civInd = -3;
-        if (sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
-                if (isset($civ->CivRole) && trim($civ->CivRole) == 'Victim' 
-                    && $civInd < 0) {
-                    $civInd = $i;
-                }
-            }
-        }
-        return $civInd;
-    }
-    
-    protected function chkDeptLinks($newDeptID)
-    {
-        $deptChk = false;
-        if ($this->treeID == 5) {
-            $deptChk = OPLinksComplimentDept::where('LnkCompliDeptDeptID', $newDeptID)
-                ->where('LnkCompliDeptComplimentID', $this->coreID)
-                ->get();
-        } else {
-            $deptChk = OPLinksComplaintDept::where('LnkComDeptDeptID', $newDeptID)
-                ->where('LnkComDeptComplaintID', $this->coreID)
-                ->get();
-        }
-        if ($deptChk->isEmpty()) {
-            if ($this->treeID == 5) {
-                $newDeptLnk = new OPLinksComplimentDept;
-                $newDeptLnk->LnkCompliDeptDeptID = $newDeptID;
-                $newDeptLnk->LnkCompliDeptComplimentID = $this->coreID;
-                $newDeptLnk->save();
-            } else {
-                $newDeptLnk = new OPLinksComplaintDept;
-                $newDeptLnk->LnkComDeptDeptID = $newDeptID;
-                $newDeptLnk->LnkComDeptComplaintID = $this->coreID;
-                $newDeptLnk->save();
-            }
-        }
-        $this->getOverUpdateRow($this->coreID, $newDeptID);
-        $this->sessData->refreshDataSets();
-        $this->runLoopConditions();
-        return true;
-    }
-    
-    protected function getDeptName($dept = [], $itemIndex = -3)
-    {
-    //(($itemIndex > 0) ? '<span class="fPerc66 slGrey">(#'.$itemIndex.')</span>' : '');
-        $name = ''; 
-        if (isset($dept->DeptName) && trim($dept->DeptName) != '') {
-            $name = $dept->DeptName . ' ' . $name;
-        }
-        return trim($name);
-    }
-    
-    protected function getDeptNameByID($deptID)
-    {
-        $dept = $this->sessData->getRowById('Departments', $deptID);
-        if ($dept) {
-            return $this->getDeptName($dept);
-        }
-        return '';
-    }
-    
-    protected function civRow2Set($civ)
-    {
-        if (!$civ || !isset($civ->CivIsCreator)) {
-            return '';
-        }
-        return (($civ->CivIsCreator == 'Y') ? '' 
-            : (($civ->CivRole == 'Victim') ? 'Victims' : 'Witnesses') );
-    }
-    
-    protected function getCivilianList($loop = 'Victims')
-    {
-        if ($loop == 'Victims' || $loop == 'Witness') {
-            return $this->sessData->loopItemIDs[$loop];
-        }
-        $civs = [];
-        if (isset($this->sessData->dataSets["Civilians"]) 
-            && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $civ) {
-                $civs[] = $civ->CivID;
-            }
-        }
-        return $civs;
-    }
-    
-    protected function loadPartnerTypes()
-    {
-        if (!isset($this->v["prtnTypes"])) {
-            $this->v["prtnTypes"] = [
-                [
-                    "abbr" => 'org',
-                    "sing" => 'Organization',
-                    "plur" => 'Organizations', 
-                    "defID" => $GLOBALS["SL"]
-                        ->def->getID('Partner Types', 'Organization')
-                ], [
-                    "abbr" => 'attorney',
-                    "sing" => 'Attorney',
-                    "plur" => 'Attorneys', 
-                    "defID" => $GLOBALS["SL"]
-                        ->def->getID('Partner Types', 'Attorney')
-                ]
-            ];
-        }
-        return true;
-    }
-    
-    protected function loadPrtnAbbr($defID)
-    {
-        if (!isset($this->v["prtnTypes"])) {
-            $this->loadPartnerTypes();
-        }
-        foreach ($this->v["prtnTypes"] as $p) {
-            if ($p["defID"] == $defID) {
-                return $p["abbr"];
-            }
-        }
-        return '';
-    }
-    
-    protected function loadPrtnDefID($abbr)
-    {
-        if (!isset($this->v["prtnTypes"])) {
-            $this->loadPartnerTypes();
-        }
-        foreach ($this->v["prtnTypes"] as $p) {
-            if ($p["abbr"] == $abbr) {
-                return $p["defID"];
-            }
-        }
-        return '';
-    }
-    
-/*****************************************************************************
-// END Processes Which Manage Lists of People
-*****************************************************************************/
-
-
-
-
-
-    
-
-
-
-
-
-
     
     protected function sysUpdatesCust($apply = false)
     {
@@ -1699,9 +570,16 @@ class OpenPoliceUtils extends TreeSurvForm
     protected function loadReportUploadTypes()
     {
         $this->v["reportUploadTypes"] = [
-            ['full',          'Full Sensitive Report'],
-            ['public',        'Public Report'],
-            ['findings',      'Investigative Findings Report']
+            [
+                'full',
+                'Full Sensitive Report'
+            ],[
+                'public',
+                'Public Report'
+            ],[
+                'findings',
+                'Investigative Findings Report'
+            ]
         ];
         return $this->v["reportUploadTypes"];
     }
@@ -1709,11 +587,22 @@ class OpenPoliceUtils extends TreeSurvForm
     protected function loadOversightDateLookups()
     {
         $this->v["oversightDateLookups"] = [
-            ['LnkComOverSubmitted',       'Submitted to Investigative Agency'],
-            ['LnkComOverReceived',        'Received by Investigative Agency'],
-            ['LnkComOverStillNoResponse', 'Still No Response from Agency'],
-            ['LnkComOverInvestigated',    'Investigated by Investigative Agency'],
-            ['LnkComOverReportDate',      'Investigative Agency Report Uploaded']
+            [
+                'LnkComOverSubmitted',       
+                'Submitted to Investigative Agency'
+            ],[
+                'LnkComOverReceived',        
+                'Received by Investigative Agency'
+            ],[
+                'LnkComOverStillNoResponse', 
+                'Still No Response from Agency'
+            ],[
+                'LnkComOverInvestigated',
+                'Investigated by Investigative Agency'
+            ],[
+                'LnkComOverReportDate',
+                'Investigative Agency Report Uploaded'
+            ]
         ];
         return $this->v["oversightDateLookups"];
     }

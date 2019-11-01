@@ -25,39 +25,51 @@ class OpenDevelopment extends OpenReportToolsAdmin
             [
                 'About the Web App', 
                 [
-                    ['/web-app-workflows', 'Web App Workflows']
+                    [
+                        '/web-app-workflows', 
+                        'Web App Workflows'
+                    ]
                 ]
-            ], [
-                'Getting Started', 
+            ],
+            [
+                'For Web Developers', 
                 [
                     [
-                        '/how-to-install-open-police-complaints-with-docker', 
-                        'Install Copy of OPC with Docker', 
+                        '/how-to-install-local-openpolice', 
+                        'Install Local Copy of OpenPolice', 
                         [
-                            ['#quick',     'Install Commands'],
-                            ['#video',     'Video'],
-                            ['#reference', 'Reference']
+                            ['#n3072', 'Install Homestead'],
+                            ['#n3071', 'Install Laravel'],
+                            ['#n2694', 'Install OpenPolice']
                         ]
                     ],
                     [
                         '/web-app-technical-specs', 
-                        'General Technical Background on App'
+                        'General Technical Background'
                     ]
                 ]
-            ], [
-                'Open Police Codebase Orientation',
+            ],
+            [
+                'Codebase Orientation',
                 [
                     [
+                        '/code-package-files-folders-and-classes', 
+                        'OpenPolice Package Files'
+                    ],
+                    [
                         'https://survloop.org/package-files-folders-classes', 
-                        'Package Files, Folders, and Classes'
+                        'SurvLoop Package Files'
                     ]
                 ]
             ]
         ];
-        return view('vendor.openpolice.inc-documentation-navigation', [
-            "docuNav"  => $docuNav,
-            "currPage" => $this->getCurrPage()
-        ])->render();
+        return view(
+            'vendor.openpolice.inc-documentation-navigation', 
+            [
+                "docuNav"  => $docuNav,
+                "currPage" => $this->getCurrPage()
+            ]
+        )->render();
     }
     
 }

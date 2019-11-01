@@ -133,6 +133,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             ? intVal($GLOBALS["SL"]->REQ->email) : -3);
         $this->autoloadAdminComplaintEmail($isOverCompatible);
         
+        $this->loadDeptStuff();
         $this->v["currEmail"] = [];
         if (isset($this->sessData->dataSets["LinksComplaintDept"])) {
             $depts = $this->sessData->dataSets["LinksComplaintDept"];

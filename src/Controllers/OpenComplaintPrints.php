@@ -329,6 +329,25 @@ class OpenComplaintPrints extends OpenComplaintEmails
         return '';
     }
     
+    protected function getDeptName($dept = [], $itemIndex = -3)
+    {
+    //(($itemIndex > 0) ? '<span class="fPerc66 slGrey">(#'.$itemIndex.')</span>' : '');
+        $name = ''; 
+        if (isset($dept->DeptName) && trim($dept->DeptName) != '') {
+            $name = $dept->DeptName . ' ' . $name;
+        }
+        return trim($name);
+    }
+    
+    protected function getDeptNameByID($deptID)
+    {
+        $dept = $this->sessData->getRowById('Departments', $deptID);
+        if ($dept) {
+            return $this->getDeptName($dept);
+        }
+        return '';
+    }
+    
     protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
     {
         if (in_array($nID, [143, 917]) && $loopItem) { 

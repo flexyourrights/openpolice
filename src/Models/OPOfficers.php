@@ -10,7 +10,7 @@ class OPOfficers extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'OffIsVerified', 
+		'OffVerifiedID', 
 		'OffComplaintID', 
 		'OffRole', 
 		'OffDeptID', 

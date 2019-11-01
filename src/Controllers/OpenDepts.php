@@ -963,16 +963,14 @@ class OpenDepts extends OpenListing
     }
     
     /**
-     * Prints a department's main profile page, including their basic info,
-     * complaint info, and history.
+     * Load whatever's needed to print the department profile page.
      *
      * @param  int $nID
      * @return string
      */
-    protected function printDeptPage1099($nID)
+    protected function printDeptHeaderLoad($nID)
     {
-        if (!isset($this->v["deptID"]) 
-            || intVal($this->v["deptID"]) <= 0) {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
             return 'Department Not Found';
         }
         //if (!isset($this->v["deptID"]) 
@@ -994,22 +992,108 @@ class OpenDepts extends OpenListing
                 $url
             );
         }
-        $previews = '<div id="n' . $nID . 'ajaxLoad" class="w100">'
-            . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
+        return '';
+    }
+    
+    /**
+     * Prints a department's basic info and mapped location on their profile page.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printBasicDeptInfo($nID)
+    {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+            return 'Department Not Found';
+        }
+        return view(
+            'vendor.openpolice.nodes.2711-dept-page-basic-info', 
+            [
+                "nID" => $nID,
+                "d" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]]
+            ]
+        )->render();
+    }
+    
+    /**
+     * Prints a call to action button on department's profile page.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printDeptCallsToAction($nID)
+    {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+            return 'Department Not Found';
+        }
+        return view(
+            'vendor.openpolice.nodes.2713-dept-page-calls-action', 
+            [
+                "nID" => $nID,
+                "d" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]]
+            ]
+        )->render();
+    }
+    
+    /**
+     * Prints a department's recent complaint previews on their profile page.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printDeptReportsRecent($nID)
+    {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+            return 'Department Not Found';
+        }
         $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
             . 'ajaxLoad").load("/record-prevs/1?d=' 
             . $this->v["deptID"] . '&limit=20");' . "\n";
-        //if (trim($previews) == '') {
-        //    $previews = '<p><i>No complaints have 
-        // been submitted for this deparment.</i></p>';
-        //}
         return view(
-            'vendor.openpolice.dept-page', 
+            'vendor.openpolice.nodes.2715-dept-page-recent-reports', 
             [
                 "nID" => $nID,
-                "d" => $GLOBALS["SL"]
-                    ->x["depts"][$this->v["deptID"]],
-                "previews" => $previews
+                "d" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]]
+            ]
+        )->render();
+    }
+    
+    /**
+     * Prints a breakdown of a department's accessibility score on their profile page.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printDeptProfileAccScore($nID)
+    {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+            return 'Department Not Found';
+        }
+        return view(
+            'vendor.openpolice.nodes.2717-dept-page-accessibility-score', 
+            [
+                "nID" => $nID,
+                "d" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]]
+            ]
+        )->render();
+    }
+    
+    /**
+     * Prints instructions on how to file a complaint with a department on their profile page.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printDeptProfileHowToFile($nID)
+    {
+        if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
+            return 'Department Not Found';
+        }
+        return view(
+            'vendor.openpolice.nodes.2718-dept-page-how-to-file', 
+            [
+                "nID" => $nID,
+                "d" => $GLOBALS["SL"]->x["depts"][$this->v["deptID"]]
             ]
         )->render();
     }
@@ -1028,16 +1112,12 @@ class OpenDepts extends OpenListing
         }
         $set = 'Complaint Status';
         $this->v["fltQry"] .= " c.`ComStatus` IN ("
-            . $GLOBALS["SL"]->def->getID($set, 
-                'OK to Submit to Oversight') 
-            . ", " . $GLOBALS["SL"]->def->getID($set, 
-                'Submitted to Oversight') 
-            . ", " . $GLOBALS["SL"]->def->getID($set, 
-                'Received by Oversight') 
-            . ", " . $GLOBALS["SL"]->def->getID($set, 
-                'Declined To Investigate (Closed)') 
-            . ", " . $GLOBALS["SL"]->def->getID($set, 
-                'Investigated (Closed)') . ") AND ";
+            . $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight') 
+            . ", " . $GLOBALS["SL"]->def->getID($set, 'Submitted to Oversight') 
+            . ", " . $GLOBALS["SL"]->def->getID($set, 'Received by Oversight') 
+            . ", " . $GLOBALS["SL"]->def->getID($set, 'Declined To Investigate (Closed)') 
+            . ", " . $GLOBALS["SL"]->def->getID($set, 'Investigated (Closed)') 
+            . ") AND ";
         $this->v["statusSkips"] = [
             $GLOBALS["SL"]->def->getID($set, 'Incomplete'),
             $GLOBALS["SL"]->def->getID($set, 'New'),

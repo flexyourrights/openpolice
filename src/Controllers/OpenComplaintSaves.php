@@ -42,9 +42,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
             ]);
         }
         // Main Complaint Survey...
-        if (in_array($nID, [16, 17])) {
-            return $this->saveStartTime($nID, $tbl, $fld);
-        } elseif (in_array($nID, [2262, 2263])) {
+        if (in_array($nID, [16, 17, 2262, 2263])) {
             return $this->saveStartTime($nID, $tbl, $fld);
         } elseif (in_array($nID, [145, 920])) {
             return $this->saveNewDept($nID);
@@ -106,6 +104,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
             $date = '0000-00-00';
         }
         $date = date("Y-m-d", strtotime($date));
+        if (substr($date, 0, 5) == '-0001') {
+            $date = '0000-00-00';
+        }
         $time = $this->postFormTimeStr($nID);
         if ($time === null) {
             $date .= ' 00:00:00';
