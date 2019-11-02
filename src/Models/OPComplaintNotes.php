@@ -12,7 +12,6 @@ class OPComplaintNotes extends Model
     [    
 		'NoteComplaintID', 
 		'NoteUserID', 
-		'NoteTimestamp', 
 		'NoteContent', 
     ];
     

@@ -4,7 +4,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class OPCreateTables extends Migration
+class CreateOpenPoliceTables extends Migration
 {
     /**
      * Run the migrations.
@@ -58,7 +58,7 @@ class OPCreateTables extends Migration
 			$table->string('ComUniqueStr', 20)->nullable();
 			$table->string('ComIPaddy')->nullable();
 			$table->integer('ComPublicID')->nullable();
-			$table->boolean('ComIsDemo')->default('0')->nullable();
+			$table->boolean('ComIsDemo')->default(0)->nullable();
 			$table->boolean('ComShareData')->nullable();
 			$table->timestamps();
 		});
@@ -334,7 +334,6 @@ class OPCreateTables extends Migration
 			$table->integer('NoteComplaintID')->unsigned()->nullable();
 			$table->index('NoteComplaintID');
 			$table->integer('NoteUserID')->unsigned()->nullable();
-			$table->dateTime('NoteTimestamp')->default('NOW()')->nullable();
 			$table->longText('NoteContent')->nullable();
 			$table->timestamps();
 		});
@@ -538,7 +537,7 @@ class OPCreateTables extends Migration
 			$table->boolean('OverWaySubPaperMail')->nullable();
 			$table->boolean('OverWaySubPaperInPerson')->nullable();
 			$table->boolean('OverWaySubNotary')->nullable();
-			$table->boolean('OverKeepEmailPrivate')->default('0')->nullable();
+			$table->boolean('OverKeepEmailPrivate')->default(0)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_OversightModels', function(Blueprint $table)
@@ -552,7 +551,7 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('PartID');
 			$table->integer('PartType')->unsigned()->nullable();
-			$table->boolean('PartStatus')->default('1')->nullable();
+			$table->boolean('PartStatus')->default(1)->nullable();
 			$table->integer('PartUserID')->unsigned()->nullable();
 			$table->integer('PartPersonID')->unsigned()->nullable();
 			$table->string('PartBio')->nullable();
@@ -726,7 +725,7 @@ class OPCreateTables extends Migration
 			$table->string('CompliUniqueStr', 20)->nullable();
 			$table->string('CompliIPaddy')->nullable();
 			$table->integer('CompliPublicID')->nullable();
-			$table->boolean('CompliIsDemo')->default('0')->nullable();
+			$table->boolean('CompliIsDemo')->default(0)->nullable();
 			$table->boolean('CompliShareData')->nullable();
 			$table->timestamps();
 		});
@@ -800,7 +799,6 @@ class OPCreateTables extends Migration
 		{
 			$table->increments('AdmActID');
 			$table->integer('AdmActUserID')->unsigned()->nullable();
-			$table->dateTime('AdmActTimestamp')->default('NOW()')->nullable();
 			$table->string('AdmActTable')->nullable();
 			$table->integer('AdmActRecordID')->nullable();
 			$table->longText('AdmActOldData')->nullable();
@@ -888,7 +886,7 @@ class OPCreateTables extends Migration
 			$table->boolean('ZedOverOverWaySubPaperMail')->nullable();
 			$table->boolean('ZedOverOverWaySubPaperInPerson')->nullable();
 			$table->boolean('ZedOverOverWaySubNotary')->nullable();
-			$table->boolean('ZedOverOverKeepEmailPrivate')->default('0')->nullable();
+			$table->boolean('ZedOverOverKeepEmailPrivate')->default(0)->nullable();
 			$table->timestamps();
 		});
 		Schema::create('OP_zVolunStatDays', function(Blueprint $table)

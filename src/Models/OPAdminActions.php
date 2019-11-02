@@ -11,7 +11,6 @@ class OPAdminActions extends Model
     protected $fillable   = 
     [    
 		'AdmActUserID', 
-		'AdmActTimestamp', 
 		'AdmActTable', 
 		'AdmActRecordID', 
 		'AdmActOldData', 
