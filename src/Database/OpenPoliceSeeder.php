@@ -13,7 +13,7 @@ class OpenPoliceSeeder extends Seeder
      */
     public function run()
     {
-
+    	
 	DB::table('SL_Databases')->insert([
 			'DbID' => 1,
 			'DbUser' => '1',
@@ -22,7 +22,7 @@ class OpenPoliceSeeder extends Seeder
 			'DbDesc' => 'The nation\'s most trusted police complaints service',
 			'DbMission' => 'The purpose of the OpenPolice.org database is to maintain the data we collect from users and to supply information that supports the work of police oversight professionals throughout the United States.',
 			'DbTables' => '62',
-			'DbFields' => '629'
+			'DbFields' => '627'
 		]);
 	
 	DB::table('SL_Tables')->insert([
@@ -277,7 +277,7 @@ If there is a Property record associated with a Search record, then property was
 			'TblGroup' => 'Logging Data Tables',
 			'TblOrd' => '56',
 			'TblExtend' => '0',
-			'TblNumFields' => '6',
+			'TblNumFields' => '5',
 			'TblNumForeignKeys' => '1'
 		]);
 		DB::table('SL_Tables')->insert([
@@ -306,7 +306,7 @@ Question list and fields coming soon...',
 			'TblGroup' => 'Complaint Data Tables',
 			'TblOrd' => '21',
 			'TblExtend' => '0',
-			'TblNumFields' => '4',
+			'TblNumFields' => '3',
 			'TblNumForeignKeys' => '2'
 		]);
 		DB::table('SL_Tables')->insert([
@@ -1422,32 +1422,6 @@ Question list and fields coming soon...',
 			'FldDataLength' => '1',
 			'FldCharSupport' => ',Letters,',
 			'FldCompareSame' => '130'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 779,
-			'FldDatabase' => '1',
-			'FldTable' => '136',
-			'FldOrd' => '3',
-			'FldSpecType' => 'Replica',
-			'FldSpecSource' => '957',
-			'FldName' => 'Timestamp',
-			'FldEng' => 'Timestamp',
-			'FldDesc' => 'The date and time when a Note was added to a Complaint. This is vital to tracking the chronology of new updates, information, and/or Evidence appended to a completed Complaint.',
-			'FldForeignTable' => '0',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldDefault' => 'NOW()',
-			'FldType' => 'DATETIME',
-			'FldDataType' => 'DateTime',
-			'FldDataLength' => '0',
-			'FldCharSupport' => ',Keyboard,Numbers,',
-			'FldDisplayFormat' => 'YYYY-MM-DD HH:MM:SS',
-			'FldKeyType' => 'Non',
-			'FldKeyStruct' => 'Simple',
-			'FldCompareSame' => '6',
-			'FldOpts' => '11'
 		]);
 		DB::table('SL_Fields')->insert([
 			'FldID' => 1035,
@@ -9061,31 +9035,6 @@ On 9/17, we decided not to include this in the UI specs because most complainant
 			'FldCharSupport' => ',Numbers,Keyboard,',
 			'FldDisplayFormat' => 'YYYY-MM-DD HH:MM:SS',
 			'FldNullSupport' => '0',
-			'FldCompareSame' => '6'
-		]);
-		DB::table('SL_Fields')->insert([
-			'FldID' => 480,
-			'FldDatabase' => '1',
-			'FldTable' => '126',
-			'FldOrd' => '1',
-			'FldSpecType' => 'Replica',
-			'FldSpecSource' => '957',
-			'FldName' => 'Timestamp',
-			'FldEng' => 'Timestamp',
-			'FldDesc' => 'The date and time of an Administrator\'s specific Action affecting system data, vital for tracking System User behavior and potentially providing security validation.',
-			'FldForeignTable' => '0',
-			'FldForeignMin' => '11',
-			'FldForeignMax' => '11',
-			'FldForeign2Min' => '0',
-			'FldForeign2Max' => '0',
-			'FldDefault' => 'NOW()',
-			'FldType' => 'DATETIME',
-			'FldDataType' => 'DateTime',
-			'FldDataLength' => '0',
-			'FldCharSupport' => ',Keyboard,Numbers,',
-			'FldDisplayFormat' => 'YYYY-MM-DD HH:MM:SS',
-			'FldKeyType' => 'Non',
-			'FldKeyStruct' => 'Simple',
 			'FldCompareSame' => '6'
 		]);
 		DB::table('SL_Fields')->insert([
@@ -19145,6 +19094,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Survey',
 			'TreeName' => 'Complaint',
 			'TreeDesc' => 'Open Police Complaint',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '3',
 			'TreeFirstPage' => '2603',
 			'TreeLastPage' => '529',
@@ -19158,6 +19108,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Complaint',
 			'TreeDesc' => 'Open Police Complaint',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '785',
 			'TreeCoreTable' => '112'
 		]);
@@ -19169,6 +19120,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Compliment',
 			'TreeDesc' => 'Open Police Compliment',
+			'TreeSlug' => 'compliment',
 			'TreeRoot' => '983',
 			'TreeCoreTable' => '170'
 		]);
@@ -19180,6 +19132,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Page',
 			'TreeName' => 'File Your Police Complaint - Share Your Story',
 			'TreeDesc' => 'Complaint landing page',
+			'TreeSlug' => 'file-your-police-complaint',
 			'TreeRoot' => '769',
 			'TreeFirstPage' => '769',
 			'TreeLastPage' => '769',
@@ -19193,6 +19146,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Survey',
 			'TreeName' => 'Compliment',
 			'TreeDesc' => 'Open Police Compliment',
+			'TreeSlug' => 'compliment',
 			'TreeRoot' => '752',
 			'TreeFirstPage' => '2583',
 			'TreeLastPage' => '974',
@@ -19206,6 +19160,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Page',
 			'TreeName' => 'File Your Police Compliment - Share Your Story',
 			'TreeDesc' => 'Compliment landing page',
+			'TreeSlug' => 'file-your-police-compliment',
 			'TreeRoot' => '774',
 			'TreeFirstPage' => '774',
 			'TreeLastPage' => '774'
@@ -19217,6 +19172,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'List of Allegations and Commendations',
+			'TreeSlug' => 'allegations',
 			'TreeRoot' => '787',
 			'TreeFirstPage' => '787',
 			'TreeLastPage' => '787'
@@ -19228,6 +19184,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '31',
 			'TreeType' => 'Page',
 			'TreeName' => 'Recently Posted Complaints',
+			'TreeSlug' => 'recent-complaints',
 			'TreeRoot' => '789',
 			'TreeFirstPage' => '789',
 			'TreeLastPage' => '789'
@@ -19239,6 +19196,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '609',
 			'TreeType' => 'Page',
 			'TreeName' => 'Admin Dashboard',
+			'TreeSlug' => 'dashboard',
 			'TreeRoot' => '791',
 			'TreeFirstPage' => '791',
 			'TreeLastPage' => '791'
@@ -19251,6 +19209,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Page',
 			'TreeName' => 'OpenPolice.org | You belong at the center of police oversight.',
 			'TreeDesc' => 'Home page',
+			'TreeSlug' => 'home',
 			'TreeRoot' => '793',
 			'TreeFirstPage' => '793',
 			'TreeLastPage' => '793',
@@ -19263,6 +19222,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '551',
 			'TreeType' => 'Page',
 			'TreeName' => 'Contact OpenPolice.org',
+			'TreeSlug' => 'contact',
 			'TreeRoot' => '826',
 			'TreeFirstPage' => '826',
 			'TreeLastPage' => '826'
@@ -19274,6 +19234,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'User Privacy Options on OpenPolice.org',
+			'TreeSlug' => 'complaint-privacy-options',
 			'TreeRoot' => '833',
 			'TreeFirstPage' => '833',
 			'TreeLastPage' => '833'
@@ -19285,6 +19246,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Website Privacy Policy | OpenPolice.org',
+			'TreeSlug' => 'privacy-policy',
 			'TreeRoot' => '835',
 			'TreeFirstPage' => '835',
 			'TreeLastPage' => '835'
@@ -19296,6 +19258,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Web App Specifications for OpenPolice.org',
+			'TreeSlug' => 'web-app-technical-specs',
 			'TreeRoot' => '837',
 			'TreeFirstPage' => '837',
 			'TreeLastPage' => '837'
@@ -19307,6 +19270,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Frequently Asked Questions | OpenPolice.org',
+			'TreeSlug' => 'frequently-asked-questions',
 			'TreeRoot' => '839',
 			'TreeFirstPage' => '839',
 			'TreeLastPage' => '839'
@@ -19318,6 +19282,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Blog',
+			'TreeSlug' => 'articles',
 			'TreeRoot' => '843',
 			'TreeFirstPage' => '843',
 			'TreeLastPage' => '843'
@@ -19329,6 +19294,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'How To Install Local OpenPolice.org',
+			'TreeSlug' => 'how-to-install-local-openpolice',
 			'TreeRoot' => '847',
 			'TreeFirstPage' => '847',
 			'TreeLastPage' => '847'
@@ -19340,6 +19306,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Police Departments\' Accessibility Scores | OpenPolice.org',
+			'TreeSlug' => 'department-accessibility',
 			'TreeRoot' => '858',
 			'TreeFirstPage' => '858',
 			'TreeLastPage' => '858'
@@ -19351,6 +19318,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1334',
 			'TreeType' => 'Page',
 			'TreeName' => 'My Profile',
+			'TreeSlug' => 'my-profile',
 			'TreeRoot' => '997',
 			'TreeFirstPage' => '997',
 			'TreeLastPage' => '997'
@@ -19362,6 +19330,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'About OpenPolice.org',
+			'TreeSlug' => 'about',
 			'TreeRoot' => '1005',
 			'TreeFirstPage' => '1005',
 			'TreeLastPage' => '1005'
@@ -19374,6 +19343,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint or Compliment? OpenPolice.org',
 			'TreeDesc' => 'Choose Complaint or Compliment',
+			'TreeSlug' => 'complaint-or-compliment',
 			'TreeRoot' => '1096',
 			'TreeFirstPage' => '1096',
 			'TreeLastPage' => '1096'
@@ -19385,6 +19355,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => '[{ Complaint Police Department }] ([{ Police Department State Abbr }]) Complaint Info, History & File',
+			'TreeSlug' => 'dept',
 			'TreeRoot' => '1098',
 			'TreeFirstPage' => '1098',
 			'TreeLastPage' => '1098'
@@ -19396,6 +19367,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Site Map | OpenPolice.org',
+			'TreeSlug' => 'site-map',
 			'TreeRoot' => '1105',
 			'TreeFirstPage' => '1105',
 			'TreeLastPage' => '1105'
@@ -19407,6 +19379,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Accessibility Score: How We Rate Departments',
+			'TreeSlug' => 'how-we-rate-departments',
 			'TreeRoot' => '1126',
 			'TreeFirstPage' => '1126',
 			'TreeLastPage' => '1126'
@@ -19418,6 +19391,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => '"Go Gold" To Make Your Complaint As Strong As Possible',
+			'TreeSlug' => 'go-gold-make-your-complaint-strong',
 			'TreeRoot' => '1129',
 			'TreeFirstPage' => '1129',
 			'TreeLastPage' => '1129'
@@ -19429,6 +19403,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Testing',
+			'TreeSlug' => 'testing',
 			'TreeRoot' => '1189',
 			'TreeFirstPage' => '1189',
 			'TreeLastPage' => '1189'
@@ -19439,7 +19414,8 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Redirect',
-			'TreeDesc' => 'https://github.com/flexyourrights/openpolice'
+			'TreeDesc' => 'https://github.com/flexyourrights/openpolice',
+			'TreeSlug' => 'github'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 33,
@@ -19448,6 +19424,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '106981',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Dashboard',
+			'TreeSlug' => 'volunteer',
 			'TreeRoot' => '1210',
 			'TreeFirstPage' => '1210',
 			'TreeLastPage' => '1210'
@@ -19459,6 +19436,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '899',
 			'TreeType' => 'Page',
 			'TreeName' => 'Search',
+			'TreeSlug' => 'search',
 			'TreeRoot' => '1218',
 			'TreeFirstPage' => '1218',
 			'TreeLastPage' => '1218'
@@ -19470,6 +19448,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '93',
 			'TreeType' => 'Page',
 			'TreeName' => 'Dashboard Search',
+			'TreeSlug' => 'search',
 			'TreeRoot' => '1220'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -19479,6 +19458,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '4301',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Research Department',
+			'TreeSlug' => 'volunteers-research-departments',
 			'TreeRoot' => '1222',
 			'TreeFirstPage' => '1223',
 			'TreeLastPage' => '1339',
@@ -19491,6 +19471,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Research Department',
+			'TreeSlug' => 'volunteers-research-departments',
 			'TreeRoot' => '1224',
 			'TreeCoreTable' => '111'
 		]);
@@ -19501,6 +19482,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Frequently Asked Volunteer Questions',
+			'TreeSlug' => 'volunteer-faqs',
 			'TreeRoot' => '1234',
 			'TreeFirstPage' => '1234',
 			'TreeLastPage' => '1234'
@@ -19512,6 +19494,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Verify Next Department',
+			'TreeSlug' => 'verify-next-department',
 			'TreeRoot' => '1343',
 			'TreeFirstPage' => '1343',
 			'TreeLastPage' => '1343'
@@ -19523,6 +19506,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Stars',
+			'TreeSlug' => 'volunteer-stars',
 			'TreeRoot' => '1345',
 			'TreeFirstPage' => '1345',
 			'TreeLastPage' => '1345'
@@ -19534,6 +19518,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer Edits History',
+			'TreeSlug' => 'volunteer-edits-history',
 			'TreeRoot' => '1350',
 			'TreeFirstPage' => '1350',
 			'TreeLastPage' => '1350'
@@ -19545,6 +19530,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint #[[corePubID]]',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '1362',
 			'TreeFirstPage' => '1362',
 			'TreeLastPage' => '1362',
@@ -19557,6 +19543,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '287',
 			'TreeType' => 'Page',
 			'TreeName' => 'Partner',
+			'TreeSlug' => 'partner',
 			'TreeRoot' => '1413'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -19566,6 +19553,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '38657',
 			'TreeType' => 'Page',
 			'TreeName' => 'All Complete Complaints',
+			'TreeSlug' => 'all-complete-complaints',
 			'TreeRoot' => '1417',
 			'TreeFirstPage' => '1417',
 			'TreeLastPage' => '1417',
@@ -19578,6 +19566,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '301',
 			'TreeType' => 'Page',
 			'TreeName' => 'Staff',
+			'TreeSlug' => 'staff',
 			'TreeRoot' => '1415'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -19587,6 +19576,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'All Incomplete Complaints',
+			'TreeSlug' => 'all-incomplete-complaints',
 			'TreeRoot' => '1419',
 			'TreeFirstPage' => '1419',
 			'TreeLastPage' => '1419'
@@ -19598,6 +19588,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Volunteer with OpenPolice.org',
+			'TreeSlug' => 'volunteer',
 			'TreeRoot' => '1445',
 			'TreeFirstPage' => '1445',
 			'TreeLastPage' => '1445'
@@ -19609,6 +19600,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'departments',
+			'TreeSlug' => 'departments',
 			'TreeRoot' => '1453',
 			'TreeFirstPage' => '1453',
 			'TreeLastPage' => '1453'
@@ -19620,6 +19612,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Investigative Agencies',
+			'TreeSlug' => 'oversight',
 			'TreeRoot' => '1455',
 			'TreeFirstPage' => '1455',
 			'TreeLastPage' => '1455'
@@ -19631,6 +19624,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Officers',
+			'TreeSlug' => 'officers',
 			'TreeRoot' => '1457',
 			'TreeFirstPage' => '1457',
 			'TreeLastPage' => '1457'
@@ -19642,6 +19636,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorneys',
+			'TreeSlug' => 'attorneys',
 			'TreeRoot' => '1459',
 			'TreeFirstPage' => '1459',
 			'TreeLastPage' => '1459'
@@ -19653,6 +19648,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '559',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint Review',
+			'TreeSlug' => 'complaint-review',
 			'TreeRoot' => '1461',
 			'TreeFirstPage' => '1461',
 			'TreeLastPage' => '1461'
@@ -19664,6 +19660,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'OpenPolice.org for Law Enforcement',
+			'TreeSlug' => 'for-law-enforcement',
 			'TreeRoot' => '1783',
 			'TreeFirstPage' => '1783',
 			'TreeLastPage' => '1783'
@@ -19675,6 +19672,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorneys FAQ',
+			'TreeSlug' => 'attorneys-faq',
 			'TreeRoot' => '1877',
 			'TreeFirstPage' => '1877',
 			'TreeLastPage' => '1877'
@@ -19686,6 +19684,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '41',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorney Referral Listings',
+			'TreeSlug' => 'attorney-referral-listings',
 			'TreeRoot' => '1895',
 			'TreeFirstPage' => '1895',
 			'TreeLastPage' => '1895'
@@ -19697,6 +19696,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Attorney Profile',
+			'TreeSlug' => 'attorney',
 			'TreeRoot' => '1897',
 			'TreeFirstPage' => '1897',
 			'TreeLastPage' => '1897',
@@ -19709,6 +19709,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Donate to OpenPolice.org',
+			'TreeSlug' => 'donate',
 			'TreeRoot' => '1899',
 			'TreeFirstPage' => '1899',
 			'TreeLastPage' => '1899'
@@ -19720,6 +19721,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Partner Profile',
+			'TreeSlug' => 'partner-profile',
 			'TreeRoot' => '1921',
 			'TreeFirstPage' => '1922',
 			'TreeLastPage' => '1954',
@@ -19732,6 +19734,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '5289',
 			'TreeType' => 'Survey XML',
 			'TreeName' => 'Partner Profile',
+			'TreeSlug' => 'partner-profile',
 			'TreeRoot' => '1923',
 			'TreeCoreTable' => '110'
 		]);
@@ -19742,6 +19745,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Manage Partners',
+			'TreeSlug' => 'manage-partners',
 			'TreeRoot' => '1938',
 			'TreeFirstPage' => '1938',
 			'TreeLastPage' => '1938'
@@ -19753,6 +19757,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Team Resources',
+			'TreeSlug' => 'team-resources',
 			'TreeRoot' => '1984',
 			'TreeFirstPage' => '1984',
 			'TreeLastPage' => '1984'
@@ -19764,6 +19769,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Preparing Your Complaint for an Attorney',
+			'TreeSlug' => 'prepare-complaint-for-attorney',
 			'TreeRoot' => '1992',
 			'TreeFirstPage' => '1992',
 			'TreeLastPage' => '1992',
@@ -19776,6 +19782,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Open Data Resources',
+			'TreeSlug' => 'resources',
 			'TreeRoot' => '1999',
 			'TreeFirstPage' => '1999',
 			'TreeLastPage' => '1999'
@@ -19787,6 +19794,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Temporary Testing Grounds',
+			'TreeSlug' => 'tmp',
 			'TreeRoot' => '2012',
 			'TreeFirstPage' => '2012',
 			'TreeLastPage' => '2012'
@@ -19798,6 +19806,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Organization Profile',
+			'TreeSlug' => 'org',
 			'TreeRoot' => '2059',
 			'TreeFirstPage' => '2059',
 			'TreeLastPage' => '2059',
@@ -19810,6 +19819,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '377',
 			'TreeType' => 'Page',
 			'TreeName' => 'Preparing Your Complaint for an Organization',
+			'TreeSlug' => 'preparing-complaint-for-org',
 			'TreeRoot' => '2063',
 			'TreeFirstPage' => '2063',
 			'TreeLastPage' => '2063',
@@ -19822,6 +19832,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1333',
 			'TreeType' => 'Page',
 			'TreeName' => 'Staff Search',
+			'TreeSlug' => 'staff-search',
 			'TreeRoot' => '2090'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -19831,6 +19842,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1271',
 			'TreeType' => 'Page',
 			'TreeName' => 'Partner Search',
+			'TreeSlug' => 'partner-search',
 			'TreeRoot' => '2092'
 		]);
 		DB::table('SL_Tree')->insert([
@@ -19839,7 +19851,8 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Redirect',
-			'TreeDesc' => 'http://openpolice.local/complaint-or-compliment'
+			'TreeDesc' => 'http://openpolice.local/complaint-or-compliment',
+			'TreeSlug' => 'sharing-your-story'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 70,
@@ -19848,6 +19861,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint or Compliment? OpenPolice.org',
+			'TreeSlug' => 'share-complaint-or-compliment',
 			'TreeRoot' => '2094',
 			'TreeFirstPage' => '2094',
 			'TreeLastPage' => '2094'
@@ -19859,6 +19873,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Features of OpenPolice.org',
+			'TreeSlug' => 'features',
 			'TreeRoot' => '2104',
 			'TreeFirstPage' => '2104',
 			'TreeLastPage' => '2104'
@@ -19870,6 +19885,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Principles Behind OpenPolice.org',
+			'TreeSlug' => 'principles',
 			'TreeRoot' => '2106',
 			'TreeFirstPage' => '2106',
 			'TreeLastPage' => '2106'
@@ -19881,6 +19897,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Partners',
+			'TreeSlug' => 'partners',
 			'TreeRoot' => '2149',
 			'TreeFirstPage' => '2149',
 			'TreeLastPage' => '2149'
@@ -19892,6 +19909,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Manage Attorneys',
+			'TreeSlug' => 'manage-attorneys',
 			'TreeRoot' => '2165',
 			'TreeFirstPage' => '2165',
 			'TreeLastPage' => '2165'
@@ -19903,6 +19921,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Manage Organizations',
+			'TreeSlug' => 'manage-organizations',
 			'TreeRoot' => '2170',
 			'TreeFirstPage' => '2170',
 			'TreeLastPage' => '2170'
@@ -19914,6 +19933,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Pilot Program',
+			'TreeSlug' => 'pilot-program',
 			'TreeRoot' => '2191',
 			'TreeFirstPage' => '2191',
 			'TreeLastPage' => '2191'
@@ -19925,6 +19945,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Pilot Program with SSDP Chapters',
+			'TreeSlug' => 'pilot-program-with-ssdp-chapters',
 			'TreeRoot' => '2200',
 			'TreeFirstPage' => '2200',
 			'TreeLastPage' => '2200'
@@ -19936,6 +19957,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Beta Test Signup',
+			'TreeSlug' => 'beta-test-signup',
 			'TreeRoot' => '2216',
 			'TreeFirstPage' => '2217',
 			'TreeLastPage' => '2230',
@@ -19947,7 +19969,8 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey XML',
-			'TreeName' => 'Beta Test Signup'
+			'TreeName' => 'Beta Test Signup',
+			'TreeSlug' => 'beta-test-signup'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 81,
@@ -19956,6 +19979,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '43',
 			'TreeType' => 'Page',
 			'TreeName' => 'Beta Test Signups',
+			'TreeSlug' => 'beta-test-signups',
 			'TreeRoot' => '2233',
 			'TreeFirstPage' => '2233',
 			'TreeLastPage' => '2233'
@@ -19967,6 +19991,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '41',
 			'TreeType' => 'Page',
 			'TreeName' => 'Beta Flyer',
+			'TreeSlug' => 'beta-flyer',
 			'TreeRoot' => '2248',
 			'TreeFirstPage' => '2248',
 			'TreeLastPage' => '2248'
@@ -19978,6 +20003,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'How To Install OpenPolice.org with Docker',
+			'TreeSlug' => 'how-to-install-open-police-complaints-with-docker',
 			'TreeRoot' => '2280',
 			'TreeFirstPage' => '2280',
 			'TreeLastPage' => '2280'
@@ -19989,6 +20015,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Web App Workflows for OpenPolice.org',
+			'TreeSlug' => 'web-app-workflows',
 			'TreeRoot' => '2298',
 			'TreeFirstPage' => '2298',
 			'TreeLastPage' => '2298'
@@ -20000,6 +20027,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Filing Your Police Complaint',
+			'TreeSlug' => 'filing-your-police-complaint',
 			'TreeRoot' => '2368',
 			'TreeFirstPage' => '2368',
 			'TreeLastPage' => '2368'
@@ -20011,6 +20039,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '17',
 			'TreeType' => 'Page',
 			'TreeName' => 'Department Research Volunteer Instructions & Checklist',
+			'TreeSlug' => 'department-research-volunteer-instructions-checklist',
 			'TreeRoot' => '2373',
 			'TreeFirstPage' => '2373',
 			'TreeLastPage' => '2373'
@@ -20022,6 +20051,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Responsiveness Score: How We Rate Departments',
+			'TreeSlug' => 'police-department-reports-responsiveness',
 			'TreeRoot' => '2374',
 			'TreeFirstPage' => '2374',
 			'TreeLastPage' => '2374'
@@ -20033,6 +20063,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '15457',
 			'TreeType' => 'Page',
 			'TreeName' => 'Complaint #[[corePubID]]',
+			'TreeSlug' => 'complaint',
 			'TreeRoot' => '2376',
 			'TreeFirstPage' => '2376',
 			'TreeLastPage' => '2376',
@@ -20045,6 +20076,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '60233',
 			'TreeType' => 'Page',
 			'TreeName' => 'Search Complaints Published on OpenPolice.org',
+			'TreeSlug' => 'complaints',
 			'TreeRoot' => '2383',
 			'TreeFirstPage' => '2383',
 			'TreeLastPage' => '2383',
@@ -20057,6 +20089,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Home',
+			'TreeSlug' => 'home-test',
 			'TreeRoot' => '2679',
 			'TreeFirstPage' => '2679',
 			'TreeLastPage' => '2679'
@@ -20068,6 +20101,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '3',
 			'TreeType' => 'Page',
 			'TreeName' => 'Dashboard',
+			'TreeSlug' => 'dashboard-test',
 			'TreeRoot' => '2681',
 			'TreeFirstPage' => '2681',
 			'TreeLastPage' => '2681'
@@ -20079,6 +20113,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Page',
 			'TreeName' => 'Code Package Files, Folders, and Classes',
+			'TreeSlug' => 'code-package-files-folders-and-classes',
 			'TreeRoot' => '2697',
 			'TreeFirstPage' => '2697',
 			'TreeLastPage' => '2697'
@@ -20090,6 +20125,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey',
 			'TreeName' => 'Verified Officer Record',
+			'TreeSlug' => 'verified-officer-record',
 			'TreeRoot' => '2721',
 			'TreeFirstPage' => '2722',
 			'TreeLastPage' => '2731',
@@ -20101,7 +20137,8 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeUser' => '1',
 			'TreeOpts' => '1',
 			'TreeType' => 'Survey XML',
-			'TreeName' => 'Verified Officer Record'
+			'TreeName' => 'Verified Officer Record',
+			'TreeSlug' => 'verified-officer-record'
 		]);
 		DB::table('SL_Tree')->insert([
 			'TreeID' => 186,
@@ -20110,6 +20147,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeOpts' => '13',
 			'TreeType' => 'Page',
 			'TreeName' => 'Officer [[Officer Name]]',
+			'TreeSlug' => 'officer',
 			'TreeRoot' => '2724',
 			'TreeFirstPage' => '2724',
 			'TreeLastPage' => '2724',
@@ -38030,7 +38068,7 @@ homestead , Password: secret , Port: 33060 , Database: homestead .</p>'
 			'NodeParentID' => '2688',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p></p><hr><p></p>
+			'NodePromptText' => '<p><hr>
 <h3 class="slBlueDark">3. Install FlexYourRights/OpenPolice</h3>
 <p>From your Laravel installation\'s root directory, update `composer.json` to require and easily reference OpenPolice:</p>
 <pre>$ nano composer.json
@@ -38090,7 +38128,9 @@ $ cd code/openpolice
 $ php artisan migrate
 $ composer dump-autoload
 $ php artisan db:seed --class=SurvLoopSeeder
+$ php artisan db:seed --class=ZipCodeSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
+$ php artisan db:seed --class=OpenPoliceDeptSeeder
 $ php artisan optimize
 </pre>
 <p>For now, to apply database design changes to the same installation 
@@ -38103,10 +38143,8 @@ $ cd ~/homestead/code/openpolice
 $ php artisan optimize
 $ composer dump-autoload
 </pre><h4>Initialize OpenPolice Installation<br></h4>
-<p>If all went well thus far, the hopefully you can browse to load the style sheets, etc:</p>
-<p><a href="http://openpolice.local/css-reload" target="_blank"><b>http://openpolice.local/css-reload</b></a></p>
-<p>Then browsing to another page should prompt you to create the first admin user account:</p>
-<p><a href="http://openpolice.local" target="_blank"><b>http://openpolice.local</b></a></p><p>After logging in as an admin, this link rebuilds many supporting files:</p><p><a href="http://openpolice.local/dashboard/settings?refresh=2"><b>http://openpolice.local/dashboard/settings?refresh=2</b></a></p>'
+</p><p>Then browsing to the home page should prompt you to create the first admin user account:</p>
+<p><a href="http://openpolice.local" target="_blank"><b>http://openpolice.local</b></a></p><p>If everything looks janky, then manually load the style sheets, etc:</p><p><a href="http://openpolice.local/css-reload" target="_blank"><b>http://openpolice.local/css-reload</b></a></p><p>After logging in as an admin, this link rebuilds many supporting files:</p><p><a href="http://openpolice.local/dashboard/settings?refresh=2"><b>http://openpolice.local/dashboard/settings?refresh=2</b></a></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2695,
@@ -48993,12 +49031,6 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'DataHelpTable' => 'LinksOfficerDept',
 			'DataHelpKeyField' => 'LnkOffDeptOfficerID',
 			'DataHelpValueField' => 'LinksComplaintDept:LnkComDeptDeptID'
-		]);
-
-
-
-
-		
-	
+		]);	
 
  } }

@@ -19,6 +19,7 @@ class OpenPoliceVars extends TreeSurvForm
     
     protected $allCivs         = [];
     protected $allegations     = [];
+    
     public $worstAllegations   = [ // Allegations in descending order of severity, Definition IDs
         [126, 'Sexual Assault',                 'AlleSilSexualAssault'],
         [115, 'Unreasonable Force',             'AlleSilForceUnreason'],
@@ -41,30 +42,35 @@ class OpenPoliceVars extends TreeSurvForm
         //[131, 'Miranda Rights',                 'AlleSilArrestMiranda'],
         [130, 'Officer Refused To Provide ID',  'AlleSilOfficerRefuseID']
     ];
+
     public $eventTypes = [
         'Stops',
         'Searches',
         'Force',
         'Arrests'
     ];
+
     public $eveTypIDs = [
         252 => 'Stops',
         253 => 'Searches',
         254 => 'Force',
         255 => 'Arrests'
     ];
+
     protected $eventTypeLabel = [
         'Stops'    => 'Stop/Questioning',
         'Searches' => 'Search/Seizure',
         'Force'    => 'Use of Force',
         'Arrests'  => 'Arrest'
     ];
+
     protected $eventGoldAllegs = [
         'Stops'    => [117, 118],
         'Searches' => [119, 120, 496],
         'Force'    => [115],
         'Arrests'  => [116, 122]
     ];
+
     protected $cmplntUpNodes   = [
         280,
         324,
@@ -72,7 +78,8 @@ class OpenPoliceVars extends TreeSurvForm
         413,
         371
     ];
+
     protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))
-    
+
 }

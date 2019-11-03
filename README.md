@@ -39,7 +39,7 @@ Laravel framework, and has continued to grow towards a content-management system
 
 The upcoming Open Police web app can be tested out here, 
 feedback welcome via the end of the <b>beta demo</b> submission process:<br />
-<a href="https://openpolice.org/filing-your-police-complaint" target="_blank">/filing-your-police-complaint</a><br />
+<a href="https://openpolice.org/file-your-police-complaint" target="_blank">/file-your-police-complaint</a><br />
 The resulting database designed using the engine, as well as the branching tree which specifies the user's experience: 
 <a href="https://openpolice.org/db/OP" target="_blank">/db/OP</a><br />
 <a href="https://openpolice.org/tree/complaint" target="_blank">/tree/complaint</a><br />
@@ -62,7 +62,7 @@ XML included an automatically generated schema, eg.<br />
 
 ## Installing Open Police Complaints
 
-<a href="http://openpolice.local/how-to-install-local-openpolice" target="_blank">Full install instructions</a> also describe how to set up a development environment using VirutalBox, Vargrant, and Laravel's Homestead.
+<a href="https://openpolice.org/how-to-install-local-openpolice" target="_blank">Full install instructions</a> also describe how to set up a development environment using VirutalBox, Vargrant, and Laravel's Homestead.
 
 ### Install Laravel Using Composer
 ```
@@ -124,8 +124,6 @@ $ nano config/app.php
 ```
 ```
 ...
-    'name' => 'OpenPolice',
-...
 'providers' => [
     ...
     SurvLoop\SurvLoopServiceProvider::class,
@@ -164,7 +162,7 @@ $ php artisan db:seed --class=SurvLoopSeeder
 $ php artisan db:seed --class=ZipCodeSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
 $ php artisan db:seed --class=OpenPoliceDeptSeeder
-$ php artisan optimize
+$ php artisan optimize:clear
 ```
 
 For now, to apply database design changes to the same installation you are working in, depending on your server, you might also need something like this...
@@ -177,7 +175,7 @@ You might need to re-run some things outside the virtual box too, e.g.
 ```
 $ exit
 $ cd ~/homestead/code/openpolice
-$ php artisan optimize
+$ php artisan optimize:clear
 $ composer dump-autoload
 ```
 

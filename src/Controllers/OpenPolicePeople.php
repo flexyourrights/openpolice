@@ -492,15 +492,15 @@ class OpenPolicePeople extends OpenPoliceUtils
         if (!isset($this->v["prtnTypes"])) {
             $this->v["prtnTypes"] = [
                 [
-                    "abbr" => 'org',
-                    "sing" => 'Organization',
-                    "plur" => 'Organizations', 
+                    "abbr"  => 'org',
+                    "sing"  => 'Organization',
+                    "plur"  => 'Organizations', 
                     "defID" => $GLOBALS["SL"]
                         ->def->getID('Partner Types', 'Organization')
                 ], [
-                    "abbr" => 'attorney',
-                    "sing" => 'Attorney',
-                    "plur" => 'Attorneys', 
+                    "abbr"  => 'attorney',
+                    "sing"  => 'Attorney',
+                    "plur"  => 'Attorneys', 
                     "defID" => $GLOBALS["SL"]
                         ->def->getID('Partner Types', 'Attorney')
                 ]
