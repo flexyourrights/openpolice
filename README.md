@@ -54,7 +54,7 @@ XML included an automatically generated schema, eg.<br />
 
 * php: >=7.2
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 5.8.*
-* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: >=0.2.5
+* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: >=0.2.7
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
@@ -97,8 +97,8 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "wikiworldorder/survloop": "^0.2.5",
-    "flexyourrights/openpolice": "^0.2.5",
+    "wikiworldorder/survloop": "^0.2.7",
+    "flexyourrights/openpolice": "^0.2.7",
     ...
 },
 ...
@@ -158,10 +158,10 @@ $ vagrant ssh
 $ cd code/openpolice
 $ php artisan migrate
 $ composer dump-autoload
-$ php artisan db:seed --class=SurvLoopSeeder
-$ php artisan db:seed --class=ZipCodeSeeder
+$ php artisan db:seed --class=OpenPoliceSLSeeder
 $ php artisan db:seed --class=OpenPoliceSeeder
 $ php artisan db:seed --class=OpenPoliceDeptSeeder
+$ php artisan db:seed --class=ZipCodeSeeder
 $ php artisan optimize:clear
 ```
 
