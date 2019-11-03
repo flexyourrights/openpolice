@@ -200,6 +200,10 @@ Once installed, documentation of this system's database design can be found at /
 experience design for data entry can be found at /dashboard/tree/map?all=1&alt=1 
 or publicly visible links like those above.
 
+Better documentation is juuust beginning to be created...
+
+<a href="https://openpolice.org/code-package-files-folders-and-classes" target="_blank">openpolice.org/code-package-files-folders-and-classes</a>
+
 More on the SurvLoop level is also starting here: <a href="https://survloop.org/package-files-folders-classes" target="_blank">https://survloop.org/package-files-folders-classes</a>.
 
 # <a name="roadmap"></a>Roadmap
