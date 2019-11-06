@@ -40,10 +40,10 @@ class OpenPolice extends OpenInitExtras
             return $this->printDeptSearch($nID);
         } elseif ($nID == 203) {
             $this->initBlnkAllegsSilv();
-        } elseif (in_array($nID, [270, 973])) {
-            return $this->printEndOfComplaintRedirect($nID);
         } elseif ($nID == 2341) {
             return $this->printAllegAudit();
+        } elseif (in_array($nID, [270, 973])) {
+            return $this->printEndOfComplaintRedirect($nID);
             
         // Home Page
         } elseif ($nID == 1876) {
@@ -119,6 +119,16 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1893) {
             return $this->printProfileMyComplaints($nID);
             
+        // Complaint Report Tools
+        } elseif ($nID == 1712) {
+            return $this->printComplaintAdmin();
+        } elseif ($nID == 1713) {
+            return $this->printComplaintOversight();
+        } elseif ($nID == 1714) {
+            return $this->printComplaintOwner();
+        } elseif ($nID == 1780) {
+            return $this->printMfaInstruct();
+
         // Complaint Report
         } elseif ($nID == 1374) {
             return $this->reportAllegsWhy($nID);
@@ -146,14 +156,14 @@ class OpenPolice extends OpenInitExtras
 
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
-        } elseif (in_array($nID, [1795, 2266, 2335])) {
-            return $this->getReportUploads($nID);
         } elseif ($nID == 1478) {
-            return [ $this->getCivSnstvFldsNotPrinted($this->sessData->getLatestDataBranchID()) ];
+            $civID = $this->sessData->getLatestDataBranchID();
+            return [ $this->getCivSnstvFldsNotPrinted($civID) ];
         } elseif ($nID == 1511) {
             return $this->reportCivAddy($nID);
         } elseif ($nID == 1519) {
-            return [ $this->getOffSnstvFldsNotPrinted($this->sessData->getLatestDataBranchID()) ];
+            $civID = $this->sessData->getLatestDataBranchID();
+            return [ $this->getOffSnstvFldsNotPrinted($civID) ];
         } elseif ($nID == 1566) {
             return $this->getOffProfan();
         } elseif ($nID == 1567) {
@@ -164,20 +174,14 @@ class OpenPolice extends OpenInitExtras
             return $this->reportEventTitle($this->sessData->getLatestDataBranchID());
         } elseif ($nID == 1710) {
             return $this->printReportShare();
+        } elseif (in_array($nID, [1795, 2266, 2335])) {
+            return $this->getReportUploads($nID);
         } elseif ($nID == 1707) {
             return $this->printGlossary();
-        } elseif ($nID == 1708) {
-            return $this->printFlexArts();
         } elseif ($nID == 1753) {
             return $this->printFlexVids();
-        } elseif ($nID == 1712) {
-            return $this->printComplaintAdmin();
-        } elseif ($nID == 1713) {
-            return $this->printComplaintOversight();
-        } elseif ($nID == 1714) {
-            return $this->printComplaintOwner();
-        } elseif ($nID == 1780) {
-            return $this->printMfaInstruct();
+        } elseif ($nID == 1708) {
+            return $this->printFlexArts();
         } elseif ($nID == 2164) {
             return $this->printComplaintSessPath();
         } elseif ($nID == 2632) {
@@ -209,9 +213,9 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2169) {
             return $this->printPartnerCapabilitiesOverview();
         } elseif ($nID == 2166) {
-            return $this->printManageAttorneys();
+            return $this->printManagePartners();
         } elseif ($nID == 2171) {
-            return $this->printManageAttorneys('Organization');
+            return $this->printManagePartners('Organization');
         } elseif ($nID == 1924) {
             return $this->initPartnerCaseTypes($nID);
         } elseif ($nID == 2181) {
@@ -236,13 +240,25 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2162) {
             return $this->printDeptEditHeader2();
         } elseif ($nID == 1261) {
-            return view('vendor.openpolice.nodes.1261-volun-dept-edit-wiki-stats', $this->v)->render();
+            return view(
+                'vendor.openpolice.nodes.1261-volun-dept-edit-wiki-stats', 
+                $this->v
+            )->render();
         } elseif ($nID == 1809) {
-            return view('vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate', $this->v)->render();
+            return view(
+                'vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate', 
+                $this->v
+            )->render();
         } elseif ($nID == 1227) {
-            return view('vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', $this->v)->render();
+            return view(
+                'vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', 
+                $this->v
+            )->render();
         } elseif ($nID == 1231) {
-            return view('vendor.openpolice.volun.volun-dept-edit-history', $this->v)->render();
+            return view(
+                'vendor.openpolice.volun.volun-dept-edit-history', 
+                $this->v
+            )->render();
         } elseif ($nID == 1338) {
             return $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist');
         } elseif ($nID == 1340) {

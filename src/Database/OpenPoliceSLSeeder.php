@@ -21,8 +21,8 @@ class OpenPoliceSLSeeder extends Seeder
             'DbName' => 'SurvLoop',
             'DbDesc' => 'All The Data Are Belong',
             'DbMission' => 'Empower you to design your complex databases, collect data with an easy user experience, and create an API to share the data with the world!',
-            'DbTables' => '26',
-            'DbFields' => '200'
+            'DbTables' => '38',
+            'DbFields' => '292'
         ]);
     
     DB::table('SL_Tables')->insert([
@@ -50,7 +50,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblExtend' => '0',
             'TblNumFields' => '8',
             'TblNumForeignKeys' => '1',
-            'TblNumForeignIn' => '7'
+            'TblNumForeignIn' => '8'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 5,
@@ -64,7 +64,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblExtend' => '0',
             'TblNumFields' => '11',
             'TblNumForeignKeys' => '6',
-            'TblNumForeignIn' => '6'
+            'TblNumForeignIn' => '13'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 6,
@@ -90,7 +90,8 @@ class OpenPoliceSLSeeder extends Seeder
             'TblOrd' => '3',
             'TblExtend' => '0',
             'TblNumFields' => '7',
-            'TblNumForeignKeys' => '1'
+            'TblNumForeignKeys' => '1',
+            'TblNumForeignIn' => '2'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 9,
@@ -119,7 +120,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblExtend' => '0',
             'TblNumFields' => '39',
             'TblNumForeignKeys' => '4',
-            'TblNumForeignIn' => '3'
+            'TblNumForeignIn' => '4'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 11,
@@ -146,7 +147,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblGroup' => 'Experiences',
             'TblOrd' => '11',
             'TblExtend' => '0',
-            'TblNumFields' => '2',
+            'TblNumFields' => '3',
             'TblNumForeignKeys' => '1',
             'TblNumForeignIn' => '1'
         ]);
@@ -191,7 +192,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblExtend' => '0',
             'TblNumFields' => '17',
             'TblNumForeignKeys' => '2',
-            'TblNumForeignIn' => '11'
+            'TblNumForeignIn' => '12'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 16,
@@ -204,7 +205,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblGroup' => 'Experiences',
             'TblOrd' => '7',
             'TblExtend' => '0',
-            'TblNumFields' => '5',
+            'TblNumFields' => '6',
             'TblNumForeignKeys' => '1'
         ]);
         DB::table('SL_Tables')->insert([
@@ -243,7 +244,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblGroup' => 'Users',
             'TblOrd' => '18',
             'TblExtend' => '0',
-            'TblNumFields' => '9',
+            'TblNumFields' => '10',
             'TblNumForeignKeys' => '6',
             'TblNumForeignIn' => '3'
         ]);
@@ -369,7 +370,46 @@ class OpenPoliceSLSeeder extends Seeder
             'TblGroup' => 'Users',
             'TblOrd' => '16',
             'TblExtend' => '0',
-            'TblNumForeignIn' => '7'
+            'TblNumForeignIn' => '12'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 189,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Email',
+            'TblName' => 'Emails',
+            'TblEng' => 'Email Templates',
+            'TblDesc' => 'Each record represents one Email Template which can be used throughout SurvLoop.',
+            'TblGroup' => 'Users',
+            'TblOrd' => '31',
+            'TblExtend' => '0',
+            'TblNumFields' => '7',
+            'TblNumForeignKeys' => '1'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 190,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Img',
+            'TblName' => 'Images',
+            'TblEng' => 'Gallery Images',
+            'TblDesc' => 'Each record represents one item in the Media Galleries managed by SurvLoop.',
+            'TblGroup' => 'Trees',
+            'TblOrd' => '16',
+            'TblExtend' => '0',
+            'TblNumFields' => '13',
+            'TblNumForeignKeys' => '3'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 194,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Emailed',
+            'TblName' => 'Emailed',
+            'TblEng' => 'Emailings',
+            'TblDesc' => 'Each record represents one individual Email Template Mailing, including a copy of the auto-generated (then optionally customized) body of the sent email.',
+            'TblGroup' => 'Users',
+            'TblOrd' => '32',
+            'TblExtend' => '0',
+            'TblNumFields' => '9',
+            'TblNumForeignKeys' => '3'
         ]);
         DB::table('SL_Tables')->insert([
             'TblID' => 166,
@@ -381,7 +421,122 @@ class OpenPoliceSLSeeder extends Seeder
             'TblGroup' => 'Data Libraries',
             'TblOrd' => '25',
             'TblExtend' => '0',
-            'TblNumFields' => '6'
+            'TblNumFields' => '7'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 193,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Cont',
+            'TblName' => 'Contact',
+            'TblEng' => 'Contact Form',
+            'TblDesc' => 'Each record represents one complete submission of the default Contact Form.',
+            'TblGroup' => 'Users',
+            'TblOrd' => '30',
+            'TblExtend' => '0',
+            'TblNumFields' => '5'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 195,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'SchRecDmp',
+            'TblName' => 'SearchRecDump',
+            'TblEng' => 'Searchable Record Dump',
+            'TblDesc' => 'Each record stores a cache of all data from a specific complex record, including English translations for Definition IDs, etc. This is very useful for running text searches across all Experience submissions.',
+            'TblType' => 'Validation',
+            'TblGroup' => 'Trees',
+            'TblOrd' => '18',
+            'TblExtend' => '0',
+            'TblNumFields' => '3',
+            'TblNumForeignKeys' => '1'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 196,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'SessEmo',
+            'TblName' => 'SessEmojis',
+            'TblEng' => 'Session Emojis',
+            'TblDesc' => 'Each record stores one tag of one submission, by one user. This enables users to interact and provide feedback on completed Experience submissions, and to prevent users from tagging more than once.',
+            'TblType' => 'Linking',
+            'TblGroup' => 'Session Records',
+            'TblOrd' => '24',
+            'TblExtend' => '0',
+            'TblNumFields' => '4',
+            'TblNumForeignKeys' => '3'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 198,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Tok',
+            'TblName' => 'Tokens',
+            'TblEng' => 'Tokens',
+            'TblDesc' => 'Each record one security token, of various types, which can be sent to a user to confirms some action or grant some access with greater security.',
+            'TblGroup' => 'Users',
+            'TblOrd' => '27',
+            'TblExtend' => '0',
+            'TblNumFields' => '5',
+            'TblNumForeignKeys' => '2'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 191,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'AdyGeo',
+            'TblName' => 'AddyGeo',
+            'TblEng' => 'Address Geolocate',
+            'TblDesc' => 'Each record represents one Address (all in one line) to map it to its latitude and longitude coordinates. This is important to reducing the number of geocoding requests sent to third parties.',
+            'TblGroup' => 'Lookups',
+            'TblOrd' => '36',
+            'TblExtend' => '0',
+            'TblNumFields' => '3'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 197,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'SessPage',
+            'TblName' => 'SessPage',
+            'TblEng' => 'Session Page Loads',
+            'TblDesc' => 'Each record represents one page load, or server-side redirect, as related to their current Session. This is important for saving a User\'s path through the entire website.',
+            'TblGroup' => 'Session Records',
+            'TblOrd' => '26',
+            'TblExtend' => '0',
+            'TblNumFields' => '2'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 199,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'SiteSess',
+            'TblName' => 'SessSite',
+            'TblEng' => 'Site Session',
+            'TblDesc' => 'Each record represents one User\'s Site Session while browsing through the whole website, not just surveys. This is important for identifying any problems in the website use flow.',
+            'TblGroup' => 'Session Records',
+            'TblOrd' => '25',
+            'TblExtend' => '0',
+            'TblNumFields' => '3'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 200,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Up',
+            'TblName' => 'Uploads',
+            'TblEng' => 'Uploads',
+            'TblDesc' => 'Each record stores details about a file uploaded by a user, especially with any survey process.',
+            'TblGroup' => 'Trees',
+            'TblOrd' => '17',
+            'TblExtend' => '0',
+            'TblNumFields' => '13',
+            'TblNumForeignKeys' => '3'
+        ]);
+        DB::table('SL_Tables')->insert([
+            'TblID' => 192,
+            'TblDatabase' => '3',
+            'TblAbbr' => 'Cach',
+            'TblName' => 'Caches',
+            'TblEng' => 'Caches',
+            'TblDesc' => 'Each record represents one cache of content, whether HTML, JS, or CSS.',
+            'TblGroup' => 'Optimization',
+            'TblOrd' => '37',
+            'TblExtend' => '0',
+            'TblNumFields' => '7',
+            'TblNumForeignKeys' => '1'
         ]);
     
     DB::table('SL_Fields')->insert([
@@ -1981,6 +2136,22 @@ class OpenPoliceSLSeeder extends Seeder
             'FldCompareSame' => '878800'
         ]);
         DB::table('SL_Fields')->insert([
+            'FldID' => 1618,
+            'FldDatabase' => '3',
+            'FldTable' => '12',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Title',
+            'FldEng' => 'Article Title',
+            'FldDesc' => 'Indicates an appropriate title for an Article which provides more information for Users with completed submissions meeting this related Condition/Filter.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ','
+        ]);
+        DB::table('SL_Fields')->insert([
             'FldID' => 83,
             'FldDatabase' => '3',
             'FldTable' => '5',
@@ -3426,26 +3597,6 @@ class OpenPoliceSLSeeder extends Seeder
             'FldOpts' => '13'
         ]);
         DB::table('SL_Fields')->insert([
-            'FldID' => 160,
-            'FldDatabase' => '3',
-            'FldTable' => '19',
-            'FldOrd' => '6',
-            'FldSpecSource' => '0',
-            'FldName' => 'ZoomPref',
-            'FldEng' => 'Zoom Preference',
-            'FldDesc' => 'Indicates the User\'s current preference of visual zoom of the page.',
-            'FldForeignMin' => 'N',
-            'FldForeignMax' => 'N',
-            'FldForeign2Min' => 'N',
-            'FldForeign2Max' => 'N',
-            'FldType' => 'INT',
-            'FldDataType' => 'Numeric',
-            'FldDataLength' => '0',
-            'FldCharSupport' => ',Numbers,',
-            'FldKeyType' => ',',
-            'FldOpts' => '13'
-        ]);
-        DB::table('SL_Fields')->insert([
             'FldID' => 161,
             'FldDatabase' => '3',
             'FldTable' => '19',
@@ -4070,6 +4221,1208 @@ class OpenPoliceSLSeeder extends Seeder
             'FldCompareSame' => '6'
         ]);
         DB::table('SL_Fields')->insert([
+            'FldID' => 1664,
+            'FldDatabase' => '3',
+            'FldTable' => '193',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Contact Type',
+            'FldDesc' => 'Indicates which type of contact the site visitor is making with us.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1665,
+            'FldDatabase' => '3',
+            'FldTable' => '193',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'Flag',
+            'FldEng' => 'Flag',
+            'FldDesc' => 'Indicates the current internal status of this Contact submission, important for organizing contact records which need attention by system administrators.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => 'Unread;Read;Trash',
+            'FldDefault' => 'Unread',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1666,
+            'FldDatabase' => '3',
+            'FldTable' => '193',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Email',
+            'FldEng' => 'Email Address',
+            'FldDesc' => 'Indicates the email address of the site visitor who completed the Contact Form, important for responding to them.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6',
+            'FldCompareOther' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1667,
+            'FldDatabase' => '3',
+            'FldTable' => '193',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'Subject',
+            'FldEng' => 'Message Subject Line',
+            'FldDesc' => 'Indicates the subject line (or title) of the site visitor\'s Contact Form submission. This is important for more quickly identifying and classifying the nature of the request.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1668,
+            'FldDatabase' => '3',
+            'FldTable' => '193',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'Body',
+            'FldEng' => 'Message Body',
+            'FldDesc' => 'Indicates the main body of the site visitor\'s Contact Form submission, providing all the rest of the details of their request. This also includes a dump of any other fields which may have been built into the Contact Form.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1678,
+            'FldDatabase' => '3',
+            'FldTable' => '195',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number which this record belongs to.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1679,
+            'FldDatabase' => '3',
+            'FldTable' => '195',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'RecID',
+            'FldEng' => 'Submission Record ID',
+            'FldDesc' => 'Indicates the unique record ID number whose data is being cached here.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1680,
+            'FldDatabase' => '3',
+            'FldTable' => '195',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Dump',
+            'FldEng' => 'Full Record Dump',
+            'FldDesc' => 'Stores a cache of all raw data from a specific submission record, including English translations for Definition IDs, etc.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1681,
+            'FldDatabase' => '3',
+            'FldTable' => '196',
+            'FldSpecSource' => '0',
+            'FldName' => 'UserID',
+            'FldEng' => 'User ID',
+            'FldDesc' => 'Indicates the unique User ID number whose interactions are being logged here. Important for ensuring that one User cannot tag someone\'s completed submission more than once.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1682,
+            'FldDatabase' => '3',
+            'FldTable' => '196',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number that the record being tagged belongs to. Vital for knowing which table the record ID refers to.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1683,
+            'FldDatabase' => '3',
+            'FldTable' => '196',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'RecID',
+            'FldEng' => 'Submission Record ID',
+            'FldDesc' => 'Indicates the unique record ID number which is being tagged with this row.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1684,
+            'FldDatabase' => '3',
+            'FldTable' => '196',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'DefID',
+            'FldEng' => 'Tag Definition ID',
+            'FldDesc' => 'Indicates the unique Definition ID number belonging to the specific tag or interaction being logged in this row.',
+            'FldForeignTable' => '7',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1690,
+            'FldDatabase' => '3',
+            'FldTable' => '198',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Token Type',
+            'FldDesc' => 'Indicates which type of Token has been created and stored here. ',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => 'Confirm Email;Sensitive;MFA',
+            'FldDataLength' => '20',
+            'FldCharSupport' => ',Letters,Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1691,
+            'FldDatabase' => '3',
+            'FldTable' => '198',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'UserID',
+            'FldEng' => 'User ID',
+            'FldDesc' => 'Indicates the unique User ID number whose token is logged in this row.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1692,
+            'FldDatabase' => '3',
+            'FldTable' => '198',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number to which this token relates.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1693,
+            'FldDatabase' => '3',
+            'FldTable' => '198',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'CoreID',
+            'FldEng' => 'Submission Record ID',
+            'FldDesc' => 'Indicates the unique record ID number of the completed submission to which this Token relates.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1694,
+            'FldDatabase' => '3',
+            'FldTable' => '198',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'TokToken',
+            'FldEng' => 'Generated Token',
+            'FldDesc' => 'Indicates the randomly generated string which is stored as a Token for a User\'s specific interaction with the database.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '255',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1669,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldSpecSource' => '0',
+            'FldName' => 'Tree',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID which sent this email.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1670,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'RecID',
+            'FldEng' => 'Core Record ID',
+            'FldDesc' => 'Indicates the unique Record ID of the core table of the Tree sending this email.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1671,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'EmailID',
+            'FldEng' => 'Email Template ID',
+            'FldDesc' => 'Indicates the unique Email Template ID which is being sent.',
+            'FldForeignTable' => '36',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1672,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'To',
+            'FldEng' => 'Recipient Email Address',
+            'FldDesc' => 'The email address this message is being sent to.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1673,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'ToUser',
+            'FldEng' => 'Recipient User ID',
+            'FldDesc' => 'Indicates the unique User ID of the User this email is being sent to.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldForeign2Max' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '20',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1674,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'FromUser',
+            'FldEng' => 'Sender User ID',
+            'FldDesc' => 'Indicates the unique User ID of the User initiating this emailing.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1675,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Subject',
+            'FldEng' => 'Subject Line',
+            'FldDesc' => 'Indicates the subject line of this specific email, even if it is different than the default, auto-generated version from the Email Template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1676,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '7',
+            'FldSpecSource' => '0',
+            'FldName' => 'Body',
+            'FldEng' => 'Email Body',
+            'FldDesc' => 'Indicates the body of this specific email, even if it is different than the default, auto-generated version from the Email Template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1677,
+            'FldDatabase' => '3',
+            'FldTable' => '194',
+            'FldOrd' => '8',
+            'FldSpecSource' => '0',
+            'FldName' => 'Opts',
+            'FldEng' => 'Options',
+            'FldDesc' => 'Indicates the options or flags stored with this emailing.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDefault' => '1',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800',
+            'FldOperateSame' => '52'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1619,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldSpecSource' => '0',
+            'FldName' => 'Tree',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID related to the home Tree of this Email Template.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1620,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Type',
+            'FldDesc' => 'Indicates the general type of Email Template being stored here.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1621,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Name',
+            'FldEng' => 'Template Name',
+            'FldDesc' => 'Indicates the name of this Email Template, as it will be referred to internally within the system.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1622,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'Subject',
+            'FldEng' => 'Default Subject Line',
+            'FldDesc' => 'Indicates the default subject line of emails sent out using this template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1623,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'Body',
+            'FldEng' => 'Default Email Body',
+            'FldDesc' => 'Indicates the default main content of emails sent out using this template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1624,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'Opts',
+            'FldEng' => 'Options',
+            'FldDesc' => 'Indicates any options necessary to accurately define the properties of this Email Template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDefault' => '1',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1625,
+            'FldDatabase' => '3',
+            'FldTable' => '189',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'TotSent',
+            'FldEng' => 'Total Emails Sent',
+            'FldDesc' => 'Indicates the total number of individual Emails sent using this Email Template.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDefault' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1627,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldSpecSource' => '0',
+            'FldName' => 'DatabaseID',
+            'FldEng' => 'Database ID',
+            'FldDesc' => 'Indicates the unique Database ID number which owns this media item.',
+            'FldForeignTable' => '4',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1640,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldSpecSource' => '0',
+            'FldName' => 'DatabaseID',
+            'FldEng' => 'Database ID',
+            'FldDesc' => 'Indicates the unique Database ID number which owns this media item.',
+            'FldForeignTable' => '4',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1628,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'UserID',
+            'FldEng' => 'User ID',
+            'FldDesc' => 'Indicates the unique User ID number who uploaded or owns this media item.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1641,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'UserID',
+            'FldEng' => 'User ID',
+            'FldDesc' => 'Indicates the unique User ID number who uploaded or owns this media item.',
+            'FldForeignTable' => '28',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1629,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileOrig',
+            'FldEng' => 'Original Filename',
+            'FldDesc' => 'Indicates the original filename, as it was uploaded.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1642,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileOrig',
+            'FldEng' => 'Original Filename',
+            'FldDesc' => 'Indicates the original filename, as it was uploaded.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1630,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileLoc',
+            'FldEng' => 'Stored Filename',
+            'FldDesc' => 'Indicates the filename as it was actually stored here on the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1643,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileLoc',
+            'FldEng' => 'Stored Filename',
+            'FldDesc' => 'Indicates the filename as it was actually stored here on the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1631,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'FullFilename',
+            'FldEng' => 'Full File Location',
+            'FldDesc' => 'Indicates the full path where this media file is actually stored here on the server (relative to the system app\'s root).',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1644,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'FullFilename',
+            'FldEng' => 'Full File Location',
+            'FldDesc' => 'Indicates the full path where this media file is actually stored here on the server (relative to the system app\'s root).',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1632,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'Title',
+            'FldEng' => 'Media Title',
+            'FldDesc' => 'Indicates the title of this uploaded media, or a concise description of it. This is important as a label used internally throughout the system.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1645,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'Title',
+            'FldEng' => 'Media Title',
+            'FldDesc' => 'Indicates the title of this uploaded media, or a concise description of it. This is important as a label used internally throughout the system.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1633,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Credit',
+            'FldEng' => 'Media Credit (Legal)',
+            'FldDesc' => 'Indicates any attribution required or appropriate to be shared alongside this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1646,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Credit',
+            'FldEng' => 'Media Credit (Legal)',
+            'FldDesc' => 'Indicates any attribution required or appropriate to be shared alongside this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1634,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '7',
+            'FldSpecSource' => '0',
+            'FldName' => 'CreditUrl',
+            'FldEng' => 'Media Credit URL (Legal)',
+            'FldDesc' => 'Indicates an optional URL link for any attribution required or appropriate to be shared alongside this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1647,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '7',
+            'FldSpecSource' => '0',
+            'FldName' => 'CreditUrl',
+            'FldEng' => 'Media Credit URL (Legal)',
+            'FldDesc' => 'Indicates an optional URL link for any attribution required or appropriate to be shared alongside this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1635,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '8',
+            'FldSpecSource' => '0',
+            'FldName' => 'NodeID',
+            'FldEng' => 'Node ID',
+            'FldDesc' => 'Indicates the unique Node ID number used to upload this media item.',
+            'FldForeignTable' => '15',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1648,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '8',
+            'FldSpecSource' => '0',
+            'FldName' => 'NodeID',
+            'FldEng' => 'Node ID',
+            'FldDesc' => 'Indicates the unique Node ID number used to upload this media item.',
+            'FldForeignTable' => '15',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1636,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '9',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Media Type',
+            'FldDesc' => 'Indicates which allowed type of media upload this record tracks.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => 'jpg;png;gif',
+            'FldDataLength' => '10',
+            'FldCharSupport' => ',Letters,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1649,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '9',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Media Type',
+            'FldDesc' => 'Indicates which allowed type of media upload this record tracks.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => 'jpg;png;gif',
+            'FldDataLength' => '10',
+            'FldCharSupport' => ',Letters,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1637,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '10',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileSize',
+            'FldEng' => 'Media File Size',
+            'FldDesc' => 'Indicates this media file\'s size in bytes here on the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1650,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '10',
+            'FldSpecSource' => '0',
+            'FldName' => 'FileSize',
+            'FldEng' => 'Media File Size',
+            'FldDesc' => 'Indicates this media file\'s size in bytes here on the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1638,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '11',
+            'FldSpecSource' => '0',
+            'FldName' => 'Width',
+            'FldEng' => 'Media Width',
+            'FldDesc' => 'Indicates the default width of this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1651,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '11',
+            'FldSpecSource' => '0',
+            'FldName' => 'Width',
+            'FldEng' => 'Media Width',
+            'FldDesc' => 'Indicates the default width of this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1639,
+            'FldDatabase' => '3',
+            'FldTable' => '37',
+            'FldOrd' => '12',
+            'FldSpecSource' => '0',
+            'FldName' => 'Height',
+            'FldEng' => 'Media Height',
+            'FldDesc' => 'Indicates the default height of this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1652,
+            'FldDatabase' => '3',
+            'FldTable' => '190',
+            'FldOrd' => '12',
+            'FldSpecSource' => '0',
+            'FldName' => 'Height',
+            'FldEng' => 'Media Height',
+            'FldDesc' => 'Indicates the default height of this media item.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1653,
+            'FldDatabase' => '3',
+            'FldTable' => '16',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'MutEx',
+            'FldEng' => 'Response Is Mutually Exclusive',
+            'FldDesc' => 'Indicates whether or not this response option is mutually exclusive with all the other responses to this question (Node).',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDefault' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '1',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 10267,
+            'FldDatabase' => '3',
+            'FldTable' => '166',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Country',
+            'FldEng' => 'Country',
+            'FldDesc' => 'Indicates the country where this Zip Code is located.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '100',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
             'FldID' => 1515,
             'FldDatabase' => '3',
             'FldTable' => '3',
@@ -4157,6 +5510,59 @@ class OpenPoliceSLSeeder extends Seeder
             'FldOpts' => '39'
         ]);
         DB::table('SL_Fields')->insert([
+            'FldID' => 1654,
+            'FldDatabase' => '3',
+            'FldTable' => '191',
+            'FldSpecSource' => '0',
+            'FldName' => 'Address',
+            'FldEng' => 'Full Address',
+            'FldDesc' => 'Indicates the full address, in one line, which is being linked with latitude and longitude coordinates.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1655,
+            'FldDatabase' => '3',
+            'FldTable' => '191',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'Lat',
+            'FldEng' => 'Latitude',
+            'FldDesc' => 'Indicates the Address\'s latitude is a geographic coordinate that specifies the north–south position of a point on the Earth\'s surface.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1656,
+            'FldDatabase' => '3',
+            'FldTable' => '191',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Long',
+            'FldEng' => 'Longitude',
+            'FldDesc' => 'Indicates the Address\'s longitude is a geographic coordinate that specifies the east-west position of a point on the Earth\'s surface.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
             'FldID' => 1559,
             'FldDatabase' => '3',
             'FldTable' => '3',
@@ -4174,6 +5580,561 @@ class OpenPoliceSLSeeder extends Seeder
             'FldCharSupport' => ',Numbers,',
             'FldKeyType' => ',Foreign,',
             'FldOpts' => '39'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 10268,
+            'FldDatabase' => '3',
+            'FldTable' => '19',
+            'FldOrd' => '9',
+            'FldSpecSource' => '0',
+            'FldName' => 'IsActive',
+            'FldEng' => 'Is Active',
+            'FldDesc' => 'Indicates whether or not this session is currently active, or editable. This allows us to avoid permanently deleting these records valuable for audits.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => '0;1',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '1',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1685,
+            'FldDatabase' => '3',
+            'FldTable' => '197',
+            'FldSpecSource' => '0',
+            'FldName' => 'SessID',
+            'FldEng' => 'Session ID',
+            'FldDesc' => 'Indicates the unique Session ID for the User Session who loaded this page.',
+            'FldForeignTable' => '42',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1686,
+            'FldDatabase' => '3',
+            'FldTable' => '197',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'URL',
+            'FldEng' => 'URL Loaded',
+            'FldDesc' => 'Indicates the URL which is currently being loaded, or redirected through on the server-side.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6',
+            'FldCompareOther' => '6',
+            'FldCompareValue' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1687,
+            'FldDatabase' => '3',
+            'FldTable' => '199',
+            'FldSpecSource' => '0',
+            'FldName' => 'UserID',
+            'FldEng' => 'Session User ID',
+            'FldDesc' => 'Indicates the unique User ID for the Database User logged in and using this Site Session record.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1688,
+            'FldDatabase' => '3',
+            'FldTable' => '199',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'Browser',
+            'FldEng' => 'Session Browser',
+            'FldDesc' => 'Indicates the web browser used during this Session.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '255',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1689,
+            'FldDatabase' => '3',
+            'FldTable' => '199',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'IsMobile',
+            'FldEng' => 'Using Mobile Device',
+            'FldDesc' => 'Indicates whether or not the User is currently using a mobile device (1 if yes).
+',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldValues' => '0;1',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '1',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 10266,
+            'FldDatabase' => '3',
+            'FldTable' => '19',
+            'FldOrd' => '10',
+            'FldSpecSource' => '0',
+            'FldName' => 'IP',
+            'FldEng' => 'IP Address',
+            'FldDesc' => 'Encrypted IP address of the current user.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 309,
+            'FldDatabase' => '3',
+            'FldTable' => '43',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number which this Upload belongs to. This is important to track the journey to this upload.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1695,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number which this Upload belongs to. This is important to track the journey to this upload.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1696,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'CoreID',
+            'FldEng' => 'Core Record ID',
+            'FldDesc' => 'Indicates the unique ID number associated the Core Record for whichever Tree this Upload belongs to. This is important to track the journey to this upload.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1697,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Upload Type',
+            'FldDesc' => 'Indicates the type of upload as defined by the unique Definition ID number from the Definitions set \'Value Ranges\' and subset \'Upload Types\'.',
+            'FldForeignTable' => '7',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1698,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'Privacy',
+            'FldEng' => 'Privacy Setting',
+            'FldDesc' => 'Indicates whether or not the user wants this uploaded file to be publicly published or for administrators\' eyes only.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '10',
+            'FldCharSupport' => ',Letters,Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1699,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'Title',
+            'FldEng' => 'Title of File',
+            'FldDesc' => 'Indicates a brief name by which this file can be referenced in English.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1700,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Desc',
+            'FldEng' => 'Description of File',
+            'FldDesc' => 'Provides a longer description for this uploaded file, if needed.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1701,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '7',
+            'FldSpecSource' => '0',
+            'FldName' => 'UploadFile',
+            'FldEng' => 'Filename as Uploaded',
+            'FldDesc' => 'Indicates the original filename for this upload when it got to the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1702,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '8',
+            'FldSpecSource' => '0',
+            'FldName' => 'StoredFile',
+            'FldEng' => 'Filename as Stored',
+            'FldDesc' => 'Indicates the new filename for this upload as it is stored on the server.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1703,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '9',
+            'FldSpecSource' => '0',
+            'FldName' => 'VideoLink',
+            'FldEng' => 'Video Link URL',
+            'FldDesc' => 'Indicates the URL of a video being "uploaded". So far, only YouTube is supported for automatically embeded previews.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1704,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '10',
+            'FldSpecSource' => '0',
+            'FldName' => 'VideoDuration',
+            'FldEng' => 'Video Duration',
+            'FldDesc' => 'Indicates the duration of the video in seconds.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6',
+            'FldOperateSame' => '137200',
+            'FldOperateOther' => '137200'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1705,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'NodeID',
+            'FldEng' => 'Tree Node ID',
+            'FldDesc' => 'Indicates the unique Node ID number (within the Tree) from which this file was uploaded. This is potentially important for tracking exactly when the user uploaded this.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1706,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '11',
+            'FldSpecSource' => '0',
+            'FldName' => 'LinkFldID',
+            'FldEng' => 'Link Field ID',
+            'FldDesc' => 'Indicates the unique Database Field ID which this uploaded file is related to.',
+            'FldForeignTable' => '10',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1707,
+            'FldDatabase' => '3',
+            'FldTable' => '200',
+            'FldOrd' => '12',
+            'FldSpecSource' => '0',
+            'FldName' => 'LinkRecID',
+            'FldEng' => 'Link Record ID',
+            'FldDesc' => 'Indicates the unique Record ID from the Database Table owning the associated Field, if applicable.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1657,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldSpecSource' => '0',
+            'FldName' => 'Type',
+            'FldEng' => 'Cache Type',
+            'FldDesc' => 'Indicates which type of cache record this is.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldDataLength' => '12',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1658,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '1',
+            'FldSpecSource' => '0',
+            'FldName' => 'TreeID',
+            'FldEng' => 'Tree ID',
+            'FldDesc' => 'Indicates the unique Tree ID number which generated this cache.',
+            'FldForeignTable' => '5',
+            'FldForeignMin' => '0',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => '0',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1659,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '2',
+            'FldSpecSource' => '0',
+            'FldName' => 'RecID',
+            'FldEng' => 'Core Record ID',
+            'FldDesc' => 'Indicates the unique Core Record ID number which generated this cache.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'INT',
+            'FldDataType' => 'Numeric',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Numbers,',
+            'FldKeyType' => ',Foreign,',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '878800'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1660,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '3',
+            'FldSpecSource' => '0',
+            'FldName' => 'Key',
+            'FldEng' => 'Cache Key String',
+            'FldDesc' => 'Indicates the unique key string used to locate this cached content.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldCharSupport' => ',Letters,Numbers,Keyboard,',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0',
+            'FldCompareSame' => '6'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1661,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '4',
+            'FldSpecSource' => '0',
+            'FldName' => 'Value',
+            'FldEng' => 'Cache Content Value',
+            'FldDesc' => 'Indicates the actual value of the cached content.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1662,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '5',
+            'FldSpecSource' => '0',
+            'FldName' => 'Css',
+            'FldEng' => 'Cache Content CSS',
+            'FldDesc' => 'Indicates CSS needed for the cached content.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
+        ]);
+        DB::table('SL_Fields')->insert([
+            'FldID' => 1663,
+            'FldDatabase' => '3',
+            'FldTable' => '192',
+            'FldOrd' => '6',
+            'FldSpecSource' => '0',
+            'FldName' => 'Js',
+            'FldEng' => 'Cache Content JS',
+            'FldDesc' => 'Indicates JS needed for the cached content.',
+            'FldForeignMin' => 'N',
+            'FldForeignMax' => 'N',
+            'FldForeign2Min' => 'N',
+            'FldForeign2Max' => 'N',
+            'FldType' => 'TEXT',
+            'FldDataLength' => '0',
+            'FldKeyType' => ',',
+            'FldNullSupport' => '0'
         ]);
         DB::table('SL_Fields')->insert([
             'FldID' => 1616,
@@ -4219,11 +6180,138 @@ class OpenPoliceSLSeeder extends Seeder
             'FldOperateValue' => '52'
         ]);
     
+    DB::table('SL_Definitions')->insert([
+            'DefID' => 35,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefValue' => 'New Database',
+            'DefDescription' => 'This is part of the SurvLoop installation process, where a user creates a new Database and a primary/default Experience to go with it.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 36,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '5',
+            'DefValue' => 'New Experience',
+            'DefDescription' => 'Create a new, secondary Experience for an existing Database.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 37,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '3',
+            'DefValue' => 'Add a Data Field',
+            'DefDescription' => 'Create a new Field in the Database, without adding it as an Experience Node yet.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 38,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '7',
+            'DefValue' => 'New Experience Question',
+            'DefDescription' => 'Create a new Question Node in a User Experience. This might include a simplified version of adding a new Database Field.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 39,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '1',
+            'DefValue' => 'Add a Data Table',
+            'DefDescription' => 'Create a new Database Table to later fill with Fields.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 40,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '2',
+            'DefValue' => 'Edit Database Table',
+            'DefDescription' => 'Edit the basic properties of a Database Table.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 41,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '4',
+            'DefValue' => 'Edit Database Field',
+            'DefDescription' => 'Edit the basic or thorough properties of a Database Field.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 42,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '6',
+            'DefValue' => 'Edit Experience',
+            'DefDescription' => 'Edit the basic properties of a User Experience.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 43,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefOrder' => '8',
+            'DefValue' => 'Edit Experience Question',
+            'DefDescription' => 'Edit the basic properties of a Experience Question Node.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 44,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefValue' => 'Value Ranges',
+            'DefDescription' => 'Each definition in a set of Value Ranges represents one response a user can choose when responding to some question/prompt.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 45,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '1',
+            'DefValue' => 'System Settings',
+            'DefDescription' => 'Each definition for System Settings represents one system-wide specification.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 46,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '2',
+            'DefValue' => 'Style Settings',
+            'DefDescription' => 'Each definition for Style Settings represents one color or other branding element needed system-wide.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 47,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '3',
+            'DefValue' => 'Instructions',
+            'DefDescription' => 'Each definition which is an Instruction represents one blurb, used somewhere in the system, which can be edited by system administrators.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 48,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '4',
+            'DefValue' => 'Diagrams',
+            'DefDescription' => 'Each definition which is a Diagram represents one document uploaded by system administrators.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 49,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '5',
+            'DefValue' => 'Custom Settings',
+            'DefDescription' => 'Each definition for Custom Settings represents one system-wide specification, which is established and defined by a client-specific installation of SurvLoop.'
+        ]);
+        DB::table('SL_Definitions')->insert([
+            'DefID' => 50,
+            'DefDatabase' => '3',
+            'DefSubset' => 'SurvLoop Definition Types',
+            'DefOrder' => '6',
+            'DefValue' => 'User Roles',
+            'DefDescription' => 'Each definition for User Roles represents one system-wide type of user permissions.'
+        ]);
+    
+
     DB::table('SL_Tree')->insert([
             'TreeID' => 3,
             'TreeDatabase' => '3',
             'TreeUser' => '0',
-            'TreeOpts' => '1',
             'TreeType' => 'Survey',
             'TreeName' => 'SurvLoop Database Designer',
             'TreeDesc' => 'SurvLoop users can add a new field to the database and/or user experience.',
@@ -4237,7 +6325,6 @@ class OpenPoliceSLSeeder extends Seeder
             'TreeID' => 4,
             'TreeDatabase' => '3',
             'TreeUser' => '0',
-            'TreeOpts' => '1',
             'TreeType' => 'Survey XML',
             'TreeName' => 'SurvLoop Database Designer',
             'TreeSlug' => 'survloop-design',
@@ -4284,5 +6371,788 @@ class OpenPoliceSLSeeder extends Seeder
         ]);
     
 
+    DB::table('SL_Conditions')->insert([
+            'CondID' => 45,
+            'CondDatabase' => '0',
+            'CondTag' => '#NodeDisabled',
+            'CondDesc' => 'This node is not active (for the public).',
+            'CondOperator' => 'CUSTOM',
+            'CondOperDeet' => '0',
+            'CondField' => '0',
+            'CondTable' => '0',
+            'CondLoop' => '0'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 60,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsAdmin',
+            'CondDesc' => 'The user is currently logged in as an administrator.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 61,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsNotAdmin',
+            'CondDesc' => 'The user is not currently logged in as an administrator.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 63,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsNotLoggedIn',
+            'CondDesc' => 'Complainant is not currently logged into the system.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 66,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsLoggedIn',
+            'CondDesc' => 'Complainant is currently logged into the system.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 93,
+            'CondDatabase' => '0',
+            'CondTag' => '#EmailVerified',
+            'CondDesc' => 'Current user\'s email address has been verified.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 111,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsOwner',
+            'CondDesc' => 'The user is currently logged is the owner of this record.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 112,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsPrintable',
+            'CondDesc' => 'The current page view is intended to be printable.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 114,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsPrintInFrame',
+            'CondDesc' => 'The current page view is printed into frame/ajax/widget.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 115,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsDataPermPublic',
+            'CondDesc' => 'The current data permissions are set to public.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 116,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsDataPermPrivate',
+            'CondDesc' => 'The current data permissions are set to private.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 117,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsDataPermSensitive',
+            'CondDesc' => 'The current data permissions are set to sensitive.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 118,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsDataPermInternal',
+            'CondDesc' => 'The current data permissions are set to internal.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 120,
+            'CondDatabase' => '0',
+            'CondTag' => '#HasTokenDialogue',
+            'CondDesc' => 'Current page load includes an access token dialogue.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 122,
+            'CondDatabase' => '0',
+            'CondTag' => '#TestLink',
+            'CondDesc' => 'Current page url parameters includes ?test=1.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 123,
+            'CondDatabase' => '0',
+            'CondTag' => '#NextButton',
+            'CondDesc' => 'Current page load results from clicking the survey\'s next button.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 124,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsProfileOwner',
+            'CondDesc' => 'The user is currently logged in owns this user profile.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 130,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsStaff',
+            'CondDesc' => 'The user is currently logged in as a staff user.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 131,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsPartner',
+            'CondDesc' => 'The user is currently logged in as a partner.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 132,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsVolunteer',
+            'CondDesc' => 'The user is currently logged in as a volunteer.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 133,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsBrancher',
+            'CondDesc' => 'The user is currently logged in as a database manager.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 134,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsStaffOrAdmin',
+            'CondDesc' => 'The user is currently logged in as a staff or admin user.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+        DB::table('SL_Conditions')->insert([
+            'CondID' => 143,
+            'CondDatabase' => '0',
+            'CondTag' => '#IsPartnerStaffOrAdmin',
+            'CondDesc' => 'The user is currently logged in as a partner, staff, or admin user.',
+            'CondOperator' => 'CUSTOM'
+        ]);
+    
+
+    DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 163,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '491'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 164,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '501'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 165,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '507'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 166,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '513'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 229,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '381'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 233,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '485'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 242,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '873'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 262,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '776'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 263,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '780'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 264,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 265,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '978'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 266,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 267,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '979'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 268,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '977'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 269,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '771'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 270,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '773'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 271,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '980'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 272,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '981'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 273,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '982'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 274,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '454'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 292,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '611'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 305,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '232'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 318,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1195'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 320,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '792'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 371,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1011'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 372,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1435'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 374,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '486'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 375,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '494'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 376,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '496'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 377,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '497'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 387,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '1675'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 388,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '1703'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 389,
+            'CondNodeCondID' => '111',
+            'CondNodeNodeID' => '1704'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 391,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1705',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 394,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '1711',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 396,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '1704',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 397,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '1705',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 398,
+            'CondNodeCondID' => '115',
+            'CondNodeNodeID' => '1719'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 408,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1752',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 409,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '1752',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 410,
+            'CondNodeCondID' => '120',
+            'CondNodeNodeID' => '1758'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 413,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '849'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 422,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '40'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 424,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1004'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 428,
+            'CondNodeCondID' => '124',
+            'CondNodeNodeID' => '1437',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 429,
+            'CondNodeCondID' => '124',
+            'CondNodeNodeID' => '1893'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 434,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '1996'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 435,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '1997'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 436,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '1995',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 438,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '138'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 439,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2017'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 441,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '484'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 465,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '1348',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 466,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '1003'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 477,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '2066',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 478,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '2067'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 479,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '2068'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 489,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '483'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 506,
+            'CondNodeCondID' => '130',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 510,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '2074'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 511,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '2118',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 528,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '1937'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 529,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1754'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 530,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '2163',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 532,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '2163'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 535,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '1955'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 536,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '2116'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 538,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '1956',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 543,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2242'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 544,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2244'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 545,
+            'CondNodeCondID' => '122',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 546,
+            'CondNodeCondID' => '122',
+            'CondNodeNodeID' => '2255'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 547,
+            'CondNodeCondID' => '122',
+            'CondNodeNodeID' => '2256'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 553,
+            'CondNodeCondID' => '122',
+            'CondNodeNodeID' => '2260'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 557,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2265'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 564,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1977'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 580,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1794',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 581,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '2324',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 584,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '2334'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 585,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1675',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 586,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '2336',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 588,
+            'CondNodeCondID' => '134',
+            'CondNodeNodeID' => '2324'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 589,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1703',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 590,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1711',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 591,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1704',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 592,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '2163',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 593,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '2333'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 594,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1569'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 597,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2323'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 603,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2324'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 604,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 605,
+            'CondNodeCondID' => '114',
+            'CondNodeNodeID' => '2379'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 606,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1347'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 608,
+            'CondNodeCondID' => '112',
+            'CondNodeNodeID' => '1467',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 609,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2339'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 610,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1125'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 633,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2143'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 637,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2639'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 638,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 639,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2641'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 640,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2642'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 641,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1884'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 645,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2010',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 646,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2646'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 647,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1191'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 649,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '-3',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 650,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2648',
+            'CondNodeLoopID' => '-1'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 652,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2651'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 653,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2652'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 654,
+            'CondNodeCondID' => '60',
+            'CondNodeNodeID' => '2653'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 660,
+            'CondNodeCondID' => '63',
+            'CondNodeNodeID' => '2666'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 661,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 662,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '2667'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 663,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '-3'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 664,
+            'CondNodeCondID' => '66',
+            'CondNodeNodeID' => '2668'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 667,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '2370'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 671,
+            'CondNodeCondID' => '45',
+            'CondNodeNodeID' => '1860'
+        ]);
+        DB::table('SL_ConditionsNodes')->insert([
+            'CondNodeID' => 688,
+            'CondNodeCondID' => '122',
+            'CondNodeNodeID' => '2719'
+        ]);
+       
     }
 }

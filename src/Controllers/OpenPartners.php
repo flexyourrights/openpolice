@@ -70,7 +70,7 @@ class OpenPartners extends OpenVolunteers
      * @param  string $type
      * @return string
      */
-    protected function printManageAttorneys($type = 'Attorney')
+    protected function printManagePartners($type = 'Attorney')
     {
         $ret = '';
         $this->loadPartnerTypes();
@@ -90,7 +90,7 @@ class OpenPartners extends OpenVolunteers
                 $this->v["partners"] = $this->getPartnersOfType($p["defID"]);
                 $this->v["prtnType"] = $p;
                 return view(
-                    'vendor.openpolice.nodes.2166-manage-attorneys', 
+                    'vendor.openpolice.nodes.2166-manage-partners', 
                     $this->v
                 )->render();
             }
@@ -242,7 +242,7 @@ class OpenPartners extends OpenVolunteers
         $attDef = $GLOBALS['SL']->def->getID('Partner Types', 'Attorney');
         $slg = (($this->sessData->dataSets['Partners'][0]->PartType == $attDef)
             ? 'attorney' : 'org');
-        return view('vendor.openpolice.nodes.1961-public-attorney-header', [
+        return view('vendor.openpolice.nodes.1961-public-partner-header', [
             "nID" => $nID,
             "dat" => $this->sessData->dataSets,
             "slg" => $slg
@@ -393,7 +393,7 @@ class OpenPartners extends OpenVolunteers
         if (!isset($this->sessData->dataSets["Partners"])) {
             return '';
         }
-        return view('vendor.openpolice.nodes.1898-public-attorney-page', [
+        return view('vendor.openpolice.nodes.1898-public-partner-page', [
             "nID"  => $nID,
             "dat"  => $this->sessData->dataSets,
             "type" => $this->sessData->dataSets["Partners"][0]->PartType

@@ -341,7 +341,7 @@ class DepartmentScores
             $done[] = $ind;
         }
         
-        return view('vendor.openpolice.nodes.inc-depts-score-criteria-bars', [
+        return view('vendor.openpolice.nodes.1816-depts-score-criteria-bars', [
             "datOut" => $datOut,
             "colorG" => $this->gradeColors[0],
             "colorB" => $this->gradeColors[4]

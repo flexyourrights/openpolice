@@ -320,7 +320,10 @@ class OpenVolunteers extends OpenDevelopment
                 }
             }
         }
-        return view('vendor.openpolice.nodes.1217-volun-home-your-info', $this->v)->render();
+        return view(
+            'vendor.openpolice.nodes.1217-volun-home-your-info', 
+            $this->v
+        )->render();
     }
     
     

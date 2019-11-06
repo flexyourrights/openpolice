@@ -1,4 +1,4 @@
-<!-- resources/views/vendor/openpolice/nodes/1898-public-attorney-page.blade.php -->
+<!-- resources/views/vendor/openpolice/nodes/1898-public-partner-page.blade.php -->
 
 <div id="blockWrap{{ $nID }}" class="w100" style="overflow: visible;">
 <div class="container" id="treeWrap{{ $nID }}">

@@ -18,11 +18,11 @@
 
 # <a name="about"></a>About
 
-* PHP Controllers ~ 385 KB (on disk)
-* Blade Template Views HTML with some JS CSS ~ 373 KB
-* SurvLoop-Generated PHP Eloquent Data Table Models ~ 311 KB
-* SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 1.5 MB
-* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.9 MB
+* PHP Controllers ~ 537 KB (on disk)
+* Blade Template Views HTML with some JS CSS ~ 520 KB
+* SurvLoop-Generated PHP Eloquent Data Table Models ~ 332 KB
+* SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 2.1 MB
+* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.4 MB
 
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
@@ -54,7 +54,7 @@ XML included an automatically generated schema, eg.<br />
 
 * php: >=7.2
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 5.8.*
-* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: >=0.2.8
+* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: >=0.2.10
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
@@ -97,8 +97,8 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "wikiworldorder/survloop": "^0.2.8",
-    "flexyourrights/openpolice": "^0.2.8",
+    "wikiworldorder/survloop": "^0.2.10",
+    "flexyourrights/openpolice": "^0.2.10",
     ...
 },
 ...

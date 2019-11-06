@@ -1,4 +1,4 @@
-<!-- resources/views/vendor/openpolice/nodes/inc-depts-score-criteria-bars.blade.php -->
+<!-- resources/views/vendor/openpolice/nodes/1816-depts-score-criteria-bars.blade.php -->
 @foreach ($datOut as $i => $row)
 <div class="barBlock relDiv w100">
     <div class="barLab absDiv">
