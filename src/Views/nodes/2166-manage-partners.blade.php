@@ -4,19 +4,28 @@
     ><i class="fa fa-plus-circle"></i> Add {{ $prtnType["sing"] }}</a>
 <h2>Manage {{ $prtnType["plur"] }}</h2>
 <div class="p10"><div class="row slGrey">
+    <div class="col-md-1 taC">Active</div>
     <div class="col-md-4">{{ $prtnType["sing"] }} Name</div>
     <div class="col-md-3">
         Location @if ($prtnType["abbr"] == 'attorney') - Firm Name @endif
     </div>
-    <div class="col-md-5">User</div>
+    <div class="col-md-3">User</div>
+    <div class="col-md-1">Edit</div>
 </div></div>
 @forelse ($partners as $i => $p)
     <div class="p10 @if ($i%2 == 0) row2 @endif ">
         <div class="row">
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-1 col-sm-1 taC">
+                @if (isset($p->PartStatus) && intVal($p->PartStatus) == 1)
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                @endif 
+            </div>
+            <div class="col-md-4 col-sm-5">
                 <a href="/org/{{ $p->PartSlug }}">
                     @if (isset($p->PrsnNickname)) {{ $p->PrsnNickname }} 
-                    @else <span class="slGrey">(empty)</span> @endif </a>
+                    @else <span class="slGrey">(empty)</span>
+                    @endif
+                </a>
             </div>
             <div class="col-md-3 col-sm-6">
                 @if (isset($p->PrsnAddressCity)) {{ $p->PrsnAddressCity }}, @endif
@@ -25,7 +34,7 @@
                     @if (isset($p->PartCompanyName)) - {{ $p->PartCompanyName }} @endif
                 @endif
             </div>
-            <div class="col-md-4 col-sm-11">
+            <div class="col-md-3 col-sm-11">
                 @if (isset($p->PrsnEmail)) 
                     @if (isset($p->PrsnNameFirst) && trim($p->PrsnNameFirst) != ''
                         && isset($p->PrsnNameLast) && trim($p->PrsnNameLast) != '')

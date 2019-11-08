@@ -284,14 +284,16 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 $swap = $url . '/complaint/read-' . $this->corePublicID . '/xml';
                 break;
             case '[{ Complainant Name }]':
-                $civ = $this->sessData->dataSets["Civilians"][0];
-                if (isset($civ->CivPersonID) && intVal($civ->CivPersonID) > 0) {
-                    $contact = $this->sessData->getRowById(
-                        'PersonContact', 
-                        $civ->CivPersonID
-                    );
-                    if ($contact && isset($contact->PrsnNameFirst)) {
-                        $swap = $contact->PrsnNameFirst;
+                if (isset($this->sessData->dataSets["Civilians"])) {
+                    $civ = $this->sessData->dataSets["Civilians"][0];
+                    if (isset($civ->CivPersonID) && intVal($civ->CivPersonID) > 0) {
+                        $contact = $this->sessData->getRowById(
+                            'PersonContact', 
+                            $civ->CivPersonID
+                        );
+                        if ($contact && isset($contact->PrsnNameFirst)) {
+                            $swap = $contact->PrsnNameFirst;
+                        }
                     }
                 }
                 break;
@@ -300,10 +302,12 @@ class OpenComplaintEmails extends OpenPoliceEvents
                     date("n"), (7+date("j")), date("Y")));
                 break;
             case '[{ Complaint Number of Weeks Old }]':
-                $dayCount = date_diff(time(), strtotime(
-                    $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted
-                    ))->format('%a');
-                $swap = floor($dayCount/7);
+                if (isset($this->sessData->dataSets["Complaints"])) {
+                    $dayCount = date_diff(time(), strtotime(
+                        $this->sessData->dataSets["Complaints"][0]->ComRecordSubmitted
+                        ))->format('%a');
+                    $swap = floor($dayCount/7);
+                }
                 break;
             case '[{ Analyst Name }]':
                 $swap = $this->userFormalName($this->v["user"]->id);
@@ -312,26 +316,30 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 $swap = $this->v["user"]->email;
                 break;
             case '[{ Complaint Police Department }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
                     $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                 }
                 break;
             case '[{ Complaint Police Department URL }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug)) {
                     $swap = $GLOBALS["SL"]->swapURLwrap($url . '/dept/' 
                         . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug);
                 }
                 break;
             case '[{ Complaint Police Department URL Link }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName)) {
                     $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptName;
                 }
                 break;
             case '[{ Complaint Police Department URL How }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug)) {
                     $url = $url . '/dept/' 
                         . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptSlug . '#how';
@@ -339,13 +347,15 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
             case '[{ Police Department State Abbr }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState)) {
                     $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressState;
                 }
                 break;
             case '[{ Police Department Zip Code }]':
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
+                if (isset($GLOBALS["SL"]->x["depts"]) 
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip)) {
                     $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->DeptAddressZip;
                 }
@@ -354,23 +364,27 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 $swap = 'To Whom It May Concern,';
                 break;
             case '[{ Complaint Officers Reference }]':
-                if (empty($this->sessData->dataSets["Officers"])) {
-                    $swap = 'no officers';
-                } elseif (sizeof($this->sessData->dataSets["Officers"]) == 1) {
-                    $swap = 'one officer';
-                } elseif (sizeof($this->sessData->dataSets["Officers"]) < 10) {
-                    switch (sizeof($this->sessData->dataSets["Officers"])) {
-                        case 2: $swap = 'two'; break;
-                        case 3: $swap = 'three'; break;
+                if (isset($this->sessData->dataSets["Officers"])) {
+                    if (empty($this->sessData->dataSets["Officers"])) {
+                        $swap = 'no officers';
+                    } elseif (sizeof($this->sessData->dataSets["Officers"]) == 1) {
+                        $swap = 'one officer';
+                    } elseif (sizeof($this->sessData->dataSets["Officers"]) < 10) {
+                        switch (sizeof($this->sessData->dataSets["Officers"])) {
+                            case 2: $swap = 'two'; break;
+                            case 3: $swap = 'three'; break;
+                        }
+                        $swap .= ' officers';
+                    } else {
+                        $swap = $f->format(sizeof($this->sessData->dataSets["Officers"])) 
+                            . ' officers';
                     }
-                    $swap .= ' officers';
-                } else {
-                    $swap = $f->format(sizeof($this->sessData->dataSets["Officers"])) 
-                        . ' officers';
                 }
                 break;
             case '[{ Complaint Officers Count }]':
-                $swap = sizeof($this->sessData->dataSets["Officers"]);
+                if (isset($this->sessData->dataSets["Officers"])) {
+                    $swap = sizeof($this->sessData->dataSets["Officers"]);
+                }
                 break;
             case '[{ Complaint Allegation List }]':
                 $swap = $this->commaAllegationList();
@@ -418,52 +432,69 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
             case '[{ Complaint Department Complaint PDF }]':
-                $which = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintPDF) 
-                    && trim($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintPDF) != '') {
-                    $swap = '';
-                    if (sizeof($GLOBALS["SL"]->x["depts"]) > 1) {
-                        $swap .= $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverAgncName;
+                if (isset($GLOBALS["SL"]->x["depts"]) && isset($deptID)
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                    $d = $GLOBALS["SL"]->x["depts"];
+                    $which = $d[$deptID]["whichOver"];
+                    if (isset($d[$deptID][$which]->OverComplaintPDF) 
+                        && trim($d[$deptID][$which]->OverComplaintPDF) != '') {
+                        $swap = '';
+                        if (sizeof($d) > 1) {
+                            $swap .= $d[$deptID][$which]->OverAgncName;
+                        }
+                        $swap .= ': ' . $GLOBALS["SL"]->swapURLwrap(
+                                $d[$deptID][$which]->OverComplaintPDF
+                            );
                     }
-                    $swap .= ': ' 
-                        . $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintPDF);
-                }
-                if (sizeof($GLOBALS["SL"]->x["depts"]) > 1) {
-                    for ($i = 1; $i < sizeof($GLOBALS["SL"]->x["depts"]); $i++) {
-                        if (trim($swap) != '') $swap .= '<br />';
-                        $which = $GLOBALS["SL"]->x["depts"][$i]["whichOver"];
-                        $swap .= $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverAgncName . ': ' 
-                            . $GLOBALS["SL"]->swapURLwrap($GLOBALS["SL"]->x["depts"][$i][$which]->OverComplaintPDF);
+                    if (sizeof($d) > 1) {
+                        for ($i = 1; $i < sizeof($GLOBALS["SL"]->x["depts"]); $i++) {
+                            if (trim($swap) != '') $swap .= '<br />';
+                            $which = $d[$i]["whichOver"];
+                            $swap .= $d[$deptID][$which]->OverAgncName . ': ' 
+                                . $GLOBALS["SL"]->swapURLwrap(
+                                    $d[$i][$which]->OverComplaintPDF
+                                );
+                        }
                     }
                 }
                 break;
             case '[{ Complaint Department Complaint Web }]':
-                $which = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintWebForm) 
-                    && trim($GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintWebForm) != '') {
-                    $swap = '';
-                    if (sizeof($GLOBALS["SL"]->x["depts"]) > 1) {
-                        $swap = $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverAgncName;
+                if (isset($GLOBALS["SL"]->x["depts"]) && isset($deptID)
+                    && isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+                    $d = $GLOBALS["SL"]->x["depts"];
+                    $which = $d[$deptID]["whichOver"];
+                    if (isset($d[$deptID][$which]->OverComplaintWebForm) 
+                        && trim($d[$deptID][$which]->OverComplaintWebForm) != '') {
+                        $swap = '';
+                        if (sizeof($d) > 1) {
+                            $swap = $d[$deptID][$which]->OverAgncName;
+                        }
+                        $swap .= ': ' . $GLOBALS["SL"]->swapURLwrap(
+                            $d[$deptID][$which]->OverComplaintWebForm
+                        );
                     }
-                    $swap .= ': ' . $GLOBALS["SL"]->swapURLwrap(
-                        $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverComplaintWebForm);
-                }
-                if (sizeof($GLOBALS["SL"]->x["depts"]) > 1) {
-                    for ($i = 1; $i < sizeof($GLOBALS["SL"]->x["depts"]); $i++) {
-                        if (trim($swap) != '') $swap .= '<br />';
-                        $currWhich = $GLOBALS["SL"]->x["depts"][$i]["whichOver"];
-                        $swap .= $GLOBALS["SL"]->x["depts"][$deptID][$which]->OverAgncName . ': ' 
-                            . $GLOBALS["SL"]->swapURLwrap(
-                                $GLOBALS["SL"]->x["depts"][$i][$currWhich]->OverComplaintWebForm);
+                    if (sizeof($d) > 1) {
+                        for ($i = 1; $i < sizeof($d); $i++) {
+                            if (trim($swap) != '') {
+                                $swap .= '<br />';
+                            }
+                            $currWhich = $d[$i]["whichOver"];
+                            $swap .= $d[$deptID][$which]->OverAgncName . ': ' 
+                                . $GLOBALS["SL"]->swapURLwrap(
+                                    $d[$i][$currWhich]->OverComplaintWebForm
+                                );
+                        }
                     }
                 }
                 break;
             case '[{ Flex Article Suggestions Based On Responses }]':
-                $this->loadRelatedArticles();
-                $swap = view('vendor.openpolice.nodes.1708-report-flex-articles-email', [
-                    "allUrls"     => $this->v["allUrls"], 
-                    "showVidUrls" => true
-                    ])->render();
+                if (isset($this->v["allUrls"])) {
+                    $this->loadRelatedArticles();
+                    $swap = view('vendor.openpolice.nodes.1708-report-flex-articles-email', [
+                        "allUrls"     => $this->v["allUrls"], 
+                        "showVidUrls" => true
+                        ])->render();
+                }
                 break;
         }
         $swap = trim($swap);

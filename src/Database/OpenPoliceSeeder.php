@@ -16933,7 +16933,7 @@ color: #FFF;
 			'DefDatabase' => '1',
 			'DefSet' => 'System Settings',
 			'DefSubset' => 'log-css-reload',
-			'DefDescription' => '1572974076'
+			'DefDescription' => '1572993906'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 224,
@@ -19971,6 +19971,16 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeLastPage' => '2724',
 			'TreeCoreTable' => '187',
 			'TreeOpts' => '13'
+		]);
+		DB::table('SL_Tree')->insert([
+			'TreeID' => 196,
+			'TreeDatabase' => '1',
+			'TreeUser' => '1',
+			'TreeType' => 'Page',
+			'TreeSlug' => 'n-a',
+			'TreeRoot' => '2751',
+			'TreeFirstPage' => '2751',
+			'TreeLastPage' => '2751'
 		]);
 	
 	DB::table('SL_Node')->insert([
@@ -27130,46 +27140,7 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<p>&nbsp;</p>
 <h2>OpenPolice.org Site Map</h2>
-<ul>
-<li style="margin-bottom: 30px;"><a href="/">Home Page</a></li>
-<li style="margin-bottom: 30px;"><a href="/about">About Us</a><ul style="margin-top: 10px; padding-top: 0px;">
-<li><a href="/principles">Principles</a></li>
-<!--- <li><a href="/features">Features</a></li> --->
-<li><a href="/frequently-asked-questions">Frequently Asked Questions</a></li>
-</ul></li>
-<li style="margin-bottom: 30px;"><!-- <a href="/share-complaint-or-compliment"> -->Share Your Story (public soon)<!-- </a> --><ul style="margin-top: 10px; padding-top: 0px;">
-<li><!-- <a href="/filing-your-police-complaint"> -->Filing Your Complaint<!-- </a> --></li>
-<li><!-- <a href="/filing-your-police-compliment"> -->Filing Your Compliment<!-- </a> --></li>
-<li><a href="/complaint-privacy-options">User Privacy Options</a></li>
-<li><a href="/allegations">Allegations &amp; Commendations Lists</a></li>
-<li><a href="/go-gold-make-your-complaint-strong">"Go Gold" To Make Your Complaint As Strong As Possible</a></li>
-<li><a href="/privacy-policy">Terms, Policies, &amp; Rules</a><br></li>
-</ul></li>
-<!--
-<li style="margin-bottom: 30px;"><a href="/search">Search Submitted Complaints & Compliments</a><ul style="margin-top: 10px; padding-top: 0px;">
-<li><a href="/departments">Search Complaints & Compliments by Department</a><br><span class="slGrey">Each police department has it\'s own page on OpenPolice.org where all their reports can be found, as well as comprehensive information about their complaint submission process.</span></li>
-</ul></li>
--->
-<li style="margin-bottom: 30px;"><a href="/for-law-enforcement">For Law Enforcement</a><ul style="margin-top: 10px; padding-top: 0px;">
-<li><a href="/department-accessibility">Department Accessibility Grades</a></li>
-<li><a href="/how-we-rate-departments">How We Rate Departments</a></li>
-</ul></li>
-
-<li style="margin-bottom: 30px;"><a href="/volunteer">Volunteer Team</a><ul style="margin-top: 10px; padding-top: 0px;">
-<li><a href="/dash/volunteer">Volunteer Dashboard</a><span class="slGrey"> - Crowdsource research on police department complaint processes.</span></li>
-</ul></li>
-
-<a name="techstuff"></a>
-<li style="margin-bottom: 30px;"><a href="/web-app-technical-specs">Web App Technical Stuff</a><ul style="margin-top: 10px; padding-top: 0px;">
-<li><a href="/web-app-workflows">Complaint Submission Process Flow Chart</a></li>
-<li><a href="/db/OP" target="_blank">Full Database Design (in English)</a> - <a href="/complaint-xml-schema">XML Schema</a></li>
-<li><a href="/tree/complaints" target="_blank">Full User Experience Design</a><br></li>
-<li><a href="/how-to-install-laravel">Help Code Open Police Software: Installing Homestead &amp; Laravel<br></a></li>
-<li><a href="https://github.com/flexyourrights/openpolice" target="_blank">OpenPolice.org on GitHub</a><br></li>
-</ul></li>
-<li style="margin-bottom: 30px;"><a href="/contact">Contact Us</a><br></li>
-<li style="margin-bottom: 30px;"><a href="/donate" target="_blank">Donate</a><br></li>
-</ul>',
+<ul><li style="margin-bottom: 30px;"><a href="http://openpolice.local/">Home Page</a></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/about">About Us</a><ul style="margin-top: 10px; padding-top: 0px;"><li><a href="http://openpolice.local/principles">Principles</a></li><li><a href="http://openpolice.local/frequently-asked-questions">Frequently Asked Questions</a></li></ul></li><li style="margin-bottom: 30px;">Share Your Story (public soon)<ul style="margin-top: 10px; padding-top: 0px;"><li><a href="http://openpolice.local/join-beta-test/site-map">Sign Up To Use As Beta Tester</a></li><li>Filing Your Complaint</li><li>Filing Your Compliment</li><li><a href="http://openpolice.local/complaint-privacy-options">User Privacy Options</a></li><li><a href="http://openpolice.local/allegations">Allegations &amp; Commendations Lists</a></li><li><a href="http://openpolice.local/go-gold-make-your-complaint-strong">"Go Gold" To Make Your Complaint As Strong As Possible</a></li><li><a href="http://openpolice.local/privacy-policy">Terms, Policies, &amp; Rules</a><br></li></ul></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/complaints">Search Submitted Complaints </a></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/for-law-enforcement">For Law Enforcement</a><ul style="margin-top: 10px; padding-top: 0px;"><li><a href="http://openpolice.local/department-accessibility">Department Accessibility Grades</a></li><li><a href="http://openpolice.local/how-we-rate-departments">How We Rate Departments</a></li></ul></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/volunteer">Volunteer Team</a><ul style="margin-top: 10px; padding-top: 0px;"><li><a href="http://openpolice.local/dash/volunteer">Volunteer Dashboard</a><span class="slGrey"> - Crowdsource research on police department complaint processes.</span></li></ul></li><a name="techstuff"></a><li style="margin-bottom: 30px;"><a href="http://openpolice.local/web-app-technical-specs">Web App Technical Stuff</a><ul style="margin-top: 10px; padding-top: 0px;"><li><a href="http://openpolice.local/web-app-workflows">Complaint Submission Process Flow Chart</a></li><li><a href="http://openpolice.local/db/OP" target="_blank">Full Database Design (in English)</a> - <a href="http://openpolice.local/complaint-xml-schema">XML Schema</a></li><li><a href="http://openpolice.local/tree/complaints" target="_blank">Full User Experience Design</a><br></li><li><a href="http://openpolice.local/how-to-install-local-openpolice">Installing Homestead, Laravel, &amp; OpenPolice Software for Development</a></li><li><a href="http://openpolice.local/code-package-files-folders-and-classes">OpenPolice Package\'s Files, Folders, &amp; Classes<br></a></li><li><a href="https://github.com/flexyourrights/openpolice" target="_blank">OpenPolice.org on GitHub</a><br></li></ul></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/contact">Contact Us</a><br></li><li style="margin-bottom: 30px;"><a href="http://openpolice.local/donate" target="_blank">Donate</a><br></li></ul>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -36830,7 +36801,7 @@ setTimeout("announceLoad()", 10);
 			'NodeID' => 2384,
 			'NodeTree' => '100',
 			'NodeParentID' => '2385',
-			'NodeType' => 'Instructions',
+			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '[ Print Complaints Listings ] hard-coded via OpenListing.php function printComplaintListing, to view openpolice.nodes.1418-admin-complaints-listing<br>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -36844,10 +36815,11 @@ setTimeout("announceLoad()", 10);
 			'NodeTree' => '100',
 			'NodeParentID' => '2383',
 			'NodeParentOrder' => '1',
-			'NodeType' => 'Instructions',
+			'NodeType' => 'Instructions Raw',
 			'NodePromptAfter' => '<style>
 #node2385kids { padding-top: 10px; }
-</style>'
+</style>',
+			'NodeInternalNotes' => 'just some CSS'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2387,
@@ -38011,7 +37983,7 @@ $ php artisan optimize
 <pre>$ composer dump-autoload
 </pre>
 <hr>
-<h2>Thank You!</h2><p>After following those instructions, hopefully you should have a functioning installation to start tinkering with. Please <a href="https://openpolice.org/contact">contact us</a>
+<h2>Thank You!</h2><p>After following those instructions, hopefully you should have a functioning installation to start tinkering with. Please <a href="http://openpolice.local/contact">contact us</a>
  if you hit any big errors or have corrections or improvements to this 
 install process. We hope you\'ll help make it harder, better, faster, and
  stronger for complainants, police oversight investigators, and the 
@@ -38437,6 +38409,22 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeTree' => '184',
 			'NodeParentID' => '2731',
 			'NodeType' => 'Instructions Raw'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2751,
+			'NodeTree' => '196',
+			'NodeType' => 'Page',
+			'NodePromptNotes' => 'n-a',
+			'NodePromptAfter' => '::M::::M::::M::',
+			'NodeCharLimit' => '-1'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2752,
+			'NodeTree' => '196',
+			'NodeParentID' => '2751',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2>Welcome to .</h2>
+<p>Edit this node to fill in your page! This node could be your entire page, or just one little component.</p>'
 		]);
 	
 	DB::table('SL_NodeResponses')->insert([
@@ -49564,7 +49552,6 @@ OpenPolice.org</p><p><br></p><p><b>Sample Email To Attorney:</b></p><p>Hi {Attor
  [{ Complaint URL }]</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="46n75-0-0"><div data-offset-key="46n75-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="46n75-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="254n2-0-0"><div data-offset-key="254n2-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="254n2-0-0"><span data-text="true">Thank you so much for using OpenPolice.org!</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="2feu9-0-0"><div data-offset-key="2feu9-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="2feu9-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="45dpo-0-0"><div data-offset-key="45dpo-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span class="adverb"><span data-offset-key="45dpo-0-0"><span data-text="true">Sincerely</span></span></span><span data-offset-key="45dpo-1-0"><span data-text="true">,</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="4du2g-0-0"><div data-offset-key="4du2g-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="4du2g-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="87pf3-0-0"><div data-offset-key="87pf3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="87pf3-0-0"><span data-text="true">[{ Analyst Name }]
  OpenPolice.org</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="ecbsi-0-0"><div data-offset-key="ecbsi-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="ecbsi-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="al9a2-0-0"><div data-offset-key="al9a2-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="al9a2-0-0"><span data-text="true">P.S. We care about how well — or how </span></span><span class="adverb"><span data-offset-key="al9a2-1-0"><span data-text="true">poorly</span></span></span><span data-offset-key="al9a2-2-0"><span data-text="true"> — this department  responds to your complaint. So we\'ll be in touch in the coming weeks and  months to check in!</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="4c2e3-0-0"><div data-offset-key="4c2e3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="4c2e3-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="csqgq-0-0"><div data-offset-key="csqgq-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="csqgq-0-0"><span data-text="true">[{ Complaint Footer Links }]</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="bnnk3-0-0"><div data-offset-key="bnnk3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="bnnk3-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="2peoa-0-0"><div data-offset-key="2peoa-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="2peoa-0-0"><br data-text="true"></span></div></div>'
 		]);
-	
-		
+			
 	}
 }

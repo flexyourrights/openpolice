@@ -70,7 +70,7 @@ class OpenPartners extends OpenVolunteers
      * @param  string $type
      * @return string
      */
-    protected function printManagePartners($type = 'Attorney')
+    protected function printManagePartners($nID = -3, $type = 'Attorney')
     {
         $ret = '';
         $this->loadPartnerTypes();
@@ -85,9 +85,13 @@ class OpenPartners extends OpenVolunteers
                 . '/partner-profile';
             $this->redir($redir, true);
         }
+        $statusIn = [1];
+        if ($nID == 2171) {
+            $statusIn = [0, 1];
+        }
         foreach ($this->v["prtnTypes"] as $p) {
             if ($p["defID"] == $defAtt) {
-                $this->v["partners"] = $this->getPartnersOfType($p["defID"]);
+                $this->v["partners"] = $this->getPartnersOfType($p["defID"], $statusIn);
                 $this->v["prtnType"] = $p;
                 return view(
                     'vendor.openpolice.nodes.2166-manage-partners', 
@@ -194,10 +198,13 @@ class OpenPartners extends OpenVolunteers
     protected function printPartnersOverviewPublic($nID = -3)
     {
         $orgDef = $GLOBALS["SL"]->def->getID('Partner Types', 'Organization');
-        return view('vendor.openpolice.nodes.2179-list-organizations', [
-            "orgs"  => $this->getPartnersOfType($orgDef),
-            "capab" => $this->loadPartnerCapabLookups(true)
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.2179-list-organizations', 
+            [
+                "orgs"  => $this->getPartnersOfType($orgDef),
+                "capab" => $this->loadPartnerCapabLookups(true)
+            ]
+        )->render();
     }
 
     /**

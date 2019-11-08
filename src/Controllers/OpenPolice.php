@@ -213,9 +213,9 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2169) {
             return $this->printPartnerCapabilitiesOverview();
         } elseif ($nID == 2166) {
-            return $this->printManagePartners();
+            return $this->printManagePartners($nID);
         } elseif ($nID == 2171) {
-            return $this->printManagePartners('Organization');
+            return $this->printManagePartners($nID, 'Organization');
         } elseif ($nID == 1924) {
             return $this->initPartnerCaseTypes($nID);
         } elseif ($nID == 2181) {

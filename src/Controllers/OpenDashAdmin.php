@@ -141,6 +141,7 @@ class OpenDashAdmin
         $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
         $grapher->addDataLineType('received', 'Received by Oversight', '', '#333333', '#333333');
         $grapher->addDataLineType('contacts', 'Followup Contacts', '', '#63C6FF', '#63C6FF');
+        $startDate = $grapher->getPastStartDate() . ' 00:00:00';
         $recentAttempts = OPComplaints::whereNotNull('ComSummary')
             ->where('ComSummary', 'NOT LIKE', '')
             ->whereIn('ComType', [
@@ -148,10 +149,9 @@ class OpenDashAdmin
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
-            ->where('ComRecordSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->where('ComRecordSubmitted', '>=', $startDate)
             ->select('ComStatus', 'ComRecordSubmitted')
             ->get();
-//echo '<pre>'; print_r($recentAttempts); echo '</pre>';
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
                 if ($rec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
@@ -162,7 +162,7 @@ class OpenDashAdmin
             }
         }
         $recentAttempts = OPLinksComplaintOversight::select('LnkComOverSubmitted')
-            ->where('LnkComOverSubmitted', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->where('LnkComOverSubmitted', '>=', $startDate)
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
@@ -170,7 +170,7 @@ class OpenDashAdmin
             }
         }
         $recentAttempts = OPLinksComplaintOversight::select('LnkComOverReceived')
-            ->where('LnkComOverReceived', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->where('LnkComOverReceived', '>=', $startDate)
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
@@ -181,7 +181,7 @@ class OpenDashAdmin
             ->where('ComRevType', 'LIKE', 'Update')
             ->whereNotNull('ComRevNote')
             ->where('ComRevNote', 'NOT LIKE', 'Update')
-            ->where('created_at', '>=', $grapher->getPastStartDate() . ' 00:00:00')
+            ->where('created_at', '>=', $startDate)
             ->distinct('ComRevComplaint')
             ->get();
         if ($contacts->isNotEmpty()) {
@@ -190,24 +190,30 @@ class OpenDashAdmin
             }
         }
 
-        return '<div id="dailyGraphWrap">' . $grapher->printDailyGraph(420) . '</div>';
+        return '<div id="dailyGraphWrap">' 
+            . $grapher->printDailyGraph(420) . '</div>';
     }
     
     public function printDashPercCompl()
     {
         $this->v["isDash"] = true;
         $GLOBALS["SL"]->x["needsCharts"] = true;
-        $GLOBALS["SL"]->pageAJAX .= '$("#1342graph").load("/dashboard/surv-1/sessions/graph-durations"); ';
-        return '<div id="1342graph" class="w100" style="height: 740px;"></div><div class="p10">&nbsp;</div>'
-            . '<div class="pT10"><a href="/dashboard/surv-1/sessions?refresh=1">Full Session Stats Report</a></div>';
+        $GLOBALS["SL"]->pageAJAX .= '$("#1342graph").load("'
+            . '/dashboard/surv-1/sessions/graph-durations"); ';
+        return '<div id="1342graph" class="w100" style="height: 740px;"></div>'
+            . '<div class="p10">&nbsp;</div>'
+            . '<div class="pT10"><a href="/dashboard/surv-1/sessions?refresh=1">'
+            . 'Full Session Stats Report</a></div>';
     }
     
     public function printDashTopStats()
     {
         $this->v["isDash"] = true;
         $this->v["statRanges"] = [
-            ['Last 24 Hrs',     mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))],
-            ['This Week',       mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))],
+            ['Last 24 Hrs',     mktime(date("H")-24, date("i"), date("s"), 
+                date("n"), date("j"), date("Y"))],
+            ['This Week',       mktime(date("H"), 0, 0, 
+                date("n"), date("j")-7, date("Y"))],
             ['All-Time Totals', mktime(0, 0, 0, 1, 1, 1900)]
         ];
         $this->v["statusDefs"] = $GLOBALS["SL"]->def->getSet('Complaint Status');
@@ -249,7 +255,10 @@ class OpenDashAdmin
                 }
             }
         }
-        return view('vendor.openpolice.nodes.1361-dash-top-stats', $this->v)->render();
+        return view(
+            'vendor.openpolice.nodes.1361-dash-top-stats', 
+            $this->v
+        )->render();
     }
     
     public function volunDeptsRecent()
@@ -259,10 +268,12 @@ class OpenDashAdmin
         $statRanges = [
             [
                 'Last 24 Hours', 
-                date("Y-m-d H:i:s", mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y")))
+                date("Y-m-d H:i:s", mktime(date("H")-24, date("i"), date("s"), 
+                    date("n"), date("j"), date("Y")))
             ], [
                 'This Week', 
-                date("Y-m-d H:i:s", mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y")))
+                date("Y-m-d H:i:s", mktime(date("H"), 0, 0, 
+                    date("n"), date("j")-7, date("Y")))
             ], [
                 'All-Time Totals', 
                 date("Y-m-d H:i:s", mktime(0, 0, 0, 1, 1, 1000))
@@ -276,19 +287,27 @@ class OpenDashAdmin
             $this->v["statTots"][$i][] = OPZeditDepartments::select('ZedDeptID')
                 ->where('ZedDeptDeptVerified', '>', $stat[1])
                 ->count();
-            $overQry = ((strpos($stat[1], "WHERE") === false) 
-                ? " WHERE `ZedOverOverType` LIKE '303'" : " AND `ZedOverOverType` LIKE '303'");
-            $res = DB::select( DB::raw("SELECT SUM(`ZedOverOnlineResearch`) as `tot` FROM `OP_Zedit_Oversight` WHERE
-                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $overType = " `ZedOverOverType` LIKE '303'";
+            $overQry = ((strpos($stat[1], "WHERE") === false) ? " WHERE" : " AND") . $overType;
+            $res = DB::select(
+                DB::raw("SELECT SUM(`ZedOverOnlineResearch`) as `tot` FROM `OP_Zedit_Oversight` 
+                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+            );
             $this->v["statTots"][$i][] = $res[0]->tot;
-            $res = DB::select( DB::raw("SELECT SUM(`ZedOverMadeDeptCall`) as `tot` FROM `OP_Zedit_Oversight` WHERE
-                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $res = DB::select(
+                DB::raw("SELECT SUM(`ZedOverMadeDeptCall`) as `tot` FROM `OP_Zedit_Oversight` 
+                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+            );
             $this->v["statTots"][$i][] = $res[0]->tot;
-            $res = DB::select( DB::raw("SELECT SUM(`ZedOverMadeIACall`) as `tot` FROM `OP_Zedit_Oversight` WHERE
-                ZedOverOverVerified > '" . $stat[1] . "' AND `ZedOverOverType` LIKE '303'") );
+            $res = DB::select(
+                DB::raw("SELECT SUM(`ZedOverMadeIACall`) as `tot` FROM `OP_Zedit_Oversight` 
+                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+            );
             $this->v["statTots"][$i][] = $res[0]->tot;
-            $res = DB::select( DB::raw("SELECT DISTINCT `ZedDeptDeptID` FROM `OP_Zedit_Departments` WHERE 
-                ZedDeptDeptVerified > '" . $stat[1] . "'") );
+            $res = DB::select(
+                DB::raw("SELECT DISTINCT `ZedDeptDeptID` FROM `OP_Zedit_Departments` 
+                    WHERE `ZedDeptDeptVerified` > '" . $stat[1] . "'")
+            );
             $this->v["statTots"][$i][] = (($res) ? sizeof($res) : 0);
         }
         return true;
@@ -310,23 +329,35 @@ class OpenDashAdmin
                     ->where('ZedOverOverType', 302)
                     ->first();
                 $userObj = User::find($edit->ZedDeptUserID);
-                $deptEdits[] = [ ($userObj) ? $userObj->printUsername() : '', $edit, $iaEdit, $civEdit ];
+                $deptEdits[] = [
+                    ($userObj) ? $userObj->printUsername() : '', 
+                    $edit, 
+                    $iaEdit, 
+                    $civEdit
+                ];
             }
         }
         //echo '<pre>'; print_r($deptEdits); echo '</pre>';
         $this->v["recentEdits"] = '';
         foreach ($deptEdits as $deptEdit) {
-            $this->v["recentEdits"] .= view('vendor.openpolice.volun.admPrintDeptEdit', [
-                "user"     => $deptEdit[0], 
-                "deptRow"  => OPDepartments::find($deptEdit[1]->ZedDeptDeptID), 
-                "deptEdit" => $deptEdit[1], 
-                "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $deptEdit[1]->ZedDeptType),
-                "iaEdit"   => $deptEdit[2], 
-                "civEdit"  => $deptEdit[3]
-                ])->render();
+            $this->v["recentEdits"] .= view(
+                'vendor.openpolice.volun.admPrintDeptEdit', 
+                [
+                    "user"     => $deptEdit[0], 
+                    "deptRow"  => OPDepartments::find($deptEdit[1]->ZedDeptDeptID), 
+                    "deptEdit" => $deptEdit[1], 
+                    "deptType" => $GLOBALS["SL"]->def
+                        ->getVal('Department Types', $deptEdit[1]->ZedDeptType),
+                    "iaEdit"   => $deptEdit[2], 
+                    "civEdit"  => $deptEdit[3]
+                ]
+            )->render();
         }
         $this->v["volunDataGraph"] = $this->volunStatsDailyGraph();
-        return view('vendor.openpolice.nodes.1351-admin-volun-edit-history', $this->v)->render();
+        return view(
+            'vendor.openpolice.nodes.1351-admin-volun-edit-history', 
+            $this->v
+        )->render();
     }
     
     public function volunStatsDailyGraph()
@@ -342,9 +373,11 @@ class OpenDashAdmin
         $grapher->addDataLineType('edits', 'Total Edits', 'VolunStatTotalEdits', '#c3ffe1', '#c3ffe1');
         $grapher->addDataLineType('calls', 'Total Calls', 'VolunStatCallsTot', '#29B76F', '#29B76F');
         $grapher->addDataLineType('signup', 'Signups', 'VolunStatSignups', '#ffd2c9', '#ffd2c9');
-        $grapher->processRawDataResults(OPzVolunStatDays::where('VolunStatDate', '>=', $grapher->getPastStartDate())
-            ->orderBy('VolunStatDate', 'asc')
-            ->get());
+        $grapher->processRawDataResults(
+            OPzVolunStatDays::where('VolunStatDate', '>=', $grapher->getPastStartDate())
+                ->orderBy('VolunStatDate', 'asc')
+                ->get()
+        );
         return $grapher->printDailyGraph(350);
     }
     

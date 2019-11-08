@@ -25,7 +25,7 @@
 
 
 
-<?php /* Temporary Debugging: */ ?>
+<?php /* Temporary Debugging Output: */ ?>
 <div class="slGrey">
     <hr><hr>
     <i>Verified Officer Objects:</i>
