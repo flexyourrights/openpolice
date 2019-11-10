@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "wikiworldorder/survloop": "^v0.2.10",
+        "wikiworldorder/survloop": "^v0.2.11",
         "flexyourrights/openpolice-departments": "^v0.1.2",
         "flexyourrights/openpolice-website": "^v0.1.1"
     },
