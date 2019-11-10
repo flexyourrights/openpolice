@@ -292,7 +292,7 @@ class OpenPolice extends OpenInitExtras
             return $this->v["openDash"]->volunStatsTable();
             
         // Software Development Area
-        } elseif (in_array($nID, [2690, 2703, 2297])) {
+        } elseif (in_array($nID, [2690, 2703, 2297, 2759, 2317])) {
             return $this->printNavDevelopmentArea($nID);
 
         }

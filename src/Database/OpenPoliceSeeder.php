@@ -60,7 +60,7 @@ class OpenPoliceSeeder extends Seeder
 			'TblName' => 'Oversight',
 			'TblEng' => 'Investigative Agencies',
 			'TblDesc' => 'These are the organizations tasked with receiving and investigating Civilian Complaints against Officers. This information helps us keep track of who is investigating Complaints submitted through OpenPolice.org.',
-			'TblNotes' => 'There are 2 types of Investigative Agencies: Internal Affairs (IA) & Citizen Investigative Agencies (COAs). Every police department has an Internal Affairs contact â?? but many medium and larger municipalities also have a COA tasked with receiving and investigating citizen complaints. COAs are generally more responsive than IAs. THEREFORE, if a police department has a NACOLE-approved COA, the table data must ONLY contain COA contact information â?? but no IA contact information.',
+			'TblNotes' => 'There are 2 types of Investigative Agencies: Internal Affairs (IA) & Citizen Investigative Agencies (COAs). Every police department has an Internal Affairs contact \ï¿½?? but many medium and larger municipalities also have a COA tasked with receiving and investigating citizen complaints. COAs are generally more responsive than IAs. THEREFORE, if a police department has a NACOLE-approved COA, the table data must ONLY contain COA contact information \ï¿½?? but no IA contact information.',
 			'TblGroup' => 'People & Groups Involved In Complaint Process',
 			'TblOrd' => '30',
 			'TblExtend' => '0',
@@ -9565,7 +9565,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'FldSpecSource' => '0',
 			'FldName' => 'StripSearchDesc',
 			'FldEng' => 'Strip search description',
-			'FldDesc' => 'Narrative details about the nature of the strip search (not including at the police station). Important for identifying particularly egregious wrongful search Allegations — including cavity searches. ',
+			'FldDesc' => 'Narrative details about the nature of the strip search (not including at the police station). Important for identifying particularly egregious wrongful search Allegations ï¿½ including cavity searches. ',
 			'FldNotes' => 'We understand that this isn\'t easy, but please provide as much detail as you can about the strip search. The more information you provide, the better we can help address your complaint. ',
 			'FldForeignTable' => '0',
 			'FldForeignMin' => '0',
@@ -10714,7 +10714,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'FldSpecSource' => '0',
 			'FldName' => 'Fairness',
 			'FldEng' => 'Officer was fair?',
-			'FldDesc' => 'Indicates whether or not the officer’s use of power was reasonable, appropriate, and free from bias.',
+			'FldDesc' => 'Indicates whether or not the officerï¿½s use of power was reasonable, appropriate, and free from bias.',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
 			'FldForeign2Min' => 'N',
@@ -10734,7 +10734,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'FldSpecSource' => '0',
 			'FldName' => 'Constitutional',
 			'FldEng' => 'Officer respected constitutional rights?',
-			'FldDesc' => 'Indicates whether or not the officer’s words and actions showed respect for the Bill of Rights.',
+			'FldDesc' => 'Indicates whether or not the officerï¿½s words and actions showed respect for the Bill of Rights.',
 			'FldForeignMin' => 'N',
 			'FldForeignMax' => 'N',
 			'FldForeign2Min' => 'N',
@@ -15431,7 +15431,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'DefSubset' => 'Allegation Type',
 			'DefOrder' => '9',
 			'DefValue' => 'Excessive Citation',
-			'DefDescription' => 'Police filed citations to punish someone beyond what’s legal or appropriate.'
+			'DefDescription' => 'Police filed citations to punish someone beyond whatï¿½s legal or appropriate.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 380,
@@ -17363,7 +17363,7 @@ I really appreciate your time. Thanks so much for your help!'
 			'DefSubset' => 'Commendation Type',
 			'DefOrder' => '4',
 			'DefValue' => 'Fairness',
-			'DefDescription' => 'The officer’s use of power was reasonable, appropriate, and free from bias.'
+			'DefDescription' => 'The officerï¿½s use of power was reasonable, appropriate, and free from bias.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 424,
@@ -17371,7 +17371,7 @@ I really appreciate your time. Thanks so much for your help!'
 			'DefSubset' => 'Commendation Type',
 			'DefOrder' => '5',
 			'DefValue' => 'Constitutional Policing',
-			'DefDescription' => 'The officer’s words and actions showed respect for the Bill of Rights.'
+			'DefDescription' => 'The officerï¿½s words and actions showed respect for the Bill of Rights.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 425,
@@ -18391,7 +18391,7 @@ I really appreciate your time. Thanks so much for your help!'
 			'DefSubset' => 'Organization Capabilities',
 			'DefOrder' => '9',
 			'DefValue' => 'Accepts Legal Referrals through OpenPolice.org',
-			'DefDescription' => 'Partners with this capacity — by definition — are registered to be matched with complainants searching for legal help.'
+			'DefDescription' => 'Partners with this capacity ï¿½ by definition ï¿½ are registered to be matched with complainants searching for legal help.'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 607,
@@ -18914,7 +18914,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'RuleID' => 12,
 			'RuleDatabase' => '1',
 			'RuleStatement' => 'A new Verified Officer Record should be created for every Officer if a matching Verified Officer does not exist upon creation of a new Complaint record (as decided by Complainant).',
-			'RuleConstraint' => 'Every newlyÂ created Officer record (without a preexisting Verified Officer ID) needs to have a new Verified Officer record created with its Verification Status set to &quot;New&quot; pending admin verification.',
+			'RuleConstraint' => 'Every newly\ï¿½ created Officer record (without a preexisting Verified Officer ID) needs to have a new Verified Officer record created with its Verification Status set to &quot;New&quot; pending admin verification.',
 			'RuleTables' => ',104,129,',
 			'RuleFields' => ',396,',
 			'RuleLogic' => '13',
@@ -19977,10 +19977,12 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'TreeDatabase' => '1',
 			'TreeUser' => '1',
 			'TreeType' => 'Page',
-			'TreeSlug' => 'n-a',
+			'TreeName' => 'Development Team Update',
+			'TreeSlug' => 'development-team-update',
 			'TreeRoot' => '2751',
 			'TreeFirstPage' => '2751',
-			'TreeLastPage' => '2751'
+			'TreeLastPage' => '2751',
+			'TreeOpts' => '2881'
 		]);
 	
 	DB::table('SL_Node')->insert([
@@ -20323,9 +20325,7 @@ These are your allegations: <span class="slBlueDark">[[List of Allegations]]</sp
 			'NodeParentID' => '2122',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Uploads',
-			'NodePromptText' => 'Please upload any photos, sketches, police reports, warrants, official documents, and links to videos. These should describe the scene or show proof of what happened. If police injured someone, provide photos and medical records.<br />
-<div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px; margin-top: 15px;">
-WARNING: Only share what you want investigators to see. Do not upload anyone’s private information without their permission.<br /><br />For example, we recommend that you set the privacy on injury photos to "public." But set medical documents to "private," so they\'re only visible to investigators.</div>',
+			'NodePromptText' => 'Please upload any photos, sketches, police reports, warrants, official documents, and links to videos. These should describe the scene or show proof of what happened. If police injured someone, provide photos and medical records.<br />\r\n<div class=\"alert alert-danger fade in alert-dismissible show\" style=\"padding: 10px 15px; margin-top: 15px;\">\r\nWARNING: Only share what you want investigators to see. Do not upload anyoneï¿½s private information without their permission.<br /><br />For example, we recommend that you set the privacy on injury photos to \"public.\" But set medical documents to \"private,\" so they\\'re only visible to investigators.</div>',
 			'NodeCharLimit' => '5',
 			'NodeOpts' => '3'
 		]);
@@ -21116,7 +21116,7 @@ WARNING: Only share what you want investigators to see. Do not upload anyone’s
 			'NodeParentID' => '1200',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Do you have any contact information for this victim, such as their address, phone number, or email? (This can help the investigation — but we will not make it public.)',
+			'NodePromptText' => 'Do you have any contact information for this victim, such as their address, phone number, or email? (This can help the investigation ï¿½ but we will not make it public.)',
 			'NodeDataStore' => 'Civilians:CivGiveContactInfo',
 			'NodeOpts' => '3'
 		]);
@@ -21579,7 +21579,7 @@ WARNING: Only share what you want investigators to see. Do not upload anyone’s
 			'NodeParentID' => '1202',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Do you have any contact information for this witness, such as their address, phone number, or email? (This can help the investigation — but we will not make it public.)',
+			'NodePromptText' => 'Do you have any contact information for this witness, such as their address, phone number, or email? (This can help the investigation ï¿½ but we will not make it public.)',
 			'NodeDataStore' => 'Civilians:CivGiveContactInfo',
 			'NodeOpts' => '3'
 		]);
@@ -22589,8 +22589,7 @@ WARNING: Only share what you want investigators to see. Do not upload anyone’s
 			'NodeTree' => '1',
 			'NodeParentID' => '142',
 			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h2>Who\'s Involved: Police Officers</h2>
-<br />Please provide information about the police officers or private security employees in this incident. These are people who were were involved in — or witnessed — an alleged act of police misconduct.<br /><br />If there were no [other] officers involved, go to the next section.',
+			'NodePromptText' => '<h2>Who\\'s Involved: Police Officers</h2>\r\n<br />Please provide information about the police officers or private security employees in this incident. These are people who were were involved in ï¿½ or witnessed ï¿½ an alleged act of police misconduct.<br /><br />If there were no [other] officers involved, go to the next section.',
 			'NodePromptNotes' => 'add-police-officers',
 			'NodePromptAfter' => 'Add Police Officers - Your Complaint::M::::M::::M::',
 			'NodeDataBranch' => 'Officers',
@@ -23671,7 +23670,7 @@ WARNING: Only share what you want investigators to see. Do not upload anyone’s
 			'NodeParentID' => '476',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => 'Police are legally allowed to <i class="slBlueDark">display</i> a weapon if they feel threatened. But it\'s wrongful for police to use a weapon to intimidate people who aren\'t a threat.<br /><br />Do you think an officer displayed a weapon — or a police dog — to <span class="slBlueDark">wrongfully intimidate</span> anybody? (This does not include any violent use of force. <span class="allegation">Answers in red are allegations.</span>)',
+			'NodePromptText' => 'Police are legally allowed to <i class=\"slBlueDark\">display</i> a weapon if they feel threatened. But it\\'s wrongful for police to use a weapon to intimidate people who aren\\'t a threat.<br /><br />Do you think an officer displayed a weapon ï¿½ or a police dog ï¿½ to <span class=\"slBlueDark\">wrongfully intimidate</span> anybody? (This does not include any violent use of force. <span class=\"allegation\">Answers in red are allegations.</span>)',
 			'NodePromptNotes' => '<span class="slBlueDark">Example:</span> While questioning a pedestrian, the officer pointed a taser at her in a threatening manner.',
 			'NodeDataStore' => 'AllegSilver:AlleSilIntimidatingWeapon',
 			'NodeOpts' => '5'
@@ -24268,8 +24267,7 @@ setTimeout("document.getElementById(\'skinnySurv\').className = \'container taL\
 			'NodeTree' => '8',
 			'NodeParentID' => '1009',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">File Your Police Compliment</h2>
-<p>Your story is too important to be ignored. That’s why we help you build a transparent record of police excellence. By improving accountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">File Your Police Compliment</h2>\r\n<p>Your story is too important to be ignored. Thatï¿½s why we help you build a transparent record of police excellence. By improving accountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
 			'NodePromptAfter' => '<script type="text/javascript">
 function fixColBrk() {
 if (document.getElementById("col2595")) {
@@ -24462,9 +24460,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodeTree' => '13',
 			'NodeParentID' => '826',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2>Contact Us</h2>
-<p>We\'d love to hear from you. But because we are a tiny startup trying to keep our eye on the ball — we cannot respond to most inquiries we receive.<br></p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<h2>Contact Us</h2>\r\n<p>We\\'d love to hear from you. But because we are a tiny startup trying to keep our eye on the ball ï¿½ we cannot respond to most inquiries we receive.<br></p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24527,41 +24523,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodeTree' => '14',
 			'NodeParentID' => '833',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">User Privacy Options</h2>
-<p>Complainants should control who has access to their private information. That\'s why we\'ve created three unique options for how we collect and share their data.</p>
-<p>Whichever option they choose, all information complainants provide will be <i>privately</i> shared with the relevant investigative agencies responsible for investigating complaints against police.</p>
-<p>&nbsp;</p>
-<h3>1. Full Transparency</h3>
-<p><strong>The complainant will publish all the names of civilians and police officers on OpenPolice.org.</strong></p>
-<p>Complainants who select Full Transparency will have their <i>uncensored</i> story published on OpenPolice.org. This includes officers\' and civilians\' names and responses to <a href="#glossary">open-ended questions</a>. But other personal information (e.g. complainant contact info, home address, etc.) will <i>not</i> be published.</p>
-<p>&nbsp;</p>
-<h3>2. No Names Public</h3>
-<p><strong>The complainant will not publish any names on this website. This includes police officers\' names and badge numbers too.</strong></p>
-<p>Complainants who select No Names Public will provide everything investigators need — but only their <i>anonymized</i> data will be published on the OpenPolice.org. For reciprocity purposes, neither civilian nor police officer names will be published. Only the <a href="#glossary">multiple-choice responses</a> will be published. (This does not include responses to <a href="#glossary">open-ended questions</a>, which could reveal identities.)</p>
-<p>&nbsp;</p>
-<h3>3. Anonymous</h3>
-<p><strong>The complainant needs to be anonymous, even though it might limit investigation.</strong></p>
-<p>For complainants who select Anonymous, no personal information about them is requested or collected. Neither OpenPolice.org staff nor investigators will be able to contact the complainant. While this makes it harder for investigative agencies to investigate, it’s an important option for complainants fearful of retaliation.</p>
-<p>Complainants’ <a href="#glossary">multiple-choice responses</a> will be published. (This does not include responses to <a href="#glossary">open-ended questions</a>, which could reveal identities.) Any details that could be used for personal identification may be deleted from OpenPolice.org\'s database.</p>
-<div class="nodeAnchor"><a id="attorneys" name="attorneys"></a></div>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h2>Documentation for Attorneys</h2>
-<p><strong>This is not a privacy setting, but complaints intended for attorneys’ eyes only are stored and published with <a href="#glossary">anonymized</a> data only.</strong></p>
-<p>Some people use OpenPolice.org to prepare documentation for an attorney. In these cases, no information will be shared with investigative agencies. Complainants can print out their complete complaint and download it as a PDF or raw data file. After completing the entire process, OpenPolice.org’s copy of their complaint is stripped of all data that might be personally identifiable. Only <a href="#glossary">multiple-choice question</a> data will be saved and publicly associated with the police department records.</p>
-<p>When such complaints are <a href="#glossary">anonymized</a>, all <a href="#glossary">open-ended responses</a> are <i>permanently</i> deleted from OpenPolice.org servers. But with the advice of their attorney — users can later upload their raw complaint data to publish their complete story.</p>
-<a name="glossary"></a>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h3>Glossary of Terms</h3>
-<p><b>Multiple-Choice Questions:</b> Users select answers from options on a predetermined list.</p>
-<p><b>Open-Ended Questions:</b> Users can type a narrative response in order to share their knowledge and/or feelings.</p>
-<p><b>Anonymized Complaint Data:</b> Because open-ended questions can potentially include personally-identifying information, anonymized data only includes responses to multiple-choice questions. And in some rare cases, multiple-choice question responses are also hidden if they potentially reveal too much about a person’s identity.</p>
-<p>&nbsp;</p>
-<p><em>Updated: October 24, 2018</em></p>
-<p><a href="/privacy-policy">Privacy Policy</a></p>
-<p>&nbsp;</p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<h2 class=\"slBlueDark\">User Privacy Options</h2>\r\n<p>Complainants should control who has access to their private information. That\\'s why we\\'ve created three unique options for how we collect and share their data.</p>\r\n<p>Whichever option they choose, all information complainants provide will be <i>privately</i> shared with the relevant investigative agencies responsible for investigating complaints against police.</p>\r\n<p>&nbsp;</p>\r\n<h3>1. Full Transparency</h3>\r\n<p><strong>The complainant will publish all the names of civilians and police officers on OpenPolice.org.</strong></p>\r\n<p>Complainants who select Full Transparency will have their <i>uncensored</i> story published on OpenPolice.org. This includes officers\\' and civilians\\' names and responses to <a href=\"#glossary\">open-ended questions</a>. But other personal information (e.g. complainant contact info, home address, etc.) will <i>not</i> be published.</p>\r\n<p>&nbsp;</p>\r\n<h3>2. No Names Public</h3>\r\n<p><strong>The complainant will not publish any names on this website. This includes police officers\\' names and badge numbers too.</strong></p>\r\n<p>Complainants who select No Names Public will provide everything investigators need ï¿½ but only their <i>anonymized</i> data will be published on the OpenPolice.org. For reciprocity purposes, neither civilian nor police officer names will be published. Only the <a href=\"#glossary\">multiple-choice responses</a> will be published. (This does not include responses to <a href=\"#glossary\">open-ended questions</a>, which could reveal identities.)</p>\r\n<p>&nbsp;</p>\r\n<h3>3. Anonymous</h3>\r\n<p><strong>The complainant needs to be anonymous, even though it might limit investigation.</strong></p>\r\n<p>For complainants who select Anonymous, no personal information about them is requested or collected. Neither OpenPolice.org staff nor investigators will be able to contact the complainant. While this makes it harder for investigative agencies to investigate, itï¿½s an important option for complainants fearful of retaliation.</p>\r\n<p>Complainantsï¿½ <a href=\"#glossary\">multiple-choice responses</a> will be published. (This does not include responses to <a href=\"#glossary\">open-ended questions</a>, which could reveal identities.) Any details that could be used for personal identification may be deleted from OpenPolice.org\\'s database.</p>\r\n<div class=\"nodeAnchor\"><a id=\"attorneys\" name=\"attorneys\"></a></div>\r\n<p>&nbsp;</p>\r\n<p>&nbsp;</p>\r\n<h2>Documentation for Attorneys</h2>\r\n<p><strong>This is not a privacy setting, but complaints intended for attorneysï¿½ eyes only are stored and published with <a href=\"#glossary\">anonymized</a> data only.</strong></p>\r\n<p>Some people use OpenPolice.org to prepare documentation for an attorney. In these cases, no information will be shared with investigative agencies. Complainants can print out their complete complaint and download it as a PDF or raw data file. After completing the entire process, OpenPolice.orgï¿½s copy of their complaint is stripped of all data that might be personally identifiable. Only <a href=\"#glossary\">multiple-choice question</a> data will be saved and publicly associated with the police department records.</p>\r\n<p>When such complaints are <a href=\"#glossary\">anonymized</a>, all <a href=\"#glossary\">open-ended responses</a> are <i>permanently</i> deleted from OpenPolice.org servers. But with the advice of their attorney ï¿½ users can later upload their raw complaint data to publish their complete story.</p>\r\n<a name=\"glossary\"></a>\r\n<p>&nbsp;</p>\r\n<p>&nbsp;</p>\r\n<h3>Glossary of Terms</h3>\r\n<p><b>Multiple-Choice Questions:</b> Users select answers from options on a predetermined list.</p>\r\n<p><b>Open-Ended Questions:</b> Users can type a narrative response in order to share their knowledge and/or feelings.</p>\r\n<p><b>Anonymized Complaint Data:</b> Because open-ended questions can potentially include personally-identifying information, anonymized data only includes responses to multiple-choice questions. And in some rare cases, multiple-choice question responses are also hidden if they potentially reveal too much about a personï¿½s identity.</p>\r\n<p>&nbsp;</p>\r\n<p><em>Updated: October 24, 2018</em></p>\r\n<p><a href=\"/privacy-policy\">Privacy Policy</a></p>\r\n<p>&nbsp;</p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24578,38 +24540,7 @@ Overview of recent activity and statistics coming soon. For now, the most intere
 			'NodeTree' => '15',
 			'NodeParentID' => '835',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">Terms, Policies, &amp; Rules</h2>
-<p>This privacy policy discloses the privacy practices for http://openpolice.local. This privacy policy applies solely to 
-information collected by this web site. It will notify you of the following:</p>
-<ol><li>What personally identifiable information is collected from you through the web site, how it is used and with whom it may be shared.</li><li>What choices are available to you regarding the use of your data.</li>
-<li>The security procedures in place to protect against the misuse of your information.</li><li>How you can correct any inaccuracies in the information.</li></ol>
-<p><br></p>
-<h3>Information Collection, Use, and Sharing</h3>
-<p>We are the sole owners of the information collected on this site. We only collect information that you voluntarily give us via your use of our online forms, or other direct contact from you. While most users may choose to share most of their information publicly, we will not sell or rent any private information to anyone.</p>
-<p>We will use your information to respond to you, regarding your complaint. We will not share your information with any third parties outside of our organization, other than as necessary to fulfill your request (e.g. to submit your complaint to relevant policy investigative agencies).</p>
-<p>Unless you ask us not to, we may contact you via email in the future to update you — or request updates from you — regarding your complaint, or changes to this privacy policy.</p>
-<p><br></p>
-<h3>Your Access to and Control Over Information</h3>
-<p>You may opt out of any future contacts from us at any time. You can do the following at any time by contacting us via the contact information given on our website:</p>
-<ul><li>See what data we have about you, if any.</li>
-<li>Provide updates regarding your complaint.</li>
-<li>Have us delete any data we have about you.</li>
-<li>Express any concern you have about our use of your data.</li></ul>
-<p><br></p>
-<h3>Security</h3>
-<p>We take precautions to protect your information. When you submit sensitive information via the website, your information is protected both online and offline.</p>
-<p>Wherever we collect sensitive information, that information is encrypted and transmitted to us in a secure way. You can verify this by looking for a closed lock icon at the bottom of your web browser, or looking for “https” at the beginning of the address of the web page.</p>
-<p>While we use encryption to protect sensitive information transmitted online, we also protect your information offline. Only employees and investigators who need the information to follow up on your complaint are granted access to personally identifiable information. The computers/servers in which we store personally identifiable information are kept in a secure environment.</p>
-<p><br></p>
-<h3>Cookies</h3>
-<p>We use “cookies” on this site. A cookie is a piece of data stored on a site visitor’s hard drive to help us improve your access to our site and identify repeat visitors to our site. For instance, when we use a cookie to identify you, you would not have to log in a password more than once, thereby saving time while on our site. Usage of a cookie is in no way linked to any personally identifiable information on our site.</p>
-<p>Some of our business partners may use cookies on our site (for example, Google Analytics). However, we have no access to or control over these cookies.</p>
-<p><br></p>
-<h3>Links</h3>
-<p>This web site contains links to other sites. Please be aware that we are not responsible for the content or privacy practices of such other sites. We encourage our users to be aware when they leave our site and to read the privacy statements of any other site that collects personally identifiable information.</p>
-<p><em>Updated: April 8, 2016</em></p>
-<p><a href="/complaint-privacy-options">User Privacy Options</a></p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<h2 class=\"slBlueDark\">Terms, Policies, &amp; Rules</h2>\r\n<p>This privacy policy discloses the privacy practices for http://openpolice.local. This privacy policy applies solely to \r\ninformation collected by this web site. It will notify you of the following:</p>\r\n<ol><li>What personally identifiable information is collected from you through the web site, how it is used and with whom it may be shared.</li><li>What choices are available to you regarding the use of your data.</li>\r\n<li>The security procedures in place to protect against the misuse of your information.</li><li>How you can correct any inaccuracies in the information.</li></ol>\r\n<p><br></p>\r\n<h3>Information Collection, Use, and Sharing</h3>\r\n<p>We are the sole owners of the information collected on this site. We only collect information that you voluntarily give us via your use of our online forms, or other direct contact from you. While most users may choose to share most of their information publicly, we will not sell or rent any private information to anyone.</p>\r\n<p>We will use your information to respond to you, regarding your complaint. We will not share your information with any third parties outside of our organization, other than as necessary to fulfill your request (e.g. to submit your complaint to relevant policy investigative agencies).</p>\r\n<p>Unless you ask us not to, we may contact you via email in the future to update you ï¿½ or request updates from you ï¿½ regarding your complaint, or changes to this privacy policy.</p>\r\n<p><br></p>\r\n<h3>Your Access to and Control Over Information</h3>\r\n<p>You may opt out of any future contacts from us at any time. You can do the following at any time by contacting us via the contact information given on our website:</p>\r\n<ul><li>See what data we have about you, if any.</li>\r\n<li>Provide updates regarding your complaint.</li>\r\n<li>Have us delete any data we have about you.</li>\r\n<li>Express any concern you have about our use of your data.</li></ul>\r\n<p><br></p>\r\n<h3>Security</h3>\r\n<p>We take precautions to protect your information. When you submit sensitive information via the website, your information is protected both online and offline.</p>\r\n<p>Wherever we collect sensitive information, that information is encrypted and transmitted to us in a secure way. You can verify this by looking for a closed lock icon at the bottom of your web browser, or looking for ï¿½httpsï¿½ at the beginning of the address of the web page.</p>\r\n<p>While we use encryption to protect sensitive information transmitted online, we also protect your information offline. Only employees and investigators who need the information to follow up on your complaint are granted access to personally identifiable information. The computers/servers in which we store personally identifiable information are kept in a secure environment.</p>\r\n<p><br></p>\r\n<h3>Cookies</h3>\r\n<p>We use ï¿½cookiesï¿½ on this site. A cookie is a piece of data stored on a site visitorï¿½s hard drive to help us improve your access to our site and identify repeat visitors to our site. For instance, when we use a cookie to identify you, you would not have to log in a password more than once, thereby saving time while on our site. Usage of a cookie is in no way linked to any personally identifiable information on our site.</p>\r\n<p>Some of our business partners may use cookies on our site (for example, Google Analytics). However, we have no access to or control over these cookies.</p>\r\n<p><br></p>\r\n<h3>Links</h3>\r\n<p>This web site contains links to other sites. Please be aware that we are not responsible for the content or privacy practices of such other sites. We encourage our users to be aware when they leave our site and to read the privacy statements of any other site that collects personally identifiable information.</p>\r\n<p><em>Updated: April 8, 2016</em></p>\r\n<p><a href=\"/complaint-privacy-options\">User Privacy Options</a></p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24626,29 +24557,7 @@ information collected by this web site. It will notify you of the following:</p>
 			'NodeTree' => '16',
 			'NodeParentID' => '2315',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>OpenPolice.org Technical Stuff</h2>
-<p><br></p>
-<h3 class="slBlueDark">About The Database Design</h3><p>
-We developed custom software in order to thoroughly <a href="http://openpolice.local/db/OP">document our database design</a>.
- This includes plain-English descriptions of every data table and field.
- It also includes details about the types of data stored as well as all 
-of the logical relationships between tables.</p><p>Our database design method is based upon recommendations presented in <a href="http://www.amazon.com/gp/product/0321884493/" target="_blank">Database Design for Mere Mortals: A Hands-On Guide to Relational Database Design (3rd Edition), by Michael J. Hernandez</a>.</p><p>The data requirements and emerging organizational policies and practices are based upon the guidelines presented in <a href="http://www.amazon.com/New-World-Police-Accountability/dp/1452286876/">The New World of Police Accountability by Sam Walker and Carol Archbold</a>. The <a href="https://www.sanjoseca.gov/DocumentCenter/View/29599" target="_blank">San Jose Independent Police Auditor (IPA) 2013 Year End Report</a>,
- which is the gold standard for government transparency regarding police
- misconduct complaints, provided essential guidance. We also reviewed 
-numerous <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70" target="_blank">Department of Justice (DOJ) reports on police-civilian contacts</a>. The most important of these was the <a href="http://www.justice.gov/sites/default/files/opa/press-releases/attachments/2015/03/04/ferguson_police_department_report.pdf" target="_blank">DOJ Investigation of the Ferguson Police Department</a>. We also receive ongoing guidance, from some of the <a href="http://openpolice.local/about/" target="_blank">top national experts in the field of police oversight and accountability</a>.</p><p>
-<br></p><h3 class="slBlueDark">Software Specifications</h3><p>
-The database design software we built exports Laravel data models and
- migration files in order to quickly auto-load these data structures to 
-run OpenPolice.org. The code was written using PHP, MySQL, AJAX,
- JS, and CSS. It was built atop the open source <a href="http://laravel.com/" target="_blank">Laravel coding framework</a> (<a href="http:///how-to-install-laravel">also see: How To Install Laravel</a>). The full <a href="https://github.com/flexyourrights/openpolice" target="_blank">Open Police source code</a> still needs better documentation, but is up <a href="https://github.com/flexyourrights/openpolice" target="_blank">on GitHub</a> for wider collaboration with additional open-source programmers.</p><p><b>It’s like TurboTax — but for police complaints.</b></p><p>In order to provide complainants with a dynamic user experience, we custom built a branching tree engine. Most <a href="https://en.wikipedia.org/wiki/Tree_%28data_structure%29" target="_blank">nodes</a>
- in this branching tree represent either a single form field or a page, 
-which wraps multiple fields. After defining the full tree, and mapping 
-each form field to its correct field in the database, the tree is <a href="https://en.wikipedia.org/wiki/Recursion#In_computer_science" target="_blank">recursively</a> traversed in order to create a sequence of prompts, which reveal the unique DNA of an individual police complaint.</p><p>Every node on the tree can check for prerequisites in earlier 
-responses, and some areas of the tree are set to be looped through. (For
- example, when adding multiple witnesses, officers, or victims.) This 
-approach to form generation means that most data prompts and storage are
- the default automated behavior of a generalized engine. This also 
-allows for A/B testing of any individual field for quality control.<a name="flowchart"></a></p>',
+			'NodePromptText' => '<h2>OpenPolice.org Technical Stuff</h2>\r\n<p><br></p>\r\n<h3 class=\"slBlueDark\">About The Database Design</h3><p>\r\nWe developed custom software in order to thoroughly <a href=\"http://openpolice.local/db/OP\">document our database design</a>.\r\n This includes plain-English descriptions of every data table and field.\r\n It also includes details about the types of data stored as well as all \r\nof the logical relationships between tables.</p><p>Our database design method is based upon recommendations presented in <a href=\"http://www.amazon.com/gp/product/0321884493/\" target=\"_blank\">Database Design for Mere Mortals: A Hands-On Guide to Relational Database Design (3rd Edition), by Michael J. Hernandez</a>.</p><p>The data requirements and emerging organizational policies and practices are based upon the guidelines presented in <a href=\"http://www.amazon.com/New-World-Police-Accountability/dp/1452286876/\">The New World of Police Accountability by Sam Walker and Carol Archbold</a>. The <a href=\"https://www.sanjoseca.gov/DocumentCenter/View/29599\" target=\"_blank\">San Jose Independent Police Auditor (IPA) 2013 Year End Report</a>,\r\n which is the gold standard for government transparency regarding police\r\n misconduct complaints, provided essential guidance. We also reviewed \r\nnumerous <a href=\"http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70\" target=\"_blank\">Department of Justice (DOJ) reports on police-civilian contacts</a>. The most important of these was the <a href=\"http://www.justice.gov/sites/default/files/opa/press-releases/attachments/2015/03/04/ferguson_police_department_report.pdf\" target=\"_blank\">DOJ Investigation of the Ferguson Police Department</a>. We also receive ongoing guidance, from some of the <a href=\"http://openpolice.local/about/\" target=\"_blank\">top national experts in the field of police oversight and accountability</a>.</p><p>\r\n<br></p><h3 class=\"slBlueDark\">Software Specifications</h3><p>\r\nThe database design software we built exports Laravel data models and\r\n migration files in order to quickly auto-load these data structures to \r\nrun OpenPolice.org. The code was written using PHP, MySQL, AJAX,\r\n JS, and CSS. It was built atop the open source <a href=\"http://laravel.com/\" target=\"_blank\">Laravel coding framework</a> (<a href=\"http:///how-to-install-laravel\">also see: How To Install Laravel</a>). The full <a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\">Open Police source code</a> still needs better documentation, but is up <a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\">on GitHub</a> for wider collaboration with additional open-source programmers.</p><p><b>Itï¿½s like TurboTax ï¿½ but for police complaints.</b></p><p>In order to provide complainants with a dynamic user experience, we custom built a branching tree engine. Most <a href=\"https://en.wikipedia.org/wiki/Tree_%28data_structure%29\" target=\"_blank\">nodes</a>\r\n in this branching tree represent either a single form field or a page, \r\nwhich wraps multiple fields. After defining the full tree, and mapping \r\neach form field to its correct field in the database, the tree is <a href=\"https://en.wikipedia.org/wiki/Recursion#In_computer_science\" target=\"_blank\">recursively</a> traversed in order to create a sequence of prompts, which reveal the unique DNA of an individual police complaint.</p><p>Every node on the tree can check for prerequisites in earlier \r\nresponses, and some areas of the tree are set to be looped through. (For\r\n example, when adding multiple witnesses, officers, or victims.) This \r\napproach to form generation means that most data prompts and storage are\r\n the default automated behavior of a generalized engine. This also \r\nallows for A/B testing of any individual field for quality control.<a name=\"flowchart\"></a></p>',
 			'NodePromptAfter' => '<style> #blockWrap2312 { margin-top: 30px; } </style>',
 			'NodeOpts' => '67'
 		]);
@@ -24667,170 +24576,7 @@ allows for A/B testing of any individual field for quality control.<a name="flow
 			'NodeParentID' => '839',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="nodeAnchor"><a id="faq-general" name="faq-general"></a></div>
-<br /><br />
-<h2 class="slBlueDark">General Questions</h2>
-<br />
-
-<div class="nodeAnchor"><a id="what-can-users-do" name="what-can-users-do"></a></div>
-<a id="hidivBtnUsersCan" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->What can users do with OpenPolice.org?
-<div class="pull-right"><i id="hidivCrtUsersCan" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivUsersCan" class="disNon brd mTn5 p15">
-<p><b>OpenPolice.org allows users to ...</b></p>
-<ul>
-<li>Prepare and save a precise and complete police conduct report</li>
-<li>Upload photos, documents, video, and other evidence</li>
-<li>File your official report as easily as possible and within a department’s policies</li>
-<li>Publish your report online with privacy settings that fit your needs</li>
-<li>Match your report with civil rights attorneys</li>
-<li>Share your report with your social network</li>
-</ul>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="what-commendations" name="what-commendations"></a></div>
-<a id="hidivBtnCompliment" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Can users submit compliments to the police instead of complaints?
-<div class="pull-right"><i id="hidivCrtCompliment" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivCompliment" class="disNon brd mTn5 p15">
-<p>Yes! We love constitutional and community-oriented policing. That\'s why we also encourage users to submit compliments featuring one or more commendations. This is a shorter process but it has the same privacy options and formal submission as complaints.</p>
-<p>Users filing a complaint who create a thorough <a href="#what-is-gold-star">Gold Star complaint</a> are also given an opportunity to provide this kind of positive feedback about any officer involved in their complaint.</p>
-<ul>
-<li>Valor</li>
-<li>Lifesaving</li>
-<li>De-escalation</li>
-<li>Professionalism</li>
-<li>Fairness</li>
-<li>Constitutional Policing</li>
-<li>Compassion</li>
-<li>Community Service</li>
-</ul>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="when-launch" name="when-launch"></a></div>
-<a id="hidivBtnLaunch" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->When will you launch the OpenPolice.org app?
-<div class="pull-right"><i id="hidivCrtLaunch" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivLaunch" class="disNon brd mTn5 p15">
-<p>We plan to release a public version of the web app in the first half of 2019. 
-We are currently user testing a private version of the app with recent victims of police misconduct.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="officer-names" name="officer-names"></a></div>
-<a id="hidivBtnNames" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Will you publish officers’ names with complaints?
-<div class="pull-right"><i id="hidivCrtNames" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivNames" class="disNon brd mTn5 p15">
-<p>Of all the questions that we get about OpenPolice.org, this one is the most important and controversial. 
-In short, the public benefits of openness and transparency far outweigh the arguments in favor of police secrecy. 
-Therefore, <a href="#privacy">in some situations</a>, we will allow users to publish the names and descriptions of 
-officers on our website. All complaints will feature <a href="/uploads/only-allegations.png">a 
-disclaimer about the nature of the allegations and the known status of any official investigatory 
-actions</a>.</p>
-<p>This type of data transparency, where individual officers are connected to individual complaints, is vital to the public interest. In recent years, some government agencies have gestured toward transparency by releasing "de-identified" records that can’t be traced back to specific officers. But for the people whose police encounters build up such data sets, the big-picture trends are less important than revealing the names and histories of the officers who violated their rights. Moreover, such de-identified data makes it impossible to identify specific officers with a history of problematic behavior. </p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="false-complaints" name="false-complaints"></a></div>
-<a id="hidivBtnFalse" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->How will you deal with false and abusive complaints?
-<div class="pull-right"><i id="hidivCrtFalse" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivFalse" class="disNon brd mTn5 p15">
-<p>As a general rule, we believe that police agencies should be responsible for investigating the truthfulness of complaints filed against their officers. We, on the other hand, must approach evaluation of new complaints with a light touch.</p>
-<p>As new complaints arrive, our human administrators flag spam, abuse, or reports that have nothing whatsoever to do with police matters. We will also flag certain "frequent filers" who create repeat or frivolous complaints. If complaints pass this initial evaluation, we will help users to submit them to appropriate department investigators. (Such complaints will then be published on our website in accordance with the privacy settings of individual users.)</p>
-<p>At this point, <b>the responsibility of investigating these complaints falls with the law enforcement agency.</b> If an investigation reveals that the complaint is without merit, agencies have opportunities to publish their findings with OpenPolice.org. Through this process, departments can openly and transparently address all complaint allegations.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="track" name="track"></a></div>
-<a id="hidivBtn18000" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->How do you keep track of 18,000 police departments?
-<div class="pull-right"><i id="hidivCrt18000" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidiv18000" class="disNon brd mTn5 p15">
-<p>Thanks to our team of skilled volunteer researchers, we are building the nation’s most comprehensive open-source 
-directory of police departments. This directory tool allows us to automatically submit new user complaints to 
-appropriate department contacts — if any are available. It also keeps track of the specific ways that departments 
-accept — or <em>don’t accept</em> — complaints.</p>
-<p>Collecting up-to-date data on all 18,000 police departments is a long-term objective. Fortunately, we don\'t need to 
-have data on all 18,000 departments for the service to work. That’s because we’ve built a rapid-response system that 
-allows researchers to quickly gather data on departments not yet in our system. So if, for example, we receive a new 
-complaint against a tiny not-yet-documented department, our researchers can gather data for that user within 24 hours.
-</p>
-<p>Learn how to <a href="/volunteer">become an OpenPolice.org rapid-response research 
-volunteer here!</a></p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="download-app" name="download-app"></a></div>
-<a id="hidivBtnApp" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Can I download an iOS or Android version of the app?
-<div class="pull-right"><i id="hidivCrtApp" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivApp" class="disNon brd mTn5 p15">
-<p>Not yet. We’ve built the first version of OpenPolice.org as a mobile-responsive web app. So the 
-software is accessible on any type of web browser, operating system, or mobile device. We’d like to eventually build 
-downloadable native apps for Android and iOS if public demand and funding makes this possible.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="video" name="video"></a></div>
-<a id="hidivBtnVideo" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Does the app record video?
-<div class="pull-right"><i id="hidivCrtVideo" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivVideo" class="disNon brd mTn5 p15">
-<p>OpenPolice.org does not record or store video. However, when users create OpenPolice.org reports, they can share links to 
-video evidence uploaded to popular video sites such as YouTube or Vimeo.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="police-sue" name="police-sue"></a></div>
-<a id="hidivBtnSue" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Are you prepared for police to sue you?
-<div class="pull-right"><i id="hidivCrtSue" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivSue" class="disNon brd mTn5 p15">
-<p>Yes. We understand that we are likely to be sued by police officers who will claim that complaints published on our 
-website are false and defamatory. In anticipation of this, we’ve partnered with pro bono defamation attorneys to help 
-minimize our legal exposure. Our attorneys advise us against publishing too many details of our strategy. However, 
-we\'ve developed OpenPolice.org in a manner that protects us from defamation claims under 
-<a href="https://www.eff.org/issues/cda230" target="_blank">Section 230 of the Communications Decency Act (CDA)</a>.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="make-money" name="make-money"></a></div>
-<a id="hidivBtnMoney" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->How do you make money from this?
-<div class="pull-right"><i id="hidivCrtMoney" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivMoney" class="disNon brd mTn5 p15">
-<p>This project is free to the public, because we believe that open and accessible information about police actions and 
-behavior is essential to secure public trust in law enforcement. For ongoing operations, 
-<a href="/donate">we depend on (tax-deductible!) private donations</a>.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="contribute" name="contribute"></a></div>
-<a id="hidivBtnContribute" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->How I can contribute?
-<div class="pull-right"><i id="hidivCrtContribute" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivContribute" class="disNon brd mTn5 p15">
-<p>We are currently looking for collaborators, partners, and investors. If you’re an app developer or web designer, 
-we\'d love to talk to you about contributing to the site’s development. (Check out 
-<a href="https://github.com/flexyourrights/openpolice" target="_blank">our Github repo</a>, and more 
-<a href="/web-app-technical-specs">about the software\'s technical specifications</a>.) Please 
-<a href="/contact">email us if you\'re interested</a>!</p>
-<p>You can also <a href="/donate">make a tax-deductible donation here</a>.</p>
-</div>',
+			'NodePromptText' => '<div class=\"nodeAnchor\"><a id=\"faq-general\" name=\"faq-general\"></a></div>\r\n<br /><br />\r\n<h2 class=\"slBlueDark\">General Questions</h2>\r\n<br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"what-can-users-do\" name=\"what-can-users-do\"></a></div>\r\n<a id=\"hidivBtnUsersCan\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>What can users do with OpenPolice.org?\r\n<div class=\"pull-right\"><i id=\"hidivCrtUsersCan\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivUsersCan\" class=\"disNon brd mTn5 p15\">\r\n<p><b>OpenPolice.org allows users to ...</b></p>\r\n<ul>\r\n<li>Prepare and save a precise and complete police conduct report</li>\r\n<li>Upload photos, documents, video, and other evidence</li>\r\n<li>File your official report as easily as possible and within a departmentï¿½s policies</li>\r\n<li>Publish your report online with privacy settings that fit your needs</li>\r\n<li>Match your report with civil rights attorneys</li>\r\n<li>Share your report with your social network</li>\r\n</ul>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"what-commendations\" name=\"what-commendations\"></a></div>\r\n<a id=\"hidivBtnCompliment\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Can users submit compliments to the police instead of complaints?\r\n<div class=\"pull-right\"><i id=\"hidivCrtCompliment\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivCompliment\" class=\"disNon brd mTn5 p15\">\r\n<p>Yes! We love constitutional and community-oriented policing. That\\'s why we also encourage users to submit compliments featuring one or more commendations. This is a shorter process but it has the same privacy options and formal submission as complaints.</p>\r\n<p>Users filing a complaint who create a thorough <a href=\"#what-is-gold-star\">Gold Star complaint</a> are also given an opportunity to provide this kind of positive feedback about any officer involved in their complaint.</p>\r\n<ul>\r\n<li>Valor</li>\r\n<li>Lifesaving</li>\r\n<li>De-escalation</li>\r\n<li>Professionalism</li>\r\n<li>Fairness</li>\r\n<li>Constitutional Policing</li>\r\n<li>Compassion</li>\r\n<li>Community Service</li>\r\n</ul>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"when-launch\" name=\"when-launch\"></a></div>\r\n<a id=\"hidivBtnLaunch\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>When will you launch the OpenPolice.org app?\r\n<div class=\"pull-right\"><i id=\"hidivCrtLaunch\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivLaunch\" class=\"disNon brd mTn5 p15\">\r\n<p>We plan to release a public version of the web app in the first half of 2019. \r\nWe are currently user testing a private version of the app with recent victims of police misconduct.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"officer-names\" name=\"officer-names\"></a></div>\r\n<a id=\"hidivBtnNames\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Will you publish officersï¿½ names with complaints?\r\n<div class=\"pull-right\"><i id=\"hidivCrtNames\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivNames\" class=\"disNon brd mTn5 p15\">\r\n<p>Of all the questions that we get about OpenPolice.org, this one is the most important and controversial. \r\nIn short, the public benefits of openness and transparency far outweigh the arguments in favor of police secrecy. \r\nTherefore, <a href=\"#privacy\">in some situations</a>, we will allow users to publish the names and descriptions of \r\nofficers on our website. All complaints will feature <a href=\"/uploads/only-allegations.png\">a \r\ndisclaimerï¿½about the nature of the allegations and the known status of any official investigatory \r\nactions</a>.</p>\r\n<p>This type of data transparency, where individual officers are connected to individual complaints, is vital to the public interest. In recent years, some government agencies have gestured toward transparency by releasing \"de-identified\" records that canï¿½t be traced back to specific officers. But for the people whose police encounters build up such data sets, the big-picture trends are less important than revealing the names and histories of the officers who violated their rights. Moreover, such de-identified data makes it impossible to identify specific officers with a history of problematic behavior. </p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"false-complaints\" name=\"false-complaints\"></a></div>\r\n<a id=\"hidivBtnFalse\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>How will you deal with false and abusive complaints?\r\n<div class=\"pull-right\"><i id=\"hidivCrtFalse\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivFalse\" class=\"disNon brd mTn5 p15\">\r\n<p>As a general rule, we believe that police agencies should be responsible for investigating the truthfulness of complaints filed against their officers. We, on the other hand, must approach evaluation of new complaints with a light touch.</p>\r\n<p>As new complaints arrive, our human administrators flag spam, abuse, or reports that have nothing whatsoever to do with police matters. We will also flag certain \"frequent filers\" who create repeat or frivolous complaints. If complaints pass this initial evaluation, we will help users to submit them to appropriate department investigators. (Such complaints will then be published on our website in accordance with the privacy settings of individual users.)</p>\r\n<p>At this point, <b>the responsibility of investigating these complaints falls with the law enforcement agency.</b> If an investigation reveals that the complaint is without merit, agencies have opportunities to publish their findings with OpenPolice.org. Through this process, departments can openly and transparently address all complaint allegations.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"track\" name=\"track\"></a></div>\r\n<a id=\"hidivBtn18000\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>How do you keep track of 18,000 police departments?\r\n<div class=\"pull-right\"><i id=\"hidivCrt18000\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidiv18000\" class=\"disNon brd mTn5 p15\">\r\n<p>Thanks to our team of skilled volunteer researchers, we are building the nationï¿½s most comprehensive open-source \r\ndirectory of police departments. This directory tool allows us to automatically submit new user complaints to \r\nappropriate department contacts ï¿½ if any are available. It also keeps track of the specific ways that departments \r\naccept ï¿½ or <em>donï¿½t accept</em> ï¿½ complaints.</p>\r\n<p>Collecting up-to-date data on all 18,000 police departments is a long-term objective. Fortunately, we don\\'t need to \r\nhave data on all 18,000 departments for the service to work. Thatï¿½s because weï¿½ve built a rapid-response system that \r\nallows researchers to quickly gather data on departments not yet in our system. So if, for example, we receive a new \r\ncomplaint against a tiny not-yet-documented department, our researchers can gather data for that user within 24 hours.\r\n</p>\r\n<p>Learn how to <a href=\"/volunteer\">become an OpenPolice.org rapid-response research \r\nvolunteer here!</a></p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"download-app\" name=\"download-app\"></a></div>\r\n<a id=\"hidivBtnApp\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Can I download an iOS or Android version of the app?\r\n<div class=\"pull-right\"><i id=\"hidivCrtApp\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivApp\" class=\"disNon brd mTn5 p15\">\r\n<p>Not yet. Weï¿½ve built the first version of OpenPolice.org as a mobile-responsive web app. So the \r\nsoftware is accessible on any type of web browser, operating system, or mobile device. Weï¿½d like to eventually build \r\ndownloadable native apps for Android and iOS if public demand and funding makes this possible.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"video\" name=\"video\"></a></div>\r\n<a id=\"hidivBtnVideo\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Does the app record video?\r\n<div class=\"pull-right\"><i id=\"hidivCrtVideo\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivVideo\" class=\"disNon brd mTn5 p15\">\r\n<p>OpenPolice.org does not record or store video. However, when users create OpenPolice.org reports, they can share links to \r\nvideo evidence uploaded to popular video sites such as YouTube or Vimeo.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"police-sue\" name=\"police-sue\"></a></div>\r\n<a id=\"hidivBtnSue\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Are you prepared for police to sue you?\r\n<div class=\"pull-right\"><i id=\"hidivCrtSue\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivSue\" class=\"disNon brd mTn5 p15\">\r\n<p>Yes. We understand that we are likely to be sued by police officers who will claim that complaints published on our \r\nwebsite are false and defamatory. In anticipation of this, weï¿½ve partnered with pro bono defamation attorneys to help \r\nminimize our legal exposure. Our attorneys advise us against publishing too many details of our strategy. However, \r\nwe\\'ve developed OpenPolice.org in a manner that protects us from defamation claims under \r\n<a href=\"https://www.eff.org/issues/cda230\" target=\"_blank\">Section 230 of the Communications Decency Act (CDA)</a>.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"make-money\" name=\"make-money\"></a></div>\r\n<a id=\"hidivBtnMoney\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>How do you make money from this?\r\n<div class=\"pull-right\"><i id=\"hidivCrtMoney\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivMoney\" class=\"disNon brd mTn5 p15\">\r\n<p>This project is free to the public, because we believe that open and accessible information about police actions and \r\nbehavior is essential to secure public trust in law enforcement. For ongoing operations, \r\n<a href=\"/donate\">we depend on (tax-deductible!) private donations</a>.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"contribute\" name=\"contribute\"></a></div>\r\n<a id=\"hidivBtnContribute\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>How I can contribute?\r\n<div class=\"pull-right\"><i id=\"hidivCrtContribute\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivContribute\" class=\"disNon brd mTn5 p15\">\r\n<p>We are currently looking for collaborators, partners, and investors. If youï¿½re an app developer or web designer, \r\nwe\\'d love to talk to you about contributing to the siteï¿½s development. (Check out \r\n<a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\">our Github repo</a>, and more \r\n<a href=\"/web-app-technical-specs\">about the software\\'s technical specifications</a>.) Please \r\n<a href=\"/contact\">email us if you\\'re interested</a>!</p>\r\n<p>You can also <a href=\"/donate\">make a tax-deductible donation here</a>.</p>\r\n</div>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -24846,63 +24592,7 @@ we\'d love to talk to you about contributing to the site’s development. (Check
 			'NodeTree' => '19',
 			'NodeParentID' => '843',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h1 class="entry-title">4 Terrible Ways Departments Block Police Complaints</h1>
-<time class="updated" datetime="2015-11-24T19:22:18+00:00">November 24, 2015</time>
-<p class="byline author vcard">By <a href="https://openpolicecomplaints.org/author/steve/" rel="author" class="fn">Steve Silverman</a></p>
-    
-<p>Police complaints represent a basic First Amendment right to 
-petition the government for a redress of grievances. But here are four 
-ways police departments disregard this fundamental right.</p><h3>1) Police Station Intimidation</h3><p>For those of you who are brave enough to file police complaints 
-in-person, don’t expect service with a smile. Your typical customer 
-service will match the speed of the DMV with the friendliness of the 
-TSA. In other words, not good.</p><h2>
-<iframe src="https://www.youtube.com/embed/w8v7lF5ttlQ" height="225" frameborder="0" width="300"></iframe>
-<br></h2><p>In 2014, the ACLU sent undercover testers into ten District of 
-Columbia police stations. The testers asked officers for information on 
-how to file a police complaint. Officers in six of the ten stations 
-failed to give the correct way to file a complaint. Officers at two of 
-the stations&nbsp;<a href="http://www.washingtontimes.com/news/2014/mar/2/aclu-dc-police-provide-bad-information-fail-compla/?page=all">reacted to requests with hostility</a>.</p><p>Sometimes brave citizens try to record these moments. When they do, police tend to respond with additional acts of&nbsp;<a href="https://youtu.be/HrJqTBuO-yY">intimidation</a>, including&nbsp;<a href="https://youtu.be/jfLwdyMbSHE">threats of arrest</a>.</p><h2>
-<br></h2><h3>2) Police Departments Fail to Embrace Technology</h3><p>Do you prefer to file a complaint <em>without</em> upsetting a grumpy
- desk officer? If so, you might Google to find another way to file a 
-complaint. To make things more confusing, there are roughly 18,000 state
- and local police agencies in the United States. And each one has its 
-own special way of collecting police complaints.</p><p>Regrettably, most departments fail to provide any useful online 
-information about how to file complaints. (Go figure!) The few that do 
-rarely allow you to submit complaints online. Instead, they usually make
- you send paper complaints by mail or fax. Often departments claim that 
-complaints can only be submitted in-person. (See Failure #1.)</p><h2>
-<br></h2><h3>3) Department Rules Block Complaints Investigation</h3><p>Perhaps you couldn’t find a working fax machine. Instead, you mailed 
-your complaint to the department. (You even paid more for delivery 
-confirmation!) But did you know that your complaint could be rejected 
-before it’s ever investigated? A 2014 Department of Justice (DOJ) <a href="http://www.washingtonpost.com/politics/cleveland-police-tactics-violated-rights-of-citizens-justice-department-probe-finds/2014/12/04/db93f0e0-7bfd-11e4-b821-503cc7efed9e_story.html">investigation into the Cleveland Department of Police (CDP)</a> exposed some of the tricks departments use to get away with this.</p><p>First, department rules allow them to “administratively withdraw” 
-complaints for petty reasons that have nothing to do with the substance 
-of a complaint. For example, CDP investigators would withdraw excessive 
-force complaints because there was no signature on the form. Sometimes 
-they withdrew complaints because they were in someone else’s 
-handwriting. Other times investigators made weak attempts to contact 
-complainants. Then they quickly withdrew their complaint due to a “lack 
-of response.”</p>
-<a href="https://openpolicecomplaints.org/app/uploads/2015/11/stephen-hawking.png"><img class="size-medium wp-image-41" src="https://openpolicecomplaints.org/app/uploads/2015/11/stephen-hawking-300x199.png" alt="stephen hawking image" height="199" width="300"></a>
-<p><i>Sorry, Professor. We’ll need your handwritten signature to investigate your complaint. (Bruno Vincent/Getty Images)</i></p>
-<p>Second, many of these rules were part of the collective bargaining 
-agreement between the city and the police union. Across the country, 
-similar union rules and statewide&nbsp;<a href="https://www.washingtonpost.com/news/the-watch/wp/2015/04/24/the-police-officers-bill-of-rights/">Law Enforcement Officers’ Bill of Rights laws</a>&nbsp;make it easier for police to avoid investigating complaints.</p><h2>
-<br></h2><h3>4) Local Laws&nbsp;Keep Police Complaints Secret</h3><p>Even if you’re aware that police often do a poor job investigating 
-complaints, you might mail in a complaint anyway. You can congratulate 
-yourself, because your “official record” of police misconduct will be 
-open to the public. Right? Don’t count on it.</p><p>Do you remember that NYPD cop who killed Eric Garner with a 
-chokehold? Afterwards, civil rights attorneys requested records of 
-sustained past complaints against Officer Pantaleo. But the city <a href="http://www.nytimes.com/2015/02/05/nyregion/new-challenges-to-secrecy-that-protects-police-files.html">refused to release them</a>!&nbsp;They&nbsp;invoked <a href="http://www.cjr.org/b-roll/how_new_york_protects_police_r.php?page=all&amp;print=true#sthash.mQQDhjt8.dpuf">a state law</a> that’s been used to keep secret nearly every state record dealing with individual police misconduct.</p>
-<a href="https://openpolicecomplaints.org/app/uploads/2015/11/eric-garner-daniel-pantaleo.jpg"><img class="size-medium wp-image-43" src="https://openpolicecomplaints.org/app/uploads/2015/11/eric-garner-daniel-pantaleo-300x169.jpg" alt="Daniel Pantaleo chokes Eric Garner" height="169" width="300"></a>
-<p><i>City of New York: We can’t confirm or deny the existence of past complaints against Mr. Pantaleo.</i></p>
-<p>Under the law, officers’ personnel records cannot be publicly released without a judge’s approval. This includes&nbsp;<a href="http://data.newsday.com/crime/police-misconduct/">instances when officers have been prosecuted or disciplined for misconduct</a>.&nbsp;In
- other words, if you submit a police complaint in New York, your report 
-is no longer open to the public. Instead, it’s shielded from public 
-view, because it’s tied to an officer’s confidential personnel file!</p><p><strong>Update:</strong> A New York judge&nbsp;<a href="http://www.nytimes.com/2015/07/24/nyregion/judge-orders-release-of-misconduct-findings-against-officer-in-eric-garner-case.html">ordered the release Officer Pantaleo’s prior misconduct record</a>&nbsp;but&nbsp;<a href="http://www.nydailynews.com/new-york/nyc-appeals-eric-garner-chokehold-complaint-info-release-article-1.2340259">The City appealed the decision</a>. To date, no records have been released.</p><h2>
-<br></h2><h3>Wait, There’s Hope!</h3><p>Even though most police departments have a terrible police complaints
- process — we can do better. That’s exactly what&nbsp;OpenPolice.org 
-is working to address. To receive updates about our progress, 
-please sign up to&nbsp;our email list below.</p>'
+			'NodePromptText' => '<h1 class=\"entry-title\">4 Terrible Ways Departments Block Police Complaints</h1>\r\n<time class=\"updated\" datetime=\"2015-11-24T19:22:18+00:00\">November 24, 2015</time>\r\n<p class=\"byline author vcard\">By <a href=\"https://openpolicecomplaints.org/author/steve/\" rel=\"author\" class=\"fn\">Steve Silverman</a></p>\r\n    \r\n<p>Police complaints represent a basic First Amendment right to \r\npetition the government for a redress of grievances. But here are four \r\nways police departments disregard this fundamental right.</p><h3>1) Police Station Intimidation</h3><p>For those of you who are brave enough to file police complaints \r\nin-person, donï¿½t expect service with a smile. Your typical customer \r\nservice will match the speed of the DMV with the friendliness of the \r\nTSA. In other words, not good.</p><h2>\r\n<iframe src=\"https://www.youtube.com/embed/w8v7lF5ttlQ\" height=\"225\" frameborder=\"0\" width=\"300\"></iframe>\r\n<br></h2><p>In 2014, the ACLU sent undercover testers into ten District of \r\nColumbia police stations. The testers asked officers for information on \r\nhow to file a police complaint. Officers in six of the ten stations \r\nfailed to give the correct way to file a complaint. Officers at two of \r\nthe stations&nbsp;<a href=\"http://www.washingtontimes.com/news/2014/mar/2/aclu-dc-police-provide-bad-information-fail-compla/?page=all\">reacted to requests with hostility</a>.</p><p>Sometimes brave citizens try to record these moments. When they do, police tend to respond with additional acts of&nbsp;<a href=\"https://youtu.be/HrJqTBuO-yY\">intimidation</a>, including&nbsp;<a href=\"https://youtu.be/jfLwdyMbSHE\">threats of arrest</a>.</p><h2>\r\n<br></h2><h3>2) Police Departments Fail to Embrace Technology</h3><p>Do you prefer to file a complaint <em>without</em> upsetting a grumpy\r\n desk officer? If so, you might Google to find another way to file a \r\ncomplaint. To make things more confusing, there are roughly 18,000 state\r\n and local police agencies in the United States. And each one has its \r\nown special way of collecting police complaints.</p><p>Regrettably, most departments fail to provide any useful online \r\ninformation about how to file complaints. (Go figure!) The few that do \r\nrarely allow you to submit complaints online. Instead, they usually make\r\n you send paper complaints by mail or fax. Often departments claim that \r\ncomplaints can only be submitted in-person. (See Failure #1.)</p><h2>\r\n<br></h2><h3>3) Department Rules Block Complaints Investigation</h3><p>Perhaps you couldnï¿½t find a working fax machine. Instead, you mailed \r\nyour complaint to the department. (You even paid more for delivery \r\nconfirmation!) But did you know that your complaint could be rejected \r\nbefore itï¿½s ever investigated? A 2014 Department of Justice (DOJ) <a href=\"http://www.washingtonpost.com/politics/cleveland-police-tactics-violated-rights-of-citizens-justice-department-probe-finds/2014/12/04/db93f0e0-7bfd-11e4-b821-503cc7efed9e_story.html\">investigation into the Cleveland Department of Police (CDP)</a> exposed some of the tricks departments use to get away with this.</p><p>First, department rules allow them to ï¿½administratively withdrawï¿½ \r\ncomplaints for petty reasons that have nothing to do with the substance \r\nof a complaint. For example, CDP investigators would withdraw excessive \r\nforce complaints because there was no signature on the form. Sometimes \r\nthey withdrew complaints because they were in someone elseï¿½s \r\nhandwriting. Other times investigators made weak attempts to contact \r\ncomplainants. Then they quickly withdrew their complaint due to a ï¿½lack \r\nof response.ï¿½</p>\r\n<a href=\"https://openpolicecomplaints.org/app/uploads/2015/11/stephen-hawking.png\"><img class=\"size-medium wp-image-41\" src=\"https://openpolicecomplaints.org/app/uploads/2015/11/stephen-hawking-300x199.png\" alt=\"stephen hawking image\" height=\"199\" width=\"300\"></a>\r\n<p><i>Sorry, Professor. Weï¿½ll need your handwritten signature to investigate your complaint. (Bruno Vincent/Getty Images)</i></p>\r\n<p>Second, many of these rules were part of the collective bargaining \r\nagreement between the city and the police union. Across the country, \r\nsimilar union rules and statewide&nbsp;<a href=\"https://www.washingtonpost.com/news/the-watch/wp/2015/04/24/the-police-officers-bill-of-rights/\">Law Enforcement Officersï¿½ Bill of Rights laws</a>&nbsp;make it easier for police to avoid investigating complaints.</p><h2>\r\n<br></h2><h3>4) Local Laws&nbsp;Keep Police Complaints Secret</h3><p>Even if youï¿½re aware that police often do a poor job investigating \r\ncomplaints, you might mail in a complaint anyway. You can congratulate \r\nyourself, because your ï¿½official recordï¿½ of police misconduct will be \r\nopen to the public. Right? Donï¿½t count on it.</p><p>Do you remember that NYPD cop who killed Eric Garner with a \r\nchokehold? Afterwards, civil rights attorneys requested records of \r\nsustained past complaints against Officer Pantaleo. But the city <a href=\"http://www.nytimes.com/2015/02/05/nyregion/new-challenges-to-secrecy-that-protects-police-files.html\">refused to release them</a>!&nbsp;They&nbsp;invoked <a href=\"http://www.cjr.org/b-roll/how_new_york_protects_police_r.php?page=all&amp;print=true#sthash.mQQDhjt8.dpuf\">a state law</a> thatï¿½s been used to keep secret nearly every state record dealing with individual police misconduct.</p>\r\n<a href=\"https://openpolicecomplaints.org/app/uploads/2015/11/eric-garner-daniel-pantaleo.jpg\"><img class=\"size-medium wp-image-43\" src=\"https://openpolicecomplaints.org/app/uploads/2015/11/eric-garner-daniel-pantaleo-300x169.jpg\" alt=\"Daniel Pantaleo chokes Eric Garner\" height=\"169\" width=\"300\"></a>\r\n<p><i>City of New York: We canï¿½t confirm or deny the existence of past complaints against Mr. Pantaleo.</i></p>\r\n<p>Under the law, officersï¿½ personnel records cannot be publicly released without a judgeï¿½s approval. This includes&nbsp;<a href=\"http://data.newsday.com/crime/police-misconduct/\">instances when officers have been prosecuted or disciplined for misconduct</a>.&nbsp;In\r\n other words, if you submit a police complaint in New York, your report \r\nis no longer open to the public. Instead, itï¿½s shielded from public \r\nview, because itï¿½s tied to an officerï¿½s confidential personnel file!</p><p><strong>Update:</strong> A New York judge&nbsp;<a href=\"http://www.nytimes.com/2015/07/24/nyregion/judge-orders-release-of-misconduct-findings-against-officer-in-eric-garner-case.html\">ordered the release Officer Pantaleoï¿½s prior misconduct record</a>&nbsp;but&nbsp;<a href=\"http://www.nydailynews.com/new-york/nyc-appeals-eric-garner-chokehold-complaint-info-release-article-1.2340259\">The City appealed the decision</a>. To date, no records have been released.</p><h2>\r\n<br></h2><h3>Wait, Thereï¿½s Hope!</h3><p>Even though most police departments have a terrible police complaints\r\n process ï¿½ we can do better. Thatï¿½s exactly what&nbsp;OpenPolice.org \r\nis working to address. To receive updates about our progress, \r\nplease sign up to&nbsp;our email list below.</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 845,
@@ -24910,180 +24600,7 @@ please sign up to&nbsp;our email list below.</p>'
 			'NodeParentID' => '843',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h1 class="entry-title">The Future of Civilian Oversight</h1>
-      <time class="updated" datetime="2015-12-12T20:00:31+00:00">December 12, 2015</time>
-<p class="byline author vcard">By <a href="https://openpolicecomplaints.org/author/steve/" rel="author" class="fn">Steve Silverman</a></p>
-    
-<p>Earlier this month&nbsp;I spoke at a conference called <em>Looking Toward the Future of Civilian Oversight</em>. The event was co-sponsored by the <a href="https://nacole.org/">National Association for Civilian Oversight of Law Enforcement (NACOLE)</a>
- and the UDC School of Law. This was my first public introduction of 
-Flex Your Rights’ new endeavor, OpenPolice.org.</p><p>My presentation remarks appear below&nbsp;this simulation of the latest OpenPolice.org web app prototype.</p><p>
-
-<iframe src="https://www.youtube.com/embed/FzMMQoRkBeE" allowfullscreen="allowfullscreen" height="315" frameborder="0" width="560"></iframe>
-
-<br></p><p><a href="https://openpolicecomplaints.org/civilian-oversight-future/#Failure">Oversight Failure 101</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Secrecy">It’s the Secrecy, Stupid</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Future">The Future of OpenPolice.org</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Unified">A Unified Police Complaints Platform</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Trust">Building Trust with Oversight Professionals</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Openness">How Openness Pushes Accountability</a><br>
-<a href="https://openpolicecomplaints.org/civilian-oversight-future/#Donate">Donate &amp; Volunteer</a><br>
-<a name="Failure"></a><br>
-<strong>Oversight Failure 101</strong><br>
-In July 2007, Edward Nance, an African-American cable company employee 
-and part-time high school referee got pulled over by two officers in 
-Chicago’s South Side. Nance had no criminal record, but he was stopped 
-because he didn’t have a front license plate. Things quickly turned bad 
-for him.</p><p>
-<br></p><p>When Nance asked the officers <em>why</em> they pulled him over, the 
-first officer told him to “get the fuck out of the car!” The officer 
-then slammed his head on the car’s hood, causing injuries to his neck 
-and face. The second officer forcibly handcuffed Nance, jerking his arms
- back violently, injuring tendons in his shoulders as well as one 
-rotator cuff. He required two shoulder surgeries to repair the damage.</p><p>
-<br></p><p>About two years later, a federal jury found the officers had used 
-excessive force. They awarded Nance $350,000 in damages for his 
-injuries. The judge then ordered the city to pay an additional $180,000 
-to cover his legal fees. However, Chicago’s Independent Police Review 
-Authority found all allegations against the two officers to be <em>not sustained</em>. They decided there was “no way to determine” the precise cause of the complainant’s injuries. Neither officer was disciplined.</p><p>
-<br></p><p>On October 20, 2014, a police dashcam captured footage of Chicago 
-Police Officer Jason Van Dyke firing 16 shots at 17-year-old Laquan 
-McDonald, who was armed with a 3-inch knife. We now know about this 
-story despite <a href="http://www.chicagotribune.com/news/local/breaking/ct-judge-orders-release-of-video-showing-fatal-shooting-by-police-officer-20151119-story.html">the bad faith efforts by the City of Chicago to block the release of that horrible video</a>.
- It’s inevitable release forced City officials to finally bring 
-first-degree murder charges against Officer Van Dyke — who just so 
-happens to be <a href="http://www.chicagotribune.com/news/ct-police-shooting-16-shots-04---met-20150425-story.html">the same officer who violently handcuffed Edward Nance</a>&nbsp;in 2007.</p><p>
-<br></p><p>When he heard about this connection, Nance burst into tears. He said 
-“It makes me feel like it could have been me. If they had done something
- about this cop in my case, this young boy would still be alive.”<br>
-<a name="Secrecy"></a><br>
-<strong>It’s the Secrecy, Stupid</strong><br>
-We now know that during Van Dyke’s 14-year career at least <a href="http://www.theguardian.com/us-news/2015/nov/25/laquan-mcdonald-jason-van-dyke-misconduct-chicago-police">20 civilian complaints have been filed against him</a>.
- Most of them involved allegations of excessive force, and at least one 
-complaint alleges he used a racial slur. None of these complaints led to
- disciplinary action.</p><p>
-<br></p><p>But we only know now about Van Dyke’s complaint history, because this
- too was just made public last month. This is thanks to a public 
-database created by the non-profit group, <a href="http://invisible.institute/police-data/">The Invisible Institute</a>. The <a href="http://cpdb.co/data/bzadKL/citizens-police-data-project">massive dataset includes 56,362 allegations of misconduct filed against 8,562 Chicago Police officers</a>
- between May 2001 and September 2015. This is a beautiful and powerful 
-model for how this sort of OpenPolice.org data can be used and 
-visualized. For example, you can view details of the <a href="http://cpdb.co/officer/jason-van-dyke/7655">20 complaints filed against&nbsp;Jason Van Dyke</a>.</p><p>
-<br></p><p>It took 10 years of litigation and FOIA requests by a platoon of 
-public interest lawyers to force the City to cough up this data. This is
- a scandal itself. But this sort of institutional secrecy is hardly 
-unique to Chicago. Secrecy is a <em>feature</em> of state and local 
-policing agencies across the country. So it’s no surprise that wherever 
-we find departments whose workings are cloaked in secrecy — this is 
-where we find the darkest acts of police misconduct being ignored or 
-covered up.</p><p>
-<br></p><p>The good news is that we are now in the dawn of a Golden Age of 
-police data collection. This is thanks to the openness of the Internet. 
-And this openness is accelerating the advancement of a universal, common
- language for how we can define and categorize policing data from all 
-across the country.<br>
-<a name="Future"></a><br>
-<strong>The Future of OpenPolice.org</strong><br>
-I believe we are moving towards a world with universal,&nbsp;<em>real-time access</em>
- to civilian police complaints data. This real-time data will be shared 
-directly by the complainants themselves who will be able to control who 
-has access to their <a href="http://www.economist.com/news/science-and-technology/21660966-can-big-databases-be-kept-both-anonymous-and-useful-well-see-you-anon">confidential and personal information</a>.
- Real-time police complaints data will be accessible to community groups
- promoting equitable policing. The data will be accessible to civil 
-rights attorneys working to identify departments with <a href="http://samuelwalker.net/issues/federal-pattern-or-practice-litigation/">patterns or practices of police misconduct</a>.
- Real-time civilian complaints data will become an increasingly 
-important management tool for conscientious police chiefs working to 
-build community-oriented policing cultures.</p><p>
-<br></p><p>For police oversight professionals, real-time police complaints will 
-allow us to spend less time collecting, organizing and interpreting 
-hand-written paper complaints. Instead, we can spend more time <em>investigating</em>
- important complaints. This will make it easier to identify officers 
-with chronic misbehavior problems and hold them accountable <em>before</em> they become involved in a deadly but avoidable use of force incident.</p><p>
-<br></p><p>What I’m going to show you is <a href="https://youtu.be/FzMMQoRkBeE">the first prototype of the OpenPolice.org web application</a>. This service will be <em>free</em> to users. The data we collect will be <em>open</em> to the public — with the exception of certain personally-identifiable information. The interface is modeled after <a href="https://youtu.be/CAFq9i3DUq4">TurboTax </a>—&nbsp;but instead of helping with your tax returns, we’re streamlining police complaints.<br>
-<a name="Unified"></a><br>
-<strong>A Unified Police Complaints Platform</strong><br>
-Before we did any coding on the web app, my <a href="https://openpolicecomplaints.org/about/#Development-Team">technical team</a> spent about eight months designing <a href="https://app.openpolicecomplaints.org/dbdesign/">our relational database model</a>. We wanted to make sure all of our data structures — including all the <em>people</em>, <em>places</em>, <em>things</em>, and <em>events</em>
- we capture — aligned with the most universal categories and definitions
- that fit with a national police complaints collection service.&nbsp;We also 
-needed to make sure that our service could accommodate complaints that 
-can be submitted to every one of the roughly 18,000 state and local law 
-enforcement agencies in the United States.</p><p>
-<br></p><p>I won’t bore you with details of the research I’ve done to identify 
-our data needs — but suffice it to say, I’ve reviewed every recent <a href="http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70">DOJ report on police-civilian contacts</a> I could find. I’ve examined the recent annual reports from the major <a href="https://nacole.org/resources/u-s-oversight-agency-websites/">civilian investigative agencies</a> that release&nbsp;reports. And I’ve been working with some of the <a href="https://openpolicecomplaints.org/about/#Advisory-Board">top experts in the field of police oversight</a>.</p><p>
-<br></p><p>These ongoing discussions with police oversight professionals reveal 
-some important technical challenges of maintaining&nbsp;a unified police 
-complaints platform. For example, many large municipal oversight 
-agencies require that complaints be submitted on a government paper form
- in order to be investigated by their offices. (They usually require the
- complainant’s handwritten signature too.) <a href="https://openpolicecomplaints.org/how-departments-block-police-complaints/">These sorts of laws primarily serve to block otherwise legitimate complaints from being investigated</a>.
- However, in order to make sure OpenPolice.org complaints are best positioned to be
- investigated, we will find ways to adapt to these types of constraints.<br>
-<a name="Trust"></a><br>
-<strong>Building Trust with Oversight Professionals</strong><br>
-One question I’m frequently asked is <em>how are we going to deal with malicious and fraudulent complaints?</em>
- This is an important question, because abusive complaints threaten the 
-integrity of our data and our institutional trust. However, we’ve 
-developed some strategic countermeasures.</p><p>
-<br></p><p>First, the design of our web forms is our first line of defense. In 
-order for a user’s data to become relevant, they must complete the 
-complaint-creation process. Like TurboTax, this requires a moderate 
-investment of each user’s time. While each individual question is easy 
-to answer, there are more questions than a casual troll trying to submit
- a malicious complaint will probably be willing to answer.</p><p>
-<br></p><p>Some trolls, however, are persistent. That’s why we’ll require a 
-second line defense of trained human administrators. Every new complaint
- we receive must first be reviewed by our admins, who will tag 
-complaints that don’t require further investigation. These will include 
-overtly malicious complaints as well as complaints that have nothing to 
-do with the police (e.g. landlord or employment disputes). OpenPolice.org admins 
-will also tag complaints that are unlikely to be based on reality.</p><p>
-<br></p><p>The more human effort we put into reviewing new complaints, the more 
-investigators will trust our complaints. That’s why every complaint we 
-submit to oversight investigators must include enough information for 
-them to begin an investigation.&nbsp;For example, every OpenPolice.org complaint will 
-focus on a single police incident that occurred at a single <em>place</em> and <em>time</em>. Complaints must also include one or more <em>allegations</em> against one or more <em>officers</em>
- in a particular department. If OpenPolice.org admins confirm that a complaint 
-includes these things, it will be immediately emailed to the appropriate
- oversight&nbsp;contact.<br>
-<a name="Openness"></a><br>
-<strong>How Openness Pushes Accountability</strong><br>
-In order to create additional&nbsp;transparency, every complaint submitted to an investigative agency will become <em>publicly</em>
- searchable. Depending on the privacy settings selected by individual 
-complainants, some public complaints will reveal the names and 
-identities of individual officers. Complainants may also choose to 
-remain anonymous. However, the names and identities of officers related 
-to anonymous complaints will be hidden from public views.</p><p>
-<br></p><p>We understand that some police departments might be upset about our open complaints. Nevertheless, such departments <a href="http://ric-zai-inc.com/Publications/cops-p164-pub.pdf">should respond by properly investigating complaints in a timely manner</a>.
- They should also make details of their investigations open to the 
-public in a timely manner. Because as Edward Nance’s story cautions us —
- police complaints are too important to be kept in the dark.</p><p>
-<br></p><p>So in addition to improving the creation and transmission of police 
-complaints, OpenPolice.org will track how well or how poorly individual departments
- respond to the complaints they receive. This tracking process will also
- reveal best practices for how similar departments <em>should</em> respond to civilian complaints.<br>
-<a name="Donate"></a><br>
-<strong>How to Donate &amp; Volunteer with OpenPolice.org</strong><br>
-While we’ve completed the initial <a href="https://youtu.be/FzMMQoRkBeE">web app prototype</a>,
- we have more testing to do before we begin OpenPolice.org’s national rollout 
-beginning in early 2016. In the meantime, here are some ways you can 
-contribute your <em>time</em>, <em>talent</em>, or <em>treasure</em> to this effort.</p><p>
-<br></p><p><strong>1) Your Time:</strong>&nbsp;We need volunteers who can help us 
-build the nation’s most detailed online police department contact 
-directory. This directory will be essential for identifying key contacts
- for receiving OpenPolice-generated complaints. Your research will also help 
-establish an “openness score” for each department. This will be based on
- the quality of complaint submission information they have available on 
-the web.</p><p>
-<br></p><p>You don’t need to be a coder to do this work. But you do need a keen eye for detail and basic web research skills. <a href="https://www.flexyourrights.org/opc-volunteer/">Click here, to learn how to become an OpenPolice.org research volunteer!</a></p><p>
-<br></p><p><strong>2) Your Talent:&nbsp;</strong>We’ve assembled a talented <a href="https://openpolicecomplaints.org/about/#Development-Team">core team of technical volunteers</a>.
- But&nbsp;if you’re an experienced web or software development professional 
-with a desire to contribute, we’d love to work with you too! (You can 
-check out the OpenPolice.org web app’s <a href="https://openpolicecomplaints.org/web-app-specs">technical specs here</a>.)</p><p>
-<br></p><p>For example, if you’re a web designer who can make our WordPress 
-website (this site) look extra slick — please email me. If you’re a data
- visualization guru who can do beautiful things with data, we could use 
-your help. Or if you’re a UX or analytics whiz, <a href="mailto:steve@flexyourrights.org?subject=Giving%20to%20OpenPolice">please hit me up</a>!</p><p>
-<br></p><p><strong>3) Your Treasure:</strong>&nbsp;If you’d like to support this project with a small or large tax-deductible donation, you can <a href="https://www.flexyourrights.org/donate/">donate online here</a>. (You can also mail check donations made out to Flex Your Rights to P.O. Box 21497, Washington, DC 20009.)<strong><br>
-</strong></p><p>
-<br></p><p>If you’re someone who’s connected with charitable foundations or philanthropic high-net-worth individuals, I’m <a href="mailto:steve@flexyourrights.org?subject=Giving%20to%20OpenPolice">open to your advice and introductions</a>. Thank you so much!</p><p><br></p>'
+			'NodePromptText' => '<h1 class=\"entry-title\">The Future of Civilian Oversight</h1>\r\n      <time class=\"updated\" datetime=\"2015-12-12T20:00:31+00:00\">December 12, 2015</time>\r\n<p class=\"byline author vcard\">By <a href=\"https://openpolicecomplaints.org/author/steve/\" rel=\"author\" class=\"fn\">Steve Silverman</a></p>\r\n    \r\n<p>Earlier this month&nbsp;I spoke at a conference called <em>Looking Toward the Future of Civilian Oversight</em>. The event was co-sponsored by the <a href=\"https://nacole.org/\">National Association for Civilian Oversight of Law Enforcement (NACOLE)</a>\r\n and the UDC School of Law. This was my first public introduction of \r\nFlex Your Rightsï¿½ new endeavor, OpenPolice.org.</p><p>My presentation remarks appear below&nbsp;this simulation of the latest OpenPolice.org web app prototype.</p><p>\r\n\r\n<iframe src=\"https://www.youtube.com/embed/FzMMQoRkBeE\" allowfullscreen=\"allowfullscreen\" height=\"315\" frameborder=\"0\" width=\"560\"></iframe>\r\n\r\n<br></p><p><a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Failure\">Oversight Failure 101</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Secrecy\">Itï¿½s the Secrecy, Stupid</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Future\">The Future of OpenPolice.org</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Unified\">A Unified Police Complaints Platform</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Trust\">Building Trust with Oversight Professionals</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Openness\">How Openness Pushes Accountability</a><br>\r\n<a href=\"https://openpolicecomplaints.org/civilian-oversight-future/#Donate\">Donate &amp; Volunteer</a><br>\r\n<a name=\"Failure\"></a><br>\r\n<strong>Oversight Failure 101</strong><br>\r\nIn July 2007, Edward Nance, an African-American cable company employee \r\nand part-time high school referee got pulled over by two officers in \r\nChicagoï¿½s South Side. Nance had no criminal record, but he was stopped \r\nbecause he didnï¿½t have a front license plate. Things quickly turned bad \r\nfor him.</p><p>\r\n<br></p><p>When Nance asked the officers <em>why</em> they pulled him over, the \r\nfirst officer told him to ï¿½get the fuck out of the car!ï¿½ The officer \r\nthen slammed his head on the carï¿½s hood, causing injuries to his neck \r\nand face. The second officer forcibly handcuffed Nance, jerking his arms\r\n back violently, injuring tendons in his shoulders as well as one \r\nrotator cuff. He required two shoulder surgeries to repair the damage.</p><p>\r\n<br></p><p>About two years later, a federal jury found the officers had used \r\nexcessive force. They awarded Nance $350,000 in damages for his \r\ninjuries. The judge then ordered the city to pay an additional $180,000 \r\nto cover his legal fees. However, Chicagoï¿½s Independent Police Review \r\nAuthority found all allegations against the two officers to be <em>not sustained</em>. They decided there was ï¿½no way to determineï¿½ the precise cause of the complainantï¿½s injuries. Neither officer was disciplined.</p><p>\r\n<br></p><p>On October 20, 2014, a police dashcam captured footage of Chicago \r\nPolice Officer Jason Van Dyke firing 16 shots at 17-year-old Laquan \r\nMcDonald, who was armed with a 3-inch knife. We now know about this \r\nstory despite <a href=\"http://www.chicagotribune.com/news/local/breaking/ct-judge-orders-release-of-video-showing-fatal-shooting-by-police-officer-20151119-story.html\">the bad faith efforts by the City of Chicago to block the release of that horrible video</a>.\r\n Itï¿½s inevitable release forced City officials to finally bring \r\nfirst-degree murder charges against Officer Van Dyke ï¿½ who just so \r\nhappens to be <a href=\"http://www.chicagotribune.com/news/ct-police-shooting-16-shots-04---met-20150425-story.html\">the same officer who violently handcuffed Edward Nance</a>&nbsp;in 2007.</p><p>\r\n<br></p><p>When he heard about this connection, Nance burst into tears. He said \r\nï¿½It makes me feel like it could have been me. If they had done something\r\n about this cop in my case, this young boy would still be alive.ï¿½<br>\r\n<a name=\"Secrecy\"></a><br>\r\n<strong>Itï¿½s the Secrecy, Stupid</strong><br>\r\nWe now know that during Van Dykeï¿½s 14-year career at least <a href=\"http://www.theguardian.com/us-news/2015/nov/25/laquan-mcdonald-jason-van-dyke-misconduct-chicago-police\">20 civilian complaints have been filed against him</a>.\r\n Most of them involved allegations of excessive force, and at least one \r\ncomplaint alleges he used a racial slur. None of these complaints led to\r\n disciplinary action.</p><p>\r\n<br></p><p>But we only know now about Van Dykeï¿½s complaint history, because this\r\n too was just made public last month. This is thanks to a public \r\ndatabase created by the non-profit group, <a href=\"http://invisible.institute/police-data/\">The Invisible Institute</a>. The <a href=\"http://cpdb.co/data/bzadKL/citizens-police-data-project\">massive dataset includes 56,362 allegations of misconduct filed against 8,562 Chicago Police officers</a>\r\n between May 2001 and September 2015. This is a beautiful and powerful \r\nmodel for how this sort of OpenPolice.org data can be used and \r\nvisualized. For example, you can view details of the <a href=\"http://cpdb.co/officer/jason-van-dyke/7655\">20 complaints filed against&nbsp;Jason Van Dyke</a>.</p><p>\r\n<br></p><p>It took 10 years of litigation and FOIA requests by a platoon of \r\npublic interest lawyers to force the City to cough up this data. This is\r\n a scandal itself. But this sort of institutional secrecy is hardly \r\nunique to Chicago. Secrecy is a <em>feature</em> of state and local \r\npolicing agencies across the country. So itï¿½s no surprise that wherever \r\nwe find departments whose workings are cloaked in secrecy ï¿½ this is \r\nwhere we find the darkest acts of police misconduct being ignored or \r\ncovered up.</p><p>\r\n<br></p><p>The good news is that we are now in the dawn of a Golden Age of \r\npolice data collection. This is thanks to the openness of the Internet. \r\nAnd this openness is accelerating the advancement of a universal, common\r\n language for how we can define and categorize policing data from all \r\nacross the country.<br>\r\n<a name=\"Future\"></a><br>\r\n<strong>The Future of OpenPolice.org</strong><br>\r\nI believe we are moving towards a world with universal,&nbsp;<em>real-time access</em>\r\n to civilian police complaints data. This real-time data will be shared \r\ndirectly by the complainants themselves who will be able to control who \r\nhas access to their <a href=\"http://www.economist.com/news/science-and-technology/21660966-can-big-databases-be-kept-both-anonymous-and-useful-well-see-you-anon\">confidential and personal information</a>.\r\n Real-time police complaints data will be accessible to community groups\r\n promoting equitable policing. The data will be accessible to civil \r\nrights attorneys working to identify departments with <a href=\"http://samuelwalker.net/issues/federal-pattern-or-practice-litigation/\">patterns or practices of police misconduct</a>.\r\n Real-time civilian complaints data will become an increasingly \r\nimportant management tool for conscientious police chiefs working to \r\nbuild community-oriented policing cultures.</p><p>\r\n<br></p><p>For police oversight professionals, real-time police complaints will \r\nallow us to spend less time collecting, organizing and interpreting \r\nhand-written paper complaints. Instead, we can spend more time <em>investigating</em>\r\n important complaints. This will make it easier to identify officers \r\nwith chronic misbehavior problems and hold them accountable <em>before</em> they become involved in a deadly but avoidable use of force incident.</p><p>\r\n<br></p><p>What Iï¿½m going to show you is <a href=\"https://youtu.be/FzMMQoRkBeE\">the first prototype of the OpenPolice.org web application</a>. This service will be <em>free</em> to users. The data we collect will be <em>open</em> to the public ï¿½ with the exception of certain personally-identifiable information. The interface is modeled after <a href=\"https://youtu.be/CAFq9i3DUq4\">TurboTax </a>ï¿½&nbsp;but instead of helping with your tax returns, weï¿½re streamlining police complaints.<br>\r\n<a name=\"Unified\"></a><br>\r\n<strong>A Unified Police Complaints Platform</strong><br>\r\nBefore we did any coding on the web app, my <a href=\"https://openpolicecomplaints.org/about/#Development-Team\">technical team</a> spent about eight months designing <a href=\"https://app.openpolicecomplaints.org/dbdesign/\">our relational database model</a>. We wanted to make sure all of our data structures ï¿½ including all the <em>people</em>, <em>places</em>, <em>things</em>, and <em>events</em>\r\n we capture ï¿½ aligned with the most universal categories and definitions\r\n that fit with a national police complaints collection service.&nbsp;We also \r\nneeded to make sure that our service could accommodate complaints that \r\ncan be submitted to every one of the roughly 18,000 state and local law \r\nenforcement agencies in the United States.</p><p>\r\n<br></p><p>I wonï¿½t bore you with details of the research Iï¿½ve done to identify \r\nour data needs ï¿½ but suffice it to say, Iï¿½ve reviewed every recent <a href=\"http://www.bjs.gov/index.cfm?ty=tp&amp;tid=70\">DOJ report on police-civilian contacts</a> I could find. Iï¿½ve examined the recent annual reports from the major <a href=\"https://nacole.org/resources/u-s-oversight-agency-websites/\">civilian investigative agencies</a> that release&nbsp;reports. And Iï¿½ve been working with some of the <a href=\"https://openpolicecomplaints.org/about/#Advisory-Board\">top experts in the field of police oversight</a>.</p><p>\r\n<br></p><p>These ongoing discussions with police oversight professionals reveal \r\nsome important technical challenges of maintaining&nbsp;a unified police \r\ncomplaints platform. For example, many large municipal oversight \r\nagencies require that complaints be submitted on a government paper form\r\n in order to be investigated by their offices. (They usually require the\r\n complainantï¿½s handwritten signature too.) <a href=\"https://openpolicecomplaints.org/how-departments-block-police-complaints/\">These sorts of laws primarily serve to block otherwise legitimate complaints from being investigated</a>.\r\n However, in order to make sure OpenPolice.org complaints are best positioned to be\r\n investigated, we will find ways to adapt to these types of constraints.<br>\r\n<a name=\"Trust\"></a><br>\r\n<strong>Building Trust with Oversight Professionals</strong><br>\r\nOne question Iï¿½m frequently asked is <em>how are we going to deal with malicious and fraudulent complaints?</em>\r\n This is an important question, because abusive complaints threaten the \r\nintegrity of our data and our institutional trust. However, weï¿½ve \r\ndeveloped some strategic countermeasures.</p><p>\r\n<br></p><p>First, the design of our web forms is our first line of defense. In \r\norder for a userï¿½s data to become relevant, they must complete the \r\ncomplaint-creation process. Like TurboTax, this requires a moderate \r\ninvestment of each userï¿½s time. While each individual question is easy \r\nto answer, there are more questions than a casual troll trying to submit\r\n a malicious complaint will probably be willing to answer.</p><p>\r\n<br></p><p>Some trolls, however, are persistent. Thatï¿½s why weï¿½ll require a \r\nsecond line defense of trained human administrators. Every new complaint\r\n we receive must first be reviewed by our admins, who will tag \r\ncomplaints that donï¿½t require further investigation. These will include \r\novertly malicious complaints as well as complaints that have nothing to \r\ndo with the police (e.g. landlord or employment disputes). OpenPolice.org admins \r\nwill also tag complaints that are unlikely to be based on reality.</p><p>\r\n<br></p><p>The more human effort we put into reviewing new complaints, the more \r\ninvestigators will trust our complaints. Thatï¿½s why every complaint we \r\nsubmit to oversight investigators must include enough information for \r\nthem to begin an investigation.&nbsp;For example, every OpenPolice.org complaint will \r\nfocus on a single police incident that occurred at a single <em>place</em> and <em>time</em>. Complaints must also include one or more <em>allegations</em> against one or more <em>officers</em>\r\n in a particular department. If OpenPolice.org admins confirm that a complaint \r\nincludes these things, it will be immediately emailed to the appropriate\r\n oversight&nbsp;contact.<br>\r\n<a name=\"Openness\"></a><br>\r\n<strong>How Openness Pushes Accountability</strong><br>\r\nIn order to create additional&nbsp;transparency, every complaint submitted to an investigative agency will become <em>publicly</em>\r\n searchable. Depending on the privacy settings selected by individual \r\ncomplainants, some public complaints will reveal the names and \r\nidentities of individual officers. Complainants may also choose to \r\nremain anonymous. However, the names and identities of officers related \r\nto anonymous complaints will be hidden from public views.</p><p>\r\n<br></p><p>We understand that some police departments might be upset about our open complaints. Nevertheless, such departments <a href=\"http://ric-zai-inc.com/Publications/cops-p164-pub.pdf\">should respond by properly investigating complaints in a timely manner</a>.\r\n They should also make details of their investigations open to the \r\npublic in a timely manner. Because as Edward Nanceï¿½s story cautions us ï¿½\r\n police complaints are too important to be kept in the dark.</p><p>\r\n<br></p><p>So in addition to improving the creation and transmission of police \r\ncomplaints, OpenPolice.org will track how well or how poorly individual departments\r\n respond to the complaints they receive. This tracking process will also\r\n reveal best practices for how similar departments <em>should</em> respond to civilian complaints.<br>\r\n<a name=\"Donate\"></a><br>\r\n<strong>How to Donate &amp; Volunteer with OpenPolice.org</strong><br>\r\nWhile weï¿½ve completed the initial <a href=\"https://youtu.be/FzMMQoRkBeE\">web app prototype</a>,\r\n we have more testing to do before we begin OpenPolice.orgï¿½s national rollout \r\nbeginning in early 2016. In the meantime, here are some ways you can \r\ncontribute your <em>time</em>, <em>talent</em>, or <em>treasure</em> to this effort.</p><p>\r\n<br></p><p><strong>1) Your Time:</strong>&nbsp;We need volunteers who can help us \r\nbuild the nationï¿½s most detailed online police department contact \r\ndirectory. This directory will be essential for identifying key contacts\r\n for receiving OpenPolice-generated complaints. Your research will also help \r\nestablish an ï¿½openness scoreï¿½ for each department. This will be based on\r\n the quality of complaint submission information they have available on \r\nthe web.</p><p>\r\n<br></p><p>You donï¿½t need to be a coder to do this work. But you do need a keen eye for detail and basic web research skills. <a href=\"https://www.flexyourrights.org/opc-volunteer/\">Click here, to learn how to become an OpenPolice.org research volunteer!</a></p><p>\r\n<br></p><p><strong>2) Your Talent:&nbsp;</strong>Weï¿½ve assembled a talented <a href=\"https://openpolicecomplaints.org/about/#Development-Team\">core team of technical volunteers</a>.\r\n But&nbsp;if youï¿½re an experienced web or software development professional \r\nwith a desire to contribute, weï¿½d love to work with you too! (You can \r\ncheck out the OpenPolice.org web appï¿½s <a href=\"https://openpolicecomplaints.org/web-app-specs\">technical specs here</a>.)</p><p>\r\n<br></p><p>For example, if youï¿½re a web designer who can make our WordPress \r\nwebsite (this site) look extra slick ï¿½ please email me. If youï¿½re a data\r\n visualization guru who can do beautiful things with data, we could use \r\nyour help. Or if youï¿½re a UX or analytics whiz, <a href=\"mailto:steve@flexyourrights.org?subject=Giving%20to%20OpenPolice\">please hit me up</a>!</p><p>\r\n<br></p><p><strong>3) Your Treasure:</strong>&nbsp;If youï¿½d like to support this project with a small or large tax-deductible donation, you can <a href=\"https://www.flexyourrights.org/donate/\">donate online here</a>. (You can also mail check donations made out to Flex Your Rights to P.O. Box 21497, Washington, DC 20009.)<strong><br>\r\n</strong></p><p>\r\n<br></p><p>If youï¿½re someone whoï¿½s connected with charitable foundations or philanthropic high-net-worth individuals, Iï¿½m <a href=\"mailto:steve@flexyourrights.org?subject=Giving%20to%20OpenPolice\">open to your advice and introductions</a>. Thank you so much!</p><p><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 846,
@@ -25091,86 +24608,7 @@ your help. Or if you’re a UX or analytics whiz, <a href="mailto:steve@flexyour
 			'NodeParentID' => '843',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p><header>
-      <h1 class="entry-title">The Intercept Covers OpenPolice.org</h1>
-      <time class="updated" datetime="2016-10-26T16:16:41+00:00">October 26, 2016</time>
-<p class="byline author vcard">By <a href="https://openpolicecomplaints.org/author/steve/" rel="author" class="fn">Steve Silverman</a></p>
-    </header>
-    <br></p><div class="entry-content">
-      <p>If you’re not yet familiar with <em>The Intercept</em>, you 
-should be. Glenn Greenwald, one of its founding editors, broke the story
- of Edward Snowden. Their reporters are respected (and feared) for their
- bold work documenting corporate and governmental abuses of power.</p>
-<p>So when <em>Intercept</em> Reporter Alice Speri contacted us about our new OpenPolice.org project, we were eager to help! <a href="https://theintercept.com/2016/10/25/open-data-projects-are-fueling-the-fight-against-police-misconduct/">The long-form article</a>
- details how our work bypasses the blue wall of silence blocking police 
-misconduct data from public view. Most notably, Speri makes a powerful 
-case for why we must allow OpenPolice.org users to publish officers’ names with 
-their complaints. Simply put, transparency and accountability require 
-it.</p>
-<p>Here’s the final section of the article where she covers OpenPolice.org.</p>
-<blockquote>
-<h3>A National Clearinghouse for Police Complaints</h3>
-<p>So far, efforts to use open data to track officer misconduct and hold
- police departments accountable are few and limited. But with 18,000 law
- enforcement agencies across the country, each ruled by different sets 
-of local regulations, there is no uniformity in how police misconduct is
- tracked, if at all, and in a majority of places, the public has no 
-access to records of complaints filed against police.</p>
-<p>That might be about to change, as a civil rights group is preparing 
-to launch a nationwide website that will allow users to file official 
-reports of officer misconduct and abuse, while also making those reports
- immediately public. For years, <a href="https://www.flexyourrights.org/">Flex Your Rights</a>, the group behind the <a href="https://openpolicecomplaints.org/">OpenPolice.org</a>
- initiative, ran “constitutional literacy” workshops, educating the 
-public on their rights during police encounters. But they soon realized 
-that wasn’t enough.</p>
-<p>“The events of the last few years have shined an important light on 
-the fact that people are going to have bad police encounters regardless 
-of whether they ‘flex’ their rights perfectly or not,” Steve Silverman, 
-the group’s founder and director, told The Intercept.</p>
-<p>Instead, the new website, which is set to go live early next year, 
-will aim to bring some uniformity and accountability to the police 
-complaint process, by compiling research on different departments’ 
-requirements and allowing users to either file complaints directly 
-online — for those departments that choose to participate in the 
-initiative — or upload the complaints they file on their own and share 
-those reports publicly.</p>
-<p>The idea is to simplify the complaint process for citizens and 
-minimize the need for people to file grievances in person at a police 
-station, “where they’re bound to have another bad encounter,” Silverman 
-said. The site will populate a report by asking users dozens of 
-questions and will offer varying degrees of transparency, allowing users
- to publicly disclose anything from bare, anonymous details of the 
-incident to full narrative accounts including names of officers and 
-victims. It will also give police departments an opportunity to respond 
-and update each report with the findings of their investigations.</p>
-<p>“We’re trying to use open data in order to encourage better 
-responsiveness but also to track how well and how poorly departments are
- responding to complaints, as one of the big reasons why police 
-complaints processes suck is because they’re very unresponsive,” 
-Silverman said. “Of course there are going to be some police departments
- and individual officers who chafe at the idea that their name might be 
-attached to a public complaint. But if that’s the case, they should go 
-ahead and properly and swiftly investigate the complaint and they’ll 
-have an opportunity to post their findings.”</p>
-<p>The group said it would protect the site from misuse and false 
-reports — and potential libel suits — by requiring that all police 
-complaints be officially filed before they can be shared publicly, and 
-by flagging “frequent flier” users and filling the site with disclaimer 
-notices reminding readers that the reports are allegations. It will also
- offer tools to connect citizens filing complaints with attorneys in 
-their areas, as well as to other relevant resources.</p>
-<p>“We hope that by providing this kind of information in a public way, we’ll urge departments to take action,” Silverman said.</p>
-<p>But even if departments refuse to engage with the site — and 
-Silverman and Morgan Lesko, the project’s main developer, expect it will
- take a few years to compile a significant volume of complaints and get 
-departments to take notice — the reports will be accessible and easily 
-searchable by anyone.</p>
-<p>“In the worst case scenario — that we don’t get appropriate feedback 
-from police departments — we still have these collected online,” said 
-Lesko. “And it’s all published in one place; it’s not just lost on 
-Facebook somewhere, scattered around in rant form. It’s a public 
-record.”</p></blockquote>
-    </div><p><br></p>'
+			'NodePromptText' => '<p><header>\r\n      <h1 class=\"entry-title\">The Intercept Covers OpenPolice.org</h1>\r\n      <time class=\"updated\" datetime=\"2016-10-26T16:16:41+00:00\">October 26, 2016</time>\r\n<p class=\"byline author vcard\">By <a href=\"https://openpolicecomplaints.org/author/steve/\" rel=\"author\" class=\"fn\">Steve Silverman</a></p>\r\n    </header>\r\n    <br></p><div class=\"entry-content\">\r\n      <p>If youï¿½re not yet familiar with <em>The Intercept</em>, you \r\nshould be. Glenn Greenwald, one of its founding editors, broke the story\r\n of Edward Snowden. Their reporters are respected (and feared) for their\r\n bold work documenting corporate and governmental abuses of power.</p>\r\n<p>So when <em>Intercept</em> Reporter Alice Speri contacted us about our new OpenPolice.org project, we were eager to help! <a href=\"https://theintercept.com/2016/10/25/open-data-projects-are-fueling-the-fight-against-police-misconduct/\">The long-form article</a>\r\n details how our work bypasses the blue wall of silence blocking police \r\nmisconduct data from public view. Most notably, Speri makes a powerful \r\ncase for why we must allow OpenPolice.org users to publish officersï¿½ names with \r\ntheir complaints. Simply put, transparency and accountability require \r\nit.</p>\r\n<p>Hereï¿½s the final section of the article where she covers OpenPolice.org.</p>\r\n<blockquote>\r\n<h3>A National Clearinghouse for Police Complaints</h3>\r\n<p>So far, efforts to use open data to track officer misconduct and hold\r\n police departments accountable are few and limited. But with 18,000 law\r\n enforcement agencies across the country, each ruled by different sets \r\nof local regulations, there is no uniformity in how police misconduct is\r\n tracked, if at all, and in a majority of places, the public has no \r\naccess to records of complaints filed against police.</p>\r\n<p>That might be about to change, as a civil rights group is preparing \r\nto launch a nationwide website that will allow users to file official \r\nreports of officer misconduct and abuse, while also making those reports\r\n immediately public. For years, <a href=\"https://www.flexyourrights.org/\">Flex Your Rights</a>, the group behind the <a href=\"https://openpolicecomplaints.org/\">OpenPolice.org</a>\r\n initiative, ran ï¿½constitutional literacyï¿½ workshops, educating the \r\npublic on their rights during police encounters. But they soon realized \r\nthat wasnï¿½t enough.</p>\r\n<p>ï¿½The events of the last few years have shined an important light on \r\nthe fact that people are going to have bad police encounters regardless \r\nof whether they ï¿½flexï¿½ their rights perfectly or not,ï¿½ Steve Silverman, \r\nthe groupï¿½s founder and director, told The Intercept.</p>\r\n<p>Instead, the new website, which is set to go live early next year, \r\nwill aim to bring some uniformity and accountability to the police \r\ncomplaint process, by compiling research on different departmentsï¿½ \r\nrequirements and allowing users to either file complaints directly \r\nonline ï¿½ for those departments that choose to participate in the \r\ninitiative ï¿½ or upload the complaints they file on their own and share \r\nthose reports publicly.</p>\r\n<p>The idea is to simplify the complaint process for citizens and \r\nminimize the need for people to file grievances in person at a police \r\nstation, ï¿½where theyï¿½re bound to have another bad encounter,ï¿½ Silverman \r\nsaid. The site will populate a report by asking users dozens of \r\nquestions and will offer varying degrees of transparency, allowing users\r\n to publicly disclose anything from bare, anonymous details of the \r\nincident to full narrative accounts including names of officers and \r\nvictims. It will also give police departments an opportunity to respond \r\nand update each report with the findings of their investigations.</p>\r\n<p>ï¿½Weï¿½re trying to use open data in order to encourage better \r\nresponsiveness but also to track how well and how poorly departments are\r\n responding to complaints, as one of the big reasons why police \r\ncomplaints processes suck is because theyï¿½re very unresponsive,ï¿½ \r\nSilverman said. ï¿½Of course there are going to be some police departments\r\n and individual officers who chafe at the idea that their name might be \r\nattached to a public complaint. But if thatï¿½s the case, they should go \r\nahead and properly and swiftly investigate the complaint and theyï¿½ll \r\nhave an opportunity to post their findings.ï¿½</p>\r\n<p>The group said it would protect the site from misuse and false \r\nreports ï¿½ and potential libel suits ï¿½ by requiring that all police \r\ncomplaints be officially filed before they can be shared publicly, and \r\nby flagging ï¿½frequent flierï¿½ users and filling the site with disclaimer \r\nnotices reminding readers that the reports are allegations. It will also\r\n offer tools to connect citizens filing complaints with attorneys in \r\ntheir areas, as well as to other relevant resources.</p>\r\n<p>ï¿½We hope that by providing this kind of information in a public way, weï¿½ll urge departments to take action,ï¿½ Silverman said.</p>\r\n<p>But even if departments refuse to engage with the site ï¿½ and \r\nSilverman and Morgan Lesko, the projectï¿½s main developer, expect it will\r\n take a few years to compile a significant volume of complaints and get \r\ndepartments to take notice ï¿½ the reports will be accessible and easily \r\nsearchable by anyone.</p>\r\n<p>ï¿½In the worst case scenario ï¿½ that we donï¿½t get appropriate feedback \r\nfrom police departments ï¿½ we still have these collected online,ï¿½ said \r\nLesko. ï¿½And itï¿½s all published in one place; itï¿½s not just lost on \r\nFacebook somewhere, scattered around in rant form. Itï¿½s a public \r\nrecord.ï¿½</p></blockquote>\r\n    </div><p><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 847,
@@ -25186,11 +24624,7 @@ record.”</p></blockquote>
 			'NodeParentID' => '793',
 			'NodeParentOrder' => '12',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p> </p>
-<p> </p>
-<div>{{Newsletter Sign Up}}</div>
-<p> </p>
-<p> </p>',
+			'NodePromptText' => '<p>ï¿½</p>\r\n<p>ï¿½</p>\r\n<div>{{Newsletter Sign Up}}</div>\r\n<p>ï¿½</p>\r\n<p>ï¿½</p>',
 			'NodePromptAfter' => '<style>
 #nBtn1125 { margin-bottom: 40px; }
 #blockWrap849 { margin-bottom: -85px; }
@@ -25339,13 +24773,7 @@ record.”</p></blockquote>
 			'NodeTree' => '5',
 			'NodeParentID' => '872',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<h2 class="slBlueDark">Publishing Privacy Options</h2>
-<h4>No matter which one you choose, we <nobr>will ...</nobr></h4>
-<ul>
-<li>Publish no one’s private information. That includes addresses, phone numbers, emails, etc.</li>
-<li>Try to send your full compliment to a police investigative agency.</li>
-</ul>
-<p>You have three options for how we collect your data and how we share it.</p>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">Publishing Privacy Options</h2>\r\n<h4>No matter which one you choose, we <nobr>will ...</nobr></h4>\r\n<ul>\r\n<li>Publish no oneï¿½s private information. That includes addresses, phone numbers, emails, etc.</li>\r\n<li>Try to send your full compliment to a police investigative agency.</li>\r\n</ul>\r\n<p>You have three options for how we collect your data and how we share it.</p>',
 			'NodePromptAfter' => '<style>
 #node138 div.nFld div label { padding: 40px; }
 @media screen and (max-width: 768px) {
@@ -25821,8 +25249,7 @@ left: 30px;
 			'NodeTree' => '5',
 			'NodeParentID' => '766',
 			'NodeType' => 'Loop Root',
-			'NodePromptText' => '<h2>Who\'s Involved: Police Officers</h2>
-<br />Please provide information about the police officers or private security employees in this incident. These are people who were were involved in — or witnessed — an act of police excellence.<br /><br />If there were no [other] officers involved, go to the next section.',
+			'NodePromptText' => '<h2>Who\\'s Involved: Police Officers</h2>\r\n<br />Please provide information about the police officers or private security employees in this incident. These are people who were were involved in ï¿½ or witnessed ï¿½ an act of police excellence.<br /><br />If there were no [other] officers involved, go to the next section.',
 			'NodePromptNotes' => 'add-police-officers',
 			'NodePromptAfter' => 'Add Police Officers::M::::M::::M::',
 			'NodeDataBranch' => 'Officers',
@@ -26133,7 +25560,7 @@ left: 30px;
 			'NodeParentID' => '2592',
 			'NodeParentOrder' => '6',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<span class="slBlueDark">Constitutional Policing:</span> The officer’s words and actions showed respect for the Bill of Rights.',
+			'NodePromptText' => '<span class=\"slBlueDark\">Constitutional Policing:</span> The officerï¿½s words and actions showed respect for the Bill of Rights.',
 			'NodeDataStore' => 'OffCompliment:OffCompConstitutional'
 		]);
 		DB::table('SL_Node')->insert([
@@ -26627,30 +26054,14 @@ left: 30px;
 			'NodeTree' => '12',
 			'NodeParentID' => '1013',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<center><img src="/openpolice/uploads/magnifying-eye.png" style="width: 130px;" border="0">
-        <div style="padding: 20px;">
-        <h3>Build better police transparency</h3>
-        <p>We can’t trust police to police themselves without public transparency. Share your report online to create a permanent public record that can’t be ignored. </p>
-        <p><a href="/frequently-asked-questions#privacy">LEARN MORE</a></p>
-        <p><br></p>
-        </div></center>'
+			'NodePromptText' => '<p>&nbsp;</p>\n<center><img src=\"/openpolice/uploads/magnifying-eye.png\" style=\"width: 130px;\" border=\"0\">\r\n        <div style=\"padding: 20px;\">\r\n        <h3>Build better police transparency</h3>\r\n        <p>We canï¿½t trust police to police themselves without public transparency. Share your report online to create a permanent public record that canï¿½t be ignored. </p>\r\n        <p><a href=\"/frequently-asked-questions#privacy\">LEARN MORE</a></p>\r\n        <p><br></p>\r\n        </div></center>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1017,
 			'NodeTree' => '12',
 			'NodeParentID' => '1014',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<center><img src="/openpolice/uploads/universality.png" style="width: 130px;" border="0">
-        <div style="padding: 20px;">
-        <h3>One report to rule them all</h3>
-        <p>Want to file an official report with your local police department too? 
-We already know about their laws and procedures — so we\'ve got your 
-back!</p>
-        <p><a href="/frequently-asked-questions#when-users-file">LEARN MORE</a></p>
-        <p><br></p>
-        </div></center>'
+			'NodePromptText' => '<p>&nbsp;</p>\n<center><img src=\"/openpolice/uploads/universality.png\" style=\"width: 130px;\" border=\"0\">\r\n        <div style=\"padding: 20px;\">\r\n        <h3>One report to rule them all</h3>\r\n        <p>Want to file an official report with your local police department too? \r\nWe already know about their laws and procedures ï¿½ so we\\'ve got your \r\nback!</p>\r\n        <p><a href=\"/frequently-asked-questions#when-users-file\">LEARN MORE</a></p>\r\n        <p><br></p>\r\n        </div></center>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1045,
@@ -26701,16 +26112,7 @@ back!</p>
 			'NodeTree' => '23',
 			'NodeParentID' => '1050',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Steve Silverman is the founder and executive director of <a href="https://www.flexyourrights.org/">Flex Your Rights (Flex)</a>,
- the parent company of OpenPolice.org. In 2002, Silverman founded Flex to help 
-educate people about their rights during police encounters. To this end,
- he created a pair of popular educational movies. The most recent work, <a href="https://www.flexyourrights.org/10-rules/" target="_blank"><i>10 Rules for Dealing with Police</i>,</a> is narrated by Billy Murphy, attorney for the family of Freddie Gray. (Both movies are available on the <a href="https://www.youtube.com/user/FlexYourRights/" target="_blank">Flex Your Rights YouTube channel</a>,
- which is about to hit 45 million views.) Frustrated by the innumerable 
-failures of police departments to properly collect, process, and share 
-police complaints information — Silverman is working to build something 
-better.
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nSteve Silverman is the founder and executive director of <a href=\"https://www.flexyourrights.org/\">Flex Your Rights (Flex)</a>,\r\n the parent company of OpenPolice.org. In 2002, Silverman founded Flex to help \r\neducate people about their rights during police encounters. To this end,\r\n he created a pair of popular educational movies. The most recent work, <a href=\"https://www.flexyourrights.org/10-rules/\" target=\"_blank\"><i>10 Rules for Dealing with Police</i>,</a> is narrated by Billy Murphy, attorney for the family of Freddie Gray. (Both movies are available on the <a href=\"https://www.youtube.com/user/FlexYourRights/\" target=\"_blank\">Flex Your Rights YouTube channel</a>,\r\n which is about to hit 45 million views.) Frustrated by the innumerable \r\nfailures of police departments to properly collect, process, and share \r\npolice complaints information ï¿½ Silverman is working to build something \r\nbetter.\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1052,
@@ -26820,10 +26222,7 @@ Cory Troup is a Seattle-based IT professional. After a long day he likes to kick
 			'NodeTree' => '23',
 			'NodeParentID' => '1062',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Kelvyn Anderson is the executive director of <a href="http://www.phila.gov/pac/Pages/default.aspx">Philadelphia’s Police Advisory Commission</a> and longtime board member of the <a href="https://nacole.org/">National Association National Association for Civilian Oversight of Law Enforcement</a> (NACOLE). With more than fifteen years of experience as a police oversight professional, he is helping ensure that OpenPolice.org’s complaints data is maximally beneficial to the police oversight community.
-<em><a href="https://nacole.org/team/kelvyn-anderson/" target="_blank">Read Kelvyn’s full bio</a>.</em><p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nKelvyn Anderson is the executive director of <a href=\"http://www.phila.gov/pac/Pages/default.aspx\">Philadelphiaï¿½s Police Advisory Commission</a> and longtime board member of the <a href=\"https://nacole.org/\">National Association National Association for Civilian Oversight of Law Enforcement</a> (NACOLE). With more than fifteen years of experience as a police oversight professional, he is helping ensure that OpenPolice.orgï¿½s complaints data is maximally beneficial to the police oversight community.\r\n<em><a href=\"https://nacole.org/team/kelvyn-anderson/\" target=\"_blank\">Read Kelvynï¿½s full bio</a>.</em><p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1064,
@@ -26840,10 +26239,7 @@ Kelvyn Anderson is the executive director of <a href="http://www.phila.gov/pac/P
 			'NodeTree' => '23',
 			'NodeParentID' => '1064',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Brian Buchner is the past president of the <a href="https://nacole.org/">National Association for Civilian Oversight of Law Enforcement </a>(NACOLE) and a policy director in Los Angeles Mayor Eric Garcetti’s Office of Public Safety. With more than eleven years of experience as a police oversight professional, he’s helping OpenPolice.org develop better metrics for evaluating and tracking the complaints we receive.
-<em><a href="https://nacole.org/team/brian-buchner/" target="_blank">Read Brian’s full bio</a>.</em><p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nBrian Buchner is the past president of the <a href=\"https://nacole.org/\">National Association for Civilian Oversight of Law Enforcement </a>(NACOLE) and a policy director in Los Angeles Mayor Eric Garcettiï¿½s Office of Public Safety. With more than eleven years of experience as a police oversight professional, heï¿½s helping OpenPolice.org develop better metrics for evaluating and tracking the complaints we receive.\r\n<em><a href=\"https://nacole.org/team/brian-buchner/\" target=\"_blank\">Read Brianï¿½s full bio</a>.</em><p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1066,
@@ -26860,10 +26256,7 @@ Brian Buchner is the past president of the <a href="https://nacole.org/">Nationa
 			'NodeTree' => '23',
 			'NodeParentID' => '1066',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Cynthia Conti-Cook is a staff attorney with the <a href="http://www.legal-aid.org/en/home.aspx" target="_blank">New York Legal Aid Society</a>. She runs their <a href="http://www.slate.com/articles/news_and_politics/crime/2015/02/bad_cops_a_new_database_collects_information_about_cop_misconduct_and_provides.html" target="_blank">Cop Accountability Project</a>, a database of police officers accused of wrongdoing. She’s also leading legal efforts to force the City to release records of prior complaints against Daniel Pantaleo, the officer who killed Eric Garner. Her practical knowledge of the civilian complaints process and her commitment to open government data make her an indispensable advisor.
-<em><a href="https://www.linkedin.com/in/cynthia-conti-cook-a3392948" target="_blank">Read Cynthia’s full bio</a></em>.<p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nCynthia Conti-Cook is a staff attorney with the <a href=\"http://www.legal-aid.org/en/home.aspx\" target=\"_blank\">New York Legal Aid Society</a>. She runs their <a href=\"http://www.slate.com/articles/news_and_politics/crime/2015/02/bad_cops_a_new_database_collects_information_about_cop_misconduct_and_provides.html\" target=\"_blank\">Cop Accountability Project</a>, a database of police officers accused of wrongdoing. Sheï¿½s also leading legal efforts to force the City to release records of prior complaints against Daniel Pantaleo, the officer who killed Eric Garner. Her practical knowledge of the civilian complaints process and her commitment to open government data make her an indispensable advisor.\r\n<em><a href=\"https://www.linkedin.com/in/cynthia-conti-cook-a3392948\" target=\"_blank\">Read Cynthiaï¿½s full bio</a></em>.<p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1068,
@@ -26911,10 +26304,7 @@ Cynthia Conti-Cook is a staff attorney with the <a href="http://www.legal-aid.or
 			'NodeTree' => '23',
 			'NodeParentID' => '1072',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-LaDoris H. Cordell is a retired judge of the Superior Court of California and former <a href="http://www.sanjoseca.gov/ipa/" target="_blank">Independent Police Auditor (IPA) for the city of San Jose, California</a>. Under her guidance, the IPA produced the nation’s <a href="http://www.sanjoseca.gov/DocumentCenter/View/42029" target="_blank">most transparent and data-rich annual reports</a> regarding police complaints investigation. These reports, along with Cordell’s individual guidance, were crucial building blocks for OpenPolice.org’s national complaints service.
-<em><a href="https://en.wikipedia.org/wiki/LaDoris_Cordell" target="_blank">Read Judge Cordell’s full bio</a></em>.<p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nLaDoris H. Cordell is a retired judge of the Superior Court of California and former <a href=\"http://www.sanjoseca.gov/ipa/\" target=\"_blank\">Independent Police Auditor (IPA) for the city of San Jose, California</a>. Under her guidance, the IPA produced the nationï¿½s <a href=\"http://www.sanjoseca.gov/DocumentCenter/View/42029\" target=\"_blank\">most transparent and data-rich annual reports</a> regarding police complaints investigation. These reports, along with Cordellï¿½s individual guidance, were crucial building blocks for OpenPolice.orgï¿½s national complaints service.\r\n<em><a href=\"https://en.wikipedia.org/wiki/LaDoris_Cordell\" target=\"_blank\">Read Judge Cordellï¿½s full bio</a></em>.<p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1074,
@@ -26931,10 +26321,7 @@ LaDoris H. Cordell is a retired judge of the Superior Court of California and fo
 			'NodeTree' => '23',
 			'NodeParentID' => '1074',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Major Neill Franklin is a 34-year law enforcement veteran of the Maryland State Police and Baltimore Police Department. Franklin is a longtime friend and&nbsp;technical advisor to Flex Your Rights (OpenPolice.org’s parent company), making sure our information is accurate and reliable.<br><br>Franklin is committed to the principles of open government and police transparency that OpenPolice.org is working to fulfill.
-<a href="http://www.leap.cc/author/NeillF/" target="_blank"><em>Read Neill Franklin’s full bio</em>.</a><p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nMajor Neill Franklin is a 34-year law enforcement veteran of the Maryland State Police and Baltimore Police Department. Franklin is a longtime friend and&nbsp;technical advisor to Flex Your Rights (OpenPolice.orgï¿½s parent company), making sure our information is accurate and reliable.<br><br>Franklin is committed to the principles of open government and police transparency that OpenPolice.org is working to fulfill.\r\n<a href=\"http://www.leap.cc/author/NeillF/\" target=\"_blank\"><em>Read Neill Franklinï¿½s full bio</em>.</a><p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1076,
@@ -26951,9 +26338,7 @@ Major Neill Franklin is a 34-year law enforcement veteran of the Maryland State 
 			'NodeTree' => '23',
 			'NodeParentID' => '1076',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Matthew Hickman is a an associate professor of criminal justice at Seattle University. A former staffer with the Bureau of Justice Statistics, <a href="https://nacole.org/wp-content/uploads/Hickman.National-Data-on-Citizen-Complaints-about-Police-Use-of-Force_Data-Quality-Concern-and-the-Potential-Mis-Use-of-Statistical-Evidence-to-Address-Police-Agency-Conduct.DRAFT_.pdf" target="_blank">Hickman has criticized the quality of the government’s national data on citizen complaints and police use of force</a>. As such, he serves as OpenPolice.org’s data quality ombudsman, helping ensure the accuracy and reliability of our data.
-<em><a href="https://www.seattleu.edu/artsci/faculty-staff/hickman-matthew/" target="_blank">Read Matthew’s full bio</a>.</em></div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nMatthew Hickman is a an associate professor of criminal justice at Seattle University. A former staffer with the Bureau of Justice Statistics, <a href=\"https://nacole.org/wp-content/uploads/Hickman.National-Data-on-Citizen-Complaints-about-Police-Use-of-Force_Data-Quality-Concern-and-the-Potential-Mis-Use-of-Statistical-Evidence-to-Address-Police-Agency-Conduct.DRAFT_.pdf\" target=\"_blank\">Hickman has criticized the quality of the governmentï¿½s national data on citizen complaints and police use of force</a>. As such, he serves as OpenPolice.orgï¿½s data quality ombudsman, helping ensure the accuracy and reliability of our data.\r\n<em><a href=\"https://www.seattleu.edu/artsci/faculty-staff/hickman-matthew/\" target=\"_blank\">Read Matthewï¿½s full bio</a>.</em></div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1078,
@@ -27001,10 +26386,7 @@ Matthew Hickman is a an associate professor of criminal justice at Seattle Unive
 			'NodeTree' => '23',
 			'NodeParentID' => '1082',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Fritz Mulhauser is a retired ACLU attorney and current Flex Your Rights board member. Fritz has devoted his life to advancing the principles of the Bill of Rights, open government, and justice. He’s been a source of knowledge and wisdom, guiding OpenPolice.org from its inception.
-<em><a href="https://www.flexyourrights.org/about-us/board-of-directors/fritz-mulhauser/" target="_blank">Read Fritz’s full bio.</a></em><p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nFritz Mulhauser is a retired ACLU attorney and current Flex Your Rights board member. Fritz has devoted his life to advancing the principles of the Bill of Rights, open government, and justice. Heï¿½s been a source of knowledge and wisdom, guiding OpenPolice.org from its inception.\r\n<em><a href=\"https://www.flexyourrights.org/about-us/board-of-directors/fritz-mulhauser/\" target=\"_blank\">Read Fritzï¿½s full bio.</a></em><p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1084,
@@ -27012,8 +26394,7 @@ Fritz Mulhauser is a retired ACLU attorney and current Flex Your Rights board me
 			'NodeParentID' => '1080',
 			'NodeType' => 'Big Button',
 			'NodeResponseSet' => 'Text',
-			'NodeDefault' => '<center><p><img src="/openpolice/uploads/billy-murphy.jpeg" alt="William H. “Billy” Murphy, Jr." class="bigTmbRound"></p>
-<h3 style="margin-top: 20px;">William H. “Billy” Murphy, Jr.</h3></center>',
+			'NodeDefault' => '<center><p><img src=\"/openpolice/uploads/billy-murphy.jpeg\" alt=\"William H. ï¿½Billyï¿½ Murphy, Jr.\" class=\"bigTmbRound\"></p>\r\n<h3 style=\"margin-top: 20px;\">William H. ï¿½Billyï¿½ Murphy, Jr.</h3></center>',
 			'NodeOpts' => '43'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27021,9 +26402,7 @@ Fritz Mulhauser is a retired ACLU attorney and current Flex Your Rights board me
 			'NodeTree' => '23',
 			'NodeParentID' => '1084',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-William H. “Billy” Murphy, Jr. is an attorney and former judge in Baltimore, Maryland. In 2015, he served as attorney for the family of Freddie Gray, who died during an encounter with the Baltimore police. Murphy was the starring narrator and executive producer of Flex Your Rights most recent educational film, <a href="https://www.flexyourrights.org/10-rules/" target="_blank"><i>10 Rules for Dealing with Police</i>. Murphy</a>, a longtime civil rights advocate, provides OpenPolice.org strategic advice for identifying complainants who are credible candidates for potential civil litigation.
-<a href="https://en.wikipedia.org/wiki/William_%22Billy%22_Murphy,_Jr" target="_blank"><em>Read Billy’s full bio.</em></a></div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nWilliam H. ï¿½Billyï¿½ Murphy, Jr. is an attorney and former judge in Baltimore, Maryland. In 2015, he served as attorney for the family of Freddie Gray, who died during an encounter with the Baltimore police. Murphy was the starring narrator and executive producer of Flex Your Rights most recent educational film, <a href=\"https://www.flexyourrights.org/10-rules/\" target=\"_blank\"><i>10 Rules for Dealing with Police</i>. Murphy</a>, a longtime civil rights advocate, provides OpenPolice.org strategic advice for identifying complainants who are credible candidates for potential civil litigation.\r\n<a href=\"https://en.wikipedia.org/wiki/William_%22Billy%22_Murphy,_Jr\" target=\"_blank\"><em>Read Billyï¿½s full bio.</em></a></div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1086,
@@ -27040,10 +26419,7 @@ William H. “Billy” Murphy, Jr. is an attorney and former judge in Baltimore,
 			'NodeTree' => '23',
 			'NodeParentID' => '1086',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">
-Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000. A prominent critic of the War on Drug’s impact on policing culture, he is the author of <a href="http://www.amazon.com/Breaking-Rank-Expos%C3%A9-American-Policing/dp/1560258551/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1449697683&amp;sr=1-1&amp;keywords=breaking+rank+norm+stamper" target="_blank"><i>Breaking Rank: A Top Cop’s Exposé of the Dark Side of American Policing</i></a>. His new book, <i><a href="http://www.amazon.com/Protect-Serve-How-America%C2%92s-Police/dp/1568585403/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1450372080&amp;sr=1-1&amp;keywords=To+Protect+and+to+Serve%3A+How+to+Fix" target="_blank">To Protect and To Serve: How to Fix America’s Police</a></i>, will be released in spring 2016. Stamper is advising OpenPolice.org on how our data can support conscientious police chiefs working to improve oversight and accountability.
-<em><a href="http://normstamper.com/" target="_blank">Read Norm’s full bio.</a></em><p></p>
-</div>'
+			'NodePromptText' => '<div style=\"padding: 20px; font-size: 80%;\">\r\nNorm Stamper served as chief of the Seattle Police Department from 1994 to 2000. A prominent critic of the War on Drugï¿½s impact on policing culture, he is the author of <a href=\"http://www.amazon.com/Breaking-Rank-Expos%C3%A9-American-Policing/dp/1560258551/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1449697683&amp;sr=1-1&amp;keywords=breaking+rank+norm+stamper\" target=\"_blank\"><i>Breaking Rank: A Top Copï¿½s Expos\ï¿½ of the Dark Side of American Policing</i></a>. His new book, <i><a href=\"http://www.amazon.com/Protect-Serve-How-America%C2%92s-Police/dp/1568585403/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1450372080&amp;sr=1-1&amp;keywords=To+Protect+and+to+Serve%3A+How+to+Fix\" target=\"_blank\">To Protect and To Serve: How to Fix Americaï¿½s Police</a></i>, will be released in spring 2016. Stamper is advising OpenPolice.org on how our data can support conscientious police chiefs working to improve oversight and accountability.\r\n<em><a href=\"http://normstamper.com/\" target=\"_blank\">Read Normï¿½s full bio.</a></em><p></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1088,
@@ -27105,15 +26481,7 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeParentID' => '1096',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p> </p>
-<center>
-<h3>Do you have a complaint or a compliment about the police?</h3>
-</center>
-<p> </p>
-<p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-complaint"><i class="fa fa-thumbs-o-down mR10" aria-hidden="true"></i>  Share a Complaint</a></p>
-<p> </p>
-<p><a class="btn btn-xl btn-primary w100" href="[[DOMAIN]]/filing-your-police-compliment"><i class="fa fa-thumbs-o-up mR10" aria-hidden="true"></i> Share a Compliment</a></p>
-<p> </p>',
+			'NodePromptText' => '<p>ï¿½</p>\r\n<center>\r\n<h3>Do you have a complaint or a compliment about the police?</h3>\r\n</center>\r\n<p>ï¿½</p>\r\n<p><a class=\"btn btn-xl btn-primary w100\" href=\"[[DOMAIN]]/filing-your-police-complaint\"><i class=\"fa fa-thumbs-o-down mR10\" aria-hidden=\"true\"></i>  Share a Complaint</a></p>\r\n<p>ï¿½</p>\r\n<p><a class=\"btn btn-xl btn-primary w100\" href=\"[[DOMAIN]]/filing-your-police-compliment\"><i class=\"fa fa-thumbs-o-up mR10\" aria-hidden=\"true\"></i> Share a Compliment</a></p>\r\n<p>ï¿½</p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27148,9 +26516,7 @@ Norm Stamper served as chief of the Seattle Police Department from 1994 to 2000.
 			'NodeTree' => '70',
 			'NodeParentID' => '2094',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p> </p>
-
-<center><h3>Sorry, but this isn\'t quite ready for the public yet.</h3></center>',
+			'NodePromptText' => '<p>ï¿½</p>\r\n\r\n<center><h3>Sorry, but this isn\\'t quite ready for the public yet.</h3></center>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -27568,22 +26934,7 @@ setTimeout("checkYouFatal()", 1);
 			'NodeTree' => '1',
 			'NodeParentID' => '679',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<h2>We will help you organize everything that a lawyer needs to <nobr>help you.</nobr></h2>
-<p>You might not know it, but some information you publish could hurt somebody\'s legal case. That\'s not what we want to happen, so you should share your complaint with a lawyer first. Later, you can file it with a police investigative agency.</p>
-<p>After you complete your complaint, you can save it in three <nobr>ways ...</nobr></p>
-<table border=0 class="w100"><tr><td class="taC">
-<h1 class="slBlueDark" style="margin-top: 15px;"><i class="fa fa-print" aria-hidden="true"></i></h1>
-Print it
-</td><td class="taC">
-<h1 class="slBlueDark" style="margin-top: 15px;"><i class="fa fa-cloud-download" aria-hidden="true"></i></h1>
-Download it
-</td><td class="taC">
-<h1 class="slBlueDark" style="margin-top: 15px;"><i class="fa fa-envelope" aria-hidden="true"></i></h1>
-Email it
-</td></tr></table>
-<p>For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can re-upload your complaint. <b>That will publish your full story and file it with a police investigative agency.</b></p>
-<h3 class="slBlueDark" style="margin-top: 20px;">Remember: The more details you share, the better we can match you with a lawyer.</h3>',
+			'NodePromptText' => '<h2>We will help you organize everything that a lawyer needs to <nobr>help you.</nobr></h2>\r\n<p>You might not know it, but some information you publish could hurt somebody\\'s legal case. That\\'s not what we want to happen, so you should share your complaint with a lawyer first. Later, you can file it with a police investigative agency.</p>\r\n<p>After you complete your complaint, you can save it in three <nobr>ways ...</nobr></p>\r\n<table border=0 class=\"w100\"><tr><td class=\"taC\">\r\n<h1 class=\"slBlueDark\" style=\"margin-top: 15px;\"><i class=\"fa fa-print\" aria-hidden=\"true\"></i></h1>\r\nPrint it\r\n</td><td class=\"taC\">\r\n<h1 class=\"slBlueDark\" style=\"margin-top: 15px;\"><i class=\"fa fa-cloud-download\" aria-hidden=\"true\"></i></h1>\r\nDownload it\r\n</td><td class=\"taC\">\r\n<h1 class=\"slBlueDark\" style=\"margin-top: 15px;\"><i class=\"fa fa-envelope\" aria-hidden=\"true\"></i></h1>\r\nEmail it\r\n</td></tr></table>\r\n<p>For your protection, we will delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>\r\n<p>After you\\'ve checked with a lawyer ï¿½ or any charges are resolved ï¿½ you can re-upload your complaint. <b>That will publish your full story and file it with a police investigative agency.</b></p>\r\n<h3 class=\"slBlueDark\" style=\"margin-top: 20px;\">Remember: The more details you share, the better we can match you with a lawyer.</h3>',
 			'NodeOpts' => '37'
 		]);
 		DB::table('SL_Node')->insert([
@@ -29200,7 +28551,7 @@ Due to the importance of this information in filing OpenPolice.org, we want to v
 			'NodeTree' => '47',
 			'NodeType' => 'Page',
 			'NodePromptNotes' => 'volunteer',
-			'NodePromptAfter' => 'Volunteer with OpenPolice.org::M::You can help build the nation\'s most powerful database of police complaints. You’ll help build a national open-source directory of police department contact information.::M::Open Police, OpenPolice.org, Open Police Complaints, Police Departments, Cops, Police, Officers, file complaint, submit, victims, accountability, oversight, open source, transparency, volunteer, database::M::',
+			'NodePromptAfter' => 'Volunteer with OpenPolice.org::M::You can help build the nation\\'s most powerful database of police complaints. Youï¿½ll help build a national open-source directory of police department contact information.::M::Open Police, OpenPolice.org, Open Police Complaints, Police Departments, Cops, Police, Officers, file complaint, submit, victims, accountability, oversight, open source, transparency, volunteer, database::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
@@ -29208,13 +28559,7 @@ Due to the importance of this information in filing OpenPolice.org, we want to v
 			'NodeTree' => '47',
 			'NodeParentID' => '1445',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h2 class="slBlueDark">Please Volunteer To Help OpenPolice.org</h2>
-<h4>You can help build the nation\'s most powerful database of police complaints.</h4>
-<p></p>
-<p><b>Your research will do three important things:</b></p><ol>
-<li>You’ll help build a national open-source directory of police department contact information.</li><li>The up-to-date directory will help OpenPolice.org users file complaints the right way with the right department.</li><li>Your research will reveal a “Complaints Accessibility Score” for each department. This score shows how easy or difficult it is for people to share complaints with departments.</li></ol><h4>Thank you for helping to make OpenPolice.org stronger!</h4>
-<p>&nbsp;</p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<h2 class=\"slBlueDark\">Please Volunteer To Help OpenPolice.org</h2>\r\n<h4>You can help build the nation\\'s most powerful database of police complaints.</h4>\r\n<p></p>\r\n<p><b>Your research will do three important things:</b></p><ol>\r\n<li>Youï¿½ll help build a national open-source directory of police department contact information.</li><li>The up-to-date directory will help OpenPolice.org users file complaints the right way with the right department.</li><li>Your research will reveal a ï¿½Complaints Accessibility Scoreï¿½ for each department. This score shows how easy or difficult it is for people to share complaints with departments.</li></ol><h4>Thank you for helping to make OpenPolice.org stronger!</h4>\n<p>&nbsp;</p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -29303,7 +28648,7 @@ Due to the importance of this information in filing OpenPolice.org, we want to v
 			'NodeParentID' => '1750',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pT5"> </div>',
+			'NodePromptText' => '<div class=\"pT5\">ï¿½</div>',
 			'NodePromptAfter' => '<style>
 #node2326kids { margin-bottom: -20px; }
 #repNode1384 { margin-top: 30px; }
@@ -31228,7 +30573,7 @@ setTimeout("checkIncBlock()", 100);
 			'NodeParentID' => '1362',
 			'NodeParentOrder' => '5',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pT5"> </div><div class="alert alert-danger fade in alert-dismissible show" style="padding: 10px 15px;">This complaint is not public while it awaits further review or legal counsel.</div>'
+			'NodePromptText' => '<div class=\"pT5\">ï¿½</div><div class=\"alert alert-danger fade in alert-dismissible show\" style=\"padding: 10px 15px;\">This complaint is not public while it awaits further review or legal counsel.</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1750,
@@ -31327,54 +30672,7 @@ setTimeout("checkIncBlock()", 100);
 			'NodeTree' => '12',
 			'NodeParentID' => '1847',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<center>
-<h3 style="margin-bottom: 40px;">Our Principles</h3>
-</center>
-<p> </p>
-<div class="row"><div class="col-lg-5 col-md-12 col-sm-12">
-
-<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-lg-8 col-md-9 col-sm-9">
-<h4>Universality</h4>
-<p>Consistent user experience for all 18,000 police departments in the U.S.</p>
-</div></div>
-
-</div><div class="col-lg-1 col-0">
-</div><div class="col-lg-5 col-md-12 col-sm-12">
-
-<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-lg-8 col-md-9 col-sm-9">
-<h4>Objectivity</h4>
-<p>Neutral, non-leading questions seeking truth and accuracy</p>
-</div></div>
-
-</div><div class="col-lg-1 col-0"></div></div>
-<div class="row"><div class="col-lg-5 col-md-12 col-sm-12">
-
-<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-lg-8 col-md-9 col-sm-9">
-<h4>Transparency</h4>
-<p>Bypass state secrecy laws with uncensored public reporting<br></p>
-</div></div>
-
-</div><div class="col-lg-1 col-0">
-</div><div class="col-lg-5 col-md-12 col-sm-12">
-
-<div class="row mB20"><div class="col-lg-4 col-md-3 col-sm-3"><div class="bigIcoWrap">
-<i class="fa fa-lock" aria-hidden="true"></i>
-</div></div><div class="col-lg-8 col-md-9 col-sm-9">
-<h4>Privacy</h4>
-<p>Multiple options for how your information is shared with police and with the public</p>
-</div></div>
-
-</div><div class="col-lg-1 col-0">
-</div></div>
-
-<p> </p>
-<center><a href="/principles" class="btn btn-lg btn-secondary" onmouseover="this.style.color=\'#FFF\';" onmouseout="this.style.color=\'#2B3493\';" style="color: #2B3493;">Learn more</a></center>',
+			'NodePromptText' => '<center>\r\n<h3 style=\"margin-bottom: 40px;\">Our Principles</h3>\r\n</center>\r\n<p>ï¿½</p>\r\n<div class=\"row\"><div class=\"col-lg-5 col-md-12 col-sm-12\">\r\n\r\n<div class=\"row mB20\"><div class=\"col-lg-4 col-md-3 col-sm-3\"><div class=\"bigIcoWrap\">\r\n<img src=\"/openpolice/uploads/universality-sm.jpg\" style=\"height: 65px;\" border=\"0\">\r\n</div></div><div class=\"col-lg-8 col-md-9 col-sm-9\">\r\n<h4>Universality</h4>\r\n<p>Consistent user experience for all 18,000 police departments in the U.S.</p>\r\n</div></div>\r\n\r\n</div><div class=\"col-lg-1 col-0\">\r\n</div><div class=\"col-lg-5 col-md-12 col-sm-12\">\r\n\r\n<div class=\"row mB20\"><div class=\"col-lg-4 col-md-3 col-sm-3\"><div class=\"bigIcoWrap\">\r\n<img src=\"/openpolice/uploads/balance-sm.jpg\" style=\"height: 65px;\" border=\"0\">\r\n</div></div><div class=\"col-lg-8 col-md-9 col-sm-9\">\r\n<h4>Objectivity</h4>\r\n<p>Neutral, non-leading questions seeking truth and accuracy</p>\r\n</div></div>\r\n\r\n</div><div class=\"col-lg-1 col-0\"></div></div>\r\n<div class=\"row\"><div class=\"col-lg-5 col-md-12 col-sm-12\">\r\n\r\n<div class=\"row mB20\"><div class=\"col-lg-4 col-md-3 col-sm-3\"><div class=\"bigIcoWrap\">\r\n<img src=\"/openpolice/uploads/magnifying-eye-sm.jpg\" style=\"height: 65px;\" border=\"0\">\r\n</div></div><div class=\"col-lg-8 col-md-9 col-sm-9\">\r\n<h4>Transparency</h4>\r\n<p>Bypass state secrecy laws with uncensored public reporting<br></p>\r\n</div></div>\r\n\r\n</div><div class=\"col-lg-1 col-0\">\r\n</div><div class=\"col-lg-5 col-md-12 col-sm-12\">\r\n\r\n<div class=\"row mB20\"><div class=\"col-lg-4 col-md-3 col-sm-3\"><div class=\"bigIcoWrap\">\r\n<i class=\"fa fa-lock\" aria-hidden=\"true\"></i>\r\n</div></div><div class=\"col-lg-8 col-md-9 col-sm-9\">\r\n<h4>Privacy</h4>\r\n<p>Multiple options for how your information is shared with police and with the public</p>\r\n</div></div>\r\n\r\n</div><div class=\"col-lg-1 col-0\">\r\n</div></div>\r\n\r\n<p>ï¿½</p>\r\n<center><a href=\"/principles\" class=\"btn btn-lg btn-secondary\" onmouseover=\"this.style.color=\\'#FFF\\';\" onmouseout=\"this.style.color=\\'#2B3493\\';\" style=\"color: #2B3493;\">Learn more</a></center>',
 			'NodePromptAfter' => '<style>
 #blockWrap1847 { padding: 60px 0px; }
 .bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; background: #FFF; }
@@ -31423,15 +30721,7 @@ setTimeout("checkIncBlock()", 100);
 			'NodeTree' => '53',
 			'NodeParentID' => '1789',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p><br></p>
-<h2>How OpenPolice.org can help your department</h2>
-<p>OpenPolice.org is a web app that helps people prepare, file, and track reports of police conduct. <b>This includes <i>compliments</i> as well as complaints.</b> For law enforcement agencies that value constitutional, community policing — this is a tool for you.
-</p><p>
-OpenPolice.org was developed with contributions from police oversight professionals from across the country. The tools are designed to serve the needs of police commanders, attorneys, and others working to advance police oversight and accountability through better, more open data.
-</p><p>
-Together, we can foster a culture of transparency and accountability to build community trust.
-</p>
-<p><br></p>'
+			'NodePromptText' => '<p><br></p>\r\n<h2>How OpenPolice.org can help your department</h2>\r\n<p>OpenPolice.org is a web app that helps people prepare, file, and track reports of police conduct. <b>This includes <i>compliments</i> as well as complaints.</b> For law enforcement agencies that value constitutional, community policing ï¿½ this is a tool for you.\r\n</p><p>\r\nOpenPolice.org was developed with contributions from police oversight professionals from across the country. The tools are designed to serve the needs of police commanders, attorneys, and others working to advance police oversight and accountability through better, more open data.\r\n</p><p>\r\nTogether, we can foster a culture of transparency and accountability to build community trust.\r\n</p>\r\n<p><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1789,
@@ -31462,160 +30752,7 @@ Together, we can foster a culture of transparency and accountability to build co
 			'NodeParentID' => '787',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<h1 class="slBlueDark">Misconduct Allegations</h1>
-
-<div class="relDiv"><a name="wrongful-detention" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Detention</h3>
-<p>Police pulled over a vehicle or stopped someone without reasonable suspicion.</p>
-<p class="slGrey">"Do do you think anybody was wrongfully stopped or detained?"</p>
-<p class="slGrey">"What makes you think that this stop was wrongful?"</p>
-<p class="slGrey"><i>Example: Police are called to a high school after a student is accused of theft. Police and teachers interrogate him as he\'s held against his will. His parents are not contacted until many hours later.</i></p>
-<p class="slGrey"><i>Example: A motorists gets pulled over for speeding. When the officer asks to search his vehicle, he says no. The officer then detains him for 30 minutes until drug dogs arrive.</i></p>
-
-<div class="relDiv"><a name="wrongful-search" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Search</h3>
-<p>Police conducted a search without a warrant, probable cause, or consent.</p>
-<p class="slGrey">"Do you think anybody was wrongfully searched?"</p>
-<p class="slGrey">"What makes you think that this search was wrongful?"</p>
-<p class="slGrey"><i>Example: An officer writes a man a ticket after pulling him over for an unsafe lane change. When the officer asks to search the car, the man refuses. The officer then orders the man out of his vehicle and searches it without the man\'s consent.</i></p>
-
-<div class="relDiv"><a name="wrongful-property-seizure" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Property Seizure</h3>
-<p>Property seizure which violated the protections provided by the 4th Amendment of the United States Constitution.</p>
-<p class="slGrey">"Do you think this property was wrongfully seized?"</p>
-<p class="slGrey">"What makes you think that this property seizure was wrongful?"</p>
-<p class="slGrey"><i>Example: Rudy Ramirez was pulled over driving to Missouri to buy a used Corvette. A search turned up no drugs. But under civil forfeiture laws, the officers confiscated $6,000 in cash he had on hand to buy the car.</i></p>
-
-<div class="relDiv"><a name="wrongful-property-damage" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Property Damage</h3>
-<p>Property damage which violated the protections provided by the 4th Amendment of the United States Constitution.</p>
-<p class="slGrey">"Do you think this property was wrongfully damaged?"</p>
-<p class="slGrey">"What makes you think that this property damage was wrongful?"</p>
-<p class="slGrey"><i>Example: </i></p>
-
-<div class="relDiv"><a name="sexual-harassment" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Sexual Harassment</h3>
-<p>This includes the use of unwanted sexual advances or obscene remarks.</p>
-<p class="slGrey">"Do you think an officer sexually harassed someone? This includes the use of unwanted sexual advances or obscene remarks."</p>
-<p class="slGrey">"What makes you think that sexual harassment occurred?"</p>
-
-<div class="relDiv"><a name="sexual-assault" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Sexual Assault</h3>
-<p>Any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching.</p>
-<p class="slGrey">"Do you think an officer sexually assaulted someone? Sexual assault is any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching."</p>
-<p class="slGrey">"What makes you think that a sexual assault occurred? We understand that this isn\'t easy, but please provide as much detail as you can."</p>
-<p class="slGrey"><i>Example: An officer put his hand down a motorist\'s pants, groping his genitals. He said he was looking for drugs.</i></p>
-
-<div class="relDiv"><a name="unreasonable-force" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Unreasonable Force</h3>
-<p>"Reasonable force" is the amount of effort required by police to compel an unwilling person to comply. So "unreasonable force" is any unnecessary or excessive force beyond what\'s required to do that.</p>
-<p class="slGrey">"Do you think the use of physical force on someone was unreasonable?"</p>
-<p class="slGrey">"What makes you think that this use of physical force was unreasonable?"</p>
-<p class="slGrey"><i>Example: A woman drove into a road construction area by accident. An officer directing traffic approached her and yelled at her to get off the road. He then put his hand through her open window and twisted her arm until she moved her car.</i></p>
-
-<div class="relDiv"><a name="wrongful-arrest" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Arrest</h3>
-<p>Police took someone into custody without a warrant or probable cause.</p>
-<p class="slGrey">"Do do you think anybody was arrested wrongfully?"</p>
-<p class="slGrey">"What makes you think that their arrest was wrongful?"</p>
-<p class="slGrey"><i>Example: A woman asserts her first-amendment rights by video recording on-duty police. An officer arrests her after she refuses to turn off her camera.</i></p>
-
-<div class="relDiv"><a name="excessive-arrest-charges" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Excessive Arrest Charges</h3>
-<p>Police filed arrest charges to punish someone beyond what\'s legal or appropriate.</p>
-<p class="slGrey">"Do you think the arrest charges filed against anyone were a form of retaliation?"</p>
-<p class="slGrey">"What makes you think that these charges were retaliatory?"</p>
-<p class="slGrey"><i>Example: Upset about the arrest of his wife, a man accidentally shoves an officer. Another officer responds by violently arresting the man. He\'s charged with "disturbing the peace," "resisting arrest," and "assaulting an officer."</i></p>
-
-<div class="relDiv"><a name="excessive-citation" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Excessive Citation</h3>
-<p>Police filed citations to punish someone beyond what\'s legal or appropriate.</p>
-<p class="slGrey">"Do you think the citations filed against anyone were wrongful or excessive?"</p>
-<p class="slGrey">"What makes you think that these citations were excessive?"</p>
-<p class="slGrey"><i>Example: A motorist gets pulled over and cited for speeding. On the same ticket, the officer also cites him for "illegal window tint," "muffler violation," "seat belt violation," and "illegal lane change."</i></p>
-
-<div class="relDiv"><a name="intimidation-weapon" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Intimidation With Weapon</h3>
-<p>Police pointed or flaunted a weapon to intimidate someone who isn’t a threat.</p>
-<p class="slGrey">"Police are legally allowed to display a weapon if they feel threatened. But it\'s wrongful for police to use a weapon to intimidate people who aren\'t a threat. Do you think an officer wrongfully intimidated someone by displaying a weapon or a police dog? (This does not include any violent use of force.)"</p>
-<p class="slGrey">"What type of weapon?"</p>
-<p class="slGrey">"What makes you think that this was wrongful?"</p>
-<p class="slGrey"><i>Example: While questioning a pedestrian, the officer pointed a taser at her in a threatening manner.</i></p>
-
-<div class="relDiv"><a name="repeat-harassment" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Repeat Harassment</h3>
-<p>Circumstances where a department member has had repeated or continued contact with a person without lawful police justification.</p>
-<p class="slGrey">We asked you to focus this complaint on a single incident. But was this incident part of continued contact with an officer?</p>
-<p class="slGrey">Do you think this incident was part of repeated harassment without lawful justification?</p>
-<p class="slGrey">"What makes you think that this was wrongful?"</p>
-<p class="slGrey"><i>Example of Repeated Harassment: Every few weeks, the same officer stops, questions, and frisks the same group of teenagers. He does this when they’re on their way home from school. But he never finds illegal items or arrests them.</i></p>
-
-<div class="relDiv"><a name="bias-based" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Bias-Based Policing</h3>
-<p>An officer\'s conduct was based on a person\'s race, gender, appearance, nationality, religion, age, class, sexual orientation, residence, disability, etc.</p>
-<p class="slGrey">"Do you think an officer acted in a biased or discriminatory manner? This means an officer\'s conduct was based on a person\'s race, gender, appearance, nationality, religion, age, class, sexual orientation, residence, disability, etc."</p>
-<p class="slGrey">"What makes you think that an officer\'s conduct was biased or discriminatory?"</p>
-<p class="slGrey"><i>Example: An officer stops a black motorist in a primarily white neighborhood. The officer claimed he fit the description of a suspect.</i></p>
-
-<div class="relDiv"><a name="neglect-of-duty" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Neglect of Duty</h3>
-<p>The officer\'s inaction did not follow appropriate policy, procedure, or guidelines. These are things an officer should have done, but didn\'t do.</p>
-<p class="slGrey">"Do you think an officer neglected their duty by failing to take appropriate action? These are things an officer should have done, but didn\'t do."</p>
-<p class="slGrey">"What makes you think that an officer neglected their duty?"</p>
-<p class="slGrey"><i>Example: A woman is groped on the street by an unknown man. When the police arrive, they refuse to file an official report or investigate.</i></p>
-
-<div class="relDiv"><a name="policy-procedure" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Policy or Procedure Violation</h3>
-<p>An officer took actions which did not follow appropriate policy, procedure, or guidelines.</p>
-<p class="slGrey">"Do you think an officer took actions that did not follow appropriate policy or procedure?"</p>
-<p class="slGrey">"What actions do you think weren\'t appropriate?"</p>
-<p class="slGrey"><i>Example: An officer parked his police vehicle in a handicap spot. There did not seem to be any emergency to justify this.</i></p>
-
-<div class="relDiv"><a name="conduct-unbecoming" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Conduct Unbecoming an Officer</h3>
-<p>A reasonable person would find the officer\'s on or off duty conduct to be unbecoming a police officer, and such conduct reflected adversely on the department.</p>
-<p class="slGrey">"Do you think an officer\'s on-duty or off-duty conduct was improper or unprofessional? This includes conduct that looks bad for the department or for police in general."</p>
-<p class="slGrey">"What makes you think that the conduct was unbecoming?"</p>
-<p class="slGrey"><i>Example: An off-duty officer likes to get drunk at a local bar. He sometimes gets in fights, threatens patrons, and drives home drunk.</i></p>
-
-<div class="relDiv"><a name="officer-discourtesy" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Officer Discourtesy</h3>
-<p>This includes the use of profanity, offensive language, loss of temper, verbal threats, impatience, or any rude behavior.</p>
-<p class="slGrey">"Was an officer discourteous in ways not included in other allegations? This includes the use of profanity, offensive language, loss of temper, verbal threats, impatience, or any discourteous behavior."</p>
-<p class="slGrey">"What makes you think that these actions were discourteous?"</p>
-
-<div class="relDiv"><a name="officer-no-id" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Officer failed to provide ID upon request</h3>
-<p>An officer refused to provide ID when requested by a subject, though this may be allowed by police and law.</p>
-<p class="slGrey">"Did an officer refuse to provide identification?"</p>
-
-<div class="relDiv"><a name="wrongful-entry" class="absDiv" style="top: -60px;"></a></div>
-<p>&nbsp;</p>
-<h3>Wrongful Entry</h3>
-<p>Police entered private property without a warrant or consent. (Gold Star only)</p>
-<p class="slGrey">"Did an officer enter a private home or workplace? (Yes) 
-Did someone grant permission for an officer to enter? (No or Not sure)
-Did an officer enter anyway without a warrant? (Yes)
-Describe what happened."</p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<h1 class=\"slBlueDark\">Misconduct Allegations</h1>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-detention\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Detention</h3>\r\n<p>Police pulled over a vehicle or stopped someone without reasonable suspicion.</p>\r\n<p class=\"slGrey\">\"Do do you think anybody was wrongfully stopped or detained?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this stop was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: Police are called to a high school after a student is accused of theft. Police and teachers interrogate him as he\\'s held against his will. His parents are not contacted until many hours later.</i></p>\r\n<p class=\"slGrey\"><i>Example: A motorists gets pulled over for speeding. When the officer asks to search his vehicle, he says no. The officer then detains him for 30 minutes until drug dogs arrive.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-search\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Search</h3>\r\n<p>Police conducted a search without a warrant, probable cause, or consent.</p>\r\n<p class=\"slGrey\">\"Do you think anybody was wrongfully searched?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this search was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: An officer writes a man a ticket after pulling him over for an unsafe lane change. When the officer asks to search the car, the man refuses. The officer then orders the man out of his vehicle and searches it without the man\\'s consent.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-property-seizure\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Property Seizure</h3>\r\n<p>Property seizure which violated the protections provided by the 4th Amendment of the United States Constitution.</p>\r\n<p class=\"slGrey\">\"Do you think this property was wrongfully seized?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this property seizure was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: Rudy Ramirez was pulled over driving to Missouri to buy a used Corvette. A search turned up no drugs. But under civil forfeiture laws, the officers confiscated $6,000 in cash he had on hand to buy the car.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-property-damage\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Property Damage</h3>\r\n<p>Property damage which violated the protections provided by the 4th Amendment of the United States Constitution.</p>\r\n<p class=\"slGrey\">\"Do you think this property was wrongfully damaged?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this property damage was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: </i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"sexual-harassment\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Sexual Harassment</h3>\r\n<p>This includes the use of unwanted sexual advances or obscene remarks.</p>\r\n<p class=\"slGrey\">\"Do you think an officer sexually harassed someone? This includes the use of unwanted sexual advances or obscene remarks.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that sexual harassment occurred?\"</p>\r\n\r\n<div class=\"relDiv\"><a name=\"sexual-assault\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Sexual Assault</h3>\r\n<p>Any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching.</p>\r\n<p class=\"slGrey\">\"Do you think an officer sexually assaulted someone? Sexual assault is any sexual act that a person is forced to engage in against their will. This includes any non-consensual sexual touching.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that a sexual assault occurred? We understand that this isn\\'t easy, but please provide as much detail as you can.\"</p>\r\n<p class=\"slGrey\"><i>Example: An officer put his hand down a motorist\\'s pants, groping his genitals. He said he was looking for drugs.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"unreasonable-force\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Unreasonable Force</h3>\r\n<p>\"Reasonable force\" is the amount of effort required by police to compel an unwilling person to comply. So \"unreasonable force\" is any unnecessary or excessive force beyond what\\'s required to do that.</p>\r\n<p class=\"slGrey\">\"Do you think the use of physical force on someone was unreasonable?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this use of physical force was unreasonable?\"</p>\r\n<p class=\"slGrey\"><i>Example: A woman drove into a road construction area by accident. An officer directing traffic approached her and yelled at her to get off the road. He then put his hand through her open window and twisted her arm until she moved her car.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-arrest\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Arrest</h3>\r\n<p>Police took someone into custody without a warrant or probable cause.</p>\r\n<p class=\"slGrey\">\"Do do you think anybody was arrested wrongfully?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that their arrest was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: A woman asserts her first-amendment rights by video recording on-duty police. An officer arrests her after she refuses to turn off her camera.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"excessive-arrest-charges\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Excessive Arrest Charges</h3>\r\n<p>Police filed arrest charges to punish someone beyond what\\'s legal or appropriate.</p>\r\n<p class=\"slGrey\">\"Do you think the arrest charges filed against anyone were a form of retaliation?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that these charges were retaliatory?\"</p>\r\n<p class=\"slGrey\"><i>Example: Upset about the arrest of his wife, a man accidentally shoves an officer. Another officer responds by violently arresting the man. He\\'s charged with \"disturbing the peace,\" \"resisting arrest,\" and \"assaulting an officer.\"</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"excessive-citation\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Excessive Citation</h3>\r\n<p>Police filed citations to punish someone beyond what\\'s legal or appropriate.</p>\r\n<p class=\"slGrey\">\"Do you think the citations filed against anyone were wrongful or excessive?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that these citations were excessive?\"</p>\r\n<p class=\"slGrey\"><i>Example: A motorist gets pulled over and cited for speeding. On the same ticket, the officer also cites him for \"illegal window tint,\" \"muffler violation,\" \"seat belt violation,\" and \"illegal lane change.\"</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"intimidation-weapon\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Intimidation With Weapon</h3>\r\n<p>Police pointed or flaunted a weapon to intimidate someone who isnï¿½t a threat.</p>\r\n<p class=\"slGrey\">\"Police are legally allowed to display a weapon if they feel threatened. But it\\'s wrongful for police to use a weapon to intimidate people who aren\\'t a threat. Do you think an officer wrongfully intimidated someone by displaying a weapon or a police dog? (This does not include any violent use of force.)\"</p>\r\n<p class=\"slGrey\">\"What type of weapon?\"</p>\r\n<p class=\"slGrey\">\"What makes you think that this was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example: While questioning a pedestrian, the officer pointed a taser at her in a threatening manner.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"repeat-harassment\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Repeat Harassment</h3>\n<p>Circumstances where a department member has had repeated or continued contact with a person without lawful police justification.</p>\r\n<p class=\"slGrey\">We asked you to focus this complaint on a single incident. But was this incident part of continued contact with an officer?</p>\n<p class=\"slGrey\">Do you think this incident was part of repeated harassment without lawful justification?</p>\r\n<p class=\"slGrey\">\"What makes you think that this was wrongful?\"</p>\r\n<p class=\"slGrey\"><i>Example of Repeated Harassment: Every few weeks, the same officer stops, questions, and frisks the same group of teenagers. He does this when theyï¿½re on their way home from school. But he never finds illegal items or arrests them.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"bias-based\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Bias-Based Policing</h3>\r\n<p>An officer\\'s conduct was based on a person\\'s race, gender, appearance, nationality, religion, age, class, sexual orientation, residence, disability, etc.</p>\r\n<p class=\"slGrey\">\"Do you think an officer acted in a biased or discriminatory manner? This means an officer\\'s conduct was based on a person\\'s race, gender, appearance, nationality, religion, age, class, sexual orientation, residence, disability, etc.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that an officer\\'s conduct was biased or discriminatory?\"</p>\r\n<p class=\"slGrey\"><i>Example: An officer stops a black motorist in a primarily white neighborhood. The officer claimed he fit the description of a suspect.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"neglect-of-duty\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Neglect of Duty</h3>\r\n<p>The officer\\'s inaction did not follow appropriate policy, procedure, or guidelines. These are things an officer should have done, but didn\\'t do.</p>\r\n<p class=\"slGrey\">\"Do you think an officer neglected their duty by failing to take appropriate action? These are things an officer should have done, but didn\\'t do.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that an officer neglected their duty?\"</p>\r\n<p class=\"slGrey\"><i>Example: A woman is groped on the street by an unknown man. When the police arrive, they refuse to file an official report or investigate.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"policy-procedure\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Policy or Procedure Violation</h3>\r\n<p>An officer took actions which did not follow appropriate policy, procedure, or guidelines.</p>\r\n<p class=\"slGrey\">\"Do you think an officer took actions that did not follow appropriate policy or procedure?\"</p>\r\n<p class=\"slGrey\">\"What actions do you think weren\\'t appropriate?\"</p>\r\n<p class=\"slGrey\"><i>Example: An officer parked his police vehicle in a handicap spot. There did not seem to be any emergency to justify this.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"conduct-unbecoming\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Conduct Unbecoming an Officer</h3>\r\n<p>A reasonable person would find the officer\\'s on or off duty conduct to be unbecoming a police officer, and such conduct reflected adversely on the department.</p>\r\n<p class=\"slGrey\">\"Do you think an officer\\'s on-duty or off-duty conduct was improper or unprofessional? This includes conduct that looks bad for the department or for police in general.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that the conduct was unbecoming?\"</p>\r\n<p class=\"slGrey\"><i>Example: An off-duty officer likes to get drunk at a local bar. He sometimes gets in fights, threatens patrons, and drives home drunk.</i></p>\r\n\r\n<div class=\"relDiv\"><a name=\"officer-discourtesy\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Officer Discourtesy</h3>\r\n<p>This includes the use of profanity, offensive language, loss of temper, verbal threats, impatience, or any rude behavior.</p>\r\n<p class=\"slGrey\">\"Was an officer discourteous in ways not included in other allegations? This includes the use of profanity, offensive language, loss of temper, verbal threats, impatience, or any discourteous behavior.\"</p>\r\n<p class=\"slGrey\">\"What makes you think that these actions were discourteous?\"</p>\r\n\r\n<div class=\"relDiv\"><a name=\"officer-no-id\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Officer failed to provide ID upon request</h3>\r\n<p>An officer refused to provide ID when requested by a subject, though this may be allowed by police and law.</p>\r\n<p class=\"slGrey\">\"Did an officer refuse to provide identification?\"</p>\r\n\r\n<div class=\"relDiv\"><a name=\"wrongful-entry\" class=\"absDiv\" style=\"top: -60px;\"></a></div>\r\n<p>&nbsp;</p>\r\n<h3>Wrongful Entry</h3>\r\n<p>Police entered private property without a warrant or consent. (Gold Star only)</p>\r\n<p class=\"slGrey\">\"Did an officer enter a private home or workplace? (Yes) \r\nDid someone grant permission for an officer to enter? (No or Not sure)\r\nDid an officer enter anyway without a warrant? (Yes)\r\nDescribe what happened.\"</p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32403,20 +31540,14 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeTree' => '12',
 			'NodeParentID' => '2103',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/katryna-smile-crop-sm.jpg" border=0 ></div>
-<div class="bigQuote"><span class="slBlueDark">”</span></div>
-<div class="quoteTxt"><p>I\'ve never used a police complaints software before — but I\'m feelin\' this!</p></div>
-<p><b class="slBlueDark">Katryna Lawson</b><br />OpenPolice.org User</p>'
+			'NodePromptText' => '<div class=\"pB20\"><img class=\"bigTmbRound\" src=\"/openpolice/uploads/katryna-smile-crop-sm.jpg\" border=0 ></div>\r\n<div class=\"bigQuote\"><span class=\"slBlueDark\">ï¿½</span></div>\r\n<div class=\"quoteTxt\"><p>I\\'ve never used a police complaints software before ï¿½ but I\\'m feelin\\' this!</p></div>\r\n<p><b class=\"slBlueDark\">Katryna Lawson</b><br />OpenPolice.org User</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1872,
 			'NodeTree' => '12',
 			'NodeParentID' => '2102',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/norm-stamper.jpeg" border=0 ></div>
-<div class="bigQuote"><span class="slBlueDark">”</span></div>
-<div class="quoteTxt"><p>OpenPolice.org will upset some officers, but it will help police leaders identify, analyze, and correct problematic police conduct.</p></div>
-<p><b class="slBlueDark">Norm Stamper</b><br />Former Chief of Police, Seattle PD</p>'
+			'NodePromptText' => '<div class=\"pB20\"><img class=\"bigTmbRound\" src=\"/openpolice/uploads/norm-stamper.jpeg\" border=0 ></div>\r\n<div class=\"bigQuote\"><span class=\"slBlueDark\">ï¿½</span></div>\r\n<div class=\"quoteTxt\"><p>OpenPolice.org will upset some officers, but it will help police leaders identify, analyze, and correct problematic police conduct.</p></div>\r\n<p><b class=\"slBlueDark\">Norm Stamper</b><br />Former Chief of Police, Seattle PD</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1873,
@@ -32439,10 +31570,7 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeTree' => '12',
 			'NodeParentID' => '2101',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div class="pB20"><img class="bigTmbRound" src="/openpolice/uploads/cynthia-conti-cook.jpg" border=0 ></div>
-<div class="bigQuote"><span class="slBlueDark">”</span></div>
-<div class="quoteTxt"><p>OpenPolice.org helps people document police misconduct without relying on the police. This independence ensures that this vital data is transparent and accessible to the public.</p></div>
-<p><b class="slBlueDark">Cynthia Conti-Cook</b><br />Staff Attorney, New York Legal Aid Society</p>'
+			'NodePromptText' => '<div class=\"pB20\"><img class=\"bigTmbRound\" src=\"/openpolice/uploads/cynthia-conti-cook.jpg\" border=0 ></div>\r\n<div class=\"bigQuote\"><span class=\"slBlueDark\">ï¿½</span></div>\r\n<div class=\"quoteTxt\"><p>OpenPolice.org helps people document police misconduct without relying on the police. This independence ensures that this vital data is transparent and accessible to the public.</p></div>\r\n<p><b class=\"slBlueDark\">Cynthia Conti-Cook</b><br />Staff Attorney, New York Legal Aid Society</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1876,
@@ -32473,9 +31601,7 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeTree' => '13',
 			'NodeParentID' => '829',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<div style="margin-top: -20px;"><p>If you haven\'t done so already, please review our <a href="/frequently-asked-questions#faq-complaint" target="_blank">Complaint Process FAQs</a>.</p></div>
-<p> </p>
-<div style="margin-top: -20px;"><p><b>Type of police incident inquiry</b></p></div>',
+			'NodePromptText' => '<div style=\"margin-top: -20px;\"><p>If you haven\\'t done so already, please review our <a href=\"/frequently-asked-questions#faq-complaint\" target=\"_blank\">Complaint Process FAQs</a>.</p></div>\r\n<p>ï¿½</p>\r\n<div style=\"margin-top: -20px;\"><p><b>Type of police incident inquiry</b></p></div>',
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32484,9 +31610,7 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeParentID' => '829',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<div style="margin-top: -20px;"><p>If you haven\'t done so already, please review our <a href="/frequently-asked-questions#faq-law-enforcement" target="_blank">FAQs for Law Enforcement</a>.</p></div>
-<p> </p>
-<div style="margin-top: -20px;"><p><b>Type of law enforcement inquiry</b></p></div>',
+			'NodePromptText' => '<div style=\"margin-top: -20px;\"><p>If you haven\\'t done so already, please review our <a href=\"/frequently-asked-questions#faq-law-enforcement\" target=\"_blank\">FAQs for Law Enforcement</a>.</p></div>\r\n<p>ï¿½</p>\r\n<div style=\"margin-top: -20px;\"><p><b>Type of law enforcement inquiry</b></p></div>',
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32495,9 +31619,7 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeParentID' => '829',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<div style="margin-top: -20px;"><p>If you haven\'t done so already, please review our <a href="/frequently-asked-questions#faq-attorneys" target="_blank">FAQs for Attorneys</a>.</p></div>
-<p> </p>
-<div style="margin-top: -20px;"><p><b>Type of attorney inquiry</b></p></div>',
+			'NodePromptText' => '<div style=\"margin-top: -20px;\"><p>If you haven\\'t done so already, please review our <a href=\"/frequently-asked-questions#faq-attorneys\" target=\"_blank\">FAQs for Attorneys</a>.</p></div>\r\n<p>ï¿½</p>\r\n<div style=\"margin-top: -20px;\"><p><b>Type of attorney inquiry</b></p></div>',
 			'NodeOpts' => '5'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32506,134 +31628,7 @@ a#btnDeptAccMore:hover { color: #2B3493; }
 			'NodeParentID' => '839',
 			'NodeParentOrder' => '3',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<br /><br />
-<div class="nodeAnchor"><a id="faq-complaint" name="faq-complaint"></a></div>
-<br />
-<h2 class="slBlueDark">The Complaint Process</h2>
-<br />
-
-<div class="nodeAnchor"><a id="when-users-file" name="when-users-file"></a></div>
-<a id="hidivBtnAfterFile" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->What happens when users file reports with OpenPolice.org?
-<div class="pull-right"><i id="hidivCrtAfterFile" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivAfterFile" class="disNon brd mTn5 p15">
-<p>We aim to make it as easy as possible for users to file reports directly with police department investigators. 
-The challenge is that there are about 18,000 law enforcement agencies in the United States. Each one has it\'s own rules 
-for how they accept — or <em>don’t accept</em> — reports that can be investigated.</p>
-<p>The goods news is that OpenPolice.org has built a <a href="#track">crowdsourced knowledge base</a> containing 
-information about these department rules. This tool makes it easy as possible for users to submit an official report 
-to the appropriate department contact. But regardless of how departments accept reports, OpenPolice.org allows users to 
-publish their reports on our website with <a href="#privacy">privacy settings</a> that fit their needs. So even if 
-certain departments disregard user complaints, these reports will be forever visible to the public.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="departments-ignore" name="departments-ignore"></a></div>
-<a id="hidivBtnIgnore" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->What if police departments ignore OpenPolice.org reports?
-<div class="pull-right"><i id="hidivCrtIgnore" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivIgnore" class="disNon brd mTn5 p15">
-<p>We look forward to working with departments that accept OpenPolice.org reports. But we understand that many departments 
-have broken oversight systems that disregard police misconduct complaints. Either way, we will prompt users who submit 
-complaints to report back to us about how departments are responding.</p>
-<p>As we gather and track thousands of new user complaints, we\'ll be able to publicly track how individual officers 
-interact with the public. We’ll also begin to see important police behavioral trends across all police jurisdictions 
-in the United States. At the same time, we\'ll be able to see how well — or how poorly — individual departments are 
-responding to reports of police misconduct. In other words, OpenPolice.org will provide open source oversight of police 
-oversight!</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="privacy" name="privacy"></a></div>
-<a id="hidivBtnPrivacy" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->What can users do with OpenPolice.org?
-<div class="pull-right"><i id="hidivCrtPrivacy" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivPrivacy" class="disNon brd mTn5 p15">
-<p>We believe that victims of police misconduct must control who has access to their private information. Different 
-users will have different privacy needs, so we\'ve developed three unique privacy options that control how we collect 
-and share and individual user\'s data. Victims can publish their complaint with full transparency, no names made 
-public, or complete anonymity. <a href="http://openpolice.local/complaint-privacy-options">See how these privacy options 
-appear to new users</a>.</p>
-<p>No matter which option users select, we\'ll never publish anyone\'s private information. (This includes addresses, 
-phone numbers, emails, etc.) We will only share this with appropriate agencies who can investigate your complaint.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="anonymous" name="anonymous"></a></div>
-<a id="hidivBtnAnonymous" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Can users submit anonymous reports?
-<div class="pull-right"><i id="hidivCrtAnonymous" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivAnonymous" class="disNon brd mTn5 p15">
-<p>Absolutely. Police misconduct victims who fear police retaliation <a href="http://openpolice.local/complaint-privacy-options">can submit OpenPolice.org complaints anonymously</a>. These complaints don\'t require users to share personally-identifiable information with us or police departments. Neither OpenPolice.org staff nor investigators will receive contact information from anonymous complainants. But they can submit crucial details about the incident — including officer names and descriptions — which OpenPolice.org will only share with investigative agencies.</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="anonymousOver" name="anonymousOver"></a></div>
-<a id="hidivBtnAnonymousOver" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->How can we track officers associated with anonymous complaints?
-<div class="pull-right"><i id="hidivCrtAnonymousOver" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivAnonymousOver" class="disNon brd mTn5 p15">
-<p>Approved community organizers can create OpenPolice.org affiliate accounts to collect local complaints. Such organizers can see the full details of these reports — including officer’s names. With equal access to complaints data, they will have more power to pressure local officials to take appropriate action when problematic behavior gets reported.
-</p><p>
-For public reporting, OpenPolice.org can track unpublished officers using assigned identification numbers. These will help organizers and third-party researches to, for example, spot a single officer engaging in repeat sexual harassment of female motorists.
-</p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="sell-data" name="sell-data"></a></div>
-<a id="hidivBtnSell" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->Will you sell my my data?
-<div class="pull-right"><i id="hidivCrtSell" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivSell" class="disNon brd mTn5 p15">
-<p>Definitely not! We respect your privacy and only collect the necessary information to create a police report in accordance with users’ privacy needs.<br></p>
-</div>
-
-<br /><br />
-
-<div class="nodeAnchor"><a id="what-allegations" name="what-allegations"></a></div>
-<a id="hidivBtnAllegs" class="btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt" href="javascript:;"
->What types of police misconduct are you tracking?
-<div class="pull-right"><i id="hidivCrtAllegs" class="fa fa-chevron-down" aria-hidden="true"></i></div></a>
-<div id="hidivAllegs" class="disNon brd mTn5 p15">
-<p>During the basic complaint process, users can make <a href="/allegations">allegations of various types of police misconduct</a>:</p>
-<p><b>Tier 1</b></p>
-<ul>
-<li>Sexual Assault</li>
-<li>Unreasonable Force</li>
-<li>Wrongful Arrest</li>
-<li>Wrongful Property Seizure or Damage</li>
-</ul>
-<p><b>Tier 2</b></p>
-<ul>
-<li>Sexual Harassment</li>
-<li>Intimidating Display of Weapon</li>
-<li>Wrongful Search</li>
-<li>Wrongful Entry</li>
-<li>Wrongful Detention</li>
-</ul>
-<p><b>Tier 3</b></p>
-<ul>
-<li>Bias-Based Policing</li>
-<li>Retaliation<ul>
-<li>Unnecessary Charges</li>
-</ul></li>
-<li>Conduct Unbecoming an Officer</li>
-<li>Officer Discourtesy
-<ul>
-<li>Profanity</li>
-</ul></li>
-<li>Neglect of Duty</li>
-<li>Policy or Procedure Violation
-<ul>
-<li>Officer failed to provide ID upon request</li>
-</ul></li>
-</ul>
-</div>',
+			'NodePromptText' => '<br /><br />\r\n<div class=\"nodeAnchor\"><a id=\"faq-complaint\" name=\"faq-complaint\"></a></div>\r\n<br />\r\n<h2 class=\"slBlueDark\">The Complaint Process</h2>\r\n<br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"when-users-file\" name=\"when-users-file\"></a></div>\r\n<a id=\"hidivBtnAfterFile\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>What happens when users file reports with OpenPolice.org?\r\n<div class=\"pull-right\"><i id=\"hidivCrtAfterFile\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivAfterFile\" class=\"disNon brd mTn5 p15\">\r\n<p>We aim to make it as easy as possible for users to file reports directly with police department investigators. \r\nThe challenge is that there are about 18,000 law enforcement agencies in the United States. Each one has it\\'s own rules \r\nfor how they accept ï¿½ or <em>donï¿½t accept</em> ï¿½ reports that can be investigated.</p>\r\n<p>The goods news is that OpenPolice.org has built a <a href=\"#track\">crowdsourced knowledge base</a> containing \r\ninformation about these department rules. This tool makes it easy as possible for users to submit an official report \r\nto the appropriate department contact. But regardless of how departments accept reports, OpenPolice.org allows users to \r\npublish their reports on our website with <a href=\"#privacy\">privacy settings</a> that fit their needs. So even if \r\ncertain departments disregard user complaints, these reports will be forever visible to the public.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"departments-ignore\" name=\"departments-ignore\"></a></div>\r\n<a id=\"hidivBtnIgnore\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>What if police departments ignore OpenPolice.org reports?\r\n<div class=\"pull-right\"><i id=\"hidivCrtIgnore\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivIgnore\" class=\"disNon brd mTn5 p15\">\r\n<p>We look forward to working with departments that accept OpenPolice.org reports. But we understand that many departments \r\nhave broken oversight systems that disregard police misconduct complaints. Either way, we will prompt users who submit \r\ncomplaints to report back to us about how departments are responding.</p>\r\n<p>As we gather and track thousands of new user complaints, we\\'ll be able to publicly track how individual officers \r\ninteract with the public. Weï¿½ll also begin to see important police behavioral trends across all police jurisdictions \r\nin the United States. At the same time, we\\'ll be able to see how well ï¿½ or how poorly ï¿½ individual departments are \r\nresponding to reports of police misconduct. In other words, OpenPolice.org will provide open source oversight of police \r\noversight!</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"privacy\" name=\"privacy\"></a></div>\r\n<a id=\"hidivBtnPrivacy\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>What can users do with OpenPolice.org?\r\n<div class=\"pull-right\"><i id=\"hidivCrtPrivacy\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivPrivacy\" class=\"disNon brd mTn5 p15\">\r\n<p>We believe that victims of police misconduct must control who has access to their private information. Different \r\nusers will have different privacy needs, so we\\'ve developed three unique privacy options that control how we collect \r\nand share and individual user\\'s data.ï¿½Victims can publish their complaint with full transparency, no names made \r\npublic, or complete anonymity. <a href=\"http://openpolice.local/complaint-privacy-options\">See how these privacy options \r\nappear to new users</a>.</p>\r\n<p>No matter which option users select, we\\'ll never publish anyone\\'s private information. (This includes addresses, \r\nphone numbers, emails, etc.) We will only share this with appropriate agencies who can investigate your complaint.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"anonymous\" name=\"anonymous\"></a></div>\r\n<a id=\"hidivBtnAnonymous\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Can users submit anonymous reports?\r\n<div class=\"pull-right\"><i id=\"hidivCrtAnonymous\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivAnonymous\" class=\"disNon brd mTn5 p15\">\r\n<p>Absolutely. Police misconduct victims who fear police retaliation <a href=\"http://openpolice.local/complaint-privacy-options\">can submit OpenPolice.org complaints anonymously</a>. These complaints don\\'t require users to share personally-identifiable information with us or police departments. Neither OpenPolice.org staff nor investigators will receive contact information from anonymous complainants. But they can submit crucial details about the incident ï¿½ including officer names and descriptions ï¿½ which OpenPolice.org will only share with investigative agencies.</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"anonymousOver\" name=\"anonymousOver\"></a></div>\r\n<a id=\"hidivBtnAnonymousOver\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>How can we track officers associated with anonymous complaints?\r\n<div class=\"pull-right\"><i id=\"hidivCrtAnonymousOver\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivAnonymousOver\" class=\"disNon brd mTn5 p15\">\r\n<p>Approved community organizers can create OpenPolice.org affiliate accounts to collect local complaints. Such organizers can see the full details of these reports ï¿½ including officerï¿½s names. With equal access to complaints data, they will have more power to pressure local officials to take appropriate action when problematic behavior gets reported.\r\n</p><p>\r\nFor public reporting, OpenPolice.org can track unpublished officers using assigned identification numbers. These will help organizers and third-party researches to, for example, spot a single officer engaging in repeat sexual harassment of female motorists.\r\n</p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"sell-data\" name=\"sell-data\"></a></div>\r\n<a id=\"hidivBtnSell\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>Will you sell my my data?\r\n<div class=\"pull-right\"><i id=\"hidivCrtSell\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivSell\" class=\"disNon brd mTn5 p15\">\r\n<p>Definitely not! We respect your privacy and only collect the necessary information to create a police report in accordance with usersï¿½ privacy needs.<br></p>\r\n</div>\r\n\r\n<br /><br />\r\n\r\n<div class=\"nodeAnchor\"><a id=\"what-allegations\" name=\"what-allegations\"></a></div>\r\n<a id=\"hidivBtnAllegs\" class=\"btn btn-secondary btn-lg w100 taL hidivBtn hidivCrt\" href=\"javascript:;\"\r\n>What types of police misconduct are you tracking?\r\n<div class=\"pull-right\"><i id=\"hidivCrtAllegs\" class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></div></a>\r\n<div id=\"hidivAllegs\" class=\"disNon brd mTn5 p15\">\r\n<p>During the basic complaint process, users can make <a href=\"/allegations\">allegations of various types of police misconduct</a>:</p>\r\n<p><b>Tier 1</b></p>\r\n<ul>\r\n<li>Sexual Assault</li>\r\n<li>Unreasonable Force</li>\r\n<li>Wrongful Arrest</li>\r\n<li>Wrongful Property Seizure or Damage</li>\r\n</ul>\r\n<p><b>Tier 2</b></p>\r\n<ul>\r\n<li>Sexual Harassment</li>\r\n<li>Intimidating Display of Weapon</li>\r\n<li>Wrongful Search</li>\r\n<li>Wrongful Entry</li>\r\n<li>Wrongful Detention</li>\r\n</ul>\r\n<p><b>Tier 3</b></p>\r\n<ul>\r\n<li>Bias-Based Policing</li>\r\n<li>Retaliation<ul>\r\n<li>Unnecessary Charges</li>\r\n</ul></li>\r\n<li>Conduct Unbecoming an Officer</li>\r\n<li>Officer Discourtesy\r\n<ul>\r\n<li>Profanity</li>\r\n</ul></li>\r\n<li>Neglect of Duty</li>\r\n<li>Policy or Procedure Violation\r\n<ul>\r\n<li>Officer failed to provide ID upon request</li>\r\n</ul></li>\r\n</ul>\r\n</div>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -32733,14 +31728,7 @@ content our users\' post to this site.</p>
 			'NodeParentID' => '839',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p> </p>
-<div>
-<a class="hidTogAll pull-right btn btn-secondary" data-list="UsersCan,Compliment,Launch,Names,False,18000,App,Video,Sue,Money,Contribute,AfterFile,Ignore,Privacy,Anonymous,AnonymousOver,Sell,Allegs,GotEmail,Integrate,Correction,Remove,AttrIntak" href="javascript:;">Toggle All</a>
-<h1>Frequently Asked Questions</h1>
-</div>
-<div id="faqCats" class="faqNav">
-<div class="disIn slGrey">Categories:  <a href="#faq-general" class="hsho">General</a>  |  <a href="#faq-complaint" class="hsho">Complaint Process</a></div> <div id="faqLine2" class="slGrey"> | <a href="#faq-law-enforcement" class="hsho">Law Enforcement</a>  |  <a href="#faq-attorneys" class="hsho">Attorneys</a></div>
-</div>',
+			'NodePromptText' => '<p>ï¿½</p>\r\n<div>\r\n<a class=\"hidTogAll pull-right btn btn-secondary\" data-list=\"UsersCan,Compliment,Launch,Names,False,18000,App,Video,Sue,Money,Contribute,AfterFile,Ignore,Privacy,Anonymous,AnonymousOver,Sell,Allegs,GotEmail,Integrate,Correction,Remove,AttrIntak\" href=\"javascript:;\">Toggle All</a>\r\n<h1>Frequently Asked Questions</h1>\r\n</div>\r\n<div id=\"faqCats\" class=\"faqNav\">\r\n<div class=\"disIn slGrey\">Categories:ï¿½ï¿½<a href=\"#faq-general\" class=\"hsho\">General</a>ï¿½ï¿½|ï¿½ï¿½<a href=\"#faq-complaint\" class=\"hsho\">Complaint Process</a></div>ï¿½<div id=\"faqLine2\" class=\"slGrey\">ï¿½|ï¿½<a href=\"#faq-law-enforcement\" class=\"hsho\">Law Enforcement</a>ï¿½ï¿½|ï¿½ï¿½<a href=\"#faq-attorneys\" class=\"hsho\">Attorneys</a></div>\r\n</div>',
 			'NodePromptAfter' => '<style>
 .faqNav { position: relative; width: 100%; margin: 0px; }
 .faqNavScroll {
@@ -33333,8 +32321,7 @@ Partner URL Slug',
 			'NodeParentID' => '2082',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<p> </p>
-<h3>Referral Alert Options</h3>',
+			'NodePromptText' => '<p>ï¿½</p>\r\n<h3>Referral Alert Options</h3>',
 			'NodeResponseSet' => 'Definition::Attorney Referral Alerts',
 			'NodeDefault' => '556',
 			'NodeDataStore' => 'Partners:PartAlerts'
@@ -33472,11 +32459,7 @@ $(document).ready(function(){
 			'NodeParentID' => '1445',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<p>Every time someone submits a complaint or compliment here, we check if our database has recent information for the department(s) involved. If the department\'s complaint process needs to be researched, we alert our team of volunteers.</p>
-<div class="pull-right slBlueDark" style="font-size: 80px;">&nbsp;&nbsp;<i class="fa fa-users" aria-hidden="true"></i></div>
-<p>Volunteers help out by doing online research into the department\'s basic contact information and web presence. This is followed up by a phone call to the department (with non-emergency number) to confirm the information found online. Finally a phone call is made to the internal affairs department — or sometimes an independent civilian investigative agency — to fill in remaining questions, and confirm important info.</p>
-<p>&nbsp;</p>',
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<p>Every time someone submits a complaint or compliment here, we check if our database has recent information for the department(s) involved. If the department\\'s complaint process needs to be researched, we alert our team of volunteers.</p>\r\n<div class=\"pull-right slBlueDark\" style=\"font-size: 80px;\">&nbsp;&nbsp;<i class=\"fa fa-users\" aria-hidden=\"true\"></i></div>\r\n<p>Volunteers help out by doing online research into the department\\'s basic contact information and web presence. This is followed up by a phone call to the department (with non-emergency number) to confirm the information found online. Finally a phone call is made to the internal affairs department ï¿½ or sometimes an independent civilian investigative agency ï¿½ to fill in remaining questions, and confirm important info.</p>\r\n<p>&nbsp;</p>',
 			'NodeOpts' => '67'
 		]);
 		DB::table('SL_Node')->insert([
@@ -33647,21 +32630,7 @@ James became fascinated with civil liberties while studying political science in
 			'NodeParentID' => '1987',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div class="nodeAnchor"><a name="daily-checklist"></a></div>
-<h3>Daily Staff Checklist</h3>
-<p>Every day, OpenPolice.org staff needs to do these things.</p>
-<ul>
-<li><a href="/dash/all-complete-complaints"><b>Check for new complaints</b></a><ul><li>Is this story about the police? Is it about misconduct?</li><li>Does this person need a lawyer? (criminal or civil)</li><li>Does this department need research? If so, do research or alert volunteers.</li><li>If research is complete, send the apppropriate email(s)<br><br></li></ul></li>
-<li><a href="/dash/all-complete-complaints?fltView=all&amp;fltStatus=200">Check for auto-emailed complaints</a>&nbsp;whose secure links have not yet been opened by the police (after 24 hours)<ul><li>Call internal affairs to confirm they received the complaint<br><br></li></ul></li>
-</ul>
-<p>&nbsp;Every day, a team member should also do the following.</p>
-<ul>
-<li>Search for new complainants to use OpenPolice.org.</li>
-<li>Search for lawyers in places where we don’t have them (especially for new complaints).</li>
-<li><a href="/dash/volunteer">Perform department research</a> on large cities that need it.<br><br></li></ul><p><a href="/openpolice/uploads/OPC_Complaint_Process.jpg" target="_blank" class="btn btn-secondary"><i class="fa fa-external-link mR3" aria-hidden="true"></i>
- Full Process Workflow</a><br></p><ul>
-</ul>
-<p class="slGrey"><span style="font-size: 10.56px;">Updated: Oct 1, 2019</span></p>',
+			'NodePromptText' => '<div class=\"nodeAnchor\"><a name=\"daily-checklist\"></a></div>\r\n<h3>Daily Staff Checklist</h3>\r\n<p>Every day, OpenPolice.org staff needs to do these things.</p>\r\n<ul>\r\n<li><a href=\"/dash/all-complete-complaints\"><b>Check for new complaints</b></a><ul><li>Is this story about the police? Is it about misconduct?</li><li>Does this person need a lawyer? (criminal or civil)</li><li>Does this department need research? If so, do research or alert volunteers.</li><li>If research is complete, send the apppropriate email(s)<br><br></li></ul></li>\r\n<li><a href=\"/dash/all-complete-complaints?fltView=all&amp;fltStatus=200\">Check for auto-emailed complaints</a>&nbsp;whose secure links have not yet been opened by the police (after 24 hours)<ul><li>Call internal affairs to confirm they received the complaint<br><br></li></ul></li>\r\n</ul>\r\n<p>&nbsp;Every day, a team member should also do the following.</p>\r\n<ul>\r\n<li>Search for new complainants to use OpenPolice.org.</li>\r\n<li>Search for lawyers in places where we donï¿½t have them (especially for new complaints).</li>\r\n<li><a href=\"/dash/volunteer\">Perform department research</a> on large cities that need it.<br><br></li></ul><p><a href=\"/openpolice/uploads/OPC_Complaint_Process.jpg\" target=\"_blank\" class=\"btn btn-secondary\"><i class=\"fa fa-external-link mR3\" aria-hidden=\"true\"></i>\r\n Full Process Workflow</a><br></p><ul>\r\n</ul>\r\n<p class=\"slGrey\"><span style=\"font-size: 10.56px;\">Updated: Oct 1, 2019</span></p>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -33793,16 +32762,7 @@ legal aid organizations in every state.</li></ul>
 			'NodeTree' => '63',
 			'NodeParentID' => '2002',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<div class="row">
-<div class="col-md-4"><img src="/openpolice/uploads/invisible-institute-logo.png" class="w100" border="0"></div>
-<div class="col-md-8">
-<h2>Citizens Police Data Project (Chicago)</h2>
-<p>The Invisible Institute\'s <a href="https://CPDP.co" target="_blank">Citizens Police Data Project (CPDP.co)</a> is a tool for holding police accountable to the public they serve. CPDP takes records of police interactions with the public that would otherwise be buried in internal databases and opens them up to make the data useful to the public, creating a permanent record for every police officer and a public record for every civilian complaint.</p>
-<p>Designed to serve as a national model for transparency, the Citizens Police Data Project is the product of a decade-long <a href="https://invisible.institute/news/2014/cpd-lists-of-officers-with-the-most-complaints-are-now-public" target="_blank">collaboration</a> with the University of Chicago Law School’s Mandel Legal Aid Clinic.</p>
-<div class="mT20"><a href="https://cpdp.co/" target="_blank" class="btn btn-lg btn-primary">Explore The Data</a></div>
-</div></div>
-<p>&nbsp;</p>'
+			'NodePromptText' => '<p>&nbsp;</p>\r\n<div class=\"row\">\r\n<div class=\"col-md-4\"><img src=\"/openpolice/uploads/invisible-institute-logo.png\" class=\"w100\" border=\"0\"></div>\r\n<div class=\"col-md-8\">\r\n<h2>Citizens Police Data Project (Chicago)</h2>\r\n<p>The Invisible Institute\\'s <a href=\"https://CPDP.co\" target=\"_blank\">Citizens Police Data Project (CPDP.co)</a> is a tool for holding police accountable to the public they serve. CPDP takes records of police interactions with the public that would otherwise be buried in internal databases and opens them up to make the data useful to the public, creating a permanent record for every police officer and a public record for every civilian complaint.</p>\r\n<p>Designed to serve as a national model for transparency, the Citizens Police Data Project is the product of a decade-long <a href=\"https://invisible.institute/news/2014/cpd-lists-of-officers-with-the-most-complaints-are-now-public\" target=\"_blank\">collaboration</a> with the University of Chicago Law Schoolï¿½s Mandel Legal Aid Clinic.</p>\n<div class=\"mT20\"><a href=\"https://cpdp.co/\" target=\"_blank\" class=\"btn btn-lg btn-primary\">Explore The Data</a></div>\r\n</div></div>\r\n<p>&nbsp;</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2004,
@@ -33866,12 +32826,7 @@ legal aid organizations in every state.</li></ul>
 			'NodeTree' => '63',
 			'NodeParentID' => '2008',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p>&nbsp;</p>
-<img src="/openpolice/uploads/open-data-policing-logo.png" class="w100 mTn20" border="0">
-<h2>Search all known North Carolina, Maryland, and Illinois traffic stops.</h2>
-<p>Open Data Policing is a first-of-its-kind platform that aims to make real the recommendation of the President’s Task Force on 21st Century Policing to make stop, search, and use-of-force “data...publicly available to ensure transparency.” The site currently aggregates, visualizes, and publishes public records related to all known traffic stops to have occurred in North Carolina since 2002, in Maryland since 2013, and in Illinois since 2005. Data is collected in all states pursuant to mandatory data collection statutes and reported monthly to the NC State Bureau of Investigation, Maryland State Police, and Illinois State Police.</p>
-<div class="mT20 mB20"><a href="https://opendatapolicing.com/" target="_blank" class="btn btn-lg btn-primary" onmouseover="this.style.color=\'#2B3493\';" onmouseout="this.style.color=\'#FFF\';">Explore The Data</a></div>
-<p>&nbsp;</p>'
+			'NodePromptText' => '<p>&nbsp;</p>\n<img src=\"/openpolice/uploads/open-data-policing-logo.png\" class=\"w100 mTn20\" border=\"0\">\r\n<h2>Search all known North Carolina, Maryland, and Illinois traffic stops.</h2>\r\n<p>Open Data Policing is a first-of-its-kind platform that aims to make real the recommendation of the Presidentï¿½s Task Force on 21st Century Policing to make stop, search, and use-of-force ï¿½data...publicly available to ensure transparency.ï¿½ The site currently aggregates, visualizes, and publishes public records related to all known traffic stops to have occurred in North Carolina since 2002, in Maryland since 2013, and in Illinois since 2005. Data is collected in all states pursuant to mandatory data collection statutes and reported monthly to the NC State Bureau of Investigation, Maryland State Police, and Illinois State Police.</p>\r\n<div class=\"mT20 mB20\"><a href=\"https://opendatapolicing.com/\" target=\"_blank\" class=\"btn btn-lg btn-primary\" onmouseover=\"this.style.color=\\'#2B3493\\';\" onmouseout=\"this.style.color=\\'#FFF\\';\">Explore The Data</a></div>\r\n<p>&nbsp;</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2012,
@@ -33920,12 +32875,7 @@ legal aid organizations in every state.</li></ul>
 			'NodeParentID' => '453',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Radio',
-			'NodePromptText' => '<h4>No matter which one you choose, we <nobr>will ...</nobr></h4>
-<ul>
-<li>Publish no one’s private information. That includes addresses, phone numbers, emails, etc.</li>
-<li>Try to send your full complaint to a police investigative agency.</li>
-</ul>
-<p>You have three options for how we collect your data and how we share it.</p>',
+			'NodePromptText' => '<h4>No matter which one you choose, we <nobr>will ...</nobr></h4>\r\n<ul>\r\n<li>Publish no oneï¿½s private information. That includes addresses, phone numbers, emails, etc.</li>\r\n<li>Try to send your full complaint to a police investigative agency.</li>\r\n</ul>\r\n<p>You have three options for how we collect your data and how we share it.</p>',
 			'NodePromptAfter' => '<style>
 .privOptPadL { padding-left: 10px; padding-top: 10px; }
 #node138 div.nFld div label { padding: 40px; }
@@ -34521,52 +33471,7 @@ legal aid organizations in every state.</li></ul>
 			'NodeTree' => '71',
 			'NodeParentID' => '2109',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p>&nbsp;</p><h1>Our Core Features</h1>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">Prepare and save a professional-grade police misconduct report</h3>
-<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\'re helping to establish national police complaint data standards.</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">File your report with the right police investigative agency</h3>
-<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">Get matched with civil rights attorneys</h3>
-<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OpenPolice.org enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/openness-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">Publish your complaint online and share on social media</h3>
-<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\'s the <i>opposite</i> of openness — because openness requires <i>accessibility</i>. OpenPolice.org is always easy to use and easy to understand. And, of course, we’re always open to receive your complaint!</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/empowered-arm-2b-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">Upload photos, documents, video, and other evidence</h3>
-<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OpenPolice.org users. We keep in touch because we care about how well — or how poorly — your department responds to your complaint. Your story is too important to be ignored!</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-3"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-9">
-<h3 class="slBlueDark">Select from three privacy options</h3>
-<p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OpenPolice.org helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
-</div></div>
-<p>&nbsp;</p>
-<p><a href="/principles" class="btn btn-xl btn-primary w100">Our Core Principles</a></p>
-<p>&nbsp;</p>',
+			'NodePromptText' => '<p>&nbsp;</p><h1>Our Core Features</h1>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">Prepare and save a professional-grade police misconduct report</h3>\n<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\\'re helping to establish national police complaint data standards.</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/universality-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">File your report with the right police investigative agency</h3>\n<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information thatï¿½s accurate and truthful.</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/balance-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">Get matched with civil rights attorneys</h3>\n<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OpenPolice.org enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/openness-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">Publish your complaint online and share on social media</h3>\n<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\\'s the <i>opposite</i> of openness ï¿½ because openness requires <i>accessibility</i>. OpenPolice.org is always easy to use and easy to understand. And, of course, weï¿½re always open to receive your complaint!</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/empowered-arm-2b-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">Upload photos, documents, video, and other evidence</h3>\n<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OpenPolice.org users. We keep in touch because we care about how well ï¿½ or how poorly ï¿½ your department responds to your complaint. Your story is too important to be ignored!</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-3\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/magnifying-eye-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-9\">\n<h3 class=\"slBlueDark\">Select from three privacy options</h3>\n<p>Police encounters can be chaotic, and the law is complex. Thatï¿½s why people who report misconduct often miss important things or pick allegations that arenï¿½t quite right. OpenPolice.org helps you find and organize the details that matter most. We also know the law inside and out, so we\\'ll make sure your allegations match the facts of your story.</p>\n</div></div>\n<p>&nbsp;</p>\n<p><a href=\"/principles\" class=\"btn btn-xl btn-primary w100\">Our Core Principles</a></p>\n<p>&nbsp;</p>',
 			'NodePromptAfter' => '<style> .bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; }</style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -34582,61 +33487,7 @@ legal aid organizations in every state.</li></ul>
 			'NodeTree' => '72',
 			'NodeParentID' => '2108',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/universality-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Universality</h1>
-<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\'re helping to establish national police complaint data standards.</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/balance-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Objectivity</h1>
-<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information that’s accurate and truthful.</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/magnifying-eye-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Transparency</h1>
-<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OpenPolice.org enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<i class="fa fa-lock" aria-hidden="true"></i>
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Privacy</h1>
-<p>You choose how your complaint information is shared with police and with the public. For example, you can choose to be anonymous. But no matter which option you choose, we will never publish anyone’s private information. Learn more about your privacy options.
-<a href="/complaint-privacy-options">Read more about privacy options</a></p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/openness-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Openness</h1>
-<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\'s the <i>opposite</i> of openness — because openness requires <i>accessibility</i>. OpenPolice.org is always easy to use and easy to understand. And, of course, we’re always open to receive your complaint!</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/empowered-arm-2b-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Empowerment</h1>
-<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OpenPolice.org users. We keep in touch because we care about how well — or how poorly — your department responds to your complaint. Your story is too important to be ignored!</p>
-</div></div>
-<p>&nbsp;</p>
-<div class="row pB20"><div class="col-sm-3 col-4"><div class="bigIcoWrap">
-<img src="/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg" style="height: 65px;" border="0">
-</div></div><div class="col-sm-9 col-8">
-<h1 class="slBlueDark">Completeness</h1>
-<p>Police encounters can be chaotic, and the law is complex. That’s why people who report misconduct often miss important things or pick allegations that aren’t quite right. OpenPolice.org helps you find and organize the details that matter most. We also know the law inside and out, so we\'ll make sure your allegations match the facts of your story.</p>
-</div></div>
-<!--
-<p>&nbsp;</p>
-<p><center><a href="/features" class="btn btn-lg btn-primary">Our Key Features</a></center></p>
-<p>&nbsp;</p>
--->',
+			'NodePromptText' => '<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/universality-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Universality</h1>\n<p>Each one of the 18,000 police departments in the U.S. collects complaints in its own unique way. This poor data consistency creates huge headaches for researchers. To gain better insight into police behavior across the country, we\\'re helping to establish national police complaint data standards.</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/balance-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Objectivity</h1>\n<p>We strive to be fair and neutral in the way we collect and share data. We cannot check the accuracy of complaint allegations, so we never assume that they are true or false. We only present questions and response options that are non-leading. And we always encourage users to share information thatï¿½s accurate and truthful.</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/magnifying-eye-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Transparency</h1>\n<p>Many state and local laws conceal government-collected police misconduct records from public view. To counter this problem, OpenPolice.org enables users to publish uncensored complaints online. Because the best antidote to state secrecy is public transparency!<br></p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<i class=\"fa fa-lock\" aria-hidden=\"true\"></i>\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Privacy</h1>\n<p>You choose how your complaint information is shared with police and with the public. For example, you can choose to be anonymous. But no matter which option you choose, we will never publish anyoneï¿½s private information. Learn more about your privacy options.\n<a href=\"/complaint-privacy-options\">Read more about privacy options</a></p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/openness-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Openness</h1>\n<p>Police misconduct victims should never have to deal with rude or intimidating police station employees. That\\'s the <i>opposite</i> of openness ï¿½ because openness requires <i>accessibility</i>. OpenPolice.org is always easy to use and easy to understand. And, of course, weï¿½re always open to receive your complaint!</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/empowered-arm-2b-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Empowerment</h1>\n<p>The people who report misconduct should be at the center of the police oversight process. Filing a complaint is not the end of the road for OpenPolice.org users. We keep in touch because we care about how well ï¿½ or how poorly ï¿½ your department responds to your complaint. Your story is too important to be ignored!</p>\n</div></div>\n<p>&nbsp;</p>\n<div class=\"row pB20\"><div class=\"col-sm-3 col-4\"><div class=\"bigIcoWrap\">\n<img src=\"/openpolice/uploads/puzzle-pieces-circle-2-sm.jpg\" style=\"height: 65px;\" border=\"0\">\n</div></div><div class=\"col-sm-9 col-8\">\n<h1 class=\"slBlueDark\">Completeness</h1>\n<p>Police encounters can be chaotic, and the law is complex. Thatï¿½s why people who report misconduct often miss important things or pick allegations that arenï¿½t quite right. OpenPolice.org helps you find and organize the details that matter most. We also know the law inside and out, so we\\'ll make sure your allegations match the facts of your story.</p>\n</div></div>\n<!--\n<p>&nbsp;</p>\n<p><center><a href=\"/features\" class=\"btn btn-lg btn-primary\">Our Key Features</a></center></p>\n<p>&nbsp;</p>\n-->',
 			'NodePromptAfter' => '<style>
 .bigIcoWrap { width: 120px; height: 120px; -moz-border-radius: 60px; border-radius: 60px; text-align: center; padding-top: 27px; border: 2px #2B3493 solid; }
 .bigIcoWrap i { font-size: 75px; margin-top: -7px; color: #000; }
@@ -34697,21 +33548,7 @@ font-size: 50px;
 			'NodeTree' => '7',
 			'NodeParentID' => '2253',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Publishing Options</h3>
-<p>You can choose to file your complaint with investigative agencies and publish your story on OpenPolice.org. You\'ll have three privacy options to control what personal information you want to share.</p>
-<p><a id="hidivBtnReadPriv" class="hidivBtnSelf btn btn-secondary" href="javascript:;">Read More</a></p>
-<div id="hidivReadPriv" class="disNon">
-<p>Whichever you choose, we will try to send your full complaint to a police investigative agency.</p>
-<ul>
-<li>
-<b style="font-weight: bold;">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
-<li>
-<b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
-<li>
-<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul>
-<p><a href="/frequently-asked-questions" target="_blank" class="btn btn-secondary"><i class="fa fa-external-link" aria-hidden="true"></i> Frequently Asked Questions</a></p>
-</div>'
+			'NodePromptText' => '<h3>Publishing Options</h3>\r\n<p>You can choose to file your complaint with investigative agencies and publish your story on OpenPolice.org. You\\'ll have three privacy options to control what personal information you want to share.</p>\r\n<p><a id=\"hidivBtnReadPriv\" class=\"hidivBtnSelf btn btn-secondary\" href=\"javascript:;\">Read More</a></p>\r\n<div id=\"hidivReadPriv\" class=\"disNon\">\r\n<p>Whichever you choose, we will try to send your full complaint to a police investigative agency.</p>\r\n<ul>\r\n<li>\r\n<b style=\"font-weight: bold;\">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">No Names Public<br></b>You donï¿½t want to publish any names to this website. This includes police officersï¿½ names and badge numbers too.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>\r\n</ul>\r\n<p><a href=\"/frequently-asked-questions\" target=\"_blank\" class=\"btn btn-secondary\"><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Frequently Asked Questions</a></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2114,
@@ -35244,7 +34081,7 @@ Who was riding this vehicle during this incident?',
 			'NodeParentID' => '2185',
 			'NodeType' => 'Radio',
 			'NodePromptText' => 'Do you think this specific incident is part of <span class="slBlueDark">repeated harassment</span>? That means an officer continued to contact someone without lawful justification.',
-			'NodePromptNotes' => '<span class="slBlueDark">Example of Repeated Harassment:</span> Every few weeks, the same officer stops, questions, and frisks the same group of teenagers. He does this when they’re on their way home from school. But he never finds illegal items or arrests them.',
+			'NodePromptNotes' => '<span class=\"slBlueDark\">Example of Repeated Harassment:</span> Every few weeks, the same officer stops, questions, and frisks the same group of teenagers. He does this when theyï¿½re on their way home from school. But he never finds illegal items or arrests them.',
 			'NodeDataStore' => 'AllegSilver:AlleSilRepeatHarass',
 			'NodeOpts' => '5'
 		]);
@@ -35299,23 +34136,7 @@ Who was riding this vehicle during this incident?',
 			'NodeTree' => '76',
 			'NodeParentID' => '2194',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">Welcome to the OpenPolice.org Pilot Program!</h2>
-<p>This document provides guidance on what to expect during this pilot testing phase. In the short term, you can help make OpenPolice.org more resilient and user-friendly. In the long term, you can help OpenPolice.org become the national center for accessible and transparent police complaint data.</p>
-<p>We designed OpenPolice.org to make it easy as possible for people to build complete reports that are accurate and easy for you to evaluate. If we do this right, the experience will not only help you better serve complaints; it will empower complainants to become better advocates for themselves and others who face police misconduct.</p>
-<p>&nbsp;</p>
-<h3>Identifying New Complainants</h3>
-<p>We invited you to join this program because you’re an attorney or activist working with people who experience police misconduct. We are excited for you to introduce them to OpenPolice.org. In particular, we are looking for users who are credible and motivated to test a new app.</p>
-<p>&nbsp;</p>
-<h3>Working With Complainants</h3>
-<p>Once you’ve identified a qualified complainant, please tell them they are part of an exclusive private beta testing program for an important new web app. They should not share the app link with others. If testers know people who want to use it, they should refer them to you. (See sample invitation email template below.)</p>
-<p>Remind complainants that they might hit an error or bug while using the app. If that happens, they should refresh the page in the browser. If the problem persists, they should email morgan<span style="margin-right: -7px;">&nbsp;&nbsp;</span>@<span style="margin-right: -7px;">&nbsp;&nbsp;</span>flexyourrights.org using their account email. Morgan will then help them through the problem.</p>
-<p>Once a complainant agrees to participate, you can send them the custom link created for your organization (e.g. http://openpolice.local/prepare-complaint-for-org/cuapb). This will tell us that your organization referred this complaint to OpenPolice.org.</p>
-<p>&nbsp;</p>
-<h3>Timeline</h3>
-<p>A crucial part of our pilot program will involve streamlining our administrative tools and processes for reviewing and submitting complaints to investigative agencies.</p>
-<p>We are ready to process a handful of new complaints per day. But we will rapidly scale up as our process becomes more stable and efficient. Because many invited participants will not complete the survey — you can invite up to 3-5 participants per day.</p>
-<p>We aim to collect our first 100 complaints by early April 2019. Soon after, we will quietly open OpenPolice.org to the public. Then you can share the link far and wide as we invite all reports of police misconduct to use OpenPolice.org.</p>
-<p>&nbsp;</p>'
+			'NodePromptText' => '<h2 class=\"slBlueDark\">Welcome to the OpenPolice.org Pilot Program!</h2>\r\n<p>This document provides guidance on what to expect during this pilot testing phase. In the short term, you can help make OpenPolice.org more resilient and user-friendly. In the long term, you can help OpenPolice.org become the national center for accessible and transparent police complaint data.</p>\r\n<p>We designed OpenPolice.org to make it easy as possible for people to build complete reports that are accurate and easy for you to evaluate. If we do this right, the experience will not only help you better serve complaints; it will empower complainants to become better advocates for themselves and others who face police misconduct.</p>\r\n<p>&nbsp;</p>\n<h3>Identifying New Complainants</h3>\r\n<p>We invited you to join this program because youï¿½re an attorney or activist working with people who experience police misconduct. We are excited for you to introduce them to OpenPolice.org. In particular, we are looking for users who are credible and motivated to test a new app.</p>\r\n<p>&nbsp;</p>\n<h3>Working With Complainants</h3>\r\n<p>Once youï¿½ve identified a qualified complainant, please tell them they are part of an exclusive private beta testing program for an important new web app. They should not share the app link with others. If testers know people who want to use it, they should refer them to you. (See sample invitation email template below.)</p>\r\n<p>Remind complainants that they might hit an error or bug while using the app. If that happens, they should refresh the page in the browser. If the problem persists, they should email morgan<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>@<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>flexyourrights.org using their account email. Morgan will then help them through the problem.</p>\r\n<p>Once a complainant agrees to participate, you can send them the custom link created for your organization (e.g. http://openpolice.local/prepare-complaint-for-org/cuapb). This will tell us that your organization referred this complaint to OpenPolice.org.</p>\r\n<p>&nbsp;</p>\n<h3>Timeline</h3>\r\n<p>A crucial part of our pilot program will involve streamlining our administrative tools and processes for reviewing and submitting complaints to investigative agencies.</p>\r\n<p>We are ready to process a handful of new complaints per day. But we will rapidly scale up as our process becomes more stable and efficient. Because many invited participants will not complete the survey ï¿½ you can invite up to 3-5 participants per day.</p>\r\n<p>We aim to collect our first 100 complaints by early April 2019. Soon after, we will quietly open OpenPolice.org to the public. Then you can share the link far and wide as we invite all reports of police misconduct to use OpenPolice.org.</p>\n<p>&nbsp;</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2193,
@@ -35346,9 +34167,7 @@ Who was riding this vehicle during this incident?',
 			'NodeParentID' => '2195',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Sample Email to Invite Complainant
-<hr></h3>
-<p>Dear {Complainant Name},<br><br>I’m so sorry to hear about your experience. {Partner Organition} partnered with OpenPolice.org to help point you in the right direction.<br><br>OpenPolice.org is not yet open to the public, but <b>we are inviting you to become a beta tester for the software</b>. If you participate, please note that you might hit bugs or errors while using the app. If that happens, refresh the page in your browser. If that doesn’t fix the problem, please email OpenPolice.org\'s coder Morgan Lesko (morgan<span style="margin-right: -7px;">&nbsp;&nbsp;</span>@<span style="margin-right: -7px;">&nbsp;&nbsp;</span>flexyourrights.org). He will then help you through the problem.<br><br>To prepare your complaint, click the link below. Depending on the complexity of your incident and how much information you share, the survey should take 10-40 minutes to complete.<br><br>http://openpolice.local/prepare-complaint-for-org/url<br><br>Sincerely,<br><br>{Name of Partner &amp; Org Name}<br></p>',
+			'NodePromptText' => '<h3>Sample Email to Invite Complainant\r\n<hr></h3>\r\n<p>Dear {Complainant Name},<br><br>Iï¿½m so sorry to hear about your experience. {Partner Organition} partnered with OpenPolice.org to help point you in the right direction.<br><br>OpenPolice.org is not yet open to the public, but <b>we are inviting you to become a beta tester for the software</b>. If you participate, please note that you might hit bugs or errors while using the app. If that happens, refresh the page in your browser. If that doesnï¿½t fix the problem, please email OpenPolice.org\\'s coder Morgan Lesko (morgan<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>@<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>flexyourrights.org). He will then help you through the problem.<br><br>To prepare your complaint, click the link below. Depending on the complexity of your incident and how much information you share, the survey should take 10-40 minutes to complete.<br><br>http://openpolice.local/prepare-complaint-for-org/url<br><br>Sincerely,<br><br>{Name of Partner &amp; Org Name}<br></p>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35433,25 +34252,7 @@ Who was riding this vehicle during this incident?',
 			'NodeParentID' => '2205',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<iframe width="100%" height="315" src="https://www.youtube.com/embed/Hn_KOQvWEmU" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<h4 class="slBlueDark mB0"><br />This free web app helps you <nobr>to ...</nobr></h4>
-<ul>
-<li>Prepare and save a professional-grade police misconduct report.</li>
-<li>File your report with the right police investigative agency.</li>
-<li>Get matched with legal help.</li>
-<li>Publish your complaint online and share on social media.</li>
-<li>Upload photos, documents, video, and other evidence.</li>
-</ul>
-<h4><br />Your Privacy Options:</h4>
-<p>When you begin your new complaint, you\'ll have three privacy options to control what personal information you want to share.</p>
-<ul>
-<li>
-<b>Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
-<li>
-<b>No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
-<li>
-<b>Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul>',
+			'NodePromptText' => '<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/Hn_KOQvWEmU\" frameborder=\"0\" allow=\"accelerometer; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n<h4 class=\"slBlueDark mB0\"><br />This free web app helps you <nobr>to ...</nobr></h4>\n<ul>\n<li>Prepare and save a professional-grade police misconduct report.</li>\n<li>File your report with the right police investigative agency.</li>\n<li>Get matched with legal help.</li>\n<li>Publish your complaint online and share on social media.</li>\n<li>Upload photos, documents, video, and other evidence.</li>\n</ul>\n<h4><br />Your Privacy Options:</h4>\n<p>When you begin your new complaint, you\\'ll have three privacy options to control what personal information you want to share.</p>\n<ul>\n<li>\n<b>Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>\n<li>\n<b>No Names Public<br></b>You donï¿½t want to publish any names to this website. This includes police officersï¿½ names and badge numbers too.</li>\n<li>\n<b>Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>\n</ul>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35460,14 +34261,7 @@ Who was riding this vehicle during this incident?',
 			'NodeParentID' => '2203',
 			'NodeParentOrder' => '4',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Sample email to students who want to formally report <nobr>police misconduct</nobr>
-<hr></h3>
-<p>Dear {Complainant Name},<br><br>I’m so sorry to hear about your experience. Our SSDP chapter partnered with OpenPolice.org to help point you in the right direction.</p>
-<p>OpenPolice.org is not yet open to the public, but <b>we are inviting you to become a beta tester for the software</b>. If you participate, please note that you might hit bugs or errors while using the app. If that happens, refresh the page in your browser. If that doesn’t fix the problem, please email OpenPolice.org\'s coder Morgan Lesko (morgan<span style="margin-right: -7px;">&nbsp;&nbsp;</span>@<span style="margin-right: -7px;">&nbsp;&nbsp;</span>flexyourrights.org). He will then help you through the problem.</p>
-<p>To prepare your complaint, click the link below. Depending on the complexity of your incident and how much information you share, the survey should take 10-40 minutes to complete.</p>
-<p><a href="http://openpolice.local/filing-your-police-complaint?org=ssdp" target="_blank">http://openpolice.local/filing-your-police-complaint?org=ssdp</a></p>
-<p>Sincerely,</p>
-<p>{Name &amp; Chapter Info}<br></p>',
+			'NodePromptText' => '<h3>Sample email to students who want to formally report <nobr>police misconduct</nobr>\r\n<hr></h3>\r\n<p>Dear {Complainant Name},<br><br>Iï¿½m so sorry to hear about your experience. Our SSDP chapter partnered with OpenPolice.org to help point you in the right direction.</p>\n<p>OpenPolice.org is not yet open to the public, but <b>we are inviting you to become a beta tester for the software</b>. If you participate, please note that you might hit bugs or errors while using the app. If that happens, refresh the page in your browser. If that doesnï¿½t fix the problem, please email OpenPolice.org\\'s coder Morgan Lesko (morgan<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>@<span style=\"margin-right: -7px;\">&nbsp;&nbsp;</span>flexyourrights.org). He will then help you through the problem.</p>\n<p>To prepare your complaint, click the link below. Depending on the complexity of your incident and how much information you share, the survey should take 10-40 minutes to complete.</p>\n<p><a href=\"http://openpolice.local/filing-your-police-complaint?org=ssdp\" target=\"_blank\">http://openpolice.local/filing-your-police-complaint?org=ssdp</a></p>\n<p>Sincerely,</p>\n<p>{Name &amp; Chapter Info}<br></p>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35498,8 +34292,7 @@ He has also been a great ally and Friend of SSDP (awarded in 20??) for decades.<
 			'NodeParentID' => '2203',
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Identifying New Complainants</h3>
-<p>We invited you to join this program because you’re an SSDP chapter that might know students who experience police misconduct. We are excited for you to introduce them to OpenPolice.org. In particular, we are looking for users who are credible and motivated to test a new app.</p>',
+			'NodePromptText' => '<h3>Identifying New Complainants</h3>\r\n<p>We invited you to join this program because youï¿½re an SSDP chapter that might know students who experience police misconduct. We are excited for you to introduce them to OpenPolice.org. In particular, we are looking for users who are credible and motivated to test a new app.</p>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35508,10 +34301,7 @@ He has also been a great ally and Friend of SSDP (awarded in 20??) for decades.<
 			'NodeParentID' => '2203',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Working With Complainants</h3>
-<p>Once you’ve identified a qualified complainant, please tell them they are part of an exclusive private beta testing program for an important new web app. They should not share the app link with others. If testers know people who want to use it, they should refer them to you, Morgan, or Steve. (See sample invitation email template below.)</p>
-<p>Remind complainants that they might hit an error or bug while using the app. If that happens, they should refresh the page in the browser. If the problem persists, they should email morgan@flexyourrights.org using their account email. Morgan will then help them through the problem.</p>
-<p>Once a complainant agrees to participate, you can send them the SSDP referral link, just so we know that SSDP referred this complaint to OpenPolice.org.</p>',
+			'NodePromptText' => '<h3>Working With Complainants</h3>\r\n<p>Once youï¿½ve identified a qualified complainant, please tell them they are part of an exclusive private beta testing program for an important new web app. They should not share the app link with others. If testers know people who want to use it, they should refer them to you, Morgan, or Steve. (See sample invitation email template below.)</p>\r\n<p>Remind complainants that they might hit an error or bug while using the app. If that happens, they should refresh the page in the browser. If the problem persists, they should email morgan@flexyourrights.org using their account email. Morgan will then help them through the problem.</p>\r\n<p>Once a complainant agrees to participate, you can send them the SSDP referral link, just so we know that SSDP referred this complaint to OpenPolice.org.</p>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35544,9 +34334,7 @@ He has also been a great ally and Friend of SSDP (awarded in 20??) for decades.<
 			'NodeTree' => '79',
 			'NodeParentID' => '2239',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<div class="mTn20"><h2 class="slBlueDark mT0">Now OPEN for <nobr>Beta Testers!</nobr></h2></div>
-<p>Do you have a negative police experience you want to share? If so, we invite you to test our new OpenPolice.org app.</p>
-<p>To make sure you qualify, please share your name, email, and a brief description of your incident. Your incident must have occurred in the United States. <b>If you qualify, we’ll email you a link within 24 hours to begin your complaint.</b></p><p>OpenPolice.org is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. </p>',
+			'NodePromptText' => '<div class=\"mTn20\"><h2 class=\"slBlueDark mT0\">Now OPEN for <nobr>Beta Testers!</nobr></h2></div>\r\n<p>Do you have a negative police experience you want to share? If so, we invite you to test our new OpenPolice.org app.</p>\r\n<p>To make sure you qualify, please share your name, email, and a brief description of your incident. Your incident must have occurred in the United States. <b>If you qualify, weï¿½ll email you a link within 24 hours to begin your complaint.</b></p><p>OpenPolice.org is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. </p>',
 			'NodePromptAfter' => '<style>
 #ajaxWrap { background: #F5FBFF; padding-bottom: 40px; margin-bottom: -50px; } 
 #pageBtns, #sessMgmtWrap { display: none; }
@@ -35680,25 +34468,7 @@ He has also been a great ally and Friend of SSDP (awarded in 20??) for decades.<
 			'NodeTree' => '79',
 			'NodeParentID' => '2238',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<iframe src="https://www.youtube.com/embed/Hn_KOQvWEmU" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="margin-top: -20px;" width="100%" height="236" frameborder="0"></iframe>
-<h3 class="slBlueDark m0"><br>This free web app helps you <nobr>to ...</nobr></h3>
-<ul>
-<li>Prepare and save a professional-grade police misconduct report.</li>
-<li>File your report with the right police investigative agency.</li>
-<li>Get matched with legal help.</li>
-<li>Publish your complaint online and share on social media.</li>
-<li>Upload photos, documents, video, and other evidence.</li>
-</ul>
-<h4><br>Your Privacy Options:</h4>
-<p>When you begin your new complaint, you\'ll have three privacy options to control what personal information you want to share.</p>
-<ul>
-<li>
-<b>Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
-<li>
-<b>No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
-<li>
-<b>Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul>',
+			'NodePromptText' => '<iframe src=\"https://www.youtube.com/embed/Hn_KOQvWEmU\" allow=\"accelerometer; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen=\"\" style=\"margin-top: -20px;\" width=\"100%\" height=\"236\" frameborder=\"0\"></iframe>\r\n<h3 class=\"slBlueDark m0\"><br>This free web app helps you <nobr>to ...</nobr></h3>\r\n<ul>\r\n<li>Prepare and save a professional-grade police misconduct report.</li>\r\n<li>File your report with the right police investigative agency.</li>\r\n<li>Get matched with legal help.</li>\r\n<li>Publish your complaint online and share on social media.</li>\r\n<li>Upload photos, documents, video, and other evidence.</li>\r\n</ul>\r\n<h4><br>Your Privacy Options:</h4>\r\n<p>When you begin your new complaint, you\\'ll have three privacy options to control what personal information you want to share.</p>\r\n<ul>\r\n<li>\r\n<b>Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>\r\n<li>\r\n<b>No Names Public<br></b>You donï¿½t want to publish any names to this website. This includes police officersï¿½ names and badge numbers too.</li>\r\n<li>\r\n<b>Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither Open Police staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>\r\n</ul>',
 			'NodeOpts' => '89'
 		]);
 		DB::table('SL_Node')->insert([
@@ -35975,24 +34745,14 @@ If so, we invite you to test our new OpenPolice.org <nobr>web app.</nobr></h5>
 			'NodeTree' => '62',
 			'NodeParentID' => '2271',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<!--- <h3>About OpenPolice.org</h3>
-<iframe src="https://www.youtube.com/embed/Hn_KOQvWEmU" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="margin: 20px 0px 40px 0px;" width="100%" height="236" frameborder="0"></iframe> --->
-<h3>Your Privacy</h3>
-<p>After you complete your complaint, you can download it, print it, or email it to your legal assistance. For your protection, we will then delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your full complaint. If you want, this will publish your full story and file it with a police investigative agency.</p>
-<p><a href="/frequently-asked-questions" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Frequently Asked Questions</a></p>'
+			'NodePromptText' => '<!--- <h3>About OpenPolice.org</h3>\r\n<iframe src=\"https://www.youtube.com/embed/Hn_KOQvWEmU\" allow=\"accelerometer; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen=\"\" style=\"margin: 20px 0px 40px 0px;\" width=\"100%\" height=\"236\" frameborder=\"0\"></iframe> --->\r\n<h3>Your Privacy</h3>\r\n<p>After you complete your complaint, you can download it, print it, or email it to your legal assistance. For your protection, we will then delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>\r\n<p>After you\\'ve checked with a lawyer ï¿½ or any charges are resolved ï¿½ you can reupload your full complaint. If you want, this will publish your full story and file it with a police investigative agency.</p>\r\n<p><a href=\"/frequently-asked-questions\" target=\"_blank\"><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Frequently Asked Questions</a></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2276,
 			'NodeTree' => '66',
 			'NodeParentID' => '2065',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<!--- <h3>About OpenPolice.org</h3>
-<iframe src="https://www.youtube.com/embed/Hn_KOQvWEmU" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="margin: 20px 0px 40px 0px;" width="100%" height="236" frameborder="0"></iframe> --->
-<h3>Your Privacy</h3>
-<p>After you complete your complaint, you can download it, print it, or email it to your legal assistance. For your protection, we will then delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>
-<p>After you\'ve checked with a lawyer — or any charges are resolved — you can reupload your full complaint. If you want, this will publish your full story and file it with a police investigative agency.</p>
-<p><a href="/frequently-asked-questions" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Frequently Asked Questions</a></p>'
+			'NodePromptText' => '<!--- <h3>About OpenPolice.org</h3>\r\n<iframe src=\"https://www.youtube.com/embed/Hn_KOQvWEmU\" allow=\"accelerometer; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen=\"\" style=\"margin: 20px 0px 40px 0px;\" width=\"100%\" height=\"236\" frameborder=\"0\"></iframe> --->\r\n<h3>Your Privacy</h3>\r\n<p>After you complete your complaint, you can download it, print it, or email it to your legal assistance. For your protection, we will then delete your story from our system. But we will preserve some anonymous data for police accountability researchers.</p>\r\n<p>After you\\'ve checked with a lawyer ï¿½ or any charges are resolved ï¿½ you can reupload your full complaint. If you want, this will publish your full story and file it with a police investigative agency.</p>\r\n<p><a href=\"/frequently-asked-questions\" target=\"_blank\"><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Frequently Asked Questions</a></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2277,
@@ -36173,16 +34933,7 @@ make it ever stronger.</p>'
 			'NodeParentID' => '2293',
 			'NodeParentOrder' => '2',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<p><br></p>
-<h3 class="slBlueDark">Step 1 - Install Docker</h3>
-<p>First you\'ll need to check out <a href="https://Docker.com" target="_blank">Docker.com</a> to download and install Docker for your desktop, or on your server. Here I\'m showing how to reset your Docker installation to factory settings (on Mac). This is useful if you\'re struggling to learn Docker and need to start fresh, perhaps again and again.</p>
-<p><br></p>
-<h3 class="slBlueDark">Step 2 - Install Laradock</h3>
-<p>Once Docker is installed, we\'re ready for Laradock which you can learn more about at <a href="https://laradock.io" target="_blank">Laradock.io</a>. It is well known in the Laravel community because it “includes pre-packaged Docker Images, all pre-configured to provide a wonderful PHP development environment.”<br><br>Expect the first Laradock boot to take up to 15 minutes, so pause this video and stretch. Or go to <a href="https://Laravel.com" target="_blank">Laravel.com</a> to learn more about the PHP framework used by OpenPolice.org.<br><br>If nothing goes wrong with Docker, you don\'t need to learn much about it to help with OpenPolice.org. But some basic Laravel orientation, like on <a href="https://Laracasts.com" target="_blank">Laracasts.com</a>, can provide important context for working on OpenPolice.org.<br><br>To prep the stage, we can use Git to clone the latest Laravel and Laradock packages. Then initialize Laradock\'s environment file. And now we\'re going to boot up all of Laradock\'s container\'s for the first time.<br><br>If the Laradock install went smoothly, let\'s move forward.<br><br>We will enter the Docker container created by Laradock named “mysql”, and quickly apply a fix for something funky with the latest blend of versions. Then exit out of that container.</p>
-<div class="row2 p15"><p>At this point, you can optionally browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> for PhpMyAdmin. Enter the server as \'mysql\', username as \'default\', password as \'secret\'.</p></div>
-<p><br></p>
-<h3 class="slBlueDark">Step 3 - Install Laravel &amp; OpenPolice.org<br></h3>
-<p>We will enter the Docker container created by Laradock named “workspace”. Then clone the <a href="https://github.com/flexyourrights/docker-openpolice/" target="_blank">docker-openpolice repository from GitHub</a>, give the bash script permissions to run, and run <a href="https://github.com/flexyourrights/docker-openpolice/blob/master/bin/openpolice-laradock-postinstall.sh" target="_blank">our installation script</a>.<br><br>This script should install Laravel, OpenPolice.org, and all its dependencies. It should take about half as long a wait as the first Laradock boot up, and I\'ve laid out the screen here so you can see some of the installation\'s results.<br><br>If the Open Police install script didn\'t throw a bunch of red errors, then let\'s move forward.</p><p>At this point, browsing to localhost as a URL should bring up the site template of OpenPolice.org, and a signup form to create your first Admin User account in your local system. <br><br>Now your installation has been initiated and you can browse back to the home page, click the button to Share Your Story, and test out the process of filing a complaint. While logged in, you can also click the Dashboard link in the top-right corner to start poking around the Admin Areas. <br><br>When possible, I will be make more videos to review each area of the site, and the codebase. But I hope you\'ve had success in creating your own copy of OpenPolice.org, and I look forward any nuggets of brilliance you\'ll be able to share for this effort.</p><p>Thank you so much, for helping to make OpenPolice.org ever stronger!</p>'
+			'NodePromptText' => '<p><br></p>\r\n<h3 class=\"slBlueDark\">Step 1 - Install Docker</h3>\r\n<p>First you\\'ll need to check out <a href=\"https://Docker.com\" target=\"_blank\">Docker.com</a> to download and install Docker for your desktop, or on your server. Here I\\'m showing how to reset your Docker installation to factory settings (on Mac). This is useful if you\\'re struggling to learn Docker and need to start fresh, perhaps again and again.</p>\r\n<p><br></p>\r\n<h3 class=\"slBlueDark\">Step 2 - Install Laradock</h3>\r\n<p>Once Docker is installed, we\\'re ready for Laradock which you can learn more about at <a href=\"https://laradock.io\" target=\"_blank\">Laradock.io</a>. It is well known in the Laravel community because it ï¿½includes pre-packaged Docker Images, all pre-configured to provide a wonderful PHP development environment.ï¿½<br><br>Expect the first Laradock boot to take up to 15 minutes, so pause this video and stretch. Or go to <a href=\"https://Laravel.com\" target=\"_blank\">Laravel.com</a> to learn more about the PHP framework used by OpenPolice.org.<br><br>If nothing goes wrong with Docker, you don\\'t need to learn much about it to help with OpenPolice.org. But some basic Laravel orientation, like on <a href=\"https://Laracasts.com\" target=\"_blank\">Laracasts.com</a>, can provide important context for working on OpenPolice.org.<br><br>To prep the stage, we can use Git to clone the latest Laravel and Laradock packages. Then initialize Laradock\\'s environment file. And now we\\'re going to boot up all of Laradock\\'s container\\'s for the first time.<br><br>If the Laradock install went smoothly, let\\'s move forward.<br><br>We will enter the Docker container created by Laradock named ï¿½mysqlï¿½, and quickly apply a fix for something funky with the latest blend of versions. Then exit out of that container.</p>\r\n<div class=\"row2 p15\"><p>At this point, you can optionally browse to <a href=\"http://localhost:8080\" target=\"_blank\">http://localhost:8080</a> for PhpMyAdmin. Enter the server as \\'mysql\\', username as \\'default\\', password as \\'secret\\'.</p></div>\r\n<p><br></p>\r\n<h3 class=\"slBlueDark\">Step 3 - Install Laravel &amp; OpenPolice.org<br></h3>\r\n<p>We will enter the Docker container created by Laradock named ï¿½workspaceï¿½. Then clone the <a href=\"https://github.com/flexyourrights/docker-openpolice/\" target=\"_blank\">docker-openpolice repository from GitHub</a>, give the bash script permissions to run, and run <a href=\"https://github.com/flexyourrights/docker-openpolice/blob/master/bin/openpolice-laradock-postinstall.sh\" target=\"_blank\">our installation script</a>.<br><br>This script should install Laravel, OpenPolice.org, and all its dependencies. It should take about half as long a wait as the first Laradock boot up, and I\\'ve laid out the screen here so you can see some of the installation\\'s results.<br><br>If the Open Police install script didn\\'t throw a bunch of red errors, then let\\'s move forward.</p><p>At this point, browsing to localhost as a URL should bring up the site template of OpenPolice.org, and a signup form to create your first Admin User account in your local system. <br><br>Now your installation has been initiated and you can browse back to the home page, click the button to Share Your Story, and test out the process of filing a complaint. While logged in, you can also click the Dashboard link in the top-right corner to start poking around the Admin Areas. <br><br>When possible, I will be make more videos to review each area of the site, and the codebase. But I hope you\\'ve had success in creating your own copy of OpenPolice.org, and I look forward any nuggets of brilliance you\\'ll be able to share for this effort.</p><p>Thank you so much, for helping to make OpenPolice.org ever stronger!</p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2295,
@@ -36629,8 +35380,7 @@ setTimeout("swapNextJumpAlleg()", 10);
 			'NodeTree' => '7',
 			'NodeParentID' => '1008',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">File Your Police Complaint</h2>
-<p>Your story is too important to be ignored. That’s why we help you build a transparent record of police misconduct. By improving accountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">File Your Police Complaint</h2>\r\n<p>Your story is too important to be ignored. Thatï¿½s why we help you build a transparent record of police misconduct. By improving accountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
 			'NodePromptAfter' => '<script type="text/javascript">
 function fixColBrk() {
 if (document.getElementById("col2251")) {
@@ -37009,21 +35759,7 @@ knowledge, the information in this </b><b>compliment is truthful and accurate.</
 			'NodeTree' => '8',
 			'NodeParentID' => '2600',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Publishing Options</h3>
-<p>You can choose to file your compliment with investigative agencies and publish your story on OpenPolice.org. You\'ll have three privacy options to control what personal information you want to share.</p>
-<p><a id="hidivBtnReadPriv" class="hidivBtnSelf btn btn-secondary" href="javascript:;">Read More</a></p>
-<div id="hidivReadPriv" class="disNon">
-<p>Whichever you choose, we will try to send your full compliment to a police investigative agency.</p>
-<ul>
-<li>
-<b style="font-weight: bold;">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
-<li>
-<b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
-<li>
-<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul>
-<p><a href="/frequently-asked-questions" target="_blank" class="btn btn-secondary"><i class="fa fa-external-link" aria-hidden="true"></i> Frequently Asked Questions</a></p>
-</div>'
+			'NodePromptText' => '<h3>Publishing Options</h3>\r\n<p>You can choose to file your compliment with investigative agencies and publish your story on OpenPolice.org. You\\'ll have three privacy options to control what personal information you want to share.</p>\r\n<p><a id=\"hidivBtnReadPriv\" class=\"hidivBtnSelf btn btn-secondary\" href=\"javascript:;\">Read More</a></p>\r\n<div id=\"hidivReadPriv\" class=\"disNon\">\r\n<p>Whichever you choose, we will try to send your full compliment to a police investigative agency.</p>\r\n<ul>\r\n<li>\r\n<b style=\"font-weight: bold;\">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">No Names Public<br></b>You donï¿½t want to publish any names to this website. This includes police officersï¿½ names and badge numbers too.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>\r\n</ul>\r\n<p><a href=\"/frequently-asked-questions\" target=\"_blank\" class=\"btn btn-secondary\"><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Frequently Asked Questions</a></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2602,
@@ -37328,7 +36064,7 @@ knowledge, the information in this </b><b>compliment is truthful and accurate.</
 			'NodeTree' => '57',
 			'NodeParentID' => '2639',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">Donors\' Frequently Asked Questions</h2><p><b>What will your organization do?</b></p><p>We build open data tools to track police conduct. Police agencies are bad at collecting civilian complaints data, and the data they collect, they rarely share. Our software helps police misconduct victims build professional-quality incident reports. Users can file with investigative agencies and publish online, so their data is transparent and searchable.<br><br><b>How far along are you?</b></p><p>We released a beta version of OpenPolice.org in late spring. From our organic traffic alone, we’ve captured over 330 signups, and 30 users completed our comprehensive complaint survey. Ten of those have been submitted to law enforcement agencies and fully published online.<br><br><b>What\'s new about what you plan to do?</b></p><p>Most police open data projects rely on voluntary data reporting by law enforcement agencies. As a result, such data is limited by inherent flaws, gaps, and biases. For example, data from police sources typically exclude the identity of involved police officers. That makes it practically impossible for outsiders to identify and track the behavior of individual officers. </p><p>OpenPolice.org uses a grassroots data collection strategy, gathering information directly from citizens. That enables better tracking of individual officers. And because we are a non-governmental organization, we are exempt from various state and local laws that block police records from public view.</p><p>We hope to see more governmental and research institutions using grassroots data to supplement government data.<br><br><b>How will you make money?</b></p><p>According to government data, about 4% of 2.9 million annual victims of police misconduct file complaints through departments’ traditional methods. So there is plenty of demand for what we’ve built to generate revenue with a lead generation service for defense attorneys. We will also have paid subscriptions for intake management software for law firms and investigative agencies. Beyond this free opt-in service, we will never share or sell users\' data.<br></p><p>This revenue will help us grow and sustain citizen-controlled oversight institutions independent of police control. We can democratize police oversight in the US and forever shift the balance of power between police and the people they serve.</p><p><a href="#n1905" class="btn btn-primary"><i class="fa fa-arrow-circle-o-up mR3" aria-hidden="true"></i> <b>Back to Top, Donate</b></a></p><p><a href="/frequently-asked-questions">Frequently Asked Questions</a></p><p>&nbsp;<br><br></p>'
+			'NodePromptText' => '<h2 class=\"slBlueDark\">Donors\\' Frequently Asked Questions</h2><p><b>What will your organization do?</b></p><p>We build open data tools to track police conduct. Police agencies are bad at collecting civilian complaints data, and the data they collect, they rarely share. Our software helps police misconduct victims build professional-quality incident reports. Users can file with investigative agencies and publish online, so their data is transparent and searchable.<br><br><b>How far along are you?</b></p><p>We released a beta version of OpenPolice.org in late spring. From our organic traffic alone, weï¿½ve captured over 330 signups, and 30 users completed our comprehensive complaint survey. Ten of those have been submitted to law enforcement agencies and fully published online.<br><br><b>What\\'s new about what you plan to do?</b></p><p>Most police open data projects rely on voluntary data reporting by law enforcement agencies. As a result, such data is limited by inherent flaws, gaps, and biases. For example, data from police sources typically exclude the identity of involved police officers. That makes it practically impossible for outsiders to identify and track the behavior of individual officers. </p><p>OpenPolice.org uses a grassroots data collection strategy, gathering information directly from citizens. That enables better tracking of individual officers. And because we are a non-governmental organization, we are exempt from various state and local laws that block police records from public view.</p><p>We hope to see more governmental and research institutions using grassroots data to supplement government data.<br><br><b>How will you make money?</b></p><p>According to government data, about 4% of 2.9 million annual victims of police misconduct file complaints through departmentsï¿½ traditional methods. So there is plenty of demand for what weï¿½ve built to generate revenue with a lead generation service for defense attorneys. We will also have paid subscriptions for intake management software for law firms and investigative agencies. Beyond this free opt-in service, we will never share or sell users\\' data.<br></p><p>This revenue will help us grow and sustain citizen-controlled oversight institutions independent of police control. We can democratize police oversight in the US and forever shift the balance of power between police and the people they serve.</p><p><a href=\"#n1905\" class=\"btn btn-primary\"><i class=\"fa fa-arrow-circle-o-up mR3\" aria-hidden=\"true\"></i> <b>Back to Top, Donate</b></a></p><p><a href=\"/frequently-asked-questions\">Frequently Asked Questions</a></p><p>&nbsp;<br><br></p>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2641,
@@ -37546,10 +36282,7 @@ addHshoo("#faq-attorneys");
 			'NodeTree' => '66',
 			'NodeParentID' => '2663',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">File Your Police Complaint</h2>
-<p>Your story is too important to be ignored. That’s why we help you 
-build a transparent record of police misconduct. By improving 
-accountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">File Your Police Complaint</h2>\r\n<p>Your story is too important to be ignored. Thatï¿½s why we help you \r\nbuild a transparent record of police misconduct. By improving \r\naccountability, you can protect the rights of people in your community.</p><p><b>OpenPolice.org</b> is an independent project developed by <nobr>Flex Your Rights</nobr>, a 501(c)(3) educational nonprofit. <br></p>',
 			'NodePromptAfter' => '<script type="text/javascript">
 function fixColBrk() {
 if (document.getElementById("col2661")) {
@@ -37624,21 +36357,7 @@ setTimeout("fixColBrk()", 100);
 			'NodeTree' => '66',
 			'NodeParentID' => '2670',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h3>Publishing Options</h3>
-<p>You can choose to file your complaint with investigative agencies and publish your story on OpenPolice.org. You\'ll have three privacy options to control what personal information you want to share.</p>
-<p><a id="hidivBtnReadPriv" class="hidivBtnSelf btn btn-secondary" href="javascript:;">Read More</a></p>
-<div id="hidivReadPriv" class="disNon">
-<p>Whichever you choose, we will try to send your full complaint to a police investigative agency.</p>
-<ul>
-<li>
-<b style="font-weight: bold;">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>
-<li>
-<b style="font-weight: bold;">No Names Public<br></b>You don’t want to publish any names to this website. This includes police officers’ names and badge numbers too.</li>
-<li>
-<b style="font-weight: bold;">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>
-</ul>
-<p><a href="/frequently-asked-questions" target="_blank" class="btn btn-secondary"><i class="fa fa-external-link" aria-hidden="true"></i> Frequently Asked Questions</a></p>
-</div>'
+			'NodePromptText' => '<h3>Publishing Options</h3>\r\n<p>You can choose to file your complaint with investigative agencies and publish your story on OpenPolice.org. You\\'ll have three privacy options to control what personal information you want to share.</p>\r\n<p><a id=\"hidivBtnReadPriv\" class=\"hidivBtnSelf btn btn-secondary\" href=\"javascript:;\">Read More</a></p>\r\n<div id=\"hidivReadPriv\" class=\"disNon\">\r\n<p>Whichever you choose, we will try to send your full complaint to a police investigative agency.</p>\r\n<ul>\r\n<li>\r\n<b style=\"font-weight: bold;\">Full Transparency</b><br>You want to publish the names of all civilians and police officers to this website.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">No Names Public<br></b>You donï¿½t want to publish any names to this website. This includes police officersï¿½ names and badge numbers too.</li>\r\n<li>\r\n<b style=\"font-weight: bold;\">Anonymous</b><br>You need your complaint to be anonymous, even though it will be harder to investigate. No names will be published on this website. Neither OpenPolice.org staff nor investigators will be able to contact you. Any details that could be used for personal identification may be deleted from the database.</li>\r\n</ul>\r\n<p><a href=\"/frequently-asked-questions\" target=\"_blank\" class=\"btn btn-secondary\"><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> Frequently Asked Questions</a></p>\r\n</div>'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2672,
@@ -37781,32 +36500,7 @@ setTimeout("fixColBrk()", 100);
 			'NodeTree' => '20',
 			'NodeParentID' => '2689',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<h4 class="slBlueDark">Software Documentation</h4>
-<p>About the Web App</p>
-<ul>
-<li><a href="/web-app-workflows">Web App Workflows</a></li>
-</ul>
-
-<div class="pT10">
-<p>For Web Developers</p>
-<ul>
-<li><a href="/how-to-install-local-openpolice"><b class="slBlueDark">Install Copy of OpenPolice.org Software</b></a></li>
-<li><a href="/web-app-technical-specs">General Technical Background on App</a></li>
-</ul>
-</div>
-
-<div class="pT10">
-<p>Codebase Orientation</p>
-<ul>
-<li><a href="/code-package-files-folders-classes" target="_blank">OpenPolice Package Files, Folders, and Classes</a></li>
-<li><a href="https://survloop.org/package-files-folders-classes" target="_blank">SurvLoop Package Files, Folders, and Classes</a></li>
-</ul>
-</div>
-
-<div class="pT10">
-<p>More on GitHub</p>
-<p><a href="https://github.com/flexyourrights/openpolice" target="_blank" class="btn btn-primary btn-lg btn-block taL mB20"><i class="fa fa-github mR5" aria-hidden="true"></i> flexyourrights/openpolice</a></p>
-</div>'
+			'NodePromptText' => '[ Documentation Navigation ] hard-coded in OpenDevelopment.php function printNavDevelopmentArea, via view openpolice.inc-documentation-navigation'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2691,
@@ -37847,7 +36541,8 @@ sites:
 			'NodeParentID' => '2688',
 			'NodeType' => 'Instructions Raw',
 			'NodePromptText' => '<h2>How To Install OpenPolice.org Locally</h2>
-<ol><li><a href="#n3072">Install Homestead</a> </li><li><a href="#n3071">Install Laravel</a> </li><li><a href="#n2694">Install FlexYourRights/OpenPolice</a><br></li></ol>',
+<ol><li><a href="#n3072">Install Homestead</a> </li><li><a href="#n3071">Install Laravel</a> </li><li><a href="#n2694">Install FlexYourRights/OpenPolice</a><br></li></ol>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/U-0knFJThws" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
 			'NodePromptAfter' => '<style> #treeWrap2686 { margin-top: 30px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -38021,25 +36716,7 @@ etc. Thank you!<br></p>',
 			'NodeTree' => '181',
 			'NodeParentID' => '2701',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class="slBlueDark">OpenPolice Package\'s File &amp; Folder Layout</h2>
-
-<p><a href="https://blog.pusher.com/laravel-mvc-use/" target="_blank">Laravel is a Model View Controller (</a><a href="https://blog.pusher.com/laravel-mvc-use/" target="_blank">MVC</a><a href="https://blog.pusher.com/laravel-mvc-use/" target="_blank">)</a>,
- and the OpenPolice package is installed on top. SurvLoop was built for this project, and it has separate <a href="https://survloop.org/package-files-folders-classes" target="_blank">layout documentation</a>. Below is a general map of
- the OpenPolice package.</p><p>If you\'re new to Laravel, this gets installed 
-here: /root-folder/vendor/flexyourrights/openpolice<br></p>
-<h4><a href="https://github.com/flexyourrights/openpolice" target="_blank"> flexyourrights/openpolice</a></h4>
-<div class="pL20"><ul><li><b>composer.json</b>: Defines more packages required by OpenPolice, as well as easier references to some packages.</li><li><b>src</b>: Repository\'s main source code.
-<ul><li><b>OpenPoliceServiceProvider.php</b>: OpenPoliceServiceProvider 
-manages which package files and folders need to be copied to elsewhere 
-in the system. This mostly just runs after installation, and perhaps of 
-some other code updates.</li><li><b>routes.php</b>: All of OpenPolice\'s custom routing happens here, passing a url request to the right Controller.</li><li><b>Controllers</b>: Most of the PHP algorithms and logic which process and manipulate data, and call Views to output the proper results.
-    
-    </li><li><b>Database</b>: Includes migration and seeder files which Laravel can use to install OpenPolice.</li><li><b>Models</b>: Copies of all the <a href="https://laravel.com/docs/5.8/eloquent" target="_blank">Eloquent Models</a> used by this package, generated by this same OpenPolice installation.</li><li><b>Public</b>: Contains images and photos in OpenPolice\'s public media gallery — to be merged into Uploads folder.<br></li><li><b>Uploads</b>: Contains images and photos in OpenPolice\'s public media gallery.</li><li><b>Views</b>: Includes <a href="https://laravel.com/docs/5.8/blade" target="_blank">Blade Templates</a> which are called by controllers, and where most of OpenPolice\'s HTML, Javascript, and CSS can be found. Templates for...
-    <ul><li><b>admin</b>: general OpenPolice admin interfaces
-        <ul><li><b>db</b>: customize database admin tools</li></ul>
-        </li><li><b>ajax</b>: printing results of specific jQuery/AJAX requests custom to OpenPolice</li><li><b>nodes</b>: printing hard-coded nodes which appear within OpenPolice surveys or web content pages</li><li><b>volun</b>: printing hard-coded interfaces for volunteers\' research of police department policies<br></li></ul></li></ul></li><li><b>tests</b>: Holding place to remind me to add as much unit testing as possible and appropriate.</li></ul></div>
-<h4><a href="https://github.com/flexyourrights/openpolice-departments" target="_blank"> flexyourrights/openpolice-departments</a></h4>
-<div class="pL20"><ul><li><b>src/OpenPoliceDeptSeeder.php</b>: database import for 18,000+ police departments and complaint policies.<br></li></ul></div><br>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">OpenPolice Package\\'s File &amp; Folder Layout</h2>\r\n\r\n<p><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">Laravel is a Model View Controller (</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">MVC</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">)</a>,\r\n and the OpenPolice package is installed on top. SurvLoop was built for this project, and it has separate <a href=\"https://survloop.org/package-files-folders-classes\" target=\"_blank\">layout documentation</a>. Below is a general map of\r\n the OpenPolice package.</p><p>If you\\'re new to Laravel, this gets installed \r\nhere: /root-folder/vendor/flexyourrights/openpolice<br></p>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\"> flexyourrights/openpolice</a></h4>\r\n<div class=\"pL20\"><ul><li><b>composer.json</b>: Defines more packages required by OpenPolice, as well as easier references to some packages.</li><li><b>src</b>: Repository\\'s main source code.\r\n<ul><li><b>OpenPoliceServiceProvider.php</b>: OpenPoliceServiceProvider \r\nmanages which package files and folders need to be copied to elsewhere \r\nin the system. This mostly just runs after installation, and perhaps of \r\nsome other code updates.</li><li><b>routes.php</b>: All of OpenPolice\\'s custom routing happens here, passing a url request to the right Controller.</li><li><b>Controllers</b>: Most of the PHP algorithms and logic which process and manipulate data, and call Views to output the proper results.\r\n    \r\n    </li><li><b>Database</b>: Includes migration and seeder files which Laravel can use to install OpenPolice.</li><li><b>Models</b>: Copies of all the <a href=\"https://laravel.com/docs/5.8/eloquent\" target=\"_blank\">Eloquent Models</a> used by this package, generated by this same OpenPolice installation.</li><li><b>Public</b>: Contains images and photos in OpenPolice\\'s public media gallery ï¿½ to be merged into Uploads folder.<br></li><li><b>Uploads</b>: Contains images and photos in OpenPolice\\'s public media gallery.</li><li><b>Views</b>: Includes <a href=\"https://laravel.com/docs/5.8/blade\" target=\"_blank\">Blade Templates</a> which are called by controllers, and where most of OpenPolice\\'s HTML, Javascript, and CSS can be found. Templates for...\r\n    <ul><li><b>admin</b>: general OpenPolice admin interfaces\r\n        <ul><li><b>db</b>: customize database admin tools</li></ul>\r\n        </li><li><b>ajax</b>: printing results of specific jQuery/AJAX requests custom to OpenPolice</li><li><b>nodes</b>: printing hard-coded nodes which appear within OpenPolice surveys or web content pages</li><li><b>volun</b>: printing hard-coded interfaces for volunteers\\' research of police department policies<br></li></ul></li></ul></li><li><b>tests</b>: Holding place to remind me to add as much unit testing as possible and appropriate.</li></ul></div>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice-departments\" target=\"_blank\"> flexyourrights/openpolice-departments</a></h4>\r\n<div class=\"pL20\"><ul><li><b>src/OpenPoliceDeptSeeder.php</b>: database import for 18,000+ police departments and complaint policies.<br></li></ul></div><br>',
 			'NodePromptAfter' => '<style> #treeWrap2699 { margin-top: 30px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -38076,32 +36753,7 @@ some other code updates.</li><li><b>routes.php</b>: All of OpenPolice\'s custom 
 			'NodeTree' => '181',
 			'NodeParentID' => '2702',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '<h4 class="slBlueDark">Software Documentation</h4>
-<p>About the Web App</p>
-<ul>
-<li><a href="/web-app-workflows">Web App Workflows</a></li>
-</ul>
-
-<div class="pT10">
-<p>For Web Developers</p>
-<ul>
-<li><a href="/how-to-install-local-openpolice">Install Copy of OpenPolice.org Software</a></li>
-<li><a href="/web-app-technical-specs">General Technical Background on App</a></li>
-</ul>
-</div>
-
-<div class="pT10">
-<p>Codebase Orientation</p>
-<ul>
-<li><a href="/code-package-files-folders-classes" target="_blank"><b class="slBlueDark">OpenPolice Package Files, Folders, and Classes</b></a></li>
-<li><a href="https://survloop.org/package-files-folders-classes" target="_blank">SurvLoop Package Files, Folders, and Classes</a></li>
-</ul>
-</div>
-
-<div class="pT10">
-<p>More on GitHub</p>
-<p><a href="https://github.com/flexyourrights/openpolice" target="_blank" class="btn btn-primary btn-lg btn-block taL mB20"><i class="fa fa-github mR5" aria-hidden="true"></i> flexyourrights/openpolice</a></p>
-</div>'
+			'NodePromptText' => '[ Documentation Navigation ] hard-coded in OpenDevelopment.php function printNavDevelopmentArea, via view openpolice.inc-documentation-navigation'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2704,
@@ -38414,17 +37066,73 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeID' => 2751,
 			'NodeTree' => '196',
 			'NodeType' => 'Page',
-			'NodePromptNotes' => 'n-a',
-			'NodePromptAfter' => '::M::::M::::M::',
+			'NodePromptNotes' => 'development-team-update',
+			'NodePromptAfter' => 'Development Team Update::M::This contains some status updates, plans, and announcements related to software development for OpenPolice.org.::M::::M::',
 			'NodeCharLimit' => '-1'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 2752,
 			'NodeTree' => '196',
-			'NodeParentID' => '2751',
+			'NodeParentID' => '2756',
+			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2>Welcome to .</h2>
-<p>Edit this node to fill in your page! This node could be your entire page, or just one little component.</p>'
+			'NodePromptText' => '<h3>Morgan\'s Current ToDo List</h3>
+<p>The never ending storrrr-ryyy!..</p><ul><li>Begin partner admin area for Legal Aid Society and Asheville Police Transparency Project to manage their clinics.</li><li>Fix issues reported by Alyx, and get back to her.</li><li>Complaint Management top upgrade list<ul><li>Admin Tools to upload PDFs for public and sensitive complaint reports. These should be delivered when people click the PDF link on the site too.</li><li>Attached sensitive PDF to email sent through the admin tools to complainants or departments.</li><li>Determine first approach to try, and build admin tools to alert volunteers for need to research department info.</li><li>Upgrade email to investigative agency to include entire body of complaint in text.</li><li>Auto-select more emails for the next few steps which have been ironed out for admins.</li><li>Build into the admin tools any further instructions needed by staff during the processes.</li><li>Load individual forms on demand to reduce initial load times, and page timeouts.<br></li></ul></li><li>Layout department accessibility scores page more like the complaints search results page.</li><li>Send followup emails to any incomplete survey users.</li><li>Send followup emails to beta invites who haven\'t started the survey yet.</li><li>Finish Steve\'s general site layout redesign.</li><li>Finish pending issues and items Steve documented in Slack while dogfooding.</li><li>Finish updating Compliment survey, and sent it to the two beta users who requested it.</li><li>Enable users to upload profile pictures, and integrate with complaint reports and previews.</li><li>Integrate and require MFA for all staff user accounts.</li><li>Add protection to contact form.</li><li>Lower-priority stuff...<br><br></li></ul>',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2755,
+			'NodeTree' => '196',
+			'NodeParentID' => '2751',
+			'NodeType' => 'Layout Row',
+			'NodeCharLimit' => '2'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2756,
+			'NodeTree' => '196',
+			'NodeParentID' => '2755',
+			'NodeType' => 'Layout Column',
+			'NodeCharLimit' => '8'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2757,
+			'NodeTree' => '196',
+			'NodeParentID' => '2755',
+			'NodeParentOrder' => '1',
+			'NodeType' => 'Layout Column',
+			'NodeCharLimit' => '4'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2758,
+			'NodeTree' => '196',
+			'NodeParentID' => '2757',
+			'NodeType' => 'Page Block',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2759,
+			'NodeTree' => '196',
+			'NodeParentID' => '2758',
+			'NodeType' => 'Instructions Raw',
+			'NodePromptText' => '[ Documentation Navigation ] hard-coded in OpenDevelopment.php function printNavDevelopmentArea, via view openpolice.inc-documentation-navigation'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2760,
+			'NodeTree' => '196',
+			'NodeParentID' => '2756',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h2 class="slBlueDark">Software Development Team Updates</h2>',
+			'NodeOpts' => '89'
+		]);
+		DB::table('SL_Node')->insert([
+			'NodeID' => 2761,
+			'NodeTree' => '196',
+			'NodeParentID' => '2756',
+			'NodeParentOrder' => '2',
+			'NodeType' => 'Instructions',
+			'NodePromptText' => '<h3>Introduction for Alyx</h3>
+<p>Hi Alyx!</p><p><br></p>',
+			'NodeOpts' => '89'
 		]);
 	
 	DB::table('SL_NodeResponses')->insert([
@@ -39688,7 +38396,7 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeResID' => 596,
 			'NodeResNode' => '28',
 			'NodeResOrd' => '3',
-			'NodeResEng' => 'I was not at the scene, but I\'m upset about police brutality on the news or on the internet.​',
+			'NodeResEng' => 'I was not at the scene, but I\'m upset about police brutality on the news or on the internet.?',
 			'NodeResValue' => 'Upset'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -41710,16 +40418,14 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeResID' => 1009,
 			'NodeResNode' => '871',
 			'NodeResOrd' => '1',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">No Names Public</h2>
-<div class="privOptPadL"><ul><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officers’ identities.</li></ul></div>',
+			'NodeResEng' => '<h2 class=\"disIn slBlueDark\">No Names Public</h2>\r\n<div class=\"privOptPadL\"><ul><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officersï¿½ identities.</li></ul></div>',
 			'NodeResValue' => '305'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1010,
 			'NodeResNode' => '871',
 			'NodeResOrd' => '2',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">Anonymous</h2>
-<div class="privOptPadL"><ul><li>We will NOT ask for you personal information.</li><li>Neither OpenPolice.org staff nor investigators can contact you. That will make it harder to investigate your compliment.</li><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officers’ identities.</li></ul></div>',
+			'NodeResEng' => '<h2 class=\"disIn slBlueDark\">Anonymous</h2>\r\n<div class=\"privOptPadL\"><ul><li>We will NOT ask for you personal information.</li><li>Neither OpenPolice.org staff nor investigators can contact you. That will make it harder to investigate your compliment.</li><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officersï¿½ identities.</li></ul></div>',
 			'NodeResValue' => '306'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -43626,16 +42332,14 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeResID' => 1373,
 			'NodeResNode' => '2018',
 			'NodeResOrd' => '1',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">No Names Public</h2>
-<div class="privOptPadL"><ul><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officers’ identities.</li></ul></div>',
+			'NodeResEng' => '<h2 class=\"disIn slBlueDark\">No Names Public</h2>\r\n<div class=\"privOptPadL\"><ul><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officersï¿½ identities.</li></ul></div>',
 			'NodeResValue' => '305'
 		]);
 		DB::table('SL_NodeResponses')->insert([
 			'NodeResID' => 1374,
 			'NodeResNode' => '2018',
 			'NodeResOrd' => '2',
-			'NodeResEng' => '<h2 class="disIn slBlueDark">Anonymous</h2>
-<div class="privOptPadL"><ul><li>We will NOT ask for you personal information.</li><li>Neither OpenPolice.org staff nor investigators can contact you. That will make it harder to investigate your complaint.</li><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officers’ identities.</li></ul></div>',
+			'NodeResEng' => '<h2 class=\"disIn slBlueDark\">Anonymous</h2>\r\n<div class=\"privOptPadL\"><ul><li>We will NOT ask for you personal information.</li><li>Neither OpenPolice.org staff nor investigators can contact you. That will make it harder to investigate your complaint.</li><li>You will only publish your multiple-choice answers on OpenPolice.org. That will NOT include your written story nor information showing police officersï¿½ identities.</li></ul></div>',
 			'NodeResValue' => '306'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -44286,7 +42990,7 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'NodeResID' => 1505,
 			'NodeResNode' => '870',
 			'NodeResOrd' => '3',
-			'NodeResEng' => 'I was not at the scene, but I\'m impressed with police actions on the news or on the internet.​',
+			'NodeResEng' => 'I was not at the scene, but I\'m impressed with police actions on the news or on the internet.?',
 			'NodeResValue' => 'Impressed'
 		]);
 		DB::table('SL_NodeResponses')->insert([
@@ -45270,7 +43974,7 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'CondID' => 100,
 			'CondDatabase' => '1',
 			'CondTag' => '#StatusSubmit',
-			'CondDesc' => 'This complaint status is either to be — or having been — submitted.',
+			'CondDesc' => 'This complaint status is either to be ï¿½ or having been ï¿½ submitted.',
 			'CondOperDeet' => '0',
 			'CondField' => '405',
 			'CondTable' => '112',
@@ -45609,7 +44313,7 @@ See something inaccurate? Please <a href="/contact">contact us</a> or <a href="/
 			'CondID' => 154,
 			'CondDatabase' => '1',
 			'CondTag' => '#PartnerActiveOrTestLink',
-			'CondDesc' => 'The current partner is actively working with OpenPolice.org — or the url has ?test=1',
+			'CondDesc' => 'The current partner is actively working with OpenPolice.org ï¿½ï¿½or the url has ?test=1',
 			'CondOperator' => 'CUSTOM',
 			'CondOperDeet' => '0',
 			'CondField' => '0',
@@ -49364,18 +48068,7 @@ OpenPolice.org</p>
 			'EmailType' => 'To Complainant',
 			'EmailName' => '62. Complaint Emailed To Oversight (OpenPolice-COMPLIANT!)',
 			'EmailSubject' => 'We submitted your police complaint!',
-			'EmailBody' => '<p>Congratulations, [{ Complainant Name }]!</p>
-<p>We just attempted to email your complaint to the [{ Complaint Investigative Agency }]. But this shouldn\'t be the end of the road for you!</p>
-<p><b>Please contact the [{ Complaint Investigative Agency }] this week — even tomorrow — to confirm that your complaint has been received.</b> And as the investigation progresses, please login to update the community!<br>
-[{ Complaint URL }]</p>
-<p>If you can\'t confirm that your complaint was accepted by the [{ Complaint Investigative Agency }], you\'ll need to submit it another way to make sure it gets investigated. You can find the instructions for submitting your complaint to the department here:<br>
-[{ Complaint Police Department URL How }]</p>
-<p>Thank you so much for using OpenPolice.org!</p>
-<p>Sincerely,</p>
-<p>[{ Analyst Name }]<br>
-OpenPolice.org</p><p>
-</p><p>P.S. We care about how well — or how poorly — this department responds to your complaint. So we\'ll be in touch in the coming weeks and months to check in!</p>
-[{ Complaint Footer Links }]'
+			'EmailBody' => '<p>Congratulations, [{ Complainant Name }]!</p>\r\n<p>We just attempted to email your complaint to the [{ Complaint Investigative Agency }]. But this shouldn\\'t be the end of the road for you!</p>\r\n<p><b>Please contact the [{ Complaint Investigative Agency }] this week ï¿½ even tomorrow ï¿½ to confirm that your complaint has been received.</b> And as the investigation progresses, please login to update the community!<br>\r\n[{ Complaint URL }]</p>\r\n<p>If you can\\'t confirm that your complaint was accepted by the [{ Complaint Investigative Agency }], you\\'ll need to submit it another way to make sure it gets investigated. You can find the instructions for submitting your complaint to the department here:<br>\r\n[{ Complaint Police Department URL How }]</p>\r\n<p>Thank you so much for using OpenPolice.org!</p>\r\n<p>Sincerely,</p>\r\n<p>[{ Analyst Name }]<br>\r\nOpenPolice.org</p><p>\r\n</p><p>P.S. We care about how well ï¿½ or how poorly ï¿½ this department responds to your complaint. So we\\'ll be in touch in the coming weeks and months to check in!</p>\r\n[{ Complaint Footer Links }]'
 		]);
 		DB::table('SL_Emails')->insert([
 			'EmailID' => 9,
@@ -49383,16 +48076,7 @@ OpenPolice.org</p><p>
 			'EmailType' => 'To Complainant',
 			'EmailName' => '60. How To Manually Submit Complaint (NON-COMPLIANT)',
 			'EmailSubject' => 'Action Needed: How to formally submit your complaint to the [{ Complaint Police Department }]',
-			'EmailBody' => '<p>Hi, [{ Complainant Name }],</p>
-<p>We\'re almost done — but we need you to do one more important thing as soon as possible. OpenPolice.org is working to get all police departments to accept complaints sent by email. Unfortunately, the [{ Complaint Investigative Agency }] does not investigate OpenPolice.org complaints sent by email.</p><p><b><a href="http://openpolice.local/login" target="_blank">Log into your account</a> and follow the instructions at the top of your complaint:</b><br>
-[{ Complaint URL }]</p>
-<p>After you submit your complaint with the [{ Complaint Investigative Agency }], please login to update us. Also, please <b>let us know whenever they receive or investigate your complaint</b>.</p>
-<p>Thank you so much for using OpenPolice.org!</p>
-<p>Sincerely,</p>
-<p>[{ Analyst Name }]<br>
-OpenPolice.org</p>
-<p>P.S. We care about how well — or how poorly — this department responds to your complaint. So we\'ll be in touch in the coming weeks and months to check in!</p>
-[{ Complaint Footer Links }]'
+			'EmailBody' => '<p>Hi, [{ Complainant Name }],</p>\r\n<p>We\\'re almost done ï¿½ but we need you to do one more important thing as soon as possible. OpenPolice.org is working to get all police departments to accept complaints sent by email. Unfortunately, the [{ Complaint Investigative Agency }] does not investigate OpenPolice.org complaints sent by email.</p><p><b><a href=\"http://openpolice.local/login\" target=\"_blank\">Log into your account</a> and follow the instructions at the top of your complaint:</b><br>\r\n[{ Complaint URL }]</p>\r\n<p>After you submit your complaint with the [{ Complaint Investigative Agency }], please login to update us. Also, please <b>let us know whenever they receive or investigate your complaint</b>.</p>\r\n<p>Thank you so much for using OpenPolice.org!</p>\r\n<p>Sincerely,</p>\r\n<p>[{ Analyst Name }]<br>\r\nOpenPolice.org</p>\r\n<p>P.S. We care about how well ï¿½ or how poorly ï¿½ this department responds to your complaint. So we\\'ll be in touch in the coming weeks and months to check in!</p>\r\n[{ Complaint Footer Links }]'
 		]);
 		DB::table('SL_Emails')->insert([
 			'EmailID' => 11,
@@ -49452,15 +48136,7 @@ OpenPolice.org,<br>
 			'EmailType' => 'To Complainant',
 			'EmailName' => '73. Investivated? Periodic Follow-Up',
 			'EmailSubject' => '[{ Complainant Name }], what\'s the status of the police complaint you filed?',
-			'EmailBody' => '<p>Hi, [{ Complainant Name }],</p>
-<p>Have you heard yet from the [{ Complaint Investigative Agency }] about the status of your complaint? It\'s been a while since you submitted it.</p><p><b><a href="http://openpolice.local/login" target="_blank">Log into your account</a> and let us know </b><b>how well — or how poorly — this department responds here:</b><br>
-[{ Complaint URL }]</p>
-<p>Our community wants to know, for example, if the investigation by the [{ Complaint Investigative Agency }] upheld your allegations. This information helps make sure that future complaints like yours won\'t be ignored.</p>
-<p>Thank you so much for using OpenPolice.org!</p>
-<p>Sincerely,</p>
-<p>[{ Analyst Name }]<br>
-OpenPolice.org</p>
-[{ Complaint Footer Links }]'
+			'EmailBody' => '<p>Hi, [{ Complainant Name }],</p>\r\n<p>Have you heard yet from the [{ Complaint Investigative Agency }] about the status of your complaint? It\\'s been a while since you submitted it.</p><p><b><a href=\"http://openpolice.local/login\" target=\"_blank\">Log into your account</a> and let us know </b><b>how well ï¿½ or how poorly ï¿½ this department responds here:</b><br>\r\n[{ Complaint URL }]</p>\r\n<p>Our community wants to know, for example, if the investigation by the [{ Complaint Investigative Agency }] upheld your allegations. This information helps make sure that future complaints like yours won\\'t be ignored.</p>\r\n<p>Thank you so much for using OpenPolice.org!</p>\r\n<p>Sincerely,</p>\r\n<p>[{ Analyst Name }]<br>\r\nOpenPolice.org</p>\r\n[{ Complaint Footer Links }]'
 		]);
 		DB::table('SL_Emails')->insert([
 			'EmailID' => 17,
@@ -49526,11 +48202,7 @@ OpenPolice.org</p>
 			'EmailType' => 'To Complainant',
 			'EmailName' => '52. Talk To A Lawyer, Doesn\'t Have Laywer',
 			'EmailSubject' => 'Action Needed: We reviewed your complaint, you need to talk to a lawyer',
-			'EmailBody' => '<p></p><p>Hi, [{ Complainant Name }],</p><p>I’m sorry to hear about your situation. <b>Because you have unresolved criminal charges, I urge you to contact a local criminal defense attorney as soon as possible.</b> Until you speak with a lawyer, you should avoid posting anything online about this incident and avoid talking to the police about it.</p><p>Please understand that we do not provide direct legal services. If you cannot afford a lawyer, the court will connect you to a public defender. If you can afford one, you can start by searching online for well-reviewed criminal defense attorneys in your area.</p><p><b>When you contact an attorney, we recommend you share the attached PDF version of your complaint.</b> They will appreciate the work you put into organizing it, and it will help them prepare your defense. When contacting an attorney, you can send them your PDF with a brief message like the sample below.</p><p><b>Please let us know whether or not you can find legal help.</b> Thank you so much for using OpenPolice.org!</p>
-<p>Sincerely,</p>
-<p>[{ Analyst Name }]<br>
-OpenPolice.org</p><p><br></p><p><b>Sample Email To Attorney:</b></p><p>Hi {Attorney Name},</p><p>I created the attached document using OpenPolice.org. It’s an online web service that I used to organize essential event details and evidence related to my criminal case.</p><p>I look forward to discussing it with you further, and you can reach me at {insert your email and phone number}.</p><p>Sincerely,<br>{Your Name}<br></p><p><br></p><p><b>Some Resources To Search:</b><br></p><ul><li><a href="https://www.avvo.com/search/lawyer_search?utf8=%E2%9C%93&amp;q=criminal+defense&amp;loc=[{ Police Department Zip Code }]&amp;client_rating_range=3&amp;free_consultation=true&amp;no_misconduct=true&amp;sort=relevancy">Avvo Directory: Criminal Defense Lawyers</a></li><li><a href="https://www.nlg-npap.org/find-an-attorney" target="_blank">National Police Accountability Project’s (NPAP) Find an Attorney page</a></li><li><a href="https://cldc.org/wp-content/uploads/2014/04/Evaluating-Police-Misconduct-Cases.pdf" target="_blank">Evaluating Your Potential Police Misconduct Civil Rights Case, by Ben Rosenfeld, Attorney</a></li><li><a href="https://www.lsc.gov/what-legal-aid/find-legal-aid" target="_blank">Non-Profit Legal Aid Organizations</a><br><br></li></ul><p><br></p>
-[{ Complaint Footer Links }]<p></p><p><br></p>'
+			'EmailBody' => '<p></p><p>Hi, [{ Complainant Name }],</p><p>Iï¿½m sorry to hear about your situation. <b>Because you have unresolved criminal charges, I urge you to contact a local criminal defense attorney as soon as possible.</b> Until you speak with a lawyer, you should avoid posting anything online about this incident and avoid talking to the police about it.</p><p>Please understand that we do not provide direct legal services. If you cannot afford a lawyer, the court will connect you to a public defender. If you can afford one, you can start by searching online for well-reviewed criminal defense attorneys in your area.</p><p><b>When you contact an attorney, we recommend you share the attached PDF version of your complaint.</b> They will appreciate the work you put into organizing it, and it will help them prepare your defense. When contacting an attorney, you can send them your PDF with a brief message like the sample below.</p><p><b>Please let us know whether or not you can find legal help.</b> Thank you so much for using OpenPolice.org!</p>\r\n<p>Sincerely,</p>\r\n<p>[{ Analyst Name }]<br>\r\nOpenPolice.org</p><p><br></p><p><b>Sample Email To Attorney:</b></p><p>Hi {Attorney Name},</p><p>I created the attached document using OpenPolice.org. Itï¿½s an online web service that I used to organize essential event details and evidence related to my criminal case.</p><p>I look forward to discussing it with you further, and you can reach me at {insert your email and phone number}.</p><p>Sincerely,<br>{Your Name}<br></p><p><br></p><p><b>Some Resources To Search:</b><br></p><ul><li><a href=\"https://www.avvo.com/search/lawyer_search?utf8=%E2%9C%93&amp;q=criminal+defense&amp;loc=[{ Police Department Zip Code }]&amp;client_rating_range=3&amp;free_consultation=true&amp;no_misconduct=true&amp;sort=relevancy\">Avvo Directory: Criminal Defense Lawyers</a></li><li><a href=\"https://www.nlg-npap.org/find-an-attorney\" target=\"_blank\">National Police Accountability Projectï¿½s (NPAP) Find an Attorney page</a></li><li><a href=\"https://cldc.org/wp-content/uploads/2014/04/Evaluating-Police-Misconduct-Cases.pdf\" target=\"_blank\">Evaluating Your Potential Police Misconduct Civil Rights Case, by Ben Rosenfeld, Attorney</a></li><li><a href=\"https://www.lsc.gov/what-legal-aid/find-legal-aid\" target=\"_blank\">Non-Profit Legal Aid Organizations</a><br><br></li></ul><p><br></p>\r\n[{ Complaint Footer Links }]<p></p><p><br></p>'
 		]);
 		DB::table('SL_Emails')->insert([
 			'EmailID' => 23,
@@ -49548,10 +48220,8 @@ OpenPolice.org</p><p><br></p><p><b>Sample Email To Attorney:</b></p><p>Hi {Attor
 			'EmailType' => 'To Complainant',
 			'EmailName' => '63. Complaint Received By Oversight',
 			'EmailSubject' => 'The [{ Complaint Investigative Agency }] received your complaint',
-			'EmailBody' => '<div class="" data-block="true" data-editor="8a1e3" data-offset-key="35fb8-0-0"><div data-offset-key="35fb8-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="35fb8-0-0"><span data-text="true">Congratulations, </span></span><span data-offset-key="35fb8-0-0"><span data-text="true">[{ Complainant Name }],</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="deg56-0-0"><div data-offset-key="deg56-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="deg56-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="2mhdt-0-0"><div data-offset-key="2mhdt-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="2mhdt-0-0"><span data-text="true">The [{ Complaint Investigative Agency }] received your complaint! But this shouldn\'t be the end of the road for you. As the investigation progresses, please login to update the community.
- [{ Complaint URL }]</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="46n75-0-0"><div data-offset-key="46n75-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="46n75-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="254n2-0-0"><div data-offset-key="254n2-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="254n2-0-0"><span data-text="true">Thank you so much for using OpenPolice.org!</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="2feu9-0-0"><div data-offset-key="2feu9-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="2feu9-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="45dpo-0-0"><div data-offset-key="45dpo-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span class="adverb"><span data-offset-key="45dpo-0-0"><span data-text="true">Sincerely</span></span></span><span data-offset-key="45dpo-1-0"><span data-text="true">,</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="4du2g-0-0"><div data-offset-key="4du2g-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="4du2g-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="87pf3-0-0"><div data-offset-key="87pf3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="87pf3-0-0"><span data-text="true">[{ Analyst Name }]
- OpenPolice.org</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="ecbsi-0-0"><div data-offset-key="ecbsi-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="ecbsi-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="al9a2-0-0"><div data-offset-key="al9a2-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="al9a2-0-0"><span data-text="true">P.S. We care about how well — or how </span></span><span class="adverb"><span data-offset-key="al9a2-1-0"><span data-text="true">poorly</span></span></span><span data-offset-key="al9a2-2-0"><span data-text="true"> — this department  responds to your complaint. So we\'ll be in touch in the coming weeks and  months to check in!</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="4c2e3-0-0"><div data-offset-key="4c2e3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="4c2e3-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="csqgq-0-0"><div data-offset-key="csqgq-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="csqgq-0-0"><span data-text="true">[{ Complaint Footer Links }]</span></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="bnnk3-0-0"><div data-offset-key="bnnk3-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="bnnk3-0-0"><br data-text="true"></span></div></div><div class="" data-block="true" data-editor="8a1e3" data-offset-key="2peoa-0-0"><div data-offset-key="2peoa-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="2peoa-0-0"><br data-text="true"></span></div></div>'
+			'EmailBody' => '<div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"35fb8-0-0\"><div data-offset-key=\"35fb8-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"35fb8-0-0\"><span data-text=\"true\">Congratulations, </span></span><span data-offset-key=\"35fb8-0-0\"><span data-text=\"true\">[{ Complainant Name }],</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"deg56-0-0\"><div data-offset-key=\"deg56-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"deg56-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"2mhdt-0-0\"><div data-offset-key=\"2mhdt-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"2mhdt-0-0\"><span data-text=\"true\">The [{ Complaint Investigative Agency }] received your complaint! But this shouldn\\'t be the end of the road for you. As the investigation progresses, please login to update the community.\r\n [{ Complaint URL }]</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"46n75-0-0\"><div data-offset-key=\"46n75-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"46n75-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"254n2-0-0\"><div data-offset-key=\"254n2-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"254n2-0-0\"><span data-text=\"true\">Thank you so much for using OpenPolice.org!</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"2feu9-0-0\"><div data-offset-key=\"2feu9-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"2feu9-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"45dpo-0-0\"><div data-offset-key=\"45dpo-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span class=\"adverb\"><span data-offset-key=\"45dpo-0-0\"><span data-text=\"true\">Sincerely</span></span></span><span data-offset-key=\"45dpo-1-0\"><span data-text=\"true\">,</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"4du2g-0-0\"><div data-offset-key=\"4du2g-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"4du2g-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"87pf3-0-0\"><div data-offset-key=\"87pf3-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"87pf3-0-0\"><span data-text=\"true\">[{ Analyst Name }]\r\n OpenPolice.org</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"ecbsi-0-0\"><div data-offset-key=\"ecbsi-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"ecbsi-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"al9a2-0-0\"><div data-offset-key=\"al9a2-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"al9a2-0-0\"><span data-text=\"true\">P.S. We care about how well ï¿½ or how </span></span><span class=\"adverb\"><span data-offset-key=\"al9a2-1-0\"><span data-text=\"true\">poorly</span></span></span><span data-offset-key=\"al9a2-2-0\"><span data-text=\"true\"> ï¿½ this department  responds to your complaint. So we\\'ll be in touch in the coming weeks and  months to check in!</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"4c2e3-0-0\"><div data-offset-key=\"4c2e3-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"4c2e3-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"csqgq-0-0\"><div data-offset-key=\"csqgq-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"csqgq-0-0\"><span data-text=\"true\">[{ Complaint Footer Links }]</span></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"bnnk3-0-0\"><div data-offset-key=\"bnnk3-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bnnk3-0-0\"><br data-text=\"true\"></span></div></div><div class=\"\" data-block=\"true\" data-editor=\"8a1e3\" data-offset-key=\"2peoa-0-0\"><div data-offset-key=\"2peoa-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"2peoa-0-0\"><br data-text=\"true\"></span></div></div>'
 		]);
-			
+				
 	}
 }

@@ -131,7 +131,19 @@ class OpenPoliceAdminMenu extends AdminMenu
                 ),
                 $this->admMenuLnk(
                     '/dash/team-resources', 
-                    'Team Resources'
+                    'Team Resources', 
+                    '', 
+                    1, 
+                    [
+                        $this->admMenuLnk(
+                            '/dash/team-resources', 
+                            'Team Resources'
+                        ),
+                        $this->admMenuLnk(
+                            '/dash/development-team-update', 
+                            'Software Development Updates'
+                        )
+                    ]
                 )
             ]
         );
@@ -166,7 +178,19 @@ class OpenPoliceAdminMenu extends AdminMenu
                 ),
                 $this->admMenuLnk(
                     '/dash/team-resources', 
-                    'Team Resources'
+                    'Team Resources', 
+                    '', 
+                    1, 
+                    [
+                        $this->admMenuLnk(
+                            '/dash/team-resources', 
+                            'Team Resources'
+                        ),
+                        $this->admMenuLnk(
+                            '/dash/development-team-update', 
+                            'Software Development Updates'
+                        )
+                    ]
                 )
             ]
         );
