@@ -39,28 +39,28 @@ class OpenPolicePeople extends OpenPoliceUtils
         return (sizeof($this->sessData->loopItemIDs["Officers"]) > 1); 
     }
 
-    protected function getPersonLabel($type = 'Civilians', $id = -3, $row = [])
+    protected function getPersonLabel($type = 'civilians', $id = -3, $row = [])
     {
         $name = '';
         $persID = 0;
-        if (isset($row->{ substr($type, 0, 3) . 'PersonID' })) {
-            $persID = intVal($row->{ substr($type, 0, 3) . 'PersonID' });
-        } elseif (isset($row->CivCompPersonID)) {
-            $persID = intVal($row->CivCompPersonID);
+        if (isset($row->{ substr($type, 0, 3) . '_person_id' })) {
+            $persID = intVal($row->{ substr($type, 0, 3) . '_person_id' });
+        } elseif (isset($row->civ_comp_person_id)) {
+            $persID = intVal($row->civ_comp_person_id);
         }
-        $civ2 = $this->sessData->dataFind('PersonContact', $persID);
-        //$civ2 = $this->sessData->getChildRow($type, $id, 'PersonContact');
+        $civ2 = $this->sessData->dataFind('person_contact', $persID);
+        //$civ2 = $this->sessData->getChildRow($type, $id, 'person_contact');
 //echo 'type: ' . $type . ', id: ' . $id . '<pre>'; print_r($civ2); echo '</pre>';
-        if ($civ2 && trim($civ2->PrsnNickname) != '') {
-            $name = $civ2->PrsnNickname;
-        } elseif ($civ2 && (trim($civ2->PrsnNameFirst) != '' 
-            || trim($civ2->PrsnNameLast) != '')) {
-            $name = $civ2->PrsnNameFirst . ' ' . $civ2->PrsnNameLast 
-                . ' ' . $name;
+        if ($civ2 && trim($civ2->prsn_nickname) != '') {
+            $name = $civ2->prsn_nickname;
+        } elseif ($civ2 
+            && (trim($civ2->prsn_name_first) != '' || trim($civ2->prsn_name_last) != '')) {
+            $name = $civ2->prsn_name_first . ' ' . $civ2->prsn_name_last . ' ' . $name;
         } else {
-            if ($type == 'Officers' && isset($row->OffBadgeNumber) 
-                && intVal($row->OffBadgeNumber) > 0) {
-                $name = 'Badge #' . $row->OffBadgeNumber . ' ' . $name;
+            if ($type == 'officers' 
+                && isset($row->off_badge_number) 
+                && intVal($row->off_badge_number) > 0) {
+                $name = 'Badge #' . $row->off_badge_number . ' ' . $name;
             }
         }
         return trim($name);
@@ -75,27 +75,24 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function getCivName($loop, $civ = [], $itemInd = -3)
     {
         $name = '';
-        if (!isset($civ->CivID)) {
-            if (isset($civ->InjSubjectID)) {
-                $civ = $this->sessData
-                    ->getRowById('Civilians', $civ->InjSubjectID);
-            } elseif (isset($civ->InjCareSubjectID)) {
-                $civ = $this->sessData
-                    ->getRowById('Civilians', $civ->InjCareSubjectID);
+        if (!isset($civ->civ_id)) {
+            if (isset($civ->inj_subject_id)) {
+                $civ = $this->sessData->getRowById('civilians', $civ->inj_subject_id);
+            } elseif (isset($civ->inj_care_subject_id)) {
+                $civ = $this->sessData->getRowById('civilians', $civ->inj_care_subject_id);
             }
         }
-        if ($civ->CivIsCreator == 'Y' 
-            && (($loop == 'Victims' && $civ->CivRole == 'Victim') 
-            || ($loop == 'Witnesses' && $civ->CivRole == 'Witness'))) {
+        if ($civ->civ_is_creator == 'Y' 
+            && (($loop == 'Victims' && $civ->civ_role == 'Victim') 
+            || ($loop == 'Witnesses' && $civ->civ_role == 'Witness'))) {
             if ($this->isReport) {
-                if (isset($civ->CivPersonID) && intVal($civ->CivPersonID) > 0) {
+                if (isset($civ->civ_person_id) && intVal($civ->civ_person_id) > 0) {
                     $contact = $this->sessData->getChildRow(
-                        'Civilians', 
-                        $civ->CivPersonID, 
+                        'civilians', 
+                        $civ->civ_person_id, 
                         'PersonContact'
                     );
-                    $name = $contact->PrsnNameFirst . ' ' 
-                        . $contact->PrsnNameLast;
+                    $name = $contact->prsn_name_first . ' ' . $contact->prsn_name_last;
                 }
                 if (trim($name) == '') {
                     $name = 'Complainant';
@@ -104,13 +101,12 @@ class OpenPolicePeople extends OpenPoliceUtils
                 $name = 'You ' . $name;
             }
         } else {
-            $name = $this->getPersonLabel('Civilians', $civ->CivID, $civ);
+            $name = $this->getPersonLabel('civilians', $civ->civ_id, $civ);
         }
         $name = trim($name);
         if ($name != '' && $name != 'You') {
-            $name .= ' (' . $civ->CivRole . ' #' 
-                . (1+$this->sessData->getLoopIndFromID($loop, $civ->CivID)) 
-                . ')';
+            $name .= ' (' . $civ->civ_role . ' #' 
+                . (1+$this->sessData->getLoopIndFromID($loop, $civ->civ_id)) . ')';
         }
         if ($name == '') {
             
@@ -120,19 +116,19 @@ class OpenPolicePeople extends OpenPoliceUtils
     
     public function getCivilianNameFromID($civID)
     {
-        if ($this->sessData->dataSets["Civilians"][0]->CivID == $civID) {
+        if ($this->sessData->dataSets["civilians"][0]->civ_id == $civID) {
             $role = '';
-            if ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Victim') {
+            if ($this->sessData->dataSets["civilians"][0]->civ_role == 'Victim') {
                 $role = 'Victims';
-            } elseif ($this->sessData->dataSets["Civilians"][0]->CivRole == 'Witness') {
+            } elseif ($this->sessData->dataSets["civilians"][0]->civ_role == 'Witness') {
                 $role = 'Witnesses';
             }
-            return $this->getCivName($role, $this->sessData->dataSets["Civilians"][0], 1);
+            return $this->getCivName($role, $this->sessData->dataSets["civilians"][0], 1);
         }
         $civInd = $this->sessData->getLoopIndFromID('Victims', $civID);
         if ($civInd >= 0) {
-            $name = $this->getCivName('Victims', 
-                $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            $civRow = $this->sessData->getRowById('civilians', $civID);
+            $name = $this->getCivName('Victims', $civRow, (1+$civInd));
             if ($name == '') {
                 $name = 'Victim #' . (1+$civInd);
             }
@@ -140,8 +136,8 @@ class OpenPolicePeople extends OpenPoliceUtils
         }
         $civInd = $this->sessData->getLoopIndFromID('Witnesses', $civID);
         if ($civInd >= 0) {
-            $name = $this->getCivName('Witnesses', 
-                $this->sessData->getRowById('Civilians', $civID), (1+$civInd));
+            $civRow = $this->sessData->getRowById('civilians', $civID);
+            $name = $this->getCivName('Witnesses', $civRow, (1+$civInd));
             if ($name == '') {
                 $name = 'Witness #' . (1+$civInd);
             }
@@ -153,10 +149,9 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function getFirstVictimCivInd()
     {
         $civInd = -3;
-        if (sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $i => $civ) {
-                if (isset($civ->CivRole) && trim($civ->CivRole) == 'Victim' 
-                    && $civInd < 0) {
+        if (sizeof($this->sessData->dataSets["civilians"]) > 0) {
+            foreach ($this->sessData->dataSets["civilians"] as $i => $civ) {
+                if (isset($civ->civ_role) && trim($civ->civ_role) == 'Victim' && $civInd < 0) {
                     $civInd = $i;
                 }
             }
@@ -167,13 +162,13 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function getCivNamesFromEvent($eveID)
     {
         $ret = '';
-        $lnks = OPLinksCivilianEvents::where('LnkCivEveEveID', $eveID)
+        $lnks = OPLinksCivilianEvents::where('lnk_civ_eve_eve_id', $eveID)
             ->get();
         if ($lnks->isNotEmpty()) {
             $civs = [];
             foreach ($lnks as $lnk) {
-                if (!in_array($lnk->LnkCivEveCivID, $civs)) {
-                    $civs[] = $lnk->LnkCivEveCivID;
+                if (!in_array($lnk->lnk_civ_eve_civ_id, $civs)) {
+                    $civs[] = $lnk->lnk_civ_eve_civ_id;
                 }
             }
             foreach ($civs as $i => $civID) {
@@ -185,15 +180,15 @@ class OpenPolicePeople extends OpenPoliceUtils
         return $ret;
     }
 
-    protected function getLinkedToEvent($Ptype = 'Officer', $eveSeqID = -3)
+    protected function getLinkedToEvent($Ptype = 'officer', $eveSeqID = -3)
     {
         $retArr = [];
-        $abbr = (($Ptype == 'Officer') ? 'Off' : 'Civ');
-        if ($eveSeqID > 0 && isset($this->sessData->dataSets["Links" . $Ptype . "Events"]) 
-            && sizeof($this->sessData->dataSets["Links" . $Ptype . "Events"]) > 0) {
-            foreach ($this->sessData->dataSets["Links" . $Ptype . "Events"] as $PELnk) {
-                if ($PELnk->{ 'Lnk' . $abbr . 'EveEveID' } == $eveSeqID) {
-                    $retArr[] = $PELnk->{ 'Lnk' . $abbr . 'Eve' . $abbr . 'ID' };
+        $abbr = (($Ptype == 'officer') ? 'off' : 'civ');
+        if ($eveSeqID > 0 && isset($this->sessData->dataSets["links_" . $Ptype . "_events"]) 
+            && sizeof($this->sessData->dataSets["links_" . $Ptype . "_events"]) > 0) {
+            foreach ($this->sessData->dataSets["links_" . $Ptype . "_events"] as $PELnk) {
+                if ($PELnk->{ 'lnk_' . $abbr . '_eve_eve_id' } == $eveSeqID) {
+                    $retArr[] = $PELnk->{ 'lnk_' . $abbr . '_eve_' . $abbr . '_id' };
                 }
             }
         }
@@ -203,10 +198,10 @@ class OpenPolicePeople extends OpenPoliceUtils
     // converts Officer row into identifying name used in most of the complaint process
     protected function getOfficerName($officer = [], $itemIndex = -3)
     {
-        if (isset($officer->OffCompOffID) && intVal($officer->OffCompOffID) > 0) {
-            $officer = $this->sessData->dataFind('Officers', $officer->OffCompOffID);
+        if (isset($officer->off_comp_off_id) && intVal($officer->off_comp_off_id) > 0) {
+            $officer = $this->sessData->dataFind('officers', $officer->off_comp_off_id);
         }
-        $name = $this->getPersonLabel('Officers', $officer->OffID, $officer);
+        $name = $this->getPersonLabel('officers', $officer->off_id, $officer);
         if (trim($name) == '') {
             $name = 'Officer #' . (1+$itemIndex);
         } else {
@@ -219,10 +214,7 @@ class OpenPolicePeople extends OpenPoliceUtils
     {
         $offInd = $this->sessData->getLoopIndFromID('Officers', $offID);
         if ($offInd >= 0) {
-            return $this->getOfficerName(
-                $this->sessData->getRowById('Officers', $offID), 
-                (1+$offInd)
-            );
+            return $this->getOfficerName($this->sessData->getRowById('officers', $offID), (1+$offInd));
         }
         return '';
     }
@@ -235,18 +227,18 @@ class OpenPolicePeople extends OpenPoliceUtils
      */
     protected function getOfficerVerifiedRecordByID($offVID = -3)
     {
-        return DB::table('OP_OfficersVerified')
-            ->join('OP_PersonContact', 'OP_OfficersVerified.OffVerPersonID', 
-                '=', 'OP_PersonContact.PrsnID')
-            ->where('OP_OfficersVerified.OffVerID', $offVID)
+        return DB::table('op_officers_verified')
+            ->join('op_person_contact', 'op_officers_verified.off_ver_person_id', 
+                '=', 'op_person_contact.prsn_id')
+            ->where('op_officers_verified.off_ver_id', $offVID)
             ->select(
-                'OP_OfficersVerified.*', 
-                'OP_PersonContact.PrsnNamePrefix', 
-                'OP_PersonContact.PrsnNameFirst', 
-                'OP_PersonContact.PrsnNickname', 
-                'OP_PersonContact.PrsnNameMiddle', 
-                'OP_PersonContact.PrsnNameLast',  
-                'OP_PersonContact.PrsnNameSuffix'
+                'op_officers_verified.*', 
+                'op_person_contact.prsn_name_prefix', 
+                'op_person_contact.prsn_name_first', 
+                'op_person_contact.prsn_nickname', 
+                'op_person_contact.prsn_name_middle', 
+                'op_person_contact.prsn_name_last',  
+                'op_person_contact.prsn_name_suffix'
             )
             ->first();
     }
@@ -261,28 +253,28 @@ class OpenPolicePeople extends OpenPoliceUtils
      */
     protected function getOfficerVerifiedRecord($offID = -3, $autoCreate = false)
     {
-        $off = DB::table('OP_OfficersVerified')
-            ->join('OP_PersonContact', 'OP_OfficersVerified.OffVerPersonID', 
-                '=', 'OP_PersonContact.PrsnID')
-            ->where('OP_OfficersVerified.OffVerID', function($query) use ($offID)
+        $off = DB::table('op_officers_verified')
+            ->join('op_person_contact', 'op_officers_verified.off_ver_person_id', 
+                '=', 'op_person_contact.prsn_id')
+            ->where('op_officers_verified.off_ver_id', function($query) use ($offID)
             {
-                $query->select('OffVerifiedID')
+                $query->select('off_verified_id')
                     ->from(with(new OPOfficers)->getTable())
-                    ->whereNotNull('OffVerifiedID')
-                    ->where('OffID', $offID)
+                    ->whereNotNull('off_verified_id')
+                    ->where('off_id', $offID)
                     ->first();
             })
             ->select(
-                'OP_OfficersVerified.*', 
-                'OP_PersonContact.PrsnNamePrefix', 
-                'OP_PersonContact.PrsnNameFirst', 
-                'OP_PersonContact.PrsnNickname', 
-                'OP_PersonContact.PrsnNameMiddle', 
-                'OP_PersonContact.PrsnNameLast',  
-                'OP_PersonContact.PrsnNameSuffix'
+                'op_officers_verified.*', 
+                'op_person_contact.prsn_name_prefix', 
+                'op_person_contact.prsn_name_first', 
+                'op_person_contact.prsn_nickname', 
+                'op_person_contact.prsn_name_middle', 
+                'op_person_contact.prsn_name_last',  
+                'op_person_contact.prsn_name_suffix'
             )
             ->first();
-        if ($autoCreate && (!$off || !isset($off->OffVerID))) {
+        if ($autoCreate && (!$off || !isset($off->off_ver_id))) {
             $this->createOfficerVerifiedRecord($offID);
         }
         return $off;
@@ -298,17 +290,17 @@ class OpenPolicePeople extends OpenPoliceUtils
      */
     protected function chkOfficerVerifiedRecord($offID = -3, $autoCreate = false)
     {
-        $off = OPOfficersVerified::where('OffVerID', function($query) use ($offID)
+        $off = OPOfficersVerified::where('off_ver_id', function($query) use ($offID)
             {
-                $query->select('OffVerifiedID')
+                $query->select('off_verified_id')
                     ->from(with(new OPOfficers)->getTable())
-                    ->whereNotNull('OffVerifiedID')
-                    ->where('OffID', $offID)
+                    ->whereNotNull('off_verified_id')
+                    ->where('off_id', $offID)
                     ->first();
             })
             ->first();
         $off = $this->getOfficerVerifiedRecord($offID);
-        $found = ($off && isset($off->OffVerID));
+        $found = ($off && isset($off->off_ver_id));
         if (!$found && $autoCreate) {
             $this->createOfficerVerifiedRecord($offID);
         }
@@ -326,43 +318,43 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function createOfficerVerifiedRecord($offID = -3, $off = null)
     {
         // Accept either starting point
-        if ($offID <= 0 && $off && isset($off->OffID)) {
-            $offID = $off->OffID;
-        } elseif ($offID > 0 && (!$off || !isset($off->OffID))) {
+        if ($offID <= 0 && $off && isset($off->off_id)) {
+            $offID = $off->off_id;
+        } elseif ($offID > 0 && (!$off || !isset($off->off_id))) {
             $off = OPOfficers::find($offID);
         }
         $prsn = OPPersonContact::find($off->OffPersonID);
-        if (!$prsn || !isset($prsn->PrsnID)) {
+        if (!$prsn || !isset($prsn->prsn_id)) {
             return null;
         }
 
         // Avoid creating duplicate records
         $offV = $this->getOfficerVerifiedRecord($offID);
-        if ($offV && isset($offV->OffVerID)) {
+        if ($offV && isset($offV->off_ver_id)) {
             return $offV;
         }
 
         // Create verified record
         $prsnV = new OPPersonContact;
-        $prsnV->PrsnNamePrefix = $prsn->PrsnNamePrefix;
-        $prsnV->PrsnNameFirst  = $prsn->PrsnNameFirst;
-        $prsnV->PrsnNameMiddle = $prsn->PrsnNameMiddle;
-        $prsnV->PrsnNameLast   = $prsn->PrsnNameLast;
-        $prsnV->PrsnNameSuffix = $prsn->PrsnNameSuffix;
+        $prsnV->prsn_name_prefix = $prsn->prsn_name_prefix;
+        $prsnV->prsn_name_first  = $prsn->prsn_name_first;
+        $prsnV->prsn_name_middle = $prsn->prsn_name_middle;
+        $prsnV->prsn_name_last   = $prsn->prsn_name_last;
+        $prsnV->prsn_name_suffix = $prsn->prsn_name_suffix;
         $prsnV->save();
 
         $offV = new OPOfficersVerified;
-        $offV->OffVerPersonID = $prsnV->PrsnID;
-        $offV->OffVerStatus = $GLOBALS["SL"]->def->getID(
+        $offV->off_ver_person_id = $prsnV->prsn_id;
+        $offV->off_ver_status = $GLOBALS["SL"]->def->getID(
             'Verified Officer Status', 
             'Department Employment Not Verified'
         );
         $offV->save();
-        $off->OffVerifiedID = $offV->OffVerID;
+        $off->off_verified_id = $offV->off_ver_id;
         $off->save();
 
-        $this->linkVerifOffWithDept($offV->OffVerID, $off);
-        return $this->getOfficerVerifiedRecordByID($offV->OffVerID);
+        $this->linkVerifOffWithDept($offV->off_ver_id, $off);
+        return $this->getOfficerVerifiedRecordByID($offV->off_ver_id);
     }
     
     /**
@@ -376,28 +368,30 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function linkVerifOffWithDept($offVID = -3, $off = null)
     {
         $deptID = 0;
-        if (isset($off->OffDeptID) && intVal($off->OffDeptID) > 0) {
-            $deptID = intVal($off->OffDeptID);
+        if (isset($off->off_dept_id) && intVal($off->off_dept_id) > 0) {
+            $deptID = intVal($off->off_dept_id);
         }
-        if ($deptID <= 0 && isset($off->OffComplaintID) 
-            && intVal($off->OffComplaintID) > 0) {
-            $depts = OPLinksComplaintDept::where('LnkComDeptComplaintID', $off->OffComplaintID)
+        if ($deptID <= 0 
+            && isset($off->off_complaint_id) 
+            && intVal($off->off_complaint_id) > 0) {
+            $depts = OPLinksComplaintDept::where('lnk_com_dept_complaint_id', $off->off_complaint_id)
                 ->get();
-            if ($depts->isNotEmpty() && sizeof($depts) == 1
-                && isset($depts[0]->LnkComDeptDeptID) 
-                && intVal($depts[0]->LnkComDeptDeptID) > 0) {
-                $deptID = $depts[0]->LnkComDeptDeptID;
-                $off->OffDeptID = $deptID;
+            if ($depts->isNotEmpty() 
+                && sizeof($depts) == 1
+                && isset($depts[0]->lnk_com_dept_dept_id) 
+                && intVal($depts[0]->lnk_com_dept_dept_id) > 0) {
+                $deptID = $depts[0]->lnk_com_dept_dept_id;
+                $off->off_dept_id = $deptID;
                 $off->save();
             }
         }
-        $lnk = OPLinksOfficerDept::where('LnkOffDeptDeptID', $deptID)
-            ->where('LnkOffDeptOfficerID', $offVID)
+        $lnk = OPLinksOfficerDept::where('lnk_off_dept_dept_id', $deptID)
+            ->where('lnk_off_dept_officer_id', $offVID)
             ->first();
         if (!$lnk || !isset($lnk)) {
             $lnk = new OPLinksOfficerDept;
-            $lnk->LnkOffDeptDeptID = $deptID;
-            $lnk->LnkOffDeptOfficerID = $offVID;
+            $lnk->lnk_off_dept_dept_id = $deptID;
+            $lnk->lnk_off_dept_officer_id = $offVID;
             $lnk->save();
         }
         return $lnk;
@@ -412,19 +406,19 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function chkAllOfficerVerifiedRecords()
     {
         $found = true;
-        $chk = OPOfficers::whereIn('OffComplaintID', function($query)
+        $chk = OPOfficers::whereIn('off_complaint_id', function($query)
             {
-                $status = $this->getPublishedStatusList('Complaints');
-                $query->select('ComID')
+                $status = $this->getPublishedStatusList('complaints');
+                $query->select('com_id')
                     ->from(with(new OPComplaints)->getTable())
-                    ->whereIn('ComStatus', $status);
+                    ->whereIn('com_status', $status);
             })
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $off) {
-                if (!isset($off->OffVerifiedID) 
-                    || intVal($off->OffVerifiedID) <= 0) {
-                    $this->createOfficerVerifiedRecord($off->OffID, $off);
+                if (!isset($off->off_verified_id) 
+                    || intVal($off->off_verified_id) <= 0) {
+                    $this->createOfficerVerifiedRecord($off->off_id, $off);
                     $found = false;
                 }
             }
@@ -436,24 +430,24 @@ class OpenPolicePeople extends OpenPoliceUtils
     {
         $deptChk = false;
         if ($this->treeID == 5) {
-            $deptChk = OPLinksComplimentDept::where('LnkCompliDeptDeptID', $newDeptID)
-                ->where('LnkCompliDeptComplimentID', $this->coreID)
+            $deptChk = OPLinksComplimentDept::where('lnk_compli_dept_dept_id', $newDeptID)
+                ->where('lnk_compli_dept_compliment_id', $this->coreID)
                 ->get();
         } else {
-            $deptChk = OPLinksComplaintDept::where('LnkComDeptDeptID', $newDeptID)
-                ->where('LnkComDeptComplaintID', $this->coreID)
+            $deptChk = OPLinksComplaintDept::where('lnk_com_dept_dept_id', $newDeptID)
+                ->where('lnk_com_dept_complaint_id', $this->coreID)
                 ->get();
         }
         if ($deptChk->isEmpty()) {
             if ($this->treeID == 5) {
                 $newDeptLnk = new OPLinksComplimentDept;
-                $newDeptLnk->LnkCompliDeptDeptID = $newDeptID;
-                $newDeptLnk->LnkCompliDeptComplimentID = $this->coreID;
+                $newDeptLnk->lnk_compli_dept_dept_id = $newDeptID;
+                $newDeptLnk->lnk_compli_dept_compliment_id = $this->coreID;
                 $newDeptLnk->save();
             } else {
                 $newDeptLnk = new OPLinksComplaintDept;
-                $newDeptLnk->LnkComDeptDeptID = $newDeptID;
-                $newDeptLnk->LnkComDeptComplaintID = $this->coreID;
+                $newDeptLnk->lnk_com_dept_dept_id = $newDeptID;
+                $newDeptLnk->lnk_com_dept_complaint_id = $this->coreID;
                 $newDeptLnk->save();
             }
         }
@@ -465,11 +459,11 @@ class OpenPolicePeople extends OpenPoliceUtils
     
     protected function civRow2Set($civ)
     {
-        if (!$civ || !isset($civ->CivIsCreator)) {
+        if (!$civ || !isset($civ->civ_is_creator)) {
             return '';
         }
-        return (($civ->CivIsCreator == 'Y') ? '' 
-            : (($civ->CivRole == 'Victim') ? 'Victims' : 'Witnesses') );
+        return (($civ->civ_is_creator == 'Y') ? '' 
+            : (($civ->civ_role == 'Victim') ? 'Victims' : 'Witnesses') );
     }
     
     protected function getCivilianList($loop = 'Victims')
@@ -478,10 +472,10 @@ class OpenPolicePeople extends OpenPoliceUtils
             return $this->sessData->loopItemIDs[$loop];
         }
         $civs = [];
-        if (isset($this->sessData->dataSets["Civilians"]) 
-            && sizeof($this->sessData->dataSets["Civilians"]) > 0) {
-            foreach ($this->sessData->dataSets["Civilians"] as $civ) {
-                $civs[] = $civ->CivID;
+        if (isset($this->sessData->dataSets["civilians"]) 
+            && sizeof($this->sessData->dataSets["civilians"]) > 0) {
+            foreach ($this->sessData->dataSets["civilians"] as $civ) {
+                $civs[] = $civ->civ_id;
             }
         }
         return $civs;
@@ -495,14 +489,12 @@ class OpenPolicePeople extends OpenPoliceUtils
                     "abbr"  => 'org',
                     "sing"  => 'Organization',
                     "plur"  => 'Organizations', 
-                    "defID" => $GLOBALS["SL"]
-                        ->def->getID('Partner Types', 'Organization')
+                    "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')
                 ], [
                     "abbr"  => 'attorney',
                     "sing"  => 'Attorney',
                     "plur"  => 'Attorneys', 
-                    "defID" => $GLOBALS["SL"]
-                        ->def->getID('Partner Types', 'Attorney')
+                    "defID" => $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')
                 ]
             ];
         }

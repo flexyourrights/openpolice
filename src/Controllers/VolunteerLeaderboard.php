@@ -27,19 +27,19 @@ class VolunteerLeaderboard
     
     public function checkVolunStats()
     {
-        // First ensure all volunteers and staff have a corresponding OP_zVolunUserInfo record
+        // First ensure all volunteers and staff have a corresponding op_zvolun_user_info record
         $volunteers = User::whereIn('id', function($query){
-            $query->select('RoleUserUID')
-                ->from('SL_UsersRoles')
+            $query->select('role_user_uid')
+                ->from('sl_users_roles')
                 ->get();
         })->get();
         if ($volunteers->isNotEmpty()) {
             foreach ($volunteers as $u) {
-                $chk = OPzVolunUserInfo::where('UserInfoUserID', $u->id)
+                $chk = OPzVolunUserInfo::where('user_info_user_id', $u->id)
                 	->first();
                 if (!$chk) {
                     $tmp = new OPzVolunUserInfo;
-                    $tmp->UserInfoUserID = $u->id;
+                    $tmp->user_info_user_id = $u->id;
                     $tmp->save();
                 }
             }
@@ -47,37 +47,38 @@ class VolunteerLeaderboard
         
         // Now update all editing totals
         $tally = $userTots = $uniqueDepts = [];
-        $edits = DB::table('OP_Zedit_Oversight')
-            ->leftJoin('OP_Zedit_Departments', 'OP_Zedit_Oversight.ZedOverZedDeptID', 
-                '=', 'OP_Zedit_Departments.ZedDeptID')
-            ->select('OP_Zedit_Departments.ZedDeptDuration', 
-                'OP_Zedit_Departments.ZedDeptUserID', 
-                'OP_Zedit_Oversight.ZedOverOverDeptID', 
-                'OP_Zedit_Oversight.ZedOverOnlineResearch', 
-                'OP_Zedit_Oversight.ZedOverMadeDeptCall', 
-                'OP_Zedit_Oversight.ZedOverMadeIACall')
-            ->where('OP_Zedit_Oversight.ZedOverOverType', 303)
+        $edits = DB::table('op_z_edit_oversight')
+            ->leftJoin('op_z_edit_departments', 'op_z_edit_oversight.zed_over_zed_dept_id', 
+                '=', 'op_z_edit_departments.zed_dept_id')
+            ->select('op_z_edit_departments.zed_dept_duration', 
+                'op_z_edit_departments.zed_dept_user_id', 
+                'op_z_edit_oversight.zed_over_over_dept_id', 
+                'op_z_edit_oversight.zed_over_online_research', 
+                'op_z_edit_oversight.zed_over_made_dept_call', 
+                'op_z_edit_oversight.zed_over_made_ia_call')
+            ->where('op_z_edit_oversight.zed_over_over_type', 303)
             ->get();
         if ($edits->isNotEmpty()) {
             foreach ($edits as $edit) {
-                if (!isset($tally[$edit->ZedDeptUserID])) {
-                    $userTots[$edit->ZedDeptUserID] = array(0, 0, 0, 0, 0);
-                    $tally[$edit->ZedDeptUserID] = [];
+                if (!isset($tally[$edit->zed_dept_user_id])) {
+                    $userTots[$edit->zed_dept_user_id] = [0, 0, 0, 0, 0];
+                    $tally[$edit->zed_dept_user_id] = [];
                 }
-                if (!isset($tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID])) {
-                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID] = array(0, 0, 0, 0);
+                if (!isset($tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id])) {
+                    $tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id] = [0, 0, 0, 0];
                 }
-                if ($edit->ZedOverOnlineResearch && intVal($edit->ZedOverOnlineResearch) > 0) {
-                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][0] = 1;
+                if ($edit->zed_over_online_research && intVal($edit->zed_over_online_research) > 0) {
+                    $tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id][0] = 1;
                 }
-                if ($edit->ZedOverMadeDeptCall && intVal($edit->ZedOverMadeDeptCall) > 0) {
-                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][1] = 1;
+                if ($edit->zed_over_made_dept_call && intVal($edit->zed_over_made_dept_call) > 0) {
+                    $tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id][1] = 1;
                 }
-                if ($edit->ZedOverMadeIACall && intVal($edit->ZedOverMadeIACall) > 0) {
-                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][2] = 1;
+                if ($edit->zed_over_made_ia_call && intVal($edit->zed_over_made_ia_call) > 0) {
+                    $tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id][2] = 1;
                 }
-                if ($edit->ZedDeptDuration && intVal($edit->ZedDeptDuration) > 0) {
-                    $tally[$edit->ZedDeptUserID][$edit->ZedOverOverDeptID][3] += intVal($edit->ZedDeptDuration);
+                if ($edit->zed_dept_duration && intVal($edit->zed_dept_duration) > 0) {
+                    $tally[$edit->zed_dept_user_id][$edit->zed_over_over_dept_id][3]
+                        += intVal($edit->zed_dept_duration);
                 }
             }
         }
@@ -94,15 +95,15 @@ class VolunteerLeaderboard
                     }
                 }
                 $userTots[$uID][4] = $totDeptTime/sizeof($depts);
-                DB::table('OP_zVolunUserInfo')
-                    ->where('UserInfoUserID', $uID)
+                DB::table('op_zvolun_user_info')
+                    ->where('user_info_user_id', $uID)
                     ->update([
-                        'UserInfoStars1'      => $userTots[$uID][0], 
-                        'UserInfoStars2'      => $userTots[$uID][1], 
-                        'UserInfoStars3'      => $userTots[$uID][2], 
-                        'UserInfoStars'       => ($userTots[$uID][0]+(3*$userTots[$uID][1])+(3*$userTots[$uID][2])), 
-                        'UserInfoDepts'       => $userTots[$uID][3], 
-                        'UserInfoAvgTimeDept' => $userTots[$uID][4]
+                        'user_info_stars1'        => $userTots[$uID][0], 
+                        'user_info_stars2'        => $userTots[$uID][1], 
+                        'user_info_stars3'        => $userTots[$uID][2], 
+                        'user_info_stars'         => ($userTots[$uID][0]+(3*$userTots[$uID][1])+(3*$userTots[$uID][2])), 
+                        'user_info_depts'         => $userTots[$uID][3], 
+                        'user_info_avg_time_dept' => $userTots[$uID][4]
                     ]);
             }
         }
@@ -111,14 +112,15 @@ class VolunteerLeaderboard
     
     public function loadUserInfoStars()
     {
-        DB::raw("DELETE FROM `OP_zVolunUserInfo` WHERE `UserInfoUserID` NOT IN (SELECT `id` FROM `users`)");
-        $this->UserInfoStars = DB::table('OP_zVolunUserInfo')
-            ->join('users', 'OP_zVolunUserInfo.UserInfoUserID', '=', 'users.id')
-            ->leftJoin('OP_PersonContact', 'OP_zVolunUserInfo.UserInfoPersonContactID', 
-                '=', 'OP_PersonContact.PrsnID')
-            ->select('users.name', 'OP_zVolunUserInfo.*', 'OP_PersonContact.PrsnAddressState')
-            ->orderBy('OP_zVolunUserInfo.UserInfoStars', 'desc')
-            ->orderBy('OP_zVolunUserInfo.UserInfoDepts', 'desc')
+        DB::raw("DELETE FROM `op_zvolun_user_info` "
+            . "WHERE `user_info_user_id` NOT IN (SELECT `id` FROM `users`)");
+        $this->UserInfoStars = DB::table('op_zvolun_user_info')
+            ->join('users', 'op_zvolun_user_info.user_info_user_id', '=', 'users.id')
+            ->leftJoin('op_person_contact', 'op_zvolun_user_info.user_info_person_contact_id', 
+                '=', 'op_person_contact.prsn_id')
+            ->select('users.name', 'op_zvolun_user_info.*', 'op_person_contact.prsn_address_state')
+            ->orderBy('op_zvolun_user_info.user_info_stars', 'desc')
+            ->orderBy('op_zvolun_user_info.user_info_depts', 'desc')
             ->get();
         return true;
     }

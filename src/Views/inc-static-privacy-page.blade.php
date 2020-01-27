@@ -1,6 +1,5 @@
 <!-- resources/views/vendor/openpolice/inc-static-privacy-page.blade.php -->
 
-
 <form method="post" name="ownerPublish" action="?ownerPublish=1&refresh=1{{
     (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
@@ -9,10 +8,12 @@
     <input type="hidden" name="n2018radioCurr" id="n2018radioCurrID" value="">
     <div id="nLabel2018" class="nPrompt">
         <!--- <h2 class="slBlueDark">Publishing Privacy Options</h2> --->
-        <p>After filing your complaint for investigation, your full story can be published on OpenPolice.org. Please select your privacy option.</p>
+        <p>After filing your complaint for investigation, your full story can 
+        be published on OpenPolice.org. Please select your privacy option.</p>
         <p><b>No matter which one you choose, we <nobr>will ...</nobr></b></p>
         <ul>
-            <li>Publish no one’s private information. That includes addresses, phone numbers, <nobr>emails, etc.</nobr></li>
+            <li>Publish no one’s private information. 
+                That includes addresses, phone numbers, <nobr>emails, etc.</nobr></li>
             <li>Try to send your full complaint to a police investigative agency.</li>
         </ul>
         <p>

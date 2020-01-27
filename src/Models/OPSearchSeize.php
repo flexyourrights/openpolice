@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPSearchSeize extends Model
 {
-    protected $table      = 'OP_SearchSeize';
-    protected $primaryKey = 'SrchSeizID';
+    protected $table      = 'op_search_seize';
+    protected $primaryKey = 'srch_seiz_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'SrchSeizSearchID', 
-		'SrchSeizType', 
+		'srch_seiz_search_id', 
+		'srch_seiz_type', 
     ];
     
     // END SurvLoop auto-generated portion of Model

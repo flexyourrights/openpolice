@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksComplimentOversight extends Model
 {
-    protected $table      = 'OP_LinksComplimentOversight';
-    protected $primaryKey = 'LnkCompliOverID';
+    protected $table      = 'op_links_compliment_oversight';
+    protected $primaryKey = 'lnk_compli_over_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'LnkCompliOverComplimentID', 
-		'LnkCompliOverDeptID', 
-		'LnkCompliOverOverID', 
-		'LnkCompliOverSubmitted', 
-		'LnkCompliOverReceived', 
+		'lnk_compli_over_compliment_id', 
+		'lnk_compli_over_dept_id', 
+		'lnk_compli_over_over_id', 
+		'lnk_compli_over_submitted', 
+		'lnk_compli_over_received', 
     ];
     
     // END SurvLoop auto-generated portion of Model

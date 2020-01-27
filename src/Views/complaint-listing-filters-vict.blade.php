@@ -16,9 +16,9 @@
 </label>
 @foreach ($races as $i => $race)
     <label class="disBlo pB5 pT5">
-        <input name="filtVictRace[]" id="filtVictRace{{ $i }}" value="{{ $race->DefID }}"
-            @if (in_array($race->DefID, $srchFilts["victrace"])) CHECKED @endif 
+        <input name="filtVictRace[]" id="filtVictRace{{ $i }}" value="{{ $race->def_id }}"
+            @if (in_array($race->def_id, $srchFilts["victrace"])) CHECKED @endif 
             class="mR5 searchDeetFld" type="checkbox" autocomplete="off">
-            {{ str_replace('Other', 'Other Race', $race->DefValue) }}
+            {{ str_replace('Other', 'Other Race', $race->def_value) }}
     </label>
 @endforeach

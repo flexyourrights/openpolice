@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/2720-dept-page-officer-listing.blade.php -->
 
-<h3 class="mT0">Officers of {!! $d["deptRow"]->DeptName !!}</h3>
+<h3 class="mT0">Officers of {!! $d["deptRow"]->dept_name !!}</h3>
 <p>This is a listing of all the officers with published complaints.</p>
 
 

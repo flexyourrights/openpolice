@@ -33,8 +33,7 @@ class OpenPoliceEvents extends OpenPoliceAllegations
             'Arrests'  => 152
         ];
         foreach ($eveSeqLoop as $eventType => $nodeRoot) {
-            if ($this->allNodes[$nID]->checkBranch(
-                $this->allNodes[$nodeRoot]->nodeTierPath)) {
+            if ($this->allNodes[$nID]->checkBranch($this->allNodes[$nodeRoot]->nodeTierPath)) {
                 return $eventType;
             }
         }
@@ -43,11 +42,11 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function getEveSeqOrd($eveSeqID)
     {
-        /* if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) { 
-            foreach ($this->sessData->dataSets["EventSequence"] as $i => $eveSeq) {
-                if ($eveSeq->EveID == $eveSeqID) {
-                    return $eveSeq->EveOrder;
+        /* if (isset($this->sessData->dataSets["event_sequence"]) 
+            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) { 
+            foreach ($this->sessData->dataSets["event_sequence"] as $i => $eveSeq) {
+                if ($eveSeq->eve_id == $eveSeqID) {
+                    return $eveSeq->eve_order;
                 }
             }
         } */
@@ -57,10 +56,10 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     protected function getLastEveSeqOrd()
     {
         $newOrd = 0;
-        /* if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            $ind = sizeof($this->sessData->dataSets["EventSequence"])-1;
-            $newOrd = $this->sessData->dataSets["EventSequence"][$ind]->EveOrder;
+        /* if (isset($this->sessData->dataSets["event_sequence"]) 
+            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) {
+            $ind = sizeof($this->sessData->dataSets["event_sequence"])-1;
+            $newOrd = $this->sessData->dataSets["event_sequence"][$ind]->eve_order;
         } */
         return $newOrd;
     }
@@ -80,35 +79,33 @@ class OpenPoliceEvents extends OpenPoliceAllegations
         ];
         $loopRows = $this->sessData->getLoopRows('Victims');
         foreach ($loopRows as $i => $civ) {
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Stops') > 0) {
-                $this->eventCivLookup["Stops"][] = $civ->CivID;
+            if ($this->getCivEveSeqIdByType($civ->civ_id, 'Stops') > 0) {
+                $this->eventCivLookup["Stops"][] = $civ->civ_id;
             }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Searches') > 0) {
-                $this->eventCivLookup["Searches"][] = $civ->CivID;
+            if ($this->getCivEveSeqIdByType($civ->civ_id, 'Searches') > 0) {
+                $this->eventCivLookup["Searches"][] = $civ->civ_id;
             }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Force') > 0) {
-                $this->eventCivLookup["Force"][] = $civ->CivID;
+            if ($this->getCivEveSeqIdByType($civ->civ_id, 'Force') > 0) {
+                $this->eventCivLookup["Force"][] = $civ->civ_id;
             }
-            if ($this->getCivEveSeqIdByType($civ->CivID, 'Arrests') > 0) {
-                $this->eventCivLookup["Arrests"][] = $civ->CivID;
-            } elseif (($civ->CivGivenCitation == 'N' 
-                    || trim($civ->CivGivenCitation) == '') 
-                && ($civ->CivGivenWarning == 'N' 
-                    || trim($civ->CivGivenWarning) == '')) {
-                $this->eventCivLookup["No Punish"][] = $civ->CivID;
+            if ($this->getCivEveSeqIdByType($civ->civ_id, 'Arrests') > 0) {
+                $this->eventCivLookup["Arrests"][] = $civ->civ_id;
+            } elseif (($civ->civ_given_citation == 'N' || trim($civ->civ_given_citation) == '') 
+                && ($civ->civ_given_warning == 'N' || trim($civ->civ_given_warning) == '')) {
+                $this->eventCivLookup["No Punish"][] = $civ->civ_id;
             }
-            if ($civ->CivGivenCitation == 'Y') {
-                $this->eventCivLookup["Citations"][] = $civ->CivID;
+            if ($civ->civ_given_citation == 'Y') {
+                $this->eventCivLookup["Citations"][] = $civ->civ_id;
             }
-            if ($civ->CivGivenWarning == 'Y') {
-                $this->eventCivLookup["Warnings"][] = $civ->CivID;
+            if ($civ->civ_given_warning == 'Y') {
+                $this->eventCivLookup["Warnings"][] = $civ->civ_id;
             }
         }
-        if (isset($this->sessData->dataSets["Force"]) 
-            && sizeof($this->sessData->dataSets["Force"]) > 0) {
-            foreach ($this->sessData->dataSets["Force"] as $forceRow) {
-                if ($forceRow->ForAgainstAnimal == 'Y') {
-                    $this->eventCivLookup["Force Animal"][] = $forceRow->ForID;
+        if (isset($this->sessData->dataSets["force"]) 
+            && sizeof($this->sessData->dataSets["force"]) > 0) {
+            foreach ($this->sessData->dataSets["force"] as $forceRow) {
+                if ($forceRow->for_against_animal == 'Y') {
+                    $this->eventCivLookup["Force Animal"][] = $forceRow->for_id;
                 }
             }
         }
@@ -119,19 +116,19 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     {
         if ($this->coreID > 0) {
             $newEveSeq = new OPEventSequence;
-            $newEveSeq->EveComplaintID = $this->coreID;
-            $newEveSeq->EveType = $eventType;
-            //$newEveSeq->EveOrder = (1+$this->getLastEveSeqOrd());
+            $newEveSeq->eve_complaint_id = $this->coreID;
+            $newEveSeq->eve_type = $eventType;
+            //$newEveSeq->eve_order = (1+$this->getLastEveSeqOrd());
             $newEveSeq->save();
             eval("\$newEvent = new App\\Models\\" 
-                . $GLOBALS["SL"]->tblModels[$eventType] . ";");
-            $fld = $GLOBALS["SL"]->tblAbbr[$eventType] . 'EventSequenceID';
+                . $GLOBALS["SL"]->tblModels[strtolower($eventType)] . ";");
+            $fld = $GLOBALS["SL"]->tblAbbr[strtolower($eventType)] . 'event_sequence_id';
             $newEvent->{ $fld } = $newEveSeq->getKey();
             if ($eventType == 'Force' && $forceType > 0) {
-                $newEvent->ForType = $forceType;
+                $newEvent->for_type = $forceType;
             }
             $newEvent->save();
-            $this->sessData->dataSets["EventSequence"][] = $newEveSeq;
+            $this->sessData->dataSets["event_sequence"][] = $newEveSeq;
             $this->sessData->dataSets[$eventType][] = $newEvent;
             return $newEvent;
         }
@@ -140,33 +137,33 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function getCivEventID($nID, $eveType, $civID)
     {
-        $civLnk = DB::table('OP_LinksCivilianEvents')
-            ->join('OP_EventSequence', 'OP_EventSequence.EveID', 
-                '=', 'OP_LinksCivilianEvents.LnkCivEveEveID')
-            ->where('OP_EventSequence.EveType', $eveType)
-            ->where('OP_LinksCivilianEvents.LnkCivEveCivID', $civID)
-            ->select('OP_EventSequence.*')
+        $civLnk = DB::table('op_links_civilian_events')
+            ->join('op_event_sequence', 'op_event_sequence.eve_id', 
+                '=', 'op_links_civilian_events.lnk_civ_eve_eve_id')
+            ->where('op_event_sequence.eve_type', $eveType)
+            ->where('op_links_civilian_events.lnk_civ_eve_civ_id', $civID)
+            ->select('op_event_sequence.*')
             ->first();
-        if ($civLnk && isset($civLnk->EveID)) {
-            return $civLnk->EveID;
+        if ($civLnk && isset($civLnk->eve_id)) {
+            return $civLnk->eve_id;
         }
         return -3;
     }
     
     protected function getForceEveID($forceType, $animal = false)
     {
-        if (isset($this->sessData->dataSets["Force"]) 
-            && sizeof($this->sessData->dataSets["Force"]) > 0) {
-            foreach ($this->sessData->dataSets["Force"] as $force) {
-                if (isset($force->ForType) && $force->ForType == $forceType) {
+        if (isset($this->sessData->dataSets["force"]) 
+            && sizeof($this->sessData->dataSets["force"]) > 0) {
+            foreach ($this->sessData->dataSets["force"] as $force) {
+                if (isset($force->for_type) && $force->for_type == $forceType) {
                     if ($animal) {
-                        if (isset($force->ForAgainstAnimal) 
-                            && trim($force->ForAgainstAnimal) == 'Y') {
-                            return $force->ForEventSequenceID;
+                        if (isset($force->for_against_animal) 
+                            && trim($force->for_against_animal) == 'Y') {
+                            return $force->for_event_sequence_id;
                         }
-                    } elseif (!isset($force->ForAgainstAnimal) 
-                        || trim($force->ForAgainstAnimal) != 'Y') {
-                        return $force->ForEventSequenceID;
+                    } elseif (!isset($force->for_against_animal) 
+                        || trim($force->for_against_animal) != 'Y') {
+                        return $force->for_event_sequence_id;
                     }
                 }
             }
@@ -176,62 +173,59 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function getCivAnimalForces()
     {
-        return DB::table('OP_EventSequence')
-            ->join('OP_Force', 'OP_Force.ForEventSequenceID', 
-                '=', 'OP_EventSequence.EveID')
-            ->where('OP_EventSequence.EveComplaintID', $this->coreID)
-            ->where('OP_EventSequence.EveType', 'Force')
-            ->where('OP_Force.ForAgainstAnimal', 'Y')
-            ->select('OP_Force.*')
+        return DB::table('op_event_sequence')
+            ->join('op_force', 'op_force.for_event_sequence_id', '=', 'op_event_sequence.eve_id')
+            ->where('op_event_sequence.eve_complaint_id', $this->coreID)
+            ->where('op_event_sequence.eve_type', 'Force')
+            ->where('op_force.for_against_animal', 'Y')
+            ->select('op_force.*')
             ->get();
     }
     
     protected function createCivAnimalForces()
     {
         $eve = new OPEventSequence;
-        $eve->EveComplaintID = $this->coreID;
-        $eve->EveType = 'Force';
+        $eve->eve_complaint_id = $this->coreID;
+        $eve->eve_type = 'Force';
         $eve->save();
         $frc = new OPForce;
-        $frc->ForEventSequenceID = $eve->getKey();
-        $frc->ForAgainstAnimal = 'Y';
+        $frc->for_event_sequence_id = $eve->getKey();
+        $frc->for_against_animal = 'Y';
         $frc->save();
-        if (!isset($this->sessData->dataSets["Force"])) {
-            $this->sessData->dataSets["Force"] = [];
+        if (!isset($this->sessData->dataSets["force"])) {
+            $this->sessData->dataSets["force"] = [];
         }
-        $this->sessData->dataSets["Force"][] = $frc;
-        if (!isset($this->sessData->dataSets["EventSequence"])) {
-            $this->sessData->dataSets["EventSequence"] = [];
+        $this->sessData->dataSets["force"][] = $frc;
+        if (!isset($this->sessData->dataSets["event_sequence"])) {
+            $this->sessData->dataSets["event_sequence"] = [];
         }
-        $this->sessData->dataSets["EventSequence"][] = $eve;
+        $this->sessData->dataSets["event_sequence"][] = $eve;
         return $eve;
     }
     
     protected function delCivEvent($nID, $eveType, $civID)
     {
-        return $this->deleteEventByID(
-            $this->getCivEventID($nID, $eveType, $civID)
-        );
+        return $this->deleteEventByID($this->getCivEventID($nID, $eveType, $civID));
     }
     
     protected function deleteEventByID($eveSeqID)
     {
         if ($eveSeqID > 0) {
             $chk = OPEventSequence::find($eveSeqID);
-            if ($chk && isset($chk->EveID)) {
+            if ($chk && isset($chk->eve_id)) {
                 OPEventSequence::find($eveSeqID)
                     ->delete();
-                OPStops::where('StopEventSequenceID', $eveSeqID)
+                OPStops::where('stop_event_sequence_id', $eveSeqID)
                     ->delete();
-                OPSearches::where('SrchEventSequenceID', $eveSeqID)
+                OPSearches::where('srch_event_sequence_id', $eveSeqID)
                     ->delete();
-                OPArrests::where('ArstEventSequenceID', $eveSeqID)
+                OPArrests::where('arst_event_sequence_id', $eveSeqID)
                     ->delete();
-                OPForce::where('ForEventSequenceID', $eveSeqID)
+                OPForce::where('for_event_sequence_id', $eveSeqID)
                     ->delete();
-                OPLinksCivilianEvents::where('LnkCivEveEveID', $eveSeqID)
+                OPLinksCivilianEvents::where('lnk_civ_eve_eve_id', $eveSeqID)
                     ->delete();
-                OPLinksOfficerEvents::where('LnkOffEveEveID', $eveSeqID)
+                OPLinksOfficerEvents::where('lnk_off_eve_eve_id', $eveSeqID)
                     ->delete();
             }
         }
@@ -241,21 +235,21 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     protected function getEventSequence($eveSeqID = -3)
     {
         $eveSeqs = [];
-        if (isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                if ($eveSeqID <= 0 || $eveSeqID == $eveSeq->EveID) {
+        if (isset($this->sessData->dataSets["event_sequence"]) 
+            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) {
+            foreach ($this->sessData->dataSets["event_sequence"] as $eveSeq) {
+                if ($eveSeqID <= 0 || $eveSeqID == $eveSeq->eve_id) {
                     $event = $this->sessData->getChildRow(
-                        'EventSequence', 
-                        $eveSeq->EveID, 
-                        $eveSeq->EveType
+                        'event_sequence', 
+                        $eveSeq->eve_id, 
+                        $eveSeq->eve_type
                     );
-                    $civs = $this->getLinkedToEvent('Civilian', $eveSeq->EveID);
-                    $offs = $this->getLinkedToEvent('Officer', $eveSeq->EveID);
+                    $civs = $this->getLinkedToEvent('civilian', $eveSeq->eve_id);
+                    $offs = $this->getLinkedToEvent('officer', $eveSeq->eve_id);
                     $eveSeqs[] = [ 
-                        "EveID"     => $eveSeq->EveID, 
-                        //"EveOrder"  => $eveSeq->EveOrder, 
-                        "EveType"   => $eveSeq->EveType, 
+                        "EveID"     => $eveSeq->eve_id, 
+                        //"EveOrder"  => $eveSeq->eve_order, 
+                        "EveType"   => $eveSeq->eve_type, 
                         "Civilians" => $civs, 
                         "Officers"  => $offs, 
                         "Event"     => $event
@@ -277,46 +271,38 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function printEventSequenceLine($eveSeq, $info = '')
     {
-        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) 
-            && sizeof($eveSeq) > 0) {
+        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) {
             $eveSeq = $eveSeq[0];
         }
         if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) {
             return '';
         }
         $ret = '<span class="slBlueDark">';
-        if ($eveSeq["EveType"] == 'Force' && isset($eveSeq["Event"]->ForType) 
-            && trim($eveSeq["Event"]->ForType) != ''){
-            if ($eveSeq["Event"]->ForType 
-                == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
-                $ret .= $eveSeq["Event"]->ForTypeOther . ' Force ';
+        if ($eveSeq["EveType"] == 'Force' 
+            && isset($eveSeq["Event"]->for_type) 
+            && trim($eveSeq["Event"]->for_type) != '') {
+            if ($eveSeq["Event"]->for_type == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
+                $ret .= $eveSeq["Event"]->for_type_other . ' Force ';
             } else {
-                $ret .= $GLOBALS["SL"]->def->getVal('Force Type', 
-                        $eveSeq["Event"]->ForType) 
-                    . ' Force ';
+                $ret .= $GLOBALS["SL"]->def->getVal('Force Type', $eveSeq["Event"]->for_type) . ' Force ';
             }
         } elseif (isset($this->eventTypeLabel[$eveSeq["EveType"]])) {
             $ret .= $this->eventTypeLabel[$eveSeq["EveType"]] . ' ';
         }
-        if ($eveSeq["EveType"] == 'Force' 
-            && $eveSeq["Event"]->ForAgainstAnimal == 'Y') {
-            $ret .= '<span class="blk">on</span> ' 
-                . $eveSeq["Event"]->ForAnimalDesc;
+        if ($eveSeq["EveType"] == 'Force' && $eveSeq["Event"]->for_against_animal == 'Y') {
+            $ret .= '<span class="blk">on</span> ' . $eveSeq["Event"]->for_animal_desc;
         } else {
             $civNames = $offNames = '';
-            if ($this->moreThan1Victim() 
-                && in_array($info, array('', 'Civilians'))) { 
+            if ($this->moreThan1Victim() && in_array($info, array('', 'civilians'))) { 
                 foreach ($eveSeq["Civilians"] as $civ) {
                     $civNames .= ', ' . $this->getCivilianNameFromID($civ);
                 }
                 if (trim($civNames) != '') {
-                    $ret .= '<span class="blk">' 
-                        . (($eveSeq["EveType"] == 'Force') ? 'on ' : 'of ')
+                    $ret .= '<span class="blk">' . (($eveSeq["EveType"] == 'Force') ? 'on ' : 'of ')
                         . '</span>' . substr($civNames, 1);
                 }
             }
-            if ($this->moreThan1Officer() 
-                && in_array($info, array('', 'Officers'))) { 
+            if ($this->moreThan1Officer() && in_array($info, array('', 'officers'))) { 
                 foreach ($eveSeq["Officers"] as $off) {
                     $offNames .= ', ' . $this->getOfficerNameFromID($off);
                 }
@@ -331,13 +317,13 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function getCivEveSeqIdByType($civID, $eventType)
     {
-        if ($eventType != '' && isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eveSeq) {
-                $linked = $this->getLinkedToEvent('Civilian', $eveSeq->EveID);
-                if ($eveSeq->EveType == $eventType
-                    && in_array($civID, $linked)) {
-                    return $eveSeq->EveID;
+        if ($eventType != '' 
+            && isset($this->sessData->dataSets["event_sequence"]) 
+            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) {
+            foreach ($this->sessData->dataSets["event_sequence"] as $eveSeq) {
+                $linked = $this->getLinkedToEvent('civilian', $eveSeq->eve_id);
+                if ($eveSeq->eve_type == $eventType && in_array($civID, $linked)) {
+                    return $eveSeq->eve_id;
                 }
             }
         }
@@ -346,23 +332,23 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function getEveSeqRowType($eveSeqID = -3)
     {
-        $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
+        $eveSeq = $this->sessData->getRowById('event_sequence', $eveSeqID);
         if ($eveSeq) {
-            return $eveSeq->EveType;
+            return $eveSeq->eve_type;
         }
         return '';
     }
     
     protected function chkCivHasForce($civID = -3)
     {
-        if ($civID > 0 && isset($this->sessData->dataSets["EventSequence"]) 
-            && sizeof($this->sessData->dataSets["EventSequence"]) > 0) {
-            foreach ($this->sessData->dataSets["EventSequence"] as $eve) {
-                if ($eve->EveType == 'Force') {
-                    $chk = OPLinksCivilianEvents::where('LnkCivEveEveID', $eve->EveID)
-                        ->where('LnkCivEveCivID', $civID)
+        if ($civID > 0 && isset($this->sessData->dataSets["event_sequence"]) 
+            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) {
+            foreach ($this->sessData->dataSets["event_sequence"] as $eve) {
+                if ($eve->eve_type == 'Force') {
+                    $chk = OPLinksCivilianEvents::where('lnk_civ_eve_eve_id', $eve->eve_id)
+                        ->where('lnk_civ_eve_civ_id', $civID)
                         ->first();
-                    if ($chk && isset($chk->LnkCivEveID)) {
+                    if ($chk && isset($chk->lnk_civ_eve_id)) {
                         return 1;
                     }
                 }
@@ -374,18 +360,17 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     protected function isEventAnimalForce($eveSeqID = -3, $force = [])
     {
         if (empty($force)) {
-            $eveSeq = $this->sessData->getRowById('EventSequence', $eveSeqID);
-            if ($eveSeq && $eveSeq->EveType == 'Force') {
+            $eveSeq = $this->sessData->getRowById('event_sequence', $eveSeqID);
+            if ($eveSeq && $eveSeq->eve_type == 'Force') {
                 $force = $this->sessData->getChildRow(
-                    'EventSequence', 
-                    $eveSeq->EveID, 
-                    $eveSeq->EveType
+                    'event_sequence', 
+                    $eveSeq->eve_id, 
+                    $eveSeq->eve_type
                 );
             }
         }
-        if ($force && isset($force->ForAgainstAnimal) 
-            && $force->ForAgainstAnimal == 'Y') {
-            return $force->ForAnimalDesc;
+        if ($force && isset($force->for_against_animal) && $force->for_against_animal == 'Y') {
+            return $force->for_animal_desc;
         }
         return '';
     }

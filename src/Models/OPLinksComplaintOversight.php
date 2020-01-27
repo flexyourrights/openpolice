@@ -5,21 +5,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksComplaintOversight extends Model
 {
-    protected $table      = 'OP_LinksComplaintOversight';
-    protected $primaryKey = 'LnkComOverID';
+    protected $table      = 'op_links_complaint_oversight';
+    protected $primaryKey = 'lnk_com_over_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'LnkComOverComplaintID', 
-		'LnkComOverDeptID', 
-		'LnkComOverOverID', 
-		'LnkComOverSubmitted', 
-		'LnkComOverStillNoResponse', 
-		'LnkComOverReceived', 
-		'LnkComOverInvestigated', 
-		'LnkComOverReportDate', 
-		'LnkComOverOversightReportEvidenceID', 
-		'LnkComOverAgencyComplaintNumber', 
+		'lnk_com_over_complaint_id', 
+		'lnk_com_over_dept_id', 
+		'lnk_com_over_over_id', 
+		'lnk_com_over_submitted', 
+		'lnk_com_over_still_no_response', 
+		'lnk_com_over_received', 
+		'lnk_com_over_investigated', 
+		'lnk_com_over_report_date', 
+		'lnk_com_over_oversight_report_evidence_id', 
+		'lnk_com_over_agency_complaint_number', 
     ];
     
     // END SurvLoop auto-generated portion of Model

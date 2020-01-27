@@ -39,7 +39,10 @@
 </div>
 
 @if (sizeof($deptPriorityRows) > 0)
-    {!! view('vendor.openpolice.volun.dept-rows', [ "deptRows" => $deptRows ])->render() !!}
+    {!! view(
+        'vendor.openpolice.volun.dept-rows', 
+        [ "deptRows" => $deptRows ]
+    )->render() !!}
 @else
     <a class="list-group-item" href="javascript:;">No departments found.</a>
 @endif
@@ -53,7 +56,8 @@
         Also make sure you are searching in the right state.</b>
     </div>
     </form>
-    <form name="volunAddNewDept" action="/dash/volunteer?newDept=1" method="post" onSubmit="return checkNewDept();">
+    <form name="volunAddNewDept" action="/dash/volunteer?newDept=1" 
+        method="post" onSubmit="return checkNewDept();">
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
     <div class="row mB20 fPerc125">
         <div class="col-8">

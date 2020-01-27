@@ -36,13 +36,15 @@
         && !in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))
         <h3 class="slBlueDark mT0">Share</h3>
         <div class="disBlo">
-            <div class="disIn mR10">
-                {!! $GLOBALS["SL"]->twitShareBtn($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID, 
-                    'Check out this police complaint!') !!}
-            </div>
-            <div class="disIn mR10">
-                {!! $GLOBALS["SL"]->faceShareBtn($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID) !!}
-            </div>
+            <div class="disIn mR10">{!! 
+                $GLOBALS["SL"]->twitShareBtn(
+                    $GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID, 
+                    'Check out this police complaint!'
+                )
+            !!}</div>
+            <div class="disIn mR10">{!! 
+                $GLOBALS["SL"]->faceShareBtn($GLOBALS["SL"]->sysOpts["app-url"] . '/complaint/read-' . $pubID) 
+            !!}</div>
         </div>
         @if (isset($emojiTags) && trim($emojiTags) != '') <div class="mT5">{!! $emojiTags !!}</div> @endif
     @elseif (in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))

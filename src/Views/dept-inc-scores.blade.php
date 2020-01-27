@@ -2,10 +2,14 @@
 @if ($score && sizeof($score) > 0)
     @if (isset($twocol) && $twocol)
         @foreach ($score as $i => $s)
-            <div class=" @if ($i%2 == 0) row2 @endif @if ($s[2]) scoreRowOn @else scoreRowOff @endif">
+            <div class=" @if ($i%2 == 0) row2 @endif 
+                @if ($s[2]) scoreRowOn @else scoreRowOff @endif">
                 <div class="row" style="margin: -5px;">
                     <div class="col-2">
-                        {{ $s[0] }} @if ($s[2]) <br /><i class="fa fa-check-circle mL3" aria-hidden="true"></i> @endif
+                        {{ $s[0] }} 
+                        @if ($s[2])
+                            <br /><i class="fa fa-check-circle mL3" aria-hidden="true"></i>
+                        @endif
                     </div>
                     <div class="col-10">{{ $s[1] }}</div>
                 </div>

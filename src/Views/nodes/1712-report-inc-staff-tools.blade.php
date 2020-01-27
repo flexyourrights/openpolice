@@ -1,26 +1,22 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools.blade.php -->
 <div style="margin-top: -10px;"></div>
 
-@if (isset($complaintRec->ComStatus)
-    && $GLOBALS["SL"]->def->getVal('Complaint Status', 
-        $complaintRec->ComStatus) != 'Incomplete')
+@if (isset($complaintRec->com_status)
+    && $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->com_status) 
+        != 'Incomplete')
 
     <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;"> 
         <div class="row">
             <div class="col-md-6">
     {!! view(
         'vendor.openpolice.nodes.1712-report-inc-staff-tools-warnings', 
-        [
-            "complaintRec" => $complaintRec
-        ]
+        [ "complaintRec" => $complaintRec ]
     )->render() !!}
             </div>
             <div class="col-md-6">
     {!! view(
         'vendor.openpolice.nodes.1712-report-inc-staff-tools-warnings', 
-        [
-            "complaintRec" => $complaintRec
-        ]
+        [ "complaintRec" => $complaintRec ]
     )->render() !!}
             </div>
         </div>
@@ -28,22 +24,21 @@
 
 @endif
 
-@if (!isset($complaintRec->ComStatus) 
-    || intVal($complaintRec->ComStatus) <= 0)
+@if (!isset($complaintRec->com_status) 
+    || intVal($complaintRec->com_status) <= 0)
     
     Complaint status not loading correctly.
 
-@elseif ($firstReview && $GLOBALS["SL"]->def
-    ->getVal('Complaint Status', $complaintRec->ComStatus) != 'Incomplete')
+@elseif ($firstReview 
+    && $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->com_status) 
+        != 'Incomplete')
     
     <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
     {!! $GLOBALS["SL"]->printAccordian(
-        '#' . $complaintRec->ComPublicID . ': Is this a complaint?',
+        '#' . $complaintRec->com_public_id . ': Is this a complaint?',
         view(
             'vendor.openpolice.nodes.1712-report-inc-staff-tools-first-review',
-            [
-                "complaintRec" => $complaintRec
-            ]
+            [ "complaintRec" => $complaintRec ]
         )->render(),
         true,
         false,
@@ -60,9 +55,7 @@
             'Complaint History',
             view(
                 'vendor.openpolice.nodes.1712-report-inc-history', 
-                [
-                    "history" => $history
-                ]
+                [ "history" => $history ]
             )->render(),
             false,
             false,
@@ -78,7 +71,7 @@
                 [
                     "complaintRec"       => $complaintRec,
                     "comStatus"          => $GLOBALS['SL']->def
-                        ->getVal('Complaint Status', $complaintRec->ComStatus),
+                        ->getVal('Complaint Status', $complaintRec->com_status),
                     "lastReview"         => $lastReview,
                     "comDepts"           => $comDepts,
                     "oversightDates"     => $oversightDateLookups,

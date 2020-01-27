@@ -115,8 +115,8 @@ function loadComplaint(idPub, id) {
             }
         }
     @forelse ($complaints as $j => $com)
-        $("#comRow{{ $com->ComID }}").removeClass( "complaintRowWrpActive" );
-        $("#comRow{{ $com->ComID }}").addClass( "complaintRowWrp" );
+        $("#comRow{{ $com->com_id }}").removeClass( "complaintRowWrpActive" );
+        $("#comRow{{ $com->com_id }}").addClass( "complaintRowWrp" );
     @empty
     @endforelse
         $("#comRow"+id+"").removeClass( "complaintRowWrp" );

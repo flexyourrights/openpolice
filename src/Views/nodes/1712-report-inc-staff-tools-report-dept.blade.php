@@ -2,7 +2,7 @@
 <form name="fixDeptsForm" method="get" action="?fixDepts=1">
 <input type="hidden" name="fixDepts" value="1">
 <input type="hidden" name="refresh" value="1">
-<input type="hidden" name="cID" value="{{ $complaintRec->ComID }}">
+<input type="hidden" name="cID" value="{{ $complaintRec->com_id }}">
 {!! $GLOBALS['SL']->getReqHiddenInputs() !!}
 
 <div class="nodeAnchor"><a name="reportUpload"></a></div>
@@ -18,10 +18,10 @@
                 <input type="checkbox" class="slTab ntrStp"
                     name="keepDepts[]" id="keepDept{{ $deptID }}" 
                     value="{{ $deptID }}" autocomplete="off" CHECKED >
-            </div> {!! $d["deptRow"]->DeptName !!} 
-            @if (isset($d["deptRow"]->DeptAddressState)
-                && trim($d["deptRow"]->DeptAddressState) != '')
-                , {!! $d["deptRow"]->DeptAddressState !!}
+            </div> {!! $d["deptRow"]->dept_name !!} 
+            @if (isset($d["deptRow"]->dept_address_state)
+                && trim($d["deptRow"]->dept_address_state) != '')
+                , {!! $d["deptRow"]->dept_address_state !!}
             @endif
         </label>
 @empty
@@ -52,8 +52,7 @@
                 <select name="deptStateSearch" id="deptStateSearchID" 
                     class="form-control form-control-lg">
                     <option value="">Select State</option>
-                    {!! $GLOBALS["SL"]->states
-                        ->stateDrop($incidentState, true) !!}
+                    {!! $GLOBALS["SL"]->states->stateDrop($incidentState, true) !!}
                 </select>
             </div>
         </div>

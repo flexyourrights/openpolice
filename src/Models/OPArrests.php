@@ -5,21 +5,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPArrests extends Model
 {
-    protected $table      = 'OP_Arrests';
-    protected $primaryKey = 'ArstID';
+    protected $table      = 'op_arrests';
+    protected $primaryKey = 'arst_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ArstEventSequenceID', 
-		'ArstChargesFiled', 
-		'ArstStatedReason', 
-		'ArstStatedReasonDesc', 
-		'ArstMiranda', 
-		'ArstSITA', 
-		'ArstNoChargesFiled', 
-		'ArstStrip', 
-		'ArstStripSearchDesc', 
-		'ArstChargesOther', 
+		'arst_event_sequence_id', 
+		'arst_charges_filed', 
+		'arst_stated_reason', 
+		'arst_stated_reason_desc', 
+		'arst_miranda', 
+		'arst_sita', 
+		'arst_no_charges_filed', 
+		'arst_strip', 
+		'arst_strip_search_desc', 
+		'arst_charges_other', 
     ];
     
     // END SurvLoop auto-generated portion of Model

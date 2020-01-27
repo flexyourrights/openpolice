@@ -1,6 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1217-volun-home-your-info.blade.php -->
-@if (!isset($yourContact->PrsnAddressState) || !$yourContact->PrsnAddressState 
-    || trim($yourContact->PrsnAddressState) == '')
+@if (!isset($yourContact->prsn_address_state) 
+    || !$yourContact->prsn_address_state 
+    || trim($yourContact->prsn_address_state) == '')
     <form name="volunStateForm" method="post" action="?saveDefaultState=1">
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
     <div class="mB20 pB10"><div id="volunState" class="slCard w100">
@@ -15,8 +16,8 @@
         <div class="nFld mT0"><label>
             What is your phone number? 
             <input name="newPhone" type="text" class="form-control" 
-            @if (isset($yourContact) && isset($yourContact->PrsnPhoneMobile))
-                value="{{ trim($yourContact->PrsnPhoneMobile) }}"
+            @if (isset($yourContact) && isset($yourContact->prsn_phone_mobile))
+                value="{{ trim($yourContact->prsn_phone_mobile) }}"
             @else value="" @endif >
         </label></div>
         <input type="submit" class="btn btn-primary disBlo mT10" value="Save Your Info">

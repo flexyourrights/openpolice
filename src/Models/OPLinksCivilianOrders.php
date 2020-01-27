@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksCivilianOrders extends Model
 {
-    protected $table      = 'OP_LinksCivilianOrders';
+    protected $table      = 'op_LinksCivilianOrders';
     protected $primaryKey = 'LnkCivOrdID';
     public $timestamps    = true;
     protected $fillable   = 

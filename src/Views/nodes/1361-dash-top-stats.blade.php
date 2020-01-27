@@ -16,9 +16,9 @@
 @foreach ($statusDefs as $def)
     <tr>
         @foreach ($statRanges as $j => $range)
-            <td>{{ $dashTopStats[$j][$def->DefID] }}</td>
+            <td>{{ $dashTopStats[$j][$def->def_id] }}</td>
         @endforeach
-        <td>{{ $def->DefValue }}</td>
+        <td>{{ $def->def_value }}</td>
     </tr>
 @endforeach
 </table>

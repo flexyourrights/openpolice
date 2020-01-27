@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPStopReasons extends Model
 {
-    protected $table      = 'OP_StopReasons';
-    protected $primaryKey = 'StopReasID';
+    protected $table      = 'op_stop_reasons';
+    protected $primaryKey = 'stop_reas_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'StopReasStopID', 
-		'StopReasReason', 
+		'stop_reas_stop_id', 
+		'stop_reas_reason', 
     ];
     
     // END SurvLoop auto-generated portion of Model

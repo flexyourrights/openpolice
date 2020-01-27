@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPLinksOfficerAllegations extends Model
 {
-    protected $table      = 'OP_LinksOfficerAllegations';
-    protected $primaryKey = 'LnkOffAlleID';
+    protected $table      = 'op_links_officer_allegations';
+    protected $primaryKey = 'lnk_off_alle_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'LnkOffAlleOffID', 
-		'LnkOffAlleAlleID', 
+		'lnk_off_alle_off_id', 
+		'lnk_off_alle_alle_id', 
     ];
     
     // END SurvLoop auto-generated portion of Model

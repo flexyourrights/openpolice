@@ -5,17 +5,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPhysicalDesc extends Model
 {
-    protected $table      = 'OP_PhysicalDesc';
-    protected $primaryKey = 'PhysID';
+    protected $table      = 'op_physical_desc';
+    protected $primaryKey = 'phys_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PhysGender', 
-		'PhysGenderOther', 
-		'PhysAge', 
-		'PhysHeight', 
-		'PhysBodyType', 
-		'PhysGeneralDesc', 
+		'phys_gender', 
+		'phys_gender_other', 
+		'phys_age', 
+		'phys_height', 
+		'phys_body_type', 
+		'phys_general_desc', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPInjuries extends Model
 {
-    protected $table      = 'OP_Injuries';
-    protected $primaryKey = 'InjID';
+    protected $table      = 'op_injuries';
+    protected $primaryKey = 'inj_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'InjSubjectID', 
-		'InjType', 
-		'InjHowManyTimes', 
-		'InjDescription', 
-		'InjDone', 
+		'inj_subject_id', 
+		'inj_type', 
+		'inj_how_many_times', 
+		'inj_description', 
+		'inj_done', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -37,55 +37,59 @@ class OpenListing extends OpenAjax
      */
     public function printPreviewReportCustom($isAdmin = false)
     {
+        $coreTbl = $GLOBALS["SL"]->coreTbl;
         $coreAbbr = $GLOBALS["SL"]->coreTblAbbr();
-        if (!isset($this->sessData->dataSets[$GLOBALS["SL"]->coreTbl]) 
-            || !isset($this->sessData->dataSets["Incidents"])) {
+        if (!isset($this->sessData->dataSets[$coreTbl]) 
+            || !isset($this->sessData->dataSets["incidents"])) {
             return '';
         }
-        $complaint = $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0];
+        $coreRec = $this->sessData->dataSets[$coreTbl][0];
+        $incident = $this->sessData->dataSets["incidents"][0];
         $where = $this->getReportWhereLine();
         $deptList = '';
-        $depts = ((isset($this->sessData->dataSets["Departments"])) 
-            ? $this->sessData->dataSets["Departments"] : null);
+        $depts = ((isset($this->sessData->dataSets["departments"])) 
+            ? $this->sessData->dataSets["departments"] : null);
         if ($depts && sizeof($depts) > 0) {
             foreach ($depts as $i => $d) {
-                if (isset($d->DeptName)) {
+                if (isset($d->dept_name)) {
                     $deptList .= ((trim($deptList) != '') ? ', ' : '') 
-                        . str_replace('Department', 'Dept', $d->DeptName);
+                        . str_replace('Department', 'Dept', $d->dept_name);
                 }
             }
         }
+        $editable = $this->recordIsEditable($coreTbl, $coreRec->getKey(), $coreRec);
         $url = '';
-        if (isset($complaint->{ $coreAbbr . 'PublicID' }) 
-            && intVal($complaint->{ $coreAbbr . 'PublicID' }) > 0) {
-            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') 
-                . '/read-' . $complaint->{ $coreAbbr . 'PublicID' };
+        if (isset($coreRec->{ $coreAbbr . 'public_id' }) 
+            && intVal($coreRec->{ $coreAbbr . 'public_id' }) > 0) {
+            $url = '/' . (($coreAbbr == 'com_') ? 'complaint' : 'compliment')
+                . '/read-' . $coreRec->{ $coreAbbr . 'public_id' };
         } else {
-            $url = '/' . (($coreAbbr == 'Com') ? 'complaint' : 'compliment') 
-                . '/readi-' . $complaint->{ $coreAbbr . 'ID' };
+            $url = '/' . (($coreAbbr == 'com_') ? 'complaint' : 'compliment')
+                . '/readi-' . $coreRec->{ $coreAbbr . 'id' };
         }
-        $comDate = $this->getComplaintDate(
-            $this->sessData->dataSets["Incidents"][0], 
-            $complaint
-        );
+        $comDate = $this->getComplaintDate($incident, $coreRec);
         $storyPrev = '';
         if ($this->canPrintFullReport()) {
-            $storyPrev = $complaint->{ $coreAbbr . 'Summary' };
+            $storyPrev = $coreRec->{ $coreAbbr . 'summary' };
         }
-        return view('vendor.openpolice.complaint-report-preview', [
-            "uID"         => $this->v["uID"],
-            "storyPrev"   => $storyPrev,
-            "coreAbbr"    => $coreAbbr,
-            "complaint"   => $this->sessData->dataSets[$GLOBALS["SL"]->coreTbl][0], 
-            "incident"    => $this->sessData->dataSets["Incidents"][0], 
-            "comDate"     => $comDate, 
-            "comDateFile" => $this->getComplaintDateOPC($complaint), 
-            "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
-            "allegations" => $this->commaAllegationListSplit(),
-            "deptList"    => $deptList,
-            "url"         => $url,
-            "featureImg"  => ''
-        ])->render();
+        return view(
+            'vendor.openpolice.complaint-report-preview', 
+            [
+                "uID"         => $this->v["uID"],
+                "editable"    => $editable,
+                "storyPrev"   => $storyPrev,
+                "coreAbbr"    => $coreAbbr,
+                "complaint"   => $coreRec, 
+                "incident"    => $incident, 
+                "comDate"     => $comDate, 
+                "comDateFile" => $this->getComplaintDateOPC($coreRec), 
+                "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
+                "allegations" => $this->commaAllegationListSplit(),
+                "deptList"    => $deptList,
+                "url"         => $url,
+                "featureImg"  => ''
+            ]
+        )->render();
     }
     
     /**
@@ -97,9 +101,9 @@ class OpenListing extends OpenAjax
      */
     protected function getComplaintDate($inc, $com)
     {
-        $comDate = date('F Y', strtotime($inc->IncTimeStart));
+        $comDate = date('F Y', strtotime($inc->inc_time_start));
         if ($this->shouldPrintFullDate($com)) {
-            $comDate = date('m/d/Y', strtotime($inc->IncTimeStart));
+            $comDate = date('m/d/Y', strtotime($inc->inc_time_start));
         }
         return $comDate;
     }
@@ -113,9 +117,9 @@ class OpenListing extends OpenAjax
      */
     protected function getComplaintDateOPC($com)
     {
-        $comDate = date('F Y', strtotime($com->ComRecordSubmitted));
+        $comDate = date('F Y', strtotime($com->com_record_submitted));
         if ($this->shouldPrintFullDate($com)) {
-            $comDate = date('m/d/Y', strtotime($com->ComRecordSubmitted));
+            $comDate = date('m/d/Y', strtotime($com->com_record_submitted));
         }
         return $comDate;
     }
@@ -130,9 +134,8 @@ class OpenListing extends OpenAjax
     protected function getComplaintPreviewByRow($com)
     {
         $ret = '';
-        $cacheName = 'complaint' . $com->ComID . '-preview-' 
-            . (($GLOBALS["SL"]->x["isPublicList"]) 
-                ? 'public' : 'sensitive');
+        $cacheName = 'complaint' . $com->com_id . '-preview-' 
+            . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
         if (!$GLOBALS["SL"]->REQ->has('refresh')) {
             $ret = Cache::get($cacheName, '');
             if ($ret != '') {
@@ -140,36 +143,37 @@ class OpenListing extends OpenAjax
             }
         }
         $tbls = [
-            'Complaints', 
-            'Incidents', 
-            'AllegSilver', 
-            'Allegations', 
-            'Departments', 
-            'Stops'
+            'complaints', 
+            'incidents', 
+            'alleg_silver', 
+            'allegations', 
+            'departments', 
+            'stops'
         ];
         $this->allegations = [];
         foreach ($tbls as $tbl) {
             $this->sessData->dataSets[$tbl] = [];
         }
-        $this->sessData->dataSets["Complaints"][0] = $com;
-        $this->sessData->dataSets["Incidents"][0]
-            = OPIncidents::find($com->ComIncidentID);
-        $this->sessData->dataSets["AllegSilver"][0] 
-            = OPAllegSilver::where('AlleSilComplaintID', $com->ComID)
-            ->first();
-        $this->sessData->dataSets["Allegations"] 
-            = OPAllegations::where('AlleComplaintID', $com->ComID)
+        $this->sessData->dataSets["complaints"][0] = $com;
+        $this->sessData->dataSets["incidents"][0]
+            = OPIncidents::find($com->com_incident_id);
+        $this->sessData->dataSets["alleg_silver"][0] 
+            = OPAllegSilver::where('alle_sil_complaint_id', $com->com_id)
+                ->first();
+        $this->sessData->dataSets["allegations"] 
+            = OPAllegations::where('alle_complaint_id', $com->com_id)
+                ->get();
+        $this->sessData->dataSets["departments"] = DB::table('op_departments')
+            ->join('op_links_complaint_dept', 'op_departments.dept_id', 
+                '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
+            ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', $com->com_id)
+            ->select('op_departments.*')
             ->get();
-        $this->sessData->dataSets["Departments"] = DB::table('OP_Departments')
-            ->join('OP_LinksComplaintDept', 'OP_Departments.DeptID', '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
-            ->where('OP_LinksComplaintDept.LnkComDeptComplaintID', $com->ComID)
-            ->select('OP_Departments.*')
-            ->get();
-        $this->sessData->dataSets["Stops"] = DB::table('OP_Stops')
-            ->join('OP_EventSequence', 'OP_Stops.StopEventSequenceID', 
-                '=', 'OP_EventSequence.EveID')
-            ->where('OP_EventSequence.EveComplaintID', $com->ComID)
-            ->select('OP_Stops.*')
+        $this->sessData->dataSets["stops"] = DB::table('op_stops')
+            ->join('op_event_sequence', 'op_stops.stop_event_sequence_id', 
+                '=', 'op_event_sequence.eve_id')
+            ->where('op_event_sequence.eve_complaint_id', $com->com_id)
+            ->select('op_stops.*')
             ->get();
         $ret = $this->printPreviewReportCustom();
         Cache::put($cacheName, $ret);
@@ -187,14 +191,13 @@ class OpenListing extends OpenAjax
         //$GLOBALS["SL"]->pageView = 'public';
         $this->initSearcher();
         $this->searcher->getSearchFilts();
-        $xtra = "whereIn('ComStatus', [" . implode(", ", 
-            $this->getPublishedStatusList('Complaints')) . "])->";
+        $xtra = "whereIn('com_status', [" 
+            . implode(", ", $this->getPublishedStatusList('complaints')) . "])->";
         $this->searcher->loadAllComplaintsPublic($xtra);
         if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
             foreach ($this->searcher->v["allcomplaints"] as $i => $com) {
                 $ret .= '<div class="pB20 mB10"><div class="slCard">' 
-                    . $this->getComplaintPreviewByRow($com) 
-                    . '</div></div>';
+                    . $this->getComplaintPreviewByRow($com) . '</div></div>';
             }
         }
         return $ret;
@@ -210,12 +213,10 @@ class OpenListing extends OpenAjax
      */
     protected function printComplaintsFilters($nID, $view = 'list')
     {
-        if (!isset($this->searcher->v["sortLab"]) 
-            || $this->searcher->v["sortLab"] == '') {
+        if (!isset($this->searcher->v["sortLab"]) || $this->searcher->v["sortLab"] == '') {
             $this->searcher->v["sortLab"] = 'date';
         }
-        if (!isset($this->searcher->v["sortDir"]) 
-            || $this->searcher->v["sortDir"] == '') {
+        if (!isset($this->searcher->v["sortDir"]) || $this->searcher->v["sortDir"] == '') {
             $this->searcher->v["sortDir"] = 'desc';
         }
         if (!isset($this->searcher->searchFilts["comstatus"])) {
@@ -230,11 +231,10 @@ class OpenListing extends OpenAjax
             $this->searcher->searchFilts["states"] = [];
         }
         if ((!isset($this->searcher->searchFilts["states"]) 
-            || sizeof($this->searcher->searchFilts["states"]) == 0)
+                || sizeof($this->searcher->searchFilts["states"]) == 0)
             && (isset($this->searcher->searchFilts["state"]) 
             && trim($this->searcher->searchFilts["state"]) != '')) {
-            $this->searcher->searchFilts["states"][] 
-                = trim($this->searcher->searchFilts["state"]);
+            $this->searcher->searchFilts["states"][] = trim($this->searcher->searchFilts["state"]);
         }
         if (!isset($this->searcher->searchFilts["allegs"])) {
             $this->searcher->searchFilts["allegs"] = [];
@@ -253,54 +253,68 @@ class OpenListing extends OpenAjax
         }
         $statusFilts = $GLOBALS["SL"]->printAccordian(
             'By Complaint Status',
-            view('vendor.openpolice.complaint-listing-filters-status', [
-                "srchFilts"  => $this->searcher->searchFilts
-            ])->render(),
+            view(
+                'vendor.openpolice.complaint-listing-filters-status', 
+                [ "srchFilts"  => $this->searcher->searchFilts ]
+            )->render(),
             (sizeof($this->searcher->searchFilts["comstatus"]) > 0)
         );
         $stateFilts = $GLOBALS["SL"]->printAccordian(
             'By State',
-            view('vendor.openpolice.complaint-listing-filters-states', [
-                "srchFilts"  => $this->searcher->searchFilts
-            ])->render(),
+            view(
+                'vendor.openpolice.complaint-listing-filters-states', 
+                [ "srchFilts"  => $this->searcher->searchFilts ]
+            )->render(),
             (sizeof($this->searcher->searchFilts["states"]) > 0)
         );
         $allegFilts = $GLOBALS["SL"]->printAccordian(
             'By Allegation',
-            view('vendor.openpolice.complaint-listing-filters-allegs', [
-                "allegTypes" => $this->worstAllegations,
-                "srchFilts"  => $this->searcher->searchFilts
-            ])->render(),
+            view(
+                'vendor.openpolice.complaint-listing-filters-allegs', 
+                [
+                    "allegTypes" => $this->worstAllegations,
+                    "srchFilts"  => $this->searcher->searchFilts
+                ]
+            )->render(),
             (sizeof($this->searcher->searchFilts["allegs"]) > 0)
         );
         $victFilts = $GLOBALS["SL"]->printAccordian(
             'By Victim Description',
-            view('vendor.openpolice.complaint-listing-filters-vict', [
-                "races"      => $GLOBALS["SL"]->def->getSet('Races'),
-                "srchFilts"  => $this->searcher->searchFilts
-            ])->render(),
+            view(
+                'vendor.openpolice.complaint-listing-filters-vict', 
+                [
+                    "races"      => $GLOBALS["SL"]->def->getSet('Races'),
+                    "srchFilts"  => $this->searcher->searchFilts
+                ]
+            )->render(),
             (sizeof($this->searcher->searchFilts["victgend"]) > 0
                 || sizeof($this->searcher->searchFilts["victrace"]) > 0)
         );
         $offFilts = $GLOBALS["SL"]->printAccordian(
             'By Officer Description',
-            view('vendor.openpolice.complaint-listing-filters-off', [
-                "races"      => $GLOBALS["SL"]->def->getSet('Races'),
-                "srchFilts"  => $this->searcher->searchFilts
-            ])->render(),
+            view(
+                'vendor.openpolice.complaint-listing-filters-off', 
+                [
+                    "races"      => $GLOBALS["SL"]->def->getSet('Races'),
+                    "srchFilts"  => $this->searcher->searchFilts
+                ]
+            )->render(),
             (sizeof($this->searcher->searchFilts["offgend"]) > 0
                 || sizeof($this->searcher->searchFilts["offrace"]) > 0)
         );
-        return view('vendor.openpolice.complaint-listing-filters', [
-            "nID"         => $nID,
-            "view"        => $view,
-            "statusFilts" => $statusFilts,
-            "stateFilts"  => $stateFilts,
-            "allegFilts"  => $allegFilts,
-            "victFilts"   => $victFilts,
-            "offFilts"    => $offFilts,
-            "srchFilts"   => $this->searcher->searchFilts
-        ])->render();
+        return view(
+            'vendor.openpolice.complaint-listing-filters', 
+            [
+                "nID"         => $nID,
+                "view"        => $view,
+                "statusFilts" => $statusFilts,
+                "stateFilts"  => $stateFilts,
+                "allegFilts"  => $allegFilts,
+                "victFilts"   => $victFilts,
+                "offFilts"    => $offFilts,
+                "srchFilts"   => $this->searcher->searchFilts
+            ]
+        )->render();
     }
     
     /**
@@ -323,131 +337,137 @@ class OpenListing extends OpenAjax
         if ($GLOBALS["SL"]->x["isPublicList"]) {
             $this->v["sView"] = 'lrg';
         }
-        $this->v["complaints"] = $this->v["complaintsPreviews"] 
-            = $this->v["comInfo"] = $this->v["lastNodes"] 
-            = $this->v["ajaxRefreshs"] = [];
+        $this->v["complaints"] = $this->v["complaintsPreviews"] = $this->v["comInfo"] 
+            = $this->v["lastNodes"] = $this->v["ajaxRefreshs"] = [];
         $this->v["filtersDesc"] = '';
-        $this->v["firstComplaint"] = [0, 0];
+        $this->v["firstComplaint"] = [ 0, 0 ];
         $this->initSearcher();
         $this->searcher->getSearchFilts();
-        $this->v["listPrintFilters"] = $this
-            ->printComplaintsFilters($nID, $this->v["sView"]);
+        $this->v["listPrintFilters"] = $this->printComplaintsFilters($nID, $this->v["sView"]);
 
-        // run query into $compls1
-        eval($this->printComplaintListQry1($nID));
+        if ($GLOBALS["SL"]->REQ->has('showPreviews')) {
+            $cacheKey = $this->searcher->searchFiltsURL() . $GLOBALS["SL"]->getCacheSffxAdds();
+            $cache = $GLOBALS["SL"]->chkCache($cacheKey, 'srch-results', 1);
+            if ($cache && isset($cache->cach_value)) {
+                echo $cache->cach_value;
+                exit;
+            }
 
-        // run 2nd-round queries
-        $compls2 = $this->printComplaintListQry2($nID, $compls1);
+            // run query into $compls1
+            eval($this->printComplaintListQry1($nID));
 
-        unset($compls1);
-        $this->printComplaintFiltsDesc($nID);
+            // run 2nd-round queries
+            $compls2 = $this->printComplaintListQry2($nID, $compls1);
 
-        if ($compls2 && sizeof($compls2) > 0) {
-            foreach ($compls2 as $i => $com) {
-                if ($this->v["firstComplaint"][0] == 0) {
-                    $this->v["firstComplaint"] = [
-                        intVal($com->ComPublicID), 
-                        $com->ComID
+            unset($compls1);
+            $this->printComplaintFiltsDesc($nID);
+
+            if ($compls2 && sizeof($compls2) > 0) {
+                foreach ($compls2 as $i => $com) {
+                    if ($this->v["firstComplaint"][0] == 0) {
+                        $this->v["firstComplaint"] = [
+                            intVal($com->com_public_id), 
+                            $com->com_id
+                        ];
+                    }
+                    $this->v["comInfo"][$com->com_public_id] = [
+                        "depts"     => '',
+                        "submitted" => ''
                     ];
-                }
-                $this->v["comInfo"][$com->ComPublicID] = [
-                    "depts"     => '',
-                    "submitted" => ''
-                ];
-                $dChk = DB::table('OP_LinksComplaintDept')
-                    ->where('OP_LinksComplaintDept.LnkComDeptComplaintID', $com->ComID)
-                    ->leftJoin('OP_Departments', 'OP_Departments.DeptID', 
-                        '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
-                    ->select('OP_Departments.DeptName', 'OP_Departments.DeptSlug')
-                    ->orderBy('OP_Departments.DeptName', 'asc')
-                    ->get();
-                if ($dChk && sizeof($dChk) > 0) {
-                    foreach ($dChk as $i => $d) {
-                        $this->v["comInfo"][$com->ComPublicID]["depts"] 
-                            .= (($i > 0) ? ', ' : '') 
-                            . str_replace('Department' , 'Dept', $d->DeptName);
-                    }
-                }
-                $comTime = strtotime($com->updated_at);
-                if (trim($com->ComRecordSubmitted) != '' 
-                    && $com->ComRecordSubmitted != '0000-00-00 00:00:00') {
-                    $comTime = strtotime($com->ComRecordSubmitted);
-                }
-                if (!isset($com->ComStatus) 
-                    || intVal($com->ComStatus) <= 0) {
-                    $com->ComStatus = $GLOBALS['SL']->def
-                        ->getID('Complaint Status', 'Incomplete');
-                    OPComplaints::find($com->ComID)
-                        ->update([ "ComStatus" => $com->ComStatus ]);
-                }
-                if (!isset($com->ComType) || intVal($com->ComType) <= 0) {
-                    $com->ComType = $GLOBALS['SL']->def
-                        ->getID('Complaint Type', 'Unreviewed');
-                    OPComplaints::find($com->ComID)
-                        ->update([ "ComType" => $com->ComType ]);
-                }
-                $cutoffTime = mktime(date("H"), date("i"), date("s"), 
-                    date("m"), date("d")-1, date("Y"));
-                if ($comTime < $cutoffTime) {
-                    if (!isset($com->ComSummary) 
-                        || trim($com->ComSummary) == '') {
-                        OPComplaints::find($com->ComID)
-                            ->delete();
-                        $comTime = false;
-                    }
-                }
-                if ($comTime !== false) {
-                    $sortInd = $comTime;
-                    $this->v["comInfo"][$com->ComPublicID]["submitted"] 
-                        = date("n/j/Y", $comTime);
-                    if ($com->ComStatus == $GLOBALS['SL']->def
-                        ->getID('Complaint Status', 'Incomplete')) {
-                        if ($com->ComSubmissionProgress > 0 
-                            && !isset($this->v["lastNodes"][
-                                $com->ComSubmissionProgress])) {
-                            $node = SLNode::find($com->ComSubmissionProgress);
-                            if ($node && isset($node->NodePromptNotes)) {
-                                $this->v["lastNodes"][$com->ComSubmissionProgress] 
-                                    = $node->NodePromptNotes;
-                            }
+                    $dChk = DB::table('op_links_complaint_dept')
+                        ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', $com->com_id)
+                        ->leftJoin('op_departments', 'op_departments.dept_id', 
+                            '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
+                        ->select('op_departments.dept_name', 'op_departments.dept_slug')
+                        ->orderBy('op_departments.dept_name', 'asc')
+                        ->get();
+                    if ($dChk && sizeof($dChk) > 0) {
+                        foreach ($dChk as $i => $d) {
+                            $this->v["comInfo"][$com->com_public_id]["depts"] .= (($i > 0) ? ', ' : '') 
+                                . str_replace('Department' , 'Dept', $d->dept_name);
                         }
                     }
-                    $this->v["complaints"][$sortInd] = $com;
+                    $comTime = strtotime($com->updated_at);
+                    if (trim($com->com_record_submitted) != '' 
+                        && $com->com_record_submitted != '0000-00-00 00:00:00') {
+                        $comTime = strtotime($com->com_record_submitted);
+                    }
+                    if (!isset($com->com_status) || intVal($com->com_status) <= 0) {
+                        $com->com_status = $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete');
+                        OPComplaints::find($com->com_id)
+                            ->update([ "com_status" => $com->com_status ]);
+                    }
+                    if (!isset($com->com_type) || intVal($com->com_type) <= 0) {
+                        $com->com_type = $GLOBALS['SL']->def->getID('Complaint Type', 'Unreviewed');
+                        OPComplaints::find($com->com_id)
+                            ->update([ "com_type" => $com->com_type ]);
+                    }
+                    $cutoffTime = mktime(date("H"), date("i"), date("s"), 
+                        date("m"), date("d")-1, date("Y"));
+                    if ($comTime < $cutoffTime) {
+                        if (!isset($com->com_summary) || trim($com->com_summary) == '') {
+                            OPComplaints::find($com->com_id)
+                                ->delete();
+                            $comTime = false;
+                        }
+                    }
+                    if ($comTime !== false) {
+                        $sortInd = $comTime;
+                        $this->v["comInfo"][$com->com_public_id]["submitted"] = date("n/j/Y", $comTime);
+                        if ($com->com_status == $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete')) {
+                            if ($com->com_submission_progress > 0 
+                                && !isset($this->v["lastNodes"][$com->com_submission_progress])) {
+                                $node = SLNode::find($com->com_submission_progress);
+                                if ($node && isset($node->node_prompt_notes)) {
+                                    $this->v["lastNodes"][$com->com_submission_progress] = $node->node_prompt_notes;
+                                }
+                            }
+                        }
+                        $this->v["complaints"][$sortInd] = $com;
+                    }
+                    if (!isset($com->com_alleg_list) || trim($com->com_alleg_list) == '') {
+                        $this->v["ajaxRefreshs"][] = $com->com_public_id;
+                    }
                 }
-                if (!isset($com->ComAllegList) 
-                    || trim($com->ComAllegList) == '') {
-                    $this->v["ajaxRefreshs"][] = $com->ComPublicID;
+                krsort($this->v["complaints"]);
+            }
+
+            if ($this->v["sView"] == 'lrg' && sizeof($this->v["complaints"]) > 0) {
+                foreach ($this->v["complaints"] as $i => $com) {
+                    if (!$GLOBALS["SL"]->x["isHomePage"] || sizeof($this->v["complaintsPreviews"]) < 3) {
+                        $ret = '';
+                        $cacheName = 'complaint' . $com->com_id . '-preview-' 
+                            . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
+                        if (!$GLOBALS["SL"]->REQ->has('refresh')) {
+                            $ret = Cache::get($cacheName, '');
+                        }
+                        if ($ret == '') {
+                            $this->loadAllSessData('complaints', $com->com_id);
+                            $ret = $this->printPreviewReport();
+                            Cache::put($cacheName, $ret);
+                            //$this->printPreviewReportCustom($isAdmin);
+                        }
+                        $this->v["complaintsPreviews"][] = '<div id="reportPreview' 
+                            . $com->com_id . '" class="reportPreview">' . $ret . '</div>';
+                    }
                 }
             }
-            krsort($this->v["complaints"]);
+            $this->printComplaintFiltDescPrev();
+            $content = view(
+                    'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
+                    $this->v
+                )->render();
+            $GLOBALS["SL"]->putCache($cacheKey, $content, 'srch-results', 1);
+            echo $content;
+            exit;
         }
-        if ($this->v["sView"] == 'lrg' 
-            && sizeof($this->v["complaints"]) > 0) {
-            foreach ($this->v["complaints"] as $i => $com) {
-                if (!$GLOBALS["SL"]->x["isHomePage"] 
-                    || sizeof($this->v["complaintsPreviews"]) < 3) {
-                    $ret = '';
-                    $cacheName = 'complaint' . $com->ComID . '-preview-' 
-                        . (($GLOBALS["SL"]->x["isPublicList"]) 
-                            ? 'public' : 'sensitive');
-                    if (!$GLOBALS["SL"]->REQ->has('refresh')) {
-                        $ret = Cache::get($cacheName, '');
-                    }
-                    if ($ret == '') {
-                        $this->loadAllSessData('Complaints', $com->ComID);
-                        $ret = $this->printPreviewReport();
-                        Cache::put($cacheName, $ret);
-                        //$this->printPreviewReportCustom($isAdmin);
-                    }
-                    $this->v["complaintsPreviews"][] = '<div id="reportPreview' 
-                        . $com->ComID . '" class="reportPreview">' 
-                        . $ret . '</div>';
-                }
-            }
-        }
-        $this->v["sortLab"]    = $this->searcher->v["sortLab"];
-        $this->v["sortDir"]    = $this->searcher->v["sortDir"];
-        $this->v["allegTypes"] = $this->worstAllegations;
+
+        $this->printComplaintFiltDescPrev();
+        $this->searcher->searchFiltsURL();
+        $this->v["searchFiltsURL"] = $this->searcher->v["searchFiltsURL"];
+        $this->v["sortLab"]        = $this->searcher->v["sortLab"];
+        $this->v["sortDir"]        = $this->searcher->v["sortDir"];
+        $this->v["allegTypes"]     = $this->worstAllegations;
 
         if (!$GLOBALS["SL"]->x["isHomePage"]) {
             $GLOBALS["SL"]->pageAJAX .= view(
@@ -465,6 +485,25 @@ class OpenListing extends OpenAjax
     }
 
     /**
+     * Creates a preview of the search results count for the top of the page.
+     *
+     * @return string
+     */
+    protected function printComplaintFiltDescPrev()
+    {
+        $this->v["complaintFiltDescPrev"] = '';
+        if (isset($this->v["complaints"]) && is_array($this->v["complaints"])) {
+            $this->v["complaintFiltDescPrev"] .= number_format(sizeof($this->v["complaints"])) 
+                . ' Found';
+        }
+        if (isset($this->v["filtersDesc"]) && trim($this->v["filtersDesc"]) != '') {
+            $this->v["complaintFiltDescPrev"] .= '<span class="mL5 slGrey">'
+                . $GLOBALS["SL"]->wordLimitDotDotDot(trim($this->v["filtersDesc"]), 20) . '</span>';
+        }
+        return $this->v["complaintFiltDescPrev"];
+    }
+
+    /**
      * First main complaint management listings query.
      *
      * @param  int $nID
@@ -473,44 +512,36 @@ class OpenListing extends OpenAjax
     protected function printComplaintListQry1($nID)
     {
         $hasStateFilt = (sizeof($this->searcher->searchFilts["states"]) > 0);
-        $eval = "\$compls1 = DB::table('OP_Complaints')
-            ->join('OP_Incidents', function (\$joi) {
-                \$joi->on('OP_Complaints.ComIncidentID', '=', 'OP_Incidents.IncID')"
-                . (($hasStateFilt) 
-                    ? "->whereIn('OP_Incidents.IncAddressState', ['"
-                    . implode("', '", $this->searcher->searchFilts["states"]) 
-                    . "'])" : "") . ";
+        $eval = "\$compls1 = DB::table('op_complaints')
+            ->join('op_incidents', function (\$joi) {
+                \$joi->on('op_complaints.com_incident_id', '=', 'op_incidents.inc_id')"
+                . (($hasStateFilt) ? "->whereIn('op_incidents.inc_address_state', ['"
+                        . implode("', '", $this->searcher->searchFilts["states"]) . "'])" 
+                    : "") . ";
             })";
         if ($hasStateFilt) {
-            $this->v["filtersDesc"] .= ' & ' 
-                . implode(', ', $this->searcher->searchFilts["states"]);
+            $this->v["filtersDesc"] .= ' & ' . implode(', ', $this->searcher->searchFilts["states"]);
         }
 
         if (sizeof($this->searcher->searchFilts["allegs"]) > 0) {
             $filtDescTmp = '';
-            $eval .= "->join('OP_AllegSilver', function (\$joi) {
-                \$joi->on('OP_Complaints.ComID', '=', "
-                . "'OP_AllegSilver.AlleSilComplaintID')";
-            foreach ($this->searcher->searchFilts["allegs"] 
-                as $i => $allegID) {
-                $eval .= "->" . (($i > 0) ? "orWhere" : "where") 
-                    . "('OP_AllegSilver." 
+            $eval .= "->join('op_alleg_silver', function (\$joi) {
+                \$joi->on('op_complaints.com_id', '=', 'op_alleg_silver.alle_sil_complaint_id')";
+            foreach ($this->searcher->searchFilts["allegs"] as $i => $allegID) {
+                $eval .= "->" . (($i > 0) ? "orWhere" : "where") . "('op_alleg_silver." 
                     . $this->getAllegFldName($allegID) . "', 'Y')";
-                $filtDescTmp = ' or ' 
-                    . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
+                $filtDescTmp = ' or ' . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
             }
             $eval .= "; })";
             $this->v["filtersDesc"] .= ' & ' . substr($filtDescTmp, 3);
         }
 
-        $eval .= "->leftJoin('OP_Civilians', function (\$joi) {
-                \$joi->on('OP_Complaints.ComID', '=', "
-                    . "'OP_Civilians.CivComplaintID')
-                    ->where('OP_Civilians.CivIsCreator', 'Y');
+        $eval .= "->leftJoin('op_civilians', function (\$joi) {
+                \$joi->on('op_complaints.com_id', '=', 'op_civilians.civ_complaint_id')
+                    ->where('op_civilians.civ_is_creator', 'Y');
             })
-            ->leftJoin('OP_PersonContact', 
-                'OP_Civilians.CivPersonID', '=', "
-                    . "'OP_PersonContact.PrsnID')";
+            ->leftJoin('op_person_contact', 'op_civilians.civ_person_id', 
+                '=', 'op_person_contact.prsn_id')";
         
         if (isset($this->v["fltIDs"]) 
             && sizeof($this->v["fltIDs"]) > 0) {
@@ -523,15 +554,13 @@ class OpenListing extends OpenAjax
                 }
             }
             if (trim($fltIDs) != '') {
-                $eval .= "->whereIn('OP_Complaints.ComID', [" 
-                    . substr($fltIDs, 2) . "])";
+                $eval .= "->whereIn('op_complaints.com_id', [" . substr($fltIDs, 2) . "])";
             }
         }
         $eval .= $this->searcher->getSearchFiltQryStatus()
-            . "->select('OP_Complaints.*', 'OP_PersonContact.PrsnNameFirst', "
-            . "'OP_PersonContact.PrsnNameLast', 'OP_PersonContact.PrsnEmail', "
-            . "'OP_Incidents.*')"
-            . $this->searcher->getSearchFiltQryOrderBy()
+            . "->select('op_complaints.*', 'op_person_contact.prsn_name_first', 
+            'op_person_contact.prsn_name_last', 'op_person_contact.prsn_email', 'op_incidents.*')"
+            . $this->searcher->getSearchFiltQryOrderBy() 
             . "->get();";
         return $eval;
     }
@@ -546,23 +575,21 @@ class OpenListing extends OpenAjax
      */
     protected function printComplaintListQry2($nID, $compls1)
     {
-        $GLOBALS["SL"]->xmlTree["coreTbl"] = 'Complaints';
+        $GLOBALS["SL"]->xmlTree["coreTbl"] = 'complaints';
         $compls2 = [];
         if ($compls1 && sizeof($compls1) > 0) {
             foreach ($compls1 as $com) {
-                $comID = $com->ComID;
+                $comID = $com->com_id;
                 $inFilter = true;
                 if (sizeof($this->searcher->searchFilts["victgend"]) > 0
                     || sizeof($this->searcher->searchFilts["victrace"]) > 0) {
-                    $chk = DB::table('OP_PhysicalDesc')
-                        ->join('OP_Civilians', function ($joi) use ($comID) {
-                            $joi->on('OP_PhysicalDesc.PhysID', 
-                                    '=', 'OP_Civilians.CivPhysDescID')
-                                ->where('OP_Civilians.CivComplaintID', $comID)
-                                ->where('OP_Civilians.CivRole', 'Victim');
+                    $chk = DB::table('op_physical_desc')
+                        ->join('op_civilians', function ($joi) use ($comID) {
+                            $joi->on('op_physical_desc.phys_id', '=', 'op_civilians.civ_phys_desc_id')
+                                ->where('op_civilians.civ_complaint_id', $comID)
+                                ->where('op_civilians.civ_role', 'Victim');
                         })
-                        ->select('OP_PhysicalDesc.PhysID', 
-                            'OP_PhysicalDesc.PhysGender')
+                        ->select('op_physical_desc.phys_id', 'op_physical_desc.phys_gender')
                         ->get();
                     if ($chk->isNotEmpty()) {
                         $flt = $this->searcher->searchFilts["victgend"];
@@ -580,16 +607,14 @@ class OpenListing extends OpenAjax
                     }
                 }
                 if ($inFilter 
-                    && sizeof($this->searcher->searchFilts["offgend"]) > 0
-                    || sizeof($this->searcher->searchFilts["offrace"]) > 0) {
-                    $chk = DB::table('OP_PhysicalDesc')
-                        ->join('OP_Officers', function ($joi) use ($comID) {
-                            $joi->on('OP_PhysicalDesc.PhysID', 
-                                '=', 'OP_Officers.OffPhysDescID')
-                                ->where('OP_Officers.OffComplaintID', $comID);
+                    && (sizeof($this->searcher->searchFilts["offgend"]) > 0
+                        || sizeof($this->searcher->searchFilts["offrace"]) > 0)) {
+                    $chk = DB::table('op_physical_desc')
+                        ->join('op_officers', function ($joi) use ($comID) {
+                            $joi->on('op_physical_desc.phys_id', '=', 'op_officers.off_phys_desc_id')
+                                ->where('op_officers.off_complaint_id', $comID);
                         })
-                        ->select('OP_PhysicalDesc.PhysID', 
-                            'OP_PhysicalDesc.PhysGender')
+                        ->select('op_physical_desc.phys_id', 'op_physical_desc.phys_gender')
                         ->get();
                     if ($chk->isNotEmpty()) {
                         $flt = $this->searcher->searchFilts["offgend"];
@@ -607,26 +632,23 @@ class OpenListing extends OpenAjax
                     }
                 }
                 if ($inFilter && trim($this->searcher->searchTxt) != '') {
-                    $dump = SLSearchRecDump::where('SchRecDmpTreeID', 1)
-                        ->where('SchRecDmpRecID', $comID)
+                    $dump = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
+                        ->where('sch_rec_dmp_rec_id', $comID)
                         ->first();
-                    if (!$dump || !isset($dump->SchRecDmpID)) {
+                    if (!$dump || !isset($dump->sch_rec_dmp_id)) {
                         $dump = $this->genRecDump($comID, true);
                     }
-                    $pos = stripos(
-                        $dump->SchRecDmpRecDump, 
-                        $this->searcher->searchTxt
-                    );
+                    $pos = stripos($dump->sch_rec_dmp_rec_dump, $this->searcher->searchTxt);
                     if ($pos === false) {
                         $inFilter = false;
                     }
                     /*
                     } else {
-                        $chk = SLSearchRecDump::where('SchRecDmpTreeID', 1)
-                            ->where('SchRecDmpRecID', $comID)
-                            ->where('SchRecDmpRecDump', 'LIKE', '%' 
+                        $chk = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
+                            ->where('sch_rec_dmp_rec_id', $comID)
+                            ->where('sch_rec_dmp_rec_dump', 'LIKE', '%' 
                                 . $this->searcher->searchTxt . '%')
-                            ->select('SchRecDmpID')
+                            ->select('sch_rec_dmp_id')
                             ->get();
                         if ($chk->isEmpty()) {
                             $inFilter = false;
@@ -671,17 +693,14 @@ class OpenListing extends OpenAjax
     {
         $inFilterGend = false;
         foreach ($chkPhys as $phys) {
-            if (isset($phys->PhysGender) 
-                && trim($phys->PhysGender) != '') {
+            if (isset($phys->phys_gender) && trim($phys->phys_gender) != '') {
                 if (in_array('T', $matches)) {
-                    if (!in_array($phys->PhysGender, ['M', 'F'])) {
+                    if (!in_array($phys->phys_gender, ['M', 'F'])) {
                         $inFilterGend = true;
                     }
-                } elseif (in_array('M', $matches)
-                    && $phys->PhysGender == 'M') {
+                } elseif (in_array('M', $matches) && $phys->phys_gender == 'M') {
                     $inFilterGend = true;
-                } elseif (in_array('F', $matches)
-                    && $phys->PhysGender == 'F') {
+                } elseif (in_array('F', $matches) && $phys->phys_gender == 'F') {
                     $inFilterGend = true;
                 }
             }
@@ -701,10 +720,9 @@ class OpenListing extends OpenAjax
     {
         $inFilterRace = false;
         foreach ($chkPhys as $phys) {
-            $chkRace = OPPhysicalDescRace::where(
-                'PhysRacePhysDescID', $phys->PhysID)
-                ->whereIn('PhysRaceRace', $matches)
-                ->select('PhysRaceID')
+            $chkRace = OPPhysicalDescRace::where('phys_race_phys_desc_id', $phys->phys_id)
+                ->whereIn('phys_race_race', $matches)
+                ->select('phys_race_id')
                 ->get();
             if ($chkRace->isNotEmpty()) {
                 $inFilterRace = true;
@@ -729,40 +747,35 @@ class OpenListing extends OpenAjax
             if ($usr && isset($usr->name) && trim($usr->name) != '') {
                 $name = trim($usr->name) . '\'s';
             }
-            $chk = OPComplaints::where('ComUserID', $this->v["uID"])
-                ->where('ComStatus', '>', 0)
+            $chk = OPComplaints::where('com_user_id', $this->v["uID"])
+                ->where('com_status', '>', 0)
                 ->orderBy('created_at', 'desc')
                 ->get();
             if ($chk->isNotEmpty()) {
                 $loadURL = '/record-prevs/1?rawids=';
                 foreach ($chk as $i => $rec) {
-                    $loadURL .= (($i > 0) ? ',' : '') . $rec->ComID;
+                    $loadURL .= (($i > 0) ? ',' : '') . $rec->com_id;
                 }
-                $ret .= '<h2 class="slBlueDark m0">' . $name 
-                . ' Complaints</h2><div id="n' . $nID 
-                    . 'ajaxLoadA" class="w100">' 
-                    . $GLOBALS["SL"]->sysOpts["spinner-code"] 
+                $ret .= '<h2 class="slBlueDark m0">' . $name . ' Complaints</h2><div id="n' 
+                    . $nID . 'ajaxLoadA" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
                     . '</div>';
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
-                    . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
             } else {
                 $ret .= '<div class="p10"><i>No Complaints</i></div>';
             }
-            $chk = OPCompliments::where('CompliUserID', $this->v["uID"])
-                ->where('CompliStatus', '>', 0)
+            $chk = OPCompliments::where('compli_user_id', $this->v["uID"])
+                ->where('compli_status', '>', 0)
                 ->orderBy('created_at', 'desc')
                 ->get();
             if ($chk->isNotEmpty()) {
                 $loadURL = '/record-prevs/5?rawids=';
                 foreach ($chk as $i => $rec) {
-                    $loadURL .= (($i > 0) ? ',' : '') . $rec->CompliID;
+                    $loadURL .= (($i > 0) ? ',' : '') . $rec->compli_id;
                 }
-                $ret .= '<div class="p20">&nbsp;</div><h2 class="slBlueDark m0">' 
-                    . $name . ' Compliments</h2><div id="n' . $nID 
-                    . 'ajaxLoadB" class="w100">'
+                $ret .= '<div class="p20">&nbsp;</div><h2 class="slBlueDark m0">' . $name 
+                    . ' Compliments</h2><div id="n' . $nID . 'ajaxLoadB" class="w100">'
                     . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
-                    . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
             } else {
                 $ret .= '<!-- <div class="p10"><i>No Compliments</i></div> -->';
             }
@@ -783,17 +796,15 @@ class OpenListing extends OpenAjax
         if ($GLOBALS["SL"]->REQ->has('invited')) {
             $invited = $GLOBALS["SL"]->REQ->get('invited');
             if (intVal($invited) > 0) {
-                OPTesterBeta::find(intVal($invited))->update([
-                    'BetaInvited' => date('Y-m-d')
-                ]);
+                OPTesterBeta::find(intVal($invited))->update([ 'beta_invited' => date('Y-m-d') ]);
             }
         }
-        $betas = OPTesterBeta::whereNotNull('BetaEmail')
-            ->where('BetaEmail', 'NOT LIKE', '')
+        $betas = OPTesterBeta::whereNotNull('beta_email')
+            ->where('beta_email', 'NOT LIKE', '')
             ->orderBy('created_at', 'desc')
             ->get();
-        $empties = OPTesterBeta::whereNotNull('BetaHowHear')
-            ->where('BetaHowHear', 'NOT LIKE', '')
+        $empties = OPTesterBeta::whereNotNull('beta_how_hear')
+            ->where('beta_how_hear', 'NOT LIKE', '')
             ->get();
         //$GLOBALS["SL"]->addHshoo("#stats");
         $GLOBALS["SL"]->x["needsPlots"] = true;
@@ -803,39 +814,35 @@ class OpenListing extends OpenAjax
         if (sizeof($betas) > 0) {
             foreach ($betas as $i => $beta) {
                 $bcc = '';
-                if ($this->v["user"]->email 
-                    != 'morgan@flexyourrights.org') {
-                    $bcc = 'morgan@flexyourrights.org';
+                if ($this->v["user"]->email != 'morgan'.'@'.'flexyourrights.org') {
+                    $bcc = 'morgan'.'@'.'flexyourrights.org';
                 }
-                $betaLinks[$beta->BetaID] = '/dashboard/send-email'
-                    . '?emaTemplate=28&emaTo='
-                    . urlencode($beta->BetaEmail) . '&emaCC=' 
-                    . urlencode($this->v["user"]->email) . '&emaBCC='
-                    . $bcc . '&emaSwapName=' 
-                    . urlencode($beta->BetaName);
+                $betaLinks[$beta->beta_id] = '/dashboard/send-email?emaTemplate=28&emaTo='
+                    . urlencode($beta->beta_email) . '&emaCC=' 
+                    . urlencode($this->v["user"]->email) . '&emaBCC=' . $bcc 
+                    . '&emaSwapName=' . urlencode($beta->beta_name);
                 if (isset($this->v["yourUserContact"])) {
                     $you = $this->v["yourUserContact"];
-                    $analystName = ((isset($you->PrsnNameFirst)) 
-                        ? $you->PrsnNameFirst : '') . ' ' 
-                        . ((isset($you->PrsnNameLast)) 
-                            ? $you->PrsnNameLast : '');
-                    $betaLinks[$beta->BetaID] .= '&emaSwapAnalyst=' 
-                        . urlencode(trim($analystName));
+                    $analystName = ((isset($you->prsn_name_first)) ? $you->prsn_name_first : '')
+                        . ' ' . ((isset($you->prsn_name_last)) ? $you->prsn_name_last : '');
+                    $betaLinks[$beta->beta_id] .= '&emaSwapAnalyst=' . urlencode(trim($analystName));
                 }
-                $betaLinks[$beta->BetaID] .= '&redir='
-                    . urlencode('/dash/beta-test-signups?invited='
-                        . $beta->BetaID . '#beta' . $beta->BetaID);
+                $betaLinks[$beta->beta_id] .= '&redir=' . urlencode('/dash/beta-test-signups?invited='
+                        . $beta->beta_id . '#beta' . $beta->beta_id);
             }
         }
-        $emptyNoRef = OPTesterBeta::whereNull('BetaHowHear')
-            ->orWhere('BetaHowHear', 'LIKE', '')
+        $emptyNoRef = OPTesterBeta::whereNull('beta_how_hear')
+            ->orWhere('beta_how_hear', 'LIKE', '')
             ->count();
-        return view('vendor.openpolice.nodes.2234-beta-listing', [
-            "betas"      => $betas,
-            "emptyNoRef" => $emptyNoRef,
-            "totLoads"   => OPTesterBeta::count(),
-            "betaLinks"  => $betaLinks
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.2234-beta-listing', 
+            [
+                "betas"      => $betas,
+                "emptyNoRef" => $emptyNoRef,
+                "totLoads"   => OPTesterBeta::count(),
+                "betaLinks"  => $betaLinks
+            ]
+        )->render();
     }
     
     /**
@@ -855,7 +862,7 @@ class OpenListing extends OpenAjax
         $tots = [];
         if ($betas->isNotEmpty()) {
             foreach ($betas as $i => $beta) {
-                $how = trim($beta->BetaHowHear);
+                $how = trim($beta->beta_how_hear);
                 $how = str_replace('-police-dept', '', $how);
                 if (!isset($tots[$how])) {
                     $tots[$how] = 0;
@@ -872,10 +879,8 @@ class OpenListing extends OpenAjax
                         $how = $howHear;
                     }
                 }
-                $graph["values"] .= (($i > 0) ? ', ' : '') 
-                    . $min;
-                $graph["labels"] .= (($i > 0) ? ', ' : '') 
-                    . json_encode($how);
+                $graph["values"] .= (($i > 0) ? ', ' : '') . $min;
+                $graph["labels"] .= (($i > 0) ? ', ' : '') . json_encode($how);
                 unset($tots[$how]);
             }
         }

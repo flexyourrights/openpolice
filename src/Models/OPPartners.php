@@ -5,31 +5,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPartners extends Model
 {
-    protected $table      = 'OP_Partners';
-    protected $primaryKey = 'PartID';
+    protected $table      = 'op_partners';
+    protected $primaryKey = 'part_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PartType', 
-		'PartStatus', 
-		'PartUserID', 
-		'PartPersonID', 
-		'PartBio', 
-		'PartSlug', 
-		'PartCompanyName', 
-		'PartTitle', 
-		'PartCompanyWebsite', 
-		'PartBioUrl', 
-		'PartHelpReqs', 
-		'PartGeoDesc', 
-		'PartPhotoUrl', 
-		'PartAlerts', 
-		'PartVersionAB', 
-		'PartSubmissionProgress', 
-		'PartIPaddy', 
-		'PartTreeVersion', 
-		'PartUniqueStr', 
-		'PartIsMobile', 
+		'part_type', 
+		'part_status', 
+		'part_user_id', 
+		'part_person_id', 
+		'part_bio', 
+		'part_slug', 
+		'part_company_name', 
+		'part_title', 
+		'part_company_website', 
+		'part_bio_url', 
+		'part_help_reqs', 
+		'part_geo_desc', 
+		'part_photo_url', 
+		'part_alerts', 
+		'part_version_ab', 
+		'part_submission_progress', 
+		'part_ip_addy', 
+		'part_tree_version', 
+		'part_unique_str', 
+		'part_is_mobile', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPComplaintNotes extends Model
 {
-    protected $table      = 'OP_ComplaintNotes';
-    protected $primaryKey = 'NoteID';
+    protected $table      = 'op_complaint_notes';
+    protected $primaryKey = 'note_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'NoteComplaintID', 
-		'NoteUserID', 
-		'NoteContent', 
+		'note_complaint_id', 
+		'note_user_id', 
+		'note_content', 
     ];
     
     // END SurvLoop auto-generated portion of Model

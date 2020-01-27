@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPzComplaintEmailed extends Model
 {
-    protected $table = 'OP_zComplaintEmailed';
+    protected $table = 'op_z_ComplaintEmailed';
     protected $primaryKey = 'ComEmailedID';
     
     protected $fillable = [
-        'ComEmailedComplaintID', 
+        'ComEmailed_complaint_id', 
         'ComEmailedEmailID', 
         'ComEmailedDate', 
         'ComEmailedTo', 

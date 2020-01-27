@@ -67,24 +67,24 @@ class OpenOfficers extends OpenDepts
      */
     protected function getDeptOfficerRecords($deptID = -3)
     {
-        return DB::table('OP_OfficersVerified')
-            ->join('OP_PersonContact', 'OP_OfficersVerified.OffVerPersonID', 
-                '=', 'OP_PersonContact.PrsnID')
-            //->where('OP_OfficersVerified.OffVerCntComplaints', '>', 0)
-            ->whereIn('OP_OfficersVerified.OffVerID', function($query) use ($deptID)
+        return DB::table('op_officers_verified')
+            ->join('op_person_contact', 'op_officers_verified.off_ver_person_id', 
+                '=', 'op_person_contact.prsn_id')
+            //->where('op_officers_verified.off_ver_cnt_complaints', '>', 0)
+            ->whereIn('op_officers_verified.off_ver_id', function($query) use ($deptID)
             {
-                $query->select('LnkOffDeptOfficerID')
+                $query->select('lnk_off_dept_officer_id')
                     ->from(with(new OPLinksOfficerDept)->getTable())
-                    ->where('LnkOffDeptDeptID', $deptID);
+                    ->where('lnk_off_dept_dept_id', $deptID);
             })
             ->select(
-                'OP_OfficersVerified.*', 
-                'OP_PersonContact.PrsnNamePrefix', 
-                'OP_PersonContact.PrsnNameFirst', 
-                'OP_PersonContact.PrsnNickname', 
-                'OP_PersonContact.PrsnNameMiddle', 
-                'OP_PersonContact.PrsnNameLast',  
-                'OP_PersonContact.PrsnNameSuffix'
+                'op_officers_verified.*', 
+                'op_person_contact.prsn_name_prefix', 
+                'op_person_contact.prsn_name_first', 
+                'op_person_contact.prsn_nickname', 
+                'op_person_contact.prsn_name_middle', 
+                'op_person_contact.prsn_name_last',  
+                'op_person_contact.prsn_name_suffix'
             )
             ->get();
     }
@@ -118,8 +118,8 @@ class VerifiedOfficer
     public function __construct($rec = null)
     {
         $this->rec = $rec;
-        if ($this->rec && isset($this->rec->OffVerID)) {
-            $this->id = $this->rec->OffVerID;
+        if ($this->rec && isset($this->rec->off_ver_id)) {
+            $this->id = $this->rec->off_ver_id;
         }
         $this->loadOfficerComplaints();
 

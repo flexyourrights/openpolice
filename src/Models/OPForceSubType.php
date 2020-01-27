@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPForceSubType extends Model
 {
-    protected $table      = 'OP_ForceSubType';
-    protected $primaryKey = 'ForceSubID';
+    protected $table      = 'op_force_sub_type';
+    protected $primaryKey = 'force_sub_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'ForceSubForceID', 
-		'ForceSubType', 
+		'force_sub_force_id', 
+		'force_sub_type', 
     ];
     
     // END SurvLoop auto-generated portion of Model

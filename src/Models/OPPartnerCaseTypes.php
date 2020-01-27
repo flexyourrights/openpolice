@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPartnerCaseTypes extends Model
 {
-    protected $table      = 'OP_PartnerCaseTypes';
-    protected $primaryKey = 'PrtCasID';
+    protected $table      = 'op_partner_case_types';
+    protected $primaryKey = 'prt_cas_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PrtCasPartnerID', 
+		'prt_cas_partner_id', 
     ];
     
     // END SurvLoop auto-generated portion of Model

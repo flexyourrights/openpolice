@@ -20024,7 +20024,7 @@ Our team developed OpenPolice.org in partnership with police oversight professio
 			'NodePromptNotes' => 'share-your-story',
 			'NodeResponseSet' => '194',
 			'NodeDataBranch' => 'Complaints',
-			'NodeDataStore' => 'Complaints:ComStatus'
+			'NodeDataStore' => 'Complaints:com_status'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 4,
@@ -21089,7 +21089,7 @@ These are your allegations: <span class="slBlueDark">[[List of Allegations]]</sp
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: Update',
 			'NodeResponseSet' => '194',
-			'NodeDataStore' => 'Complaints:ComStatus'
+			'NodeDataStore' => 'Complaints:com_status'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 325,
@@ -21108,7 +21108,7 @@ These are your allegations: <span class="slBlueDark">[[List of Allegations]]</sp
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: Update',
 			'NodeResponseSet' => '295',
-			'NodeDataStore' => 'Complaints:ComType'
+			'NodeDataStore' => 'Complaints:com_type'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 70,
@@ -24089,7 +24089,7 @@ left: 30px;
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Data Manip: Update',
 			'NodeResponseSet' => '295',
-			'NodeDataStore' => 'Complaints:ComType'
+			'NodeDataStore' => 'Complaints:com_type'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 752,
@@ -25767,7 +25767,7 @@ left: 30px;
 			'NodeParentID' => '767',
 			'NodeType' => 'Data Manip: Update',
 			'NodeResponseSet' => '196',
-			'NodeDataStore' => 'Complaints:ComStatus'
+			'NodeDataStore' => 'Complaints:com_status'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 977,

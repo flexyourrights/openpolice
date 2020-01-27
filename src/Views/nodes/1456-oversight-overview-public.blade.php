@@ -23,15 +23,16 @@
     <th># of Employees</th><th>Score</th></tr>
 @if ($oversights->isNotEmpty())
     @foreach ($oversights as $i => $over)
-        <tr><td><a href="/dept/{{ $over->DeptSlug }}"
-            >{{ str_replace('Department', 'Dept.', $over->DeptName) }}</a>
-            <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->def->getVal('Investigative Agency Types', $over->OverType) }}
-            </div></td>
-        <td>{{ $over->OverAddressState }}, {{ $over->OverAddressCounty }}
+        <tr><td><a href="/dept/{{ $over->dept_slug }}"
+            >{{ str_replace('Department', 'Dept.', $over->dept_name) }}</a>
+            <div class="slGrey fPerc80">{{ 
+                $GLOBALS["SL"]->def->getVal('Investigative Agency Types', $over->OverType) 
+            }}</div></td>
+        <td>{{ $over->over_address_state }}, {{ $over->over_address_county }}
             <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->printRowAddy($over, 'Dept') }}</span></td>
-        <td> @if ($over->OverTotOfficers > 0) {{ number_format($over->OverTotOfficers) }} 
+        <td> @if ($over->over_tot_officers > 0) {{ number_format($over->over_tot_officers) }} 
             @else <a href="/volunteer" class="slGrey">?</a> @endif </td>
-        <td>{{ $over->OverScoreOpenness }}</td></tr>
+        <td>{{ $over->over_score_openness }}</td></tr>
     @endforeach
 @else
     <tr><td><i>None found.</i></td></tr>

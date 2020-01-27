@@ -17,10 +17,10 @@ class CreateOpenPoliceTables extends Migration
 		{
 			$table->increments('ComID');
 			$table->integer('ComUserID')->unsigned()->nullable();
-			$table->integer('ComStatus')->unsigned()->nullable();
-			$table->index('ComStatus');
-			$table->integer('ComType')->unsigned()->nullable();
-			$table->index('ComType');
+			$table->integer('com_status')->unsigned()->nullable();
+			$table->index('com_status');
+			$table->integer('com_type')->unsigned()->nullable();
+			$table->index('com_type');
 			$table->integer('ComIncidentID')->unsigned()->nullable();
 			$table->integer('ComSceneID')->unsigned()->nullable();
 			$table->integer('ComPrivacy')->unsigned()->nullable();
@@ -468,11 +468,11 @@ class CreateOpenPoliceTables extends Migration
 		Schema::create('OP_Departments', function(Blueprint $table)
 		{
 			$table->increments('DeptID');
-			$table->string('DeptName')->nullable();
+			$table->string('dept_name')->nullable();
 			$table->string('DeptSlug', 100)->nullable();
 			$table->integer('DeptType')->unsigned()->nullable();
 			$table->integer('DeptStatus')->unsigned()->nullable();
-			$table->dateTime('DeptVerified')->nullable();
+			$table->dateTime('dept_verified')->nullable();
 			$table->string('DeptEmail')->nullable();
 			$table->string('DeptPhoneWork', 20)->nullable();
 			$table->string('DeptAddress')->nullable();

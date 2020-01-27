@@ -12,12 +12,13 @@
                 <h3 class="mT0">Option #1: Enter your emailed Key Code</h3>
                 <div class="pT5 mB10 pL10">{!! $mfa !!}</div>
                 <p>
-                If your code has expired or doesn’t work, please click the button below to get a 
-                new code sent to <b>{{ $user->email }}</b>.
+                If your code has expired or doesn’t work, please click the button 
+                below to get a new code sent to <b>{{ $user->email }}</b>.
                 </p>
                 <div class="pL10">
                     <a href="?resend=access" class="btn btn-secondary" style="width: 190px;"
-                        ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> Email New Key Code</a>
+                        ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> 
+                        Email New Key Code</a>
                 </div>
             </div>
         </div>
@@ -25,12 +26,14 @@
             <div id="keyOpt2" class="slCard mT20">
                 <h3 class="mT0">Option #2: Create an account</h3>
                 <p>
-                Creating an account makes it easier for you to access and manage complaint reports. 
-                If the account for <b>{{ $user->email }}</b> has not been setup yet, you can use the 
-                <a href="/password/reset">password reset tool</a> to gain access to it by email.
+                Creating an account makes it easier for you to access and manage complaint 
+                reports. If the account for <b>{{ $user->email }}</b> has not been setup 
+                yet, you can use the <a href="/password/reset">password reset tool</a> 
+                to gain access to it by email.
                 </p>
                 <p>
-                If your office needs to change the email associated with its account, please <a href="/contact">contact us</a>.
+                If your office needs to change the email associated with 
+                its account, please <a href="/contact">contact us</a>.
                 </p>
             </div>
         </div>

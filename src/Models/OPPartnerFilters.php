@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPartnerFilters extends Model
 {
-    protected $table      = 'OP_PartnerFilters';
-    protected $primaryKey = 'PrtFltID';
+    protected $table      = 'op_partner_filters';
+    protected $primaryKey = 'prt_flt_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PrtFltCaseID', 
-		'PrtFltFilter', 
+		'prt_flt_case_id', 
+		'prt_flt_filter', 
     ];
     
     // END SurvLoop auto-generated portion of Model

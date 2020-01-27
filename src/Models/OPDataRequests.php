@@ -5,17 +5,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPDataRequests extends Model
 {
-    protected $table         = 'OP_DataRequests';
-    protected $primaryKey     = 'ReqID';
+    protected $table         = 'op_data_requests';
+    protected $primaryKey     = 'req_id';
     public $timestamps         = true;
     protected $fillable     = 
     [    
-        'ReqUserID', 
-        'ReqTimestamp', 
-        'ReqSuccess', 
-        'ReqType', 
-        'ReqID1', 
-        'ReqID2', 
-        'ReqID3', 
+        'req_user_id', 
+        'req_timestamp', 
+        'req_success', 
+        'req_type', 
+        'req_id1', 
+        'req_id2', 
+        'req_id3', 
     ];
 }

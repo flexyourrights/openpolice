@@ -47,24 +47,24 @@
 </div>
 @if ($deptScores->scoreDepts->isNotEmpty())
     @foreach ($deptScores->scoreDepts as $i => $dept)
-        <div class="deptScrMore @if ($i%2 == 0) row2 @endif " data-dept="{{ $dept->DeptID }}">
+        <div class="deptScrMore @if ($i%2 == 0) row2 @endif " data-dept="{{ $dept->dept_id }}">
             <div class="row @if ($i%2 == 0) row2 @endif ">
                 <div class="col-md-3 col-sm-12 
-                <?php /* @if (strlen($deptScores->deptNames[$dept->DeptID]) > 33) deptScrLab2 @else */ ?> 
+                <?php /* @if (strlen($deptScores->deptNames[$dept->dept_id]) > 33) deptScrLab2 @else */ ?> 
                     deptScrLab <?php /* @endif */ ?> ">
-                    <b>{{ $deptScores->deptNames[$dept->DeptID] }}</b>
+                    <b>{{ $deptScores->deptNames[$dept->dept_id] }}</b>
                 </div>
                 <div class="col-md-1 col-sm-12 deptScrLab deptScrLabNum">
-                    {{ $GLOBALS["SL"]->calcGrade($dept->DeptScoreOpenness) }}
+                    {{ $GLOBALS["SL"]->calcGrade($dept->dept_score_openness) }}
                 </div>
                 <div class="col-md-8 col-sm-12">
                 @foreach ($deptScores->chartFlds as $i => $fld)
                     <?php
                     $good = false;
                     if ($fld[1] == 'Notary') {
-                        $good = !$deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->DeptID);
+                        $good = !$deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->dept_id);
                     } else {
-                        $good = $deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->DeptID);
+                        $good = $deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->dept_id);
                     }
                     ?>
                     @if (!$good)
@@ -83,22 +83,26 @@
                 @endforeach
                 </div>
             </div>
-            <div id="deptScrMore{{ $dept->DeptID }}" class="disNon p10 @if ($i%2 == 0) row2 @endif ">
-                <a href="/dept/{{ $dept->DeptSlug }}" class="deptScrLnk"><h4 class="mB0">{{ 
-                        str_replace('Department', 'Dept', $dept->DeptName) }}</h4></a>
+            <div id="deptScrMore{{ $dept->dept_id }}" class="disNon p10 @if ($i%2 == 0) row2 @endif ">
+                <a href="/dept/{{ $dept->dept_slug }}" class="deptScrLnk"><h4 class="mB0">{{ 
+                        str_replace('Department', 'Dept', $dept->dept_name) }}</h4></a>
                 <div class="row">
                     <div class="col-6">
                         {!! $GLOBALS["SL"]->printRowAddy($dept, 'Dept', true) !!}<br />
-                        {{ $dept->DeptAddressCounty }} County
+                        {{ $dept->dept_address_county }} County
                     </div><div class="col-6">
                         Accessibility Score: 
-                        <b class="slBlueDark">{{ $dept->DeptScoreOpenness }}</b><br />
-                        @if (isset($dept->DeptType) && intVal($dept->DeptType) > 0)
-                            {{ $GLOBALS["SL"]->def->getVal('Department Types', $dept->DeptType) }},
+                        <b class="slBlueDark">{{ $dept->dept_score_openness }}</b><br />
+                        @if (isset($dept->dept_type) && intVal($dept->dept_type) > 0)
+                            {{ $GLOBALS["SL"]->def->getVal('Department Types', $dept->dept_type) }},
                         @endif
-                        @if ($dept->DeptTotOfficers > 0) {{ number_format($dept->DeptTotOfficers) }} officers @endif
-                        @if (isset($dept->DeptVerified) && trim($dept->DeptVerified) != '')
-                            <div class="slGrey">updated {{ date('n/j/y', strtotime($dept->DeptVerified)) }}</div>
+                        @if ($dept->dept_tot_officers > 0) 
+                            {{ number_format($dept->dept_tot_officers) }} officers
+                        @endif
+                        @if (isset($dept->dept_verified) && trim($dept->dept_verified) != '')
+                            <div class="slGrey">
+                                updated {{ date('n/j/y', strtotime($dept->dept_verified)) }}
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -106,7 +110,7 @@
                 <?php $cnt = 0; ?>
                 @foreach ($deptScores->vals as $type => $specs)
                     @if ($cnt == floor(sizeof($deptScores->vals)/2)) </div><div class="col-lg-6 col-md-12"> @endif
-                    @if ($deptScores->checkRecFld($specs, $dept->DeptID) != 0)
+                    @if ($deptScores->checkRecFld($specs, $dept->dept_id) != 0)
                         <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOn"><div class="row">
                         <div class="col-1 taR"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
                     @else
@@ -123,7 +127,7 @@
                 </div></div>
             </div>
         
-            <?php /* <pre>{!! print_r($deptScores->deptOvers[$dept->DeptID]) !!}</pre> */ ?>
+            <?php /* <pre>{!! print_r($deptScores->deptOvers[$dept->dept_id]) !!}</pre> */ ?>
             
         </div>
     @endforeach

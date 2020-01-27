@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPAdminActions extends Model
 {
-    protected $table      = 'OP_AdminActions';
-    protected $primaryKey = 'AdmActID';
+    protected $table      = 'op_admin_actions';
+    protected $primaryKey = 'adm_act_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'AdmActUserID', 
-		'AdmActTable', 
-		'AdmActRecordID', 
-		'AdmActOldData', 
-		'AdmActNewData', 
+		'adm_act_user_id', 
+		'adm_act_table', 
+		'adm_act_record_id', 
+		'adm_act_old_data', 
+		'adm_act_new_data', 
     ];
     
     // END SurvLoop auto-generated portion of Model

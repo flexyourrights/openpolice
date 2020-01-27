@@ -12,25 +12,26 @@
         <th>Volunteer Notes</th>
     </tr>
     @forelse($editsIA as $i => $edit)
-        @if ($edit && isset($edit->ZedOverOverID))
+        @if ($edit && isset($edit->zed_over_over_id))
             <tr><td>
                 @if (isset($edit->created_at)) {{ date("n/j/y", strtotime($edit->created_at)) }} @endif
             </td><td>
-                @if (intVal($editsDept[$i]->ZedDeptUserID) > 0 && isset($userNames[$editsDept[$i]->ZedDeptUserID])) 
-                    {!! $userNames[$editsDept[$i]->ZedDeptUserID] !!} @endif
+                @if (intVal($editsDept[$i]->zed_dept_user_id) > 0 
+                    && isset($userNames[$editsDept[$i]->zed_dept_user_id])) 
+                    {!! $userNames[$editsDept[$i]->zed_dept_user_id] !!} @endif
             </td><td>
                 <div class="mLn10">
-                @if ($edit->ZedOverOnlineResearch == 0 && $edit->ZedOverMadeDeptCall == 0 
-                    && $edit->ZedOverMadeIACall == 0) <span class="slGrey mL10">Minor Changes</span> 
+                @if ($edit->zed_over_online_research == 0 && $edit->zed_over_made_dept_call == 0 
+                    && $edit->zed_over_made_ia_call == 0) <span class="slGrey mL10">Minor Changes</span> 
                 @else 
-                    @if ($edit->ZedOverOnlineResearch == 1) <i class="fa fa-laptop mL10"></i> @endif
-                    @if ($edit->ZedOverMadeDeptCall == 1) <i class="fa fa-phone mL10"></i>Dept @endif
-                    @if ($edit->ZedOverMadeIACall == 1) <i class="fa fa-phone mL10"></i>IA @endif
+                    @if ($edit->zed_over_online_research == 1) <i class="fa fa-laptop mL10"></i> @endif
+                    @if ($edit->zed_over_made_dept_call == 1) <i class="fa fa-phone mL10"></i>Dept @endif
+                    @if ($edit->zed_over_made_ia_call == 1) <i class="fa fa-phone mL10"></i>IA @endif
                 @endif
                 </div>
             </td><td>
-                @if (isset($edit->ZedOverNotes) && trim($edit->ZedOverNotes) != '')
-                    {{ $edit->ZedOverNotes }}
+                @if (isset($edit->zed_over_notes) && trim($edit->zed_over_notes) != '')
+                    {{ $edit->zed_over_notes }}
                 @endif
             </td></tr>
         @endif
@@ -46,7 +47,12 @@
     <div class="pT20">
     <h3 class="slBlueDark">Detailed Edit History...</h3>
     <table class="table table-striped" border=0 cellpadding=10 >
-    <tr><th>Edit Details</th><th>Department Info</th><th>Internal Affairs</th><th>Civilian Oversight</th></tr>
+    <tr>
+        <th>Edit Details</th>
+        <th>Department Info</th>
+        <th>Internal Affairs</th>
+        <th>Civilian Oversight</th>
+    </tr>
     {!! $recentEdits !!}
     </table>
     </div>

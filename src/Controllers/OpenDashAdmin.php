@@ -35,13 +35,13 @@ class OpenDashAdmin
             "processed"  => 0,
             "submitted"  => 0
         ];
-        $stats["betas"] = DB::table('OP_TesterBeta')
-            ->whereNotNull('BetaInvited')
-            ->distinct('BetaEmail')
+        $stats["betas"] = DB::table('op_tester_beta')
+            ->whereNotNull('beta_invited')
+            ->distinct('beta_email')
             ->count();
-        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
-            ->where('ComStatus', '>', 0)
-            ->whereIn('ComType', [
+        $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
+            ->where('com_status', '>', 0)
+            ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
@@ -49,7 +49,7 @@ class OpenDashAdmin
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $com) {
-                switch (intVal($com->ComStatus)) {
+                switch (intVal($com->com_status)) {
                     case $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'):
                         $stats["incomplete"]++;
                         break;
@@ -81,11 +81,11 @@ class OpenDashAdmin
             "activeU"   => [],
             "contactsU" => []
         ];
-        $chk = OPComplaints::select('ComID', 'ComUserID', 'ComStatus', 'ComRecordSubmitted')
-            ->where('ComStatus', '>', 0)
-            ->whereNotNull('ComSummary')
-            ->where('ComSummary', 'NOT LIKE', '')
-            ->whereIn('ComType', [
+        $chk = OPComplaints::select('com_id', 'com_user_id', 'com_status', 'com_record_submitted')
+            ->where('com_status', '>', 0)
+            ->whereNotNull('com_summary')
+            ->where('com_summary', 'NOT LIKE', '')
+            ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
@@ -94,42 +94,45 @@ class OpenDashAdmin
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $com) {
-                if (intVal($com->ComUserID) > 0) {
-                    $statsWeek["activeU"][] = $com->ComUserID;
+                if (intVal($com->com_user_id) > 0) {
+                    $statsWeek["activeU"][] = $com->com_user_id;
                 }
             }
         }
-        /* $contacts = DB::table('OP_zComplaintReviews')
-            ->join('OP_zComplaintReviews', 'OP_Complaints.ComID', 
-                '=', 'OP_zComplaintReviews.ComRevComplaint')
-            ->where('OP_zComplaintReviews.ComRevType', 'LIKE', 'Update')
-            ->whereNotNull('OP_zComplaintReviews.ComRevNote')
-            ->where('OP_zComplaintReviews.ComRevNote', 'NOT LIKE', 'Update')
-            ->where('OP_zComplaintReviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
-            ->select('OP_Complaints.ComUserID', 'OP_zComplaintReviews.*')
+        /* $contacts = DB::table('op_z_complaint_reviews')
+            ->join('op_z_complaint_reviews', 'op_complaints.com_id', 
+                '=', 'op_z_complaint_reviews.ComRevComplaint')
+            ->where('op_z_complaint_reviews.com_rev_type', 'LIKE', 'Update')
+            ->whereNotNull('op_z_complaint_reviews.com_rev_note')
+            ->where('op_z_complaint_reviews.com_rev_note', 'NOT LIKE', 'Update')
+            ->where('op_z_complaint_reviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->select('op_complaints.com_user_id', 'op_z_complaint_reviews.*')
             ->get(); */
-        $contacts = OPzComplaintReviews::where('ComRevType', 'LIKE', 'Update')
-            ->whereNotNull('ComRevNote')
-            ->where('ComRevNote', 'NOT LIKE', 'Update')
+        $contacts = OPzComplaintReviews::where('com_rev_type', 'LIKE', 'Update')
+            ->whereNotNull('com_rev_note')
+            ->where('com_rev_note', 'NOT LIKE', 'Update')
             ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
             ->get();
         if ($contacts->isNotEmpty()) {
             foreach ($contacts as $i => $rec) {
-                $com = OPComplaints::find($rec->ComRevComplaint);
-                if ($com && isset($com->ComUserID) && intVal($com->ComUserID) > 0) {
-                    if (!in_array($com->ComUserID, $statsWeek["activeU"])) {
-                        $statsWeek["activeU"][] = $com->ComUserID;
+                $com = OPComplaints::find($rec->com_rev_complaint);
+                if ($com && isset($com->com_user_id) && intVal($com->com_user_id) > 0) {
+                    if (!in_array($com->com_user_id, $statsWeek["activeU"])) {
+                        $statsWeek["activeU"][] = $com->com_user_id;
                     }
-                    if (!in_array($com->ComUserID, $statsWeek["contactsU"])) {
-                        $statsWeek["contactsU"][] = $com->ComUserID;
+                    if (!in_array($com->com_user_id, $statsWeek["contactsU"])) {
+                        $statsWeek["contactsU"][] = $com->com_user_id;
                     }
                 }
             }
         }
-        return view('vendor.openpolice.nodes.2345-dash-top-stats', [
-            "stats"     => $stats,
-            "statsWeek" => $statsWeek
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.2345-dash-top-stats', 
+            [
+                "stats"     => $stats,
+                "statsWeek" => $statsWeek
+            ]
+        )->render();
     }
     
     public function printDashSessGraph()
@@ -142,47 +145,47 @@ class OpenDashAdmin
         $grapher->addDataLineType('received', 'Received by Oversight', '', '#333333', '#333333');
         $grapher->addDataLineType('contacts', 'Followup Contacts', '', '#63C6FF', '#63C6FF');
         $startDate = $grapher->getPastStartDate() . ' 00:00:00';
-        $recentAttempts = OPComplaints::whereNotNull('ComSummary')
-            ->where('ComSummary', 'NOT LIKE', '')
-            ->whereIn('ComType', [
+        $recentAttempts = OPComplaints::whereNotNull('com_summary')
+            ->where('com_summary', 'NOT LIKE', '')
+            ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
-            ->where('ComRecordSubmitted', '>=', $startDate)
-            ->select('ComStatus', 'ComRecordSubmitted')
+            ->where('com_record_submitted', '>=', $startDate)
+            ->select('com_status', 'com_record_submitted')
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
-                if ($rec->ComStatus == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
-                    $grapher->addDayTally('incomplete', $rec->ComRecordSubmitted);
+                if ($rec->com_status == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+                    $grapher->addDayTally('incomplete', $rec->com_record_submitted);
                 } else {
-                    $grapher->addDayTally('complete', $rec->ComRecordSubmitted);
+                    $grapher->addDayTally('complete', $rec->com_record_submitted);
                 }
             }
         }
-        $recentAttempts = OPLinksComplaintOversight::select('LnkComOverSubmitted')
-            ->where('LnkComOverSubmitted', '>=', $startDate)
+        $recentAttempts = OPLinksComplaintOversight::select('lnk_com_over_submitted')
+            ->where('lnk_com_over_submitted', '>=', $startDate)
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
-                $grapher->addDayTally('submitted', $rec->LnkComOverSubmitted);
+                $grapher->addDayTally('submitted', $rec->lnk_com_over_submitted);
             }
         }
-        $recentAttempts = OPLinksComplaintOversight::select('LnkComOverReceived')
-            ->where('LnkComOverReceived', '>=', $startDate)
+        $recentAttempts = OPLinksComplaintOversight::select('lnk_com_over_received')
+            ->where('lnk_com_over_received', '>=', $startDate)
             ->get();
         if ($recentAttempts->isNotEmpty()) {
             foreach ($recentAttempts as $i => $rec) {
-                $grapher->addDayTally('received', $rec->LnkComOverReceived);
+                $grapher->addDayTally('received', $rec->lnk_com_over_received);
             }
         }
-        $contacts = DB::table('OP_zComplaintReviews')
-            ->where('ComRevType', 'LIKE', 'Update')
-            ->whereNotNull('ComRevNote')
-            ->where('ComRevNote', 'NOT LIKE', 'Update')
+        $contacts = DB::table('op_z_complaint_reviews')
+            ->where('com_rev_type', 'LIKE', 'Update')
+            ->whereNotNull('com_rev_note')
+            ->where('com_rev_note', 'NOT LIKE', 'Update')
             ->where('created_at', '>=', $startDate)
-            ->distinct('ComRevComplaint')
+            ->distinct('com_rev_complaint')
             ->get();
         if ($contacts->isNotEmpty()) {
             foreach ($contacts as $i => $rec) {
@@ -210,23 +213,28 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $this->v["statRanges"] = [
-            ['Last 24 Hrs',     mktime(date("H")-24, date("i"), date("s"), 
-                date("n"), date("j"), date("Y"))],
-            ['This Week',       mktime(date("H"), 0, 0, 
-                date("n"), date("j")-7, date("Y"))],
-            ['All-Time Totals', mktime(0, 0, 0, 1, 1, 1900)]
+            [
+                'Last 24 Hrs',
+                mktime(date("H")-24, date("i"), date("s"), date("n"), date("j"), date("Y"))
+            ], [
+                'This Week',
+                mktime(date("H"), 0, 0, date("n"), date("j")-7, date("Y"))
+            ], [
+                'All-Time Totals', 
+                mktime(0, 0, 0, 1, 1, 1900)
+            ]
         ];
         $this->v["statusDefs"] = $GLOBALS["SL"]->def->getSet('Complaint Status');
         $this->v["dashTopStats"] = [];
         foreach ($this->v["statRanges"] as $j => $range) {
             $this->v["dashTopStats"][$j] = [];
             foreach ($this->v["statusDefs"] as $def) {
-                $this->v["dashTopStats"][$j][$def->DefID] = 0;
+                $this->v["dashTopStats"][$j][$def->def_id] = 0;
             }
         }
-        $chk = OPComplaints::select('ComID', 'ComPublicID', 'ComStatus', 'ComRecordSubmitted')
-            ->where('ComStatus', '>', 0)
-            ->whereIn('ComType', [
+        $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
+            ->where('com_status', '>', 0)
+            ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
@@ -235,21 +243,21 @@ class OpenDashAdmin
         if ($chk->isNotEmpty()) {
             foreach ($chk as $i => $complaint) {
                 foreach ($this->v["statRanges"] as $j => $range) {
-                    if (strtotime($complaint->ComRecordSubmitted) > $range[1]) {
-                        $this->v["dashTopStats"][$j][$complaint->ComStatus]++;
+                    if (strtotime($complaint->com_record_submitted) > $range[1]) {
+                        $this->v["dashTopStats"][$j][$complaint->com_status]++;
                     }
                 }
             }
         }
         $this->v["dashBetaStats"] = [0, 0, 0];
-        $chk = DB::table('OP_TesterBeta')
-            ->whereNotNull('BetaInvited')
-            ->distinct('BetaEmail')
+        $chk = DB::table('op_tester_beta')
+            ->whereNotNull('beta_invited')
+            ->distinct('beta_email')
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $i => $complaint) {
                 foreach ($this->v["statRanges"] as $j => $range) {
-                    if (strtotime($complaint->BetaInvited) > $range[1]) {
+                    if (strtotime($complaint->beta_invited) > $range[1]) {
                         $this->v["dashBetaStats"][$j]++;
                     }
                 }
@@ -281,32 +289,32 @@ class OpenDashAdmin
         ];
         foreach ($statRanges as $i => $stat) {
             $this->v["statTots"][$i] = [ $stat[0] ];
-            $this->v["statTots"][$i][] = OPZeditDepartments::distinct('ZedDeptUserID')
-                ->where('ZedDeptDeptVerified', '>', $stat[1])
+            $this->v["statTots"][$i][] = OPZeditDepartments::distinct('zed_dept_user_id')
+                ->where('zed_dept_dept_verified', '>', $stat[1])
                 ->count();
-            $this->v["statTots"][$i][] = OPZeditDepartments::select('ZedDeptID')
-                ->where('ZedDeptDeptVerified', '>', $stat[1])
+            $this->v["statTots"][$i][] = OPZeditDepartments::select('zed_dept_id')
+                ->where('zed_dept_dept_verified', '>', $stat[1])
                 ->count();
-            $overType = " `ZedOverOverType` LIKE '303'";
+            $overType = " `zed_over_over_type` LIKE '303'";
             $overQry = ((strpos($stat[1], "WHERE") === false) ? " WHERE" : " AND") . $overType;
             $res = DB::select(
-                DB::raw("SELECT SUM(`ZedOverOnlineResearch`) as `tot` FROM `OP_Zedit_Oversight` 
-                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+                DB::raw("SELECT SUM(`zed_over_online_research`) as `tot` FROM `op_z_edit_oversight` 
+                    WHERE `zed_over_over_verified` > '" . $stat[1] . "' AND" . $overType)
             );
             $this->v["statTots"][$i][] = $res[0]->tot;
             $res = DB::select(
-                DB::raw("SELECT SUM(`ZedOverMadeDeptCall`) as `tot` FROM `OP_Zedit_Oversight` 
-                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+                DB::raw("SELECT SUM(`zed_over_made_dept_call`) as `tot` FROM `op_z_edit_oversight` 
+                    WHERE `zed_over_over_verified` > '" . $stat[1] . "' AND" . $overType)
             );
             $this->v["statTots"][$i][] = $res[0]->tot;
             $res = DB::select(
-                DB::raw("SELECT SUM(`ZedOverMadeIACall`) as `tot` FROM `OP_Zedit_Oversight` 
-                    WHERE `ZedOverOverVerified` > '" . $stat[1] . "' AND" . $overType)
+                DB::raw("SELECT SUM(`zed_over_made_ia_call`) as `tot` FROM `op_z_edit_oversight` 
+                    WHERE `zed_over_over_verified` > '" . $stat[1] . "' AND" . $overType)
             );
             $this->v["statTots"][$i][] = $res[0]->tot;
             $res = DB::select(
-                DB::raw("SELECT DISTINCT `ZedDeptDeptID` FROM `OP_Zedit_Departments` 
-                    WHERE `ZedDeptDeptVerified` > '" . $stat[1] . "'")
+                DB::raw("SELECT DISTINCT `zed_dept_dept_id` FROM `op_z_edit_departments` 
+                    WHERE `zed_dept_dept_verified` > '" . $stat[1] . "'")
             );
             $this->v["statTots"][$i][] = (($res) ? sizeof($res) : 0);
         }
@@ -318,17 +326,17 @@ class OpenDashAdmin
         $this->volunDeptsRecent();
         $deptEdits = [];
         $recentEdits = OPZeditDepartments::take(100)
-            ->orderBy('ZedDeptDeptVerified', 'desc')
+            ->orderBy('zed_dept_dept_verified', 'desc')
             ->get();
         if ($recentEdits->isNotEmpty()) {
             foreach ($recentEdits as $i => $edit) {
-                $iaEdit  = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
-                    ->where('ZedOverOverType', 303)
+                $iaEdit  = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                    ->where('zed_over_over_type', 303)
                     ->first();
-                $civEdit = OPZeditOversight::where('ZedOverZedDeptID', $edit->ZedDeptID)
-                    ->where('ZedOverOverType', 302)
+                $civEdit = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                    ->where('zed_over_over_type', 302)
                     ->first();
-                $userObj = User::find($edit->ZedDeptUserID);
+                $userObj = User::find($edit->zed_dept_user_id);
                 $deptEdits[] = [
                     ($userObj) ? $userObj->printUsername() : '', 
                     $edit, 
@@ -340,14 +348,14 @@ class OpenDashAdmin
         //echo '<pre>'; print_r($deptEdits); echo '</pre>';
         $this->v["recentEdits"] = '';
         foreach ($deptEdits as $deptEdit) {
+            $deptType = $GLOBALS["SL"]->def->getVal('Department Types', $deptEdit[1]->zed_dept_type);
             $this->v["recentEdits"] .= view(
                 'vendor.openpolice.volun.admPrintDeptEdit', 
                 [
                     "user"     => $deptEdit[0], 
-                    "deptRow"  => OPDepartments::find($deptEdit[1]->ZedDeptDeptID), 
+                    "deptRow"  => OPDepartments::find($deptEdit[1]->zed_dept_dept_id), 
                     "deptEdit" => $deptEdit[1], 
-                    "deptType" => $GLOBALS["SL"]->def
-                        ->getVal('Department Types', $deptEdit[1]->ZedDeptType),
+                    "deptType" => $deptType,
                     "iaEdit"   => $deptEdit[2], 
                     "civEdit"  => $deptEdit[3]
                 ]
@@ -367,15 +375,15 @@ class OpenDashAdmin
             $this->volunDeptsRecent();
         }
         $this->recalcVolunStats();
-        $grapher = new SurvTrends('1349', 'VolunStatDate');
-        $grapher->addDataLineType('depts', 'Unique Depts', 'VolunStatDeptsUnique', '#2b3493', '#2b3493');
-        $grapher->addDataLineType('users', 'Unique Users', 'VolunStatUsersUnique', '#63c6ff', '#63c6ff');
-        $grapher->addDataLineType('edits', 'Total Edits', 'VolunStatTotalEdits', '#c3ffe1', '#c3ffe1');
-        $grapher->addDataLineType('calls', 'Total Calls', 'VolunStatCallsTot', '#29B76F', '#29B76F');
-        $grapher->addDataLineType('signup', 'Signups', 'VolunStatSignups', '#ffd2c9', '#ffd2c9');
+        $grapher = new SurvTrends('1349', 'volun_stat_date');
+        $grapher->addDataLineType('depts', 'Unique Depts', 'volun_stat_depts_unique', '#2b3493', '#2b3493');
+        $grapher->addDataLineType('users', 'Unique Users', 'volun_stat_users_unique', '#63c6ff', '#63c6ff');
+        $grapher->addDataLineType('edits', 'Total Edits', 'volun_stat_total_edits', '#c3ffe1', '#c3ffe1');
+        $grapher->addDataLineType('calls', 'Total Calls', 'volun_stat_calls_tot', '#29B76F', '#29B76F');
+        $grapher->addDataLineType('signup', 'Signups', 'volun_stat_signups', '#ffd2c9', '#ffd2c9');
         $grapher->processRawDataResults(
-            OPzVolunStatDays::where('VolunStatDate', '>=', $grapher->getPastStartDate())
-                ->orderBy('VolunStatDate', 'asc')
+            OPzVolunStatDays::where('volun_stat_date', '>=', $grapher->getPastStartDate())
+                ->orderBy('volun_stat_date', 'asc')
                 ->get()
         );
         return $grapher->printDailyGraph(350);
@@ -422,9 +430,9 @@ class OpenDashAdmin
         $users = DB::table('users')
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
-                    ->from('SL_UsersRoles')
-                    ->where('SL_UsersRoles.RoleUserRID', 17) // 'volunteer'
-                    ->whereRaw('SL_UsersRoles.RoleUserUID = users.id');
+                    ->from('sl_users_roles')
+                    ->where('sl_users_roles.role_user_rid', 17) // 'volunteer'
+                    ->whereRaw('sl_users_roles.role_user_uid = users.id');
             })
             ->get();
         if ($users->isNotEmpty()) {
@@ -439,57 +447,60 @@ class OpenDashAdmin
             }
         }
         
-        $edits  = OPZeditOversight::where('OP_Zedit_Oversight.ZedOverOverType', 303)
-            ->join('OP_Zedit_Departments', 'OP_Zedit_Departments.ZedDeptID', '=', 'OP_Zedit_Oversight.ZedOverZedDeptID')
-            ->where('OP_Zedit_Oversight.ZedOverOverVerified', '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
-            ->select('OP_Zedit_Oversight.*', 'OP_Zedit_Departments.ZedDeptUserID')
+        $edits  = OPZeditOversight::where('op_z_edit_oversight.zed_over_over_type', 303)
+            ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
+            ->where('op_z_edit_oversight.zed_over_over_verified', 
+                '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
+            ->select('op_z_edit_oversight.*', 'op_z_edit_departments.zed_dept_user_id')
             ->get();
         if ($edits->isNotEmpty()) {
             foreach ($edits as $i => $e) {
-                $day = date("Y-m-d", strtotime($e->ZedOverOverVerified));
+                $day = date("Y-m-d", strtotime($e->zed_over_over_verified));
                 if (!isset($days[$day])) {
                     $days[$day] = $this->volunStatsInitDay();
                 }
                 $days[$day]["totalEdits"]++;
-                $days[$day]["onlineResearch"] += intVal($e->ZedOverOnlineResearch);
-                $days[$day]["callsDept"]      += intVal($e->ZedOverMadeDeptCall);
-                $days[$day]["callsIA"]        += intVal($e->ZedOverMadeIACall);
-                $days[$day]["callsTot"]       += intVal($e->ZedOverMadeDeptCall) + intVal($e->ZedOverMadeIACall);
-                if (in_array($e->ZedDeptUserID, $volunteers)) {
+                $days[$day]["onlineResearch"] += intVal($e->zed_over_online_research);
+                $days[$day]["callsDept"]      += intVal($e->zed_over_made_dept_call);
+                $days[$day]["callsIA"]        += intVal($e->zed_over_made_ia_call);
+                $days[$day]["callsTot"]       += intVal($e->zed_over_made_dept_call)
+                    +intVal($e->zed_over_made_ia_call);
+                if (in_array($e->zed_dept_user_id, $volunteers)) {
                     $days[$day]["totalEditsV"]++;
-                    $days[$day]["onlineResearchV"] += intVal($e->ZedOverOnlineResearch);
-                    $days[$day]["callsDeptV"]      += intVal($e->ZedOverMadeDeptCall);
-                    $days[$day]["callsIAV"]        += intVal($e->ZedOverMadeIACall);
-                    $days[$day]["callsTotV"]       += intVal($e->ZedOverMadeDeptCall) + intVal($e->ZedOverMadeIACall);
+                    $days[$day]["onlineResearchV"] += intVal($e->zed_over_online_research);
+                    $days[$day]["callsDeptV"]      += intVal($e->zed_over_made_dept_call);
+                    $days[$day]["callsIAV"]        += intVal($e->zed_over_made_ia_call);
+                    $days[$day]["callsTotV"]       += intVal($e->zed_over_made_dept_call)
+                        +intVal($e->zed_over_made_ia_call);
                 }
-                if (!in_array($e->ZedDeptUserID, $days[$day]["users"])) {
-                    $days[$day]["users"][] = $e->ZedDeptUserID;
+                if (!in_array($e->zed_dept_user_id, $days[$day]["users"])) {
+                    $days[$day]["users"][] = $e->zed_dept_user_id;
                 }
-                if (!in_array($e->ZedOverDeptID, $days[$day]["depts"])) {
-                    $days[$day]["depts"][] = $e->ZedOverDeptID;
+                if (!in_array($e->zed_over_dept_id, $days[$day]["depts"])) {
+                    $days[$day]["depts"][] = $e->zed_over_dept_id;
                 }
             }
         }
         
-        OPzVolunStatDays::where('VolunStatDate', '>=', $startDate)
+        OPzVolunStatDays::where('volun_stat_date', '>=', $startDate)
             ->delete();
         foreach ($days as $day => $stats) {
             $newDay = new OPzVolunStatDays;
-            $newDay->VolunStatDate            = $day;
-            $newDay->VolunStatSignups         = $stats["signups"];
-            $newDay->VolunStatLogins          = $stats["logins"];
-            $newDay->VolunStatUsersUnique     = sizeof($stats["users"]);
-            $newDay->VolunStatDeptsUnique     = sizeof($stats["depts"]);
-            $newDay->VolunStatOnlineResearch  = $stats["onlineResearch"];
-            $newDay->VolunStatCallsDept       = $stats["callsDept"];
-            $newDay->VolunStatCallsIA         = $stats["callsIA"];
-            $newDay->VolunStatCallsTot        = $stats["callsTot"];
-            $newDay->VolunStatTotalEdits      = $stats["totalEdits"];
-            $newDay->VolunStatOnlineResearchV = $stats["onlineResearchV"];
-            $newDay->VolunStatCallsDeptV      = $stats["callsDeptV"];
-            $newDay->VolunStatCallsIAV        = $stats["callsIAV"];
-            $newDay->VolunStatCallsTotV       = $stats["callsTotV"];
-            $newDay->VolunStatTotalEditsV     = $stats["totalEditsV"];
+            $newDay->volun_stat_date              = $day;
+            $newDay->volun_stat_signups           = $stats["signups"];
+            $newDay->volun_stat_logins            = $stats["logins"];
+            $newDay->volun_stat_users_unique      = sizeof($stats["users"]);
+            $newDay->volun_stat_depts_unique      = sizeof($stats["depts"]);
+            $newDay->volun_stat_online_research   = $stats["onlineResearch"];
+            $newDay->volun_stat_calls_dept        = $stats["callsDept"];
+            $newDay->volun_stat_calls_ia          = $stats["callsIA"];
+            $newDay->volun_stat_calls_tot         = $stats["callsTot"];
+            $newDay->volun_stat_total_edits       = $stats["totalEdits"];
+            $newDay->volun_stat_online_research_v = $stats["onlineResearchV"];
+            $newDay->volun_stat_calls_dept_v      = $stats["callsDeptV"];
+            $newDay->volun_stat_calls_ia_v        = $stats["callsIAV"];
+            $newDay->volun_stat_calls_tot_v       = $stats["callsTotV"];
+            $newDay->volun_stat_total_edits_v     = $stats["totalEditsV"];
             $newDay->save();
         }
         

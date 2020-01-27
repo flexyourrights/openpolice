@@ -1,183 +1,212 @@
 <!-- resources/views/vendor/openpolice/volun/admPrintDeptEdit.blade.php -->
 
-@if (isset($deptEdit) && isset($deptEdit->ZedDeptDeptName))
+@if (isset($deptEdit) && isset($deptEdit->zed_dept_dept_name))
 
     <tr>
     <td class="pT10 pB20">
-    <b>{{ date("n/j/y g:ia", strtotime($deptEdit->ZedDeptDeptVerified)) }}</b><br />
+    <b>{{ date("n/j/y g:ia", strtotime($deptEdit->zed_dept_dept_verified)) }}</b><br />
     <span class="slGrey"><i>by</i></span> {!! $user !!}<br />
     <br />
-    <span class="slGrey"><i>took</i></span> {{ number_format(($deptEdit->ZedDeptDeptDuration/60), 1) }} minutes<br />
+    <span class="slGrey"><i>took</i></span> {{ 
+        number_format(($deptEdit->zed_dept_dept_duration/60), 1) }} minutes<br />
     <br />
     
     @if (isset($iaEdit) && $iaEdit)
         <div class="pB10">
-        @if ($iaEdit->ZedOverOnlineResearch == 1) <i class="fa fa-laptop"></i>, @endif
-        @if ($iaEdit->ZedOverMadeDeptCall == 1) <i class="fa fa-phone"></i>Dept, @endif
-        @if ($iaEdit->ZedOverMadeIACall == 1) <span class="slBlueDark"><i class="fa fa-phone "></i>IA</span>, @endif
+        @if ($iaEdit->zed_over_online_research == 1) 
+            <i class="fa fa-laptop"></i>, 
+        @endif
+        @if ($iaEdit->zed_over_made_dept_call == 1) 
+            <i class="fa fa-phone"></i>Dept, 
+        @endif
+        @if ($iaEdit->zed_over_made_ia_call == 1) 
+            <span class="slBlueDark"><i class="fa fa-phone "></i>IA</span>, 
+        @endif
         </div>
     @endif
     
     </td><td class="pT10 pB20">
     
-    @if (isset($deptRow->DeptName)) 
-        <a @if (isset($deptRow->DeptSlug)) href="/dashboard/volunteer/verify/{{ $deptRow->DeptSlug }}" @endif 
-            ><b>{{ $deptEdit->ZedDeptDeptName }}</b></a><br />
+    @if (isset($deptRow->dept_name)) 
+        <a @if (isset($deptRow->dept_slug)) href="/dashboard/volunteer/verify/{{ $deptRow->dept_slug }}" @endif 
+            ><b>{{ $deptEdit->zed_dept_dept_name }}</b></a><br />
     @endif
     @if (isset($iaEdit) && $iaEdit)
     
-        @if (trim($iaEdit->ZedOverOverWebsite) != '')
-            <a href="{{ $iaEdit->ZedOverOverWebsite }}" target="_blank">Website</a>, 
+        @if (trim($iaEdit->zed_over_over_website) != '')
+            <a href="{{ $iaEdit->zed_over_over_website }}" target="_blank">Website</a>, 
         @endif
-        @if (trim($iaEdit->ZedOverOverFacebook) != '')
-            <a href="{{ $iaEdit->ZedOverOverFacebook }}" target="_blank">Facebook</a>, 
+        @if (trim($iaEdit->ZedOver->over_facebook) != '')
+            <a href="{{ $iaEdit->ZedOver->over_facebook }}" target="_blank">Facebook</a>, 
         @endif
-        @if (trim($iaEdit->ZedOverOverTwitter) != '')
-            <a href="{{ $iaEdit->ZedOverOverTwitter }}" target="_blank">Twitter</a>, 
+        @if (trim($iaEdit->ZedOver->over_twitter) != '')
+            <a href="{{ $iaEdit->ZedOver->over_twitter }}" target="_blank">Twitter</a>, 
         @endif
-        @if (trim($iaEdit->ZedOverOverWebsite) != '' || trim($iaEdit->ZedOverOverFacebook) != '' || trim($iaEdit->ZedOverOverTwitter) != '')
+        @if (trim($iaEdit->zed_over_over_website) != '' 
+            || trim($iaEdit->ZedOver->over_facebook) != '' 
+            || trim($iaEdit->ZedOver->over_twitter) != '')
             <br />
         @endif
-        @if (trim($deptEdit->ZedDeptDeptEmail) != '')
-            <a href="mailto:{{ $deptEdit->ZedDeptDeptEmail }}">{{ $deptEdit->ZedDeptDeptEmail }}</a><br />
+        @if (trim($deptEdit->zed_dept_dept_email) != '')
+            <a href="mailto:{{ $deptEdit->zed_dept_dept_email }}"
+                >{{ $deptEdit->zed_dept_dept_email }}</a><br />
         @endif
-        @if (trim($deptEdit->ZedDeptDeptPhoneWork) != '')
-            {{ $deptEdit->ZedDeptDeptPhoneWork }}<br />
+        @if (trim($deptEdit->zed_dept_dept_phone_work) != '')
+            {{ $deptEdit->zed_dept_dept_phone_work }}<br />
         @endif
-        <span class="slGrey">{{ $deptEdit->ZedDeptDeptAddress }}
-        @if (trim($deptEdit->ZedDeptDeptAddress2) != '')
-            <br />{{ $deptEdit->ZedDeptDeptAddress2 }}
+        <span class="slGrey">{{ $deptEdit->zed_dept_dept_address }}
+        @if (trim($deptEdit->zed_dept_dept_address2) != '')
+            <br />{{ $deptEdit->zed_dept_dept_address2 }}
         @endif
-        {{ $deptEdit->ZedDeptDeptAddressCity }}, {{  $deptEdit->ZedDeptDeptAddressState }} {{  $deptEdit->ZedDeptDeptAddressZip }}<br />
-        {{ $deptEdit->ZedDeptDeptAddressCounty }}<br />
+        {{ $deptEdit->zed_dept_dept_address_city }}, {{  $deptEdit->zed_dept_dept_address_state }} {{  $deptEdit->zed_dept_dept_address_zip }}<br />
+        {{ $deptEdit->zed_dept_dept_address_county }}<br />
         
         Type: {{ $deptType }}<br />
-        Status: @if (intVal($deptEdit->ZedDeptDeptStatus) == 0) Inactive @else Active @endif <br />
+        Status: @if (intVal($deptEdit->zed_dept_dept_status) == 0) Inactive @else Active @endif <br />
         </span>
         
-        @if (intVal($deptEdit->ZedDeptDeptJurisdictionPopulation) > 0)
-            <nobr><span class="slGrey">Population:</span> {{ number_format($deptEdit->ZedDeptDeptJurisdictionPopulation) }}</nobr><br />
+        @if (intVal($deptEdit->zed_dept_dept_jurisdiction_population) > 0)
+            <nobr><span class="slGrey">Population:</span> {{ number_format($deptEdit->zed_dept_dept_jurisdiction_population) }}</nobr><br />
         @endif
-        @if (intVal($deptEdit->ZedDeptDeptTotOfficers) > 0)
-            <nobr><span class="slGrey">Officers:</span> {{ number_format($deptEdit->ZedDeptDeptTotOfficers) }}</nobr><br />
+        @if (intVal($deptEdit->zed_dept_dept_tot_officers) > 0)
+            <nobr><span class="slGrey">Officers:</span> 
+            {{ number_format($deptEdit->zed_dept_dept_tot_officers) }}</nobr><br />
         @endif
     
         </td><td>
         
-        <nobr><b><span class="slGrey">Accessibility:</span> {{ $deptEdit->ZedDeptDeptScoreOpenness }}</b></nobr><br />
+        <nobr><b><span class="slGrey">Accessibility:</span> 
+        {{ $deptEdit->zed_dept_dept_score_openness }}</b></nobr><br />
     
-        @if (trim($iaEdit->ZedOverOverWebComplaintInfo) != '')
-            <a href="{{ $iaEdit->ZedOverOverWebComplaintInfo }}" target="_blank">Complaint Info</a><br />
+        @if (trim($iaEdit->zed_over_over_web_complaint_info) != '')
+            <a href="{{ $iaEdit->zed_over_over_web_complaint_info }}" 
+                target="_blank">Complaint Info</a><br />
         @endif
-        @if (trim($iaEdit->ZedOverOverComplaintWebForm) != '')
-            <a href="{{ $iaEdit->ZedOverOverComplaintWebForm }}" target="_blank">Online Form</a><br />
+        @if (trim($iaEdit->zed_over_over_complaint_web_form) != '')
+            <a href="{{ $iaEdit->zed_over_over_complaint_web_form }}" 
+                target="_blank">Online Form</a><br />
         @endif
-        @if (trim($deptEdit->ZedDeptDeptWebsite) != '')
-            <span class="slGrey">Homepage Link:</span> {{ $iaEdit->ZedOverOverHomepageComplaintLink }}<br />
+        @if (trim($deptEdit->zed_dept_dept_website) != '')
+            <span class="slGrey">Homepage Link:</span> 
+            {{ $iaEdit->zed_over_over_homepage_complaint_link }}<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubPaperMail)
+        @if ($iaEdit->zed_over_over_way_sub_paper_mail)
             Paper Form Mail<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubPaperFax)
+        @if ($iaEdit->zed_over_over_way_sub_paper_fax)
             Paper Form Fax<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubPaperInPerson)
+        @if ($iaEdit->zed_over_over_way_sub_paper_in_person)
             Paper In Person<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubVerbalPhone)
+        @if ($iaEdit->zed_over_over_way_sub_verbal_phone)
             Verbal Phone<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubVerbalInPerson)
+        @if ($iaEdit->zed_over_over_way_sub_verbal_in_person)
             Verbal In Person<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubEmail)
+        @if ($iaEdit->zed_over_over_way_sub_email)
             Email<br />
         @endif
-        @if ($iaEdit->ZedOverOverWaySubOnline)
+        @if ($iaEdit->zed_over_over_way_sub_online)
             Online Form<br />
         @endif
         
-        @if (intVal($iaEdit->ZedOverOverSubmitDeadline) > 0) 
-            <nobr><span class="slGrey">Days To Submit:</span> {{ $iaEdit->ZedOverOverSubmitDeadline }}</nobr><br />
+        @if (intVal($iaEdit->zed_over_over_submit_deadline) > 0) 
+            <nobr><span class="slGrey">Days To Submit:</span> 
+            {{ $iaEdit->zed_over_over_submit_deadline }}</nobr><br />
         @endif
-        @if (trim($iaEdit->ZedOverOverEmail) != '')
-            {{ $iaEdit->ZedOverOverEmail }}<br />
+        @if (trim($iaEdit->zed_over_over_email) != '')
+            {{ $iaEdit->zed_over_over_email }}<br />
         @endif
-        @if (trim($iaEdit->ZedOverOverPhoneWork) != '')
-            {{ $iaEdit->ZedOverOverPhoneWork }}<br />
+        @if (trim($iaEdit->zed_over_over_phone_work) != '')
+            {{ $iaEdit->zed_over_over_phone_work }}<br />
         @endif
         
-        <span class="slGrey">{{ $iaEdit->ZedOverOverAddress }}
-        @if (trim($iaEdit->ZedOverOverAddress2) != '')
-            <br />{{ $iaEdit->ZedOverOverAddress2 }}
+        <span class="slGrey">{{ $iaEdit->zed_over_over_address }}
+        @if (trim($iaEdit->zed_over_over_address2) != '')
+            <br />{{ $iaEdit->zed_over_over_address2 }}
         @endif
-        <br />{{ $iaEdit->ZedOverOverAddressCity }}, {{ $iaEdit->ZedOverOverAddressState }} {{ $iaEdit->ZedOverOverAddressZip }}<br />
+        <br />{{ $iaEdit->zed_over_over_addressCity }}, 
+        {{ $iaEdit->zed_over_over_addressState }} 
+        {{ $iaEdit->zed_over_over_addressZip }}<br />
     
     @endif
     
     </td><td class="pT10 pB20">
     
-    @if ($civEdit && (isset($civEdit->ZedOverOverAgncName) || isset($civEdit->ZedOverOverWebsite)))
-        @if (trim($civEdit->ZedOverOverAgncName) != '')
-            {{ $civEdit->ZedOverOverAgncName }}<br />
+    @if ($civEdit && (isset($civEdit->zed_over_over_agnc_name) 
+        || isset($civEdit->zed_over_over_website)))
+        @if (trim($civEdit->zed_over_over_agnc_name) != '')
+            {{ $civEdit->zed_over_over_agnc_name }}<br />
         @endif
-        @if (trim($civEdit->ZedOverOverEmail) != '')
-            {{ $civEdit->ZedOverOverEmail }}<br />
+        @if (trim($civEdit->zed_over_over_email) != '')
+            {{ $civEdit->zed_over_over_email }}<br />
         @endif
-        @if (trim($civEdit->ZedOverOverPhoneWork) != '')
-            {{ $civEdit->ZedOverOverPhoneWork }}<br />
+        @if (trim($civEdit->zed_over_over_phone_work) != '')
+            {{ $civEdit->zed_over_over_phone_work }}<br />
         @endif
-        @if (trim($civEdit->ZedOverOverWebsite) != '')
-            <a href="{{ $civEdit->ZedOverOverWebsite }}" target="_blank">Website</a><br />
+        @if (trim($civEdit->zed_over_over_website) != '')
+            <a href="{{ $civEdit->zed_over_over_website }}" 
+                target="_blank">Website</a><br />
         @endif
-        @if (trim($civEdit->ZedOverOverFacebook) != '')
-            <a href="{{ $civEdit->ZedOverOverFacebook }}" target="_blank">Facebook</a><br />
+        @if (trim($civEdit->ZedOver->over_facebook) != '')
+            <a href="{{ $civEdit->ZedOver->over_facebook }}" 
+                target="_blank">Facebook</a><br />
         @endif
-        <span class="slGrey">{{ $civEdit->ZedOverOverAddress }}<br />
-        @if (trim($civEdit->ZedOverOverAddress2) != '')
-            {{ $civEdit->ZedOverOverAddress2 }}<br />
+        <span class="slGrey">{{ $civEdit->zed_over_over_address }}<br />
+        @if (trim($civEdit->zed_over_over_address2) != '')
+            {{ $civEdit->zed_over_over_address2 }}<br />
         @endif
-        {{ $civEdit->ZedOverOverAddressCity }}, {{ $civEdit->ZedOverOverAddressState }} {{ $civEdit->ZedOverOverAddressZip }}</span><br /><br />
-        @if (trim($civEdit->ZedOverOverWebComplaintInfo) != '')
-            <a href="{{ $civEdit->ZedOverOverWebComplaintInfo }}" target="_blank">Complaint Info</a><br />
+        {{ $civEdit->zed_over_over_addressCity }}, 
+        {{ $civEdit->zed_over_over_addressState }} 
+        {{ $civEdit->zed_over_over_addressZip }}</span><br /><br />
+        @if (trim($civEdit->zed_over_over_web_complaint_info) != '')
+            <a href="{{ $civEdit->zed_over_over_web_complaint_info }}" 
+                target="_blank">Complaint Info</a><br />
         @endif
-        @if (trim($civEdit->ZedOverOverComplaintWebForm) != '')
-            <a href="{{ $civEdit->ZedOverOverComplaintWebForm }}" target="_blank">Online Form</a><br />
+        @if (trim($civEdit->zed_over_over_complaint_web_form) != '')
+            <a href="{{ $civEdit->zed_over_over_complaint_web_form }}" 
+                target="_blank">Online Form</a><br />
         @endif
         
-        @if ($civEdit->ZedOverOverWaySubPaperMail)
+        @if ($civEdit->zed_over_over_way_sub_paper_mail)
             Paper Form Mail<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubPaperFax)
+        @if ($civEdit->zed_over_over_way_sub_paper_fax)
             Paper Form Fax<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubPaperInPerson)
+        @if ($civEdit->zed_over_over_way_sub_paper_in_person)
             Paper In Person<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubVerbalPhone)
+        @if ($civEdit->zed_over_over_way_sub_verbal_phone)
             Verbal Phone<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubVerbalInPerson)
+        @if ($civEdit->zed_over_over_way_sub_verbal_in_person)
             Verbal In Person<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubEmail)
+        @if ($civEdit->zed_over_over_way_sub_email)
             Email<br />
         @endif
-        @if ($civEdit->ZedOverOverWaySubOnline)
+        @if ($civEdit->zed_over_over_way_sub_online)
             Online Form<br />
         @endif
     
-        @if (intVal($civEdit->ZedOverOverSubmitDeadline) > 0)
-            <nobr><span class="slGrey">Days To Submit:</span> {{ $civEdit->ZedOverOverSubmitDeadline }}</nobr><br />
+        @if (intVal($civEdit->zed_over_over_submit_deadline) > 0)
+            <nobr><span class="slGrey">Days To Submit:</span> 
+            {{ $civEdit->zed_over_over_submit_deadline }}</nobr><br />
         @endif
     @endif
     
     </td></tr>
     
-    @if (isset($iaEdit->ZedOverNotes) && trim($iaEdit->ZedOverNotes) != '')
+    @if (isset($iaEdit->zed_over_notes) && trim($iaEdit->zed_over_notes) != '')
         <tr>
         <td>&nbsp;</td>
-        <td colspan=3 class="pB20 txtDanger"><i class="fa fa-level-up fa-flip-horizontal" aria-hidden="true"></i> <i>Note:</i> {{ $iaEdit->ZedOverNotes }}</td>
+        <td colspan=3 class="pB20 txtDanger">
+            <i class="fa fa-level-up fa-flip-horizontal" aria-hidden="true"></i> 
+            <i>Note:</i> {{ $iaEdit->zed_over_notes }}
+        </td>
         </tr>
     @endif
     

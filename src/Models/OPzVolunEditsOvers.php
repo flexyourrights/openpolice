@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPzVolunEditsOvers extends Model
 {
-    protected $table = 'OP_zVolunEditsOvers';
+    protected $table = 'op_z_VolunEditsOvers';
     protected $primaryKey = 'EditOverID';
     public $timestamps = true;
     
     protected $fillable = [
-        'EditOverUser', 
-        'EditOverEditDeptID', 
+        'EditOver_user', 
+        'EditOver_edit_dept_id', 
         'EditOverOnlineResearch', 
         'EditOverMadeDeptCall', 
         'EditOverMadeIACall', 
         'EditOverNotes', 
-        'EditOverOverID', 
+        'EditOver_over_id', 
         'EditOverType', 
         'EditOverCivModel', 
-        'EditOverUserID', 
-        'EditOverDeptID', 
+        'EditOveruser_id', 
+        'EditOver_dept_id', 
         'EditOverAgncName', 
         'EditOverVerified', 
         'EditOverNamePrefix', 

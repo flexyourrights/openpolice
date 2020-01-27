@@ -5,37 +5,37 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPDepartments extends Model
 {
-    protected $table      = 'OP_Departments';
-    protected $primaryKey = 'DeptID';
+    protected $table      = 'op_departments';
+    protected $primaryKey = 'dept_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'DeptName', 
-		'DeptSlug', 
-		'DeptType', 
-		'DeptStatus', 
-		'DeptVerified', 
-		'DeptEmail', 
-		'DeptPhoneWork', 
-		'DeptAddress', 
-		'DeptAddress2', 
-		'DeptAddressCity', 
-		'DeptAddressState', 
-		'DeptAddressZip', 
-		'DeptAddressCounty', 
-		'DeptScoreOpenness', 
-		'DeptTotOfficers', 
-		'DeptJurisdictionPopulation', 
-		'DeptJurisdictionGPS', 
-		'DeptVersionAB', 
-		'DeptSubmissionProgress', 
-		'DeptIPaddy', 
-		'DeptTreeVersion', 
-		'DeptUniqueStr', 
-		'DeptUserID', 
-		'DeptIsMobile', 
-		'DeptAddressLat', 
-		'DeptAddressLng', 
+		'dept_name', 
+		'dept_slug', 
+		'dept_type', 
+		'dept_status', 
+		'dept_verified', 
+		'dept_email', 
+		'dept_phone_work', 
+		'dept_address', 
+		'dept_address2', 
+		'dept_address_city', 
+		'dept_address_state', 
+		'dept_address_zip', 
+		'dept_address_county', 
+		'dept_score_openness', 
+		'dept_tot_officers', 
+		'dept_jurisdiction_population', 
+		'dept_jurisdiction_gps', 
+		'dept_version_ab', 
+		'dept_submission_progress', 
+		'dept_ip_addy', 
+		'dept_tree_version', 
+		'dept_unique_str', 
+		'dept_user_id', 
+		'dept_is_mobile', 
+		'dept_address_lat', 
+		'dept_address_lng', 
     ];
     
     // END SurvLoop auto-generated portion of Model

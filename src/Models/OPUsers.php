@@ -5,8 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPUsers extends Model
 {
-    protected $table      = 'OP_Users';
-    protected $primaryKey = 'UserID';
+    protected $table      = 'op_Users';
+    protected $primaryKey = 'user_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    

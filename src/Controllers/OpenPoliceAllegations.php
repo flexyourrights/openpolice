@@ -17,9 +17,9 @@ class OpenPoliceAllegations extends OpenPolicePeople
     public function simpleAllegationList()
     {
         if (sizeof($this->allegations) == 0 
-            && isset($this->sessData->dataSets["AllegSilver"]) 
-            && isset($this->sessData->dataSets["AllegSilver"][0])) {
-            $allegSilv = $this->sessData->dataSets["AllegSilver"][0];
+            && isset($this->sessData->dataSets["alleg_silver"]) 
+            && isset($this->sessData->dataSets["alleg_silver"][0])) {
+            $allegSilv = $this->sessData->dataSets["alleg_silver"][0];
             foreach ($this->worstAllegations as $i => $alleg) {
                 $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
                 switch ($alleg[1]) {
@@ -44,27 +44,26 @@ class OpenPoliceAllegations extends OpenPolicePeople
                             $allegInfo[1] .= ', ' . $this->getAllegDesc($allegName, $allegID);
                         }
                     case 'Wrongful Entry':
-                        if (isset($this->sessData->dataSets["Stops"]) 
-                            && sizeof($this->sessData->dataSets["Stops"]) > 0) {
-                            foreach ($this->sessData->dataSets["Stops"] as $stop) {
-                                if (isset($stop->StopAllegWrongfulEntry) 
-                                    && $stop->StopAllegWrongfulEntry == 'Y') {
+                        if (isset($this->sessData->dataSets["stops"]) 
+                            && sizeof($this->sessData->dataSets["stops"]) > 0) {
+                            foreach ($this->sessData->dataSets["stops"] as $stop) {
+                                if (isset($stop->stop_alleg_wrongful_entry) 
+                                    && $stop->stop_alleg_wrongful_entry == 'Y') {
                                     $allegRec = $this->getAllegGoldRec($alleg[1], $alleg[0]);
-                                    $allegInfo[1] .= ', ' 
-                                        . $this->getAllegDesc($alleg[1], $alleg[0], $allegRec);
+                                    $allegInfo[1] .= ', ' . $this->getAllegDesc($alleg[1], $alleg[0], $allegRec);
                                 }
                             }
                         }
                         break;
                     case 'Miranda Rights':
-                        if (isset($allegSilv->AlleSilArrestMiranda)
-                            && $allegSilv->AlleSilArrestMiranda == 'Y') {
+                        if (isset($allegSilv->alle_sil_arrest_miranda)
+                            && $allegSilv->alle_sil_arrest_miranda == 'Y') {
                             $allegInfo[1] .= ' ';
                         }
                         break;
                     case 'Officer Refused To Provide ID':
-                        if (isset($allegSilv->AlleSilOfficerRefuseID)
-                            && $allegSilv->AlleSilOfficerRefuseID == 'Y') {
+                        if (isset($allegSilv->alle_sil_officer_refuse_id)
+                            && $allegSilv->alle_sil_officer_refuse_id == 'Y') {
                             $allegInfo[1] .= ' ';
                         }
                         break;
@@ -129,39 +128,31 @@ class OpenPoliceAllegations extends OpenPolicePeople
     protected function commaComplimentList()
     {
         $types = [];
-        if (isset($this->sessData->dataSets["OffCompliments"]) 
-            && sizeof($this->sessData->dataSets["OffCompliments"]) > 0) {
-            foreach ($this->sessData->dataSets["OffCompliments"] as $off) {
-                if (isset($off->OffCompValor) 
-                    && trim($off->OffCompValor) == 'Y') {
+        if (isset($this->sessData->dataSets["off_compliments"]) 
+            && sizeof($this->sessData->dataSets["off_compliments"]) > 0) {
+            foreach ($this->sessData->dataSets["off_compliments"] as $off) {
+                if (isset($off->off_comp_valor) && trim($off->off_comp_valor) == 'Y') {
                     $types[] = 'Valor';
                 }
-                if (isset($off->OffCompLifesaving) 
-                    && trim($off->OffCompLifesaving) == 'Y') {
+                if (isset($off->off_comp_lifesaving) && trim($off->off_comp_lifesaving) == 'Y') {
                     $types[] = 'Lifesaving';
                 }
-                if (isset($off->OffCompDeescalation) 
-                    && trim($off->OffCompDeescalation) == 'Y') {
+                if (isset($off->off_comp_deescalation) && trim($off->off_comp_deescalation) == 'Y') {
                     $types[] = 'De-escalation';
                 }
-                if (isset($off->OffCompProfessionalism) 
-                    && trim($off->OffCompProfessionalism) == 'Y') {
+                if (isset($off->off_comp_professionalism) && trim($off->off_comp_professionalism) == 'Y') {
                     $types[] = 'Professionalism';
                 }
-                if (isset($off->OffCompFairness) 
-                    && trim($off->OffCompFairness) == 'Y') {
+                if (isset($off->off_comp_fairness) && trim($off->off_comp_fairness) == 'Y') {
                     $types[] = 'Fairness';
                 }
-                if (isset($off->OffCompConstitutional) 
-                    && trim($off->OffCompConstitutional) == 'Y') {
+                if (isset($off->off_comp_constitutional) && trim($off->off_comp_constitutional) == 'Y') {
                     $types[] = 'Constitutional';
                 }
-                if (isset($off->OffCompCompassion) 
-                    && trim($off->OffCompCompassion) == 'Y') {
+                if (isset($off->off_comp_compassion) && trim($off->off_comp_compassion) == 'Y') {
                     $types[] = 'Compassion';
                 }
-                if (isset($off->OffCompCommunity) 
-                    && trim($off->OffCompCommunity) == 'Y') {
+                if (isset($off->off_comp_community) && trim($off->off_comp_community) == 'Y') {
                     $types[] = 'Community';
                 }
             }
@@ -207,8 +198,8 @@ class OpenPoliceAllegations extends OpenPolicePeople
     
     protected function checkAllegIntimidWeaponSilver($allegSilv)
     {
-        if (isset($allegSilv->AlleSilIntimidatingWeapon) 
-            && in_array(intVal($allegSilv->AlleSilIntimidatingWeapon), $this->intimidWeaponNos())) {
+        if (isset($allegSilv->alle_sil_intimidating_weapon) 
+            && in_array(intVal($allegSilv->alle_sil_intimidating_weapon), $this->intimidWeaponNos())) {
 
         }
 
@@ -217,8 +208,8 @@ class OpenPoliceAllegations extends OpenPolicePeople
     protected function checkAllegIntimidWeapon($alleg)
     {
         $def = $GLOBALS["SL"]->def->getID('Allegation Type', 'Intimidating Display of Weapon');
-        return ($alleg->AlleType != $def 
-            || !in_array($alleg->AlleIntimidatingWeapon, $this->intimidWeaponNos()));
+        return ($alleg->alle_type != $def 
+            || !in_array($alleg->alle_intimidating_weapon, $this->intimidWeaponNos()));
     }
     
     protected function getAllegID($allegName)
@@ -250,12 +241,12 @@ class OpenPoliceAllegations extends OpenPolicePeople
         if ($allegID <= 0) {
             $allegID = $this->getAllegID($allegName);
         }
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
-            foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                if ($alleg->AlleType == $allegID 
-                    && (!isset($alleg->AlleEventSequenceID) 
-                        || intVal($alleg->AlleEventSequenceID) <= 0)) {
+        if (isset($this->sessData->dataSets["allegations"]) 
+            && sizeof($this->sessData->dataSets["allegations"]) > 0) {
+            foreach ($this->sessData->dataSets["allegations"] as $alleg) {
+                if ($alleg->alle_type == $allegID 
+                    && (!isset($alleg->alle_event_sequence_id) 
+                        || intVal($alleg->alle_event_sequence_id) <= 0)) {
                     return $alleg;
                 }
             }
@@ -268,12 +259,12 @@ class OpenPoliceAllegations extends OpenPolicePeople
         if ($allegID <= 0) {
             $allegID = $this->getAllegID($allegName);
         }
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
-            foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                if ($alleg->AlleType == $allegID 
-                    && isset($alleg->AlleEventSequenceID) 
-                    && intVal($alleg->AlleEventSequenceID) > 0) {
+        if (isset($this->sessData->dataSets["allegations"]) 
+            && sizeof($this->sessData->dataSets["allegations"]) > 0) {
+            foreach ($this->sessData->dataSets["allegations"] as $alleg) {
+                if ($alleg->alle_type == $allegID 
+                    && isset($alleg->alle_event_sequence_id) 
+                    && intVal($alleg->alle_event_sequence_id) > 0) {
                     return $alleg;
                 }
             }
@@ -283,19 +274,19 @@ class OpenPoliceAllegations extends OpenPolicePeople
     
     protected function getAllegDesc($allegName, $allegID = -3, $allegRec = [])
     {
-        if (!$allegRec || !isset($allegRec->AlleDescription)) {
+        if (!$allegRec || !isset($allegRec->alle_description)) {
             $allegRec = $this->getAllegSilvRec($allegName, $allegID);
         }
-        if ($allegRec && isset($allegRec->AlleDescription)) {
-            return trim($allegRec->AlleDescription);
+        if ($allegRec && isset($allegRec->alle_description)) {
+            return trim($allegRec->alle_description);
         }
         return '';
     }
     
     protected function chkSilvAlleg($fldName, $allegName, $allegID = -3)
     {
-        if (isset($this->sessData->dataSets["AllegSilver"][0]->{ $fldName })
-            && trim($this->sessData->dataSets["AllegSilver"][0]->{ $fldName }) == 'Y') {
+        if (isset($this->sessData->dataSets["alleg_silver"][0]->{ $fldName })
+            && trim($this->sessData->dataSets["alleg_silver"][0]->{ $fldName }) == 'Y') {
             return ', ' . $this->getAllegDesc($allegName, $allegID);
         }
         return '';
@@ -305,31 +296,31 @@ class OpenPoliceAllegations extends OpenPolicePeople
     protected function basicAllegationList($showWhy = false, $isAnon = false)
     {
         $ret = '';
-        if (isset($this->sessData->dataSets["Allegations"]) 
-            && sizeof($this->sessData->dataSets["Allegations"]) > 0) {
+        if (isset($this->sessData->dataSets["allegations"]) 
+            && sizeof($this->sessData->dataSets["allegations"]) > 0) {
             $printedOfficers = false;
             $allegOffs = [];
             // if there's only one Officer on the Complaint, then it is associated with all Allegations
-            if (!$isAnon && isset($this->sessData->dataSets["Officers"]) 
-                && sizeof($this->sessData->dataSets["Officers"]) == 1) {
+            if (!$isAnon && isset($this->sessData->dataSets["officers"]) 
+                && sizeof($this->sessData->dataSets["officers"]) == 1) {
                 /*
                 $ret .= '<div class="pL5 pB10">Officer '
-                    . $this->getOfficerNameFromID($this->sessData->dataSets["Officers"][0]->OffID) . '</div>';
+                    . $this->getOfficerNameFromID($this->sessData->dataSets["officers"][0]->off_id) . '</div>';
                 */
                 $printedOfficers = true;
             } else { // Load Officer names for each Allegation
-                foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
+                foreach ($this->sessData->dataSets["allegations"] as $alleg) {
                     if ($this->checkAllegIntimidWeapon($alleg)) {
-                        $allegOffs[$alleg->AlleID] = '';
-                        $offs = $this->getLinkedToEvent('Officer', $alleg->AlleID);
+                        $allegOffs[$alleg->alle_id] = '';
+                        $offs = $this->getLinkedToEvent('Officer', $alleg->alle_id);
                         if (sizeof($offs) > 0) {
                             foreach ($offs as $off) {
-                                $allegOffs[$alleg->AlleID] .= ', '
+                                $allegOffs[$alleg->alle_id] .= ', '
                                     . $this->getOfficerNameFromID($off);
                             }
                         }
-                        if (trim($allegOffs[$alleg->AlleID]) != '') {
-                            $allegOffs[$alleg->AlleID] = substr($allegOffs[$alleg->AlleID], 1); 
+                        if (trim($allegOffs[$alleg->alle_id]) != '') {
+                            $allegOffs[$alleg->alle_id] = substr($allegOffs[$alleg->alle_id], 1); 
                             // 'Officer'.((sizeof($offs) > 1) ? 's' : '').
                         }
                     }
@@ -346,24 +337,21 @@ class OpenPoliceAllegations extends OpenPolicePeople
                 }
                 if (!$isAnon && $allOfficersSame) { // all the same, so print once at the top
                     $ret .= '<div class="pL5 pB10 fPerc125">' 
-                        . $allegOffs[$this->sessData->dataSets["Allegations"][0]->AlleID] 
+                        . $allegOffs[$this->sessData->dataSets["allegations"][0]->alle_id] 
                         . '</div>';
                     $printedOfficers = true;
                 }
             }
             foreach ($this->worstAllegations as $allegType) { // printing Allegations in order of severity...
-                foreach ($this->sessData->dataSets["Allegations"] as $alleg) {
-                    if ($alleg->AlleType 
-                        == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
+                foreach ($this->sessData->dataSets["allegations"] as $alleg) {
+                    if ($alleg->alle_type == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
                         if ($this->checkAllegIntimidWeapon($alleg)) {
                             $ret .= '<div class="fPerc125">' . $allegType;
-                            if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->AlleID])) {
-                                $ret .= ' <span class="mL20 slGrey">' 
-                                    . $allegOffs[$alleg->AlleID] . '</span>';
+                            if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->alle_id])) {
+                                $ret .= ' <span class="mL20 slGrey">' . $allegOffs[$alleg->alle_id] . '</span>';
                             }
                             $ret .= '</div>' . (($showWhy) ? '<div class="slGrey mTn10 pL20">' 
-                                . $alleg->AlleDescription . '</div>' : '') 
-                                . '<div class="p5"></div>';
+                                . $alleg->alle_description . '</div>' : '') . '<div class="p5"></div>';
                         }
                     }
                 }

@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPOrders extends Model
 {
-    protected $table      = 'OP_Orders';
+    protected $table      = 'op_Orders';
     protected $primaryKey = 'OrdID';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'OrdEventSequenceID', 
+		'Ord_event_sequence_id', 
 		'OrdDescription', 
-		'OrdTroubleUnderYN', 
+		'OrdTroubleUnder_yn', 
 		'OrdTroubleUnderstading', 
     ];
     

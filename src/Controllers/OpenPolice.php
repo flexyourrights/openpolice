@@ -47,8 +47,7 @@ class OpenPolice extends OpenInitExtras
             
         // Home Page
         } elseif ($nID == 1876) {
-            return view('vendor.openpolice.nodes.1876-home-page-hero-credit')
-                ->render();
+            return view('vendor.openpolice.nodes.1876-home-page-hero-credit')->render();
         } elseif ($nID == 2685) { // overwrite preview results
             $GLOBALS["SL"]->x["isHomePage"] = true;
             $GLOBALS["SL"]->x["isPublicList"] = true;
@@ -70,8 +69,7 @@ class OpenPolice extends OpenInitExtras
             return $this->publicDeptAccessMap($nID);
             
         } elseif ($nID == 1907) { // Donate Social Media Buttons
-            return view('vendor.openpolice.nodes.1907-donate-share-social')
-                ->render();
+            return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif (in_array($nID, [859, 1454])) {
             return $this->printDeptOverPublic($nID);
                 
@@ -191,8 +189,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2634) {
             $this->processOwnerUpdate();
         } elseif (in_array($nID, [2635, 2378])) {
-            $GLOBALS["SL"]->x["needsWsyiwyg"] 
-                = $this->v["needsWsyiwyg"] = true;
+            $GLOBALS["SL"]->x["needsWsyiwyg"] = $this->v["needsWsyiwyg"] = true;
             
         // Complaint Listings
         } elseif (in_array($nID, [1418, 2384])) {
@@ -219,7 +216,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1924) {
             return $this->initPartnerCaseTypes($nID);
         } elseif ($nID == 2181) {
-            if ($this->sessData->dataSets["Partners"][0]->PartType 
+            if ($this->sessData->dataSets["partners"][0]->part_type 
                 == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')) {
                 $GLOBALS["SL"]->setCurrPage('/dash/manage-organizations');
             } else {
@@ -303,25 +300,25 @@ class OpenPolice extends OpenInitExtras
      * Overrides default SurvLoop behavior for responses to multiple-choice questions.
      *
      * @param  int $nID
-     * @param  SLNode $curr
-     * @return string
+     * @param  SLNode &$curr
+     * @return SLNode
      */
-    protected function customResponses($nID, $curr)
+    protected function customResponses($nID, &$curr)
     {
         if ($nID == 2126) {
-            if (isset($curr->responses[0]) && isset($curr->responses[0]->NodeResEng) 
-                && isset($this->sessData->dataSets["Complaints"]) 
-                && isset($this->sessData->dataSets["Complaints"][0]->ComPrivacy)) {
-                switch ($this->sessData->dataSets["Complaints"][0]->ComPrivacy) {
+            if (isset($curr->responses[0]) && isset($curr->responses[0]->node_res_eng) 
+                && isset($this->sessData->dataSets["complaints"]) 
+                && isset($this->sessData->dataSets["complaints"][0]->com_privacy)) {
+                switch ($this->sessData->dataSets["complaints"][0]->com_privacy) {
                     case $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'):
-                        $curr->responses[0]->NodeResEng = 'Yes, I agree to publish my complaint data on this website 
+                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my complaint data on this website 
                             with <b>Full Transparency</b>.<div class="pL20 mL5 mT10">
                             We will publish your FULL complaint on OpenPolice.org. This includes your written story, 
                             the names of civilians and police officers, and all survey answers.
                             </div>';
                         break;
                     case $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public'):
-                        $curr->responses[0]->NodeResEng = 'Yes, I agree to publish my complaint data on this website 
+                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my complaint data on this website 
                             with <b>No Names Public</b>.<div class="pL20 mL5 mT10">
                             Only your multiple-choice answers will be published on OpenPolice.org. 
                             This will NOT include your written story or police officers\' names and badge numbers.
@@ -329,8 +326,8 @@ class OpenPolice extends OpenInitExtras
                         break;
                     case $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'):
                     case $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized'):
-                        $curr->responses[0]->NodeResEng = 'Yes, I agree to publish my <b>Anonymized</b> complaint data 
-                            on this website.<div class="pL20 mL5 mT10">
+                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my <b>Anonymized</b> 
+                            complaint data on this website.<div class="pL20 mL5 mT10">
                             Only your multiple-choice answers will be published on OpenPolice.org. 
                             This will NOT include your written story or police officers\' names and badge numbers.
                             </div>';
@@ -382,27 +379,29 @@ class OpenPolice extends OpenInitExtras
         // but for now, I'm replacing that complication with this check...
         $found = false;
         $types = [
-            ['Civilians', 'Civ'],
-            ['Officers',  'Off']
+            ['civilians', 'civ'],
+            ['officers',  'off']
         ];
         foreach ($types as $type) {
             if (isset($this->sessData->dataSets[$type[0]]) 
                 && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
                 foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
-                    if (!isset($civ->{ $type[1] . 'PersonID' }) 
-                        || intVal($civ->{ $type[1] . 'PersonID' }) <= 0) {
+                    if (!isset($civ->{ $type[1] . '_person_id' }) 
+                        || intVal($civ->{ $type[1] . '_person_id' }) <= 0) {
                         $new = new OPPersonContact;
                         $new->save();
                         $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . 'PersonID' => $new->getKey() ]);
+                            $type[1] . '_person_id' => $new->getKey() 
+                        ]);
                         $found = true;
                     }
-                    if (!isset($civ->{ $type[1] . 'PhysDescID' }) 
-                        || intVal($civ->{ $type[1] . 'PhysDescID' }) <= 0) {
+                    if (!isset($civ->{ $type[1] . '_phys_desc_id' }) 
+                        || intVal($civ->{ $type[1] . '_phys_desc_id' }) <= 0) {
                         $new = new OPPhysicalDesc;
                         $new->save();
                         $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . 'PhysDescID' => $new->getKey() ]);
+                            $type[1] . '_phys_desc_id' => $new->getKey()
+                        ]);
                         $found = true;
                     }
                 }
@@ -416,6 +415,24 @@ class OpenPolice extends OpenInitExtras
     }
     
     /**
+     * Look up the record linking fields which should be skipped
+     * when auto-creating a new loop item's database record.
+     *
+     * @return array
+     */
+    protected function newLoopItemSkipLinks($tbl = '')
+    {
+        // Until this can be auto-inferred for 
+        // outgoing linkages to data subsets
+        if ($tbl == 'civilians') {
+            return [ 'civ_person_id', 'civ_phys_desc_id' ];
+        } elseif ($tbl == 'officers') {
+            return [ 'off_person_id', 'off_phys_desc_id' ];
+        }
+        return [];
+    }
+    
+    /**
      * Double-check behavior after a new item has been created for a data loop.
      *
      * @param  string $tbl
@@ -424,7 +441,7 @@ class OpenPolice extends OpenInitExtras
      */
     protected function afterCreateNewDataLoopItem($tbl = '', $itemID = -3)
     {
-        if (in_array($tbl, ['Civilians', 'Officers']) && $itemID > 0) {
+        if (in_array($tbl, ['civilians', 'officers']) && $itemID > 0) {
             $this->chkPersonRecs();
         }
         return true;

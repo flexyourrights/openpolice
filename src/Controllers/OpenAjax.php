@@ -63,91 +63,88 @@ class OpenAjax extends OpenComplaintSaves
     public function ajaxPoliceDeptSearch(Request $request)
     {
         if (trim($request->get('policeDept')) == '') {
-            return '<i>Please type part of the '
-                . 'department\'s name to find it.</i>';
+            return '<i>Please type part of the department\'s name to find it.</i>';
         }
         $depts = $deptIDs = [];
         // Prioritize by Incident City first, also by Department size (# of officers)
-        $reqState = (($request->has('policeState')) ? trim($request->get('policeState')) : '');
-        if (in_array(strtolower($request->policeDept), ['washington dc', 'washington d.c.'])) {
-            $request->policeDept = 'Washington';
+        $reqState = $reqLike = '';
+        if ($request->has('policeState')) {
+            $reqState = trim(strtolower($request->get('policeState')));
         }
+        if (in_array($request->policeDept, ['washington dc', 'washington d.c.'])) {
+            $request->policeDept = 'washington';
+        }
+        $reqLike = '%' . $request->policeDept . '%';
         if (!in_array($reqState, ['', 'US'])) {
-            $deptsRes = OPDepartments::where('DeptName', 
-                    'LIKE', '%' . $request->policeDept . '%')
-                ->where('DeptAddressState', $reqState)
-                ->orderBy('DeptJurisdictionPopulation', 'desc')
-                ->orderBy('DeptTotOfficers', 'desc')
-                ->orderBy('DeptName', 'asc')
+            $deptsRes = OPDepartments::where('dept_name', 'LIKE', $reqLike)
+                ->where('dept_address_state', $reqState)
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
                 ->get();
             $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-            $deptsRes = OPDepartments::where('DeptAddressCity', 
-                    'LIKE', '%' . $request->policeDept . '%')
-                ->where('DeptAddressState', $reqState)
-                ->orderBy('DeptJurisdictionPopulation', 'desc')
-                ->orderBy('DeptTotOfficers', 'desc')
-                ->orderBy('DeptName', 'asc')
+            $deptsRes = OPDepartments::where('dept_address_city', 'LIKE', $reqLike)
+                ->where('dept_address_state', $reqState)
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
                 ->get();
             $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-            $deptsRes = OPDepartments::where('DeptAddress', 
-                    'LIKE', '%' . $request->policeDept . '%')
-                ->where('DeptAddressState', $reqState)
-                ->orderBy('DeptJurisdictionPopulation', 'desc')
-                ->orderBy('DeptTotOfficers', 'desc')
-                ->orderBy('DeptName', 'asc')
+            $deptsRes = OPDepartments::where('dept_address', 'LIKE', $reqLike)
+                ->where('dept_address_state', $reqState)
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
                 ->get();
             $this->addDeptToResults($deptIDs, $depts, $deptsRes);
             $zips = $counties = [];
-            $cityZips = SLZips::where('ZipCity', 
-                    'LIKE', '%' . $request->policeDept . '%')
-                ->where('ZipState', 'LIKE', $reqState)
+            $cityZips = SLZips::where('zip_city', 'LIKE', $reqLike)
+                ->where('zip_state', 'LIKE', $reqState)
                 ->get();
             if ($cityZips->isNotEmpty()) {
                 foreach ($cityZips as $z) {
-                    $zips[] = $z->ZipZip;
-                    $counties[] = $z->ZipCounty;
+                    $zips[] = $z->zip_zip;
+                    $counties[] = $z->zip_county;
                 }
-                $deptsMore = OPDepartments::whereIn('DeptAddressZip', $zips)
-                    ->orderBy('DeptName', 'asc')
+                $deptsMore = OPDepartments::whereIn('dept_address_zip', $zips)
+                    ->orderBy('dept_name', 'asc')
                     ->get();
                 $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                 foreach ($counties as $c) {
-                    $deptsMore = OPDepartments::where('DeptName', 
-                            'LIKE', '%' . $c . '%')
-                        ->where('DeptAddressState', $reqState)
-                        ->orderBy('DeptJurisdictionPopulation', 'desc')
-                        ->orderBy('DeptTotOfficers', 'desc')
-                        ->orderBy('DeptName', 'asc')
+                    $deptsMore = OPDepartments::where('dept_name', 'LIKE', '%' . $c . '%')
+                        ->where('dept_address_state', $reqState)
+                        ->orderBy('dept_jurisdiction_population', 'desc')
+                        ->orderBy('dept_tot_officers', 'desc')
+                        ->orderBy('dept_name', 'asc')
                         ->get();
                     $this->addDeptToResults($deptIDs, $depts, $deptsMore);
-                    $deptsMore = OPDepartments::where('DeptAddressCounty', 
-                            'LIKE', '%' . $c . '%')
-                        ->where('DeptAddressState', $reqState)
-                        ->orderBy('DeptJurisdictionPopulation', 'desc')
-                        ->orderBy('DeptTotOfficers', 'desc')
-                        ->orderBy('DeptName', 'asc')
+                    $deptsMore = OPDepartments::where('dept_address_county', 'LIKE', '%' . $c . '%')
+                        ->where('dept_address_state', $reqState)
+                        ->orderBy('dept_jurisdiction_population', 'desc')
+                        ->orderBy('dept_tot_officers', 'desc')
+                        ->orderBy('dept_name', 'asc')
                         ->get();
                     $this->addDeptToResults($deptIDs, $depts, $deptsMore);
                 }
             }
         }
-        $deptsFed = OPDepartments::where('DeptName', 
-            'LIKE', '%' . $request->policeDept . '%')
-            ->where('DeptType', 366)
-            ->orderBy('DeptJurisdictionPopulation', 'desc')
-            ->orderBy('DeptTotOfficers', 'desc')
-            ->orderBy('DeptName', 'asc')
+        $deptsFed = OPDepartments::where('dept_type', 366)
+            ->where('dept_name', 'LIKE', $reqLike)
+            ->orderBy('dept_jurisdiction_population', 'desc')
+            ->orderBy('dept_tot_officers', 'desc')
+            ->orderBy('dept_name', 'asc')
             ->get();
         $this->addDeptToResults($deptIDs, $depts, $deptsFed);
         $GLOBALS["SL"]->loadStates();
-        echo view('vendor.openpolice.ajax.search-police-dept', [
-            "depts" => $depts, 
-            "search" => $request->get('policeDept'), 
-            "stateName" => $GLOBALS["SL"]->states
-                ->getState($request->get('policeState')), 
-            "newDeptStateDrop" => $GLOBALS["SL"]->states
-                ->stateDrop($request->get('policeState'), true)
-        ])->render();
+        echo view(
+            'vendor.openpolice.ajax.search-police-dept', 
+            [
+                "depts"            => $depts, 
+                "search"           => $request->get('policeDept'), 
+                "stateName"        => $GLOBALS["SL"]->states->getState($reqState), 
+                "newDeptStateDrop" => $GLOBALS["SL"]->states->stateDrop($reqState, true)
+            ]
+        )->render();
         exit;
     }
     
@@ -181,8 +178,8 @@ class OpenAjax extends OpenComplaintSaves
     {
         if ($deptsIn->isNotEmpty()) {
             foreach ($deptsIn as $d) {
-                if (!in_array($d->DeptID, $deptIDs)) {
-                    $deptIDs[] = $d->DeptID;
+                if (!in_array($d->dept_id, $deptIDs)) {
+                    $deptIDs[] = $d->dept_id;
                     $depts[] = $d;
                 }
             }

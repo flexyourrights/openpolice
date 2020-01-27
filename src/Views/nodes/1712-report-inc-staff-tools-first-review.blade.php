@@ -2,7 +2,7 @@
 @if ($GLOBALS['SL']->REQ->has('ajax') 
     || $GLOBALS['SL']->REQ->has('wdg'))
     <form name="firstReviewForm" method="get" src="/dash/complaint/read-{{ 
-        $complaintRec->ComID }}?firstReview=1">
+        $complaintRec->com_id }}?firstReview=1">
 @else
     <form name="firstReviewForm" method="get" src="?firstReview=1">
     @if ($GLOBALS['SL']->REQ->has('frame'))
@@ -73,9 +73,7 @@
 
 <div class="mT20 mB10">{!! $GLOBALS["SL"]->printAccordTxt(
     'About these complaint types',
-    view(
-        'vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types'
-    )->render()
+    view('vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types')->render()
 ) !!}</div>
 
 </form>

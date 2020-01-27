@@ -12,8 +12,9 @@
         <div class="col-6">
             <h4>Filter</h4>
         </div><div class="col-6 taR">
-            <a id="compFiltBtn{{ $nID }}" class="btn btn-secondary btn-sm updateSearchFilts"
-                href="javascript:;">Apply Filters</a>
+            <a id="compFiltBtn{{ $nID }}" href="javascript:;"
+                class="btn btn-secondary btn-sm updateSearchFilts"
+                >Apply Filters</a>
         </div>
     </div>
     <div class="p0"><br /></div>

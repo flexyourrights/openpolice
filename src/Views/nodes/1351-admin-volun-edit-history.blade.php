@@ -3,11 +3,16 @@
     <h2>Volunteer Activity History</h2>
     <div class="mBn20">{!! $volunDataGraph !!}</div>
 </div>
-<a name="recentEdits"></a>
+<div class="nodeAnchor"><a name="recentEdits"></a></div>
 <div class="slCard nodeWrap">
     <h2>100 Most Recent Department Edits</h2>
     <table class="table table-striped" border=0 cellpadding=10 >
-        <tr><th>Edit Details</th><th>Department Info</th><th>Internal Affairs</th><th>Civilian Oversight</th></tr>
+        <tr>
+            <th>Edit Details</th>
+            <th>Department Info</th>
+            <th>Internal Affairs</th>
+            <th>Civilian Oversight</th>
+        </tr>
         {!! $recentEdits !!}
     </table>
 </div>

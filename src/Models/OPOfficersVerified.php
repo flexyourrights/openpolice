@@ -5,24 +5,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPOfficersVerified extends Model
 {
-    protected $table      = 'OP_OfficersVerified';
-    protected $primaryKey = 'OffVerID';
+    protected $table      = 'op_officers_verified';
+    protected $primaryKey = 'off_ver_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'OffVerStatus', 
-		'OffVerPersonID', 
-		'OffVerCntComplaints', 
-		'OffVerCntAllegations', 
-        'OffVerCntCompliments',
-        'OffVerCntCommends',
-		'OffVerUniqueStr', 
-		'OffVerSubmissionProgress', 
-		'OffVerVersionAB', 
-		'OffVerTreeVersion', 
-		'OffVerIPaddy', 
-		'OffVerIsMobile', 
-		'OffVerUserID', 
+		'off_ver_status', 
+		'off_ver_person_id', 
+		'off_ver_cnt_complaints', 
+		'off_ver_cnt_allegations', 
+		'off_ver_cnt_compliments', 
+		'off_ver_cnt_commends', 
+		'off_ver_unique_str', 
+		'off_ver_submission_progress', 
+		'off_ver_version_ab', 
+		'off_ver_tree_version', 
+		'off_ver_ip_addy', 
+		'off_ver_is_mobile', 
+		'off_ver_user_id', 
     ];
     
     // END SurvLoop auto-generated portion of Model

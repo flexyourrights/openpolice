@@ -1,10 +1,10 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-report-upload.blade.php -->
 
 <form enctype="multipart/form-data" action="/dash/complaint/read-{{ 
-    $complaintRec->ComID }}?view=reportUp&refresh=1{{ 
+    $complaintRec->com_id }}?view=reportUp&refresh=1{{ 
     $GLOBALS['SL']->getReqParams() }}" method="post" >
 <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-<input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
+<input type="hidden" name="cID" value="{{ $complaintRec->com_public_id }}">
 
 <div class="nodeAnchor"><a name="reportUpload"></a></div>
 <h4>Upload Reports</h4>
@@ -24,8 +24,7 @@
             </label>
         </div>
         <div class="col-4">
-        @if (file_exists($reportUploadFolder . $complaintRec->ComID 
-            . '-' . $type[0] . '.pdf'))
+        @if (file_exists($reportUploadFolder . $complaintRec->com_id . '-' . $type[0] . '.pdf'))
             
         @endif
         </div>

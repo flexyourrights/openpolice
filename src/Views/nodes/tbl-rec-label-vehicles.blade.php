@@ -1,10 +1,10 @@
 @if (isset($rec) && $rec)
     <!-- resources/views/vendor/openpolice/nodes/tbl-rec-label-vehicles.blade.php -->
-    {{ $GLOBALS["SL"]->def->getValById($rec->VehicTransportation) }}
-    @if (trim($rec->VehicUnmarked) == 'Y') Unmarked @elseif (trim($rec->VehicUnmarked) == '?') Maybe Unmarked @endif 
-    @if (trim($rec->VehicVehicleMake) != '')    , {{ $rec->VehicVehicleMake }} @endif 
-    @if (trim($rec->VehicVehicleModel) != '')   , {{ $rec->VehicVehicleModel }} @endif 
-    @if (trim($rec->VehicVehicleDesc) != '')    , {{ $rec->VehicVehicleDesc }} @endif 
-    @if (trim($rec->VehicVehicleLicence) != '') , License Plate {{ $rec->VehicVehicleLicence }} @endif 
-    @if (trim($rec->VehicVehicleNumber) != '')  , #{{ $rec->VehicVehicleNumber }} @endif
+    {{ $GLOBALS["SL"]->def->getValById($rec->vehic_transportation) }}
+    @if (trim($rec->vehic_unmarked) == 'Y') Unmarked @elseif (trim($rec->vehic_unmarked) == '?') Maybe Unmarked @endif 
+    @if (trim($rec->vehic_vehicle_make) != '')    , {{ $rec->vehic_vehicle_make }} @endif 
+    @if (trim($rec->vehic_vehicle_model) != '')   , {{ $rec->vehic_vehicle_model }} @endif 
+    @if (trim($rec->vehic_vehicle_desc) != '')    , {{ $rec->vehic_vehicle_desc }} @endif 
+    @if (trim($rec->vehic_vehicle_licence) != '') , License Plate {{ $rec->vehic_vehicle_licence }} @endif 
+    @if (trim($rec->vehic_vehicle_number) != '')  , #{{ $rec->vehic_vehicle_number }} @endif
 @endif

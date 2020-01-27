@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPCivWeapons extends Model
 {
-    protected $table      = 'OP_CivWeapons';
-    protected $primaryKey = 'CivWeapID';
+    protected $table      = 'op_civ_weapons';
+    protected $primaryKey = 'civ_weap_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'CivWeapComID', 
-		'CivWeapBodyWeapon', 
+		'civ_weap_com_id', 
+		'civ_weap_body_weapon', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -5,17 +5,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPCivCompliment extends Model
 {
-    protected $table      = 'OP_CivCompliment';
-    protected $primaryKey = 'CivCompID';
+    protected $table      = 'op_civ_compliment';
+    protected $primaryKey = 'civ_comp_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'CivCompComplimentID', 
-		'CivCompUserID', 
-		'CivCompIsCreator', 
-		'CivCompRole', 
-		'CivCompPersonID', 
-		'CivCompPhysDescID', 
+		'civ_comp_compliment_id', 
+		'civ_comp_user_id', 
+		'civ_comp_is_creator', 
+		'civ_comp_role', 
+		'civ_comp_person_id', 
+		'civ_comp_phys_desc_id', 
     ];
     
     // END SurvLoop auto-generated portion of Model

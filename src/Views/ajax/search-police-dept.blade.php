@@ -14,30 +14,33 @@
         @if ($GLOBALS["SL"]->REQ->has('loadNewFixDept'))
             <div class="mT20">
                 <a href="javascript:;" onClick="return loadNewFixDept({{ 
-                    $dept->DeptID }}, {{ json_encode($dept->DeptName) }});"
+                    $dept->dept_id }}, {{ json_encode($dept->dept_name) }});"
                     class="btn btn-secondary btn-block taL"
                     ><i class="fa fa-plus-circle mR3" aria-hidden="true"></i>
-                    {{ $dept->DeptName }}</a>
+                    {{ $dept->dept_name }}</a>
             </div>
             <div class="m5" style="margin-left: 25px;">
-                <a href="/dept/{{ $dept->DeptSlug }}" target="_blank" 
-                    >/{{ $dept->DeptSlug }}</a>
+                <a href="/dept/{{ $dept->dept_slug }}" target="_blank" 
+                    >/{{ $dept->dept_slug }}</a>
             </div>
         @else
             <div class="deptWrap">
-            @if ($dept->DeptType == 366) 
-                <h3 @if ($i == 0) class="mT0" @endif >{{ $dept->DeptName }}</h3>
+            @if ($dept->dept_type == 366) 
+                <h3 @if ($i == 0) class="mT0" @endif >{{ $dept->dept_name }}</h3>
                 <div class="mTn10"><b><i>(Federal)</i></b></div>
             @else
-                <h3>{{ str_replace('Department', 'Dept', ucwords(strtolower($dept->DeptName))) }}</h3>
+                <h3>{{ str_replace('Department', 'Dept', 
+                    ucwords(strtolower($dept->dept_name))) }}</h3>
             @endif
                 <div class="row mT10 mB10 @if ($i == 0) mT0 @endif ">
                     <div class="col-sm-9 pB20">
                         {!! $GLOBALS["SL"]->printRowAddy($dept, 'Dept') !!}
-                        @if (trim($dept->DeptAddressCounty) != '') <br />{{ $dept->DeptAddressCounty }} County @endif
+                        @if (trim($dept->dept_address_county) != '') 
+                            <br />{{ $dept->dept_address_county }} County
+                        @endif
                     </div>
                     <div class="col-sm-3">
-                        <a id="dept{{ $dept->DeptID }}" href="javascript:;" 
+                        <a id="dept{{ $dept->dept_id }}" href="javascript:;" 
                             class="deptLoad btn btn-lg btn-primary btn-block taC" 
                             >Select</a>
                     </div>
@@ -57,10 +60,12 @@
     </ul>
     <p>
         If you can't find the right department, 
-        <a id="hidivBtnAddNewDept" class="hidivBtn" href="javascript:;">click here to add it to our database</a>.
+        <a id="hidivBtnAddNewDept" class="hidivBtn" 
+            href="javascript:;">click here to add it to our database</a>.
     </p><p>
         If you don't know the department name, 
-        <a class="deptLoad" id="dept18124" href="javascript:;">click here to use a temporary place holder</a>.
+        <a class="deptLoad" id="dept18124" href="javascript:;"
+            >click here to use a temporary place holder</a>.
     </p>
         
     <div id="hidivAddNewDept" class="slCard disNon mT20 mB20">
@@ -70,15 +75,21 @@
         </div>
         <div class="row">
             <div class="col-md-7 pB20">
-                <label for="newDeptNameID">Department Name <span class="red">*required</span></label>
+                <label for="newDeptNameID">
+                    Department Name <span class="red">*required</span>
+                </label>
                 <div class="nFld">
-                    <input id="newDeptNameID" name="newDeptName" type="text" value="" class="form-control form-control-lg" >
+                    <input id="newDeptNameID" name="newDeptName" type="text" 
+                        value="" class="form-control form-control-lg" >
                 </div>
             </div>
             <div class="col-md-5 pB20">
-                <label for="newDeptAddressStateID">State <span class="red">*required</span></label>
+                <label for="newDeptAddressStateID">
+                    State <span class="red">*required</span>
+                </label>
                 <div class="nFld">
-                    <select id="newDeptAddressStateID" name="newDeptAddressState" class="form-control form-control-lg" 
+                    <select id="newDeptAddressStateID" name="newDeptAddressState" 
+                        class="form-control form-control-lg" 
                         autocomplete="off" >{!! $newDeptStateDrop !!}
                     </select>
                 </div>

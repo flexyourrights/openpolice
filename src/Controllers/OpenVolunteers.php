@@ -31,9 +31,7 @@ class OpenVolunteers extends OpenDevelopment
         $this->v["leaderboard"] = new VolunteerLeaderboard;
         return view(
             'vendor.openpolice.volun.volun-sidebar-leaderboard', 
-            [
-                "leaderboard" => $this->v["leaderboard"]
-            ]
+            [ "leaderboard" => $this->v["leaderboard"] ]
         )->render();
     }
     
@@ -53,100 +51,91 @@ class OpenVolunteers extends OpenDevelopment
                 && trim($GLOBALS["SL"]->REQ->get('deptName')) != '') {
                 $newDept = $this->newDeptAdd(
                     $GLOBALS["SL"]->REQ->get('deptName'), 
-                    $GLOBALS["SL"]->REQ->get('DeptAddressState')
+                    $GLOBALS["SL"]->REQ->get('deptAddressState')
                 );
-                return '<script type="text/javascript"> '
-                    . 'setTimeout("window.location=\''
-                    . '/dashboard/start-' . $newDept->DeptID 
-                    . '/volunteers-research-departments\'", 10); '
-                    . '</script>';
+                return '<script type="text/javascript"> setTimeout("window.location=\''
+                    . '/dashboard/start-' . $newDept->dept_id 
+                    . '/volunteers-research-departments\'", 10); </script>';
             }
             $this->v["viewType"] = (($GLOBALS["SL"]->REQ->has('sort')) 
                 ? $GLOBALS["SL"]->REQ->get('sort') : 'recent');
             $this->v["deptRows"] = [];
             $this->v["searchForm"] = $this->deptSearchForm();
             $orderby = [
-                [ 'DeptVerified', 'desc' ],
-                [ 'DeptName', 'asc' ]
+                [ 'dept_verified', 'desc' ],
+                [ 'dept_name', 'asc' ]
             ];
             switch ($this->v["viewType"]) {
                 case 'best': 
-                    $orderby[0] = [ 'DeptScoreOpenness', 'desc' ];
+                    $orderby[0] = [ 'dept_score_openness', 'desc' ];
                     break;
                 case 'name': 
-                    $orderby[0] = [ 'DeptName', 'asc' ];
+                    $orderby[0] = [ 'dept_name', 'asc' ];
                     break;
                 case 'city': 
                     $orderby = [
-                        [ 'DeptAddressState', 'asc' ],
-                        [ 'DeptAddressCity', 'asc' ]
+                        [ 'dept_address_state', 'asc' ],
+                        [ 'dept_address_city', 'asc' ]
                     ];
                     break;
             }
             $this->v["state"] = '';
             if ($GLOBALS["SL"]->REQ->has('state')) {
                 $this->v["state"] = trim($GLOBALS["SL"]->REQ->get('state'));
-            } elseif (isset($this->v["yourContact"]->PrsnAddressState) 
-                && trim($this->v["yourContact"]->PrsnAddressState) != '') {
-                $this->v["state"] 
-                    = trim($this->v["yourContact"]->PrsnAddressState);
+            } elseif (isset($this->v["yourContact"]->prsn_address_state) 
+                && trim($this->v["yourContact"]->prsn_address_state) != '') {
+                $this->v["state"] = trim($this->v["yourContact"]->prsn_address_state);
             }
-            if ($GLOBALS["SL"]->REQ->has('s') 
-                && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+            if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
                 $this->chkRecsPub($GLOBALS["SL"]->REQ, 36);
                 $searches = [];
-                if ($GLOBALS["SL"]->REQ->has('s') 
-                    && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
-                    $searches = $GLOBALS["SL"]->parseSearchWords(
-                        $GLOBALS["SL"]->REQ->get('s'));
+                if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+                    $searches = $GLOBALS["SL"]->parseSearchWords($GLOBALS["SL"]->REQ->get('s'));
                 }
                 if (sizeof($searches) > 0) {
                     $rows = null;
                     if ($this->v["state"] == '') {
                         foreach ($searches as $s) {
                             $sP = '%' . $s . '%';
-                            $rows = OPDepartments::where('DeptName', 'LIKE', $sP)
-                                ->orWhere('DeptEmail', 'LIKE', $sP)
-                                ->orWhere('DeptPhoneWork', 'LIKE', $sP)
-                                ->orWhere('DeptAddress', 'LIKE', $sP)
-                                ->orWhere('DeptAddressCity', 'LIKE', $sP)
-                                ->orWhere('DeptAddressZip', 'LIKE', $sP)
-                                ->orWhere('DeptAddressCounty', 'LIKE', $sP)
+                            $rows = OPDepartments::where('dept_name', 'LIKE', $sP)
+                                ->orWhere('dept_email', 'LIKE', $sP)
+                                ->orWhere('dept_phone_work', 'LIKE', $sP)
+                                ->orWhere('dept_address', 'LIKE', $sP)
+                                ->orWhere('dept_address_city', 'LIKE', $sP)
+                                ->orWhere('dept_address_zip', 'LIKE', $sP)
+                                ->orWhere('dept_address_county', 'LIKE', $sP)
                                 ->get();
-                            $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                            $GLOBALS["SL"]->addSrchResults('depts', $rows, 'dept_id');
                         }
                     } else {
                         foreach ($searches as $s) {
                             $sP = '%' . $s . '%';
-                            $rows = OPDepartments::where('DeptAddressState', 
-                                    $this->v["state"])
+                            $rows = OPDepartments::where('dept_address_state', $this->v["state"])
                                 ->where(function ($query) use ($s) {
-                                    $query->where('DeptName', 'LIKE', $sP)
-                                        ->orWhere('DeptEmail', 'LIKE', $sP)
-                                        ->orWhere('DeptPhoneWork', 'LIKE', $sP)
-                                        ->orWhere('DeptAddress', 'LIKE', $sP)
-                                        ->orWhere('DeptAddressCity', 'LIKE', $sP)
-                                        ->orWhere('DeptAddressZip', 'LIKE', $sP)
-                                        ->orWhere('DeptAddressCounty', 'LIKE', $sP);
+                                    $query->where('dept_name', 'LIKE', $sP)
+                                        ->orWhere('dept_email', 'LIKE', $sP)
+                                        ->orWhere('dept_phone_work', 'LIKE', $sP)
+                                        ->orWhere('dept_address', 'LIKE', $sP)
+                                        ->orWhere('dept_address_city', 'LIKE', $sP)
+                                        ->orWhere('dept_address_zip', 'LIKE', $sP)
+                                        ->orWhere('dept_address_county', 'LIKE', $sP);
                                     })
                                 ->get();
-                            $GLOBALS["SL"]->addSrchResults('depts', $rows, 'DeptID');
+                            $GLOBALS["SL"]->addSrchResults('depts', $rows, 'dept_id');
                         }
                     }
                 }
                 $this->v["deptRows"] = $GLOBALS["SL"]->x["srchRes"]["depts"];
                 unset($GLOBALS["SL"]->x["srchRes"]["depts"]);
             } elseif ($this->v["state"] != '') {
-                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 
-                    'DeptScoreOpenness', 'DeptVerified', 
-                    'DeptAddressCity', 'DeptAddressState')
-                    ->where('DeptAddressState', $this->v["state"])
+                $this->v["deptRows"] = OPDepartments::where('dept_address_state', $this->v["state"])
+                    ->select('dept_id', 'dept_name', 'dept_score_openness', 
+                        'dept_verified', 'dept_address_city', 'dept_address_state')
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
             } else {
-                $this->v["deptRows"] = OPDepartments::select('DeptID', 'DeptName', 
-                    'DeptScoreOpenness', 'DeptVerified', 
-                    'DeptAddressCity', 'DeptAddressState')
+                $this->v["deptRows"] = OPDepartments::select('dept_id', 'dept_name', 
+                    'dept_score_openness', 'dept_verified', 'dept_address_city', 'dept_address_state')
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
             }
@@ -198,8 +187,7 @@ class OpenVolunteers extends OpenDevelopment
     protected function loadDeptPriorityRows()
     {
         $this->v["deptPriorityRows"] = $done = $rejects = [];
-        $this->v["yearold"] = mktime(date("H"), date("i"), date("s"), 
-            date("m"), date("d"), date("Y")-1);
+        $this->v["yearold"] = mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")-1);
         $set = 'Complaint Status';
         $statuses = [
             $GLOBALS["SL"]->def->getID($set, 'New'),
@@ -215,27 +203,25 @@ class OpenVolunteers extends OpenDevelopment
             $GLOBALS["SL"]->def->getID($set, 'Unreviewed'),
             $GLOBALS["SL"]->def->getID($set, 'Police Complaint')
         ];
-        $chk = DB::table('OP_Departments')
-            ->join('OP_LinksComplaintDept', 'OP_Departments.DeptID', 
-                '=', 'OP_LinksComplaintDept.LnkComDeptDeptID')
-            ->join('OP_Complaints', 
-                'OP_LinksComplaintDept.LnkComDeptComplaintID', 
-                '=', 'OP_Complaints.ComID')
-            ->whereIn('OP_Complaints.ComType', $types)
-            ->whereIn('OP_Complaints.ComStatus', $statuses)
-            ->where('OP_Complaints.ComSummary', 'NOT LIKE', '')
-            ->select('OP_Departments.*')
-            ->orderBy('OP_Complaints.created_at', 'asc')
+        $chk = DB::table('op_departments')
+            ->join('op_links_complaint_dept', 'op_departments.dept_id', 
+                '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
+            ->join('op_complaints', 'op_links_complaint_dept.lnk_com_dept_complaint_id', 
+                '=', 'op_complaints.com_id')
+            ->whereIn('op_complaints.com_type', $types)
+            ->whereIn('op_complaints.com_status', $statuses)
+            ->where('op_complaints.com_summary', 'NOT LIKE', '')
+            ->select('op_departments.*')
+            ->orderBy('op_complaints.created_at', 'asc')
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $dept) {
-                if (!in_array($dept->DeptID, $done)
-                    && (!isset($dept->DeptScoreOpenness)
-                        || !isset($dept->DeptVerified) 
-                        || $dept->DeptVerified < date("Y-m-d H:i:s", 
-                            $this->v["yearold"]))) {
+                if (!in_array($dept->dept_id, $done)
+                    && (!isset($dept->dept_score_openness)
+                        || !isset($dept->dept_verified) 
+                        || $dept->dept_verified < date("Y-m-d H:i:s", $this->v["yearold"]))) {
                     $this->v["deptPriorityRows"][] = $dept;
-                    $done[] = $dept->DeptID;
+                    $done[] = $dept->dept_id;
                 } else {
                     $rejects[] = $dept;
                 }
@@ -256,10 +242,13 @@ class OpenVolunteers extends OpenDevelopment
     protected function deptSearchForm($state = '', $deptName = '')
     {
         $GLOBALS["SL"]->loadStates();
-        return view('vendor.openpolice.volun.volunEditSearch', [ 
-            "deptName"  => $deptName, 
-            "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
-            ])->render();
+        return view(
+            'vendor.openpolice.volun.volunEditSearch', 
+            [ 
+                "deptName"  => $deptName, 
+                "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
+            ]
+        )->render();
     }
     
     /**
@@ -274,23 +263,22 @@ class OpenVolunteers extends OpenDevelopment
             $GLOBALS["SL"]->x["usernames"] = [];
         }
         $GLOBALS["SL"]->x["recentDeptEdits"] = [];
-        $cutoff = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), 
-            date("n"), date("j")-7, date("Y")));
-        $rows = OPZeditDepartments::where(
-            'OP_Zedit_Departments.ZedDeptDeptVerified', '>', $cutoff)
-            ->leftJoin('users', 'users.id', 
-                '=', 'OP_Zedit_Departments.ZedDeptUserID')
-            ->select('OP_Zedit_Departments.ZedDeptDeptID', 'OP_Zedit_Departments.ZedDeptDeptVerified', 
-                'users.id', 'users.name')
-            ->orderBy('OP_Zedit_Departments.ZedDeptDeptVerified', 'desc')
+        $cutoff = mktime(date("H"), date("i"), date("s"), date("n"), date("j")-7, date("Y"));
+        $cutoff = date("Y-m-d H:i:s", $cutoff);
+        $rows = OPZeditDepartments::where('op_z_edit_departments.zed_dept_dept_verified', '>', $cutoff)
+            ->leftJoin('users', 'users.id', '=', 'op_z_edit_departments.zed_dept_user_id')
+            ->select('op_z_edit_departments.zed_dept_dept_id', 
+                'op_z_edit_departments.zed_dept_dept_verified', 'users.id', 'users.name')
+            ->orderBy('op_z_edit_departments.zed_dept_dept_verified', 'desc')
             ->get();
         if ($rows->isNotEmpty()) {
             foreach ($rows as $row) {
-                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID])) {
-                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID] = [];
+                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->zed_dept_dept_id])) {
+                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->zed_dept_dept_id] = [];
                 }
-                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID][$row->id])) {
-                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->ZedDeptDeptID][$row->id] = $row->ZedDeptDeptVerified;
+                if (!isset($GLOBALS["SL"]->x["recentDeptEdits"][$row->zed_dept_dept_id][$row->id])) {
+                    $GLOBALS["SL"]->x["recentDeptEdits"][$row->zed_dept_dept_id][$row->id] 
+                        = $row->zed_dept_dept_verified;
                 }
                 if (!isset($GLOBALS["SL"]->x["usernames"][$row->id])) {
                     $GLOBALS["SL"]->x["usernames"][$row->id] = $row->name;
@@ -311,12 +299,16 @@ class OpenVolunteers extends OpenDevelopment
         $GLOBALS["SL"]->loadStates();
         $this->loadYourContact();
         if ($GLOBALS["SL"]->REQ->has('saveDefaultState')) {
-            if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->PrsnID)) {
+            if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->prsn_id)) {
                 if ($GLOBALS["SL"]->REQ->has('newState')) {
-                    $this->v["yourContact"]->update([ "PrsnAddressState" => $GLOBALS["SL"]->REQ->get('newState') ]);
+                    $this->v["yourContact"]->update([
+                        "prsn_address_state" => $GLOBALS["SL"]->REQ->get('newState')
+                    ]);
                 }
                 if ($GLOBALS["SL"]->REQ->has('newPhone')) {
-                    $this->v["yourContact"]->update([ "PrsnPhoneMobile" => $GLOBALS["SL"]->REQ->get('newPhone') ]);
+                    $this->v["yourContact"]->update([
+                        "prsn_phone_mobile" => $GLOBALS["SL"]->REQ->get('newPhone')
+                    ]);
                 }
             }
         }

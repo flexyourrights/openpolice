@@ -3,9 +3,9 @@
 Every legitimate submission will receive our 
 <a href="/web-app-workflows" target="_blank"
     ><i class="fa fa-external-link" aria-hidden="true"></i> primary OpenPolice.org workflow</a>
-and will be included in the site's main 
-dataset. These must involve a specific incident, with attempts to identify officers 
-from a specific law enforcement agency or private security force.</p>
+and will be included in the site's main dataset. These must involve 
+a specific incident, with attempts to identify officers from a 
+specific law enforcement agency or private security force.</p>
 <p><b>
 The rest are submissions which do not describe an incident of misconduct 
 by law enforcement agency or private security...

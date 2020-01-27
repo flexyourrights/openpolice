@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPCustomers extends Model
 {
-    protected $table         = 'OP_Customers';
-    protected $primaryKey     = 'CustID';
+    protected $table         = 'op_customers';
+    protected $primaryKey     = 'cust_id';
     public $timestamps         = true;
     protected $fillable     = 
     [    
-        'CustType', 
-        'CustUserID', 
-        'CustPersonID', 
-        'CustTitle', 
-        'CustCompanyName', 
-        'CustCompanyWebsite', 
+        'cust_type', 
+        'cust_user_id', 
+        'cust_person_id', 
+        'cust_title', 
+        'cust_company_name', 
+        'cust_company_website', 
     ];
 }

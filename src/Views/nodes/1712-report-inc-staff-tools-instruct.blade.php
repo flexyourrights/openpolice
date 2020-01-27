@@ -3,20 +3,19 @@
 Next, this complaint could use help with...
 
 <?php /*
-@if ((isset($complaintRec->ComAttorneyHas) 
-        && trim($complaintRec->ComAttorneyHas) == 'Y')
-    || (isset($complaintRec->ComStatus) 
-        && intVal($complaintRec->ComStatus) 
-        == $GLOBALS["SL"]->def->getID(
+@if ((isset($complaintRec->com_attorney_has) 
+        && trim($complaintRec->com_attorney_has) == 'Y')
+    || (isset($complaintRec->com_status) 
+        && intVal($complaintRec->com_status) == $GLOBALS["SL"]->def->getID(
         'Complaint Status', 'Attorney\'d')))
     #29B76F;
-@elseif (isset($complaintRec->ComAnyoneCharged) 
-    && in_array(trim($complaintRec->ComAnyoneCharged), ['Y', '?'])
-    && isset($complaintRec->ComAllChargesResolved)
-    && trim($complaintRec->ComAllChargesResolved) != 'Y')
+@elseif (isset($complaintRec->com_anyone_charged) 
+    && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
+    && isset($complaintRec->com_all_charges_resolved)
+    && trim($complaintRec->com_all_charges_resolved) != 'Y')
     #EC2327;
-@elseif (isset($complaintRec->ComAttorneyWant) 
-    && trim($complaintRec->ComAttorneyWant) == 'Y')
+@elseif (isset($complaintRec->com_attorney_want) 
+    && trim($complaintRec->com_attorney_want) == 'Y')
     #F0AD4E;
 @else
     #29B76F;

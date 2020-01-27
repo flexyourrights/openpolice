@@ -5,12 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPComplaintDeptLinks extends Model
 {
-    protected $table         = 'OP_ComplaintDeptLinks';
-    protected $primaryKey     = 'CompDeptLinksID';
+    protected $table         = 'op_complaint_dept_links';
+    protected $primaryKey     = 'comp_dept_links_id';
     public $timestamps         = true;
     protected $fillable     = 
     [    
-        'CompDeptLinksComplaintID', 
-        'CompDeptLinksDeptID', 
+        'comp_dept_links_complaint_id', 
+        'comp_dept_links_dept_id', 
     ];
 }

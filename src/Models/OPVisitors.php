@@ -5,18 +5,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPVisitors extends Model
 {
-    protected $table      = 'OP_Visitors';
-    protected $primaryKey = 'VisID';
+    protected $table      = 'op_visitors';
+    protected $primaryKey = 'vis_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'VisVersionAB', 
-		'VisSubmissionProgress', 
-		'VisIPaddy', 
-		'VisTreeVersion', 
-		'VisUniqueStr', 
-		'VisUserID', 
-		'VisIsMobile', 
+		'vis_version_ab', 
+		'vis_submission_progress', 
+		'vis_ip_addy', 
+		'vis_tree_version', 
+		'vis_unique_str', 
+		'vis_user_id', 
+		'vis_is_mobile', 
     ];
     
     // END SurvLoop auto-generated portion of Model

@@ -3,11 +3,12 @@
         <img id="saveStar1" src="/openpolice/star1.png" border=0 height=15 class="mTn5" > 
         Volunteer All-Stars <img id="saveStar1" src="/openpolice/star1.png" border=0 height=15 class="mTn5" >
     </th></tr>
-    @forelse ($leaderboard->UserInfoStars as $i => $u)
+    @forelse ($leaderboard->user_info_stars as $i => $u)
         @if ($i < 10)
             <tr>
-                <td class="taC"><a href="/dashboard/volunteer/user/{{ $u->UserInfoUserID }}">{{ $u->name }}</a></td>
-                <td class="pR20">{{ $u->UserInfoStars }}</td>
+                <td class="taC"><a href="/dashboard/volunteer/user/{{ 
+                    $u->user_info_user_id }}">{{ $u->name }}</a></td>
+                <td class="pR20">{{ $u->user_info_stars }}</td>
             </tr>
         @endif
     @empty

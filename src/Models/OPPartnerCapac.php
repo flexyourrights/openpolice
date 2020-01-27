@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPartnerCapac extends Model
 {
-    protected $table      = 'OP_PartnerCapac';
-    protected $primaryKey = 'PrtCapID';
+    protected $table      = 'op_partner_capac';
+    protected $primaryKey = 'prt_cap_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PrtCapPartID', 
-		'PrtCapCapacity', 
+		'prt_cap_part_id', 
+		'prt_cap_capacity', 
     ];
     
     // END SurvLoop auto-generated portion of Model

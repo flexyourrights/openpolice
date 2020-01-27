@@ -6,8 +6,8 @@
         <div class="col-8 pB20">
             <div class="deptNameInWrap">
                 <a href="javascript:;" id="ajaxSubmit"><i class="fa fa-search"></i></a>
-                <input type="text" name="deptNameIn" id="deptNameInID" value="{{ $IncAddressCity }}" 
-                    class="form-control form-control-lg w100">
+                <input type="text" name="deptNameIn" id="deptNameInID" 
+                    value="{{ $incAddressCity }}" class="form-control form-control-lg w100">
             </div>
         </div>
         <div class="col-4 pB20">

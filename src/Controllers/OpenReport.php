@@ -30,16 +30,15 @@ class OpenReport extends OpenOfficers
     protected function reportAllegsWhyDeets($nID = -3)
     {
         $deets = [];
-        if (isset($this->sessData->dataSets["AllegSilver"]) 
-            && isset($this->sessData->dataSets["AllegSilver"][0])) {
-            $silv = $this->sessData->dataSets["AllegSilver"][0];
+        if (isset($this->sessData->dataSets["alleg_silver"]) 
+            && isset($this->sessData->dataSets["alleg_silver"][0])) {
+            $silv = $this->sessData->dataSets["alleg_silver"][0];
             foreach ($this->worstAllegations as $i => $alleg) {
                 if (isset($silv->{ $alleg[2] })) {
                     $show = (trim($silv->{ $alleg[2] }) == 'Y');
                     if ($alleg[1] == 'Intimidating Display of Weapon') {
                         $allegVal = intVal($silv->{ $alleg[2] });
-                        if (!in_array($allegVal, 
-                            $this->intimidWeaponNos())) {
+                        if (!in_array($allegVal, $this->intimidWeaponNos())) {
                             $show = true;
                         }
                     }
@@ -62,19 +61,17 @@ class OpenReport extends OpenOfficers
     {
         $alle = '';
         if (!$this->canPrintFullReport()) {
-            $alle .= '<b class="fPerc125">' 
-                . $alleg[1] . '</b>';
+            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
         } else {
             $foundWhy = false;
-            $alle .= '<b class="fPerc125">' 
-                . $alleg[1] . '</b><br />';
-            foreach ($this->sessData->dataSets["Allegations"] 
-                as $j => $all) {
-                if (!$foundWhy && $all 
-                    && isset($all->AlleType) 
-                    && $all->AlleType == $alleg[0] 
-                    && trim($all->AlleDescription) != '') {
-                    $alle .= $all->AlleDescription . '<br />';
+            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
+            foreach ($this->sessData->dataSets["allegations"] as $j => $all) {
+                if (!$foundWhy 
+                    && $all 
+                    && isset($all->alle_type) 
+                    && $all->alle_type == $alleg[0] 
+                    && trim($all->alle_description) != '') {
+                    $alle .= $all->alle_description . '<br />';
                     $foundWhy = true;
                 }
             }
@@ -91,12 +88,11 @@ class OpenReport extends OpenOfficers
     protected function reportAllegsWhy($nID = -3)
     {
         $why = $this->reportAllegsWhyDeets($nID);
-        $deets = 'Allegations</h3>'
-            . (($this->canPrintFullReport()) 
-                ? '<div class="slGrey mTn10">Including ' 
-                    . 'comments from the complainant</div>'
-                : '')
-            . '<h3 class="disNon">';
+        $deets = 'Allegations</h3>';
+        if ($this->canPrintFullReport()) {
+            $deets .= '<div class="slGrey mTn10">Including comments from the complainant</div>';
+        }
+        $deets .= '<h3 class="disNon">';
         return $this->printReportDeetsBlock($why, $deets);
     }
 
@@ -113,7 +109,7 @@ class OpenReport extends OpenOfficers
             if ($this->checkFldDataPerms($fldRow)
                 && $this->checkViewDataPerms($fldRow)) {
                 $prsn = $this->sessData->getLatestDataBranchRow();
-                $addy = $GLOBALS["SL"]->printRowAddy($prsn, 'Prsn');
+                $addy = $GLOBALS["SL"]->printRowAddy($prsn, 'prsn_');
                 if (trim($addy) != '') {
                     return [ 'Address', $addy ];
                 }
@@ -133,11 +129,9 @@ class OpenReport extends OpenOfficers
         $ret = '';
         if ($nID > 0 && isset($this->allNodes[$nID])) {
             $fldRow = $this->allNodes[$nID]->getFldRow();
-            if ($this->checkFldDataPerms($fldRow) 
-                && $this->checkViewDataPerms($fldRow)) {
-                $story = $this->sessData
-                    ->dataSets["Complaints"][0]->ComSummary;
-                $views = ['pdf', 'full-pdf'];
+            if ($this->checkFldDataPerms($fldRow) && $this->checkViewDataPerms($fldRow)) {
+                $story = $this->sessData->dataSets["complaints"][0]->com_summary;
+                $views = [ 'pdf', 'full-pdf' ];
                 if (!in_array($GLOBALS["SL"]->pageView, $views)) {
                     $ret = $this->printStoryPreview($story);
                 }
@@ -146,8 +140,7 @@ class OpenReport extends OpenOfficers
                 }
             }
         }
-        return '<h3 class="slBlueDark mT0 mB10">'
-            . 'Story</h3><p>' . $ret . '</p>';
+        return '<h3 class="slBlueDark mT0 mB10">Story</h3><p>' . $ret . '</p>';
     }
 
     /**
@@ -161,9 +154,7 @@ class OpenReport extends OpenOfficers
         $ret = '';
         $previewMax = 1800;
         if (strlen($story) > $previewMax) {
-            $more = ($GLOBALS["SL"]->REQ->has('read') 
-                && $GLOBALS["SL"]->REQ->get('read') 
-                    == 'more');
+            $more = ($GLOBALS["SL"]->REQ->has('read') && $GLOBALS["SL"]->REQ->get('read') == 'more');
             $brkPos = strpos($story, ' ', $previewMax-200);
             if ($brkPos > 0) {
                 $storyLess = substr($story, 0, $brkPos+1);
@@ -171,13 +162,12 @@ class OpenReport extends OpenOfficers
                     'vendor.openpolice.nodes.1373-story-read-more', 
                     [
                         "more"      => $more,
-                        "storyLess" => $GLOBALS["SL"]
-                            ->textSaferHtml($storyLess),
-                        "storyMore" => $GLOBALS["SL"]
-                            ->textSaferHtml($story)
+                        "storyLess" => $GLOBALS["SL"]->textSaferHtml($storyLess),
+                        "storyMore" => $GLOBALS["SL"]->textSaferHtml($story)
                     ]
                 )->render();
-                $GLOBALS["SL"]->pageAJAX .= view('vendor.openpolice.nodes.1373-story-read-more-ajax'
+                $GLOBALS["SL"]->pageAJAX .= view(
+                    'vendor.openpolice.nodes.1373-story-read-more-ajax'
                 )->render();
             } else {
                 $ret = $story;
@@ -193,10 +183,10 @@ class OpenReport extends OpenOfficers
      * @param  int $overLnkID
      * @return string
      */
-    protected function queuePeopleSubsets($id, $type = 'Civilians')
+    protected function queuePeopleSubsets($id, $type = 'civilians')
     {
-        $prsn = $this->sessData->getChildRow($type, $id, 'PersonContact');
-        $phys = $this->sessData->getChildRow($type, $id, 'PhysicalDesc');
+        $prsn = $this->sessData->getChildRow($type, $id, 'person_contact');
+        $phys = $this->sessData->getChildRow($type, $id, 'physical_desc');
         return [ $prsn, $phys ];
     }
     
@@ -211,12 +201,9 @@ class OpenReport extends OpenOfficers
         if (!isset($this->v["reportDepts"])) {
             $this->v["reportDepts"] = [];
         }
-        $overLnk = $this->sessData->getRowById(
-            'LinksComplaintOversight', 
-            $overLnkID
-        );
-        if ($overLnk && isset($overLnk->LnkComOverDeptID)) {
-            $deptID = intVal($overLnk->LnkComOverDeptID);
+        $overLnk = $this->sessData->getRowById('links_complaint_oversight', $overLnkID);
+        if ($overLnk && isset($overLnk->lnk_com_over_dept_id)) {
+            $deptID = intVal($overLnk->lnk_com_over_dept_id);
             if ($deptID > 0 
                 && !in_array($deptID, $this->v["reportDepts"])) {
                 $this->v["reportDepts"][] = $deptID;
@@ -234,15 +221,13 @@ class OpenReport extends OpenOfficers
      */
     protected function getReportDept($deptID)
     {
-        $dept = $this->sessData->getRowById('Departments', $deptID);
-        if ($dept && isset($dept->DeptName)) {
-            return '<h3 class="mT0 mB5"><a href="/dept/' 
-                . $dept->DeptSlug . '" class="slBlueDark">'
-                . 'Misconduct Incident Report for ' . $dept->DeptName 
-                . '</a></h3><div class="mB10"><b>Complaint #' 
-                . $this->sessData->dataSets["Complaints"][0]->ComPublicID 
-                . ': ' . $this->printComplaintStatus(
-                    $this->sessData->dataSets["Complaints"][0]->ComStatus)
+        $dept = $this->sessData->getRowById('departments', $deptID);
+        if ($dept && isset($dept->dept_name)) {
+            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug . '" class="slBlueDark">'
+                . 'Misconduct Incident Report for ' . $dept->dept_name . '</a></h3>'
+                . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
+                . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
+                . $this->printComplaintStatus($this->sessData->dataSets["complaints"][0]->com_status)
                 . '</b></div>';
         }
         $this->v["reportDepts"][] = $deptID;
@@ -258,19 +243,18 @@ class OpenReport extends OpenOfficers
     protected function getReportByLine()
     {
         $ret = '';
-        $com = $this->sessData->dataSets['Complaints'][0];
-        $anon = $GLOBALS["SL"]->def
-            ->getID('Privacy Types', 'Completely Anonymous');
-        if ($com->ComPrivacy == $anon) {
+        $com = $this->sessData->dataSets["complaints"][0];
+        $anon = $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous');
+        if ($com->com_privacy == $anon) {
             $ret = 'Anonymous';
-        } elseif (isset($this->sessData->dataSets["Civilians"]) 
-            && isset($this->sessData->dataSets["Civilians"][0]->CivID) 
-            && (in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf'])
-            || ($this->isPublished('Complaints', $this->coreID, $com)
-                && $com->ComPrivacy 
-                == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')))) {
-            $ret = $this->getCivReportName($this->sessData
-                ->dataSets["Civilians"][0]->CivID);
+        } elseif (isset($this->sessData->dataSets["civilians"]) 
+            && isset($this->sessData->dataSets["civilians"][0]->civ_id)) {
+            $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
+            if (in_array($GLOBALS["SL"]->pageView, [ 'full', 'full-pdf' ])
+                || ($this->isPublished('complaints', $this->coreID, $com) 
+                    && $com->com_privacy == $pubDef)) {
+                $ret = $this->getCivReportName($this->sessData->dataSets["civilians"][0]->civ_id);
+            }
         }
         if (trim($ret) != '') {
             return [ 'Submitted By', $ret ];
@@ -286,12 +270,11 @@ class OpenReport extends OpenOfficers
      */
     protected function shouldPrintFullDate($complaint = null)
     {
-        if (!$complaint && isset($this->sessData->dataSets['Complaints'])) {
-            $complaint = $this->sessData->dataSets['Complaints'][0];
+        if (!$complaint && isset($this->sessData->dataSets["complaints"])) {
+            $complaint = $this->sessData->dataSets["complaints"][0];
         }
         return (($this->v["isOwner"] || $this->v["isAdmin"]) 
-            && (!isset($GLOBALS["SL"]->x["isPublicList"]) 
-                || !$GLOBALS["SL"]->x["isPublicList"]));
+            && (!isset($GLOBALS["SL"]->x["isPublicList"]) || !$GLOBALS["SL"]->x["isPublicList"]));
     }
     
     /**
@@ -304,20 +287,20 @@ class OpenReport extends OpenOfficers
     protected function getReportWhenLine()
     {
         $date = '';
-        if (isset($this->sessData->dataSets["Incidents"][0])) {
-            $inc = $this->sessData->dataSets["Incidents"][0];
+        if (isset($this->sessData->dataSets["incidents"][0])) {
+            $inc = $this->sessData->dataSets["incidents"][0];
             if ($this->shouldPrintFullDate()) {
-                $date = date('n/j/Y', strtotime($inc->IncTimeStart));
+                $date = date('n/j/Y', strtotime($inc->inc_time_start));
                 $timeStart = $timeEnd = '';
-                if ($inc->IncTimeEnd !== null) {
-                    $timeEnd = date('g:ia', strtotime($inc->IncTimeEnd));
+                if ($inc->inc_time_end !== null) {
+                    $timeEnd = date('g:ia', strtotime($inc->inc_time_end));
                 }
-                if ($inc->IncTimeStart !== null) {
-                    $timeStart = date('g:ia', strtotime($inc->IncTimeStart));
+                if ($inc->inc_time_start !== null) {
+                    $timeStart = date('g:ia', strtotime($inc->inc_time_start));
                     $date .= $this->printStartEndTimes($timeStart, $timeEnd);
                 }
             } else {
-                $date = date('F Y', strtotime($inc->IncTimeStart));
+                $date = date('F Y', strtotime($inc->inc_time_start));
             }
         }
         return [ 'Indicent Date', $date ];
@@ -333,8 +316,7 @@ class OpenReport extends OpenOfficers
     protected function printStartEndTimes($timeStart, $timeEnd)
     {
         $ret = '';
-        if ($timeStart != '' 
-            && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
+        if ($timeStart != '' && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
             $ret .= ' <nobr>at ' . $timeStart . '</nobr>';
             if ($timeEnd != '' && $timeStart != $timeEnd) {
                 $ret .= ' <nobr>until ' . $timeEnd . '</nobr>';
@@ -352,13 +334,14 @@ class OpenReport extends OpenOfficers
     protected function chkPrintWhereLine($nID = -3)
     {
         $show = false;
-        if ($nID > 0 && isset($this->allNodes[$nID]) 
+        if ($nID > 0 
+            && isset($this->allNodes[$nID]) 
             && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
             && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
             if ($GLOBALS["SL"]->pageView == 'full') {
                 $show = true;
-            } elseif (isset($this->sessData->dataSets["Incidents"][0]->IncPublic) 
-                && $this->sessData->dataSets["Incidents"][0]->IncPublic == 'Y'
+            } elseif (isset($this->sessData->dataSets["incidents"][0]->inc_public) 
+                && $this->sessData->dataSets["incidents"][0]->inc_public == 'Y'
                 && $this->canPrintFullReport()) {
                 $show = true;
             }
@@ -375,28 +358,26 @@ class OpenReport extends OpenOfficers
      */
     protected function getReportWhereLine($nID = -3)
     {
-        if (isset($this->sessData->dataSets["Incidents"])) {
-            $inc = $this->sessData->dataSets["Incidents"][0];
-            $addy = $GLOBALS["SL"]->printRowAddy($inc, 'Inc');
-            if ($this->chkPrintWhereLine($nID) 
-                && trim($addy) != '') {
-                return [ 'Indicent Location', $addy ];
+        if (isset($this->sessData->dataSets["incidents"])) {
+            $inc = $this->sessData->dataSets["incidents"][0];
+            $addy = $GLOBALS["SL"]->printRowAddy($inc, 'inc_');
+            if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
+                return [
+                    'Indicent Location', 
+                    $addy
+                ];
             }
-            if (isset($inc->IncAddressState)) {
+            if (isset($inc->inc_address_state)) {
                 $c = '';
-                $state = $inc->IncAddressState;
-                if (isset($inc->IncAddressZip) 
-                    && strlen($inc->IncAddressZip) > 4) {
-                    $c = $GLOBALS["SL"]->getZipProperty(
-                        $inc->IncAddressZip, 'County');
+                $state = $inc->inc_address_state;
+                if (isset($inc->inc_address_zip) && strlen($inc->inc_address_zip) > 4) {
+                    $c = $GLOBALS["SL"]->getZipProperty($inc->inc_address_zip, 'county');
                 }
-                if (trim($c) == '' && isset($inc->IncAddressCity)) {
-                    $c = $GLOBALS["SL"]->getCityCounty(
-                        $inc->IncAddressCity, $state);
+                if (trim($c) == '' && isset($inc->inc_address_city)) {
+                    $c = $GLOBALS["SL"]->getCityCounty($inc->inc_address_city, $state);
                 }
                 if (trim($c) != '') {
-                    $ret = $GLOBALS["SL"]->allCapsToUp1stChars($c) 
-                        . ', ' . $state;
+                    $ret = $GLOBALS["SL"]->allCapsToUp1stChars($c) . ', ' . $state;
                     return [
                         'Indicent Location',
                         $this->fixWhereError($ret)
@@ -415,11 +396,7 @@ class OpenReport extends OpenOfficers
      */
     protected function fixWhereError($str)
     {
-        $ret = str_replace(
-            'District Of Columbia County, DC', 
-            'Washington, DC', 
-            $str
-        );
+        $ret = str_replace('District Of Columbia County, DC', 'Washington, DC', $str);
         return $ret;
     }
     
@@ -432,11 +409,10 @@ class OpenReport extends OpenOfficers
     protected function getReportPrivacy($nID)
     {
         $set = 'Privacy Types';
-        switch ($this->sessData->dataSets["Complaints"][0]->ComPrivacy) {
+        switch ($this->sessData->dataSets["complaints"][0]->com_privacy) {
             case $GLOBALS["SL"]->def->getID($set, 'Submit Publicly'): 
                 return 'Full Transparency';
-            case $GLOBALS["SL"]->def->getID($set, 
-                'Names Visible to Police but not Public'): 
+            case $GLOBALS["SL"]->def->getID($set, 'Names Visible to Police but not Public'): 
                 return 'No Names Public';
             case $GLOBALS["SL"]->def->getID($set, 'Completely Anonymous'): 
                 return 'Anonymous';
@@ -452,10 +428,10 @@ class OpenReport extends OpenOfficers
      */
     protected function hideWitnessName($civRow)
     {
-        $views = ['full', 'full-pdf'];
-        return ($civRow->CivRole == 'Witness' 
-            && $civRow->CivIsCreator != 'Y'
-            && ($GLOBALS["SL"]->dataPerms != 'sensitive'
+        $views = [ 'full', 'full-pdf' ];
+        return ($civRow->civ_role == 'Witness' 
+            && $civRow->civ_is_creator != 'Y'
+            && ($GLOBALS["SL"]->dataPerms != 'sensitive' 
                 || !in_array($GLOBALS["SL"]->pageView, $views)));
     }
     
@@ -468,32 +444,22 @@ class OpenReport extends OpenOfficers
     protected function getCivReportNameRow($nID)
     {
         $civRow = $this->sessData->getDataBranchRow('Civilians');
-        if (isset($civRow->CivRole) 
-            && isset($civRow->CivIsCreator)) {
+        if (isset($civRow->civ_role) && isset($civRow->civ_is_creator)) {
             if ($nID == 1507) {
-                $prsn = $this->sessData->getChildRow(
-                    'Civilians', 
-                    $civRow->CivID, 
-                    'PersonContact'
-                );
-                if ($prsn && isset($prsn->PrsnNickname)) {
-                    $nick = trim(strtolower(
-                        $prsn->PrsnNickname));
+                $prsn = $this->sessData->getChildRow('civilians', $civRow->civ_id, 'person_contact');
+                if ($prsn && isset($prsn->prsn_nickname)) {
+                    $nick = trim(strtolower($prsn->prsn_nickname));
                     $first = $middle = $last = '';
-                    if (isset($prsn->PrsnNameFirst)) {
-                        $first = trim(strtolower(
-                            $prsn->PrsnNameFirst));
+                    if (isset($prsn->prsn_name_first)) {
+                        $first = trim(strtolower($prsn->prsn_name_first));
                     }
-                    if (isset($prsn->PrsnNameMiddle)) {
-                        $middle = trim(strtolower(
-                            $prsn->PrsnNameMiddle));
+                    if (isset($prsn->prsn_name_middle)) {
+                        $middle = trim(strtolower($prsn->prsn_name_middle));
                     }
-                    if (isset($prsn->PrsnNameLast)) {
-                        $last = trim(strtolower(
-                            $prsn->PrsnNameLast));
+                    if (isset($prsn->prsn_name_last)) {
+                        $last = trim(strtolower($prsn->prsn_name_last));
                     }
-                    if ($this->chkDupliNickname(
-                        $nick, $first, $middle, $last)) {
+                    if ($this->chkDupliNickname($nick, $first, $middle, $last)) {
                         return [ '', '', 0 ];
                     }
                 }
@@ -541,11 +507,8 @@ class OpenReport extends OpenOfficers
      */
     protected function getCivReportNameHeader($nID)
     {
-        return '<h3 class="slBlueDark" '
-            . 'style="margin: 0px 0px 18px 0px;">' 
-            . $this->getCivReportName(
-                $this->sessData->getLatestDataBranchID()) 
-            . '</h3>';
+        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '</h3>';
     }
     
     /**
@@ -562,62 +525,45 @@ class OpenReport extends OpenOfficers
         if (!isset($this->v["civNames"])) {
             $this->v["civNames"] = [];
         }
-        if (!isset($this->v["civNames"][$civID]) 
-            || trim($this->v["civNames"][$civID]) == '') {
-            $civRow = $this->sessData->getRowById('Civilians', $civID);
+        if (!isset($this->v["civNames"][$civID]) || trim($this->v["civNames"][$civID]) == '') {
+            $civRow = $this->sessData->getRowById('civilians', $civID);
             if (!$prsn) {
                 list($prsn, $phys) = $this->queuePeopleSubsets($civID);
             }
             $name = '';
+            $com = $this->sessData->dataSets["complaints"][0];
+            $civ1 = $this->sessData->dataSets["civilians"][0];
             if ($this->canPrintFullReport()) {
-                $setCivID = $this->sessData
-                    ->dataSets["Civilians"][0]->CivID;
-                $firstLast = trim($prsn->PrsnNameFirst 
-                    . $prsn->PrsnNameLast);
-                if ($civID ==  $setCivID
-                    && ($firstLast == ''
-                    || $this->sessData->dataSets["Complaints"][0]
-                        ->ComPrivacy == 306) ) {
-                    $name = '<span style="color: #2b3493;" title="'
-                        . 'This complainant did not provide '
-                        . 'their name to investigators.'
-                        . '">Complainant</span>';
+                $setCivID = $civ1->civ_id;
+                $firstLast = trim($prsn->prsn_name_first . $prsn->prsn_name_last);
+                if ($civID ==  $setCivID && ($firstLast == '' || $com->com_privacy == 306)) {
+                    $name = '<span style="color: #2b3493;" title="This complainant did not provide '
+                        . 'their name to investigators.">Complainant</span>';
                 } elseif ($firstLast != '' 
                     && $this->canPrintFullReport()
                     && !$this->hideWitnessName($civRow)) {
-                    if (trim($prsn->PrsnNickname) != '') {
-                        $name = trim($prsn->PrsnNickname);
+                    if (trim($prsn->prsn_nickname) != '') {
+                        $name = trim($prsn->prsn_nickname);
                     } else {
-                        $name = '<span style="color: #2b3493;" title="'
-                            . 'This complainant wanted to '
-                            . 'publicly provide their name.">' 
-                            . $prsn->PrsnNameFirst . ' ' 
-                            . $prsn->PrsnNameLast . '</span>';
-                    } // ' . $prsn->PrsnNameMiddle . '
+                        $name = '<span style="color: #2b3493;" '
+                            . 'title="This complainant wanted to publicly provide their name.">' 
+                            . $prsn->prsn_name_first . ' ' . $prsn->prsn_name_last . '</span>';
+                    } // ' . $prsn->prsn_name_middle . '
                 }
             }
             $label = 'Complainant';
-            if ($this->sessData->dataSets["Civilians"][0]
-                    ->CivID != $civID) {
-                if ($civRow && isset($civRow->CivRole) 
-                    && $civRow->CivRole == 'Victim') {
-                    $label = 'Victim #' . (1+$this->sessData
-                        ->getLoopIndFromID('Victims', $civID));
+            if ($civ1->civ_id != $civID) {
+                if ($civRow && isset($civRow->civ_role) && $civRow->civ_role == 'Victim') {
+                    $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
                 } else {
-                    $label = 'Witness #' . (1+$this->sessData
-                        ->getLoopIndFromID('Witnesses', $civID));
+                    $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
                 }
-            } elseif ($this->sessData->dataSets["Civilians"][0]
-                ->CivRole == 'Victim') {
-                $label = 'Victim #' . (1+$this->sessData
-                    ->getLoopIndFromID('Victims', $civID));
-            } elseif ($this->sessData->dataSets["Civilians"][0]
-                ->CivRole == 'Witness') {
-                $label = 'Witness #' . (1+$this->sessData
-                    ->getLoopIndFromID('Witnesses', $civID));
+            } elseif ($civ1->civ_role == 'Victim') {
+                $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+            } elseif ($civ1->civ_role == 'Witness') {
+                $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
             }
-            $this->v["civNames"][$civID] = $label 
-                . ((trim($name) != '') ? ': ' . $name : '');
+            $this->v["civNames"][$civID] = $label . ((trim($name) != '') ? ': ' . $name : '');
         }
         return $this->v["civNames"][$civID];
     }
@@ -630,14 +576,11 @@ class OpenReport extends OpenOfficers
      */
     protected function getOffReportNameHeader($nID)
     {
-        list($itemInd, $itemID) = $this->sessData
-            ->currSessDataPosBranchOnly('Officers');
+        list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('officers');
         //$offID = $this->sessData->getLatestDataBranchID();
-        $offRow = $this->sessData->getRowById('Officers', $itemID);
-        return '<h3 class="slBlueDark" '
-            . 'style="margin: 0px 0px 18px 0px;">' 
-            . $this->getOffReportName($offRow, $itemInd) 
-            . '</h3>';
+        $offRow = $this->sessData->getRowById('officers', $itemID);
+        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getOffReportName($offRow, $itemInd) . '</h3>';
     }
     
     /**
@@ -653,38 +596,33 @@ class OpenReport extends OpenOfficers
         if (!isset($this->v["offNames"])) {
             $this->v["offNames"] = [];
         }
-        if ($off && isset($off->OffID)) {
+        if ($off && isset($off->off_id)) {
             if (sizeof($this->v["offNames"]) == 0 
-                || !isset($this->v["offNames"][$off->OffID]) 
-                || trim($this->v["offNames"][$off->OffID]) == '') {
+                || !isset($this->v["offNames"][$off->off_id]) 
+                || trim($this->v["offNames"][$off->off_id]) == '') {
                 if (!$prsn) {
-                    list($prsn, $phys) = $this
-                        ->queuePeopleSubsets($off->OffID, 'Officers');
+                    list($prsn, $phys) = $this->queuePeopleSubsets($off->off_id, 'officers');
                 }
                 $name = ' ';
                 if ($this->canPrintFullReport()) {
-                    if (trim($prsn->PrsnNickname) != '') {
-                        $name = trim(str_ireplace(
-                            'Officer ', 
-                            '', 
-                            $prsn->PrsnNickname
-                        ));
+                    if (trim($prsn->prsn_nickname) != '') {
+                        $name = trim(str_ireplace('Officer ', '', $prsn->prsn_nickname));
                     } else {
-                        $name = trim($prsn->PrsnNameFirst . ' ' 
-                            . $prsn->PrsnNameMiddle . ' ' 
-                            . $prsn->PrsnNameLast);
+                        $name = trim($prsn->prsn_name_first . ' ' . $prsn->prsn_name_middle 
+                            . ' ' . $prsn->prsn_name_last);
                         if ($name == '' 
-                            && trim($off->OffBadgeNumber) != '' 
-                            && trim($off->OffBadgeNumber) != '0') {
-                            $name = 'Badge #' . $off->OffBadgeNumber;
+                            && trim($off->off_badge_number) != '' 
+                            && trim($off->off_badge_number) != '0') {
+                            $name = 'Badge #' . $off->off_badge_number;
                         }
                     }
                 }
-                $this->v["offNames"][$off->OffID] = 'Officer #' 
-                    . (1+$ind) . ((trim($name) != '') 
-                        ? ': ' . $name : '');
+                $this->v["offNames"][$off->off_id] = 'Officer #' . (1+$ind);
+                if (trim($name) != '') {
+                    $this->v["offNames"][$off->off_id] .= ': ' . $name;
+                }
             }
-            return $this->v["offNames"][$off->OffID];
+            return $this->v["offNames"][$off->off_id];
         }
         return '';
     }
@@ -700,46 +638,38 @@ class OpenReport extends OpenOfficers
     {
         $info = '';
         $prsn = $this->sessData->getChildRow(
-            'Civilians', 
+            'civilians', 
             $civID, 
-            'PersonContact'
+            'person_contact'
         );
-        if ((isset($prsn->PrsnNameFirst) 
-            && trim($prsn->PrsnNameFirst) != '') 
-            || (isset($prsn->PrsnNameLast) 
-                && $prsn->PrsnNameLast != '')) {
-            //&& $this->sessData->dataSets["Complaints"][0]
-            //->ComPrivacy != 304) {
+        if ((isset($prsn->prsn_name_first) && trim($prsn->prsn_name_first) != '') 
+            || (isset($prsn->prsn_name_last) && $prsn->prsn_name_last != '')) {
+            //&& $this->sessData->dataSets["complaints"][0]
+            //->com_privacy != 304) {
             $info .= ', Name';
         }
-        if (isset($prsn->PrsnAddress) 
-            && trim($prsn->PrsnAddress) != '')  {
+        if (isset($prsn->prsn_address) && trim($prsn->prsn_address) != '')  {
             $info .= ', Address';
         }
-        if (isset($prsn->PrsnPhoneHome) 
-            && trim($prsn->PrsnPhoneHome) != '') {
+        if (isset($prsn->prsn_phone_home) && trim($prsn->prsn_phone_home) != '') {
             $info .= ', Phone Number'; 
         }
-        if (isset($prsn->PrsnEmail) 
-            && trim($prsn->PrsnEmail) != '') {
+        if (isset($prsn->prsn_email) && trim($prsn->prsn_email) != '') {
             $info .= ', Email'; 
         }
-        if (isset($prsn->PrsnFacebook) 
-            && trim($prsn->PrsnFacebook) != '') {
+        if (isset($prsn->prsn_facebook) && trim($prsn->prsn_facebook) != '') {
             $info .= ', Facebook';
         }
-        if (isset($prsn->PrsnBirthday) 
-            && trim($prsn->PrsnBirthday) != '' 
-            && trim($prsn->PrsnBirthday) != '0000-00-00' 
-            && trim($prsn->PrsnBirthday) != '1970-01-01') {
+        if (isset($prsn->prsn_birthday) 
+            && trim($prsn->prsn_birthday) != '' 
+            && trim($prsn->prsn_birthday) != '0000-00-00' 
+            && trim($prsn->prsn_birthday) != '1970-01-01') {
             $info .= ', Birthday';
         }
-        if (trim($info) != '' && ($civID != $this->sessData
-                ->dataSets["Civilians"][0]->CivID 
-            || $this->sessData->dataSets["Complaints"][0]
-                ->ComPrivacy != 306)) {
-            return '<i class="slGrey">Not public: ' 
-                . substr($info, 1) . '</i>';
+        if (trim($info) != '' 
+            && ($civID != $this->sessData->dataSets["civilians"][0]->civ_id 
+                || $this->sessData->dataSets["complaints"][0]->com_privacy != 306)) {
+            return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
         }
         return '';
     }
@@ -753,22 +683,18 @@ class OpenReport extends OpenOfficers
      */
     protected function getOffSnstvFldsNotPrinted($offID)
     {
-        $off = $this->sessData->getRowById('Officers', $offID);
-        $prsn = $this->sessData->getChildRow(
-            'Officers', 
-            $offID, 
-            'PersonContact'
-        );
-        $info = (((isset($prsn->PrsnNameFirst) 
-                && trim($prsn->PrsnNameFirst) != '') 
-            || (isset($prsn->PrsnNameLast) 
-                && $prsn->PrsnNameLast != '')) ? ', Name' : '')
-            . ((isset($off->OffBadgeNumber) 
-                && intVal($off->OffBadgeNumber) > 0) 
-                ? ', Badge Number' : '');
+        $off = $this->sessData->getRowById('officers', $offID);
+        $prsn = $this->sessData->getChildRow('officers', $offID, 'person_contact');
+        $info = '';
+        if ((isset($prsn->prsn_name_first) && trim($prsn->prsn_name_first) != '') 
+            || (isset($prsn->prsn_name_last) && $prsn->prsn_name_last != '')) {
+            $info .= ', Name';
+        }
+        if (isset($off->off_badge_number) && intVal($off->off_badge_number) > 0) {
+            $info .= ', Badge Number';
+        }
         if (trim($info) != '') {
-            return '<i class="slGrey">Not public: ' 
-                . substr($info, 1) . '</i>';
+            return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
         }
         return '';
     }
@@ -782,21 +708,19 @@ class OpenReport extends OpenOfficers
     {
         $cnt = 0;
         $profanity = '';
-        if (isset($this->sessData->dataSets["Officers"])) {
-            $offs = $this->sessData->dataSets["Officers"];
+        if (isset($this->sessData->dataSets["officers"])) {
+            $offs = $this->sessData->dataSets["officers"];
             if (sizeof($offs) > 0) {
                 foreach ($offs as $i => $off) {
-                    if ($off->OffUsedProfanity == 'Y') {
+                    if ($off->off_used_profanity == 'Y') {
                         $cnt++;
-                        $profanity .= ', ' 
-                            . $this->getOffReportName($off);
+                        $profanity .= ', ' . $this->getOffReportName($off);
                     }
                 }
             }
         }
         if (trim($profanity) != '') {
-            $desc = 'Officer' . (($cnt > 1) ? 's' : '') 
-                . ' used profanity?';
+            $desc = 'Officer' . (($cnt > 1) ? 's' : '') . ' used profanity?';
             return [
                 $desc, 
                 substr($profanity, 1)
@@ -814,21 +738,19 @@ class OpenReport extends OpenOfficers
     {
         $cnt = 0;
         $profanity = '';
-        if (isset($this->sessData->dataSets["Civilians"])) {
-            $civs = $this->sessData->dataSets["Civilians"];
+        if (isset($this->sessData->dataSets["civilians"])) {
+            $civs = $this->sessData->dataSets["civilians"];
             if (sizeof($civs) > 0) {
                 foreach ($civs as $i => $civ) {
-                    if ($civ->CivUsedProfanity == 'Y') {
+                    if ($civ->civ_used_profanity == 'Y') {
                         $cnt++;
-                        $profanity .= ', ' . $this
-                            ->getCivReportName($civ->getKey());
+                        $profanity .= ', ' . $this->getCivReportName($civ->getKey());
                     }
                 }
             }
         }
         if (trim($profanity) != '') {
-            $desc = 'Civilian' . (($cnt > 1) ? 's' : '') 
-                . ' used profanity?';
+            $desc = 'Civilian' . (($cnt > 1) ? 's' : '') . ' used profanity?';
             return [
                 $desc, 
                 substr($profanity, 1)
@@ -845,10 +767,8 @@ class OpenReport extends OpenOfficers
     protected function getReportOffAge($nID)
     {
         $phys = $this->sessData->getLatestDataBranchRow();
-        if ($phys && isset($phys->PhysAge) 
-            && intVal($phys->PhysAge) > 0) {
-            $defAge = $GLOBALS["SL"]->def
-                ->getVal('Age Ranges Officers', $phys->PhysAge);
+        if ($phys && isset($phys->phys_age) && intVal($phys->phys_age) > 0) {
+            $defAge = $GLOBALS["SL"]->def->getVal('Age Ranges Officers', $phys->phys_age);
             return [
                 '<span class="slGrey">Age Range</span>', 
                 $defAge, 
@@ -882,20 +802,18 @@ class OpenReport extends OpenOfficers
      */
     protected function printReportShare()
     {
-        $com = $this->sessData->dataSets["Complaints"][0];
-        $isPublished = $this->isPublished(
-            'Complaints', 
-            $this->coreID, 
-            $com
-        );
-        $viewPrfx = (($GLOBALS["SL"]->pageView == 'full') 
-            ? 'full-' : '');
-        return view('vendor.openpolice.nodes.1710-report-inc-share', [
-            "pubID"     => $com->ComPublicID,
-            "emojiTags" => $this->printEmojiTags(),
-            "published" => $isPublished,
-            "viewPrfx"  => $viewPrfx
-        ])->render();
+        $com = $this->sessData->dataSets["complaints"][0];
+        $isPublished = $this->isPublished('complaints', $this->coreID, $com);
+        $viewPrfx = (($GLOBALS["SL"]->pageView == 'full') ? 'full-' : '');
+        return view(
+            'vendor.openpolice.nodes.1710-report-inc-share', 
+            [
+                "pubID"     => $com->com_public_id,
+                "emojiTags" => $this->printEmojiTags(),
+                "published" => $isPublished,
+                "viewPrfx"  => $viewPrfx
+            ]
+        )->render();
     }
     
     /**
@@ -906,17 +824,14 @@ class OpenReport extends OpenOfficers
     protected function fillGlossary()
     {
         $this->v["glossaryList"] = [];
-        if ((in_array($this->treeID, [1, 42]) 
-                || $GLOBALS["SL"]->getReportTreeID() == 1)
-            && isset($this->sessData->dataSets["Complaints"])) {
-            $prvLnk = '<a href="/complaint-privacy-options" '
-                . 'target="_blank">Privacy Setting</a>: ';
-            $prvType = $GLOBALS["SL"]->def->getVal('Privacy Types', 
-                $this->sessData->dataSets["Complaints"][0]->ComPrivacy);
-            $prvType = str_replace('Names Visible to Police but not Public', 
-                'No Names Public', str_replace('Completely ', '', 
-                str_replace('Submit Publicly', 'Full Transparency', 
-                    $prvType)));
+        if ((in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1)
+            && isset($this->sessData->dataSets["complaints"])) {
+            $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
+            $comPriv = $this->sessData->dataSets["complaints"][0]->com_privacy;
+            $prvType = $GLOBALS["SL"]->def->getVal('Privacy Types', $comPriv);
+            $prvType = str_replace('Submit Publicly', 'Full Transparency', $prvType);
+            $prvType = str_replace('Completely ', '', $prvType);
+            $prvType = str_replace('Names Visible to Police but not Public', 'No Names Public', $prvType);
             $desc = view(
                 'vendor.openpolice.report-inc-fill-glossary', 
                 [
@@ -928,27 +843,23 @@ class OpenReport extends OpenOfficers
                 '<b>' . $prvType . '</b>',
                 $desc
             ];
-            if ($this->sessData->dataSets["Complaints"][0]
-                ->ComAwardMedallion == 'Gold') {
+            if ($this->sessData->dataSets["complaints"][0]->com_award_medallion == 'Gold') {
                 $this->v["glossaryList"][] = [
                     '<b>Gold-Level Complaint</b>', 
                     view(
                         'vendor.openpolice.report-inc-fill-glossary', 
-                        [
-                            "glossaryType" => 'Gold-Level Complaint'
-                        ]
+                        [ "glossaryType" => 'Gold-Level Complaint' ]
                     )->render()
                 ];
             }
             $this->simpleAllegationList();
             if (sizeof($this->allegations) > 0) {
                 foreach ($this->allegations as $i => $a) {
+                    $allegDesc = '<a href="/allegations" target="_blank">Allegation</a>: ' 
+                        . $GLOBALS["SL"]->def->getDesc('Allegation Type', $a[0]);
                     $this->v["glossaryList"][] = [
                         '<b>' . $a[0] . '</b>', 
-                        '<a href="/allegations" target="_blank">'
-                            . 'Allegation</a>: ' 
-                            . $GLOBALS["SL"]->def
-                                ->getDesc('Allegation Type', $a[0])
+                        $allegDesc
                     ];
                 }
             }
@@ -967,9 +878,7 @@ class OpenReport extends OpenOfficers
         $this->loadRelatedArticles();
         return view(
             'vendor.openpolice.nodes.1708-report-flex-articles', 
-            [
-                "allUrls" => $this->v["allUrls"]
-            ]
+            [ "allUrls" => $this->v["allUrls"] ]
         )->render();
     }
     
@@ -982,9 +891,10 @@ class OpenReport extends OpenOfficers
     protected function printFlexVids()
     {
         $this->loadRelatedArticles();
-        return view('vendor.openpolice.nodes.1753-report-flex-videos', [
-            "allUrls" => $this->v["allUrls"]
-        ])->render();
+        return view(
+            'vendor.openpolice.nodes.1753-report-flex-videos', 
+            [ "allUrls" => $this->v["allUrls"] ]
+        )->render();
     }
     
     /**

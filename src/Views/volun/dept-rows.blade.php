@@ -12,26 +12,26 @@
         @if ($i < 500)
         <div class="p10 @if ($i%2 == 0) row2 @endif "><div class="row">
             <div class="col-5">
-                <a href="/dashboard/start-{{ $dept->DeptID }}/volunteers-research-departments">
-                    @if (isset($dept->DeptName)) {{ str_replace('Police Dept', 'PD',
-                        str_replace('Department', 'Dept', $dept->DeptName)) }}
+                <a href="/dashboard/start-{{ $dept->dept_id }}/volunteers-research-departments">
+                    @if (isset($dept->dept_name)) {{ str_replace('Police Dept', 'PD',
+                        str_replace('Department', 'Dept', $dept->dept_name)) }}
                     @else <span class="slGrey">(empty)</span> @endif </a>
             </div>
             <div class="col-3">
-                {{ $dept->DeptAddressCity }}, {{ $dept->DeptAddressState }}
+                {{ $dept->dept_address_city }}, {{ $dept->dept_address_state }}
             </div>
             <div class="col-1">
-                @if (intVal($dept->DeptScoreOpenness) > 0) <b>{{ $dept->DeptScoreOpenness }}</b>
+                @if (intVal($dept->dept_score_openness) > 0) <b>{{ $dept->dept_score_openness }}</b>
                 @else <span class="slGery">0</span>
                 @endif
             </div>
             <div class="col-3">
                 {!! view('vendor.openpolice.volun.volunteer-recent-edits', [
-                    "deptID" => $dept->DeptID
+                    "deptID" => $dept->dept_id
                 ])->render() !!}
-                @if (trim($dept->DeptVerified) != '' 
-                    && !in_array($dept->DeptVerified, ['0000-00-00 00:00:00', '2001-01-01 00:00:00']))
-                    {{ date("n/j/y", strtotime($dept->DeptVerified)) }}
+                @if (trim($dept->dept_verified) != '' 
+                    && !in_array($dept->dept_verified, ['0000-00-00 00:00:00', '2001-01-01 00:00:00']))
+                    {{ date("n/j/y", strtotime($dept->dept_verified)) }}
                 @else
                     <span class="slGery">-</span>
                 @endif

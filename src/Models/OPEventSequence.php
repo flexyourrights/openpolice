@@ -5,13 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPEventSequence extends Model
 {
-    protected $table      = 'OP_EventSequence';
-    protected $primaryKey = 'EveID';
+    protected $table      = 'op_event_sequence';
+    protected $primaryKey = 'eve_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'EveComplaintID', 
-		'EveType', 
+		'eve_complaint_id', 
+		'eve_type', 
     ];
     
     // END SurvLoop auto-generated portion of Model

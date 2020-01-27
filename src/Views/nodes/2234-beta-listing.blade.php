@@ -12,28 +12,28 @@
     </div>
 </div>
 @forelse ($betas as $i => $beta)
-    <div class="nodeAnchor"><a name="beta{{ $beta->BetaID }}"></a></div>
+    <div class="nodeAnchor"><a name="beta{{ $beta->beta_id }}"></a></div>
     <div class="p15 @if ($i%2 == 0) row2 @endif ">
         <div class="row">
             <div class="col-md-4">
-                <b>{{ $beta->BetaName }} {{ $beta->BetaLastName }}</b><br />
-                <a href="mailto:{{ $beta->BetaEmail }}">{{ $beta->BetaEmail }}</a>
+                <b>{{ $beta->beta_name }} {{ $beta->beta_last_name }}</b><br />
+                <a href="mailto:{{ $beta->beta_email }}">{{ $beta->beta_email }}</a>
             </div><div class="col-md-4">
                 {{ $GLOBALS["SL"]->printTimeZoneShift($beta->created_at) }}<br />
-                @if (isset($beta->BetaHowHear))
-                    <span class="slGrey">{{ $beta->BetaHowHear }}</span>
+                @if (isset($beta->beta_how_hear))
+                    <span class="slGrey">{{ $beta->beta_how_hear }}</span>
                 @endif
             </div><div class="col-md-4">
-                @if (isset($beta->BetaInvited))
-                    {{ date('n/j/y', strtotime($beta->BetaInvited)) }}
+                @if (isset($beta->beta_invited))
+                    {{ date('n/j/y', strtotime($beta->beta_invited)) }}
                 @else
-                    <a href="{!! $betaLinks[$beta->BetaID] !!}"
+                    <a href="{!! $betaLinks[$beta->beta_id] !!}"
                         class="btn btn-secondary btn-sm">Send Invite</a>
                 @endif
             </div>
         </div>
-        @if (isset($beta->BetaYear)) {{ $beta->BetaYear }} - @endif
-        {{ $beta->BetaNarrative }}
+        @if (isset($beta->beta_year)) {{ $beta->beta_year }} - @endif
+        {{ $beta->beta_narrative }}
     </div>
 @empty
     <i>None found</i>

@@ -5,15 +5,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPPrivilegeProfiles extends Model
 {
-    protected $table      = 'OP_PrivilegeProfiles';
-    protected $primaryKey = 'PrivID';
+    protected $table      = 'op_privilege_profiles';
+    protected $primaryKey = 'priv_id';
     public $timestamps    = true;
     protected $fillable   = 
     [    
-		'PrivUserID', 
-		'PrivComplaintID', 
-		'PrivDeptID', 
-		'PrivAccessLevel', 
+		'priv_user_id', 
+		'priv_complaint_id', 
+		'priv_dept_id', 
+		'priv_access_level', 
     ];
     
     // END SurvLoop auto-generated portion of Model

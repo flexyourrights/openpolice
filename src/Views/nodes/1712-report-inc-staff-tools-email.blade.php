@@ -2,22 +2,22 @@
 
 Select which email template you want to send:<br />
 <select name="email" id="emailID" class="form-control form-control-lg" 
-    onChange="window.location='/complaint/read-{{ $complaintRec->ComPublicID 
+    onChange="window.location='/complaint/read-{{ $complaintRec->com_public_id 
         }}?email='+this.value+'&refresh=1#emailer';" autocomplete="off">
     <option value="" > No email right now</option>
     <?php $set = '00'; ?>
     @forelse ($emailList as $i => $email)
-        @if ($email->EmailType != 'Blurb')
+        @if ($email->email_type != 'Blurb')
             <?php
-            $currSet = substr($email->EmailName, 0, 1) . '0';
+            $currSet = substr($email->email_name, 0, 1) . '0';
             if ($set != $currSet) {
                 $set = $currSet;
                 echo '<option disabled ></option>';
             }
             ?>
-            <option value="{{ $email->EmailID }}" 
-                @if ($emailID == $email->EmailID) SELECTED @endif
-                >{{ $email->EmailName }} - {{ $email->EmailType }}</option>
+            <option value="{{ $email->email_id }}" 
+                @if ($emailID == $email->email_id) SELECTED @endif
+                >{{ $email->email_name }} - {{ $email->email_type }}</option>
         @endif
     @empty 
     @endforelse
@@ -29,11 +29,11 @@ Select which email template you want to send:<br />
     <div class="pB20"> </div>
 
     <form name="complaintEmailForm" action="/dash/complaint/read-{{ 
-        $complaintRec->ComID }}?view=emails&refresh=1{{ 
+        $complaintRec->com_id }}?view=emails&refresh=1{{ 
         (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}" 
         method="post" onSubmit="return chkEmaForm();" >
     <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="cID" value="{{ $complaintRec->ComPublicID }}">
+    <input type="hidden" name="cID" value="{{ $complaintRec->com_public_id }}">
     <input type="hidden" name="emailID" value="{{ $emailID }}">
     
     <div id="analystEmailComposer" 
@@ -42,7 +42,7 @@ Select which email template you want to send:<br />
         @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
             @if (!isset($stuff["overUser"]) || !isset($stuff["overUser"]->email))
                 <div class="alert alert-danger mT10 fPerc133" role="alert">
-                    <strong>{{ $stuff["deptRow"]->DeptName }}</strong> 
+                    <strong>{{ $stuff["deptRow"]->dept_name }}</strong> 
                     is <nobr>NOT OpenPolice-Compliant!</nobr><br />
                     Do not send them an email!
                 </div>
@@ -67,7 +67,7 @@ Select which email template you want to send:<br />
             <select class="form-control form-control-lg w100 changeEmailTo" 
                 name="emailTo{{ $j }}" id="emailTo{{ $j }}ID"
                 autocomplete=off >
-            @forelse ($emailsTo[$email["rec"]->EmailType] as $i => $ema)
+            @forelse ($emailsTo[$email["rec"]->email_type] as $i => $ema)
                 <option value="{{ $ema[0] }}" @if ($ema[2]) SELECTED @endif 
                     >{{ $ema[1] }} ({{ $ema[0] }}) </option>
             @empty
@@ -141,7 +141,7 @@ Select which email template you want to send:<br />
             @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
                 @if (!isset($stuff["overUser"]) || !isset($stuff["overUser"]->email))
                     <div class="alert alert-danger mT10 fPerc133" role="alert">
-                        <strong>{{ $stuff["deptRow"]->DeptName }}</strong> 
+                        <strong>{{ $stuff["deptRow"]->dept_name }}</strong> 
                         is NOT OpenPolice-Compliant!<br />Do not send them an email!</div>
                 @endif
             @empty

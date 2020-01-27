@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPzVolunEditsDepts extends Model
 {
-    protected $table = 'OP_zVolunEditsDepts';
+    protected $table = 'op_z_VolunEditsDepts';
     protected $primaryKey = 'EditDeptID';
     public $timestamps = true;
     
     protected $fillable = [
         'EditDeptUser',
         'EditDeptPageTime',
-        'EditDeptDeptID', 
+        'EditDept_dept_id', 
         'EditDeptName', 
         'EditDeptSlug', 
         'EditDeptType', 

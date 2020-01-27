@@ -4,8 +4,10 @@
 
 <div id="acknows" class="jumbotron mT20">
     <h1>Acknowledgments</h1>
-    <a href="https://www.sanjoseca.gov/DocumentCenter/View/29599" target="_blank"><img src="/openpolice/sanjose.png" border=1 width=16% hspace=5 align=right ></a>
-    <a href="http://www.amazon.com/New-World-Police-Accountability/dp/1452286876/" target="_blank"><img src="/openpolice/samwalker.png" border=0 width=16% hspace=5 align=right ></a>
+    <a href="https://www.sanjoseca.gov/DocumentCenter/View/29599" target="_blank"
+        ><img src="/openpolice/sanjose.png" border=1 width=16% hspace=5 align=right ></a>
+    <a href="http://www.amazon.com/New-World-Police-Accountability/dp/1452286876/" target="_blank"
+        ><img src="/openpolice/samwalker.png" border=0 width=16% hspace=5 align=right ></a>
     <p>
         Since its inception, the emerging database design has been striving to rely upon 
         best-practice recommendations presented in <a href="http://www.amazon.com/gp/product/0321884493/" 

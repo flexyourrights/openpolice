@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OPVehiclePersons extends Model
 {
-    protected $table         = 'OP_VehiclePersons';
+    protected $table         = 'op_VehiclePersons';
     protected $primaryKey     = 'VehicPersID';
     public $timestamps         = true;
     protected $fillable     = 

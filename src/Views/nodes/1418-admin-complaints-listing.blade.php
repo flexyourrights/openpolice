@@ -7,9 +7,11 @@
             No complaints found in this filter
         @else
             @foreach ($complaintsPreviews as $prev)
-            <div class="slCard nodeWrap"><div class="mTn20 mBn10">
-                {!! $prev !!}
-            </div></div>
+            <div class="slCard nodeWrap">
+                <div class="mTn20 mBn10">
+                    {!! $prev !!}
+                </div>
+            </div>
             @endforeach
         @endif
     </div>
@@ -34,12 +36,9 @@
                 <h4>Manage Complaints</h4>
             @endif
         @endif
-            {{ number_format(sizeof($complaints)) }} Found
-            @if (isset($filtersDesc) && trim($filtersDesc) != '')
-                <span class="mL5 slGrey">{{ 
-                    $GLOBALS["SL"]->wordLimitDotDotDot(trim($filtersDesc), 20) 
-                }}</span>
-            @endif
+            <div id="searchFoundCnt" class="disIn">
+                {!! $complaintFiltDescPrev !!}
+            </div>
         </div>
         <div class="col-md-4">
         @if (!$GLOBALS["SL"]->x["isPublicList"])
@@ -66,10 +65,13 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" 
                             aria-labelledby="dropdownMenu2">
-                            {!! view('vendor.openpolice.complaint-listing-sorts', [
-                                "sortLab" => $sortLab,
-                                "sortDir" => $sortDir
-                            ])->render() !!}
+                            {!! view(
+                                'vendor.openpolice.complaint-listing-sorts', 
+                                [
+                                    "sortLab" => $sortLab,
+                                    "sortDir" => $sortDir
+                                ]
+                            )->render() !!}
                         </div>
                     </div>
 
@@ -100,29 +102,23 @@
             </div>
             <div class="col-lg-8">
                 <div id="complaintPreviews" class="w100">
-                    @if (sizeof($complaintsPreviews) == 0)
-                        No complaints found in this filter
-                    @else
-                        @foreach ($complaintsPreviews as $prev)
-                        <div class="slCard nodeWrap">
-                            <div class="mTn20 mBn10">
-                                {!! $prev !!}
-                            </div>
-                        </div>
-                        @endforeach
-                    @endif
+                    <div class="w100 p20 taC">
+                        {!! $GLOBALS["SL"]->spinner() !!}
+                    </div>
+            <?php /* <a href="?showPreviews=1{!! $searchFiltsURL !!}" target="_blank"
+                >?showPreviews=1{!! $searchFiltsURL !!}</a> */ ?>
                 </div>
             </div>
         </div>
     </div> <!-- end admDashLargeView -->
-    <?php /* @if (sizeof($complaints) > 0)
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $("#complaintPreviews").load("/record-prevs/1?rawids={{  }}");
-            });
-        </script>
-    @endif */ ?>
-
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //setTimeout(function() {
+                $("#complaintPreviews").load("?showPreviews=1{!! $searchFiltsURL !!}");
+            //}, 10);
+        });
+    </script>
+    
 @elseif ($sView == 'list')
 
     <div id="admDashListView">
@@ -135,66 +131,65 @@
     <?php $cnt = 0; ?>
     @forelse ($complaints as $j => $com)
         <?php $cnt++; ?>
-        <div id="comRow{{ $com->ComID }}" class="complaintRowWrp">
+        <div id="comRow{{ $com->com_id }}" class="complaintRowWrp">
 
             <a class="complaintRowA" href="javascript:;"
-                data-com-id="{{ $com->ComID }}" data-com-pub-id="{{ intVal($com->ComPublicID) }}">
+                data-com-id="{{ $com->com_id }}" data-com-pub-id="{{ intVal($com->com_public_id) }}">
                 <div class="float-left complaintAlert">
                     <div>&nbsp;
-                    @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', 
-                        $com->ComType), ['Unreviewed', 'Not Sure'])
-                        || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) 
+                    @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type), 
+                            ['Unreviewed', 'Not Sure'])
+                        || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                             == 'Police Complaint'
-                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
+                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
                             ['New', 'Hold', 'Reviewed'])))
                         <div class="litRedDot"></div>
-                    @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) == 'Police Complaint'
-                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus), 
+                    @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) == 'Police Complaint'
+                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
                             ['Needs More Work', 'Pending Attorney', 'OK to Submit to Oversight']))
                         <div class="litRedDottie"></div>
                     @endif
                     </div>
                 </div>
                 <div class="float-left">
-                    <b>{{ trim($com->IncAddressCity) }}, {{ $com->IncAddressState }},
+                    <b>{{ trim($com->inc_address_city) }}, {{ $com->inc_address_state }},
                     {{ $GLOBALS["SL"]->convertAllCallToUp1stChars(
-                        $com->PrsnNameFirst . ' ' . $com->PrsnNameLast) }}</b><br />
+                        $com->prsn_name_first . ' ' . $com->prsn_name_last) }}</b><br />
                     <span class="slGrey">
-                    @if ($com->ComPublicID <= 0)
-                        #i{{ number_format($com->ComID) }}
-                        @if ($com->ComSubmissionProgress > 0 
-                            && isset($lastNodes[$com->ComSubmissionProgress]))
-                            /{{ $lastNodes[$com->ComSubmissionProgress] }}
+                    @if ($com->com_public_id <= 0)
+                        #i{{ number_format($com->com_id) }}
+                        @if ($com->com_submission_progress > 0 
+                            && isset($lastNodes[$com->com_submission_progress]))
+                            /{{ $lastNodes[$com->com_submission_progress] }}
                         @endif
                     @else
-                        #{{ number_format($com->ComPublicID) }}
-                        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) 
+                        #{{ number_format($com->com_public_id) }}
+                        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                             == 'Police Complaint')
-                            {{ $GLOBALS['SL']->def->getVal('Complaint Status', $com->ComStatus) }}
+                            {{ $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status) }}
                         @endif
                     @endif
-                    @if ($com->ComStatus != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete') 
-                        && $com->ComType 
-                        != $GLOBALS["SL"]->def->getID('Complaint Type',  'Police Complaint'))
-                        ({{ $GLOBALS['SL']->def->getVal('Complaint Type', $com->ComType) }})
+                    @if ($com->com_status != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete') 
+                        && $com->com_type != $GLOBALS["SL"]->def->getID('Complaint Type',  'Police Complaint'))
+                        ({{ $GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) }})
                     @endif
                     </span>
                 </div>
                 <div class="float-right">
-                    @if (isset($com->ComRecordSubmitted))
+                    @if (isset($com->com_record_submitted))
                         &nbsp;<br /><span class="slGrey">{{ 
-                        date("n/j/y", strtotime($com->ComRecordSubmitted)) }}</span>
+                        date("n/j/y", strtotime($com->com_record_submitted)) }}</span>
                     @endif
                 </div>
                 <div class="fC"></div>
             </a>
 
             <a class="complaintRowFull" 
-                @if ($com->ComPublicID > 0) href="/dash/complaint/read-{{ $com->ComPublicID }}"
-                @else href="/dash/complaint/readi-{{ $com->ComID }}"
+                @if ($com->com_public_id > 0) href="/dash/complaint/read-{{ $com->com_public_id }}"
+                @else href="/dash/complaint/readi-{{ $com->com_id }}"
                 @endif ><i class="fa fa-arrows-alt" aria-hidden="true"></i></a>
             
-            <div id="resultSpin{{ $com->ComID }}" class="resultSpin"></div>
+            <div id="resultSpin{{ $com->com_id }}" class="resultSpin"></div>
 
         </div>
     @empty
@@ -210,8 +205,8 @@
                     </div>
                 </div>
             </div>
-            <iframe id="reportAdmPreview" src="" width="100%" height="100%" frameborder="0"
-                style="display: block;"></iframe>
+            <iframe id="reportAdmPreview" src="" width="100%" height="100%" 
+                frameborder="0" style="display: block;"></iframe>
         </div>
         <div class="fC"></div>
     </div> <!-- end admDashListView -->

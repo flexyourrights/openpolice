@@ -6,7 +6,9 @@
         <p class="slGrey">Leave fields blank if the department doesn't have the thing.</p>
     </div><div class="col-5">
         <div class="p5"></div>
-        <a href="https://www.google.com/search?as_q={{ urlencode($deptRow->DeptName . ' file complaint against') }}" 
-            class="btn btn-secondary" target="_blank">Complaints Search <i class="fa fa-google mL10"></i></a>
+        <a href="https://www.google.com/search?as_q={{ 
+            urlencode($deptRow->dept_name . ' file complaint against') }}" 
+            class="btn btn-secondary" target="_blank"
+            >Complaints Search <i class="fa fa-google mL10"></i></a>
     </div>
 </div>
