@@ -537,17 +537,18 @@ class OpenReport extends OpenOfficers
                 $setCivID = $civ1->civ_id;
                 $firstLast = trim($prsn->prsn_name_first . $prsn->prsn_name_last);
                 if ($civID ==  $setCivID && ($firstLast == '' || $com->com_privacy == 306)) {
-                    $name = '<span style="color: #2b3493;" title="This complainant did not provide '
-                        . 'their name to investigators.">Complainant</span>';
+                    // '<span style="color: #2B3493;" title="'
+                    // . 'This complainant did not provide their name to investigators.'
+                    $name = 'Complainant';
                 } elseif ($firstLast != '' 
                     && $this->canPrintFullReport()
                     && !$this->hideWitnessName($civRow)) {
                     if (trim($prsn->prsn_nickname) != '') {
                         $name = trim($prsn->prsn_nickname);
                     } else {
-                        $name = '<span style="color: #2b3493;" '
-                            . 'title="This complainant wanted to publicly provide their name.">' 
-                            . $prsn->prsn_name_first . ' ' . $prsn->prsn_name_last . '</span>';
+                        // '<span style="color: #2B3493;" title="'
+                        // . 'This complainant wanted to publicly provide their name.">' 
+                        $name = $prsn->prsn_name_first . ' ' . $prsn->prsn_name_last;
                     } // ' . $prsn->prsn_name_middle . '
                 }
             }
@@ -563,7 +564,11 @@ class OpenReport extends OpenOfficers
             } elseif ($civ1->civ_role == 'Witness') {
                 $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
             }
-            $this->v["civNames"][$civID] = $label . ((trim($name) != '') ? ': ' . $name : '');
+            if (trim($name) == '') {
+                $this->v["civNames"][$civID] = $name;
+            } else {
+                $this->v["civNames"][$civID] = $name . ' (' . $label . ')';
+            }
         }
         return $this->v["civNames"][$civID];
     }
@@ -605,6 +610,33 @@ class OpenReport extends OpenOfficers
                 }
                 $name = ' ';
                 if ($this->canPrintFullReport()) {
+                    if (trim($off->off_officer_rank) != '') {
+                        $rank = strtolower(trim(str_replace(' ', '', $off->off_officer_rank)));
+                        $ok2print = [
+                            'Agent', 'Assistant Chief of Police', 'Assistant Commissioner',
+                            'Assistant Sheriff', 'Assistant Superintendent', 'Captain (Capt.)', 
+                            'Chief Deputy', 'Chief of Police', 'Colonel (Col.)', 'Commander (Cdr.)', 
+                            'Commissioner', 'Corporal (Cpl.)', 'Deputy', 'Deputy Chief of Police', 
+                            'Deputy Commissioner', 'Deputy Superintendent', 'Detective (Det.)', 
+                            'Director (Dir.)', 'Inspector (Insp.)', 'Investigator', 
+                            'Lieutenant (Lt.)', 'Lieutenant Colonel (Lt. Col.)', 'Major (Maj.)', 
+                            'Officer (Ofc.)', 'Patrol Officer', 'Police Officer', 
+                            'Police Commissioner', 'Sergeant (Sgt.)', 'Sheriff', 
+                            'Superintendent (Supt.)', 'Trooper', 'Undersheriff'
+                        ];
+                        foreach ($ok2print as $tmpRnk) {
+                            $lwrRnk = strtolower(str_replace(' ', '', $tmpRnk));
+
+
+
+                        }
+                    }
+
+
+                    
+
+
+
                     if (trim($prsn->prsn_nickname) != '') {
                         $name = trim(str_ireplace('Officer ', '', $prsn->prsn_nickname));
                     } else {
@@ -617,12 +649,60 @@ class OpenReport extends OpenOfficers
                         }
                     }
                 }
-                $this->v["offNames"][$off->off_id] = 'Officer #' . (1+$ind);
-                if (trim($name) != '') {
-                    $this->v["offNames"][$off->off_id] .= ': ' . $name;
+                $label = 'Officer #' . (1+$ind);
+                if (trim($name) == '') {
+                    $this->v["offNames"][$off->off_id] = $label;
+                } else {
+                    $this->v["offNames"][$off->off_id] = $name . ' (' . $label . ')';
                 }
             }
             return $this->v["offNames"][$off->off_id];
+        }
+        return '';
+    }
+    
+    /**
+     * Determine the most appropriate name printing for a officer within the survey.
+     *
+     * @param  App\Models\OPOfficers $off
+     * @param  int $ind
+     * @param  App\Models\OPPersonContact $prsn
+     * @return string
+     */
+    protected function getOffNickname($off, $ind = 0, $prsn = NULL)
+    {
+        if (!isset($this->v["offNicknames"])) {
+            $this->v["offNicknames"] = [];
+        }
+        if ($off && isset($off->off_id)) {
+            if (sizeof($this->v["offNicknames"]) == 0 
+                || !isset($this->v["offNicknames"][$off->off_id]) 
+                || trim($this->v["offNicknames"][$off->off_id]) == '') {
+                if (!$prsn) {
+                    list($prsn, $phys) = $this->queuePeopleSubsets($off->off_id, 'officers');
+                }
+                $name = ' ';
+                if ($this->canPrintFullReport()) {
+                    if (trim($prsn->prsn_nickname) != '') {
+                        $name = trim(str_ireplace('Officer ', '', $prsn->prsn_nickname));
+                    } else {
+                        $name = trim($prsn->prsn_name_first . ' ' . $prsn->prsn_name_middle 
+                            . ' ' . $prsn->prsn_name_last);
+                        if ($name == '' 
+                            && trim($off->off_badge_number) != '' 
+                            && trim($off->off_badge_number) != '0') {
+                            $name = 'Badge #' . $off->off_badge_number;
+                        }
+                    }
+                }
+                $label = 'Officer #' . (1+$ind);
+                if (trim($name) == '') {
+                    $this->v["offNicknames"][$off->off_id] = $label;
+                } else {
+                    $this->v["offNicknames"][$off->off_id] = $name . ' (' . $label . ')';
+                }
+            }
+            return $this->v["offNicknames"][$off->off_id];
         }
         return '';
     }

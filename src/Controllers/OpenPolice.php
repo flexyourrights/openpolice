@@ -72,6 +72,8 @@ class OpenPolice extends OpenInitExtras
             return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif (in_array($nID, [859, 1454])) {
             return $this->printDeptOverPublic($nID);
+        } elseif (in_array($nID, [2804])) {
+            return $this->printDeptOverPublicTop50s($nID);
                 
         // How We Rate Departments Page
         } elseif ($nID == 1127) {

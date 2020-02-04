@@ -20,6 +20,8 @@ class OPLinksComplaintOversight extends Model
 		'lnk_com_over_report_date', 
 		'lnk_com_over_oversight_report_evidence_id', 
 		'lnk_com_over_agency_complaint_number', 
+        'lnk_com_over_declined',
+        'lnk_com_over_declined_evidence_id',
     ];
     
     // END SurvLoop auto-generated portion of Model

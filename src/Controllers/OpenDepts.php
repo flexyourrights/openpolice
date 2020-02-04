@@ -803,6 +803,25 @@ class OpenDepts extends OpenListing
     }
     
     /**
+     * Prints the main public listing of all departments with
+     * accessibility scores, updated in 2020 with just some top 50 lists!
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printDeptOverPublicTop50s($nID)
+    {
+
+        return view(
+            'vendor.openpolice.nodes.2804-depts-accessibility-overview-public', 
+            [
+                "nID"        => $nID,
+                "deptScores" => $this->v["deptScores"]
+            ]
+        )->render();
+    }
+    
+    /**
      * Prints the titles for main public listing of all departments 
      * with accessibility scores.
      *

@@ -1,5 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/2711-dept-page-basic-info.blade.php -->
-<h2 class="mT0">{!! $d["deptRow"]->dept_name !!}</h2>
+<h2>{!! $d["deptRow"]->dept_name !!}</h2>
 <p>
 @if (isset($d["deptRow"]->dept_address) 
 	&& trim($d["deptRow"]->dept_address) != '')
@@ -15,6 +15,7 @@
     {{ $d["deptRow"]->dept_phone_work }}
 @endif
 </p>
+<?php /*
 <div class="mT3">{!! 
     $GLOBALS["SL"]->embedMapSimpRowAddy(
     	$nID, 
@@ -24,3 +25,4 @@
     	250
     )
 !!}</div>
+*/ ?>

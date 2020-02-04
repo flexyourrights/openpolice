@@ -1,60 +1,75 @@
 <!-- resources/views/vendor/openpolice/dept-page-filing-instructs.blade.php -->
 
 <div class="nodeAnchor"><a name="how"></a></div>
-<div class="slCard mT20">
-    <h3 class="mT0">
-        How to File Complaints against the {!! $d["deptRow"]->dept_name !!}
-    </h3>
-    @if (isset($d["iaRow"]->over_official_form_not_req) 
-        && intVal($d["iaRow"]->over_official_form_not_req) == 1
-        && isset($d["iaRow"]->over_way_sub_email) 
-        && intVal($d["iaRow"]->over_way_sub_email) == 1
-        && isset($d[$d["whichOver"]]->over_email) 
-        && trim($d[$d["whichOver"]]->over_email) != '')
-        <div class="alert alert-success mT10" role="alert"><h4 class="m0">
-            <i class="fa fa-smile-o mR5" aria-hidden="true"></i> 
-            OpenPolice-Compatible Department
-        </h4></div>
-        <p class="mB20">
-            This police department's policy permits them 
-            to investigate complaints sent via email. 
-            They also accept complaints filed on non-department forms. 
-            <b class="bld">That means OpenPolice.org will automatically 
-                file your report after you 
-            <a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
-            <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->dept_slug }}" */ ?>
-                >share your story</a>.</b>
-        </p>
+<p>&nbsp;</p>
+<h3>
+    How to File Complaints against the {!! $d["deptRow"]->dept_name !!}
+</h3>
+@if (isset($d["iaRow"]->over_official_form_not_req) 
+    && intVal($d["iaRow"]->over_official_form_not_req) == 1
+    && isset($d["iaRow"]->over_way_sub_email) 
+    && intVal($d["iaRow"]->over_way_sub_email) == 1
+    && isset($d[$d["whichOver"]]->over_email) 
+    && trim($d[$d["whichOver"]]->over_email) != '')
+    <div class="alert alert-success mT10" role="alert"><h4 class="m0">
+        <i class="fa fa-smile-o mR5" aria-hidden="true"></i> 
+        OpenPolice-Compatible Department
+    </h4></div>
+    <p class="mB20">
+        This police department's policy permits them 
+        to investigate complaints sent via email. 
+        They also accept complaints filed on non-department forms. 
+        <b class="bld">That means OpenPolice.org will automatically 
+            file your report after you share your story.</b>
+    </p>
+
+    @if (!isset($ownerTools) || !$ownerTools)
         <p>
-            The information below includes other ways 
-            to submit a formal complaint to the 
-            {{ $d[$d["whichOver"]]->over_agnc_name }}.
-        </p>
-    @else
-        @if (isset($d["iaRow"]->over_way_sub_paper_in_person) 
-            && intVal($d["iaRow"]->over_way_sub_paper_in_person) == 1)
-            <div class="alert alert-danger mT10" role="alert">
-                <i class="fa fa-frown-o mR5" aria-hidden="true"></i> 
-                This department only investigates complaints submitted in-person.
-            </div>
-        @endif
-        <p>
-            This department does not investigate 
-            OpenPolice.org reports sent by email.
-            @if (!isset($ownerTools) || !$ownerTools)
-                We recommend you 
-                <a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
-                    <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->dept_slug }}" */ ?>
-                    >share your story on OpenPolice.org</a> first.
-                Then use the information below to submit a formal complaint.
-            @endif
+        <a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
+    <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->dept_slug }}" */ ?>
+            class="btn btn-primary btn-lg"
+            >File a Complaint or Compliment</a>
         </p>
     @endif
-</div>
 
-<div class="slCard mT20">
+    <p>
+        The information below includes other ways 
+        to submit a formal complaint to the 
+        {{ $d[$d["whichOver"]]->over_agnc_name }}.
+    </p>
+@else
+    @if (isset($d["iaRow"]->over_way_sub_paper_in_person) 
+        && intVal($d["iaRow"]->over_way_sub_paper_in_person) == 1)
+        <div class="alert alert-danger mT10" role="alert">
+            <i class="fa fa-frown-o mR5" aria-hidden="true"></i> 
+            This department only investigates complaints submitted in-person.
+        </div>
+    @endif
+    <!--- <p>
+        This department does not investigate 
+        OpenPolice.org reports sent by email.
+    </p> --->
+    @if (!isset($ownerTools) || !$ownerTools)
+        <p>
+            <b class="bld">We recommend you create a professional-grade 
+            police misconduct report on OpenPolice.org first.</b> 
+            Then use the information below to submit a formal complaint.
+        </p>
+        @if (!isset($ownerTools) || !$ownerTools)
+            <p>
+            <a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
+        <?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->dept_slug }}" */ ?>
+                class="btn btn-primary btn-lg"
+                >File a Complaint or Compliment</a>
+            </p>
+        @endif
+    @endif
+@endif
+
+
+<p>&nbsp;</p>
 @if ($d["whichOver"] == 'civRow')
-    <h3 class="mT0">{{ $d[$d["whichOver"]]->over_agnc_name }}</h3>
+    <h3>{{ $d[$d["whichOver"]]->over_agnc_name }}</h3>
     <p>
     This is the agency that collects complaints 
     against the {!! $d["deptRow"]->dept_name !!}.
@@ -67,7 +82,7 @@
             {!! $d["civAddy"] !!}</a></p>
     @endif
 @elseif (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-    <h3 class="mT0">Internal Affairs</h3>
+    <h3>Internal Affairs</h3>
     <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
         ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
         {!! $d["iaAddy"] !!}</a></p>
@@ -189,16 +204,14 @@
 
 @endif
 
-</div>
 
     
 @if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-     <div class="slCard mT20">
-        <h3>Internal Affairs Office</h3>
-        <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
-            ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
-        @if (isset($d["iaRow"]->over_phone_work) && trim($d["iaRow"]->over_phone_work) != '')
-            <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->over_phone_work }}</p>
-        @endif
-    </div>
+    <p>&nbsp;</p>
+    <h3>Internal Affairs Office</h3>
+    <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
+        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
+    @if (isset($d["iaRow"]->over_phone_work) && trim($d["iaRow"]->over_phone_work) != '')
+        <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->over_phone_work }}</p>
+    @endif
 @endif
