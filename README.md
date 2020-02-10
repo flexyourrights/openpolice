@@ -2,7 +2,7 @@
 # FlexYourRights/OpenPolice
 
 [![Laravel](https://img.shields.io/badge/Laravel-5.8-orange.svg?style=flat-square)](http://laravel.com)
-[![SurvLoop](https://img.shields.io/badge/SurvLoop-0.2-orange.svg?style=flat-square)](https://github.com/wikiworldorder/survloop)
+[![SurvLoop](https://img.shields.io/badge/SurvLoop-0.2-orange.svg?style=flat-square)](https://github.com/rockhopsoft/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Table of Contents
@@ -27,7 +27,7 @@
 Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
 users to publish reports online, we aim to establish better public transparency and oversight of police activity in the 
-U.S.. Open Police extends <a href="https://github.com/wikiworldorder/survloop" target="_blank">SurvLoop</a>, which runs atop
+U.S.. Open Police extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">SurvLoop</a>, which runs atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
 <a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
@@ -54,7 +54,7 @@ XML included an automatically generated schema, eg.<br />
 
 * php: >=7.2
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 5.8.*
-* <a href="https://packagist.org/packages/wikiworldorder/survloop" target="_blank">wikiworldorder/survloop</a>: >=0.2.10
+* <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: >=0.2.10
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
@@ -97,7 +97,7 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "wikiworldorder/survloop": "^0.2.11",
+    "rockhopsoft/survloop": "^0.2.11",
     "flexyourrights/openpolice": "^0.2.11",
     ...
 },
@@ -106,7 +106,7 @@ $ nano composer.json
     ...
     "psr-4": {
         ...
-        "SurvLoop\\": "vendor/wikiworldorder/survloop/src/",
+        "SurvLoop\\": "vendor/rockhopsoft/survloop/src/",
         "OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
     }
     ...
