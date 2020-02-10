@@ -133,7 +133,7 @@ $ nano config/app.php
 ...
 'aliases' => [
     ...
-    'SurvLoop' => 'WikiWorldOrder\SurvLoop\SurvLoopFacade',
+    'SurvLoop' => 'RockHopSoft\SurvLoop\SurvLoopFacade',
     'OpenPolice' => 'FlexYourRights\OpenPolice\OpenPoliceFacade',
     ...
 ], ...
@@ -230,9 +230,9 @@ If you've discovered a security vulnerability in OpenPolice.org,
 we appreciate your help in disclosing it to us in a responsible manner.
 
 Publicly disclosing a vulnerability can put the entire community at risk. 
-If you've discovered a security concern, please email us at wikiworldorder *at* protonmail.com. 
+If you've discovered a security concern, please email us at rockhoppers *at* runbox.com. 
 We'll work with you to make sure that we understand the scope of the issue, and that we fully address your concern. 
-We consider correspondence sent to wikiworldorder *at* protonmail.com our highest priority, 
+We consider correspondence sent to rockhoppers *at* runbox.com our highest priority, 
 and work to address any issues that arise as quickly as possible.
 
 After a security vulnerability has been corrected, a release will be deployed as soon as possible.
