@@ -22,12 +22,20 @@ use App\Models\OPzVolunStatDays;
 use App\Models\OPTesterBeta;
 use SurvLoop\Controllers\Stats\SurvTrends;
 
+// temp...
+use App\Models\OPEventSequence;
+use App\Models\OPStops;
+use App\Models\OPSearches;
+use App\Models\OPArrests;
+use App\Models\OPForce;
+
 class OpenDashAdmin
 {
     public $v = [];
     
     public function printDashTopLevStats()
     {
+        $this->transitionData();
         $stats = [
             "betas"      => 0,
             "incomplete" => 0,
@@ -506,5 +514,108 @@ class OpenDashAdmin
         
         return true;
     }
-    
+
+
+    // For March 2020 transition. Should be deleted soon
+    protected function transitionData()
+    {
+        if ($GLOBALS["SL"]->REQ->has('trans')) {
+            $transition = intVal($GLOBALS["SL"]->REQ->get('trans'));
+            if ($transition == 1) {
+                $defPub = $GLOBALS["SL"]->def->getID(
+                    'Privacy Types', 
+                    'Submit Publicly'
+                );
+                $defMid = $GLOBALS["SL"]->def->getID(
+                    'Privacy Types', 
+                    'Names Visible to Police but not Public'
+                );
+                $chk = OPComplaints::whereNotNull('com_privacy')
+                    ->whereNull('com_publish_user_name')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $com) {
+                        if ($com->com_privacy == $defPub) {
+                            $com->com_anon                 = 0;
+                            $com->com_publish_user_name    = 1;
+                            $com->com_publish_officer_name = 1;
+                        } elseif ($com->com_privacy == $defMid) {
+                            $com->com_anon                 = 0;
+                            $com->com_publish_user_name    = 0;
+                            $com->com_publish_officer_name = 0;
+                        } else {
+                            $com->com_anon                 = 1;
+                            $com->com_publish_user_name    = 0;
+                            $com->com_publish_officer_name = 0;
+                        }
+                        $com->save();
+                    }
+                }
+            } elseif ($transition == 2) {
+                $chk = DB::table('op_stops')
+                    ->join('op_event_sequence', 'op_stops.stop_event_sequence_id', 
+                        '=', 'op_event_sequence.eve_id')
+                    ->whereNull('op_stops.stop_com_id')
+                    ->orWhere('op_stops.stop_com_id', '<=', 0)
+                    ->select('op_stops.*', 'op_event_sequence.eve_complaint_id')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $stop) {
+                        DB::table('op_stops')
+                            ->where('stop_id', $stop->stop_id)
+                            ->update([ 'stop_com_id' => $stop->eve_complaint_id ]);
+                    }
+                }
+            } elseif ($transition == 3) {
+                $chk = DB::table('op_searches')
+                    ->join('op_event_sequence', 'op_searches.srch_event_sequence_id', 
+                        '=', 'op_event_sequence.eve_id')
+                    ->whereNull('op_searches.srch_com_id')
+                    ->orWhere('op_searches.srch_com_id', '<=', 0)
+                    ->select('op_searches.*', 'op_event_sequence.eve_complaint_id')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $search) {
+                        DB::table('op_searches')
+                            ->where('srch_id', $search->srch_id)
+                            ->update([ 'srch_com_id' => $search->eve_complaint_id ]);
+                    }
+                }
+            } elseif ($transition == 4) {
+                $chk = DB::table('op_arrests')
+                    ->join('op_event_sequence', 'op_arrests.arst_event_sequence_id', 
+                        '=', 'op_event_sequence.eve_id')
+                    ->whereNull('op_arrests.arst_com_id')
+                    ->orWhere('op_arrests.arst_com_id', '<=', 0)
+                    ->select('op_arrests.*', 'op_event_sequence.eve_complaint_id')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $arrest) {
+                        DB::table('op_arrests')
+                            ->where('arst_id', $arrest->arst_id)
+                            ->update([ 'arst_com_id' => $arrest->eve_complaint_id ]);
+                    }
+                }
+            } elseif ($transition == 5) {
+                $chk = DB::table('op_force')
+                    ->join('op_event_sequence', 'op_force.for_event_sequence_id', 
+                        '=', 'op_event_sequence.eve_id')
+                    ->whereNull('op_force.for_com_id')
+                    ->orWhere('op_force.for_com_id', '<=', 0)
+                    ->select('op_force.*', 'op_event_sequence.eve_complaint_id')
+                    ->get();
+                if ($chk->isNotEmpty()) {
+                    foreach ($chk as $force) {
+                        DB::table('op_force')
+                            ->where('for_id', $force->for_id)
+                            ->update([ 'for_com_id' => $force->eve_complaint_id ]);
+                    }
+                }
+            }
+            $transition++;
+            echo '<a href="?trans=' . $transition . '">Next</a>';
+            exit;
+        }
+        return true;
+    }
 }

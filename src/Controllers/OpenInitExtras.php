@@ -181,12 +181,6 @@ class OpenInitExtras extends OpenPartners
                 }
                 $this->sessData->dataSets["complaints"][0]->save();
             }
-            foreach ($this->eventTypeLabel as $type => $label) {
-                if (!isset($this->sessData->dataSets[strtolower($type)]) 
-                    || sizeof($this->sessData->dataSets[strtolower($type)]) == 0) {
-                    $this->addNewEveSeq($type);
-                }
-            }
         }
         if ($this->treeID == 5 || $GLOBALS["SL"]->getReportTreeID() == 5) {
             if (isset($this->sessData->dataSets["complaints"])
@@ -201,7 +195,8 @@ class OpenInitExtras extends OpenPartners
             && intVal(session()->get('opcDeptID')) > 0) {
             if ($this->treeID == 1) {
                 if (isset($this->sessData->dataSets["complaints"])
-                    && intVal($this->sessData->dataSets["complaints"][0]->com_submission_progress) > 0) {
+                    && intVal($this->sessData->dataSets["complaints"][0]
+                        ->com_submission_progress) > 0) {
                     if (!isset($this->sessData->dataSets["links_complaint_dept"])) {
                         $this->sessData->dataSets["links_complaint_dept"] = [];
                     }
@@ -215,7 +210,8 @@ class OpenInitExtras extends OpenPartners
                 }
             } elseif ($this->treeID == 5) {
                 if (isset($this->sessData->dataSets["compliments"])
-                    && intVal($this->sessData->dataSets["compliments"][0]->com_submission_progress) > 0) {
+                    && intVal($this->sessData->dataSets["compliments"][0]
+                        ->com_submission_progress) > 0) {
                     if (!isset($this->sessData->dataSets["links_compliment_dept"])) {
                         $this->sessData->dataSets["links_compliment_dept"] = [];
                     }
@@ -229,11 +225,14 @@ class OpenInitExtras extends OpenPartners
                 }
             }
         }
-        if ($this->treeID == 1 && session()->has('opcPartID') 
+        if ($this->treeID == 1 
+            && session()->has('opcPartID') 
             && intVal(session()->get('opcPartID')) > 0
             && isset($this->sessData->dataSets["complaints"]) 
-            && intVal($this->sessData->dataSets["complaints"][0]->com_submission_progress) > 0) {
-            $this->sessData->dataSets["complaints"][0]->com_att_id = intVal(session()->get('opcPartID'));
+            && intVal($this->sessData->dataSets["complaints"][0]
+                ->com_submission_progress) > 0) {
+            $this->sessData->dataSets["complaints"][0]->com_att_id 
+                = intVal(session()->get('opcPartID'));
             $this->sessData->dataSets["complaints"][0]->save();
         }
         $this->v["isPublic"] = $this->isPublic();
@@ -249,18 +248,7 @@ class OpenInitExtras extends OpenPartners
         if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
             $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
         }
-        if ((!session()->has('opcChks') || !session()->get('opcChks') || $GLOBALS["SL"]->REQ->has('refresh'))
-            && $this->treeID == 1) {
-            $chk = OPComplaints::where('com_public_id', null)
-                ->where('com_status', 'NOT LIKE', $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'))
-                ->get();
-            if ($chk->isNotEmpty()) {
-                foreach ($chk as $i => $complaint) {
-                    $complaint->update([ 'com_public_id' => $GLOBALS["SL"]->genNewCorePubID('complaints') ]);
-                }
-            }
-            session()->put('opcChks', true);
-        }
+        $this->runOpenPoliceDataChecks();
         
         // Department Research Survey
         if ($this->treeID == 36) {
@@ -277,6 +265,35 @@ class OpenInitExtras extends OpenPartners
                 $this->sessData->refreshDataSets();
             }
         }
+        return true;
+    }
+    
+    /**
+     * Run any validation needed specific to OP.org
+     *
+     * @return boolean
+     */
+    protected function runOpenPoliceDataChecks()
+    {
+        if (!session()->has('opcChks') 
+                || !session()->get('opcChks') 
+                || $GLOBALS["SL"]->REQ->has('refresh')) {
+            $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
+            $chk = OPComplaints::whereNull('com_public_id')
+                ->where('com_status', 'NOT LIKE', $incDef)
+                ->get();
+            if ($chk->isNotEmpty()) {
+                foreach ($chk as $i => $complaint) {
+                    $newPubID = $GLOBALS["SL"]->genNewCorePubID('complaints');
+                    $complaint->update([ 'com_public_id' => $newPubID ]);
+                }
+            }
+
+
+            session()->put('opcChks', true);
+        }
+
+
         return true;
     }
     
@@ -367,7 +384,6 @@ class OpenInitExtras extends OpenPartners
         }
         $com = $this->sessData->dataSets["complaints"][0];
         $isPublished = $this->isPublished('complaints', $this->coreID, $com);
-        $defPub = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
         if (isset($this->sessData->dataSets["complaints"]) 
             && $isPublished) {
             if (isset($com->com_privacy)) {
@@ -375,7 +391,7 @@ class OpenInitExtras extends OpenPartners
                     && $this->v["user"] 
                     && $this->v["user"]->hasRole('administrator|staff')) {
                     
-                } elseif ($com->com_privacy == $defPub 
+                } elseif ($this->isPublic()
                     && in_array($com->com_status, [200, 201, 203, 204])) {
                     if (in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
                         $GLOBALS["SL"]->dataPerms = 'private';

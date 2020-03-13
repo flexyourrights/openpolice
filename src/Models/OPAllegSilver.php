@@ -40,6 +40,7 @@ class OPAllegSilver extends Model
 		'alle_sil_repeat_harass', 
 		'alle_sil_unbecoming', 
 		'alle_sil_discourteous', 
+		'alle_sil_animal_force',
     ];
     
     // END SurvLoop auto-generated portion of Model

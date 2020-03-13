@@ -138,7 +138,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if (isset($this->sessData->dataSets["scenes"]) 
             && sizeof($this->sessData->dataSets["scenes"]) > 0) {
             $scene = $this->sessData->dataSets["scenes"][0];
-            if (isset($scene->scn_is_vehicle) && trim($scene->scn_is_vehicle) == 'Y') {
+            if (isset($scene->scn_is_vehicle) 
+                && trim($scene->scn_is_vehicle) == 'Y') {
                 return 1;
             }
             if (isset($scene->scn_is_vehicle_accident) 
@@ -157,7 +158,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPartnerIntake($complaint)
     {
-        if (isset($complaint->com_att_id) && intVal($complaint->com_att_id) > 0) {
+        if (isset($complaint->com_att_id) 
+            && intVal($complaint->com_att_id) > 0) {
             return 1;
         }
         return 0;
@@ -262,7 +264,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condHasArrestOrForce()
     {
-        if ($this->sessData->dataHas('arrests') || $this->sessData->dataHas('force')) {
+        if ($this->sessData->dataHas('arrests') 
+            || $this->sessData->dataHas('force')) {
             return 1;
         }
         return 0;
@@ -294,7 +297,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if (isset($this->sessData->dataSets["civilians"]) 
             && sizeof($this->sessData->dataSets["civilians"]) > 0) {
             foreach ($this->sessData->dataSets["civilians"] as $civ) {
-                if ($civ->civ_role == 'Victim' && $this->chkCivHasForce($civ->civ_id) == 1) {
+                if ($civ->civ_role == 'Victim' 
+                    && $this->chkCivHasForce($civ->civ_id) == 1) {
                     $ret = 1;
                 }
             }
@@ -335,7 +339,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condMedicalCareNotYou()
     {
         $civ = $this->sessData->getDataBranchRow('civilians');
-        if ($civ && isset($civ->civ_is_creator) && trim($civ->civ_is_creator) == 'Y') {
+        if ($civ 
+            && isset($civ->civ_is_creator) 
+            && trim($civ->civ_is_creator) == 'Y') {
             return 0;
         }
         return -1;
@@ -415,7 +421,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condEmailConfirmSentToday()
     {
         if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
-            $cutoff = mktime(date("H"), date("i"), date("s"), date("n"), date("j")-1, date("Y"));
+            $cutoff = mktime(date("H"), date("i"), date("s"), 
+                date("n"), date("j")-1, date("Y"));
             $cutoff = date("Y-m-d H:i:s", $cutoff);
             $chk = SLEmailed::where('emailed_email_id', 1)
                 ->where('emailed_from_user', $this->v["user"]->id)
@@ -466,11 +473,10 @@ class OpenComplaintConditions extends OpenSessDataOverride
             // needs more strength here
             return 1;
         }
-        $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
-        if ($complaint->com_privacy != $pubDef) {
-            return 0;
-        } // else Full Transparency, but check status first...
-        return $this->complaintHasPublishedStatus();
+        if ($this->canPrintFullReportByRecordSpecs($this->sessData->dataSets["complaints"][0])) {
+            return 1;
+        }
+        return 0;
     }
     
     /**
@@ -505,11 +511,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
             && in_array($complaint->com_status, $unPub)) {
             return 1;
         }
-        $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
         if (isset($GLOBALS["SL"]->pageView) 
             && in_array($GLOBALS["SL"]->pageView, $types)
-            && isset($complaint->com_privacy) 
-            && $complaint->com_privacy != $pubDef) {
+            && !$this->isPublic()) {
             return 1;
         }
         return 0;

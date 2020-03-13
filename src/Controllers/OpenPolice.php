@@ -38,6 +38,8 @@ class OpenPolice extends OpenInitExtras
         // Main Complaint Survey
         if (in_array($nID, [145, 920])) {
             return $this->printDeptSearch($nID);
+        } elseif ($nID == 416) {
+            $this->cleanDeptLnks();
         } elseif ($nID == 203) {
             $this->initBlnkAllegsSilv();
         } elseif ($nID == 2341) {

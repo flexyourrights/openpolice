@@ -149,7 +149,7 @@ class DepartmentScores
             'over_way_sub_notary', 
             '', 
             '1',
-            'Requires notary (for one or more types of complaint)'
+            'Requires notary or in-person signature (for one or more types of complaint)'
         );
 
         $this->chartFlds = [ // column title, field name, trimmed fail value

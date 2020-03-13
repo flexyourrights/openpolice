@@ -76,7 +76,10 @@ class OpenPoliceAdmin extends AdminController
     {
         $this->admControlInit($request, '/dashboard/officers');
         $this->v["officers"] = OPOfficers::get();
-        return view('vendor.openpolice.admin.lists.officers', $this->v)->render();
+        return view(
+            'vendor.openpolice.admin.lists.officers', 
+            $this->v
+        )->render();
     }
     
     public function listDepts(Request $request)
@@ -96,7 +99,8 @@ class OpenPoliceAdmin extends AdminController
                 $this->v["deptComplaints"][$lnk->lnk_com_dept_dept_id][] = $lnk->lnk_com_dept_complaint_id;
             }
         }
-        $this->v["departments"] = OPDepartments::whereIn('dept_id', $deptList)->get();
+        $this->v["departments"] = OPDepartments::whereIn('dept_id', $deptList)
+            ->get();
         return view('vendor.openpolice.admin.lists.depts', $this->v)->render();
     }
     
@@ -108,7 +112,7 @@ class OpenPoliceAdmin extends AdminController
             $over->over_dept_id = $request->dept_id;
             $over->save();
         }
-        return $this->redir('/dashboard/overs#o'.$request->over_id);
+        return $this->redir('/dashboard/overs#o' . $request->over_id);
     }
     
     public function listLegal(Request $request)

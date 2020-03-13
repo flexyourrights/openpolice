@@ -429,6 +429,7 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function chkDeptLinks($newDeptID)
     {
         $deptChk = false;
+        // First, check for exact matches to avoid duplicates
         if ($this->treeID == 5) {
             $deptChk = OPLinksComplimentDept::where('lnk_compli_dept_dept_id', $newDeptID)
                 ->where('lnk_compli_dept_compliment_id', $this->coreID)
@@ -439,21 +440,55 @@ class OpenPolicePeople extends OpenPoliceUtils
                 ->get();
         }
         if ($deptChk->isEmpty()) {
+            // Next, check for empty records started by loop
             if ($this->treeID == 5) {
-                $newDeptLnk = new OPLinksComplimentDept;
-                $newDeptLnk->lnk_compli_dept_dept_id = $newDeptID;
-                $newDeptLnk->lnk_compli_dept_compliment_id = $this->coreID;
-                $newDeptLnk->save();
+                $deptChk = OPLinksComplimentDept::whereNull('lnk_compli_dept_dept_id')
+                    ->where('lnk_compli_dept_compliment_id', $this->coreID)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
             } else {
-                $newDeptLnk = new OPLinksComplaintDept;
-                $newDeptLnk->lnk_com_dept_dept_id = $newDeptID;
-                $newDeptLnk->lnk_com_dept_complaint_id = $this->coreID;
-                $newDeptLnk->save();
+                $deptChk = OPLinksComplaintDept::whereNull('lnk_com_dept_dept_id')
+                    ->where('lnk_com_dept_complaint_id', $this->coreID)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+            }
+            if ($deptChk && isset($deptChk->lnk_com_dept_id)) {
+                if ($this->treeID == 5) {
+                    $deptChk->lnk_compli_dept_dept_id = $newDeptID;
+                } else {
+                    $deptChk->lnk_com_dept_dept_id = $newDeptID;
+                }
+                $deptChk->save();
+            } else {
+                // Finally, manually create new linking record
+                if ($this->treeID == 5) {
+                    $newDeptLnk = new OPLinksComplimentDept;
+                    $newDeptLnk->lnk_compli_dept_dept_id = $newDeptID;
+                    $newDeptLnk->lnk_compli_dept_compliment_id = $this->coreID;
+                    $newDeptLnk->save();
+                } else {
+                    $newDeptLnk = new OPLinksComplaintDept;
+                    $newDeptLnk->lnk_com_dept_dept_id = $newDeptID;
+                    $newDeptLnk->lnk_com_dept_complaint_id = $this->coreID;
+                    $newDeptLnk->save();
+                }
             }
         }
         $this->getOverUpdateRow($this->coreID, $newDeptID);
         $this->sessData->refreshDataSets();
         $this->runLoopConditions();
+        return true;
+    }
+
+    protected function cleanDeptLnks()
+    {
+        if ($this->treeID == 5) {
+            $deptChk = OPLinksComplimentDept::whereNull('lnk_compli_dept_dept_id')
+                ->delete();
+        } else {
+            $deptChk = OPLinksComplaintDept::whereNull('lnk_com_dept_dept_id')
+                ->delete();
+        }
         return true;
     }
     

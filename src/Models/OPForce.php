@@ -10,6 +10,7 @@ class OPForce extends Model
     public $timestamps    = true;
     protected $fillable   = 
     [    
+        'for_com_id',
 		'for_event_sequence_id', 
 		'for_against_animal', 
 		'for_animal_desc', 

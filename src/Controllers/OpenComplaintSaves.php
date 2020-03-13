@@ -13,8 +13,10 @@ namespace OpenPolice\Controllers;
 use DB;
 use Auth;
 use App\Models\OPStops;
+use App\Models\OPForce;
 use App\Models\OPInjuries;
 use App\Models\OPLinksCivilianEvents;
+use App\Models\OPLinksCivilianForce;
 use App\Models\OPLinksCivilianVehicles;
 use App\Models\OPLinksOfficerVehicles;
 use OpenPolice\Controllers\OpenComplaintConditions;
@@ -58,14 +60,10 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveProfanePersons($nID, 'civ');
         } elseif ($nID == 676) {
             return $this->saveProfanePerson($nID, 'civ');
-        } elseif (in_array($nID, [742, 2044])) {
+        } elseif (in_array($nID, [743, 2044])) {
             return $this->saveForceTypes($nID);
-        } elseif ($nID == 743) {
-            return $this->saveForceAnimYN($nID);
-        } elseif ($nID == 744) {
-            return $this->saveForceTypesAnim($nID, 743, 746);
-        } elseif ($nID == 316) {
-            return $this->saveHandcuffInjury($nID);
+        } elseif ($nID == 2824) {
+            return $this->saveForceTypeLnkOneVictim($nID);
         } elseif ($nID == 976) {
             return $this->saveStatusCompletion($nID);
             
@@ -168,6 +166,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
+
     /**
      * If there is only one of a type of person involved, 
      * store whether or not they were given any citations.
@@ -226,174 +225,94 @@ class OpenComplaintSaves extends OpenComplaintConditions
         $GLOBALS["SL"]->def->loadDefs('Force Type');
         $nodeFld = 'n' . $nID . 'fld';
         $forceTypes = $GLOBALS["SL"]->def->defValues["Force Type"];
-        if ($GLOBALS["SL"]->REQ->has($nodeFld) 
-            && is_array($GLOBALS["SL"]->REQ->get($nodeFld))
-            && sizeof($GLOBALS["SL"]->REQ->get($nodeFld)) > 0) {
-            foreach ($GLOBALS["SL"]->REQ->get($nodeFld) as $forceType) {
-                if ($this->getForceEveID($forceType) <= 0 && $this->coreID > 0) {
-                    $this->addNewEveSeq('Force', $forceType);
+        $newTypes = $forceRecs = [];
+        if (isset($this->sessData->dataSets["force"])) {
+            $forceRecs = $this->sessData->dataSets["force"];
+        }
+        $animType = 'N';
+        $animDesc = '';
+        if ($nID == 743) {
+            $animType = 'Y';
+            $nodeFld = 'n744fld';
+            if ($GLOBALS["SL"]->REQ->has('n746fld')) {
+                $animDesc = trim($GLOBALS["SL"]->REQ->n746fld);
+            }
+        }
+        if ($GLOBALS["SL"]->REQ->has($nodeFld) && is_array($newTypes)) {
+            $newTypes = $GLOBALS["SL"]->REQ->get($nodeFld);
+        }
+        foreach ($forceTypes as $typ) {
+            if (in_array($typ->def_id, $newTypes)) {
+                $found = false;
+                if (sizeof($forceRecs) > 0) {
+                    foreach ($forceRecs as $frc) {
+                        if ($frc->for_against_animal == $animType
+                            && $frc->for_type == $typ->def_id) {
+                            $found = true;
+                        }
+                    }
                 }
-                $eveID = $this->getForceEveID($forceType);
-                if ($nID == 742) {
-                    $fInd = 0;
-                    foreach ($forceTypes as $i => $typ) {
-                        if ($typ->def_id == $forceType) {
-                            $fInd = $i;
+                if (!$found) {
+                    $frc = new OPForce;
+                    $frc->for_com_id         = $this->coreID;
+                    $frc->for_type           = $typ->def_id;
+                    $frc->for_against_animal = $animType;
+                    $frc->for_animal_desc    = $animDesc;
+                    $frc->save();
+                }
+            } else {
+                if (sizeof($forceRecs) > 0) {
+                    foreach ($forceRecs as $frc) {
+                        if ($frc->for_against_animal == $animType
+                            && $frc->for_type == $typ->def_id) {
+                            $frc->delete();
                         }
-                    }
-                    $currCivs = $this->getLinkedToEvent('civilian', $eveID);
-                    if ($GLOBALS["SL"]->REQ->has('n2043res' . $fInd . 'fld')) {
-                        $reqArr = $GLOBALS["SL"]->REQ->get('n2043res' . $fInd . 'fld');
-                        if (is_array($reqArr) && sizeof($reqArr) > 0) {
-                            foreach ($reqArr as $civID) {
-                                if (!in_array($civID, $currCivs)) {
-                                    $newLnk = new OPLinksCivilianEvents;
-                                    $newLnk->lnk_civ_eve_eve_id = $eveID;
-                                    $newLnk->lnk_civ_eve_civ_id = $civID;
-                                    $newLnk->save();
-                                }
-                            }
-                        }
-                    }
-                    if (sizeof($currCivs) > 0) {
-                        foreach ($currCivs as $currCivID) {
-                            $fld = 'n2043res' . $fInd . 'fld';
-                            if (!$GLOBALS["SL"]->REQ->has($fld) 
-                                || !is_array($GLOBALS["SL"]->REQ->get($fld))
-                                || !in_array($currCivID, $GLOBALS["SL"]->REQ->get($fld))) {
-                                OPLinksCivilianEvents::where('lnk_civ_eve_eve_id', $eveID)
-                                    ->where('lnk_civ_eve_civ_id', $currCivID)
-                                    ->delete();
-                            }
-                        }
-                    }
-                } elseif ($nID == 2044) {
-                    $civs = $this->sessData->getLoopRows('Victims');
-                    if (sizeof($civs) > 0 && isset($civs[0]->civ_id)) {
-                        $newLnk = new OPLinksCivilianEvents;
-                        $newLnk->lnk_civ_eve_eve_id = $eveID;
-                        $newLnk->lnk_civ_eve_civ_id = $civs[0]->civ_id;
-                        $newLnk->save();
                     }
                 }
             }
         }
-        foreach ($forceTypes as $i => $def) {
-            if (!$GLOBALS["SL"]->REQ->has($nodeFld) 
-                || !in_array($def->def_id, $GLOBALS["SL"]->REQ->get($nodeFld))) {
-                $e = $this->getForceEveID($def->def_id);
-                $this->deleteEventByID($e);
-            }
-        }
-        $this->sessData->refreshDataSets();
-        return true;
-    }
-    
-    /**
-     * Store whether or not force was used against an animal.
-     *
-     * @param  int $nID
-     * @return boolean
-     */
-    protected function saveForceAnimYN($nID)
-    {
-        $nodeFld = 'n' . $nID . 'fld';
-        if (!$GLOBALS["SL"]->REQ->has($nodeFld) || $GLOBALS["SL"]->REQ->get($nodeFld) == 'N') {
-            $animalsForce = $this->getCivAnimalForces();
-            if ($animalsForce && sizeof($animalsForce) > 0) {
-                foreach ($animalsForce as $force) {
-                    $this->deleteEventByID($force->for_event_sequence_id);
-                }
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Store the types of force used against an animal.
-     *
-     * @param  int $nID1
-     * @param  int $nID2
-     * @param  int $nID3
-     * @return boolean
-     */
-    protected function saveForceTypesAnim($nID1, $nID2, $nID3)
-    {
-        $fld1 = 'n' . $nID1 . 'fld';
-        $fld2 = 'n' . $nID2 . 'fld';
-        $fld3 = 'n' . $nID3 . 'fld';
-        if ($GLOBALS["SL"]->REQ->has($fld2) 
-            && $GLOBALS["SL"]->REQ->get($fld2) == 'Y') { 
-            if ($GLOBALS["SL"]->REQ->has($fld1) 
-                && is_array($GLOBALS["SL"]->REQ->get($fld1)) 
-                && sizeof($GLOBALS["SL"]->REQ->get($fld1)) > 0) {
-                $animalDesc = '';
-                if ($GLOBALS["SL"]->REQ->has($fld3)) {
-                    $animalDesc = trim($GLOBALS["SL"]->REQ->get($fld3));
-                }
-                $animalsForce = $this->getCivAnimalForces();
-                foreach ($GLOBALS["SL"]->REQ->n744fld as $forceType) {
-                    $foundType = false;
-                    if ($animalsForce && sizeof($animalsForce) > 0) {
-                        foreach ($animalsForce as $force) {
-                            if ($force->for_type == $forceType) {
-                                $foundType = true;
-                            }
-                        }
-                    }
-                    if (!$foundType && $this->coreID > 0) {
-                        $newForce = $this->addNewEveSeq('Force', $forceType);
-                        $newForce->for_against_animal = 'Y';
-                        $newForce->for_animal_desc = $animalDesc;
-                        $newForce->save();
-                    }
-                }
-            }
-            $types = $GLOBALS["SL"]->def->defValues["Force Type"];
-            foreach ($types as $i => $def) {
-                if (!$GLOBALS["SL"]->REQ->has($fld1) 
-                    || !in_array($def->def_id, $GLOBALS["SL"]->REQ->get($fld1))) {
-                    $this->deleteEventByID($this->getForceEveID($def->def_id, true));
-                }
-            }
+        if ($nID == 743) {
+            $this->sessData->refreshDataSets();
+            return false;
         }
         return true;
     }
     
     /**
-     * Store whether or not there was an injury related to handcuffs.
+     * In this case there is only one victim, but here we'll
+     * make a linkage between them and this type of force
+     * for a more consistent algorithm for finding matches.
      *
      * @param  int $nID
      * @return boolean
      */
-    protected function saveHandcuffInjury($nID)
+    protected function saveForceTypeLnkOneVictim($nID)
     {
-        $handcuffDefID = $GLOBALS["SL"]->def->getID('Injury Types', 'Handcuff Injury');
-        $stopRow = $this->getEventSequence($this->sessData->dataBranches[1]["itemID"]);
-        $injID = $stopRow[0]["Event"]->stop_subject_handcuff_injury;
-        if ($GLOBALS["SL"]->REQ->has('n316fld') 
-            && trim($GLOBALS["SL"]->REQ->n316fld) == 'Y') {
-            if (intVal($injID) <= 0) {
-                $newInj = new OPInjuries;
-                $newInj->inj_type = $handcuffDefID;
-                $newInj->inj_subject_id = -3;
-                if (isset($stopRow[0]["Civilians"][0])) {
-                    $newInj->inj_subject_id = $stopRow[0]["Civilians"][0];
-                }
-                $newInj->save();
-                $this->sessData->dataSets["injuries"]["Handcuff"][] = $newInj;
-                OPStops::find($stopRow[0]["Event"]->stop_id)->update([
-                    'stop_subject_handcuff_injury' => $newInj->inj_id
-                ]);
+
+        $force = $this->sessData->getDataBranchRow('force');
+        $civs = $this->sessData->getLoopRows('Victims');
+        if ($civs && sizeof($civs) == 1 && isset($force->for_id)) {
+            if (!isset($this->sessData->dataSets["links_civilian_force"])) {
+                $this->sessData->dataSets["links_civilian_force"] = [];
             }
-        } elseif (intVal($injID) > 0) {
-            OPStops::find($stopRow[0]["Event"]->stop_id)->update([
-                'stop_subject_handcuff_injury' => NULL
-            ]);
-            $inj = $stopRow[0]["Event"]->stop_subject_handcuff_injury;
-            $this->sessData->deleteDataItem($nID, 'injuries', $inj);
+            $found = false;
+            if (sizeof($this->sessData->dataSets["links_civilian_force"]) > 0) {
+                foreach ($this->sessData->dataSets["links_civilian_force"] as $lnk) {
+                    if ($lnk->lnk_civ_frc_force_id == $force->for_id
+                        && $lnk->lnk_civ_frc_civ_id == $civs[0]->civ_id) {
+                        $found = true;
+                    }
+                }
+            }
+            if (!$found) {
+                $lnk = new OPLinksCivilianForce;
+                $lnk->lnk_civ_frc_force_id = $force->for_id;
+                $lnk->lnk_civ_frc_civ_id = $civs[0]->civ_id;
+                $lnk->save();
+                $this->sessData->dataSets["links_civilian_force"][] = $lnk;
+            }
         }
-        return false;
+        return true;
     }
     
     /**

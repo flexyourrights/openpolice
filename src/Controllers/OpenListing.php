@@ -45,6 +45,12 @@ class OpenListing extends OpenAjax
         }
         $coreRec = $this->sessData->dataSets[$coreTbl][0];
         $incident = $this->sessData->dataSets["incidents"][0];
+        $titleWho = '';
+        if ($this->canPrintFullReportByRecordSpecs($this->sessData->dataSets["complaints"][0])) {
+            $titleWho = $this->getCivName('Civilians', $this->sessData->dataSets["civilians"][0], 0);
+            $titleWho = str_replace('(Victim #1)', '', str_replace('(Witness #1)', '', $titleWho));
+
+        }
         $where = $this->getReportWhereLine();
         $deptList = '';
         $depts = ((isset($this->sessData->dataSets["departments"])) 
@@ -67,7 +73,6 @@ class OpenListing extends OpenAjax
             $url = '/' . (($coreAbbr == 'com_') ? 'complaint' : 'compliment')
                 . '/readi-' . $coreRec->{ $coreAbbr . 'id' };
         }
-        $comDate = $this->getComplaintDate($incident, $coreRec);
         $storyPrev = '';
         if ($this->canPrintFullReport()) {
             $storyPrev = $coreRec->{ $coreAbbr . 'summary' };
@@ -81,8 +86,11 @@ class OpenListing extends OpenAjax
                 "coreAbbr"    => $coreAbbr,
                 "complaint"   => $coreRec, 
                 "incident"    => $incident, 
-                "comDate"     => $comDate, 
+                "comDate"     => $this->getComplaintDate($incident, $coreRec),
+                "comDateAb"   => $this->getComplaintDate($incident, $coreRec, 'M'), 
                 "comDateFile" => $this->getComplaintDateOPC($coreRec), 
+                "comDateFileAb" => $this->getComplaintDateOPC($coreRec, 'M'), 
+                "titleWho"    => $titleWho,
                 "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
                 "allegations" => $this->commaAllegationListSplit(),
                 "deptList"    => $deptList,
@@ -99,9 +107,9 @@ class OpenListing extends OpenAjax
      * @param  App\Models\OPComplaints $com
      * @return string
      */
-    protected function getComplaintDate($inc, $com)
+    protected function getComplaintDate($inc, $com, $monthStyle = 'F')
     {
-        $comDate = date('F Y', strtotime($inc->inc_time_start));
+        $comDate = date($monthStyle . ' Y', strtotime($inc->inc_time_start));
         if ($this->shouldPrintFullDate($com)) {
             $comDate = date('m/d/Y', strtotime($inc->inc_time_start));
         }
@@ -115,9 +123,9 @@ class OpenListing extends OpenAjax
      * @param  App\Models\OPComplaints $com
      * @return string
      */
-    protected function getComplaintDateOPC($com)
+    protected function getComplaintDateOPC($com, $monthStyle = 'F')
     {
-        $comDate = date('F Y', strtotime($com->com_record_submitted));
+        $comDate = date($monthStyle . ' Y', strtotime($com->com_record_submitted));
         if ($this->shouldPrintFullDate($com)) {
             $comDate = date('m/d/Y', strtotime($com->com_record_submitted));
         }

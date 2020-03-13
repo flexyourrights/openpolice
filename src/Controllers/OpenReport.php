@@ -244,16 +244,16 @@ class OpenReport extends OpenOfficers
     {
         $ret = '';
         $com = $this->sessData->dataSets["complaints"][0];
-        $anon = $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous');
-        if ($com->com_privacy == $anon) {
+        if ($this->isAnonyLogin()) {
             $ret = 'Anonymous';
         } elseif (isset($this->sessData->dataSets["civilians"]) 
             && isset($this->sessData->dataSets["civilians"][0]->civ_id)) {
-            $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
             if (in_array($GLOBALS["SL"]->pageView, [ 'full', 'full-pdf' ])
                 || ($this->isPublished('complaints', $this->coreID, $com) 
-                    && $com->com_privacy == $pubDef)) {
-                $ret = $this->getCivReportName($this->sessData->dataSets["civilians"][0]->civ_id);
+                    && $this->isPublic())) {
+                $ret = $this->getCivReportName(
+                    $this->sessData->dataSets["civilians"][0]->civ_id
+                );
             }
         }
         if (trim($ret) != '') {
@@ -494,7 +494,9 @@ class OpenReport extends OpenOfficers
      */
     protected function chkDupliNickname($nick, $first = '', $middle = '', $last = '')
     {
-        return ($first == $nick || $middle == $nick || $last == $nick 
+        return ($first == $nick 
+            || $middle == $nick 
+            || $last == $nick 
             || ($first . ' ' . $last) == $nick
             || ($first . ' ' . $middle . ' ' . $last) == $nick);
     }
@@ -507,6 +509,7 @@ class OpenReport extends OpenOfficers
      */
     protected function getCivReportNameHeader($nID)
     {
+//echo '<br /><br /><br />getCivReportNameHeader(' . $nID . ', branch: ' . $this->sessData->getLatestDataBranchID() . ', name: ' . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '<br />';
         return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
             . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '</h3>';
     }
@@ -525,47 +528,56 @@ class OpenReport extends OpenOfficers
         if (!isset($this->v["civNames"])) {
             $this->v["civNames"] = [];
         }
-        if (!isset($this->v["civNames"][$civID]) || trim($this->v["civNames"][$civID]) == '') {
+        if (!isset($this->v["civNames"][$civID]) 
+            || trim($this->v["civNames"][$civID]) == '') {
             $civRow = $this->sessData->getRowById('civilians', $civID);
             if (!$prsn) {
                 list($prsn, $phys) = $this->queuePeopleSubsets($civID);
             }
+//if ($civID == 573) { echo '<pre>'; print_r($civRow); echo '</pre><pre>'; print_r($prsn); echo '</pre><pre>'; print_r($phys); echo '</pre>'; }
             $name = '';
             $com = $this->sessData->dataSets["complaints"][0];
             $civ1 = $this->sessData->dataSets["civilians"][0];
             if ($this->canPrintFullReport()) {
                 $setCivID = $civ1->civ_id;
                 $firstLast = trim($prsn->prsn_name_first . $prsn->prsn_name_last);
-                if ($civID ==  $setCivID && ($firstLast == '' || $com->com_privacy == 306)) {
+                if ($civID ==  $setCivID 
+                    && ($firstLast == '' || $com->com_privacy == 306)) {
                     // '<span style="color: #2B3493;" title="'
                     // . 'This complainant did not provide their name to investigators.'
                     $name = 'Complainant';
-                } elseif ($firstLast != '' 
-                    && $this->canPrintFullReport()
+                } elseif ($this->canPrintFullReport()
                     && !$this->hideWitnessName($civRow)) {
-                    if (trim($prsn->prsn_nickname) != '') {
-                        $name = trim($prsn->prsn_nickname);
-                    } else {
+                    if ($firstLast != '') {
                         // '<span style="color: #2B3493;" title="'
                         // . 'This complainant wanted to publicly provide their name.">' 
                         $name = $prsn->prsn_name_first . ' ' . $prsn->prsn_name_last;
-                    } // ' . $prsn->prsn_name_middle . '
+                        // ' . $prsn->prsn_name_middle . '
+                    } elseif (trim($prsn->prsn_nickname) != '') {
+                        $name = trim($prsn->prsn_nickname);
+                    }
                 }
             }
             $label = 'Complainant';
             if ($civ1->civ_id != $civID) {
-                if ($civRow && isset($civRow->civ_role) && $civRow->civ_role == 'Victim') {
-                    $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+                if ($civRow 
+                    && isset($civRow->civ_role) 
+                    && $civRow->civ_role == 'Victim') {
+                    $label = 'Victim #' 
+                        . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
                 } else {
-                    $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                    $label = 'Witness #' 
+                        . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
                 }
             } elseif ($civ1->civ_role == 'Victim') {
-                $label = 'Victim #' . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
+                $label = 'Victim #' 
+                    . (1+$this->sessData->getLoopIndFromID('Victims', $civID));
             } elseif ($civ1->civ_role == 'Witness') {
-                $label = 'Witness #' . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
+                $label = 'Witness #' 
+                    . (1+$this->sessData->getLoopIndFromID('Witnesses', $civID));
             }
             if (trim($name) == '') {
-                $this->v["civNames"][$civID] = $name;
+                $this->v["civNames"][$civID] = $label;
             } else {
                 $this->v["civNames"][$civID] = $name . ' (' . $label . ')';
             }

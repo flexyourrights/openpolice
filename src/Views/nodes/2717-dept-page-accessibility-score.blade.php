@@ -1,6 +1,18 @@
 <!-- resources/views/vendor/openpolice/nodes/2717-dept-page-accessibility-score.blade.php -->
 @if (isset($d["deptRow"]->dept_score_openness) 
 	&& intVal($d["deptRow"]->dept_score_openness) > 0)
+
+    <h3>Complaints Accessibility</h3>
+    <h4>Score: <span class="slBlueDark mL5">
+    {{ $d["deptRow"]->dept_score_openness }}/100</span></h4>
+    <h4>Grade: <span class="slBlueDark mL5">
+    {{ $GLOBALS["SL"]->calcGrade($d["deptRow"]->dept_score_openness) }}</span></h4>
+    {!! view(
+        'vendor.openpolice.dept-inc-scores', 
+        [ "score" => ((isset($d["score"])) ? $d["score"] : null) ]
+    )->render() !!}
+
+<?php /*
     <div class="toggleScoreInfo round10 p20 taC fPerc133
         @if ($d['deptRow']->dept_score_openness >= 70) btn-primary-simple 
         @else btn-danger-simple @endif w100 mB20">
@@ -27,13 +39,17 @@
             	>More about how we rate departments.</a>
         </div>
     </div>
+*/ ?>
+
 @endif
 @if (isset($d["deptRow"]->dept_verified) 
 	&& trim($d["deptRow"]->dept_verified) != '')
-    <div class="mT10 slGrey">
+    <div class="mT10"><p class="slGrey">
         Department info updated 
-        {{ date('n/j/y', strtotime($d["deptRow"]->dept_verified)) }}
-    </div>
+        {{ date('n/j/y', strtotime($d["deptRow"]->dept_verified)) }}<br />
+        <a href="/how-we-rate-departments"
+            >More about how we rate departments.</a>
+    </p></div>
 @endif
 
 <script type="text/javascript">

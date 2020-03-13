@@ -836,7 +836,10 @@ class OpenDepts extends OpenListing
             $this->v["deptScores"] = new DepartmentScores;
             $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
         }
-        $state = (($GLOBALS["SL"]->REQ->has('state')) ? $GLOBALS["SL"]->REQ->state : '');
+        $state = '';
+        if ($GLOBALS["SL"]->REQ->has('state')) {
+            $state = $GLOBALS["SL"]->REQ->state;
+        }
         return view(
             'vendor.openpolice.nodes.1968-accss-grades-title-desc', 
             [
@@ -906,9 +909,10 @@ class OpenDepts extends OpenListing
         //    }
         //}
         //$this->loadDeptStuff($this->v["deptID"]);
-        if ($this->v["uID"] > 0 
-            && $this->v["user"]->hasRole('administrator|databaser|staff|partner|volunteer')) {
-            $url = '/dashboard/start-' . $this->v["deptID"] . '/volunteers-research-departments';
+        $roles = 'administrator|databaser|staff|partner|volunteer';
+        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole($roles)) {
+            $url = '/dashboard/start-' . $this->v["deptID"] 
+                . '/volunteers-research-departments';
             $GLOBALS["SL"]->addSideNavItem('Edit Department', $url);
         }
         return '';
@@ -1203,7 +1207,10 @@ class OpenDepts extends OpenListing
      */
     protected function overWhichDefID($which = 'IA')
     {
-        return $GLOBALS["SL"]->def->getID('Investigative Agency Types', $this->overWhichEng($which));
+        return $GLOBALS["SL"]->def->getID(
+            'Investigative Agency Types', 
+            $this->overWhichEng($which)
+        );
     }
     
     /**

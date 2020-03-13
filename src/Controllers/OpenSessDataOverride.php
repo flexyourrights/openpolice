@@ -95,84 +95,29 @@ class OpenSessDataOverride extends OpenComplaintPrints
                     trim($this->sessData->dataSets["civilians"][$civInd]->civ_used_profanity)
                 ];
             }
-        } elseif (in_array($nID, [732, 736, 733])) { // Gold Stops & Searches, Multiple Victims
-            if (!isset($this->v["firstTimeGoGoldDeets"])) {
-                $chk = SLNodeSavesPage::where('page_save_session', $this->coreID)
-                    ->where('page_save_node', 484)
-                    ->first();
-                $this->v["firstTimeGoGoldDeets"] = (!$chk || !isset($chk->page_save_id));
-            }
+        } elseif (in_array($nID, [744, 2044])) {
+            // Use of Force on Victims: Sub-Types
             $ret = [];
-            $eveType = (in_array($nID, [732, 736])) ? 'Stops' : 'Searches';
-            if (sizeof($this->sessData->loopItemIDs["Victims"]) > 0) {
-                foreach ($this->sessData->loopItemIDs["Victims"] as $civ) {
-                    if ($this->getCivEventID($nID, $eveType, $civ) > 0) {
-                        $ret[] = $civ;
-                    }
-                }
-            }
-            return $ret;
-        } elseif (in_array($nID, [738, 737, 739])) { // Gold Stops & Searches, Only One Victims
-            $eveType = (in_array($nID, [738, 737])) ? 'Stops' : 'Searches';
-            if ($this->getCivEventID($nID, $eveType, $this->sessData->loopItemIDs["Victims"][0]) > 0) {
-                return ['Y'];
-            }
-            return ['N'];
-        } elseif ($nID == 740) { // Use of Force on Victims
-            $ret = [];
-            $this->checkHasEventSeq($nID);
-            foreach ($this->sessData->loopItemIDs["Victims"] as $i => $civ) {
-                if (in_array($civ, $this->eventCivLookup['Force'])) {
-                    $ret[] = 'cyc' . $i . 'Y';
-                } elseif (!isset($this->v["firstTimeGoGoldDeets"]) 
-                    || !$this->v["firstTimeGoGoldDeets"]
-                    || !in_array($civ, $this->eventCivLookup['Force'])) {
-                    $ret[] = 'cyc' . $i . 'N';
-                }
-            }
-            if (empty($ret)) {
-                $ret = ['N'];
-            }
-            return $ret;
-        } elseif (in_array($nID, [742, 2044])) { // Use of Force on Victims: Sub-Types
-            $ret = [];
+            $animType = (($nID == 744) ? 'Y' : 'N');
             if (isset($this->sessData->dataSets["force"]) 
                 && sizeof($this->sessData->dataSets["force"]) > 0) {
                 foreach ($this->sessData->dataSets["force"] as $force) {
                     if (isset($force->for_type) 
                         && intVal($force->for_type) > 0 
-                        && (!isset($force->for_against_animal) 
-                            || trim($force->for_against_animal) != 'Y')) {
+                        && $force->for_against_animal == $animType) {
                         $ret[] = $force->for_type;
                     }
                 }
             }
             return $ret;
-        } elseif ($nID == 2043) {
-            $force = $this->sessData->getDataBranchRow('Force');
-            if ($force && isset($force->for_event_sequence_id) 
-                && intVal($force->for_event_sequence_id) > 0) {
-                return $this->getLinkedToEvent('Civilian', $force->for_event_sequence_id);
-            }
-            return [];
-        } elseif ($nID == 743) { // Use of Force against Animal: Yes/No
-            $animalsForce = $this->getCivAnimalForces();
-            if ($animalsForce && sizeof($animalsForce) > 0) {
-                return ['Y'];
-            } elseif (!isset($this->v["firstTimeGoGoldDeets"]) || !$this->v["firstTimeGoGoldDeets"]) {
-                return ['N'];
-            }
-        } elseif ($nID == 746) { // Use of Force against Animal: Description
-            $animalsForce = $this->getCivAnimalForces();
-            if ($animalsForce->isNotEmpty() && isset($animalsForce[0]->for_animal_desc)) {
-                return [ $animalsForce[0]->for_animal_desc ];
-            }
-        } elseif ($nID == 744) { // Use of Force against Animal: Sub-types
+        } elseif ($nID == 746) {
             $ret = [];
-            $animalsForce = $this->getCivAnimalForces();
-            if ($animalsForce && sizeof($animalsForce) > 0) {
-                foreach ($animalsForce as $force) {
-                    $ret[] = $force->for_type;
+            if (isset($this->sessData->dataSets["force"]) 
+                && sizeof($this->sessData->dataSets["force"]) > 0) {
+                foreach ($this->sessData->dataSets["force"] as $force) {
+                    if (trim($force->for_against_animal) == 'Y') {
+                        $ret = [ $force->for_animal_desc ];
+                    }
                 }
             }
             return $ret;
@@ -191,31 +136,6 @@ class OpenSessDataOverride extends OpenComplaintPrints
                 }
             }
             return $ret;
-        } elseif (in_array($nID, [401, 334, 409, 356, 384])) { // Gold Allegations: Pre-Load "Why" From Silver
-            if (trim($currNodeSessionData) == '') {
-                $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Detention'); // 401
-                if ($nID == 334) {
-                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Search');
-                } elseif ($nID == 409) {
-                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Property Seizure');
-                } elseif ($nID == 356) {
-                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Unreasonable Force');
-                } elseif ($nID == 384) {
-                    $defID = $GLOBALS["SL"]->def->getID('Allegation Type', 'Wrongful Arrest');
-                }
-                if (isset($this->sessData->dataSets["allegations"]) 
-                    && sizeof($this->sessData->dataSets["allegations"]) > 0) {
-                    foreach ($this->sessData->dataSets["allegations"] as $alleg) {
-                        if (isset($alleg->alle_type) 
-                            && $alleg->alle_type == $defID 
-                            && isset($alleg->alle_description)
-                            && (!isset($alleg->alle_event_sequence_id) 
-                                || intVal($alleg->alle_event_sequence_id) == 0)) {
-                            return [$alleg->alle_description];
-                        }
-                    }
-                }
-            }
         } elseif ($nID == 269) { // Confirm Submission, Complaint Completed!
             if ($this->sessData->dataSets["complaints"][0]->com_status 
                 != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {

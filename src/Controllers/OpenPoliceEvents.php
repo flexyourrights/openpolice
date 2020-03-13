@@ -260,61 +260,6 @@ class OpenPoliceEvents extends OpenPoliceAllegations
         return $eveSeqs;
     }
     
-    protected function getEventLabel($eveSeqID = -3)
-    {
-        if ($eveSeqID > 0) {
-            $eveSeq = $this->getEventSequence($eveSeqID);
-            return $this->printEventSequenceLine($eveSeq);
-        }
-        return '';
-    }
-    
-    protected function printEventSequenceLine($eveSeq, $info = '')
-    {
-        if (!isset($eveSeq["EveType"]) && is_array($eveSeq) && sizeof($eveSeq) > 0) {
-            $eveSeq = $eveSeq[0];
-        }
-        if (!is_array($eveSeq) || !isset($eveSeq["EveType"])) {
-            return '';
-        }
-        $ret = '<span class="slBlueDark">';
-        if ($eveSeq["EveType"] == 'Force' 
-            && isset($eveSeq["Event"]->for_type) 
-            && trim($eveSeq["Event"]->for_type) != '') {
-            if ($eveSeq["Event"]->for_type == $GLOBALS["SL"]->def->getID('Force Type', 'Other')) {
-                $ret .= $eveSeq["Event"]->for_type_other . ' Force ';
-            } else {
-                $ret .= $GLOBALS["SL"]->def->getVal('Force Type', $eveSeq["Event"]->for_type) . ' Force ';
-            }
-        } elseif (isset($this->eventTypeLabel[$eveSeq["EveType"]])) {
-            $ret .= $this->eventTypeLabel[$eveSeq["EveType"]] . ' ';
-        }
-        if ($eveSeq["EveType"] == 'Force' && $eveSeq["Event"]->for_against_animal == 'Y') {
-            $ret .= '<span class="blk">on</span> ' . $eveSeq["Event"]->for_animal_desc;
-        } else {
-            $civNames = $offNames = '';
-            if ($this->moreThan1Victim() && in_array($info, array('', 'civilians'))) { 
-                foreach ($eveSeq["Civilians"] as $civ) {
-                    $civNames .= ', ' . $this->getCivilianNameFromID($civ);
-                }
-                if (trim($civNames) != '') {
-                    $ret .= '<span class="blk">' . (($eveSeq["EveType"] == 'Force') ? 'on ' : 'of ')
-                        . '</span>' . substr($civNames, 1);
-                }
-            }
-            if ($this->moreThan1Officer() && in_array($info, array('', 'officers'))) { 
-                foreach ($eveSeq["Officers"] as $off) {
-                    $offNames .= ', ' . $this->getOfficerNameFromID($off);
-                }
-                if (trim($offNames) != '') {
-                    $ret .= ' <span class="blk">by</span> ' . substr($offNames, 1);
-                }
-            }
-        }
-        $ret .= '</span>';
-        return $ret;
-    }
-    
     protected function getCivEveSeqIdByType($civID, $eventType)
     {
         if ($eventType != '' 
@@ -341,38 +286,17 @@ class OpenPoliceEvents extends OpenPoliceAllegations
     
     protected function chkCivHasForce($civID = -3)
     {
-        if ($civID > 0 && isset($this->sessData->dataSets["event_sequence"]) 
-            && sizeof($this->sessData->dataSets["event_sequence"]) > 0) {
-            foreach ($this->sessData->dataSets["event_sequence"] as $eve) {
-                if ($eve->eve_type == 'Force') {
-                    $chk = OPLinksCivilianEvents::where('lnk_civ_eve_eve_id', $eve->eve_id)
-                        ->where('lnk_civ_eve_civ_id', $civID)
-                        ->first();
-                    if ($chk && isset($chk->lnk_civ_eve_id)) {
-                        return 1;
-                    }
+        if ($civID > 0 
+            && isset($this->sessData->dataSets["links_civilian_force"]) 
+            && sizeof($this->sessData->dataSets["links_civilian_force"]) > 0) {
+            foreach ($this->sessData->dataSets["links_civilian_force"] as $frc) {
+                if (isset($frc->lnk_civ_frc_civ_id) 
+                    && intVal($frc->lnk_civ_frc_civ_id) == $civID) {
+                    return 1;
                 }
             }
         }
         return 0;
-    }
-    
-    protected function isEventAnimalForce($eveSeqID = -3, $force = [])
-    {
-        if (empty($force)) {
-            $eveSeq = $this->sessData->getRowById('event_sequence', $eveSeqID);
-            if ($eveSeq && $eveSeq->eve_type == 'Force') {
-                $force = $this->sessData->getChildRow(
-                    'event_sequence', 
-                    $eveSeq->eve_id, 
-                    $eveSeq->eve_type
-                );
-            }
-        }
-        if ($force && isset($force->for_against_animal) && $force->for_against_animal == 'Y') {
-            return $force->for_animal_desc;
-        }
-        return '';
     }
 
 

@@ -132,33 +132,32 @@ class OpenComplaintPrints extends OpenComplaintEmails
                 && $this->sessData->dataBranches[1]["branch"] == 'event_sequence') {
                 $event = $this->getEventSequence($this->sessData->dataBranches[1]["itemID"]);
             }
-            if (isset($event[0]) && isset($event[0]["EveID"])) {
+            if (strpos($str, '[ForceType]') !== false) {
+                $row = $this->sessData->getLatestDataBranchRow();
+                $forceDesc = $GLOBALS["SL"]->def->getVal('Force Type', $row->for_type);
+                if ($forceDesc == 'Other') {
+                    $forceDesc = $row->for_type_other;
+                }
+                /* if (strpos($nIDtxt, '343') !== false) {
+                    $eveSeq = $this->sessData->getDataBranchRow('event_sequence');
+                    if ($eveSeq && isset($eveSeq->eve_id)) {
+                        $forceDesc .= ' used on ' . $this->getCivNamesFromEvent($eveSeq->eve_id);
+                    }
+                } */
+                $str = str_replace(
+                    '[ForceType]', 
+                    '<span class="slBlueDark"><b>' . $forceDesc .'</b></span>',
+                    $str
+                );
+            } elseif (isset($event[0]) && isset($event[0]["EveID"])) {
                 if (strpos($str, '[LoopItemLabel]') !== false) {
-                    $civName = $this->isEventAnimalForce($event[0]["EveID"], $event[0]["Event"]);
-                    if (trim($civName) == '' 
-                        && isset($event[0]["Civilians"]) 
+                    $civName = '';
+                    if (isset($event[0]["Civilians"]) 
                         && sizeof($event[0]["Civilians"]) > 0) {
                         $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
                     }
                     $name = '<span class="slBlueDark"><b>' . $civName . '</b></span>';
                     $str = str_replace('[LoopItemLabel]', $name, $str);
-                }
-                if (strpos($str, '[ForceType]') !== false) {
-                    $forceDesc = $GLOBALS["SL"]->def->getVal('Force Type', $event[0]["Event"]->for_type);
-                    if ($forceDesc == 'Other') {
-                        $forceDesc = $event[0]["Event"]->for_type_other;
-                    }
-                    if (strpos($nIDtxt, '343') !== false) {
-                        $eveSeq = $this->sessData->getDataBranchRow('event_sequence');
-                        if ($eveSeq && isset($eveSeq->eve_id)) {
-                            $forceDesc .= ' used on ' . $this->getCivNamesFromEvent($eveSeq->eve_id);
-                        }
-                    }
-                    $str = str_replace(
-                        '[ForceType]', 
-                        '<span class="slBlueDark"><b>' . $forceDesc .'</b></span>',
-                        $str
-                    );
                 }
             } elseif (strpos($str, '[LoopItemLabel]') !== false) {
                 $row = $this->sessData->getLatestDataBranchRow();
@@ -262,10 +261,6 @@ class OpenComplaintPrints extends OpenComplaintEmails
             return $this->getOfficerName($itemRow, $itemInd);
         } elseif ($loop == 'Departments') {
             return $this->getDeptName($itemRow, $itemInd);
-        } elseif ($loop == 'Events') {
-            if (isset($itemRow->eve_id)) {
-                return $this->getEventLabel($itemRow->eve_id);
-            }
         } elseif ($loop == 'Citations') { // why isn't this working?!
             if (isset($itemRow->stop_event_sequence_id) 
                 && intVal($itemRow->stop_event_sequence_id) > 0) {
@@ -365,9 +360,8 @@ class OpenComplaintPrints extends OpenComplaintEmails
         if (isset($this->sessData->dataSets["complaints"])) {
             $com = $this->sessData->dataSets["complaints"][0];
             if (isset($com->com_status)) {
-                $pubDef = $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly');
                 if (in_array($com->com_status, $this->getPublishedStatusList())
-                    && $com->com_privacy == $pubDef) {
+                    && $this->isPublic()) {
                     if ($upDeets["privacy"] == 'Block') {
                         return false;
                     }

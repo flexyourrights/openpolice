@@ -35,8 +35,9 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return ($this->treeID == 5);
         }
-        return (isset($this->sessData->dataSets["complaints"][0]->com_is_compliment)
-            && intVal($this->sessData->dataSets["complaints"][0]->com_is_compliment) == 1);
+        $com = $this->sessData->dataSets["complaints"][0];
+        return (isset($com->com_is_compliment)
+            && intVal($com->com_is_compliment) == 1);
     }
     
     public function isOverCompatible($overRow)
@@ -54,7 +55,8 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        return ($this->sessData->dataSets["complaints"][0]->com_award_medallion == 'Silver'); 
+        return ($this->sessData->dataSets["complaints"][0]
+            ->com_award_medallion == 'Silver'); 
     }
     
     protected function isGold()
@@ -62,16 +64,45 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        return ($this->sessData->dataSets["complaints"][0]->com_award_medallion == 'Gold');
+        return ($this->sessData->dataSets["complaints"][0]
+            ->com_award_medallion == 'Gold');
     }
-    
+
+    protected function isPublicOfficerName()
+    {
+        if ($this->treeID == 1) {
+            return $this->sessData->dataFieldIsInt(
+                'complaints', 
+                'com_publish_officer_name'
+            );
+        } elseif ($this->treeID == 5) {
+            return $this->sessData->dataFieldIsInt(
+                'compliments', 
+                'compli_publish_officer_name'
+            );
+        }
+        return false;
+    }
+
+    protected function isPublicComplainantName()
+    {
+        if ($this->treeID == 1) {
+            return $this->sessData->dataFieldIsInt(
+                'complaints', 
+                'com_publish_user_name'
+            );
+        } elseif ($this->treeID == 5) {
+            return $this->sessData->dataFieldIsInt(
+                'compliments', 
+                'compli_publish_user_name'
+            );
+        }
+        return false;
+    }
+
     protected function isPublic()
     {
-        if (!isset($this->sessData->dataSets["complaints"])) {
-            return false;
-        }
-        return ($this->sessData->dataSets["complaints"][0]->com_privacy 
-            == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'));
+        return $this->isPublicComplainantName() && $this->isPublicOfficerName();
     }
     
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
@@ -81,7 +112,10 @@ class OpenPoliceUtils extends OpenPoliceVars
                 $coreRec = OPComplaints::find($coreID);
             }
             if ($coreRec && isset($coreRec->com_status)) {
-                return (in_array($coreRec->com_status, $this->getPublishedStatusList($coreTbl)));
+                return in_array(
+                    $coreRec->com_status, 
+                    $this->getPublishedStatusList($coreTbl)
+                );
             }
             return false;
         }
@@ -91,24 +125,31 @@ class OpenPoliceUtils extends OpenPoliceVars
     protected function isAnonyLogin()
     {
         if ($this->treeID == 1) {
-            return (isset($this->sessData->dataSets["complaints"]) 
-                && (in_array($this->sessData->dataSets["complaints"][0]->com_unresolved_charges, ['Y', '?'])
-                || intVal($this->sessData->dataSets["complaints"][0]->com_privacy) 
-                    == intVal($GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'))));
+            return $this->sessData->dataFieldIsInt(
+                'complaints', 
+                'com_anon'
+            );
         } elseif ($this->treeID == 5) {
-            return (isset($this->sessData->dataSets["compliments"]) 
-                && intVal($this->sessData->dataSets["compliments"][0]->compli_privacy)
-                    == intVal($GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous')));
+            return $this->sessData->dataFieldIsInt(
+                'compliments', 
+                'compli_anon'
+            );
         }
+        return false;
     }
     
     public function multiRecordCheckIntro($cnt = 1)
     {
-        $ret = '<h3 class="slBlueDark">' . $this->v["user"]->name . ', You Have ';
+        $ret = '<h3 class="slBlueDark">' 
+            . $this->v["user"]->name . ', You Have ';
         if ($this->treeID == 1) {
-            $ret .= (($cnt == 1) ? 'An Unfinished Complaint' : 'Unfinished Complaints');
+            $ret .= (($cnt == 1) 
+                ? 'An Unfinished Complaint' 
+                : 'Unfinished Complaints');
         } elseif ($this->treeID == 5) {
-            $ret .= (($cnt == 1) ? 'An Unfinished Compliment' : 'Unfinished Compliments');
+            $ret .= (($cnt == 1) 
+                ? 'An Unfinished Compliment' 
+                : 'Unfinished Compliments');
         }
         return $ret . '</h3>';
     }
@@ -119,14 +160,20 @@ class OpenPoliceUtils extends OpenPoliceVars
         if ($this->treeID == 1) {
             if (isset($coreRecord[1]->com_summary) 
                 && trim($coreRecord[1]->com_summary) != '') {
-                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->com_summary, 10);
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot(
+                    $coreRecord[1]->com_summary, 
+                    10
+                );
             } else {
                 $ret .= '(empty)';
             }
         } elseif ($this->treeID == 5) {
             if (isset($coreRecord[1]->compli_summary) 
                 && trim($coreRecord[1]->compli_summary) != '') {
-                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot($coreRecord[1]->compli_summary, 10);
+                $ret .= $GLOBALS["SL"]->wordLimitDotDotDot(
+                    $coreRecord[1]->compli_summary, 
+                    10
+                );
             } else {
                 $ret .= '(empty)';
             }
@@ -136,7 +183,8 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     public function multiRecordCheckRowSummary($coreRecord)
     {
-        $ret = 'Started ' . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
+        $ret = 'Started ' . date('n/j/y, g:ia', 
+            strtotime($coreRecord[1]->created_at));
         if ($this->treeID == 1) {
             $incident = OPIncidents::find($coreRecord[1]->com_incident_id);
             if ($incident && isset($incident->inc_address_city)) {
@@ -195,11 +243,13 @@ class OpenPoliceUtils extends OpenPoliceVars
             return false;
         }
         if ($this->treeID == 1) {
-            if ($coreRec->com_status == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
+            if ($coreRec->com_status == $GLOBALS["SL"]->def
+                ->getID('Complaint Status', 'Incomplete')) {
                 return true;
             }
         } elseif ($this->treeID == 5) {
-            if ($coreRec->compli_status == $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete')) {
+            if ($coreRec->compli_status == $GLOBALS["SL"]->def
+                ->getID('Compliment Status', 'Incomplete')) {
                 return true;
             }
         }
@@ -298,6 +348,15 @@ class OpenPoliceUtils extends OpenPoliceVars
         return 0;
     }
     
+    protected function canPrintFullReportByRecordSpecs($com)
+    {
+        return (isset($com->com_publish_officer_name)
+            && intVal($com->com_publish_officer_name) == 1
+            && isset($com->com_publish_user_name)
+            && intVal($com->com_publish_user_name) == 1
+            && in_array($com->com_status, [200, 201, 203, 204]));
+    }
+    
     protected function canPrintFullReport()
     {
         if (!isset($this->sessData->dataSets["complaints"])) {
@@ -307,9 +366,9 @@ class OpenPoliceUtils extends OpenPoliceVars
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             return true;
         }
-        $com = $this->sessData->dataSets["complaints"][0];
-        return ($com->com_privacy == $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
-            && in_array($com->com_status, [200, 201, 203, 204]));
+        return $this->canPrintFullReportByRecordSpecs(
+            $this->sessData->dataSets["complaints"][0]
+        );
     }
     
     public function tblsInPackage()
@@ -322,17 +381,14 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     protected function maxUserView()
     {
-        if (isset($this->sessData->dataSets["complaints"])) {
-            if ($this->sessData->dataSets["complaints"][0]->com_privacy 
-                    != $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly')
-                || in_array($this->sessData->dataSets["complaints"][0]->com_status, [
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
-                    $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
-                ])) {
-                $GLOBALS["SL"]->pageView = 'public';
-            }
+        if ($this->isPublic()
+            || in_array($this->sessData->dataSets["complaints"][0]->com_status, [
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
+            ])) {
+            $GLOBALS["SL"]->pageView = 'public';
         }
         if (isset($this->v["user"]) && isset($this->v["user"]->id)) {
             if (isset($this->sessData->dataSets["civilians"]) 
@@ -348,7 +404,8 @@ class OpenPoliceUtils extends OpenPoliceVars
                 $overRow = OPOversight::where('over_email', $this->v["user"]->email)
                     ->first();
                 if ($overRow && isset($overRow->over_dept_id)) {
-                    $lnkChk = OPLinksComplaintDept::where('lnk_com_dept_complaint_id', $this->coreID)
+                    $lnkChk = OPLinksComplaintDept::where('lnk_com_dept_complaint_id', 
+                            $this->coreID)
                         ->where('lnk_com_dept_dept_id', $overRow->over_dept_id)
                         ->first();
                     if ($lnkChk && isset($lnkChk->lnk_com_dept_id)) {
@@ -437,7 +494,8 @@ class OpenPoliceUtils extends OpenPoliceVars
             if (isset($this->sessData->dataSets["oversight"]) 
                 && sizeof($this->sessData->dataSets["oversight"]) > 0) {
                 foreach ($this->sessData->dataSets["oversight"] as $i => $o) {
-                    if (isset($o->over_email) && $o->over_email == $this->v["user"]->email) {
+                    if (isset($o->over_email) 
+                        && $o->over_email == $this->v["user"]->email) {
                         return true;
                     }
                 }
