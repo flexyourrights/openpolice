@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-9 col-sm-8">
             <div class="pB10">
-                <a href="{{ $url }}" class="blk"><h4>
+                <a href="{{ $url }}"><h4>
                     @if (trim($allegations[0]) == '') Incident @else {!! $allegations[0] !!} @endif
                     in {!! $comWhere !!}
                 </h4></a>

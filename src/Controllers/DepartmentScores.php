@@ -22,17 +22,19 @@ use App\Models\OPOversightModels;
 
 class DepartmentScores
 {
-    public $vals       = [];
-    public $scoreDepts = null;
-    public $deptNames  = [];
-    public $deptOvers  = [];
-    public $deptScore  = [];
+    public $vals        = [];
+    public $scoreDepts  = null;
+    public $deptNames   = [];
+    public $deptOvers   = [];
+    public $deptScore   = [];
     
-    public $chartFlds  = [];
-    public $gradeColor = [];
-    public $stats      = [];
+    public $chartFlds   = [];
+    public $gradeColor  = [];
+    public $stats       = [];
+
+    public $searchFilts = [];
     
-    protected $loaded  = false;
+    protected $loaded   = false;
     
     public function __construct()
     {
@@ -366,9 +368,9 @@ class DepartmentScores
         return 0;
     }
     
-    public function printTotsBars()
+    public function printTotsBars($searchFilts = [])
     {
-        $this->loadAllDepts();
+        $this->loadAllDepts($searchFilts);
         $this->recalcAllDepts();
         $datOut = $datTmp = [];
         foreach ($this->chartFlds as $fld) {

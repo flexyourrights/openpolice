@@ -32,12 +32,12 @@ class OpenComplaintSaves extends OpenComplaintConditions
      * @param  array $tmpSubTier
      * @return boolean
      */
-    protected function postNodePublicCustom($nID = -3, $nIDtxt = '', $tmpSubTier = [])
+    protected function postNodePublicCustom(&$curr)
     {
+        $nID = $curr->nID;
         if (empty($tmpSubTier)) {
             $tmpSubTier = $this->loadNodeSubTier($nID);
         }
-        list($tbl, $fld) = $this->allNodes[$nID]->getTblFld();
         if ($this->treeID == 1 && isset($this->sessData->dataSets["complaints"])) {
             $this->sessData->dataSets["complaints"][0]->update([
                 "updated_at" => date("Y-m-d H:i:s")
@@ -45,7 +45,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         // Main Complaint Survey...
         if (in_array($nID, [16, 17, 2262, 2263])) {
-            return $this->saveStartTime($nID, $tbl, $fld);
+            return $this->saveStartTime($curr);
         } elseif (in_array($nID, [145, 920])) {
             return $this->saveNewDept($nID);
         } elseif ($nID == 234) {
@@ -70,7 +70,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         // Department Editor Survey ...
         } elseif ($nID == 2232) {
             $date = date('Y-m-d H:i:s');
-            $this->sessData->currSessData($nID, $tbl, $fld, 'update', $date);
+            $this->sessData->currSessData($curr, 'update', $date);
             return true;
         } elseif ($nID == 1285) {
             return $this->saveDeptSubWays1($nID);
@@ -94,9 +94,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
      * @param  string $fld
      * @return boolean
      */
-    protected function saveStartTime($nID, $tbl, $fld)
+    protected function saveStartTime($curr)
     {
-        $dateNode = ((in_array($nID, [16, 17])) ? 15 : 2261);
+        $dateNode = ((in_array($curr->nID, [16, 17])) ? 15 : 2261);
         $date = $this->getRawFormDate($dateNode);
         if (trim($date) == '') {
             $date = '0000-00-00';
@@ -105,13 +105,13 @@ class OpenComplaintSaves extends OpenComplaintConditions
         if (substr($date, 0, 5) == '-0001') {
             $date = '0000-00-00';
         }
-        $time = $this->postFormTimeStr($nID);
+        $time = $this->postFormTimeStr($curr->nID);
         if ($time === null) {
             $date .= ' 00:00:00';
         } else {
             $date .= ' ' . $time;
         }
-        $this->sessData->currSessData($nID, $tbl, $fld, 'update', $date);
+        $this->sessData->currSessData($curr, 'update', $date);
         return true;
     }
     

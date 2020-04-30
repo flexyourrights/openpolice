@@ -9,37 +9,41 @@
     <div class="col-lg-3 col-md-4"><div id="partLft">
     @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
         <p>
-        @if (isset($dat["Partners"][0]->part_title))
-            {!! $dat["Partners"][0]->part_title !!}<br />
+        @if (isset($dat["partners"][0]->part_title))
+            {!! $dat["partners"][0]->part_title !!}<br />
         @endif
-        @if (isset($dat["Partners"][0]->part_company_name) 
-            && trim($dat["Partners"][0]->part_company_name) != '') 
-            @if (isset($dat["Partners"][0]->part_company_website))
-                <a href="{!! $dat['Partners'][0]->part_company_website !!}" 
-                    target="_blank">{!! $dat["Partners"][0]->part_company_name !!}</a><br />
-            @else {!! $dat["Partners"][0]->part_company_name !!}<br />
+        @if (isset($dat["partners"][0]->part_company_name) 
+            && trim($dat["partners"][0]->part_company_name) != '') 
+            @if (isset($dat["partners"][0]->part_company_website))
+                <a href="{!! $dat['partners'][0]->part_company_website !!}" 
+                    target="_blank"
+                    >{!! $dat["partners"][0]->part_company_name !!}</a><br />
+            @else {!! $dat["partners"][0]->part_company_name !!}<br />
             @endif
         @endif </p>
     @endif
-    @if (isset($dat["Partners"][0]->part_geo_desc) 
-        && trim($dat["Partners"][0]->part_geo_desc) != '')
+    @if (isset($dat["partners"][0]->part_geo_desc) 
+        && trim($dat["partners"][0]->part_geo_desc) != '')
         <p><b class="slBlueDark">Operating In</b><br />
-        {!! $dat["Partners"][0]->part_geo_desc !!}</p>
-    @elseif (isset($dat["PartnerStates"]) && sizeof($dat["PartnerStates"]) > 0)
+        {!! $dat["partners"][0]->part_geo_desc !!}</p>
+    @elseif (isset($dat["partner_states"]) 
+        && sizeof($dat["partner_states"]) > 0)
         <p><b class="slBlueDark">
         @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney')) Licensed In
         @else Operating In 
         @endif </b><br />
-        @foreach ($dat["PartnerStates"] as $state)
-            @if (isset($state->prt_sta_state) && trim($state->prt_sta_state) != '')
+        @foreach ($dat["partner_states"] as $state)
+            @if (isset($state->prt_sta_state) 
+                && trim($state->prt_sta_state) != '')
                 {!! $GLOBALS["SL"]->getState($state->prt_sta_state) !!}<br />
             @endif
         @endforeach
         </p>
     @endif
-    @if (isset($dat["Partners"][0]->part_help_reqs))
+    @if (isset($dat["partners"][0]->part_help_reqs))
         <div class="row"><div class="col-lg-8">
-        <p>{!! str_replace("\n", "</p><p>", $dat["Partners"][0]->part_help_reqs) !!}</p>
+        <p>{!! str_replace("\n", "</p><p>", 
+            $dat["partners"][0]->part_help_reqs) !!}</p>
         </div></div>
     @endif
     @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
@@ -47,11 +51,12 @@
             <b>Organization Capabilities for Users of OpenPolice.org</b>
         </div>
         <ul style="margin-left: -15px;">
-        @if (isset($dat["PartnerCapac"]) && sizeof($dat["PartnerCapac"]) > 0)
-            @foreach ($dat["PartnerCapac"] as $i => $cap)
+        @if (isset($dat["partner_capac"]) 
+            && sizeof($dat["partner_capac"]) > 0)
+            @foreach ($dat["partner_capac"] as $i => $cap)
                 <li>{!! $GLOBALS["SL"]->def->getVal(
                     'Organization Capabilities', 
-                    $cap->PrtCapCapacity
+                    $cap->prt_cap_capacity
                 ) !!}</li>
             @endforeach
         @endif </ul>
@@ -69,43 +74,48 @@
         @endif
         </h3>
         <p>
-        @if (isset($dat["Partners"][0]->part_bio))
-            {!! str_replace('\r\n', "</p><p>", str_replace("\n", "</p><p>", 
-                $dat["Partners"][0]->part_bio)) !!}
+        @if (isset($dat["partners"][0]->part_bio))
+            {!! str_replace('\r\n', "</p><p>", 
+                str_replace("\n", "</p><p>", 
+                    $dat["partners"][0]->part_bio)) !!}
         @endif
         </p>
-        @if (isset($dat["Partners"][0]->part_bio_url))
+        @if (isset($dat["partners"][0]->part_bio_url))
             <p>More About: 
-            <a href="{!! $dat['Partners'][0]->part_bio_url !!}" target="_blank"
-                >{!! $dat['Partners'][0]->part_bio_url !!}</a><br /></p>
+            <a href="{!! $dat['partners'][0]->part_bio_url !!}" 
+                target="_blank"
+                >{!! $dat['partners'][0]->part_bio_url !!}
+                </a><br /></p>
         @endif
-        @if (isset($dat["Partners"][0]->part_company_website))
+        @if (isset($dat["partners"][0]->part_company_website))
             <p>Home Page: 
-            <a href="{!! $dat['Partners'][0]->part_company_website !!}" target="_blank"
-                >{!! $dat['Partners'][0]->part_company_website !!}</a><br /></p>
+            <a href="{!! $dat['partners'][0]->part_company_website !!}" 
+                target="_blank"
+                >{!! $dat['partners'][0]->part_company_website !!}
+                </a><br /></p>
         @endif
         
         <?php /*
-        @if (isset($dat["Partners"][0]->part_bio_url))
-            <p><a href="{!! $dat['Partners'][0]->part_bio_url !!}" target="_blank"
+        @if (isset($dat["partners"][0]->part_bio_url))
+            <p><a href="{!! $dat['partners'][0]->part_bio_url !!}" target="_blank"
                 >Read more about 
-            @if (isset($dat["PersonContact"][0]->prsn_nickname))
-                {!! $dat["PersonContact"][0]->prsn_nickname !!}
+            @if (isset($dat["person_contact"][0]->prsn_nickname))
+                {!! $dat["person_contact"][0]->prsn_nickname !!}
             @else them @endif </a><br />
         @endif
         <p>
         @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
-            @if (isset($dat["Partners"][0]->part_company_website)) 
-                <a href="{!! $dat['Partners'][0]->part_company_website !!}" target="_blank">{!! 
-                    $dat["Partners"][0]->part_company_website !!}</a><br />
+            @if (isset($dat["partners"][0]->part_company_website)) 
+                <a href="{!! $dat['partners'][0]->part_company_website !!}" target="_blank">{!! 
+                    $dat["partners"][0]->part_company_website !!}</a><br />
             @endif
-            @if (isset($dat["Partners"][0]->part_bio_url))
-                <a href="{!! $dat['Partners'][0]->part_bio_url !!}" target="_blank">Full Bio</a><br />
+            @if (isset($dat["partners"][0]->part_bio_url))
+                <a href="{!! $dat['partners'][0]->part_bio_url !!}" target="_blank">Full Bio</a><br />
             @endif
         @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
-            @if (isset($dat["Partners"][0]->part_company_website)) 
-                <a href="{!! $dat['Partners'][0]->part_company_website !!}" target="_blank">{!! 
-                    $dat["Partners"][0]->part_company_website !!}</a><br />
+            @if (isset($dat["partners"][0]->part_company_website)) 
+                <a href="{!! $dat['partners'][0]->part_company_website !!}" target="_blank">{!! 
+                    $dat["partners"][0]->part_company_website !!}</a><br />
             @endif
         @endif
         </p>
@@ -120,31 +130,37 @@
     <div class="row">
         <div class="col-md-3">
             <h4>Contact</h4>
-            <p><a href="{{ $GLOBALS['SL']->rowAddyMapsURL($dat['PersonContact'][0], 'prsn_')
-                }}" target="_blank">
+            <p><a href="{{ $GLOBALS['SL']->rowAddyMapsURL(
+                    $dat['person_contact'][0], 
+                    'prsn_'
+                ) }}" target="_blank">
             @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
-                @if (isset($dat["Partners"][0]->part_company_name))
-                    {!! $dat["Partners"][0]->part_company_name !!}<br />
+                @if (isset($dat["partners"][0]->part_company_name))
+                    {!! $dat["partners"][0]->part_company_name !!}<br />
                 @endif
             @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
-                @if (isset($dat["PersonContact"][0]->prsn_nickname))
-                    {!! $dat["PersonContact"][0]->prsn_nickname !!}<br />
+                @if (isset($dat["person_contact"][0]->prsn_nickname))
+                    {!! $dat["person_contact"][0]->prsn_nickname !!}<br />
                 @endif
             @endif
-            {!! $GLOBALS['SL']->printRowAddy($dat['PersonContact'][0], 'prsn_', true) !!}</a><br />
-            @if (isset($dat["PersonContact"][0]->prsn_phone_work))
-                {!! $dat["PersonContact"][0]->prsn_phone_work !!}<br />
+            {!! $GLOBALS['SL']->printRowAddy(
+                $dat['person_contact'][0], 
+                'prsn_', 
+                true
+            ) !!}</a><br />
+            @if (isset($dat["person_contact"][0]->prsn_phone_work))
+                {!! $dat["person_contact"][0]->prsn_phone_work !!}<br />
             @endif
             </p>
         </div><div class="col-md-9">
         @if ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'))
-            {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['PersonContact'][0], 'prsn_',
-                ((isset($dat["Partners"][0]->part_company_name)) 
-                    ? $dat["Partners"][0]->part_company_name : '')) !!}
+            {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['person_contact'][0], 'prsn_',
+                ((isset($dat["partners"][0]->part_company_name)) 
+                    ? $dat["partners"][0]->part_company_name : '')) !!}
         @elseif ($type == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'))
-            {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['PersonContact'][0], 'prsn_',
-                ((isset($dat["PersonContact"][0]->prsn_nickname)) 
-                    ? $dat["PersonContact"][0]->prsn_nickname : '')) !!}
+            {!! $GLOBALS["SL"]->embedMapSimpRowAddy($nID, $dat['person_contact'][0], 'prsn_',
+                ((isset($dat["person_contact"][0]->prsn_nickname)) 
+                    ? $dat["person_contact"][0]->prsn_nickname : '')) !!}
         @endif
         </div>
     </div>

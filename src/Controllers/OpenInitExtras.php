@@ -53,6 +53,7 @@ class OpenInitExtras extends OpenPartners
                 }
             }
         }
+        $this->initComplaintToolbox();
         return true;
     }
     
@@ -68,7 +69,7 @@ class OpenInitExtras extends OpenPartners
         $this->majorSections = [];
         $this->majorSections[] = [1,   'Your Story',      'active'];
         $this->majorSections[] = [4,   'Who\'s Involved', 'active'];
-        $this->majorSections[] = [5,   'Allegations',     'active'];
+        $this->majorSections[] = [5,   'What Happened',   'active'];
         $this->majorSections[] = [6,   'Go Gold',         'disabled'];
         $this->majorSections[] = [419, 'Finish',          'active'];
         
@@ -83,10 +84,9 @@ class OpenInitExtras extends OpenPartners
         $this->minorSections[1][] = [144,  'Police Departments'];
         $this->minorSections[1][] = [142,  'Officers'];
         
-        $this->minorSections[2][] = [198,  'Stops & Searches'];
-        $this->minorSections[2][] = [200,  'Uses of Force'];
-        $this->minorSections[2][] = [201,  'Arrests & Citations'];
-        $this->minorSections[2][] = [154,  'Other'];
+        $this->minorSections[2][] = [2918, 'Allegations'];
+        $this->minorSections[2][] = [2919, 'Other Allegations'];
+        $this->minorSections[2][] = [2890, 'Your Feelings'];
         
         //$this->minorSections[3][] = [196, 'GO GOLD!']; // 483
         $this->minorSections[3][] = [149,  'Stops & Searches'];

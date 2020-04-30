@@ -79,7 +79,7 @@
 
 <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
 @if ($d["whichOver"] == 'civRow')
-    <h3>{{ $d[$d["whichOver"]]->over_agnc_name }}</h3>
+    <h2>{{ $d[$d["whichOver"]]->over_agnc_name }}</h2>
     <p>
     This is the agency that collects complaints 
     against the {!! $d["deptRow"]->dept_name !!}.
@@ -93,7 +93,7 @@
             {!! $d["civAddy"] !!}</a>
     @endif
 @else
-    <h3>Internal Affairs</h3>
+    <h2>Internal Affairs</h2>
     @if (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
         <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
             ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
@@ -222,7 +222,7 @@
     
 @if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
     <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
-    <h3>Internal Affairs Office</h3>
+    <h4>Internal Affairs Office</h4>
     <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
         ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
     @if (isset($d["iaRow"]->over_phone_work) && trim($d["iaRow"]->over_phone_work) != '')

@@ -2,7 +2,7 @@
 @if (isset($d["deptRow"]->dept_score_openness) 
 	&& intVal($d["deptRow"]->dept_score_openness) > 0)
 
-    <h3>Complaints Accessibility</h3>
+    <h2>Complaints Accessibility</h2>
     <h4>Score: <span class="slBlueDark mL5">
     {{ $d["deptRow"]->dept_score_openness }}/100</span></h4>
     <h4>Grade: <span class="slBlueDark mL5">

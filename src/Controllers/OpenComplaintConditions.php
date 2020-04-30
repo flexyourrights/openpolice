@@ -105,6 +105,15 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#PrintFullReport') {
             return $this->condPrintFullReport();
 
+        } elseif ($condition == '#PrintIncidentLocation') {
+            return $this->condPrintIncidentLocation();
+
+        } elseif ($condition == '#PrintCivilianName') {
+            return $this->condPrintCivilianName();
+
+        } elseif ($condition == '#PrintOfficerName') {
+            return $this->condPrintOfficerName();
+
         } elseif ($condition == '#PrintSensitiveReport') {
             return $this->condPrintSensitiveReport();
 
@@ -113,6 +122,10 @@ class OpenComplaintConditions extends OpenSessDataOverride
 
         } elseif ($condition == '#IsOversightAgency') {
             return $this->condIsOversightAgency();
+
+        } elseif ($condition == '#IsPartnerStaffAdminOrOwnerOversight') {
+            return $this->condIsOversightAgency()
+                || $this->isPartnerStaffAdminOrOwner();
 
         } elseif ($condition == '#ComplaintNotIncompleteOrCurrIsStaff') {
             return $this->condComplaintNotIncompleteOrCurrIsStaff($complaint);
@@ -173,7 +186,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condAttorneyIntake($complaint)
     {
-        if (isset($complaint->com_att_id) && intVal($complaint->com_att_id) > 0) {
+        if (isset($complaint->com_att_id) 
+            && intVal($complaint->com_att_id) > 0) {
             $attID = intVal($complaint->com_att_id);
             $attDef = $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney');
             $partner = OPPartners::where('part_id', $attID)
@@ -330,6 +344,20 @@ class OpenComplaintConditions extends OpenSessDataOverride
     }
     
     /**
+     * Checks whether or not the current 
+     * civilian is the complainant. 
+     *
+     * @return int
+     */
+    protected function currCivIsCreator()
+    {
+        $civ = $this->sessData->getDataBranchRow('civilians');
+        return ($civ 
+            && isset($civ->civ_is_creator) 
+            && trim($civ->civ_is_creator) == 'Y');
+    }
+    
+    /**
      * Checks whether or not the current civilian is not
      * the complainant. This helps avoid impossibly asking 
      * if the user had fatal injuries.
@@ -338,10 +366,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condMedicalCareNotYou()
     {
-        $civ = $this->sessData->getDataBranchRow('civilians');
-        if ($civ 
-            && isset($civ->civ_is_creator) 
-            && trim($civ->civ_is_creator) == 'Y') {
+        if ($this->currCivIsCreator()) {
             return 0;
         }
         return -1;
@@ -461,19 +486,28 @@ class OpenComplaintConditions extends OpenSessDataOverride
      * @param  App\Models\OPComplaints $complaint
      * @return int
      */
-    protected function complaintShowUploads($complaint)
+    protected function complaintShowUploads($complaint = null)
     {
+        if ((!$complaint || $complaint === null)
+            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $complaint = $this->sessData->dataSets["complaints"][0];
+        }
         if ($this->complaintHasUploads() == 0) {
             return 0;
         }
-        if ($this->v["isAdmin"] || $this->v["isOwner"]) {
-            return 1;
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
         }
         if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
             // needs more strength here
+
             return 1;
         }
-        if ($this->canPrintFullReportByRecordSpecs($this->sessData->dataSets["complaints"][0])) {
+        if ($this->canPrintFullReportByRecordSpecs($complaint)) {
             return 1;
         }
         return 0;
@@ -503,7 +537,10 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condPrintAnonOnly($complaint)
     {
         $unPub = $this->getUnPublishedStatusList();
-        $unPub[] = $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight');
+        $unPub[] = $GLOBALS["SL"]->def->getID(
+            'Complaint Status', 
+            'OK to Submit to Oversight'
+        );
         $types = [ 'public', 'pdf' ];
         if (isset($GLOBALS["SL"]->pageView) 
             && in_array($GLOBALS["SL"]->pageView, $types)
@@ -518,6 +555,82 @@ class OpenComplaintConditions extends OpenSessDataOverride
         }
         return 0;
     }
+
+    /**
+     * Checks whether or not the incident location
+     * should be printed for the current page load.
+     *
+     * @return int
+     */
+    protected function condPrintIncidentLocation()
+    {
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
+        }
+        if (isset($this->sessData->dataSets["incidents"]) 
+            && isset($this->sessData->dataSets["incidents"][0])
+            && isset($this->sessData->dataSets["incidents"][0]->inc_public)
+            && intVal($this->sessData->dataSets["incidents"][0]->inc_public) == 1) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether or not the current Civilian's name
+     * should be printed for the current page load.
+     *
+     * @return int
+     */
+    protected function condPrintCivilianName()
+    {
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
+        }
+        if ($this->currCivIsCreator()
+            && isset($this->sessData->dataSets["complaints"])
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $com = $this->sessData->dataSets["complaints"][0];
+            if (isset($com->com_publish_user_name)
+                && intVal($com->com_publish_user_name) == 1
+                && in_array($com->com_status, [200, 201, 203, 204])) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether or not the current Officer's name
+     * should be printed for the current page load.
+     *
+     * @return int
+     */
+    protected function condPrintOfficerName()
+    {
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
+        }
+        if (isset($this->sessData->dataSets["complaints"])
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $com = $this->sessData->dataSets["complaints"][0];
+            if (isset($com->com_publish_officer_name)
+                && intVal($com->com_publish_officer_name) == 1
+                && in_array($com->com_status, [200, 201, 203, 204])) {
+                return 1;
+            }
+        }
+        return 0;
+    }
     
     /**
      * Checks whether or not this complaint should only
@@ -528,7 +641,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condPrintFullReport()
     {
         if ($this->canPrintFullReport()) {
-            return 1;
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
         }
         return 0;
     }
@@ -543,7 +658,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
     {
         if (isset($GLOBALS["SL"]->pageView) 
             && in_array($GLOBALS["SL"]->pageView, ['full', 'full-pdf'])) {
-            return 1;
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
         }
         return 0;
     }
@@ -555,8 +672,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
      * @param  App\Models\OPComplaints $complaint
      * @return int
      */
-    protected function condPrintPublishingOnHold($complaint)
+    protected function condPrintPublishingOnHold($complaint = null)
     {
+        if ((!$complaint || $complaint === null)
+            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $complaint = $this->sessData->dataSets["complaints"][0];
+        }
         if ($this->v["isAdmin"] || $this->v["isOwner"]) {
             return 0;
         }
@@ -577,7 +699,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condIsOversightAgency()
     {
-        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
+        if ($this->v["uID"] > 0 
+            && $this->v["user"]->hasRole('oversight')) {
             return 1;
         }
         return 0;
@@ -593,10 +716,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condComplaintNotIncompleteOrCurrIsStaff($complaint)
     {
         $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
-        if (isset($complaint->com_status) && $complaint->com_status != $incDef) {
+        if (isset($complaint->com_status) 
+            && $complaint->com_status != $incDef) {
             return 1;
         }
-        if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('administrator|staff')) {
+        if ($this->v["uID"] > 0 
+            && $this->v["user"]->hasRole('administrator|staff')) {
             return 1;
         }
         return 0;
@@ -642,7 +767,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if (isset($this->sessData->dataSets["partners"])
             && isset($this->sessData->dataSets["partners"][0])) {
             $partner = $this->sessData->dataSets["partners"][0];
-            if (isset($partner->part_status) && intVal($partner->part_status) == 1) {
+            if (isset($partner->part_status) 
+                && intVal($partner->part_status) == 1) {
                 return 1;
             }
         }

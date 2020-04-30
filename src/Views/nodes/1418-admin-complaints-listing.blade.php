@@ -25,7 +25,8 @@
     <div class="row">
         <div class="col-md-8">
         @if (isset($fltDept) && intVal($fltDept) > 0)
-            <input type="hidden" name="baseUrl" id="baseUrlID" value="/my-profile">
+            <input name="baseUrl" id="baseUrlID" 
+                type="hidden" value="/my-profile">
             <h4 class="disIn mR20">Department Complaints</h4>
         @else
             <input type="hidden" name="baseUrl" id="baseUrlID" 
@@ -44,7 +45,8 @@
         @if (!$GLOBALS["SL"]->x["isPublicList"])
             <div class="fR pL15">
                 <div class="btn-group">
-                    <button type="button" id="hidivBtnDashViewList" class="btn btn-sm 
+                    <button type="button" id="hidivBtnDashViewList" 
+                        class="btn btn-sm 
                         @if ($sView == 'list') btn-secondary 
                         @else btn-outline-secondary @endif "
                         ><i class="fa fa-th-list" aria-hidden="true"></i></button>
@@ -102,22 +104,36 @@
             </div>
             <div class="col-lg-8">
                 <div id="complaintPreviews" class="w100">
-                    <div class="w100 p20 taC">
-                        {!! $GLOBALS["SL"]->spinner() !!}
-                    </div>
-            <?php /* <a href="?showPreviews=1{!! $searchFiltsURL !!}" target="_blank"
-                >?showPreviews=1{!! $searchFiltsURL !!}</a> */ ?>
+                    @if (isset($complaintPreviews) && trim($complaintPreviews) != '')
+                        {!! $complaintPreviews !!}
+                    @else
+                        <div class="slCard p20 taC">
+                            {!! $GLOBALS["SL"]->spinner() !!}
+                            <h4 class="mTn20 mB20">
+                                We're gathering the data, hold tight!
+                            </h4>
+                        </div>
+                    @endif
                 </div>
+                <?php /* <p><a href="?showPreviews=1{!! $searchFiltsURL !!}" 
+                    target="_blank" class="mT30">
+                    <i class="fa fa-external-link mR3" 
+                        aria-hidden="true"></i> 
+                    Open Results In New Window
+                </a></p>
+                */ ?>
             </div>
         </div>
     </div> <!-- end admDashLargeView -->
-    <script type="text/javascript">
+    @if (!isset($complaintPreviews) || trim($complaintPreviews) == '')
+        <script type="text/javascript">
         $(document).ready(function(){
             //setTimeout(function() {
-                $("#complaintPreviews").load("?showPreviews=1{!! $searchFiltsURL !!}");
+            $("#complaintPreviews").load("?showPreviews=1{!! $searchFiltsURL !!}");
             //}, 10);
         });
-    </script>
+        </script>
+    @endif
     
 @elseif ($sView == 'list')
 
@@ -134,7 +150,8 @@
         <div id="comRow{{ $com->com_id }}" class="complaintRowWrp">
 
             <a class="complaintRowA" href="javascript:;"
-                data-com-id="{{ $com->com_id }}" data-com-pub-id="{{ intVal($com->com_public_id) }}">
+                data-com-id="{{ $com->com_id }}" 
+                data-com-pub-id="{{ intVal($com->com_public_id) }}">
                 <div class="float-left complaintAlert">
                     <div>&nbsp;
                     @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type), 
@@ -154,7 +171,8 @@
                 <div class="float-left">
                     <b>{{ trim($com->inc_address_city) }}, {{ $com->inc_address_state }},
                     {{ $GLOBALS["SL"]->convertAllCallToUp1stChars(
-                        $com->prsn_name_first . ' ' . $com->prsn_name_last) }}</b><br />
+                        $com->prsn_name_first . ' ' . $com->prsn_name_last
+                    ) }}</b><br />
                     <span class="slGrey">
                     @if ($com->com_public_id <= 0)
                         #i{{ number_format($com->com_id) }}
@@ -178,15 +196,18 @@
                 <div class="float-right">
                     @if (isset($com->com_record_submitted))
                         &nbsp;<br /><span class="slGrey">{{ 
-                        date("n/j/y", strtotime($com->com_record_submitted)) }}</span>
+                            date("n/j/y", strtotime($com->com_record_submitted)) 
+                        }}</span>
                     @endif
                 </div>
                 <div class="fC"></div>
             </a>
 
             <a class="complaintRowFull" 
-                @if ($com->com_public_id > 0) href="/dash/complaint/read-{{ $com->com_public_id }}"
-                @else href="/dash/complaint/readi-{{ $com->com_id }}"
+                @if ($com->com_public_id > 0) 
+                    href="/dash/complaint/read-{{ $com->com_public_id }}"
+                @else 
+                    href="/dash/complaint/readi-{{ $com->com_id }}"
                 @endif ><i class="fa fa-arrows-alt" aria-hidden="true"></i></a>
             
             <div id="resultSpin{{ $com->com_id }}" class="resultSpin"></div>
@@ -220,7 +241,11 @@
 <style> 
 @if ($sView == 'list') 
     body { overflow-y: hidden; } 
+    #treeWrap1385, #treeWrap2766 {
+        width: 100%; 
+        max-width: 100%; 
+        padding-left: 0px; 
+        padding-right: 0px; 
+    }
 @endif
-
-
 </style>

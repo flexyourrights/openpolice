@@ -83,6 +83,7 @@ function logSrchFilts() {
             filts += "__offrace_"+offRace.substring(1);
         }
         document.getElementById("sFiltID").value = filts;
+console.log(document.getElementById("sFiltID").value);
     }
     return true;
 }
@@ -166,8 +167,16 @@ function updateSearchDeets() {
     if (document.getElementById("sViewID")) {
         document.getElementById("sViewID").value="{{ $sView }}";
     }
+    if (document.getElementById("complaintPreviews")) {
+        document.getElementById("complaintPreviews").innerHTML=getSpinner();
+        var sFilt = '';
+        if (document.getElementById("sFiltID")) {
+            sFilt = document.getElementById("sFiltID").value
+        }
+        $("#complaintPreviews").load("?showPreviews=1&sFilt="+sFilt);
+    }
 }
-setTimeout(function() { updateSearchDeets(); }, 100);
+setTimeout(function() { logSrchFilts(); }, 100);
 $(document).on("click", ".searchDeetFld", function() { updateSearchDeets(); });
 $(document).on("change", ".searchDeetFld", function() { updateSearchDeets(); });
 $(document).on("submit", "#dashSearchFrmID", function() { updateSearchDeets(); });

@@ -2,20 +2,25 @@
 <?php /* <pre>{!! print_r($d) !!}</pre> */ ?>
 <?php /* <h2>{!! $d["deptRow"]->dept_name !!}</h2> */ ?>
 <div class="w100 pB20 taC">
-    <?php /*
-    <img src="/survloop-libraries/state-flags/state-flag-MD-maryland.jpg" border=0 
-        class="bigTmbRound slBoxShdGryB mB15" >
-    */ ?>
+    <center>
+    <img src="{{ $GLOBALS['SL']->states->getStateFlagImg(
+            $d['deptRow']->dept_address_state
+        ) }}" border=0 class="bigTmbRound slBoxShdGryB mB15" >
+    </center>
     <h5>
-    <nobr><a href="/department-accessibility">U.S. Police Departments</a> <span class="mL5 mR5">&gt;</span></nobr> 
-    <nobr><a href="/department-accessibility?state={{ $d['deptRow']->dept_address_state }}"
-        >Maryland Police Departments</a></nobr>
+    <nobr><a href="/department-accessibility"
+        >U.S. Police Departments</a> 
+        <span class="mL5 mR5">&gt;</span></nobr> 
+    <nobr><a href="/department-accessibility?state={{ 
+            $d['deptRow']->dept_address_state }}"
+        >{{ $GLOBALS["SL"]->getState($d['deptRow']->dept_address_state) 
+        }} Police Departments</a></nobr>
     </h5>
 </div>
 
-<h3>
+<h1>
     How to File Complaints against the {!! $d["deptRow"]->dept_name !!}
-</h3>
+</h1>
 <div class="pB5"><p>
 @if (isset($d["deptRow"]->dept_address) 
 	&& trim($d["deptRow"]->dept_address) != '')

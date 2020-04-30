@@ -44,10 +44,11 @@ class OpenPoliceSearcher extends Searcher
     
     public function loadAllComplaintsPublic($xtra)
     {
-        $eval = "\$this->v['allcomplaints'] = " . $GLOBALS["SL"]->modelPath('Complaints') 
-            . "::where('com_type', " . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
-            . ")->" . $xtra . "orderBy('" . $this->v["sort"][0] . "', '" . $this->v["sort"][1]
-            . "')->get();";
+        $eval = "\$this->v['allcomplaints'] = " 
+            . $GLOBALS["SL"]->modelPath('Complaints') . "::where('com_type', " 
+            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
+            . ")->" . $xtra . "orderBy('" . $this->v["sort"][0] 
+            . "', '" . $this->v["sort"][1] . "')->get();";
         eval($eval);
 //echo '<br /><br /><br />' . $eval . '<br />loadAllComplaintsPublic( ' . $this->v["allcomplaints"]->count() . '<br />';
         return true;

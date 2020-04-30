@@ -98,7 +98,8 @@ class OpenDepts extends OpenListing
     protected function getNextDept()
     {
         $this->v["nextDept"] = array(0, '', '');
-        $recentDate = time(date("H")-3, date("i"), date("s"), date("n"), date("j"), date("Y"));
+        $recentDate = time(date("H")-3, date("i"), date("s"), 
+            date("n"), date("j"), date("Y"));
         $recentDate = date("Y-m-d H:i:s", $recentDate);
         /*
         OPzVolunTmp::where('tmp_type', 'zed_dept')
@@ -384,28 +385,28 @@ class OpenDepts extends OpenListing
             if (is_array($ways) && is_array($ways) 
                 && sizeof($ways) > 0) {
                 $found = true;
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_way_sub_email', 
                     'update', 
                     ((in_array('Email', $ways) ) ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_way_sub_verbal_phone', 
                     'update', 
                     ((in_array('VerbalPhone', $ways) ) ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_way_sub_paper_mail', 
                     'update', 
                     ((in_array('PaperMail', $ways) ) ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_way_sub_paper_in_person', 
@@ -415,28 +416,28 @@ class OpenDepts extends OpenListing
             }
         }
         if (!$found) {
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_way_sub_email', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_way_sub_verbal_phone', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_way_sub_paper_mail', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_way_sub_paper_in_person', 
@@ -461,7 +462,7 @@ class OpenDepts extends OpenListing
             $ways = $GLOBALS["SL"]->REQ->n1287fld;
             if (is_array($ways) && sizeof($ways) > 0) {
                 $found = true;
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_official_form_not_req', 
@@ -469,7 +470,7 @@ class OpenDepts extends OpenListing
                     ((in_array('OfficialFormNotReq', $ways) ) 
                         ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_official_anon', 
@@ -477,7 +478,7 @@ class OpenDepts extends OpenListing
                     ((in_array('OfficialAnon', $ways) ) 
                         ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_way_sub_notary', 
@@ -485,7 +486,7 @@ class OpenDepts extends OpenListing
                     ((in_array('Notary', $ways) ) 
                         ? 1 : 0)
                 );
-                $this->sessData->currSessData(
+                $this->sessData->currSessDataTblFld(
                     $nID, 
                     'oversight', 
                     'over_submit_deadline', 
@@ -497,28 +498,28 @@ class OpenDepts extends OpenListing
             }
         }
         if (!$found) {
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_official_form_not_req', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_official_anon', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_way_sub_notary', 
                 'update', 
                 0
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'oversight', 
                 'over_submit_deadline', 
@@ -702,9 +703,7 @@ class OpenDepts extends OpenListing
         $GLOBALS["SL"]->loadStates();
         if (!isset($this->v["deptScores"])) {
             $this->v["deptScores"] = new DepartmentScores;
-            $this->v["deptScores"]->loadAllDepts(
-                $this->searcher->searchFilts
-            );
+            $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
         }
         if ($GLOBALS["SL"]->REQ->has('state') 
             && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
@@ -789,6 +788,7 @@ class OpenDepts extends OpenListing
     protected function printDeptOverPublic($nID)
     {
         $state = '';
+        $this->initSearcher();
         if (isset($this->searcher->searchFilts["state"])) {
             $state = $this->searcher->searchFilts["state"];
         }
@@ -858,11 +858,15 @@ class OpenDepts extends OpenListing
      */
     protected function printDeptAccScoreBars($nID)
     {
-        if (!$GLOBALS["SL"]->REQ->has('state') || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
+        $this->initSearcher();
+        $this->searcher->getSearchFilts();
+        if (!$GLOBALS["SL"]->REQ->has('state') 
+            || trim($GLOBALS["SL"]->REQ->get('state')) == '') {
             $param = 'onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"';
             $GLOBALS["SL"]->addBodyParams($param);
         }
-        return $GLOBALS["SL"]->extractStyle($this->v["deptScores"]->printTotsBars(), $nID);
+        $bars = $this->v["deptScores"]->printTotsBars($this->searcher->searchFilts);
+        return $GLOBALS["SL"]->extractStyle($bars, $nID);
         /*
         $statGrades = new SurvStatsGraph;
         $statGrades->addFilt('grade', 'Grade', 
@@ -929,6 +933,7 @@ class OpenDepts extends OpenListing
         if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
             return 'Department Not Found';
         }
+        $GLOBALS["SL"]->loadStates();
         return view(
             'vendor.openpolice.nodes.2711-dept-page-basic-info', 
             [

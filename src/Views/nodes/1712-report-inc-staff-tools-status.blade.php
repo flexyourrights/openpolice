@@ -1,28 +1,21 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-status.blade.php -->
 
-@if ($GLOBALS['SL']->REQ->has('ajax') 
-    || $GLOBALS['SL']->REQ->has('wdg'))
-    <form name="comUpdate" method="get" src="/dash/complaint/read-{{ 
-        $complaintRec->com_id }}?save=1">
-@else
-    <form name="comUpdate" method="get" src="?save=1">
-    @if ($GLOBALS['SL']->REQ->has('frame'))
-        <input type="hidden" name="frame" value="1">
-    @endif
-@endif
+<form name="comUpdate" id="comUpdateID" method="post">
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
+<input type="hidden" name="ajax" value="1">
 <input type="hidden" name="save" value="1">
 <input type="hidden" name="refresh" value="1">
-<input type="hidden" name="cID" value="{{ $complaintRec->com_public_id }}">
 <input type="hidden" name="revType" value="Update">
 
 <h4>Update Complaint Status</h4>
 
-<div class="row mB10">
+<div class="row mT15 mB10">
     <div class="col-md-8 col-sm-12">
         <div id="hidivlegitType" class="
             @if ($comStatus == 'Incomplete') disBlo @else disNon @endif ">
-            <select name="revComplaintType" autocomplete="off"
-                class="form-control form-control-lg mB10">
+            <select name="revComplaintType" id="revComplaintTypeID" 
+                autocomplete="off" class="form-control form-control-lg mB10">
                 <option value="">Select complaint type...</option>
                 <option value="194" 
                     @if ($complaintRec->com_status == 194) SELECTED @endif 
@@ -52,7 +45,8 @@
         </div>
         <div id="hidivlegitStatus" class="
             @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
-            <select name="revStatus" autocomplete="off"
+            <select name="revStatus" id="revStatusID" 
+                autocomplete="off"
                 class="form-control form-control-lg mB10">
                 <option value="">Select complaint status...</option>
                 {!! view(
@@ -69,8 +63,8 @@
     <div class="col-md-4 col-sm-12 pB20">
         <div class=" @if ($comStatus != 'Incomplete') disBlo @else disNon @endif ">
             Complaint Type:<br />
-            <a href="javascript:;" id="hidivBtnlegitType" 
-                class="hidivBtn">{{ $GLOBALS['SL']->def->getVal(
+            <a class="hidivBtn" id="hidivBtnlegitType" 
+                href="javascript:;">{{ $GLOBALS['SL']->def->getVal(
                     'Complaint Type', 
                     $complaintRec->com_type
                 ) }} <i class="fa fa-pencil fPerc66"></i>
@@ -94,27 +88,29 @@
 
 <p><b>Notes for other evaluators</b></p>
 <textarea name="revNote" class="form-control form-control-lg" 
-    style="height: 90px;" ></textarea>
+    style="height: 90px;"></textarea>
 
 <div class="w100 mT20 mB20">
-    <a class="btn btn-lg btn-primary" id="stfBtn7" href="javascript:;" 
+    <a class="btn btn-lg btn-primary" id="stfBtn7" 
+        href="javascript:;" style="color: #FFF;" 
         onMouseOver="this.style.color='#2b3493';" 
-        onMouseOut="this.style.color='#FFF';" style="color: #FFF;"
-        onClick="document.comUpdate.submit();">Save Status Update</a>
+        onMouseOut="this.style.color='#FFF';"
+        >Save Status Update</a>
 </div>
+
 </form>
 
 <div id="docUploads" class="
     @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
     <div class="p20"> </div>
-    {!! view(
-        'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', 
-        [
-            "complaintRec"       => $complaintRec,
-            "reportUploadTypes"  => $reportUploadTypes,
-            "reportUploadFolder" => $reportUploadFolder
-        ]
-    )->render() !!}
+{!! view(
+    'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', 
+    [
+        "complaintRec"       => $complaintRec,
+        "reportUploadTypes"  => $reportUploadTypes,
+        "reportUploadFolder" => $reportUploadFolder
+    ]
+)->render() !!}
 </div>
 
 <div class="p20"> </div>
@@ -139,24 +135,3 @@
     </a>
 </div>
 <div class="p20"> </div>
-
-<script type="text/javascript">
-$(document).ready(function(){
-    $(document).on("change", "#hidivlegitType", function() {
-        if (parseInt($(this).find(":selected").val()) == 194) {
-            $("#hidivlegitStatus").slideUp("fast");
-            $("#progDates").slideUp("fast");
-            if (document.getElementById("docUploads")) {
-                $("#docUploads").slideUp("fast");
-            }
-        } else {
-            $("#hidivlegitStatus").slideDown("fast");
-            $("#progDates").slideDown("fast");
-            if (document.getElementById("docUploads")) {
-                $("#docUploads").slideDown("fast");
-            }
-        }
-        return true;
-    });
-});
-</script>

@@ -2,7 +2,7 @@
 <form name="fixDeptsForm" method="get" action="?fixDepts=1">
 <input type="hidden" name="fixDepts" value="1">
 <input type="hidden" name="refresh" value="1">
-<input type="hidden" name="cID" value="{{ $complaintRec->com_id }}">
+<input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
 {!! $GLOBALS['SL']->getReqHiddenInputs() !!}
 
 <div class="nodeAnchor"><a name="reportUpload"></a></div>

@@ -33,8 +33,10 @@ class OpenPolice extends OpenInitExtras
      * @param  int $currVisib
      * @return string
      */
-    protected function customNodePrint($nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
+    protected function customNodePrint(&$curr = null)
+        // $nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
     {
+        $nID = $curr->nID;
         // Main Complaint Survey
         if (in_array($nID, [145, 920])) {
             return $this->printDeptSearch($nID);
@@ -60,7 +62,8 @@ class OpenPolice extends OpenInitExtras
                 
         // FAQ
         } elseif ($nID == 1884) {
-            $GLOBALS["SL"]->addBodyParams('onscroll="if (typeof bodyOnScroll === \'function\') bodyOnScroll();"');
+            $scroll = 'if (typeof bodyOnScroll === \'function\') bodyOnScroll();';
+            $GLOBALS["SL"]->addBodyParams('onscroll="' . $scroll . '"');
             
         // Public Departments Accessibility Overview
         } elseif ($nID == 1968) {
@@ -79,7 +82,11 @@ class OpenPolice extends OpenInitExtras
                 
         // How We Rate Departments Page
         } elseif ($nID == 1127) {
-            foreach ([1827, 1825, 1829, 1831, 1833, 1837, 1806, 1835, 1, 2, 3, 4, 5, 6, 7] as $n) {
+            $nodes = [
+                1827, 1825, 1829, 1831, 1833, 1837, 1806, 1835, 
+                1, 2, 3, 4, 5, 6, 7
+            ];
+            foreach ($nodes as $n) {
                 $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n' . $n);
             }
             
@@ -123,10 +130,13 @@ class OpenPolice extends OpenInitExtras
             
         // Complaint Report Tools
         } elseif ($nID == 1712) {
+            $this->saveComplaintAdmin();
             return $this->printComplaintAdmin();
         } elseif ($nID == 1713) {
+            $this->saveComplaintAdmin();
             return $this->printComplaintOversight();
         } elseif ($nID == 1714) {
+            $this->saveComplaintAdmin();
             return $this->printComplaintOwner();
         } elseif ($nID == 1780) {
             return $this->printMfaInstruct();
@@ -187,7 +197,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2164) {
             return $this->printComplaintSessPath();
         } elseif ($nID == 2632) {
-            $this->saveComplaintAdmin();
+            //$this->saveComplaintAdmin();
         } elseif ($nID == 2633) {
             $this->saveComplaintOversight();
         } elseif ($nID == 2634) {

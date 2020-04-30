@@ -63,21 +63,21 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $url = '';
         $defNew = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
         if ($nID == 270) {
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'complaints', 
                 'com_status', 
                 'update', 
                 $defNew
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'complaints', 
                 'com_record_submitted', 
                 'update', 
                 date("Y-m-d H:i:s")
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'complaints', 
                 'com_alleg_list', 
@@ -90,26 +90,27 @@ class OpenComplaintPrints extends OpenComplaintEmails
             $url = '/complaint/read-' . $this->sessData
                 ->dataSets["complaints"][0]->com_public_id;
         } else {
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'compliments', 
                 'compli_status', 
                 'update', 
                 $defNew
             );
-            $this->sessData->currSessData(
+            $this->sessData->currSessDataTblFld(
                 $nID, 
                 'compliments', 
                 'compli_record_submitted', 
                 'update', 
                 date("Y-m-d H:i:s")
             );
-            //$this->sessData->currSessData($nID, 'compliments', 'compli_alleg_list', 'update', 
+            //$this->sessData->currSessDataTblFld($nID, 'compliments', 'compli_alleg_list', 'update', 
             //    $this->commaAllegationList());
             $this->sessData->dataSets["compliments"][0]->update([ 
                 'compli_public_id' => $GLOBALS["SL"]->genNewCorePubID()
             ]);
-            $url = '/compliment/read-' . $this->sessData->dataSets["compliments"][0]->compli_public_id;
+            $url = '/compliment/read-' 
+                . $this->sessData->dataSets["compliments"][0]->compli_public_id;
         }
         $spin = $GLOBALS["SL"]->sysOpts["spinner-code"];
         $this->restartSess($GLOBALS["SL"]->REQ);
@@ -348,7 +349,8 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $cnt = $this->v["uploadPrintMap"]["img"]
             +$this->v["uploadPrintMap"]["vid"]
             +$this->v["uploadPrintMap"]["fil"];
-        return '<h3 class="mT0 slBlueDark">' . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>' . $ret;
+        return '<h3 class="mT0 slBlueDark">' 
+            . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>' . $ret;
     }
     
     /* Double-Checking [For Now] */
@@ -359,14 +361,13 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         if (isset($this->sessData->dataSets["complaints"])) {
             $com = $this->sessData->dataSets["complaints"][0];
-            if (isset($com->com_status)) {
-                if (in_array($com->com_status, $this->getPublishedStatusList())
-                    && $this->isPublic()) {
-                    if ($upDeets["privacy"] == 'Block') {
-                        return false;
-                    }
-                    return true;
+            if (isset($com->com_status)
+                && in_array($com->com_status, $this->getPublishedStatusList())
+                && $this->canPrintFullReportByRecordSpecs()) {
+                if ($upDeets["privacy"] == 'Block') {
+                    return false;
                 }
+                return true;
             }
         }
         return false;
@@ -383,10 +384,12 @@ class OpenComplaintPrints extends OpenComplaintEmails
                     }
                     return 'Block';
                 }
-                if ($GLOBALS["SL"]->dataPerms == 'public') {
+                if ($GLOBALS["SL"]->dataPerms == 'public'
+                    && !$this->canPrintFullReportByRecordSpecs()) {
                     return 'Block';
                 }
-                if ($GLOBALS["SL"]->pageView == 'public') {
+                if ($GLOBALS["SL"]->pageView == 'public'
+                    && $this->canPrintFullReportByRecordSpecs()) {
                     return 'Public';
                 }
             }

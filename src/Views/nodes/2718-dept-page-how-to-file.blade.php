@@ -10,7 +10,7 @@
 	|| (isset($d["iaRow"]->over_twitter) && trim($d["iaRow"]->over_twitter) != '')
 	|| (isset($d["iaRow"]->over_youtube) && trim($d["iaRow"]->over_youtube) != ''))
 	<div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
-    <h3>Web Presence</h3>
+    <h2>Web Presence</h2>
     @if (isset($d["iaRow"]->over_website) && trim($d["iaRow"]->over_website) != '')
         <p><a href="{{ $d['iaRow']->over_website }}" target="_blank" 
             ><i class="fa fa-home mR5" aria-hidden="true"></i> {{ 

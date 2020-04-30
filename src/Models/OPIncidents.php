@@ -23,6 +23,7 @@ class OPIncidents extends Model
 		'inc_time_end', 
 		'inc_duration', 
 		'inc_public', 
+        'inc_borough', 
     ];
     
     // END SurvLoop auto-generated portion of Model

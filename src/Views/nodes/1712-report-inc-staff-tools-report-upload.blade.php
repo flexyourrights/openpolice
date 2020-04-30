@@ -1,10 +1,10 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-report-upload.blade.php -->
 
-<form enctype="multipart/form-data" action="/dash/complaint/read-{{ 
-    $complaintRec->com_id }}?view=reportUp&refresh=1{{ 
-    $GLOBALS['SL']->getReqParams() }}" method="post" >
-<input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-<input type="hidden" name="cID" value="{{ $complaintRec->com_public_id }}">
+<form id="complaintAdminUpload" enctype="multipart/form-data" method="post" 
+    action="/dash/complaint/read-{{ $complaintRec->com_id 
+        }}?view=reportUp&refresh=1{{ $GLOBALS['SL']->getReqParams() }}" >
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
 
 <div class="nodeAnchor"><a name="reportUpload"></a></div>
 <h4>Upload Reports</h4>
@@ -24,7 +24,8 @@
             </label>
         </div>
         <div class="col-4">
-        @if (file_exists($reportUploadFolder . $complaintRec->com_id . '-' . $type[0] . '.pdf'))
+        @if (file_exists($reportUploadFolder 
+            . $complaintRec->com_id . '-' . $type[0] . '.pdf'))
             
         @endif
         </div>
@@ -36,9 +37,44 @@
 
 <div class="mT20 mB20">
     <input type="submit" class="btn btn-lg btn-primary" id="stfBtn9"
-    onMouseOver="this.style.color='#2b3493';" 
-    onMouseOut="this.style.color='#FFF';" style="color: #FFF;" 
-    value="Upload Report" >
+        onMouseOver="this.style.color='#2b3493';" 
+        onMouseOut="this.style.color='#FFF';" style="color: #FFF;" 
+        value="Upload Report" >
 </div>
 
 </form>
+
+<script type="text/javascript"> $(document).ready(function(){
+
+    function postToolboxAdminUpload() {
+        if (document.getElementById('complaintToolbox')) {
+/*
+            document.getElementById('complaintToolbox').innerHTML = getSpinner();
+            var actionUrl = "/complaint-toolbox?cid={{ $complaintRec->com_id }}&ajax=1&refresh=1&save=1";
+            var formData = new FormData(document.getElementById("comUpdate"));
+            window.scrollTo(0, 0);
+            $.ajax({
+                url: actionUrl,
+                type: "POST", 
+                data: formData, 
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    $("#complaintToolbox").empty();
+                    $("#complaintToolbox").append(data);
+                },
+                error: function(xhr, status, error) {
+                    $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
+                }
+            });
+*/
+        }
+        return false;
+    }
+
+    $("#complaintAdminUpload").submit(function( event ) {
+        event.preventDefault();
+        return postToolboxAdminUpload();
+    });
+
+}); </script>

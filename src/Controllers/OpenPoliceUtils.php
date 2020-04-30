@@ -348,8 +348,13 @@ class OpenPoliceUtils extends OpenPoliceVars
         return 0;
     }
     
-    protected function canPrintFullReportByRecordSpecs($com)
+    protected function canPrintFullReportByRecordSpecs($com = null)
     {
+        if ((!$com || $com === null)
+            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $com = $this->sessData->dataSets["complaints"][0];
+        }
         return (isset($com->com_publish_officer_name)
             && intVal($com->com_publish_officer_name) == 1
             && isset($com->com_publish_user_name)
@@ -366,9 +371,8 @@ class OpenPoliceUtils extends OpenPoliceVars
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             return true;
         }
-        return $this->canPrintFullReportByRecordSpecs(
-            $this->sessData->dataSets["complaints"][0]
-        );
+        $com = $this->sessData->dataSets["complaints"][0];
+        return $this->canPrintFullReportByRecordSpecs($com);
     }
     
     public function tblsInPackage()
@@ -622,6 +626,9 @@ class OpenPoliceUtils extends OpenPoliceVars
             ],[
                 'findings',
                 'Investigative Findings Report'
+            ],[
+                'declined',
+                'Investigation Declined'
             ]
         ];
         return $this->v["reportUploadTypes"];

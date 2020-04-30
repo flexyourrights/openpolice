@@ -35,7 +35,7 @@
             Average Accessibility Score:
             {{ round($deptScores->stats["scoreAvg"]) }}
         </h1>
-        <p class="slGrey">(out of 100)</p>
+        <p class="slGrey">(Highest score is 100)</p>
 @endif
 
     </div>

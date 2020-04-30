@@ -56,28 +56,29 @@ class OpenDashAdmin
             ])
             ->get();
         if ($chk->isNotEmpty()) {
+            $defSet = 'Complaint Status';
             foreach ($chk as $com) {
                 switch (intVal($com->com_status)) {
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Incomplete'):
                         $stats["incomplete"]++;
                         break;
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'New'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Hold'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Needs More Work'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'New'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Hold'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Reviewed'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Needs More Work'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'):
                         $stats["complete"]++;
                         break;
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Attorney\'d'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'):
                         $stats["processed"]++;
                         $stats["complete"]++;
                         break;
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Submitted to Oversight'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Received by Oversight'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Declined To Investigate (Closed)'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Investigated (Closed)'):
-                    case $GLOBALS["SL"]->def->getID('Complaint Status', 'Closed'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Declined To Investigate (Closed)'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Investigated (Closed)'):
+                    case $GLOBALS["SL"]->def->getID($defSet, 'Closed'):
                         $stats["submitted"]++;
                         $stats["processed"]++;
                         $stats["complete"]++;
@@ -89,7 +90,8 @@ class OpenDashAdmin
             "activeU"   => [],
             "contactsU" => []
         ];
-        $chk = OPComplaints::select('com_id', 'com_user_id', 'com_status', 'com_record_submitted')
+        $chk = OPComplaints::select('com_id', 'com_user_id', 
+                'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
             ->whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
@@ -520,6 +522,7 @@ class OpenDashAdmin
     protected function transitionData()
     {
         if ($GLOBALS["SL"]->REQ->has('trans')) {
+            ini_set('max_execution_time', '300');
             $transition = intVal($GLOBALS["SL"]->REQ->get('trans'));
             if ($transition == 1) {
                 $defPub = $GLOBALS["SL"]->def->getID(
@@ -532,6 +535,9 @@ class OpenDashAdmin
                 );
                 $chk = OPComplaints::whereNotNull('com_privacy')
                     ->whereNull('com_publish_user_name')
+                    ->select('com_id', 'com_privacy', 'com_anon', 
+                        'com_publish_user_name',
+                        'com_publish_officer_name')
                     ->get();
                 if ($chk->isNotEmpty()) {
                     foreach ($chk as $com) {

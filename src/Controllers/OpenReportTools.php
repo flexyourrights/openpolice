@@ -254,7 +254,8 @@ class OpenReportTools extends OpenReport
     protected function processComplaintOverDates()
     {
         $evalNotes = '';
-        if (($this->v["isOwner"] || $this->v["user"]->hasRole('administrator|databaser|staff')) 
+        if (($this->v["isOwner"] 
+            || $this->v["user"]->hasRole('administrator|databaser|staff')) 
             && isset($this->v["comDepts"]) 
             && sizeof($this->v["comDepts"]) > 0) {
             foreach ($this->v["comDepts"] as $c => $dept) {
@@ -272,7 +273,9 @@ class OpenReportTools extends OpenReport
                             && is_array($GLOBALS["SL"]->REQ->get($fldID))
                             && in_array($d, $GLOBALS["SL"]->REQ->get($fldID)) 
                             && $GLOBALS["SL"]->REQ->has($dateFld)) {
-                            $newDate = $GLOBALS["SL"]->dateToTime($GLOBALS["SL"]->REQ->get($dateFld));
+                            $newDate = $GLOBALS["SL"]->dateToTime(
+                                $GLOBALS["SL"]->REQ->get($dateFld)
+                            );
                         }
                         if ($oldDate != $newDate) {
                             if (intVal($newDate) > 0) {
@@ -284,13 +287,15 @@ class OpenReportTools extends OpenReport
                                     $dbFld => NULL
                                 ]);
                             }
-                            $evalNotes .= 'Status with the ' 
-                                . str_replace("Police Department", "PD", 
-                                    str_replace("Sheriff's Office", "Sheriff", 
-                                        $dept["deptRow"]->dept_name)) . ' date of ' 
-                                . $this->v["oversightDateLookups"][$d][1] . ' changed from '
-                                . str_replace('1/1', 'N/A', date('n/j', $oldDate)) . ' to ' 
-                                . str_replace('1/1', 'N/A', date('n/j', $newDate)) . '. ';
+                            $evalNotes .= view(
+                                'vendor.openpolice.nodes.1712-report-inc-date-eval-note', 
+                                [
+                                    "deptName"  => $dept["deptRow"]->dept_name,
+                                    "dateLabel" => $this->v["oversightDateLookups"][$d][1],
+                                    "oldDate"   => $oldDate,
+                                    "newDate"   => $newDate
+                                ]
+                            )->render();
                         }
                     }
                 }

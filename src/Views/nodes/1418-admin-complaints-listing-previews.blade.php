@@ -14,7 +14,9 @@
 
 <script type="text/javascript">
 function fillResultCnt() {
-    document.getElementById("searchFoundCnt").innerHTML={!! json_encode($complaintFiltDescPrev) !!};
+    document.getElementById("searchFoundCnt").innerHTML={!! 
+        json_encode($complaintFiltDescPrev)
+    !!};
     return true;
 }
 setTimeout("fillResultCnt()", 10);

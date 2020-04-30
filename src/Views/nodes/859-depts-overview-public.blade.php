@@ -27,7 +27,6 @@
                 <div class="col-3">
                     <select id="deptStateDrop" class="form-control" 
                         onChange="window.location='/department-accessibility?state='+this.value;">
-                        
                     {!! $GLOBALS["SL"]->states->stateDrop($state, true) !!}
                     </select>
                 </div>
@@ -41,17 +40,20 @@
         </div>
     </div>
     <div class="deptScrHead2">
-        <div class="pL10">{{ $deptScores->scoreDepts->count() }} Departments, 
-        Accessibility Grade <span class="fPerc80 slGrey">(click anywhere for details)</span></div>
+        <div class="pL10">
+            {{ $deptScores->scoreDepts->count() }} Departments, Accessibility Grade 
+            <span class="fPerc80 slGrey">(click anywhere for details)</span>
+        </div>
     </div>
 </div>
 @if ($deptScores->scoreDepts->isNotEmpty())
     @foreach ($deptScores->scoreDepts as $i => $dept)
-        <div class="deptScrMore @if ($i%2 == 0) row2 @endif " data-dept="{{ $dept->dept_id }}">
+        <div class="deptScrMore @if ($i%2 == 0) row2 @endif " 
+            data-dept="{{ $dept->dept_id }}">
             <div class="row @if ($i%2 == 0) row2 @endif ">
                 <div class="col-md-3 col-sm-12 
-                <?php /* @if (strlen($deptScores->deptNames[$dept->dept_id]) > 33) deptScrLab2 @else */ ?> 
-                    deptScrLab <?php /* @endif */ ?> ">
+                <?php /* @if (strlen($deptScores->deptNames[$dept->dept_id]) > 33) 
+                    deptScrLab2 @else */ ?> deptScrLab <?php /* @endif */ ?> ">
                     <b>{{ $deptScores->deptNames[$dept->dept_id] }}</b>
                 </div>
                 <div class="col-md-1 col-sm-12 deptScrLab deptScrLabNum">
@@ -62,9 +64,15 @@
                     <?php
                     $good = false;
                     if ($fld[1] == 'Notary') {
-                        $good = !$deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->dept_id);
+                        $good = !$deptScores->checkRecFld(
+                            $deptScores->vals[$fld[1]], 
+                            $dept->dept_id
+                        );
                     } else {
-                        $good = $deptScores->checkRecFld($deptScores->vals[$fld[1]], $dept->dept_id);
+                        $good = $deptScores->checkRecFld(
+                            $deptScores->vals[$fld[1]], 
+                            $dept->dept_id
+                        );
                     }
                     ?>
                     @if (!$good)
@@ -83,9 +91,12 @@
                 @endforeach
                 </div>
             </div>
-            <div id="deptScrMore{{ $dept->dept_id }}" class="disNon p10 @if ($i%2 == 0) row2 @endif ">
-                <a href="/dept/{{ $dept->dept_slug }}" class="deptScrLnk"><h4 class="mB0">{{ 
-                        str_replace('Department', 'Dept', $dept->dept_name) }}</h4></a>
+            <div id="deptScrMore{{ $dept->dept_id }}" 
+                class="disNon p10 @if ($i%2 == 0) row2 @endif ">
+                <a href="/dept/{{ $dept->dept_slug }}" 
+                    class="deptScrLnk"><h4 class="mB0">{{ 
+                        str_replace('Department', 'Dept', $dept->dept_name) 
+                    }}</h4></a>
                 <div class="row">
                     <div class="col-6">
                         {!! $GLOBALS["SL"]->printRowAddy($dept, 'Dept', true) !!}<br />
@@ -106,22 +117,30 @@
                         @endif
                     </div>
                 </div>
-                <div class="row"><div class="col-lg-6 col-md-12">
-                <?php $cnt = 0; ?>
-                @foreach ($deptScores->vals as $type => $specs)
-                    @if ($cnt == floor(sizeof($deptScores->vals)/2)) </div><div class="col-lg-6 col-md-12"> @endif
-                    @if ($deptScores->checkRecFld($specs, $dept->dept_id) != 0)
-                        <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOn"><div class="row">
-                        <div class="col-1 taR"><i class="fa fa-check-circle mL5" aria-hidden="true"></i></div>
-                    @else
-                        <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOff"><div class="row">
-                        <div class="col-1">&nbsp;</div>
-                    @endif
-                        <div class="col-1 taR @if (intVal($specs->score) < 0) scoreNeg @endif ">
-                            {{ $specs->score }}
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                    <?php $cnt = 0; ?>
+                    @foreach ($deptScores->vals as $type => $specs)
+                        @if ($cnt == floor(sizeof($deptScores->vals)/2)) 
+                            </div><div class="col-lg-6 col-md-12"> 
+                        @endif
+                        @if ($deptScores->checkRecFld($specs, $dept->dept_id) != 0)
+                            <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOn">
+                                <div class="row">
+                                    <div class="col-1 taR">
+                                        <i class="fa fa-check-circle mL5" aria-hidden="true"></i>
+                                    </div>
+                        @else
+                            <div class=" @if ($cnt%2 == 0) row2 @else bgWht @endif scoreRowOff">
+                                <div class="row">
+                                    <div class="col-1">&nbsp;</div>
+                        @endif
+                            <div class="col-1 taR @if (intVal($specs->score) < 0) scoreNeg @endif ">
+                                {{ $specs->score }}
+                            </div>
+                            <div class="col-9">{{ $specs->label }}</div>
                         </div>
-                        <div class="col-9">{{ $specs->label }}</div>
-                    </div></div>
+                    </div>
                     <?php $cnt++; ?>
                 @endforeach
                 </div></div>
@@ -140,7 +159,7 @@
     <h1 class="slBlueDark">Average
     @if (isset($state) && trim($state) != '') {{ $GLOBALS["SL"]->getState($state) }} @endif
     Accessibility Score: {{ round($deptScores->stats["scoreAvg"]) }}</h1>
-    <span class="slGrey">(out of 100)</span>
+    <span class="slGrey">(Highest score is 100)</span>
 @endif
 
 </div> <!-- end #node{{ $nID }} -->

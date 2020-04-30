@@ -7,7 +7,10 @@
 </div>
 */ ?>
 
-<div id="hidivCompFilts{{ $nID }}" class="disBlo @if ($view == 'list') pB15 @endif ">
+<input type="hidden" name="showPreviews" id="showPreviewsID" value="0">
+
+<div id="hidivCompFilts{{ $nID }}" 
+    class="disBlo @if ($view == 'list') pB15 @endif ">
     <div class="row">
         <div class="col-6">
             <h4>Filter</h4>

@@ -17,6 +17,11 @@ class OPScenes extends Model
 		'scn_cctv', 
 		'scn_cctv_desc', 
 		'scn_is_vehicle_accident', 
+        'scn_how_feel', 
+        'scn_desires_officers', 
+        'scn_desires_officers_other', 
+        'scn_desires_depts', 
+        'scn_desires_depts_other', 
     ];
     
     // END SurvLoop auto-generated portion of Model

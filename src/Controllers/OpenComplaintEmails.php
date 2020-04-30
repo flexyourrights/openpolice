@@ -558,40 +558,45 @@ class OpenComplaintEmails extends OpenPoliceEvents
         $cnt = 0;
         $this->v["comDepts"] = [];
         if (isset($this->sessData->dataSets["links_complaint_dept"])) {
-            $depts = $this->sessData->dataSets["links_complaint_dept"];
-            if (sizeof($depts) > 0) {
-                foreach ($depts as $i => $lnk) {
-                    if (isset($lnk->lnk_com_dept_dept_id) && intVal($lnk->lnk_com_dept_dept_id) > 0) {
+            $this->getOversightLinksChk();
+            if (sizeof($this->sessData->dataSets["links_complaint_dept"]) > 0) {
+                foreach ($this->sessData->dataSets["links_complaint_dept"] as $i => $lnk) {
+                    if (isset($lnk->lnk_com_dept_dept_id) 
+                        && intVal($lnk->lnk_com_dept_dept_id) > 0) {
                         $deptRow = OPDepartments::find($lnk->lnk_com_dept_dept_id);
-                        if ($deptRow && isset($deptRow->dept_name) && trim($deptRow->dept_name) != '') {
-                            $this->prepEmailComDataRow($deptRow, $lnk, $cnt);
+                        if ($deptRow 
+                            && isset($deptRow->dept_name) 
+                            && trim($deptRow->dept_name) != '') {
+                            $this->prepEmailComDataRow($deptRow, $cnt);
                             $cnt++;
                         }
                     }
                 }
             }
         }
+//echo '<pre>'; print_r($this->v["comDepts"]); echo '</pre>'; exit;
         return true;
     }
     
-    public function prepEmailComDataRow($deptRow, $lnk, $cnt)
+    public function prepEmailComDataRow($deptRow, $cnt)
     {
         $this->v["comDepts"][$cnt] = [
-            "id"      => $lnk->lnk_com_dept_dept_id,
+            "id"      => $deptRow->dept_id,
             "deptRow" => $deptRow
         ];
         $defTyp = 'Investigative Agency Types';
         $iaDef = $GLOBALS["SL"]->def->getID($defTyp, 'Internal Affairs');
         $civDef = $GLOBALS["SL"]->def->getID($defTyp, 'Civilian Oversight');
         $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('over_type', $iaDef)
-            ->where('over_dept_id', $lnk->lnk_com_dept_dept_id)
+            ->where('over_dept_id', $deptRow->dept_id)
             ->first();
         $this->v["comDepts"][$cnt]["civRow"] = OPOversight::where('over_type', $civDef)
-            ->where('over_dept_id', $lnk->lnk_com_dept_dept_id)
+            ->where('over_dept_id', $deptRow->dept_id)
             ->first();
-        if (!isset($this->v["comDepts"][$cnt]["iaRow"]) || !$this->v["comDepts"][$cnt]["iaRow"]) {
+        if (!isset($this->v["comDepts"][$cnt]["iaRow"]) 
+            || !$this->v["comDepts"][$cnt]["iaRow"]) {
             $iaRow = new OPOversight;
-            $iaRow->over_dept_id       = $lnk->lnk_com_dept_dept_id;
+            $iaRow->over_dept_id       = $deptRow->dept_id;
             $iaRow->over_type          = $iaDef;
             $iaRow->over_agnc_name     = $deptRow->dept_name;
             $iaRow->over_address       = $deptRow->dept_address;
@@ -621,19 +626,47 @@ class OpenComplaintEmails extends OpenPoliceEvents
             }
         }
         $this->v["comDepts"][$cnt]["overDates"] 
-            = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $lnk->lnk_com_dept_complaint_id)
-            ->where('lnk_com_over_dept_id', $lnk->lnk_com_dept_dept_id)
+            = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $this->coreID)
+            ->where('lnk_com_over_dept_id', $deptRow->dept_id)
             ->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
             ->first();
         if (!$this->v["comDepts"][$cnt]["overDates"] 
-            || !isset($this->v["comDepts"][$cnt]["overDates"]->LnkComOverID)) {
+            || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_over_id)) {
             $lnk = new OPLinksComplaintOversight;
-            $lnk->lnk_com_over_complaint_id = $lnk->lnk_com_dept_complaint_id;
-            $lnk->lnk_com_over_dept_id      = $lnk->lnk_com_dept_dept_id;
+            $lnk->lnk_com_over_complaint_id = $this->coreID;
+            $lnk->lnk_com_over_dept_id      = $deptRow->dept_id;
             $lnk->lnk_com_over_over_id      = $this->v["comDepts"][0][$w]->over_id;
             $this->v["comDepts"][$cnt]["overDates"] = $lnk;
             $this->v["comDepts"][$cnt]["overDates"]->save();
         }
+        return true;
+    }
+    
+    protected function getOversightLinksChk()
+    {
+        /*
+        if (sizeof($this->sessData->dataSets["links_complaint_dept"]) > 0) {
+            $deptIDs = [];
+            foreach ($this->sessData->dataSets["links_complaint_dept"] as $i => $lnk) {
+                if (isset($lnk->lnk_com_dept_dept_id) 
+                    && intVal($lnk->lnk_com_dept_dept_id) > 0) {
+                    $deptIDs[] = $lnk->lnk_com_dept_dept_id;
+                }
+            }
+            foreach ($deptIDs as $deptID) {
+                $chk = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $this->coreID)
+                    ->where('lnk_com_over_dept_id', $deptID)
+                    ->first();
+                if (!$chk && !isset($chk->lnk_com_over_over_id)) {
+                    $lnk = new OPLinksComplaintOversight;
+                    $lnk->lnk_com_over_complaint_id = $this->coreID;
+                    $lnk->lnk_com_over_dept_id = $deptID;
+                    $lnk->lnk_com_over_over_id
+                    ->first();
+                }
+            }
+        }
+        */
         return true;
     }
     
