@@ -52,9 +52,9 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="requirements"></a>Requirements
 
-* php: >=7.2
+* php: >=7.2.5
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 7.6.*
-* <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: >=0.2.14
+* <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: >=0.2.15
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
@@ -97,8 +97,8 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "rockhopsoft/survloop": "^0.2.14",
-    "flexyourrights/openpolice": "^0.2.14",
+    "rockhopsoft/survloop": "^0.2.15",
+    "flexyourrights/openpolice": "^0.2.15",
     ...
 },
 ...
