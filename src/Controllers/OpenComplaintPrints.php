@@ -135,6 +135,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
             }
             if (strpos($str, '[ForceType]') !== false) {
                 $row = $this->sessData->getLatestDataBranchRow();
+//echo 'customLabels(' . $nIDtxt . ', row: <pre>'; print_r($row); echo '</pre>'; exit;
                 $forceDesc = $GLOBALS["SL"]->def->getVal('Force Type', $row->for_type);
                 if ($forceDesc == 'Other') {
                     $forceDesc = $row->for_type_other;
@@ -349,8 +350,13 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $cnt = $this->v["uploadPrintMap"]["img"]
             +$this->v["uploadPrintMap"]["vid"]
             +$this->v["uploadPrintMap"]["fil"];
+        $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
+            . 'document.getElementById("uploadDelayed").innerHTML="' . $GLOBALS["SL"]->addSlashLines($ret) 
+            . '"; }, 1500); ';
         return '<h3 class="mT0 slBlueDark">' 
-            . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>' . $ret;
+            . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>'
+            . '<div id="uploadDelayed" class="w100"><div class="w100 taC">'
+            . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div></div>';
     }
     
     /* Double-Checking [For Now] */

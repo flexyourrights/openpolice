@@ -18,6 +18,7 @@ use App\Models\OPDepartments;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
+use App\Models\OPTesterBeta;
 use App\Models\OPzVolunUserInfo;
 use OpenPolice\Controllers\OpenPartners;
 
@@ -54,6 +55,18 @@ class OpenInitExtras extends OpenPartners
             }
         }
         $this->initComplaintToolbox();
+        return true;
+    }
+
+    /**
+     * Initializing extra things for special admin pages.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return boolean
+     */
+    protected function constructorExtra()
+    {
+        $this->runOpenPoliceDataChecks();
         return true;
     }
     
@@ -248,7 +261,6 @@ class OpenInitExtras extends OpenPartners
         if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
             $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
         }
-        $this->runOpenPoliceDataChecks();
         
         // Department Research Survey
         if ($this->treeID == 36) {
@@ -275,6 +287,12 @@ class OpenInitExtras extends OpenPartners
      */
     protected function runOpenPoliceDataChecks()
     {
+        if (!isset($this->v["uID"]) 
+            || $this->v["uID"] <= 0 
+            || !isset($this->v["user"])
+            || !$this->v["user"]->hasRole('administrator|staff')) {
+            return false;
+        }
         if (!session()->has('opcChks') 
                 || !session()->get('opcChks') 
                 || $GLOBALS["SL"]->REQ->has('refresh')) {
@@ -288,12 +306,88 @@ class OpenInitExtras extends OpenPartners
                     $complaint->update([ 'com_public_id' => $newPubID ]);
                 }
             }
-
-
+            $this->clearEmptyComplaints();
+            $this->clearEmptyBetas();
+            $this->clearLostSessionHelpers();
             session()->put('opcChks', true);
         }
 
 
+        return true;
+    }
+    
+    /**
+     * Clean out old complaints.
+     *
+     * @return boolean
+     */
+    protected function clearEmptyComplaints()
+    {
+        $cutoff = mktime(date("H"), date("i"), date("s"), 
+            date("n"), date("j")-14, date("Y"));
+        $cutoff = date("Y-m-d H:i:s", $cutoff);
+        $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
+        /*
+        $chk = OPComplaints::whereNull('com_public_id')
+            ->where('com_status', 'LIKE', $incDef)
+            ->where('created_at', '<', $cutoff)
+            ->limit(2000)
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $com) {
+                if ((!isset($com->com_user_id) 
+                        || intVal($com->com_user_id) <= 0)
+                    && (!isset($com->com_summary) 
+                        || trim($com->com_summary) == '')) {
+                    $com->delete();
+                }
+            }
+        }
+        */
+        DB::select(DB::raw(
+            "DELETE FROM `op_complaints` 
+            WHERE `com_public_id` IS NULL
+                AND `com_status` LIKE '" . $incDef . "'
+                AND `created_at` < '" . $cutoff . "'
+                AND (`com_user_id` IS NULL OR `com_user_id` <= 0)
+                AND (`com_summary` IS NULL OR `com_summary` LIKE '')
+            LIMIT 2000"
+        ));
+        DB::select(DB::raw(
+            "DELETE FROM `sl_sess` 
+            WHERE `sl_sess`.`sess_tree` = 1
+                AND `sl_sess`.`sess_core_id` NOT IN 
+                    (SELECT `op_complaints`.`com_id` FROM `op_complaints`)"
+        ));
+        DB::select(DB::raw(
+            "DELETE FROM `op_event_sequence` 
+            WHERE `op_event_sequence`.`eve_complaint_id` NOT IN 
+                (SELECT `op_complaints`.`com_id` FROM `op_complaints`)"
+        ));
+        return true;
+    }
+    
+    /**
+     * Clean out old beta test signups.
+     *
+     * @return boolean
+     */
+    protected function clearEmptyBetas()
+    {
+        $cutoff = mktime(date("H"), date("i"), date("s"), 
+            date("n"), date("j")-14, date("Y"));
+        $cutoff = date("Y-m-d H:i:s", $cutoff);
+        $chk = OPTesterBeta::whereNull('beta_email')
+            ->whereNull('beta_narrative')
+            ->where('created_at', '<', $cutoff)
+            ->limit(2000)
+            ->delete();
+        DB::select(DB::raw(
+            "DELETE FROM `sl_sess` 
+            WHERE `sl_sess`.`sess_tree` = 79
+                AND `sl_sess`.`sess_core_id` NOT IN 
+                    (SELECT `op_tester_beta`.`beta_id` FROM `op_tester_beta`)"
+        ));
         return true;
     }
     
@@ -377,26 +471,27 @@ class OpenInitExtras extends OpenPartners
      *
      * @return boolean
      */
-    protected function tweakPageViewPerms()
+    protected function tweakPageViewPerms($initPageView = '')
     {
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        $com = $this->sessData->dataSets["complaints"][0];
-        $isPublished = $this->isPublished('complaints', $this->coreID, $com);
-        if (isset($this->sessData->dataSets["complaints"]) 
-            && $isPublished) {
-            if (isset($com->com_privacy)) {
-                if ($this->v["uID"] > 0 
-                    && $this->v["user"] 
-                    && $this->v["user"]->hasRole('administrator|staff')) {
-                    
-                } elseif ($this->isPublic()
-                    && in_array($com->com_status, [200, 201, 203, 204])) {
-                    if (in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
-                        $GLOBALS["SL"]->dataPerms = 'private';
-                    }
+        if ($this->v["uID"] > 0 
+            && $this->v["user"] 
+            && $this->v["user"]->hasRole('administrator|staff')) {
+            $GLOBALS["SL"]->dataPerms = 'sensitive';
+        } else {
+            $com = $this->sessData->dataSets["complaints"][0];
+            $isPublished = $this->isPublished('complaints', $this->coreID, $com);
+            if ($isPublished) {
+                if ($this->chkOverUserHasCore()) { // Investigative Access
+                    $GLOBALS["SL"]->dataPerms = 'sensitive';
+                } elseif ($this->isPublic() 
+                    && in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
+                    $GLOBALS["SL"]->dataPerms = 'private';
                 }
+            } else {
+                $GLOBALS["SL"]->dataPerms = 'none';
             }
         }
         return true;

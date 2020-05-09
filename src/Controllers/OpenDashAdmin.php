@@ -49,6 +49,8 @@ class OpenDashAdmin
             ->count();
         $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
+            ->whereNotNull('com_summary')
+            ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
@@ -148,12 +150,15 @@ class OpenDashAdmin
     public function printDashSessGraph()
     {
         $this->v["isDash"] = true;
-        $grapher = new SurvTrends('' . rand(1000000, 10000000) . '');
+        $grapher = new SurvTrends('' . rand(1000000, 10000000) . '', '', 28);
         $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
-        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#F0AD4E', '#F0AD4E');
+        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#EC2327', '#EC2327');
         $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
-        $grapher->addDataLineType('received', 'Received by Oversight', '', '#333333', '#333333');
-        $grapher->addDataLineType('contacts', 'Followup Contacts', '', '#63C6FF', '#63C6FF');
+        $grapher->addDataLineType('received', 'Received by Oversight', '', '#63C6FF', '#63C6FF');
+        $grapher->addDataLineType('contacts', 'Staff Emails', '', '#416CBD', '#416CBD');
+        $grapher->addDataLineType('notes', 'Staff Notes', '', '#333333', '#333333');
+        $grapher->addDataLineType('owners', 'User Followups', '', '#F0AD4E', '#F0AD4E');
+        $grapher->addDataLineType('oversights', 'Oversight Followups', '', '#EB9316', '#EB9316');
         $startDate = $grapher->getPastStartDate() . ' 00:00:00';
         $recentAttempts = OPComplaints::whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
@@ -190,16 +195,50 @@ class OpenDashAdmin
                 $grapher->addDayTally('received', $rec->lnk_com_over_received);
             }
         }
-        $contacts = DB::table('op_z_complaint_reviews')
-            ->where('com_rev_type', 'LIKE', 'Update')
-            ->whereNotNull('com_rev_note')
-            ->where('com_rev_note', 'NOT LIKE', 'Update')
+        $contacts = DB::table('sl_emailed')
+            ->where('emailed_tree', 1)
+            ->whereNotNull('emailed_body')
+            ->whereIn('emailed_tree', [1, 42])
+            ->whereNotIn('emailed_email_id', [1, 5, 28])
             ->where('created_at', '>=', $startDate)
-            ->distinct('com_rev_complaint')
+            ->distinct('emailed_rec_id')
             ->get();
         if ($contacts->isNotEmpty()) {
             foreach ($contacts as $i => $rec) {
                 $grapher->addDayTally('contacts', $rec->created_at);
+            }
+        }
+
+        $notes = DB::table('op_z_complaint_reviews')
+            ->where('com_rev_type', 'LIKE', 'Update')
+            ->whereNotNull('com_rev_note')
+            ->whereIn('com_rev_note', ['Update', 'First'])
+            ->where('created_at', '>=', $startDate)
+            ->distinct('com_rev_complaint')
+            ->get();
+        if ($notes->isNotEmpty()) {
+            foreach ($notes as $i => $rec) {
+                $grapher->addDayTally('notes', $rec->created_at);
+            }
+        }
+        $notes = DB::table('op_z_complaint_reviews')
+            ->where('com_rev_type', 'LIKE', 'Owner')
+            ->where('created_at', '>=', $startDate)
+            ->distinct('com_rev_complaint')
+            ->get();
+        if ($notes->isNotEmpty()) {
+            foreach ($notes as $i => $rec) {
+                $grapher->addDayTally('owners', $rec->created_at);
+            }
+        }
+        $notes = DB::table('op_z_complaint_reviews')
+            ->where('com_rev_type', 'LIKE', 'Oversight')
+            ->where('created_at', '>=', $startDate)
+            ->distinct('com_rev_complaint')
+            ->get();
+        if ($notes->isNotEmpty()) {
+            foreach ($notes as $i => $rec) {
+                $grapher->addDayTally('oversights', $rec->created_at);
             }
         }
 
@@ -244,6 +283,8 @@ class OpenDashAdmin
         }
         $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
+            ->whereNotNull('com_summary')
+            ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
@@ -385,7 +426,7 @@ class OpenDashAdmin
             $this->volunDeptsRecent();
         }
         $this->recalcVolunStats();
-        $grapher = new SurvTrends('1349', 'volun_stat_date');
+        $grapher = new SurvTrends('1349', 'volun_stat_date', 28);
         $grapher->addDataLineType('depts', 'Unique Depts', 'volun_stat_depts_unique', '#2b3493', '#2b3493');
         $grapher->addDataLineType('users', 'Unique Users', 'volun_stat_users_unique', '#63c6ff', '#63c6ff');
         $grapher->addDataLineType('edits', 'Total Edits', 'volun_stat_total_edits', '#c3ffe1', '#c3ffe1');
@@ -428,7 +469,7 @@ class OpenDashAdmin
     
     public function recalcVolunStats()
     {
-        $past = 100;
+        $past = 35;
         $startDate = date("Y-m-d", mktime(0, 0, 0, date("n"), date("j")-$past, date("Y")));
         $days = [];
         for ($i = 0; $i < $past; $i++) {

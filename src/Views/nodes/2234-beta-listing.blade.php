@@ -1,9 +1,19 @@
 <!-- resources/views/vendor/openpolice/nodes/2234-beta-listing.blade.php -->
-<h2>Beta Tester Signups</h2>
-<p>
-    Below are the users who have signed up so far. 
-    <a href="#stats" class="hsho">Stats Below</a>
-</p>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Beta Tester Signups</h2>
+        <p>
+            Below are the users who have signed up so far. 
+            <a href="#stats" class="hsho">Stats Below</a>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h3>
+            {{ number_format($tots["invited"]) }} Invited<br />
+            {{ number_format($tots["waiting"]) }} Waiting
+        </h3>
+    </div>
+</div>
 <div class="p15">
     <div class="row">
         <div class="col-md-4">Name, Email<br />Year - Narrative</div>
@@ -32,8 +42,10 @@
                 @endif
             </div>
         </div>
-        @if (isset($beta->beta_year)) {{ $beta->beta_year }} - @endif
-        {{ $beta->beta_narrative }}
+        <p style="word-break: break-word;">
+            @if (isset($beta->beta_year)) {{ $beta->beta_year }} - @endif
+            {{ $beta->beta_narrative }}
+        </p>
     </div>
 @empty
     <i>None found</i>

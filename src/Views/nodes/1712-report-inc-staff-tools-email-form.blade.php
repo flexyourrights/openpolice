@@ -17,11 +17,11 @@
     class=" @if (intVal($emailID) > 0) disBlo @else disNon @endif ">
 
 @if ($emailID == 12)
-    @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
-        @if (!isset($stuff["overUser"]) 
-            || !isset($stuff["overUser"]->email))
+    @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
+        @if (!isset($d["deptRow"]->dept_op_compliant) 
+            || intVal($d["deptRow"]->dept_op_compliant) != 1)
             <div class="alert alert-danger mT10 fPerc133" role="alert">
-                <strong>{{ $stuff["deptRow"]->dept_name }}</strong> 
+                <strong>{{ $d["deptRow"]->dept_name }}</strong> 
                 is <nobr>NOT OpenPolice-Compliant!</nobr><br />
                 Do not send them an email!
             </div>
@@ -126,10 +126,11 @@
     </div>
     
     @if ($emailID == 12)
-        @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $stuff)
-            @if (!isset($stuff["overUser"]) || !isset($stuff["overUser"]->email))
+        @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
+            @if (!isset($d["deptRow"]->dept_op_compliant) 
+                || intVal($d["deptRow"]->dept_op_compliant) != 1)
                 <div class="alert alert-danger mT10 fPerc133" role="alert">
-                    <strong>{{ $stuff["deptRow"]->dept_name }}</strong> is 
+                    <strong>{{ $d["deptRow"]->dept_name }}</strong> is 
                     NOT OpenPolice-Compliant!<br />Do not send them an email!
                 </div>
             @endif

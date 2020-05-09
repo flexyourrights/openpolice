@@ -394,14 +394,16 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         $this->coreID, 
                         $deptUser->id
                     );
-                    $swap = $url . '/complaint/read-' . $this->corePublicID . '/full/t-' . $token;
+                    $swap = $url . '/complaint/read-' 
+                        . $this->corePublicID . '/full/t-' . $token;
                 }
                 $swap = '<a href="' . $swap . '" target="_blank">' . $swap . '</a>';
                 break;
             case '[{ Oversight Complaint Secure MFA }]':
                 $deptUser = $this->getDeptUser($deptID);
                 if (!isset($deptUser->id)) {
-                    $swap = '<span style="color: red;">* DEPARTMENT IS NOT OPENPOLICE-COMPATIBLE *</span>';
+                    $swap = '<span style="color: red;">* '
+                        . 'DEPARTMENT IS NOT OPENPOLICE-COMPATIBLE *</span>';
                 } else {
                     $swap = $this->createToken(
                         'MFA', 
@@ -626,12 +628,14 @@ class OpenComplaintEmails extends OpenPoliceEvents
             }
         }
         $this->v["comDepts"][$cnt]["overDates"] 
-            = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $this->coreID)
+            = OPLinksComplaintOversight::where(
+                'lnk_com_over_complaint_id', $this->coreID)
             ->where('lnk_com_over_dept_id', $deptRow->dept_id)
-            ->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
+            //->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
             ->first();
+        /*
         if (!$this->v["comDepts"][$cnt]["overDates"] 
-            || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_over_id)) {
+            || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_dept_id)) {
             $lnk = new OPLinksComplaintOversight;
             $lnk->lnk_com_over_complaint_id = $this->coreID;
             $lnk->lnk_com_over_dept_id      = $deptRow->dept_id;
@@ -639,6 +643,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             $this->v["comDepts"][$cnt]["overDates"] = $lnk;
             $this->v["comDepts"][$cnt]["overDates"]->save();
         }
+        */
         return true;
     }
     

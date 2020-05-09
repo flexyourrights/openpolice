@@ -40,16 +40,6 @@ class OpenPoliceUtils extends OpenPoliceVars
             && intVal($com->com_is_compliment) == 1);
     }
     
-    public function isOverCompatible($overRow)
-    {
-        return ($overRow && isset($overRow->over_email) 
-            && trim($overRow->over_email) != '' 
-            && isset($overRow->over_way_sub_email) 
-            && intVal($overRow->over_way_sub_email) == 1
-            && isset($overRow->over_official_form_not_req) 
-            && intVal($overRow->over_official_form_not_req) == 1);
-    }
-    
     protected function isSilver()
     { 
         if (!isset($this->sessData->dataSets["complaints"])) {
@@ -183,8 +173,7 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     public function multiRecordCheckRowSummary($coreRecord)
     {
-        $ret = 'Started ' . date('n/j/y, g:ia', 
-            strtotime($coreRecord[1]->created_at));
+        $ret = 'Started ' . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
         if ($this->treeID == 1) {
             $incident = OPIncidents::find($coreRecord[1]->com_incident_id);
             if ($incident && isset($incident->inc_address_city)) {
@@ -348,18 +337,35 @@ class OpenPoliceUtils extends OpenPoliceVars
         return 0;
     }
     
-    protected function canPrintFullReportByRecordSpecs($com = null)
+    protected function canPrintFullReportByRecSettings($com = null)
     {
-        if ((!$com || $com === null)
+        if ( (!$com || $com === null)
             && isset($this->sessData->dataSets["complaints"]) 
-            && isset($this->sessData->dataSets["complaints"][0])) {
+            && isset($this->sessData->dataSets["complaints"][0]) ) {
             $com = $this->sessData->dataSets["complaints"][0];
         }
-        return (isset($com->com_publish_officer_name)
-            && intVal($com->com_publish_officer_name) == 1
-            && isset($com->com_publish_user_name)
+        $printOff = false;
+        if (!isset($this->sessData->dataSets["officers"])
+            || sizeof($this->sessData->dataSets["officers"]) == 0) {
+            $printOff = true;
+        } elseif (isset($com->com_publish_officer_name)
+            && intVal($com->com_publish_officer_name) == 1) {
+            $printOff = true;
+        }
+        return (isset($com->com_publish_user_name)
             && intVal($com->com_publish_user_name) == 1
-            && in_array($com->com_status, [200, 201, 203, 204]));
+            && $printOff);
+    }
+    
+    protected function canPrintFullReportByRecordSpecs($com = null)
+    {
+        if ( (!$com || $com === null)
+            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"][0]) ) {
+            $com = $this->sessData->dataSets["complaints"][0];
+        }
+        return (in_array($com->com_status, [200, 201, 203, 204])
+            && $this->canPrintFullReportByRecSettings($com));
     }
     
     protected function canPrintFullReport()
@@ -494,6 +500,8 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     protected function chkOverUserHasCore()
     {
+//echo '??? chkOverUserHasCore(' . $this->v["uID"] . ', <pre>'; print_r($this->sessData->dataSets["oversight"]); echo '</pre>'; exit;
+
         if ($this->v["uID"] > 0 && $this->v["user"]->hasRole('oversight')) {
             if (isset($this->sessData->dataSets["oversight"]) 
                 && sizeof($this->sessData->dataSets["oversight"]) > 0) {

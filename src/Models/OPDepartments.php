@@ -36,6 +36,7 @@ class OPDepartments extends Model
 		'dept_is_mobile', 
 		'dept_address_lat', 
 		'dept_address_lng', 
+        'dept_op_compliant', 
     ];
     
     // END SurvLoop auto-generated portion of Model

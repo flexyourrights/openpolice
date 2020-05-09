@@ -271,6 +271,10 @@ class OpenComplaintSaves extends OpenComplaintConditions
                 }
             }
         }
+        // This delete may just be needed for older complaints:
+        OPForce::where('for_com_id', $this->coreID)
+            ->whereNull('for_type')
+            ->delete();
         if ($nID == 743) {
             $this->sessData->refreshDataSets();
             return false;

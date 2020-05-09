@@ -57,7 +57,7 @@ class OpenListing extends OpenAjax
                 str_replace('(Witness #1)', '', $titleWho));
 
         }
-        $where = $this->getReportWhereLine();
+        $where = $this->getReportWhereLine(0, true);
         $deptList = '';
         $depts = ((isset($this->sessData->dataSets["departments"])) 
             ? $this->sessData->dataSets["departments"] : null);
@@ -376,10 +376,12 @@ class OpenListing extends OpenAjax
             $this->printComplaintsFilters($nID, $this->v["sView"])
         );
 
+        $listings = $this->printComplaintListingResults($nID, $view);
         if ($GLOBALS["SL"]->REQ->has('showPreviews')) {
-            return $this->printComplaintListingResults($nID, $view);
-        } elseif ($nID == 1418) {
-            $this->printComplaintListingResults($nID, $view);
+            return $listings;
+        //} elseif ($nID == 1418) {
+            //echo $listings;
+            //exit;
         }
 
         $this->printComplaintFiltDescPrev();
@@ -395,13 +397,19 @@ class OpenListing extends OpenAjax
                 $this->v
             )->render();
         }
-        return view(
+//echo '<pre>'; print_r($this->v["complaints"]); echo '</pre>'; exit;
+        $ret = view(
                 'vendor.openpolice.nodes.1418-admin-complaints-listing', 
                 $this->v
             )->render() . view(
                 'vendor.openpolice.nodes.1418-admin-complaints-listing-styles', 
                 $this->v
             )->render();
+        if ($GLOBALS["SL"]->REQ->has('ajax')) {
+            echo $ret;
+            exit;
+        }
+        return $ret;
     }
     
     /**
@@ -417,8 +425,7 @@ class OpenListing extends OpenAjax
             . $GLOBALS["SL"]->getCacheSffxAdds();
         $cache = $GLOBALS["SL"]->chkCache($cacheKey, 'srch-results', 1);
         if ($cache && isset($cache->cach_value)) {
-            echo $cache->cach_value;
-            exit;
+            return $cache->cach_value;
         }
 
         // run query into $compls1
@@ -437,7 +444,6 @@ class OpenListing extends OpenAjax
             }
             krsort($this->v["complaints"]);
         }
-
         if ($this->v["sView"] == 'lrg') {
             $this->printComplaintListingResultsPreviews();
             $this->printComplaintFiltDescPrev();
@@ -446,8 +452,7 @@ class OpenListing extends OpenAjax
                     $this->v
                 )->render();
             $GLOBALS["SL"]->putCache($cacheKey, $content, 'srch-results', 1);
-            echo $content;
-            exit;
+            return $content;
         }
         return '<!-- -->';
     }
@@ -957,10 +962,27 @@ class OpenListing extends OpenAjax
         $emptyNoRef = OPTesterBeta::whereNull('beta_how_hear')
             ->orWhere('beta_how_hear', 'LIKE', '')
             ->count();
+        $tots = [
+            "invited" => 0, 
+            "waiting" => 0, 
+            "emails"  => [] 
+        ];
+        foreach ($betas as $beta) {
+            if (isset($beta->beta_invited) 
+                && trim($beta->beta_invited) != ''
+                && isset($beta->beta_email)
+                && !in_array(strtolower($beta->beta_email), $tots["emails"])) {
+                $tots["emails"][] = strtolower($beta->beta_email);
+                $tots["invited"]++;
+            } else {
+                $tots["waiting"]++;
+            }
+        }
         return view(
             'vendor.openpolice.nodes.2234-beta-listing', 
             [
                 "betas"      => $betas,
+                "tots"       => $tots,
                 "emptyNoRef" => $emptyNoRef,
                 "totLoads"   => OPTesterBeta::count(),
                 "betaLinks"  => $betaLinks

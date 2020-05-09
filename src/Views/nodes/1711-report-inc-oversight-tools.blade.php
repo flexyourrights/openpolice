@@ -1,196 +1,169 @@
 <!-- resources/views/vendor/openpolice/nodes/1711-report-inc-oversight-tools.blade.php -->
+
 <div class="alert alert-danger fade in alert-dismissible show" 
     style="padding: 10px 15px; margin: 20px 0px 20px 0px; color: #a94442;">
     <b>NOTICE TO 
-    @if (isset($overRow->over_agnc_name)) {{ strtoupper($overRow->over_agnc_name) }} 
-    @else OVERSIGHT @endif STAFF:</b>
+    @if (isset($overRow->over_agnc_name)) 
+        {{ strtoupper($overRow->over_agnc_name) }} 
+    @else 
+        INVESTIGATIVE 
+    @endif STAFF:</b><br />
     This view may contain sensitive personal information. 
-    Please share with appropriate oversight staff only.
+    Please share with <nobr>appropriate investigative staff only.</nobr>
 </div>
 
-<div class="row">
-    <div class="col-8">
+<div class="row mB15">
+    <div class="col-lg-8">
 
         <div class="slCard">
             <h2 class="mT0" style="color: #2B3493;">
-                OpenPolice.org Complaint #{{ $complaint->com_public_id }}
+                OpenPolice.org Complaint 
+                #{{ $complaint->com_public_id }}
             </h2>
-            <?php /*
-            <p><span class="slGrey">
-            Current Status:
-            @if (isset($overUpdateRow->lnk_com_over_received) && trim($overUpdateRow->lnk_com_over_received) != '')
-                Received by Oversight
-            @else {{ $GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) }} @endif
-            </span></p>
-            */ ?>
             
-<?php /*
-@if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'OK to Submit to Oversight')
-    @if (sizeof($oversights) > 0 && isset($oversights[0]->over_email) && trim($oversights[0]->over_email) != ''
-        && isset($oversights[0]->over_way_sub_email) && intVal($oversights[0]->over_way_sub_email) == 1)
-        <p><b>Congratulations, {{ $user->name }}!</b></p>
-        <p>Within the next week, we will review your complaint. 
-        If there are no problems, we will try to file it with the {{ $overList }}. 
-        Then, we'll let you know what comes next. So hang tight!</p>
-    @else
-        <p><b>Hi, {{ $user->name }},</b></p>
-        <p>We're almost done — but we need you to do one more important thing as soon as possible. 
-        OpenPolice.org is working to get all police departments to accept complaints sent by email. 
-        Unfortunately, the {{ $overList }} does not investigate OpenPolice.org complaints sent by email.</p>
-        <p>The good news is you can easily copy information from your OpenPolice.org complaint to their required forms. 
-        And you can find the instructions for formally submitting your complaint to the department here:</p><p>
-        @forelse ($depts as $i => $d)
-            <a href="/dept/{{ $d->dept_slug }}" target="_blank">{{ $d->dept_name }}</a><br />
-        @empty
-        @endforelse
-        </p><p>After you submit your complaint with the {{ $overList }}, please log back in to update the community. 
-        Also, please let us know whenever they receive or investigate your complaint. 
-        Meanwhile, you can share your published complaint on Facebook, Twitter, or anywhere you like!</p>
-    @endif
-@elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Submitted to Oversight')
-    <p><b>Hi, {{ $user->name }},</b></p>
-    <p>We just attempted to email your complaint to the {{ $overList }}. 
-    But this shouldn't be the end of the road for you!</p>
-    <p>Please contact the {{ $overList }} this week to confirm that your complaint has been received. 
-    And as the investigation progresses, please log back in to update the community!</p>
-    <p>If you can't confirm that your complaint was accepted by the {{ $overList }}, you'll need to submit it 
-    another way to make sure it gets investigated. You can find the instructions for submitting your complaint 
-    to the department here:</p><p>
-    @forelse ($depts as $i => $d)
-        <a href="/dept/{{ $d->dept_slug }}" target="_blank">{{ $d->dept_name }}</a><br />
-    @empty
-    @endforelse
-    </p><p>Thank you so much for using OpenPolice.org!</p>
-@elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Received by Oversight')
-    <p><b>Hi, {{ $user->name }},</b></p>
-    The {{ $overList }} received your complaint! But this shouldn't be the end of the road for you. 
-    As the investigation progresses, please update the community here.
-@elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Declined To Investigate (Closed)')
-    <p><b>Hi, {{ $user->name }},</b></p>
-    
-@elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Investigated (Closed)')
-    <p><b>Hi, {{ $user->name }},</b></p>
-    
-@elseif ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Closed')
-    <p><b>Hi, {{ $user->name }},</b></p>
-    
-@endif
-*/ ?>
-
-            <h3 class="mT5 mB0">Please confirm the status of this complaint:</h3>
-            <form method="post" name="accessCode" action="?overUpdate=1&refresh=1{{
-                (($GLOBALS['SL']->REQ->has('frame')) ? '&frame=1' : '') }}">
+            <form name="overStatusForm" id="overStatusFormID"
+                action="?overUpdate=1" method="post">
             <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-            <div class="nFld mT0">
+            <input type="hidden" name="overUpdate" value="1">
+            <input type="hidden" name="refresh" value="1">
+
+            <h3>Please confirm the status of this complaint:</h3>
+
+            <div class="nFld mT15 mB30">
+
                 @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                     == 'Submitted to Oversight')
                     <label class="finger">
-                        <input type="radio" id="overStatus1" name="overStatus" autocomplete="off"
-                            value="Submitted to Oversight"
+                        <input type="radio" id="overStatus1" name="overStatus" 
+                            value="Submitted to Oversight" autocomplete="off"
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                                 == 'Submitted to Oversight') CHECKED @endif > 
                         <span class="mL5" style="font-weight: normal;">Submitted to 
                         @if (isset($overRow->over_agnc_name)) {{ $overRow->over_agnc_name }} 
                         @else this investigative agency @endif</span>
                         @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
-                            == 'Submitted to Oversight') <span class="mL5 slGrey">(Current Status)</span> @endif
+                            == 'Submitted to Oversight') 
+                            <span class="mL5 slGrey">(Current Status)</span> 
+                        @endif
                     </label>
                 @endif
+
                 <label class="finger">
-                    <input type="radio" id="overStatus2" name="overStatus" autocomplete="off" 
-                        value="Received by Oversight" 
+                    <input type="radio" id="overStatus2" name="overStatus" 
+                        value="Received by Oversight" autocomplete="off" 
                         @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                             == 'Received by Oversight') CHECKED @endif > 
                     <span class="mL5" style="font-weight: normal;">Received by 
                     @if (isset($overRow->over_agnc_name)) {{ $overRow->over_agnc_name }} 
                     @else this investigative agency @endif</span>
                     @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
-                        == 'Received by Oversight') <span class="mL5 slGrey">(Current Status)</span> @endif
+                        == 'Received by Oversight') 
+                        <span class="mL5 slGrey">(Current Status)</span> 
+                    @endif
                 </label>
+
                 @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                     != 'Submitted to Oversight')
                     <label class="finger">
-                        <input type="radio" id="overStatus3" name="overStatus" autocomplete="off" 
-                            value="Investigated (Closed)"
+                        <input type="radio" id="overStatus3" name="overStatus" 
+                            value="Investigated (Closed)" autocomplete="off" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                                 == 'Investigated (Closed)') CHECKED @endif >
                             <span class="mL5" style="font-weight: normal;">Investigated by 
                             @if (isset($overRow->over_agnc_name)) {{ $overRow->over_agnc_name }} 
                             @else this investigative agency @endif </span>
-                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
-                                == 'Investigated (Closed)') <span class="mL5 slGrey">(Current Status)</span> @endif
+                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', 
+                                $complaint->com_status) == 'Investigated (Closed)') 
+                                <span class="mL5 slGrey">(Current Status)</span> 
+                            @endif
                     </label>
+
                     <label class="finger">
-                        <input type="radio" id="overStatus4" name="overStatus" autocomplete="off" 
-                            value="Declined To Investigate (Closed)" 
-                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
-                                == 'Declined To Investigate (Closed)') CHECKED @endif > 
+                        <input type="radio" id="overStatus4" name="overStatus"  
+                            value="Declined To Investigate (Closed)" autocomplete="off"
+                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', 
+                                $complaint->com_status) == 'Declined To Investigate (Closed)') 
+                                CHECKED
+                            @endif > 
                             <span class="mL5" style="font-weight: normal;">
                             @if (isset($overRow->over_agnc_name)) {{ $overRow->over_agnc_name }} 
-                            @else Oversight agency @endif declined to investigate</span>
-                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
-                                == 'Declined To Investigate (Closed)') <span class="mL5 slGrey">(Current Status)</span>
+                            @else Oversight agency 
+                            @endif declined to investigate
+                            </span>
+                            @if ($GLOBALS["SL"]->def->getVal('Complaint Status', 
+                                $complaint->com_status) == 'Declined To Investigate (Closed)') 
+                                <span class="mL5 slGrey">(Current Status)</span>
                             @endif
                     </label>
                 @endif
-                @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) == 'Submitted to Oversight')
+
+                @if ($GLOBALS["SL"]->def->getVal('Complaint Status', 
+                    $complaint->com_status) == 'Submitted to Oversight')
                     <label class="finger">
-                        <input type="radio" id="overStatus5" name="overStatus" autocomplete="off" 
-                            value="OK to Submit to Oversight" 
+                        <input type="radio" id="overStatus5" name="overStatus" 
+                            value="OK to Submit to Oversight" autocomplete="off" 
                             @if ($GLOBALS["SL"]->def->getVal('Complaint Status', $complaint->com_status) 
                                 == 'OK to Submit to Oversight') CHECKED @endif > 
                         <span class="mL5" style="font-weight: normal;">
                         @if (isset($overRow->over_agnc_name)) {{ $overRow->over_agnc_name }} 
-                        @else This investigative agency @endif cannot investigate this complaint as is</span>
+                        @else This investigative agency 
+                        @endif cannot investigate this complaint as is
+                        </span>
                     </label>
                 @endif
+
             </div>
-            <div class="nFld mT10">
+
+            <div class="nFld mT30">
                 <div id="notesStatus" class="disBlo">
                     Notes about the status of this complaint:<br />
                     <small class="slGrey">
-                    These optional notes are for OpenPolice.org administrators. We will not make them public.
+                    These optional notes are for OpenPolice.org 
+                    administrators. We will not make them public.
                     </small>
                 </div>
                 <div id="notesCannot" class="disNon">
-                    Please tell us why this complaint cannot be investigated as is:<br />
+                    Please tell us why this complaint 
+                    cannot be investigated as is:<br />
                     <small class="slGrey">
-                    We can then inform the complainant to submit their complaints another way.
+                    We can then inform the complainant to 
+                    submit their complaints another way.
                     </small>
                 </div>
                 <textarea name="overNote" class="w100 mT5"></textarea>
             </div>
-            <input type="submit" value="Save New Status" class="btn btn-lg btn-xl btn-primary mT20">
-            </form>
+            <input id="overStatusSubmit" type="submit" value="Save New Status" 
+                class="btn btn-lg btn-xl btn-primary mT20">
         </div>
-
         <div class="p10"> </div>
+
+        </form>
+
     </div>
-    <div class="col-4">
+    <div class="col-lg-4">
             
-        <div class="slCard">
-            <a href="/complaint/read-{{ $complaint->com_public_id }}/full-pdf" target="_blank"
-                class="btn btn-lg btn-secondary disBlo taL"
-                ><nobr><i class="fa fa-print mR5" aria-hidden="true"></i> 
-                Print Complaint</nobr> / <nobr>Save as PDF</nobr></a>
-            <div class="mT20">
-                <a href="/complaint/read-{{ $complaint->com_public_id }}/full-xml" 
-                    target="_blank" class="btn btn-lg btn-secondary disBlo taL"
-                    ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> 
-                    Download Raw Data File</a>
-            </div>
-            <?php /*
-            <h4 class="mT20 pT20 mB5"><i class="fa fa-link mR3" aria-hidden="true"></i> Public Link To Share:</h4>
-            <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $complaint->com_public_id 
-                }}" type="text" class="form-control w100 mB10">
-            */ ?>
+        <a href="/complaint/read-{{ $complaint->com_public_id }}/full-pdf"
+            class="btn btn-lg btn-secondary btn-block disBlo taL" target="_blank"
+            ><nobr><i class="fa fa-print mR5" aria-hidden="true"></i> 
+            Print Complaint</nobr> / <nobr>Save as PDF</nobr></a>
+        <div class="mT20">
+            <a href="/complaint/read-{{ $complaint->com_public_id }}/full-xml" 
+                target="_blank" class="btn btn-lg btn-secondary btn-block disBlo taL"
+                ><i class="fa fa-cloud-download mR5" aria-hidden="true"></i> 
+                Download Raw Data File</a>
         </div>
+        <?php /*
+        <h4 class="mT20 pT20 mB5"><i class="fa fa-link mR3" aria-hidden="true"></i> Public Link To Share:</h4>
+        <input value="{{ $GLOBALS['SL']->sysOpts['app-url'] }}/complaint/read-{{ $complaint->com_public_id 
+            }}" type="text" class="form-control w100 mB10">
+        */ ?>
         
         <div class="p10"> </div>
     </div>
 </div>
 
 <script type="text/javascript"> $(document).ready(function(){
+
 function chkNotes() {
     if (document.getElementById('overStatus5') && document.getElementById('overStatus5').checked) {
         $("#notesStatus").slideUp("fast");
@@ -206,4 +179,15 @@ $(document).on("click", "#overStatus2", function() { chkNotes(); });
 $(document).on("click", "#overStatus3", function() { chkNotes(); });
 $(document).on("click", "#overStatus4", function() { chkNotes(); });
 $(document).on("click", "#overStatus5", function() { chkNotes(); });
+
+setTimeout(function() {
+    if (document.getElementById("treeWrap2766")) {
+        document.getElementById("treeWrap2766").className="";
+    }
+}, 10);
+
 }); </script>
+
+<style>
+#mfaOP, #tokAlrt, #comTokWarn { display: none; }
+</style>

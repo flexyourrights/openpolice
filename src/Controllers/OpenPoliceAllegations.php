@@ -342,16 +342,19 @@ class OpenPoliceAllegations extends OpenPolicePeople
                     $printedOfficers = true;
                 }
             }
-            foreach ($this->worstAllegations as $allegType) { // printing Allegations in order of severity...
+            foreach ($this->worstAllegations as $allegType) {
+                // printing Allegations in order of severity...
                 foreach ($this->sessData->dataSets["allegations"] as $alleg) {
                     if ($alleg->alle_type == $GLOBALS["SL"]->def->getID('Allegation Type', $allegType)) {
                         if ($this->checkAllegIntimidWeapon($alleg)) {
                             $ret .= '<div class="fPerc125">' . $allegType;
                             if (!$isAnon && !$printedOfficers && isset($allegOffs[$alleg->alle_id])) {
-                                $ret .= ' <span class="mL20 slGrey">' . $allegOffs[$alleg->alle_id] . '</span>';
+                                $ret .= ' <span class="mL20 slGrey">' . $allegOffs[$alleg->alle_id] 
+                                    . '</span>';
                             }
                             $ret .= '</div>' . (($showWhy) ? '<div class="slGrey mTn10 pL20">' 
-                                . $alleg->alle_description . '</div>' : '') . '<div class="p5"></div>';
+                                . $alleg->alle_description . '</div>' : '') 
+                                . '<div class="p5"></div>';
                         }
                     }
                 }

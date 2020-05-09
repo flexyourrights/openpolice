@@ -1,46 +1,50 @@
 <!-- resources/views/vendor/openpolice/nodes/1780-mfa-instructions.blade.php -->
-<div>
+<div id="mfaOP" class="disBlo">
     <div class="slCard mT20">
         <h3 class="m0" style="color: #2B3493;">
             <i class="fa fa-key mR5" aria-hidden="true"></i>
             To get full access to this complaint report, choose one of these options:
         </h3>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div id="keyOpt1" class="slCard mT20">
-                <h3 class="mT0">Option #1: Enter your emailed Key Code</h3>
-                <div class="pT5 mB10 pL10">{!! $mfa !!}</div>
-                <p>
-                If your code has expired or doesn’t work, please click the button 
-                below to get a new code sent to <b>{{ $user->email }}</b>.
-                </p>
-                <div class="pL10">
-                    <a href="?resend=access" class="btn btn-secondary" style="width: 190px;"
-                        ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> 
-                        Email New Key Code</a>
+        <div class="row">
+            <div class="col-md-5">
+                <div id="keyOpt1" class="pT20">
+                    <h4>
+                        Option #1:<br />
+                        Enter your emailed <nobr>Key Code</nobr>
+                    </h4>
+                    <div class="pT5 mB30">{!! $mfa !!}</div>
+                    <p>
+                    If your code has expired or doesn’t work, please click the button 
+                    below to get a new code sent to <b>{{ $user->email }}</b>.
+                    </p>
+                    <p>
+                        <a href="?resend=access" class="btn btn-secondary btn-block"
+                            ><i class="fa fa-envelope-o mR5" aria-hidden="true"></i> 
+                            Email New Key Code</a>
+                    </p>
                 </div>
             </div>
-        </div>
-        <div class="col-6">
-            <div id="keyOpt2" class="slCard mT20">
-                <h3 class="mT0">Option #2: Create an account</h3>
-                <p>
-                Creating an account makes it easier for you to access and manage complaint 
-                reports. If the account for <b>{{ $user->email }}</b> has not been setup 
-                yet, you can use the <a href="/password/reset">password reset tool</a> 
-                to gain access to it by email.
-                </p>
-                <p>
-                If your office needs to change the email associated with 
-                its account, please <a href="/contact">contact us</a>.
-                </p>
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <div id="keyOpt2" class="pT20">
+                    <h4>Option #2:<br /><nobr>Create an account</nobr></h4>
+                    <p>
+                    Creating an account makes it easier for you to access and manage complaint 
+                    reports. If the account for <b>{{ $user->email }}</b> has not been setup 
+                    yet, you can use the <a href="/password/reset">password reset tool</a> 
+                    to gain access to it by email.
+                    </p>
+                    <p>
+                    If your office needs to change the email associated with 
+                    its account, please <a href="/contact">contact us</a>.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="alert alert-danger fade in alert-dismissible show" 
+<div id="comTokWarn" class="alert alert-danger fade in alert-dismissible show" 
     style="padding: 10px 15px; margin: 20px 0px 10px 0px; color: #a94442;">
     The public view below does not contain any personal contact information. 
     But you can access that using the above instructions.
@@ -53,6 +57,14 @@
 }
 #keySry { color: #a94442; margin-right: 10px; }
 </style>
+<script type="text/javascript">
+function unwrapTokenToolbox() {
+    if (document.getElementById("treeWrap2766")) {
+        document.getElementById("treeWrap2766").className="";
+    }
+}
+setTimeout("unwrapTokenToolbox()", 1);
+</script>
 
 
 <?php /*

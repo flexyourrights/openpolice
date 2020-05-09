@@ -60,30 +60,53 @@ class OpenReportToolsOversight extends OpenReportTools
      */
     protected function saveComplaintOversight()
     {
+        if (!isset($this->v["user"]) || !isset($this->v["user"]->email)) {
+            return false;
+        }
         $overRow = OPOversight::where('over_email', $this->v["user"]->email)
             ->first();
         if ($this->chkOverUserHasCore()) {
+
             if ($GLOBALS["SL"]->REQ->has('overUpdate') 
                 && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1
-                && $overRow && isset($overRow->over_dept_id)) {
-                $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->over_id);
-                $status = 0;
-                $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) ? trim($GLOBALS["SL"]->REQ->overNote) : '');
+                && $overRow 
+                && isset($overRow->over_dept_id)) {
+
+                $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->over_dept_id);
+                $status = '';
+                $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) 
+                    ? trim($GLOBALS["SL"]->REQ->overNote) : '');
                 if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
-                    if ($GLOBALS["SL"]->REQ->overStatus == 'Received by Oversight') {
-                        $this->logOverUpDate($this->coreID, $overRow->over_id, 'Received', $overUpdateRow);
-                    } elseif ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
-                        $this->logOverUpDate($this->coreID, $overRow->over_id, 'Investigated', $overUpdateRow);
+                    $status = trim($GLOBALS["SL"]->REQ->overStatus);
+                    if ($status == 'Received by Oversight') {
+                        $this->logOverUpDate(
+                            $this->coreID, 
+                            $overRow->over_dept_id, 
+                            'received', 
+                            $overUpdateRow
+                        );
+                    } elseif ($status == 'Investigated (Closed)') {
+                        $this->logOverUpDate(
+                            $this->coreID, 
+                            $overRow->over_dept_id, 
+                            'investigated', 
+                            $overUpdateRow
+                        );
                     }
-                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', trim($GLOBALS["SL"]->REQ->overStatus));
-                    $this->sessData->dataSets["complaints"][0]->update([ "com_status" => $statusID ]);
-                    $status = $GLOBALS["SL"]->REQ->overStatus;
+                    $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', $status);
+                    $this->sessData->dataSets["complaints"][0]->com_status = $statusID;
+                    $this->sessData->dataSets["complaints"][0]->save();
                 }
                 $this->logComplaintReview('Oversight', $evalNotes, $status);
                 $this->clearComplaintCaches();
-            } elseif ($GLOBALS["SL"]->REQ->has('upResult') && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
+                echo $this->redir('?refresh=1', true);
+                exit;
+
+            } elseif ($GLOBALS["SL"]->REQ->has('upResult') 
+                && intVal($GLOBALS["SL"]->REQ->get('upResult')) == 1) {
                 
                 $this->clearComplaintCaches();
+
             }
         }
         return true;

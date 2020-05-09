@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "rockhopsoft/survloop": "^v0.2.13",
+        "rockhopsoft/survloop": "^v0.2.14",
         "flexyourrights/openpolice-departments": "^v0.1.2",
         "flexyourrights/openpolice-website": "^v0.1.1"
     },

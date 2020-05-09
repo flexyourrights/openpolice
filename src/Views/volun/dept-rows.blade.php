@@ -9,7 +9,7 @@
         <div class="col-3"><b>Researched</b></div>
     </div></div>
     @forelse ($deptRows as $i => $dept)
-        @if ($i < 500)
+        @if ($i < 500 && $dept->dept_name != 'Not sure about department')
         <div class="p10 @if ($i%2 == 0) row2 @endif "><div class="row">
             <div class="col-5">
                 <a href="/dashboard/start-{{ $dept->dept_id }}/volunteers-research-departments">

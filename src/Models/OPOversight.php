@@ -36,6 +36,7 @@ class OPOversight extends Model
 		'over_address', 
 		'over_address2', 
 		'over_address_city', 
+		'over_address_county',
 		'over_address_state', 
 		'over_address_zip', 
 		'over_submit_deadline', 

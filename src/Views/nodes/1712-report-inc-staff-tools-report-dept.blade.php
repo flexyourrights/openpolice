@@ -1,8 +1,11 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-report-department.blade.php -->
-<form name="fixDeptsForm" method="get" action="?fixDepts=1">
+
+<form name="fixDeptsForm" id="fixDeptsFormID">
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+<input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
 <input type="hidden" name="fixDepts" value="1">
 <input type="hidden" name="refresh" value="1">
-<input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
+<input type="hidden" name="ajax" value="1">
 {!! $GLOBALS['SL']->getReqHiddenInputs() !!}
 
 <div class="nodeAnchor"><a name="reportUpload"></a></div>
@@ -63,7 +66,7 @@
 </div>
 
 <div class="mT20 mB20">
-    <input type="submit" id="stfBtn9"
+    <input type="submit" id="stfBtnDept"
         class="btn btn-lg btn-primary" style="color: #FFF;"
         onMouseOver="this.style.color='#2b3493';" 
         onMouseOut="this.style.color='#FFF';"
@@ -88,6 +91,39 @@ function loadNewFixDept(deptID, deptName) {
 
 var holdSearch = false;
 $(document).ready(function(){ 
+
+    function postToolboxFixDept() {
+        if (document.getElementById('complaintToolbox')) {
+            var formData = new FormData($('#fixDeptsFormID').get(0));
+            document.getElementById('complaintToolbox').innerHTML = getSpinner();
+            window.scrollTo(0, 0);
+            $.ajax({
+                url: "/complaint-toolbox",
+                type: "POST", 
+                data: formData, 
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    $("#complaintToolbox").empty();
+                    $("#complaintToolbox").append(data);
+                },
+                error: function(xhr, status, error) {
+                    $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
+                }
+            });
+        }
+        return false;
+    }
+
+    $("#stfBtnDept").click(function() {
+        postToolboxFixDept();
+    });
+
+    $("#fixDeptsFormID").submit(function( event ) {
+        postToolboxFixDept();
+        event.preventDefault();
+    });
+
 
     function submitAjaxSearchFixDepts() {
         document.getElementById('ajaxSearchFixDepts').innerHTML=getSpinner();

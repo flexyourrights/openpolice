@@ -329,6 +329,16 @@ class DepartmentScores
                             $this->stats[$type]++;
                         }
                     }
+                    if (isset($this->deptOvers[$dept->dept_id]->over_email)
+                        && trim($this->deptOvers[$dept->dept_id]->over_email) != ''
+                        && isset($this->deptOvers[$dept->dept_id]->over_way_sub_email)
+                        && intVal($this->deptOvers[$dept->dept_id]->over_way_sub_email) == 1
+                        && isset($this->deptOvers[$dept->dept_id]->over_official_form_not_req)
+                        && intVal($this->deptOvers[$dept->dept_id]->over_official_form_not_req) == 1) {
+                        $this->scoreDepts[$i]->dept_op_compliant = 1;
+                    } else {
+                        $this->scoreDepts[$i]->dept_op_compliant = 0;
+                    }
                     $this->scoreDepts[$i]->save();
                     $this->stats["score"] += $this->scoreDepts[$i]->dept_score_openness;
                     $this->stats["count"]++;

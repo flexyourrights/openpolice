@@ -19,9 +19,10 @@
                     ><i class="fa fa-plus-circle mR3" aria-hidden="true"></i>
                     {{ $dept->dept_name }}</a>
             </div>
-            <div class="m5" style="margin-left: 25px;">
+            <div class="m5" style="margin-left: 12px;">
                 <a href="/dept/{{ $dept->dept_slug }}" target="_blank" 
-                    >/{{ $dept->dept_slug }}</a>
+                    ><i class="fa fa-external-link" aria-hidden="true"></i> 
+                    /{{ $dept->dept_slug }}</a>
             </div>
         @else
             <div class="deptWrap">
@@ -88,7 +89,8 @@
                     State <span class="red">*required</span>
                 </label>
                 <div class="nFld">
-                    <select id="newDeptAddressStateID" name="newDeptAddressState" 
+                    <select id="newDeptAddressStateID" 
+                        name="newDeptAddressState" 
                         class="form-control form-control-lg" 
                         autocomplete="off" >{!! $newDeptStateDrop !!}
                     </select>
@@ -98,7 +100,9 @@
         <div class="row mB20">
             <div class="col-md-7"></div>
             <div class="col-md-5">
-                <input id="newDeptSubmit" type="button" class="btn btn-primary btn-lg w100" value="Add New Department">
+                <input id="newDeptSubmit" type="button" 
+                    class="btn btn-primary btn-lg w100" 
+                    value="Add New Department">
             </div>
         </div>
     </div>

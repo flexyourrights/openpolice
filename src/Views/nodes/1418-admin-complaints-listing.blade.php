@@ -98,7 +98,7 @@
     <div id="admDashLargeView">
         <div class="row">
             <div class="col-lg-4">
-                <div class="slCard nodeWrap">
+                <div id="filtsCard" class="slCard nodeWrap">
                     {!! $listPrintFilters !!}
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     @if (isset($complaintPreviews) && trim($complaintPreviews) != '')
                         {!! $complaintPreviews !!}
                     @else
-                        <div class="slCard p20 taC">
+                        <div class="slCard p20 mT10 taC">
                             {!! $GLOBALS["SL"]->spinner() !!}
                             <h4 class="mTn20 mB20">
                                 We're gathering the data, hold tight!
@@ -129,7 +129,7 @@
         <script type="text/javascript">
         $(document).ready(function(){
             //setTimeout(function() {
-            $("#complaintPreviews").load("?showPreviews=1{!! $searchFiltsURL !!}");
+            $("#complaintPreviews").load("?showPreviews=1&ajax=1{!! $searchFiltsURL !!}");
             //}, 10);
         });
         </script>
@@ -221,7 +221,7 @@
         <div id="dashPreviewWrap" class="fR h100" style="width: 59%;">
             <div id="hidivDashTools" class="h100 ovrFloY" style="display: none;">
                 <div id="searchFilts" style="display: none;">
-                    <div class="slCard mR20">
+                    <div id="filtsCard" class="slCard mR20">
                         {!! $listPrintFilters !!}
                     </div>
                 </div>
@@ -241,11 +241,5 @@
 <style> 
 @if ($sView == 'list') 
     body { overflow-y: hidden; } 
-    #treeWrap1385, #treeWrap2766 {
-        width: 100%; 
-        max-width: 100%; 
-        padding-left: 0px; 
-        padding-right: 0px; 
-    }
 @endif
 </style>

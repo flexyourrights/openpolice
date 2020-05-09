@@ -36,15 +36,15 @@
         @if (trim($iaEdit->zed_over_over_website) != '')
             <a href="{{ $iaEdit->zed_over_over_website }}" target="_blank">Website</a>, 
         @endif
-        @if (trim($iaEdit->ZedOver->over_facebook) != '')
-            <a href="{{ $iaEdit->ZedOver->over_facebook }}" target="_blank">Facebook</a>, 
+        @if (trim($iaEdit->zed_over_over_facebook) != '')
+            <a href="{{ $iaEdit->zed_over_over_facebook }}" target="_blank">Facebook</a>, 
         @endif
-        @if (trim($iaEdit->ZedOver->over_twitter) != '')
-            <a href="{{ $iaEdit->ZedOver->over_twitter }}" target="_blank">Twitter</a>, 
+        @if (trim($iaEdit->zed_over_over_twitter) != '')
+            <a href="{{ $iaEdit->zed_over_over_twitter }}" target="_blank">Twitter</a>, 
         @endif
         @if (trim($iaEdit->zed_over_over_website) != '' 
-            || trim($iaEdit->ZedOver->over_facebook) != '' 
-            || trim($iaEdit->ZedOver->over_twitter) != '')
+            || trim($iaEdit->zed_over_over_facebook) != '' 
+            || trim($iaEdit->zed_over_over_twitter) != '')
             <br />
         @endif
         @if (trim($deptEdit->zed_dept_dept_email) != '')
@@ -90,25 +90,32 @@
             <span class="slGrey">Homepage Link:</span> 
             {{ $iaEdit->zed_over_over_homepage_complaint_link }}<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_paper_mail)
+        @if ($iaEdit->zed_over_over_way_sub_paper_mail
+            && intVal($iaEdit->zed_over_over_way_sub_paper_mail) == 1)
             Paper Form Mail<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_paper_fax)
+        @if ($iaEdit->zed_over_over_way_sub_paper_fax
+            && intVal($iaEdit->zed_over_over_way_sub_paper_fax) == 1)
             Paper Form Fax<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_paper_in_person)
+        @if ($iaEdit->zed_over_over_way_sub_paper_in_person
+            && intVal($iaEdit->zed_over_over_way_sub_paper_in_person) == 1)
             Paper In Person<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_verbal_phone)
+        @if ($iaEdit->zed_over_over_way_sub_verbal_phone
+            && intVal($iaEdit->zed_over_over_way_sub_verbal_phone) == 1)
             Verbal Phone<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_verbal_in_person)
+        @if ($iaEdit->zed_over_over_way_sub_verbal_in_person
+            && intVal($iaEdit->zed_over_over_way_sub_verbal_in_person) == 1)
             Verbal In Person<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_email)
+        @if ($iaEdit->zed_over_over_way_sub_email
+            && intVal($iaEdit->zed_over_over_way_sub_email) == 1)
             Email<br />
         @endif
-        @if ($iaEdit->zed_over_over_way_sub_online)
+        @if ($iaEdit->zed_over_over_way_sub_online
+            && intVal($iaEdit->zed_over_over_way_sub_online) == 1)
             Online Form<br />
         @endif
         
@@ -150,8 +157,8 @@
             <a href="{{ $civEdit->zed_over_over_website }}" 
                 target="_blank">Website</a><br />
         @endif
-        @if (trim($civEdit->ZedOver->over_facebook) != '')
-            <a href="{{ $civEdit->ZedOver->over_facebook }}" 
+        @if (trim($civEdit->zed_over_over_facebook) != '')
+            <a href="{{ $civEdit->zed_over_over_facebook }}" 
                 target="_blank">Facebook</a><br />
         @endif
         <span class="slGrey">{{ $civEdit->zed_over_over_address }}<br />
@@ -170,25 +177,32 @@
                 target="_blank">Online Form</a><br />
         @endif
         
-        @if ($civEdit->zed_over_over_way_sub_paper_mail)
+        @if ($civEdit->zed_over_over_way_sub_paper_mail
+            && intVal($civEdit->zed_over_over_way_sub_paper_mail) == 1)
             Paper Form Mail<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_paper_fax)
+        @if ($civEdit->zed_over_over_way_sub_paper_fax
+            && intVal($civEdit->zed_over_over_way_sub_paper_fax) == 1)
             Paper Form Fax<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_paper_in_person)
+        @if ($civEdit->zed_over_over_way_sub_paper_in_person
+            && intVal($civEdit->zed_over_over_way_sub_paper_in_person) == 1)
             Paper In Person<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_verbal_phone)
+        @if ($civEdit->zed_over_over_way_sub_verbal_phone
+            && intVal($civEdit->zed_over_over_way_sub_verbal_phone) == 1)
             Verbal Phone<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_verbal_in_person)
+        @if ($civEdit->zed_over_over_way_sub_verbal_in_person
+            && intVal($civEdit->zed_over_over_way_sub_verbal_in_person) == 1)
             Verbal In Person<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_email)
+        @if ($civEdit->zed_over_over_way_sub_email
+            && intVal($civEdit->zed_over_over_way_sub_email) == 1)
             Email<br />
         @endif
-        @if ($civEdit->zed_over_over_way_sub_online)
+        @if ($civEdit->zed_over_over_way_sub_online
+            && intVal($civEdit->zed_over_over_way_sub_online) == 1)
             Online Form<br />
         @endif
     

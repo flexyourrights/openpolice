@@ -109,11 +109,12 @@ function loadComplaint(idPub, id) {
         updateRightPane();
         loadResultSpinner(id);
         if (document.getElementById("reportAdmPreview")) {
+            //document.getElementById("reportAdmPreview").src="/spinner";
+            var url = "/complaint/readi-"+id+"/full?frame=1&wdg=1";
             if (idPub > 0) {
-                document.getElementById("reportAdmPreview").src="/complaint/read-"+idPub+"/full?frame=1&wdg=1";
-            } else {
-                document.getElementById("reportAdmPreview").src="/complaint/readi-"+id+"/full?frame=1&wdg=1";
+                url = "/complaint/read-"+idPub+"/full?frame=1&wdg=1";
             }
+            setTimeout("document.getElementById('reportAdmPreview').src='"+url+"'", 100);
         }
     @forelse ($complaints as $j => $com)
         $("#comRow{{ $com->com_id }}").removeClass( "complaintRowWrpActive" );
@@ -125,7 +126,9 @@ function loadComplaint(idPub, id) {
     }
     return true;
 }
-setTimeout(function() { loadComplaint({{ $firstComplaint[0] }}, {{ $firstComplaint[1] }}); }, 10);
+setTimeout(function() {
+    loadComplaint({{ $firstComplaint[0] }}, {{ $firstComplaint[1] }});
+}, 10);
 $(document).on("click", ".complaintRowA", function() {
     var idPub = $(this).attr("data-com-pub-id");
     var id = $(this).attr("data-com-id");
@@ -173,7 +176,7 @@ function updateSearchDeets() {
         if (document.getElementById("sFiltID")) {
             sFilt = document.getElementById("sFiltID").value
         }
-        $("#complaintPreviews").load("?showPreviews=1&sFilt="+sFilt);
+        $("#complaintPreviews").load("?showPreviews=1&ajax=1&sFilt="+sFilt);
     }
 }
 setTimeout(function() { logSrchFilts(); }, 100);

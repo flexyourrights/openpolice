@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/2345-dash-top-stats.blade.php -->
 <div class="relDiv w100">
 
-<div class="absDiv" style="top: 250px; right: 15px; z-index: 100;">
+<div class="absDiv" style="top: 300px; right: 15px; z-index: 100;">
     <p><b>Current Weekly Metrics:</b><br />
     {{ number_format(sizeof($statsWeek["contactsU"])) }} User talked to<br />
     {{ number_format(sizeof($statsWeek["activeU"])) }} WAUs

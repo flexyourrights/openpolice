@@ -170,8 +170,6 @@
     });
 
 
-
-
     $(document).on("change", "#emailID", function() { 
         if (document.getElementById('emailFormWrap')) {
             document.getElementById('emailFormWrap').innerHTML = getSpinner();
@@ -181,9 +179,4 @@ console.log(url);
         }
     });
 
-
-
-
-
 }); </script>
-

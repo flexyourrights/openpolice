@@ -87,13 +87,18 @@ class OpenReport extends OpenOfficers
      */
     protected function reportAllegsWhy($nID = -3)
     {
+        $fullPrint = false;
         $why = $this->reportAllegsWhyDeets($nID);
         $deets = 'Allegations</h3>';
         if ($this->canPrintFullReport()) {
             $deets .= '<div class="slGrey mTn10">Including comments from the complainant</div>';
+            $fullPrint = true;
         }
         $deets .= '<h3 class="disNon">';
-        return $this->printReportDeetsBlock($why, $deets);
+        if ($fullPrint) {
+            return $this->printReportDeetsBlock($why, $deets);
+        }
+        return $this->printReportDeetsBlockCols($why, $deets);
     }
 
     /**
@@ -128,17 +133,13 @@ class OpenReport extends OpenOfficers
     {
         $ret = '';
         if ($nID > 0 && isset($this->allNodes[$nID])) {
-            $fldRow = $this->allNodes[$nID]->getFldRow();
-            if ($this->canPrintFullReportByRecordSpecs()
-                && $this->checkViewDataPerms($fldRow)) {
-                $story = $this->sessData->dataSets["complaints"][0]->com_summary;
-                $views = [ 'pdf', 'full-pdf' ];
-                if (!in_array($GLOBALS["SL"]->pageView, $views)) {
-                    $ret = $this->printStoryPreview($story);
-                }
-                if (trim($ret) == '') {
-                    $ret = $GLOBALS["SL"]->textSaferHtml($story);
-                }
+            $story = $this->sessData->dataSets["complaints"][0]->com_summary;
+            $views = [ 'pdf', 'full-pdf' ];
+            if (!in_array($GLOBALS["SL"]->pageView, $views)) {
+                $ret = $this->printStoryPreview($story);
+            }
+            if (trim($ret) == '') {
+                $ret = $GLOBALS["SL"]->textSaferHtml($story);
             }
         }
         return '<h3 class="slBlueDark mT0 mB10">Story</h3><p>' . $ret . '</p>';
@@ -317,7 +318,8 @@ class OpenReport extends OpenOfficers
     protected function printStartEndTimes($timeStart, $timeEnd)
     {
         $ret = '';
-        if ($timeStart != '' && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
+        if ($timeStart != '' 
+            && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
             $ret .= ' <nobr>at ' . $timeStart . '</nobr>';
             if ($timeEnd != '' && $timeStart != $timeEnd) {
                 $ret .= ' <nobr>until ' . $timeEnd . '</nobr>';
@@ -327,42 +329,20 @@ class OpenReport extends OpenOfficers
     }
     
     /**
-     * Check the current permissions on printing the incident's full address.
-     *
-     * @param  int $nID
-     * @return boolean
-     */
-    protected function chkPrintWhereLine($nID = -3)
-    {
-        $show = false;
-        if ($nID > 0 
-            && isset($this->allNodes[$nID]) 
-            && $this->checkFldDataPerms($this->allNodes[$nID]->getFldRow()) 
-            && $this->checkViewDataPerms($this->allNodes[$nID]->getFldRow())) {
-            if ($GLOBALS["SL"]->pageView == 'full') {
-                $show = true;
-            } elseif (isset($this->sessData->dataSets["incidents"][0]->inc_public) 
-                && $this->sessData->dataSets["incidents"][0]->inc_public == 'Y'
-                && $this->canPrintFullReport()) {
-                $show = true;
-            }
-        }
-        return $show;
-    }
-    
-    /**
      * Get the label and value for where an incident occured,
      * depending on the current permissions and available info.
      *
      * @param  int $nID
      * @return array
      */
-    protected function getReportWhereLine($nID = -3)
+    protected function getReportWhereLine($nID = -3, $noAddy = false)
     {
         if (isset($this->sessData->dataSets["incidents"])) {
             $inc = $this->sessData->dataSets["incidents"][0];
             $addy = $GLOBALS["SL"]->printRowAddy($inc, 'inc_');
-            if ($this->chkPrintWhereLine($nID) && trim($addy) != '') {
+            if (trim($addy) != ''
+                && !$noAddy
+                && $this->condPrintIncidentLocation()) {
                 return [
                     'Indicent Location', 
                     $addy
@@ -409,16 +389,31 @@ class OpenReport extends OpenOfficers
      */
     protected function getReportPrivacy($nID)
     {
-        $set = 'Privacy Types';
-        switch ($this->sessData->dataSets["complaints"][0]->com_privacy) {
-            case $GLOBALS["SL"]->def->getID($set, 'Submit Publicly'): 
-                return 'Full Transparency';
-            case $GLOBALS["SL"]->def->getID($set, 'Names Visible to Police but not Public'): 
-                return 'No Names Public';
-            case $GLOBALS["SL"]->def->getID($set, 'Completely Anonymous'): 
-                return 'Anonymous';
+        $ret = '';
+        $com = $this->sessData->dataSets["complaints"][0];
+        $inc = $this->sessData->dataSets["incidents"][0];
+        if (isset($com->com_anon) 
+            && intVal($com->com_anon) == 1) {
+            $ret .= ', Submitted Anonymously';
+        } elseif (isset($com->com_publish_user_name) 
+            && intVal($com->com_publish_user_name) == 1) {
+            $ret .= ', Publish Complainant\'s Name';
         }
-        return '';
+        if (isset($com->com_publish_officer_name) 
+            && intVal($com->com_publish_officer_name) == 1) {
+            $ret .= ', Publish Officer Names';
+        }
+        if ($ret == '') {
+            $ret .= ', Publish No Names';
+        }
+        if (isset($inc->inc_public) 
+            && intVal($inc->inc_public) == 1) {
+            $ret .= ', Publish Incident Address';
+        }
+        if ($ret != '') {
+            return trim(substr($ret, 1));
+        }
+        return $ret;
     }
     
     /**
@@ -928,23 +923,6 @@ class OpenReport extends OpenOfficers
         $this->v["glossaryList"] = [];
         if ((in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1)
             && isset($this->sessData->dataSets["complaints"])) {
-            $prvLnk = '<a href="/complaint-privacy-options" target="_blank">Privacy Setting</a>: ';
-            $comPriv = $this->sessData->dataSets["complaints"][0]->com_privacy;
-            $prvType = $GLOBALS["SL"]->def->getVal('Privacy Types', $comPriv);
-            $prvType = str_replace('Submit Publicly', 'Full Transparency', $prvType);
-            $prvType = str_replace('Completely ', '', $prvType);
-            $prvType = str_replace('Names Visible to Police but not Public', 'No Names Public', $prvType);
-            $desc = view(
-                'vendor.openpolice.report-inc-fill-glossary', 
-                [
-                    "glossaryType" => $prvType,
-                    "prvLnk"       => $prvLnk
-                ]
-            )->render();
-            $this->v["glossaryList"][] = [
-                '<b>' . $prvType . '</b>',
-                $desc
-            ];
             if ($this->sessData->dataSets["complaints"][0]->com_award_medallion == 'Gold') {
                 $this->v["glossaryList"][] = [
                     '<b>Gold-Level Complaint</b>', 
@@ -993,10 +971,15 @@ class OpenReport extends OpenOfficers
     protected function printFlexVids()
     {
         $this->loadRelatedArticles();
-        return view(
+        $ret = view(
             'vendor.openpolice.nodes.1753-report-flex-videos', 
             [ "allUrls" => $this->v["allUrls"] ]
         )->render();
+        $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
+            . 'document.getElementById("flexVidsDelayed").innerHTML="' 
+            . $GLOBALS["SL"]->addSlashLines($ret) . '"; }, 1700); ';
+        return '<div id="flexVidsDelayed" class="w100"><div class="w100 taC">'
+            . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div></div>';
     }
     
     /**

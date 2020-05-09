@@ -564,17 +564,17 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintIncidentLocation()
     {
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
-            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
-                return 1;
-            }
-        }
         if (isset($this->sessData->dataSets["incidents"]) 
             && isset($this->sessData->dataSets["incidents"][0])
             && isset($this->sessData->dataSets["incidents"][0]->inc_public)
             && intVal($this->sessData->dataSets["incidents"][0]->inc_public) == 1) {
             return 1;
+        }
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                return 1;
+            }
         }
         return 0;
     }
@@ -587,23 +587,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintCivilianName()
     {
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
-            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
-                return 1;
-            }
-        }
-        if ($this->currCivIsCreator()
-            && isset($this->sessData->dataSets["complaints"])
-            && isset($this->sessData->dataSets["complaints"][0])) {
-            $com = $this->sessData->dataSets["complaints"][0];
-            if (isset($com->com_publish_user_name)
-                && intVal($com->com_publish_user_name) == 1
-                && in_array($com->com_status, [200, 201, 203, 204])) {
-                return 1;
-            }
-        }
-        return 0;
+        return $this->condPrintName('user');
     }
 
     /**
@@ -614,20 +598,37 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintOfficerName()
     {
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
-            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
-                return 1;
-            }
-        }
+        return $this->condPrintName('officer');
+    }
+
+    /**
+     * Checks whether or not the current Officer or Civilian 
+     * name should be printed for the current page load.
+     *
+     * @return int
+     */
+    protected function condPrintName($type = 'user')
+    {
         if (isset($this->sessData->dataSets["complaints"])
             && isset($this->sessData->dataSets["complaints"][0])) {
             $com = $this->sessData->dataSets["complaints"][0];
-            if (isset($com->com_publish_officer_name)
-                && intVal($com->com_publish_officer_name) == 1
+            if ($GLOBALS["SL"]->REQ->has('publicView')) {
+                if (!isset($com->{ 'com_publish_' . $type . '_name' })
+                    || intVal($com->{ 'com_publish_' . $type . '_name' }) == 0) {
+                    return 0;
+                } elseif ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+                    || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+                    return 1;
+                }
+            } elseif (isset($com->{ 'com_publish_' . $type . '_name' })
+                && intVal($com->{ 'com_publish_' . $type . '_name' }) == 1
                 && in_array($com->com_status, [200, 201, 203, 204])) {
                 return 1;
             }
+        }
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            return 1;
         }
         return 0;
     }
@@ -641,7 +642,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condPrintFullReport()
     {
         if ($this->canPrintFullReport()) {
-            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+            return 1;
+        }
+        if ($GLOBALS["SL"]->REQ->has('publicView')) {
+            if ($this->canPrintFullReportByRecSettings()
+                && ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+                    || (isset($this->v["isOwner"]) && $this->v["isOwner"]))) {
                 return 1;
             }
         }

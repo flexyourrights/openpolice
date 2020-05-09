@@ -1,5 +1,15 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-status.blade.php -->
 
+@if ($comStatus == 'New')
+    <div class="alert alert-danger fade in alert-dismissible show mB30" 
+        style="padding: 10px 15px;">
+        <h4>
+            Is this complaint OK to Submit 
+            <nobr>to Investigative Agency?</nobr>
+        </h4>
+    </div>
+@endif
+
 <form name="comUpdate" id="comUpdateID" method="post">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
@@ -73,18 +83,19 @@
     </div>
 </div>
 
-<div id="progDates" class="
-    @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
-    {!! view(
-        'vendor.openpolice.nodes.1712-report-inc-tools-progress-dates', 
-        [
-            "complaint"      => $complaintRec,
-            "comDepts"       => $comDepts,
-            "oversightDates" => $oversightDates
-        ]
-    )->render() !!}
-    <p><hr></p>
-</div>
+@if (!in_array($comStatus, ['Incomplete', 'New'])) 
+    <div id="progDates" class="disBlo">
+        {!! view(
+            'vendor.openpolice.nodes.1712-report-inc-tools-progress-dates', 
+            [
+                "complaint"      => $complaintRec,
+                "comDepts"       => $comDepts,
+                "oversightDates" => $oversightDates
+            ]
+        )->render() !!}
+        <p><hr></p>
+    </div>
+@endif
 
 <p><b>Notes for other evaluators</b></p>
 <textarea name="revNote" class="form-control form-control-lg" 

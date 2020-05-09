@@ -11,8 +11,8 @@
             !!}</b></p>
             <div class="nFld mT0">
             @foreach ($oversightDates as $d => $date)
-                <div class="row">
-                    <div class="col-8">
+                <div class="row pT10 pB10">
+                    <div class="col-md-8">
                         <label class="finger">
                             <input type="checkbox" value="{{ $d }}" 
                                 id="over{{ $dept['id'] }}Status{{ $d }}" 
@@ -25,7 +25,7 @@
                             <span class="mL5">{{ $date[1] }}</span>
                         </label>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div id="over{{ $dept['id'] }}Status{{ $d }}dateFlds" 
                             class="disNon pT5">
                         {!! $GLOBALS["SL"]->printDatePicker(

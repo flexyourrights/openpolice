@@ -33,9 +33,10 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
     protected function printComplaintReportForAdmin($nID)
     {
         if ($this->coreID > 0) {
-            $src = '/complaint/readi-' . $this->coreID . '/full?ajax=1&wdg=1'
-                . $GLOBALS["SL"]->getAnyReqParams();
-            $GLOBALS["SL"]->pageAJAX .= '$("#admDashReportWrap").load("' . $src . '");';
+            $src = '/complaint/readi-' . $this->coreID 
+                . '/full?ajax=1&wdg=1' . $GLOBALS["SL"]->getAnyReqParams();
+            $GLOBALS["SL"]->pageAJAX .= '$("#admDashReportWrap").load("' 
+                . $src . '");';
         }
         return view(
             'vendor.openpolice.nodes.2377-admin-dash-load-complaint', 
@@ -98,15 +99,15 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
      */
     protected function prepAdminComplaintEmailing()
     {
-        $isOverCompatible = false;
         $w = '';
+        $isOverCompatible = false;
         if (isset($this->v["comDepts"][0])) {
-            $w = $this->v["comDepts"][0]["whichOver"];
-            if (isset($this->v["comDepts"][0][$w])) {
-                $isOverCompatible = $this->isOverCompatible(
-                    $this->v["comDepts"][0][$w]
-                );
+            if (isset($this->v["comDepts"][0]["deptRow"])
+                && isset($this->v["comDepts"][0]["deptRow"]->dept_op_compliant)
+                && intVal($this->v["comDepts"][0]["deptRow"]->dept_op_compliant) == 1) {
+                $isOverCompatible = true;
             }
+            $w = $this->v["comDepts"][0]["whichOver"];
         }
         $this->v["emailsTo"] = [
             "To Complainant" => [],
@@ -189,10 +190,19 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
     protected function autoloadAdminComplaintEmail($isOverCompatible)
     {
         if ($this->v["emailID"] <= 0) {
+            $com = $this->sessData->dataSets["complaints"][0];
             $defSet = 'Complaint Status';
-            switch ($this->sessData->dataSets["complaints"][0]->com_status) {
+            switch ($com->com_status) {
                 case $GLOBALS["SL"]->def->getID($defSet, 'Incomplete'):
                     $this->v["emailID"] = 36; // Incomplete Complaint Check-In
+                    break;
+                case $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'):
+                    if (isset($com->com_all_charges_resolved)
+                        && trim($com->com_all_charges_resolved) != 'Y') {
+                        $this->v["emailID"] = 22; // Lawyer, Charges
+                    } else {
+                        $this->v["emailID"] = 32; // Lawyer, No Charges
+                    }
                     break;
                 case $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'):
                     if ($isOverCompatible) {
@@ -351,7 +361,6 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         }
         $this->logComplaintReview('Update', $evalNotes, $status);
         $this->sessData->dataSets["complaints"][0]->save();
-//echo '<pre>'; print_r($this->sessData->dataSets["complaints"][0]); echo '</pre>'; exit;
         return true;
     }
     
@@ -488,7 +497,8 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
     protected function loadComplaintAdminHistory()
     {
         $allUserNames = [];
-        $reviews = OPzComplaintReviews::where('com_rev_complaint', '=', $this->coreID)
+        $reviews = OPzComplaintReviews::where('com_rev_complaint', 
+                '=', $this->coreID)
             ->where('com_rev_type', 'NOT LIKE', 'Draft')
             ->orderBy('com_rev_date', 'desc')
             ->get();
@@ -499,7 +509,9 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 }
                 $this->v["firstReview"] = false;
                 if (!isset($allUserNames[$r->com_rev_user])) {
-                    $allUserNames[$r->com_rev_user] = $this->printUserLnk($r->com_rev_user);
+                    $allUserNames[$r->com_rev_user] = $this->printUserLnk(
+                        $r->com_rev_user
+                    );
                 }
                 $desc = '<span class="slBlueDark">';
                 if (isset($r->com_rev_next_action) 
@@ -510,12 +522,13 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                     $desc .= $r->com_rev_status;
                 }
                 $desc .= '</span>';
+                $note = ((isset($r->com_rev_note)) ? trim($r->com_rev_note) : '');
                 $this->v["history"][] = [
                     "type" => 'Status', 
                     "date" => strtotime($r->com_rev_date), 
                     "desc" => $desc, 
                     "who"  => $allUserNames[$r->com_rev_user],
-                    "note" => ((isset($r->com_rev_note)) ? trim($r->com_rev_note) : '')
+                    "note" => $note
                 ];
             }
         }

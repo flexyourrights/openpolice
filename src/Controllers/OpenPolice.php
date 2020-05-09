@@ -133,8 +133,11 @@ class OpenPolice extends OpenInitExtras
             $this->saveComplaintAdmin();
             return $this->printComplaintAdmin();
         } elseif ($nID == 1713) {
-            $this->saveComplaintAdmin();
-            return $this->printComplaintOversight();
+            if ($this->chkOverUserHasCore()) { // Investigative Access
+                $this->saveComplaintAdmin();
+                return $this->printComplaintOversight();
+            }
+            return '<!-- no toolbox -->';
         } elseif ($nID == 1714) {
             $this->saveComplaintAdmin();
             return $this->printComplaintOwner();
@@ -158,7 +161,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportWhereLine($nID);
         } elseif ($nID == 1691) {
             return [
-                'Privacy Setting', 
+                'Publishing Settings', 
                 $this->getReportPrivacy($nID)
             ];
         } elseif ($nID == 1468) {
@@ -198,9 +201,12 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintSessPath();
         } elseif ($nID == 2632) {
             //$this->saveComplaintAdmin();
-        } elseif ($nID == 2633) {
+        //} elseif ($nID == 2633) {
+        } elseif ($nID == 1385) {
+            $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 
+                width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px; } ';
             $this->saveComplaintOversight();
-        } elseif ($nID == 2634) {
+        //} elseif ($nID == 2634) {
             $this->processOwnerUpdate();
         } elseif (in_array($nID, [2635, 2378])) {
             $GLOBALS["SL"]->x["needsWsyiwyg"] = $this->v["needsWsyiwyg"] = true;

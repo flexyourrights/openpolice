@@ -48,7 +48,9 @@
     @if (isset($o->over_way_sub_email) 
         && intVal($o->over_way_sub_email) == 1 
         && isset($o->over_email) 
-        && trim($o->over_email) != '')
+        && trim($o->over_email) != ''
+        && isset($o->over_official_form_not_req) 
+        && intVal($o->over_official_form_not_req) == 1)
         You can submit your complaint by emailing your investigative agency. 
         We recommend you include a link to your OpenPolice.org complaint 
         in your email.<br /><a href="mailto:{{ $o->over_email }}"

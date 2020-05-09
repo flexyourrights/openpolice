@@ -1,12 +1,8 @@
 <!-- resources/views/vendor/openpolice/dept-page-filing-instructs.blade.php -->
 
 <div class="nodeAnchor"><a name="how"></a></div>
-@if (isset($d["iaRow"]->over_official_form_not_req) 
-    && intVal($d["iaRow"]->over_official_form_not_req) == 1
-    && isset($d["iaRow"]->over_way_sub_email) 
-    && intVal($d["iaRow"]->over_way_sub_email) == 1
-    && isset($d[$d["whichOver"]]->over_email) 
-    && trim($d[$d["whichOver"]]->over_email) != '')
+@if (isset($d["deptRow"]->dept_op_compliant) 
+    && intVal($d["deptRow"]->dept_op_compliant) == 1)
     <div class="alert alert-success mT10" role="alert">
         <div class="d-md-none">
             <h5 class="mB0">
@@ -49,8 +45,9 @@
     @if (isset($d["iaRow"]->over_way_sub_paper_in_person) 
         && intVal($d["iaRow"]->over_way_sub_paper_in_person) == 1)
         <div class="alert alert-danger mT10" role="alert">
-            <i class="fa fa-frown-o mR5" aria-hidden="true"></i> 
-            This department only investigates complaints submitted in-person.
+            <i class="fa fa-thumbs-o-down mR5" aria-hidden="true"></i> 
+            This department only investigates complaints 
+            <nobr>submitted in-person.</nobr>
         </div>
     @endif
     <p>
@@ -88,16 +85,19 @@
     </p>
     @if (isset($d["civAddy"]) && trim($d["civAddy"]) != '')
         <p>
-            <a href="{{ $GLOBALS['SL']->mapsURL($d['civAddy']) }}" target="_blank"
-            ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
-            {!! $d["civAddy"] !!}</a>
+            <a href="{{ $GLOBALS['SL']->mapsURL($d['civAddy']) }}" 
+                target="_blank"
+                ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
+                {!! $d["civAddy"] !!}</a>
     @endif
 @else
-    <h2>Internal Affairs</h2>
+    <h2>{!! $d["deptRow"]->dept_name !!} Internal Affairs</h2>
     @if (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-        <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
-            ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
-            {!! $d["iaAddy"] !!}</a>
+        <p>
+            <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" 
+                target="_blank"
+                ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
+                {!! $d["iaAddy"] !!}</a>
     @else <p class="mTn5">
     @endif
 @endif
@@ -175,10 +175,14 @@
     && intVal($d["iaRow"]->over_way_sub_paper_in_person) == 1)
 
     <p>
-    This department only investigates complaints submitted in-person. Regardless, 
-    we recommend you print and send your paper complaint to the department by 
-    <a href="https://faq.usps.com/s/article/What-is-Certified-Mail" target="_blank"
-        ><b>USPS Certified Mail</b></a>. When you get confirmation of receipt, 
+    This department only investigates 
+    complaints submitted in-person. 
+    Regardless, we recommend you print and send 
+    your paper complaint to the department by 
+    <a href="https://faq.usps.com/s/article/What-is-Certified-Mail" 
+        target="_blank"
+        ><b>USPS Certified Mail</b></a>. 
+        When you get confirmation of receipt, 
         please login to your account to let us know.
     </p>
 
@@ -219,13 +223,16 @@
 @endif
 
 
-    
-@if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
-    <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
-    <h4>Internal Affairs Office</h4>
+@if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) 
+    && trim($d["iaAddy"]) != '')
+    <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"
+        ><hr></div>
+    <h4>{!! $d["deptRow"]->dept_name !!} Internal Affairs Office</h4>
     <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
-        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> {!! $d["iaAddy"] !!}</a></p>
-    @if (isset($d["iaRow"]->over_phone_work) && trim($d["iaRow"]->over_phone_work) != '')
+        ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
+        {!! $d["iaAddy"] !!}</a></p>
+    @if (isset($d["iaRow"]->over_phone_work) 
+        && trim($d["iaRow"]->over_phone_work) != '')
         <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->over_phone_work }}</p>
     @endif
 @endif
