@@ -83,7 +83,8 @@ DB_PASSWORD=secret
 
 You could do things like install Laravel's out-of-the-box user authentication tools, and push the vendor file copies where they need to be:
 ```
-$ php artisan make:auth
+$ composer require laravel/ui
+$ php artisan ui vue --auth
 $ echo "0" | php artisan vendor:publish --tag=laravel-notifications
 ```
 
@@ -97,8 +98,8 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "rockhopsoft/survloop": "^0.2.15",
-    "flexyourrights/openpolice": "^0.2.15",
+    "rockhopsoft/survloop": "^0.2.16",
+    "flexyourrights/openpolice": "^0.2.16",
     ...
 },
 ...
