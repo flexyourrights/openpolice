@@ -26,15 +26,16 @@
                 @endif
             </div>
             <div class="col-3">
+            @if (trim($dept->dept_verified) != '' 
+                && !in_array($dept->dept_verified, 
+                    ['0000-00-00 00:00:00', '2001-01-01 00:00:00']))
+                {{ date("n/j/y", strtotime($dept->dept_verified)) }}
                 {!! view('vendor.openpolice.volun.volunteer-recent-edits', [
                     "deptID" => $dept->dept_id
                 ])->render() !!}
-                @if (trim($dept->dept_verified) != '' 
-                    && !in_array($dept->dept_verified, ['0000-00-00 00:00:00', '2001-01-01 00:00:00']))
-                    {{ date("n/j/y", strtotime($dept->dept_verified)) }}
-                @else
-                    <span class="slGery">-</span>
-                @endif
+            @else
+                <span class="slGery">-</span>
+            @endif
             </div>
         </div></div>
         @endif

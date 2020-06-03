@@ -180,11 +180,19 @@
     Regardless, we recommend you print and send 
     your paper complaint to the department by 
     <a href="https://faq.usps.com/s/article/What-is-Certified-Mail" 
-        target="_blank"
-        ><b>USPS Certified Mail</b></a>. 
+        target="_blank"><b>USPS Certified Mail</b></a>. 
         When you get confirmation of receipt, 
         please login to your account to let us know.
     </p>
+
+@elseif ($d["editCnt"] == 0)
+    
+    <div class="alert alert-primary fade in alert-dismissible show" 
+        style="padding: 10px 15px; margin-bottom: 30px;">
+        We don't yet have information about this 
+        department's complaint policies and procedures. 
+        Please <a href="/volunteer">volunteer</a> to update this record.
+    </div>
 
 @else
 

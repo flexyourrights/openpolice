@@ -16,8 +16,8 @@ use App\Models\OPComplaints;
 use App\Models\OPzComplaintReviews;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPDepartments;
-use App\Models\OPZeditDepartments;
-use App\Models\OPZeditOversight;
+use App\Models\OPzEditDepartments;
+use App\Models\OPzEditOversight;
 use App\Models\OPzVolunStatDays;
 use App\Models\OPTesterBeta;
 use SurvLoop\Controllers\Stats\SurvTrends;
@@ -340,10 +340,10 @@ class OpenDashAdmin
         ];
         foreach ($statRanges as $i => $stat) {
             $this->v["statTots"][$i] = [ $stat[0] ];
-            $this->v["statTots"][$i][] = OPZeditDepartments::distinct('zed_dept_user_id')
+            $this->v["statTots"][$i][] = OPzEditDepartments::distinct('zed_dept_user_id')
                 ->where('zed_dept_dept_verified', '>', $stat[1])
                 ->count();
-            $this->v["statTots"][$i][] = OPZeditDepartments::select('zed_dept_id')
+            $this->v["statTots"][$i][] = OPzEditDepartments::select('zed_dept_id')
                 ->where('zed_dept_dept_verified', '>', $stat[1])
                 ->count();
             $overType = " `zed_over_over_type` LIKE '303'";
@@ -376,15 +376,15 @@ class OpenDashAdmin
     {
         $this->volunDeptsRecent();
         $deptEdits = [];
-        $recentEdits = OPZeditDepartments::take(100)
+        $recentEdits = OPzEditDepartments::take(100)
             ->orderBy('zed_dept_dept_verified', 'desc')
             ->get();
         if ($recentEdits->isNotEmpty()) {
             foreach ($recentEdits as $i => $edit) {
-                $iaEdit  = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                $iaEdit  = OPzEditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
                     ->where('zed_over_over_type', 303)
                     ->first();
-                $civEdit = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                $civEdit = OPzEditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
                     ->where('zed_over_over_type', 302)
                     ->first();
                 $userObj = User::find($edit->zed_dept_user_id);
@@ -498,7 +498,7 @@ class OpenDashAdmin
             }
         }
         
-        $edits  = OPZeditOversight::where('op_z_edit_oversight.zed_over_over_type', 303)
+        $edits  = OPzEditOversight::where('op_z_edit_oversight.zed_over_over_type', 303)
             ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
             ->where('op_z_edit_oversight.zed_over_over_verified', 
                 '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')

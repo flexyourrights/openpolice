@@ -113,7 +113,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
                 . $this->sessData->dataSets["compliments"][0]->compli_public_id;
         }
         $spin = $GLOBALS["SL"]->sysOpts["spinner-code"];
-        $this->restartSess($GLOBALS["SL"]->REQ);
+        //$this->restartSess($GLOBALS["SL"]->REQ);
         return '<br /><br /><center><h1>All Done!<br />'
             . 'Taking you to <a href="' . $url . '">your finished ' 
             . (($nID == 270) ? 'complaint' : 'compliment') 

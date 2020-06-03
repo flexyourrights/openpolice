@@ -1,7 +1,10 @@
 <!-- resources/views/vendor/openpolice/nodes/2713-dept-page-calls-action.blade.php -->
-<a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
-<?php /* href="/share-complaint-or-compliment/{{ $d['deptRow']->dept_slug }}" */ ?>
-    class="btn btn-primary btn-lg"
+<a class="btn btn-primary btn-lg"
+@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-']))
+    href="/filing-your-police-complaint/{{ $d['deptRow']->dept_slug }}"
+@else
+    href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
+@endif
     >File a Complaint or Compliment</a>
 <div class="pT15 mT10"></div>
 <style>

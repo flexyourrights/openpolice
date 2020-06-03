@@ -13,8 +13,8 @@ namespace OpenPolice\Controllers;
 use DB;
 use Auth;
 use App\Models\OPDepartments;
-use App\Models\OPZeditDepartments;
-use App\Models\OPZeditOversight;
+use App\Models\OPzEditDepartments;
+use App\Models\OPzEditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
 use OpenPolice\Controllers\OpenOfficers;
@@ -96,9 +96,9 @@ class OpenReport extends OpenOfficers
         }
         $deets .= '<h3 class="disNon">';
         if ($fullPrint) {
-            return $this->printReportDeetsBlock($why, $deets);
+            return $this->printReportDeetsBlock($why, $deets, $this->allNodes[$nID]);
         }
-        return $this->printReportDeetsBlockCols($why, $deets);
+        return $this->printReportDeetsBlockCols($why, $deets, 2, $this->allNodes[$nID]);
     }
 
     /**
@@ -225,12 +225,16 @@ class OpenReport extends OpenOfficers
     {
         $dept = $this->sessData->getRowById('departments', $deptID);
         if ($dept && isset($dept->dept_name)) {
+            $extra = '';
+            if ($dept->dept_name == 'Not sure about department') {
+                $extra = '<style> #repNode1467cyc0 { display: none; } </style>';
+            }
             return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug . '" class="slBlueDark">'
                 . 'Misconduct Incident Report for ' . $dept->dept_name . '</a></h3>'
                 . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
                 . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
                 . $this->printComplaintStatus($this->sessData->dataSets["complaints"][0]->com_status)
-                . '</b></div>';
+                . '</b></div>' . $extra;
         }
         $this->v["reportDepts"][] = $deptID;
         return '';
@@ -295,10 +299,10 @@ class OpenReport extends OpenOfficers
                 $date = date('n/j/Y', strtotime($inc->inc_time_start));
                 $timeStart = $timeEnd = '';
                 if ($inc->inc_time_end !== null) {
-                    $timeEnd = date('g:ia', strtotime($inc->inc_time_end));
+                    $timeEnd = date('g:i a', strtotime($inc->inc_time_end));
                 }
                 if ($inc->inc_time_start !== null) {
-                    $timeStart = date('g:ia', strtotime($inc->inc_time_start));
+                    $timeStart = date('g:i a', strtotime($inc->inc_time_start));
                     $date .= $this->printStartEndTimes($timeStart, $timeEnd);
                 }
             } else {
@@ -319,7 +323,7 @@ class OpenReport extends OpenOfficers
     {
         $ret = '';
         if ($timeStart != '' 
-            && ($timeStart != '12:00am' || $timeStart != $timeEnd)) {
+            && ($timeStart != '12:00 am' || $timeStart != $timeEnd)) {
             $ret .= ' <nobr>at ' . $timeStart . '</nobr>';
             if ($timeEnd != '' && $timeStart != $timeEnd) {
                 $ret .= ' <nobr>until ' . $timeEnd . '</nobr>';
@@ -723,6 +727,56 @@ class OpenReport extends OpenOfficers
         }
         return '';
     }
+
+    /**
+     * Print the Civilian name tied to this Use of Force.
+     *
+     * @return string
+     */
+    protected function getForceCivName()
+    {
+        $ret = '';
+        $forceID = $this->sessData->getLatestDataBranchID();
+        if ($forceID > 0
+            && isset($this->sessData->dataSets["links_civilian_force"])
+            && sizeof($this->sessData->dataSets["links_civilian_force"]) > 0) {
+            foreach ($this->sessData->dataSets["links_civilian_force"] as $lnk) {
+                if (isset($lnk->lnk_civ_frc_force_id)
+                    && $lnk->lnk_civ_frc_force_id == $forceID) {
+                    $ret .= ', ' . $this->getCivReportName($lnk->lnk_civ_frc_civ_id);
+                }
+            }
+            if ($ret != '') {
+                $ret = substr($ret, 1);
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Print the Officer name tied to this Use of Force.
+     *
+     * @return string
+     */
+    protected function getForceOffName()
+    {
+        $ret = '';
+        $forceID = $this->sessData->getLatestDataBranchID();
+        if ($forceID > 0
+            && isset($this->sessData->dataSets["links_officer_force"])
+            && sizeof($this->sessData->dataSets["links_officer_force"]) > 0) {
+            foreach ($this->sessData->dataSets["links_officer_force"] as $lnk) {
+                if (isset($lnk->lnk_off_frc_force_id)
+                    && $lnk->lnk_off_frc_force_id == $forceID) {
+                    $ret .= ', ' . $this->getOffReportName($lnk->lnk_off_frc_off_id);
+                }
+            }
+            if ($ret != '') {
+                $ret = substr($ret, 1);
+            }
+        }
+        return $ret;
+    }
     
     /**
      * Create a list of civilian information fields which are not to be printed
@@ -988,12 +1042,17 @@ class OpenReport extends OpenOfficers
      *
      * @param  int $nID
      * @param  string $val
+     * @param  App\Models\SLFields $fldRow
      * @return string
      */
-    protected function printValCustom($nID, $val)
+    protected function printValCustom($nID, $val, $fldRow)
     {
         if (in_array($nID, [1486, 1528])) {
             return $GLOBALS["SL"]->printHeight(intVal($val));
+        } elseif ($nID == 2834) {
+            return $this->getForceCivName();
+        } elseif ($nID == 2835) {
+            return $this->getForceOffName();
         }
         return $val;
     }

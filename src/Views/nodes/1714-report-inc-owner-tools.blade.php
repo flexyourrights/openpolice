@@ -253,7 +253,6 @@
         <input type="hidden" name="ajax" value="1">
         <input type="hidden" name="refresh" value="1">
         <input type="hidden" name="ownerUpdate" value="1">
-
         <p><hr></p>
         <h4>Update Your Complaint Status</h4>
         {!! view(
@@ -272,13 +271,9 @@
                 We will not make it public.
             </small>
         </div>
-        <center><input value="Save Status Changes" 
-            type="submit" class="btn btn-lg btn-primary"
-            onMouseOver="this.style.color='#2b3493';" 
-            onMouseOut="this.style.color='#FFF';"
-            style="color: #FFF;"></center>
+        <center><input value="Save Status Changes" id="ownBtn7"
+            type="button" class="btn btn-lg btn-primary"></center>
         <div class="p20"></div>
-
         </form>
     @endif
 
@@ -393,7 +388,7 @@
         return false;
     }
 
-    $("#stfBtn7").click(function() {
+    $("#ownBtn7").click(function() {
         postToolboxUpdateStatus();
     });
 

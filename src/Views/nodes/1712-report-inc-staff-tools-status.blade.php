@@ -18,8 +18,6 @@
 <input type="hidden" name="refresh" value="1">
 <input type="hidden" name="revType" value="Update">
 
-<h4>Update Complaint Status</h4>
-
 <div class="row mT15 mB10">
     <div class="col-md-8 col-sm-12">
         <div id="hidivlegitType" class="
@@ -111,38 +109,46 @@
 
 </form>
 
-<div id="docUploads" class="
-    @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
+
+@if (isset($complaintRec->com_type)
+    && in_array($GLOBALS["SL"]->def->getVal('Complaint Type', $complaintRec->com_type), 
+        ['Unreviewed', 'Police Complaint', 'Not Sure']))
+
+    <div id="docUploads" class="
+        @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
+        <div class="p20"> </div>
+    {!! view(
+        'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', 
+        [
+            "complaintRec"       => $complaintRec,
+            "reportUploadTypes"  => $reportUploadTypes,
+            "reportUploadFolder" => $reportUploadFolder
+        ]
+    )->render() !!}
+    </div>
+
     <div class="p20"> </div>
-{!! view(
-    'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', 
-    [
-        "complaintRec"       => $complaintRec,
-        "reportUploadTypes"  => $reportUploadTypes,
-        "reportUploadFolder" => $reportUploadFolder
-    ]
-)->render() !!}
-</div>
+    {!! view(
+        'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-dept', 
+        [
+            "complaintRec"  => $complaintRec,
+            "incidentState" => $incidentState
+        ]
+    )->render() !!}
 
-<div class="p20"> </div>
-{!! view(
-    'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-dept', 
-    [
-        "complaintRec"  => $complaintRec,
-        "incidentState" => $incidentState
-    ]
-)->render() !!}
+    <div class="pT20 mT20 pB20">
+        <a href="?refresh=2{{ $GLOBALS['SL']->getReqParams() }}"
+            class="btn btn-lg btn-secondary pull-left mR10"
+            ><i class="fa fa-refresh mR3" aria-hidden="true"></i> 
+            Refresh Report
+        </a>
+        <a href="/switch/1/{{ $complaintRec->com_id }}"
+            class="btn btn-lg btn-secondary pull-left mR10"
+            ><i class="fa fa-pencil mR3" aria-hidden="true"></i> 
+            Edit Complaint
+        </a>
+    </div>
 
-<div class="pT20 mT20 pB20">
-    <a href="?refresh=2{{ $GLOBALS['SL']->getReqParams() }}"
-        class="btn btn-lg btn-secondary pull-left mR10"
-        ><i class="fa fa-refresh mR3" aria-hidden="true"></i> 
-        Refresh Report
-    </a>
-    <a href="/switch/1/{{ $complaintRec->com_id }}"
-        class="btn btn-lg btn-secondary pull-left mR10"
-        ><i class="fa fa-pencil mR3" aria-hidden="true"></i> 
-        Edit Complaint
-    </a>
-</div>
+@endif
+
 <div class="p20"> </div>

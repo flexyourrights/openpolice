@@ -15,16 +15,18 @@ use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OPDepartments;
-use App\Models\OPZeditDepartments;
-use App\Models\OPZeditOversight;
+use App\Models\OPzEditDepartments;
+use App\Models\OPzEditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPLinksComplimentOversight;
+use SurvLoop\Controllers\PageLoadUtils;
+use OpenPolice\Controllers\OpenPolice;
 use OpenPolice\Controllers\DepartmentScores;
-use OpenPolice\Controllers\OpenListing;
+use OpenPolice\Controllers\OpenPolicePCIF;
 
-class OpenDepts extends OpenListing
+class OpenDepts extends OpenPolicePCIF
 {
     /**
      * Print ajax load of search results to select a police department.
@@ -250,19 +252,23 @@ class OpenDepts extends OpenListing
             "callIA"   => 0 
         ];
         
-        if (!isset($this->v["deptRow"]->dept_id) || intVal($this->v["deptRow"]->dept_id) <= 0) {
+        if (!isset($this->v["deptRow"]->dept_id) 
+            || intVal($this->v["deptRow"]->dept_id) <= 0) {
             return $this->redir('/dashboard/volunteer');
         }
         
-        $this->v["editsDept"] = OPZeditDepartments::where('zed_dept_dept_id', $this->v["deptRow"]->dept_id)
+        $this->v["editsDept"] = OPzEditDepartments::where(
+                'zed_dept_dept_id', $this->v["deptRow"]->dept_id)
             ->orderBy('zed_dept_dept_verified', 'desc')
             ->get();
         if ($this->v["editsDept"]->isNotEmpty()) {
             foreach ($this->v["editsDept"] as $i => $edit) {
-                $this->v["editsIA"][$i]  = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                $this->v["editsIA"][$i]  = OPzEditOversight::where(
+                        'zed_over_zed_dept_id', $edit->zed_dept_id)
                     ->where('zed_over_over_type', $this->overWhichDefID('IA'))
                     ->first();
-                $this->v["editsCiv"][$i] = OPZeditOversight::where('zed_over_zed_dept_id', $edit->zed_dept_id)
+                $this->v["editsCiv"][$i] = OPzEditOversight::where(
+                        'zed_over_zed_dept_id', $edit->zed_dept_id)
                     ->where('zed_over_over_type', $this->overWhichDefID('civ'))
                     ->first();
                 if ($this->v["editsIA"][$i]) {
@@ -280,9 +286,11 @@ class OpenDepts extends OpenListing
                     }
                 }
                 if (!isset($this->v["userNames"][$edit->zed_dept_user_id])) {
-                    $this->v["userNames"][$edit->zed_dept_user_id] = $this->printUserLnk($edit->zed_dept_user_id);
+                    $this->v["userNames"][$edit->zed_dept_user_id] 
+                        = $this->printUserLnk($edit->zed_dept_user_id);
                 }
                 if ($this->v["user"]->hasRole('administrator|staff')) {
+                    $type = $GLOBALS["SL"]->def->getVal('Department Types', $edit->dept_type);
                     $this->v["recentEdits"] .= view(
                         'vendor.openpolice.volun.admPrintDeptEdit', 
                         [
@@ -291,7 +299,7 @@ class OpenDepts extends OpenListing
                             "deptEdit" => $edit, 
                             "iaEdit"   => $this->v["editsIA"][$i], 
                             "civEdit"  => $this->v["editsCiv"][$i],
-                            "deptType" => $GLOBALS["SL"]->def->getVal('Department Types', $edit->dept_type)
+                            "deptType" => $type
                         ]
                     )->render();
                 }
@@ -594,7 +602,6 @@ class OpenDepts extends OpenListing
         );
         $over = $this->getOverRow('civ');
         if ($over && isset($over->over_id)) {
-            
             $this->sessData->createTblExtendFlds(
                 'oversight', 
                 $over->getKey(), 
@@ -717,6 +724,8 @@ class OpenDepts extends OpenListing
                     $addy = $GLOBALS["SL"]->printRowAddy($dept, 'Dept');
                     if (trim($addy) != '') {
                         list($lat, $lng) = $GLOBALS["SL"]->states->getLatLng($addy);
+                        $GLOBALS["SL"]->pageJAVA .= ' console.log("' 
+                            . $addy . ', ' . $lat . ', ' . $lng . '"); ';
                         $this->v["deptScores"]->scoreDepts[$i]->dept_address_lat = $lat;
                         $this->v["deptScores"]->scoreDepts[$i]->dept_address_lng = $lng;
                         $this->v["deptScores"]->scoreDepts[$i]->save();
@@ -807,14 +816,87 @@ class OpenDepts extends OpenListing
      */
     protected function printDeptOverPublicTop50s($nID)
     {
-
+        $biggest = [];
+        if ($this->v["deptScores"]->scoreDepts->isNotEmpty()) {
+            foreach ($this->v["deptScores"]->scoreDepts as $d => $dept) {
+                $biggest[] = [
+                    "id"        => $dept->dept_id,
+                    "ind"       => $d,
+                    "name"      => $dept->dept_name . ', ' . $dept->dept_address_state,
+                    "employees" => $dept->dept_tot_officers
+                ];
+            }
+        }
+        $nameSort = $biggest;
+        usort($biggest, function($a, $b) {
+            return $b["employees"] - $a["employees"];
+        });
+        usort($nameSort, function($a, $b) {
+            return $a["name"] <=> $b["name"];
+        });
+        $this->loadStateListings();
         return view(
             'vendor.openpolice.nodes.2804-depts-accessibility-overview-public', 
             [
                 "nID"        => $nID,
-                "deptScores" => $this->v["deptScores"]
+                "biggest"    => $biggest,
+                "nameSort"   => $nameSort,
+                "deptScores" => $this->v["deptScores"],
+                "stateLists" => $this->v["stateLists"],
+                "stateAvg"   => $this->v["stateAvg"],
+                "deptCnt"    => $this->v["deptCnt"]
             ]
         )->render();
+    }
+    
+    /**
+     * Prints the main public listing of 
+     * all departments within one state.
+     *
+     * @return string
+     */
+    protected function loadStateListings()
+    {
+        $this->v["stateLists"] = null;
+        $this->v["stateAvg"] = 0;
+        $this->v["deptCnt"] = OPDepartments::where('dept_name', 'NOT LIKE', '')
+            ->select('dept_id')
+            ->count();
+        if ($GLOBALS["SL"]->REQ->has('state')) {
+            $state = trim($GLOBALS["SL"]->REQ->get('state'));
+            if ($state != '') {
+                $fedDef = $GLOBALS["SL"]->def->getID(
+                    'Department Types',
+                    'Federal Law Enforcement'
+                );
+                if (trim($GLOBALS["SL"]->REQ->get('state')) == 'US') {
+                    $this->v["stateLists"] = OPDepartments::where('dept_type', $fedDef)
+                        ->orderBy('dept_name', 'asc')
+                        ->get();
+                } else {
+                    $this->v["stateLists"] = OPDepartments::where(
+                            'dept_type', 'NOT LIKE', $fedDef)
+                        ->where('dept_address_state', $state)
+                        ->orderBy('dept_name', 'asc')
+                        ->get();
+                }
+                if ($this->v["stateLists"]->isNotEmpty()) {
+                    $cnt = 0;
+                    foreach ($this->v["stateLists"] as $dept) {
+                        if (isset($dept->dept_score_openness)
+                            && isset($dept->dept_verified)
+                            && trim($dept->dept_verified) != '') {
+                            $this->v["stateAvg"] += intVal($dept->dept_score_openness);
+                            $cnt++;
+                        }
+                    }
+                    if ($cnt > 0) {
+                        $this->v["stateAvg"] = $this->v["stateAvg"]/$cnt;
+                    }
+                }
+            }
+        }
+        return true;
     }
     
     /**
@@ -1080,6 +1162,38 @@ class OpenDepts extends OpenListing
     }
     
     /**
+     * Log the session variable for this department submissions.
+     *
+     * @param  string $deptSlug
+     * @return boolean
+     */
+    public function logDeptSessTag($deptSlug = '')
+    {
+        $deptRow = OPDepartments::where('dept_slug', $deptSlug)
+            ->first();
+        if ($deptRow && isset($deptRow->dept_id)) {
+            session()->put('opcDeptID', $deptRow->dept_id);
+        }
+        return true;
+    }
+    
+    /**
+     * Loads the department's profile affiliate landing page to start
+     * the complaint process — from their slug in the page URL.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  string $deptSlug
+     * @return string
+     */
+    public function shareComplaintDept(Request $request, $deptSlug = '')
+    {
+        $url = '/filing-your-police-complaint/' . $deptSlug;
+        $this->loadPageVariation($request, 1, 7, $url);
+        $this->logDeptSessTag($deptSlug);
+        return $this->index($request);
+    }
+    
+    /**
      * Loads the department's profile affiliate landing page to start
      * the survey process — from their slug in the page URL.
      *
@@ -1091,11 +1205,7 @@ class OpenDepts extends OpenListing
     {
         $url = '/complaint-or-compliment/' . $deptSlug;
         $this->loadPageVariation($request, 1, 24, $url);
-        $deptRow = OPDepartments::where('dept_slug', $deptSlug)
-            ->first();
-        if ($deptRow && isset($deptRow->dept_id)) {
-            session()->put('opcDeptID', $deptRow->dept_id);
-        }
+        $this->logDeptSessTag($deptSlug);
         return $this->index($request);
     }
     
@@ -1114,29 +1224,43 @@ class OpenDepts extends OpenListing
             'Civilian Oversight'
         );
         if (!isset($this->v["currOverRow"])) {
-            $this->v["currOverRow"] = NULL;
+            $this->v["currOverRow"] = [];
+        }
+        if (!isset($this->v["currOverRow"][$deptID])) {
+            $this->v["currOverRow"][$deptID] = NULL;
             $overs = OPOversight::where('over_dept_id', $deptID)
                 ->orderBy('created_at', 'asc')
                 ->get();
             if ($overs->isNotEmpty()) {
                 if ($overs->count() == 1) {
-                    $this->v["currOverRow"] = $overs[0];
+                    $this->v["currOverRow"][$deptID] = $overs[0];
                 } else {
                     foreach ($overs as $i => $ovr) {
                         if ($ovr 
                             && isset($ovr->over_type) 
                             && $ovr->over_type == $civDef) {
-                            $this->v["currOverRow"] = $ovr;
+                            $this->v["currOverRow"][$deptID] = $ovr;
                         }
                     }
                 }
             }
         }
         if (!isset($this->v["currOverUpdateRow"])) {
-            $this->v["currOverUpdateRow"] = OPLinksComplaintOversight::where(
+            $this->v["currOverUpdateRow"] = [];
+        }
+        if (!isset($this->v["currOverUpdateRow"][$deptID])) {
+            $this->v["currOverUpdateRow"][$deptID] = OPLinksComplaintOversight::where(
                     'lnk_com_over_complaint_id', $this->coreID)
                 ->where('lnk_com_over_dept_id', $deptID)
                 ->first();
+            if (!$this->v["currOverUpdateRow"][$deptID]
+                || !isset($this->v["currOverUpdateRow"][$deptID]->lnk_com_over_id)) {
+                $lnk = new OPLinksComplaintOversight;
+                $lnk->lnk_com_over_complaint_id = $this->coreID;
+                $lnk->lnk_com_over_dept_id = $deptID;
+                $lnk->save();
+                $this->v["currOverUpdateRow"][$deptID] = $lnk;
+            }
         }
         return $this->v["currOverUpdateRow"];
     }
@@ -1225,5 +1349,21 @@ class OpenDepts extends OpenListing
         }
         return [];
     }
+
+    /**
+     * Executes standard XML generations for department export.
+     *
+     * @return string
+     */
+    public function apiDeptAllXml(Request $request)
+    {
+        $load = new PageLoadUtils;
+        $load->syncDataTrees($request, 1, 36);
+        $custLoop = new OpenPolice($request, -3, 1, 36, true);
+        return $custLoop->xmlAll($request);
+    }
+    
+    
+
     
 }

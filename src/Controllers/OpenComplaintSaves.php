@@ -106,7 +106,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
             $date = '0000-00-00';
         }
         $time = $this->postFormTimeStr($curr->nID);
-        if ($time === null) {
+        if ($time === null || strlen($time) != 8) {
             $date .= ' 00:00:00';
         } else {
             $date .= ' ' . $time;

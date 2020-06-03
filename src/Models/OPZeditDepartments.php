@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPZEditDepartments extends Model
+class OPzEditDepartments extends Model
 {
     protected $table      = 'op_z_edit_departments';
     protected $primaryKey = 'zed_dept_id';
@@ -39,6 +39,7 @@ class OPZEditDepartments extends Model
 		'zed_dept_dept_is_mobile', 
 		'zed_dept_dept_address_lat', 
 		'zed_dept_dept_address_lng', 
+		'zed_dept_dept_op_compliant',
     ];
     
     // END SurvLoop auto-generated portion of Model

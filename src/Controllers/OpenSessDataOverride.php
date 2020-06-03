@@ -60,9 +60,11 @@ class OpenSessDataOverride extends OpenComplaintPrints
             }
         } elseif ($nID == 671) { // Officers Used Profanity?
             $currVals = [];
-            foreach ($this->sessData->dataSets["officers"] as $i => $off) {
-                if (isset($off->off_used_profanity) && $off->off_used_profanity == 'Y') {
-                    $currVals[] = $off->getKey();
+            if (isset($this->sessData->dataSets["officers"])) {
+                foreach ($this->sessData->dataSets["officers"] as $i => $off) {
+                    if (isset($off->off_used_profanity) && $off->off_used_profanity == 'Y') {
+                        $currVals[] = $off->getKey();
+                    }
                 }
             }
             return [';' . implode(';', $currVals) . ';'];
@@ -199,7 +201,7 @@ class OpenSessDataOverride extends OpenComplaintPrints
         }
         if (isset($this->v["overRowIA"]->over_way_sub_notary) 
             && intVal($this->v["overRowIA"]->over_way_sub_notary) > 0) {
-            $sessData[] = 'way_sub_notary';
+            $sessData[] = 'notary';
         }
         if (isset($this->v["overRowIA"]->over_submit_deadline) 
             && intVal($this->v["overRowIA"]->over_submit_deadline) > 0) {

@@ -595,8 +595,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             $status = $GLOBALS["SL"]->def->getVal('Complaint Status', $status);
             $this->logComplaintReview('Staff', $evalNotes, $status);
             $this->fixDeptsClean();
-            $redir = '/complaint/read-' . $this->corePublicID 
-                . '?refresh=1' . $GLOBALS['SL']->getReqParams();
+            $redir = '/dash/complaint/read-' . $this->corePublicID . '?refresh=1';
             $this->redir($redir, true);
             exit;
         }

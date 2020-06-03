@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/2234-beta-listing.blade.php -->
 <div class="row">
     <div class="col-md-8">
-        <h2>Beta Tester Signups</h2>
+        <a href="/dash/beta-test-signups"><h2>Beta Tester Signups</h2></a>
         <p>
             Below are the users who have signed up so far. 
             <a href="#stats" class="hsho">Stats Below</a>

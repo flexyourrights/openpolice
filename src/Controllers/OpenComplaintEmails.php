@@ -23,7 +23,8 @@ class OpenComplaintEmails extends OpenPoliceEvents
     protected function postContactEmail($nID)
     {
         $this->postNodeLoadEmail($nID);
-        if ($GLOBALS["SL"]->REQ->has('n831fld') && trim($GLOBALS["SL"]->REQ->n831fld) != '') {
+        if ($GLOBALS["SL"]->REQ->has('n831fld') 
+            && trim($GLOBALS["SL"]->REQ->n831fld) != '') {
             return true;
         }
         $emaSubject = $this->postDumpFormEmailSubject();
@@ -85,7 +86,8 @@ class OpenComplaintEmails extends OpenPoliceEvents
             }
             return $ret;
         }
-        return $GLOBALS["SL"]->sysOpts["site-name"] . ': ' . $GLOBALS["SL"]->treeRow->tree_name;
+        return $GLOBALS["SL"]->sysOpts["site-name"] . ': ' 
+            . $GLOBALS["SL"]->treeRow->tree_name;
     }
     
     protected function processTokenAccessRedirExtra()
@@ -633,17 +635,15 @@ class OpenComplaintEmails extends OpenPoliceEvents
             ->where('lnk_com_over_dept_id', $deptRow->dept_id)
             //->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
             ->first();
-        /*
-        if (!$this->v["comDepts"][$cnt]["overDates"] 
+        /* if (!$this->v["comDepts"][$cnt]["overDates"] 
             || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_dept_id)) {
             $lnk = new OPLinksComplaintOversight;
             $lnk->lnk_com_over_complaint_id = $this->coreID;
             $lnk->lnk_com_over_dept_id      = $deptRow->dept_id;
             $lnk->lnk_com_over_over_id      = $this->v["comDepts"][0][$w]->over_id;
+            $lnk->save();
             $this->v["comDepts"][$cnt]["overDates"] = $lnk;
-            $this->v["comDepts"][$cnt]["overDates"]->save();
-        }
-        */
+        } */
         return true;
     }
     

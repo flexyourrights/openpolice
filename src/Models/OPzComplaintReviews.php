@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPZComplaintReviews extends Model
+class OPzComplaintReviews extends Model
 {
     protected $table      = 'op_z_complaint_reviews';
     protected $primaryKey = 'com_rev_id';

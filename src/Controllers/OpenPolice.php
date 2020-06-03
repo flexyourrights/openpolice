@@ -139,6 +139,7 @@ class OpenPolice extends OpenInitExtras
             }
             return '<!-- no toolbox -->';
         } elseif ($nID == 1714) {
+            $this->processOwnerUpdate();
             $this->saveComplaintAdmin();
             return $this->printComplaintOwner();
         } elseif ($nID == 1780) {

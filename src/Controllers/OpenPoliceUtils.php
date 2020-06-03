@@ -252,6 +252,7 @@ class OpenPoliceUtils extends OpenPoliceVars
             $coreTbl = $GLOBALS["SL"]->coreTbl;
         }
         $this->allPublicCoreIDs = $list = [];
+        $list = null;
         if ($coreTbl == 'complaints') {
             $list = OPComplaints::whereIn('com_status', 
                     $this->getPublishedStatusList($coreTbl))
@@ -267,7 +268,7 @@ class OpenPoliceUtils extends OpenPoliceVars
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
-        if ($list->isNotEmpty()) {
+        if ($list && $list->isNotEmpty()) {
             foreach ($list as $l) {
                 $this->allPublicCoreIDs[] = $l->com_public_id;
             }
@@ -337,13 +338,8 @@ class OpenPoliceUtils extends OpenPoliceVars
         return 0;
     }
     
-    protected function canPrintFullReportByRecSettings($com = null)
+    protected function canPrintOfficersName($com = null)
     {
-        if ( (!$com || $com === null)
-            && isset($this->sessData->dataSets["complaints"]) 
-            && isset($this->sessData->dataSets["complaints"][0]) ) {
-            $com = $this->sessData->dataSets["complaints"][0];
-        }
         $printOff = false;
         if (!isset($this->sessData->dataSets["officers"])
             || sizeof($this->sessData->dataSets["officers"]) == 0) {
@@ -352,9 +348,29 @@ class OpenPoliceUtils extends OpenPoliceVars
             && intVal($com->com_publish_officer_name) == 1) {
             $printOff = true;
         }
+        return $printOff;
+    }
+    
+    protected function canPrintComplainantName($com = null)
+    {
         return (isset($com->com_publish_user_name)
-            && intVal($com->com_publish_user_name) == 1
-            && $printOff);
+            && intVal($com->com_publish_user_name) == 1);
+    }
+    
+    protected function canPrintFullReportByRecSettings($com = null)
+    {
+        if ( (!$com || $com === null)
+            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"][0]) ) {
+            $com = $this->sessData->dataSets["complaints"][0];
+        }
+        return ($this->canPrintComplainantName($com)
+            && $this->canPrintOfficersName($com));
+    }
+    
+    protected function corePublishStatuses($com = null)
+    {
+        return in_array($com->com_status, [200, 201, 203, 204]);
     }
     
     protected function canPrintFullReportByRecordSpecs($com = null)
@@ -364,7 +380,7 @@ class OpenPoliceUtils extends OpenPoliceVars
             && isset($this->sessData->dataSets["complaints"][0]) ) {
             $com = $this->sessData->dataSets["complaints"][0];
         }
-        return (in_array($com->com_status, [200, 201, 203, 204])
+        return ($this->corePublishStatuses($com)
             && $this->canPrintFullReportByRecSettings($com));
     }
     
@@ -404,6 +420,11 @@ class OpenPoliceUtils extends OpenPoliceVars
             if (isset($this->sessData->dataSets["civilians"]) 
                 && $this->v["uID"] == $this->sessData->dataSets["civilians"][0]->civ_user_id) {
                 //$this->v["isOwner"] = true;
+                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) {
+                    $GLOBALS["SL"]->pageView = 'full';
+                }
+            } elseif (isset($this->sessData->dataSets["complaints"]) 
+                && $this->v["uID"] == $this->sessData->dataSets["complaints"][0]->com_user_id) {
                 if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) {
                     $GLOBALS["SL"]->pageView = 'full';
                 }

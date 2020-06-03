@@ -15,7 +15,7 @@
 <script type="text/javascript">
 function fillResultCnt() {
     document.getElementById("searchFoundCnt").innerHTML={!! 
-        json_encode($complaintFiltDescPrev)
+        json_encode('<nobr>' . $complaintFiltDescPrev . '</nobr>')
     !!};
     return true;
 }

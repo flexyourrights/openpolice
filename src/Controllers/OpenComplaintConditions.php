@@ -557,6 +557,22 @@ class OpenComplaintConditions extends OpenSessDataOverride
     }
 
     /**
+     * Checks whether or not the incident record indicates 
+     * that the location should be printed.
+     *
+     * @return int
+     */
+    protected function canPrintIncidentLocation()
+    {
+        return (isset($this->sessData->dataSets["incidents"]) 
+            && isset($this->sessData->dataSets["incidents"][0])
+            && isset($this->sessData->dataSets["incidents"][0]->inc_public)
+            && intVal($this->sessData->dataSets["incidents"][0]->inc_public) == 1
+            && in_array($this->sessData->dataSets["complaints"][0]->com_status, 
+                [200, 201, 202, 203, 204]));
+    }
+
+    /**
      * Checks whether or not the incident location
      * should be printed for the current page load.
      *
@@ -564,10 +580,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintIncidentLocation()
     {
-        if (isset($this->sessData->dataSets["incidents"]) 
-            && isset($this->sessData->dataSets["incidents"][0])
-            && isset($this->sessData->dataSets["incidents"][0]->inc_public)
-            && intVal($this->sessData->dataSets["incidents"][0]->inc_public) == 1) {
+        if ($this->canPrintIncidentLocation()) {
             return 1;
         }
         if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])

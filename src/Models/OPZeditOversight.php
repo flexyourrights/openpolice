@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPZEditOversight extends Model
+class OPzEditOversight extends Model
 {
     protected $table      = 'op_z_edit_oversight';
     protected $primaryKey = 'zed_over_id';

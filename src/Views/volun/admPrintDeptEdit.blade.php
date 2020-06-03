@@ -4,7 +4,7 @@
 
     <tr>
     <td class="pT10 pB20">
-    <b>{{ date("n/j/y g:ia", strtotime($deptEdit->zed_dept_dept_verified)) }}</b><br />
+    <b>{{ date("n/j/y g:i a", strtotime($deptEdit->zed_dept_dept_verified)) }}</b><br />
     <span class="slGrey"><i>by</i></span> {!! $user !!}<br />
     <br />
     <span class="slGrey"><i>took</i></span> {{ 

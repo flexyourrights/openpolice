@@ -5,7 +5,10 @@
         <div class="alert alert-warning" role="alert">
             <p><b>No police departments found by searching 
             <span class="slBlueDark">"{{ $search }}"</span> in 
-            <span class="slBlueDark">{{ $stateName }}</span>. 
+            <span class="slBlueDark">{{ 
+                ((trim($stateName) != '') ? $stateName
+                    : 'Federal Law Enforcement')
+            }}</span>. 
             Please type something else in the search bar above.</b></p>
         </div>
     </div>

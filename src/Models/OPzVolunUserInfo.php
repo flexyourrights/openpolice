@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPZVolunUserInfo extends Model
+class OPzVolunUserInfo extends Model
 {
     protected $table      = 'op_z_volun_user_info';
     protected $primaryKey = 'user_info_id';

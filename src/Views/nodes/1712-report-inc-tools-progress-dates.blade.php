@@ -2,7 +2,8 @@
 
 @if (isset($comDepts) && sizeof($comDepts) > 0)
     @foreach ($comDepts as $c => $dept)
-        @if (isset($dept["deptRow"]) && isset($dept["deptRow"]->dept_name))
+        @if (isset($dept["deptRow"]) 
+            && isset($dept["deptRow"]->dept_name))
             @if ($c > 0) <p><hr></p> @endif
             <p><b>Progress with the {!! 
                 str_replace("Police Department", "PD", 

@@ -33,6 +33,8 @@
     @endif
 @endif
 
-<div class=".d-none .d-lg-block .d-xl-none">
-    <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
-</div>
+@if ($d["editCnt"] > 0)
+    <div class=".d-none .d-lg-block .d-xl-none">
+        <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
+    </div>
+@endif

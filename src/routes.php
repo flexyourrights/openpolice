@@ -23,7 +23,15 @@ Route::group(['middleware' => ['web']], function () {
         'OpenPolice\Controllers\OpenPolice@deptPage'
     );
     Route::get(
+        '/filing-your-police-complaint/{deptSlug}',
+        'OpenPolice\Controllers\OpenPolice@shareComplaintDept'
+    );
+    Route::get(
         '/complaint-or-compliment/{deptSlug}',
+        'OpenPolice\Controllers\OpenPolice@shareStoryDept'
+    );
+    Route::get(
+        '/share-complaint-or-compliment/{deptSlug}',
         'OpenPolice\Controllers\OpenPolice@shareStoryDept'
     );
     
@@ -44,6 +52,33 @@ Route::group(['middleware' => ['web']], function () {
         '/prepare-complaint-for-org/{prtnSlug}', 
         'OpenPolice\Controllers\OpenPolice@shareStoryOrg'
     );
+
+    Route::get(
+        '/api/dept-all-xml', 
+        'OpenPolice\Controllers\OpenPolice@apiDeptAllXml'
+    );
+
+    Route::get(
+        '/api/complaints-pcif-schema', 
+        'OpenPolice\Controllers\OpenPolice@printPcifSchema'
+    );
+    Route::get(
+        '/api/complaints-pcif-schema-xml', 
+        'OpenPolice\Controllers\OpenPolice@printPcifSchemaXml'
+    );
+    Route::get(
+        '/api/complaints-pcif-example-xml', 
+        'OpenPolice\Controllers\OpenPolice@printPcifExample'
+    );
+    Route::get(
+        '/api/complaints-pcif-xml', 
+        'OpenPolice\Controllers\OpenPolice@printPcifAll'
+    );
+    Route::get(
+        '/api/complaints-pcif-xml/{cid}', 
+        'OpenPolice\Controllers\OpenPolice@printPcifOne'
+    );
+
     
 });    
 

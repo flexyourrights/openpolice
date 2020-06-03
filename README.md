@@ -54,7 +54,7 @@ XML included an automatically generated schema, eg.<br />
 
 * php: >=7.2.5
 * <a href="https://packagist.org/packages/laravel/laravel" target="_blank">laravel/laravel</a>: 7.6.*
-* <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: >=0.2.15
+* <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: >=0.2.16
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">flexyourrights/openpolice-departments</a>: 0.1.*
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-website" target="_blank">flexyourrights/openpolice-website</a>: 0.1.*
 
@@ -81,7 +81,7 @@ DB_USERNAME=homestead
 DB_PASSWORD=secret
 ```
 
-You could do things like install Laravel's out-of-the-box user authentication tools, and push the vendor file copies where they need to be:
+Next, install Laravel's out-of-the-box user authentication tools, and push the vendor file copies where they need to be:
 ```
 $ composer require laravel/ui
 $ php artisan ui vue --auth
@@ -98,7 +98,7 @@ $ nano composer.json
 ...
 "require": {
     ...
-    "rockhopsoft/survloop": "^0.2.16",
+    "rockhopsoft/survloop": "^0.2.4",
     "flexyourrights/openpolice": "^0.2.16",
     ...
 },

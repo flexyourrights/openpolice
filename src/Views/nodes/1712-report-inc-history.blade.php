@@ -11,7 +11,7 @@
             @if (trim($h["desc"]) != '') <br /> @endif
             {!! str_replace("\n", "<br />", $h["note"]) !!}
         @endif
-        <br />{{ date("n/j/y g:ia", $h["date"]) }} by {!! $h["who"] !!}
+        <br />{{ date("n/j/y g:i a", $h["date"]) }} by {!! $h["who"] !!}
         </p>
     @endforeach
 @else

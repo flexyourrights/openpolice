@@ -4,7 +4,10 @@
 
 @if (isset($complaintRec->com_status)
     && $GLOBALS["SL"]->def->getVal('Complaint Status', $complaintRec->com_status) 
-        != 'Incomplete')
+        != 'Incomplete'
+    && isset($complaintRec->com_type)
+    && in_array($GLOBALS["SL"]->def->getVal('Complaint Type', $complaintRec->com_type), 
+        ['Unreviewed', 'Police Complaint', 'Not Sure']))
 
     <div class="brdTopGrey" style="padding: 15px 0px 15px 0px;"> 
         {!! view(
@@ -15,8 +18,7 @@
 
 @endif
 
-@if (!isset($complaintRec->com_status) 
-    || intVal($complaintRec->com_status) <= 0)
+@if (!isset($complaintRec->com_status) || intVal($complaintRec->com_status) <= 0)
     
     Complaint status not loading correctly.
 
@@ -43,27 +45,11 @@
 
         <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
         {!! $GLOBALS["SL"]->printAccordian(
-            'Complaint History',
-            view(
-                'vendor.openpolice.nodes.1712-report-inc-history', 
-                [ "history" => $history ]
-            )->render(),
-            (($view == 'history' 
-                || ($GLOBALS["SL"]->REQ->has('view') 
-                    && $GLOBALS["SL"]->REQ->view == 'history'))
-                ? true : false),
-            false,
-            'text'
-        ) !!}
-        </div>
-
-        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
-        {!! $GLOBALS["SL"]->printAccordian(
             (($firstRevDone 
                 || ($GLOBALS["SL"]->REQ->has('open') 
                     && $GLOBALS["SL"]->REQ->open == 'status')) 
-                ? 'Next, Update Complaint Status' 
-                : 'Update Complaint Status'),
+                ? '<b>Next, Update Complaint Status</b>' 
+                : '<b>Update Complaint Status</b>'),
             view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools-status', 
                 [
@@ -80,20 +66,21 @@
                     "incidentState"      => $incidentState
                 ]
             )->render(),
-            (($firstRevDone 
+            false,
+            false,
+            'text'
+        ) !!}
+        <?php /* (($firstRevDone 
                 || $GLOBALS['SL']->def->getVal('Complaint Status', $complaintRec->com_status)
                     == 'New'
                 || ($GLOBALS["SL"]->REQ->has('open') 
                     && $GLOBALS["SL"]->REQ->open == 'status'))
-                ? true : false),
-            false,
-            'text'
-        ) !!}
+                ? true : false) */ ?>
         </div>
 
         <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
         {!! $GLOBALS["SL"]->printAccordian(
-            'Send Email',
+            '<b>Send Email</b>',
             view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools-email', 
                 [
@@ -106,7 +93,24 @@
                     "reportUploadFolder" => $reportUploadFolder
                 ]
             )->render(),
-            (($emailID > 0) ? true : false),
+            false,
+            false,
+            'text'
+        ) !!}
+        <?php /* (($emailID > 0) ? true : false), */ ?>
+        </div>
+
+        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        {!! $GLOBALS["SL"]->printAccordian(
+            '<b>Complaint History</b>',
+            view(
+                'vendor.openpolice.nodes.1712-report-inc-history', 
+                [ "history" => $history ]
+            )->render(),
+            (($view == 'history' 
+                || ($GLOBALS["SL"]->REQ->has('view') 
+                    && $GLOBALS["SL"]->REQ->view == 'history'))
+                ? true : false),
             false,
             'text'
         ) !!}
@@ -116,6 +120,9 @@
         
 @endif
 
+<style>
+#blockWrap2336 { display: none; }
+</style>
 
 <script type="text/javascript"> $(document).ready(function(){
 

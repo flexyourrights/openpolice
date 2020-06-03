@@ -201,11 +201,6 @@ class OpenPoliceAdminMenu extends AdminMenu
     {
         $treeMenu = [];
         $treeMenu[] = $this->addAdmMenuCollapse();
-        $treeMenu[] = $this->admMenuLnk(
-            '/dash/volunteer', 
-            'Dashboard', 
-            '<i class="fa fa-home"></i>'
-        );
         $stars = '';
         if (isset($GLOBALS["SL"]->x["yourUserInfo"]) 
             && isset($GLOBALS["SL"]->x["yourUserInfo"]->UserInfoStars)) {

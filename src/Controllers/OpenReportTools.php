@@ -128,11 +128,15 @@ class OpenReportTools extends OpenReport
             'Declined To Investigate (Closed)', 
             'Investigated (Closed)'
         ];
+        $offCnt = 0;
+        if (isset($this->sessData->dataSets["officers"])) {
+            $offCnt = sizeof($this->sessData->dataSets["officers"]);
+        }
         return view(
             'vendor.openpolice.inc-static-privacy-page', 
             [
                 "complaint"  => $this->sessData->dataSets["complaints"][0],
-                "offCnt"     => sizeof($this->sessData->dataSets["officers"]),
+                "offCnt"     => $offCnt,
                 "twoOptions" => in_array($status, $tooLateForAnon)
             ]
         )->render();
@@ -217,7 +221,8 @@ class OpenReportTools extends OpenReport
         $evalNotes .= $this->processComplaintOwnerStatus();
 
         $this->logComplaintReview('Owner', $evalNotes, $GLOBALS["SL"]->REQ->overStatus);
-        if ($GLOBALS["SL"]->REQ->has('overStatus')) {
+        if ($GLOBALS["SL"]->REQ->has('overStatus')
+            && trim($GLOBALS["SL"]->REQ->overStatus) != '') {
             $defSet = 'Complaint Status';
             $okdDef = $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight');
             $subDef = $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight');
@@ -314,24 +319,29 @@ class OpenReportTools extends OpenReport
                             $newDate = $GLOBALS["SL"]->dateToTime($newDate);
                         }
                         if ($oldDate != $newDate) {
-                            if (intVal($newDate) > 0) {
-                                $this->v["comDepts"][$c]["overDates"]->update([
-                                    $dbFld => date("Y-m-d", $newDate) . ' 00:00:00'
-                                ]);
+                            if (!isset($this->v["comDepts"][$c]["overDates"]->lnk_com_over_dept_id)) {
+                                $evalNotes .= '<br />Failed to save update on department #'
+                                    . $dept["id"] . '.<br />';
                             } else {
-                                $this->v["comDepts"][$c]["overDates"]->update([
-                                    $dbFld => NULL
-                                ]);
+                                if (intVal($newDate) > 0) {
+                                    $this->v["comDepts"][$c]["overDates"]->update([
+                                        $dbFld => date("Y-m-d", $newDate) . ' 00:00:00'
+                                    ]);
+                                } else {
+                                    $this->v["comDepts"][$c]["overDates"]->update([
+                                        $dbFld => NULL
+                                    ]);
+                                }
+                                $evalNotes .= view(
+                                    'vendor.openpolice.nodes.1712-report-inc-date-eval-note', 
+                                    [
+                                        "deptName"  => $dept["deptRow"]->dept_name,
+                                        "dateLabel" => $this->v["oversightDateLookups"][$d][1],
+                                        "oldDate"   => $oldDate,
+                                        "newDate"   => $newDate
+                                    ]
+                                )->render();
                             }
-                            $evalNotes .= view(
-                                'vendor.openpolice.nodes.1712-report-inc-date-eval-note', 
-                                [
-                                    "deptName"  => $dept["deptRow"]->dept_name,
-                                    "dateLabel" => $this->v["oversightDateLookups"][$d][1],
-                                    "oldDate"   => $oldDate,
-                                    "newDate"   => $newDate
-                                ]
-                            )->render();
                         }
                     }
                 }

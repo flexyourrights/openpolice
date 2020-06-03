@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class OPZVolunStatDays extends Model
+class OPzVolunStatDays extends Model
 {
     protected $table      = 'op_z_volun_stat_days';
     protected $primaryKey = 'volun_stat_id';

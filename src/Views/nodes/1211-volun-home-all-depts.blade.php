@@ -20,15 +20,20 @@
 <div class="row mB10">
     <div class="col-6">
         <i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Sort by<br />
-        <select name="deptSort" id="deptSortID" class="form-control slTab" {!! $GLOBALS["SL"]->tabInd() !!}
+        <select name="deptSort" id="deptSortID" 
+            class="form-control slTab" {!! $GLOBALS["SL"]->tabInd() !!}
             onChange="return runVolunDeptSearch();">
-            <option value="recent" @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
+            <option value="recent" 
+                @if (!isset($viewType) || $viewType == 'recent') SELECTED @endif 
                 >Recently Verified</option>
-            <option value="best" @if (isset($viewType) && $viewType == 'best') SELECTED @endif 
+            <option value="best" 
+                @if (isset($viewType) && $viewType == 'best') SELECTED @endif 
                 >Best Departments</option>
-            <option value="name" @if (isset($viewType) && $viewType == 'name') SELECTED @endif 
+            <option value="name" 
+                @if (isset($viewType) && $viewType == 'name') SELECTED @endif 
                 >Department Name</option>
-            <option value="city" @if (isset($viewType) && $viewType == 'city') SELECTED @endif 
+            <option value="city" 
+                @if (isset($viewType) && $viewType == 'city') SELECTED @endif 
                 >State, City</option>
         </select>
     </div><div class="col-6">
@@ -38,7 +43,7 @@
     </div>
 </div>
 
-@if (sizeof($deptPriorityRows) > 0)
+@if (sizeof($deptRows) > 0)
     {!! view(
         'vendor.openpolice.volun.dept-rows', 
         [ "deptRows" => $deptRows ]
@@ -52,8 +57,11 @@
     Need to add a new police department to the database?</h3></a>
 <div id="hidivNewDept" class="disNon pT20 pB20">
     <div class="alert alert-danger" role="alert">
-        <b>Before adding a department, please search for ALL each words within the department name one at a time. 
-        Also make sure you are searching in the right state.</b>
+        <b>
+            Before adding a department, please search for
+            EACH word within the department name one at a time. 
+            Also make sure you are searching in the right state.
+        </b>
     </div>
     </form>
     <form name="volunAddNewDept" action="/dash/volunteer?newDept=1" 
