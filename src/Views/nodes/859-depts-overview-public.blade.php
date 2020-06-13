@@ -26,7 +26,7 @@
             <div class="row mT5 mB10">
                 <div class="col-3">
                     <select id="deptStateDrop" class="form-control" 
-                        onChange="window.location='/department-accessibility?state='+this.value;">
+                        onChange="window.location='/departments?states='+this.value;">
                     {!! $GLOBALS["SL"]->states->stateDrop($state, true) !!}
                     </select>
                 </div>

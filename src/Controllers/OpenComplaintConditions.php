@@ -99,6 +99,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#CanEditUploads') {
             return $this->complaintCanEditUploads();
 
+        } elseif ($condition == '#NotSureAboutDepartment') {
+            return $this->condNotSureAboutDepartment();
+
         } elseif ($condition == '#PrintAnonOnly') {
             return $this->condPrintAnonOnly($complaint);
 
@@ -537,10 +540,6 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condPrintAnonOnly($complaint)
     {
         $unPub = $this->getUnPublishedStatusList();
-        $unPub[] = $GLOBALS["SL"]->def->getID(
-            'Complaint Status', 
-            'OK to Submit to Oversight'
-        );
         $types = [ 'public', 'pdf' ];
         if (isset($GLOBALS["SL"]->pageView) 
             && in_array($GLOBALS["SL"]->pageView, $types)
@@ -796,5 +795,26 @@ class OpenComplaintConditions extends OpenSessDataOverride
         }
         return 0;
     }
+    
+    /**
+     * Checks whether or not this complainant is unsure 
+     * about one or more department involved in this incident.
+     *
+     * @return int
+     */
+    protected function condNotSureAboutDepartment()
+    {
+        if (isset($this->sessData->dataSets["departments"]) 
+            && sizeof($this->sessData->dataSets["departments"]) > 0) {
+            foreach ($this->sessData->dataSets["departments"] as $dept) {
+                if (isset($dept->dept_name)
+                    && strpos($dept->dept_name, 'Not sure') !== false) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
 
 }

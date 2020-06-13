@@ -429,6 +429,7 @@ class DepartmentScores
         if ($deptID > 0 && !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
             $d = [ "id" => $deptID ];
             $d["deptRow"] = OPDepartments::find($deptID);
+            $d["deptAbbr"] = '';
             $d["iaRow"] = OPOversight::where('over_dept_id', $deptID)
                 ->where('over_type', $GLOBALS["SL"]->x["defOverIA"])
                 ->first();
@@ -490,6 +491,15 @@ class DepartmentScores
                             . ', ' . $d["civRow"]->over_address_state 
                             . ' ' . $d["civRow"]->over_address_zip;
                     }
+                }
+                $paren1 = strpos($d["deptRow"]->dept_name, '(');
+                if ($paren1 > 0) {
+                    $paren2 = strpos($d["deptRow"]->dept_name, ')', $paren1);
+                    $d["deptAbbr"] = substr(
+                        $d["deptRow"]->dept_name,
+                        ($paren1+1),
+                        ($paren2-$paren1-1)
+                    );
                 }
             }
             

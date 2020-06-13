@@ -16,20 +16,22 @@
 <div class="row mB10">
     <div class="col-md-6">
 @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
-        <label class="finger">
-            <div class="disIn mR5">
-                <input type="checkbox" class="slTab ntrStp"
-                    name="keepDepts[]" id="keepDept{{ $deptID }}" 
-                    value="{{ $deptID }}" autocomplete="off" CHECKED >
-            </div> {!! $d["deptRow"]->dept_name !!} 
-            @if (isset($d["deptRow"]->dept_address_state)
-                && trim($d["deptRow"]->dept_address_state) != '')
-                , {!! $d["deptRow"]->dept_address_state !!}
-            @endif
-        </label>
+        <div class="mB10">
+            <label class="finger">
+                <div class="disIn mR5">
+                    <input type="checkbox" class="slTab ntrStp"
+                        name="keepDepts[]" id="keepDept{{ $deptID }}" 
+                        value="{{ $deptID }}" autocomplete="off" CHECKED >
+                </div> {!! $d["deptRow"]->dept_name !!} 
+                @if (isset($d["deptRow"]->dept_address_state)
+                    && trim($d["deptRow"]->dept_address_state) != '')
+                    , {!! $d["deptRow"]->dept_address_state !!}
+                @endif
+            </label>
+        </div>
 @empty
 @endforelse
-        <div id="fixDeptsAddNew" class="disNon">
+        <div id="fixDeptsAddNew" class="disNon mB10">
             <label class="finger">
                 <div class="disIn mR5">
                     <input type="checkbox" class="slTab ntrStp"

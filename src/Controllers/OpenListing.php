@@ -23,7 +23,7 @@ use App\Models\OPPhysicalDescRace;
 use App\Models\SLNode;
 use App\Models\SLSearchRecDump;
 use App\Models\OPTesterBeta;
-use App\User;
+use App\Models\User;
 use OpenPolice\Controllers\OpenAjax;
 
 class OpenListing extends OpenAjax
@@ -63,7 +63,8 @@ class OpenListing extends OpenAjax
             ? $this->sessData->dataSets["departments"] : null);
         if ($depts && sizeof($depts) > 0) {
             foreach ($depts as $i => $d) {
-                if (isset($d->dept_name)) {
+                if (isset($d->dept_name)
+                    && trim($d->dept_name) != 'Not sure about department') {
                     $deptList .= ((trim($deptList) != '') ? ', ' : '') 
                         . '<a href="/dept/' . $d->dept_slug . '">'
                         . str_replace('Department', 'Dept', $d->dept_name) 
@@ -102,6 +103,7 @@ class OpenListing extends OpenAjax
                 "comDateAb"   => $this->getComplaintDate($incident, $coreRec, 'M'), 
                 "comDateFile" => $this->getComplaintDateOPC($coreRec), 
                 "comDateFileAb" => $this->getComplaintDateOPC($coreRec, 'M'), 
+                "comUser"     => User::find($coreRec->com_user_id),
                 "titleWho"    => $titleWho,
                 "comWhere"    => ((isset($where[1])) ? $where[1] : ''),
                 "allegations" => $this->commaAllegationListSplit(),
@@ -233,10 +235,12 @@ class OpenListing extends OpenAjax
      */
     protected function printComplaintsFilters($nID, $view = 'list')
     {
-        if (!isset($this->searcher->v["sortLab"]) || $this->searcher->v["sortLab"] == '') {
+        if (!isset($this->searcher->v["sortLab"]) 
+            || $this->searcher->v["sortLab"] == '') {
             $this->searcher->v["sortLab"] = 'date';
         }
-        if (!isset($this->searcher->v["sortDir"]) || $this->searcher->v["sortDir"] == '') {
+        if (!isset($this->searcher->v["sortDir"]) 
+            || $this->searcher->v["sortDir"] == '') {
             $this->searcher->v["sortDir"] = 'desc';
         }
         if (!isset($this->searcher->searchFilts["comstatus"])) {
@@ -254,7 +258,8 @@ class OpenListing extends OpenAjax
                 || sizeof($this->searcher->searchFilts["states"]) == 0)
             && (isset($this->searcher->searchFilts["state"]) 
             && trim($this->searcher->searchFilts["state"]) != '')) {
-            $this->searcher->searchFilts["states"][] = trim($this->searcher->searchFilts["state"]);
+            $this->searcher->searchFilts["states"][] 
+                = trim($this->searcher->searchFilts["state"]);
         }
         if (!isset($this->searcher->searchFilts["allegs"])) {
             $this->searcher->searchFilts["allegs"] = [];
@@ -620,13 +625,16 @@ class OpenListing extends OpenAjax
     protected function printComplaintFiltDescPrev()
     {
         $this->v["complaintFiltDescPrev"] = '';
-        if (isset($this->v["complaints"]) && is_array($this->v["complaints"])) {
-            $this->v["complaintFiltDescPrev"] .= number_format(sizeof($this->v["complaints"])) 
-                . ' Found';
+        if (isset($this->v["complaints"]) 
+            && is_array($this->v["complaints"])) {
+            $this->v["complaintFiltDescPrev"] 
+                .= number_format(sizeof($this->v["complaints"])) . ' Found';
         }
-        if (isset($this->v["filtersDesc"]) && trim($this->v["filtersDesc"]) != '') {
+        if (isset($this->v["filtersDesc"]) 
+            && trim($this->v["filtersDesc"]) != '') {
             $this->v["complaintFiltDescPrev"] .= '<span class="mL5 slGrey">'
-                . $GLOBALS["SL"]->wordLimitDotDotDot(trim($this->v["filtersDesc"]), 20) . '</span>';
+                . $GLOBALS["SL"]->wordLimitDotDotDot(trim($this->v["filtersDesc"]), 20) 
+                . '</span>';
         }
         return $this->v["complaintFiltDescPrev"];
     }
@@ -648,17 +656,21 @@ class OpenListing extends OpenAjax
                     : "") . ";
             })";
         if ($hasStateFilt) {
-            $this->v["filtersDesc"] .= ' & ' . implode(', ', $this->searcher->searchFilts["states"]);
+            $this->v["filtersDesc"] .= ' & ' 
+                . implode(', ', $this->searcher->searchFilts["states"]);
         }
 
         if (sizeof($this->searcher->searchFilts["allegs"]) > 0) {
             $filtDescTmp = '';
             $eval .= "->join('op_alleg_silver', function (\$joi) {
-                \$joi->on('op_complaints.com_id', '=', 'op_alleg_silver.alle_sil_complaint_id')";
+                \$joi->on('op_complaints.com_id', 
+                    '=', 'op_alleg_silver.alle_sil_complaint_id')";
             foreach ($this->searcher->searchFilts["allegs"] as $i => $allegID) {
-                $eval .= "->" . (($i > 0) ? "orWhere" : "where") . "('op_alleg_silver." 
-                    . $this->getAllegFldName($allegID) . "', 'Y')";
-                $filtDescTmp = ' or ' . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
+                $eval .= "->" . (($i > 0) ? "orWhere" : "where") 
+                    . "('op_alleg_silver." . $this->getAllegFldName($allegID) 
+                    . "', 'Y')";
+                $filtDescTmp = ' or ' 
+                    . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
             }
             $eval .= "; })";
             $this->v["filtersDesc"] .= ' & ' . substr($filtDescTmp, 3);
@@ -682,7 +694,8 @@ class OpenListing extends OpenAjax
                 }
             }
             if (trim($fltIDs) != '') {
-                $eval .= "->whereIn('op_complaints.com_id', [" . substr($fltIDs, 2) . "])";
+                $eval .= "->whereIn('op_complaints.com_id', [" 
+                    . substr($fltIDs, 2) . "])";
             }
         }
         $eval .= $this->searcher->getSearchFiltQryStatus()
@@ -871,10 +884,10 @@ class OpenListing extends OpenAjax
         $ret = '';
         if ($this->v["uID"] > 0) {
             $usr = User::find($this->v["uID"]);
-            $name = 'Your';
+            /* $name = 'Your';
             if ($usr && isset($usr->name) && trim($usr->name) != '') {
                 $name = trim($usr->name) . '\'s';
-            }
+            } */
             $chk = OPComplaints::where('com_user_id', $this->v["uID"])
                 ->where('com_status', '>', 0)
                 ->orderBy('created_at', 'desc')
@@ -884,10 +897,12 @@ class OpenListing extends OpenAjax
                 foreach ($chk as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->com_id;
                 }
-                $ret .= '<h2 class="slBlueDark m0">' . $name . ' Complaints</h2><div id="n' 
-                    . $nID . 'ajaxLoadA" class="w100">' . $GLOBALS["SL"]->sysOpts["spinner-code"] 
+                $ret .= '<h2 class="slBlueDark m0">Complaints</h2>'
+                    . '<div id="n' . $nID . 'ajaxLoadA" class="w100">' 
+                    . $GLOBALS["SL"]->sysOpts["spinner-code"] 
                     . '</div>';
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
+                    . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
             } else {
                 $ret .= '<div class="p10"><i>No Complaints</i></div>';
             }
@@ -900,10 +915,12 @@ class OpenListing extends OpenAjax
                 foreach ($chk as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->compli_id;
                 }
-                $ret .= '<div class="p20">&nbsp;</div><h2 class="slBlueDark m0">' . $name 
-                    . ' Compliments</h2><div id="n' . $nID . 'ajaxLoadB" class="w100">'
+                $ret .= '<div class="p20">&nbsp;</div>'
+                    . '<h2 class="slBlueDark m0">Compliments</h2>'
+                    . '<div id="n' . $nID . 'ajaxLoadB" class="w100">'
                     . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' 
+                    . $loadURL . '");' . "\n";
             } else {
                 $ret .= '<!-- <div class="p10"><i>No Compliments</i></div> -->';
             }

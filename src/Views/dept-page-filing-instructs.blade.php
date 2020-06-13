@@ -58,15 +58,13 @@
     This department does not investigate OpenPolice.org reports sent by email.
     </p> --->
     @if (!isset($ownerTools) || !$ownerTools)
-        <p>
-            <b class="bld">We recommend you create a <i>transparent</i>
-            misconduct report on OpenPolice.org first.</b> 
-        </p>
         {!! view(
             'vendor.openpolice.dept-page-filing-instructs-file-btn',
             [ "d" => $d ]
         )->render() !!}
         <p>
+            <b class="bld">We recommend you start by preparing a 
+            <i>transparent</i> misconduct report on OpenPolice.org.</b> 
             Then use the information below to submit a formal complaint to the {{ $d[$d["whichOver"]]->over_agnc_name }}.
         </p>
     @endif
@@ -91,7 +89,14 @@
                 {!! $d["civAddy"] !!}</a>
     @endif
 @else
-    <h2>{!! $d["deptRow"]->dept_name !!} Internal Affairs</h2>
+    <h2>
+        @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
+            {!! $d["deptAbbr"] !!}
+        @else
+            {!! str_replace('Department', 'Dept', $d["deptRow"]->dept_name) !!} 
+        @endif
+        Internal Affairs
+    </h2>
     @if (isset($d["iaAddy"]) && trim($d["iaAddy"]) != '')
         <p>
             <a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" 
@@ -180,7 +185,7 @@
     Regardless, we recommend you print and send 
     your paper complaint to the department by 
     <a href="https://faq.usps.com/s/article/What-is-Certified-Mail" 
-        target="_blank"><b>USPS Certified Mail</b></a>. 
+        target="_blank"><b><nobr>USPS Certified Mail</b></a>.</nobr> 
         When you get confirmation of receipt, 
         please login to your account to let us know.
     </p>
@@ -218,7 +223,7 @@
             <li>Complaints submitted by postal mail will be investigated. 
             Send using 
             <a href="https://faq.usps.com/s/article/What-is-Certified-Mail" 
-            target="_blank"><b>USPS Certified Mail</b></a>.</li>
+            target="_blank"><b><nobr>USPS Certified Mail</b></a>.</nobr></li>
         @endif
     @if (isset($d["iaRow"]->over_submit_deadline) 
         && intVal($d["iaRow"]->over_submit_deadline) > 0)
@@ -231,16 +236,26 @@
 @endif
 
 
-@if ($d["whichOver"] == 'civRow' && isset($d["iaAddy"]) 
+@if ($d["whichOver"] == 'civRow' 
+    && isset($d["iaAddy"]) 
     && trim($d["iaAddy"]) != '')
     <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"
         ><hr></div>
-    <h4>{!! $d["deptRow"]->dept_name !!} Internal Affairs Office</h4>
+    <h2>
+        @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
+            {!! $d["deptAbbr"] !!}
+        @else
+            {!! str_replace('Department', 'Dept', $d["deptRow"]->dept_name) !!} 
+        @endif
+        Internal Affairs
+    </h2>
     <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
         ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 
-        {!! $d["iaAddy"] !!}</a></p>
+        {!! $d["iaAddy"] !!}</a>
     @if (isset($d["iaRow"]->over_phone_work) 
         && trim($d["iaRow"]->over_phone_work) != '')
-        <p><i class="fa fa-phone mR5" aria-hidden="true"></i> {{ $d["iaRow"]->over_phone_work }}</p>
+        <br /><i class="fa fa-phone mR5" aria-hidden="true"></i> 
+        {{ $d["iaRow"]->over_phone_work }}
     @endif
+    </p>
 @endif

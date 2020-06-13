@@ -107,7 +107,8 @@ class OpenReportTools extends OpenReport
                 "hideUpdate"     => $hideUpdate
             ]
         )->render();
-        $title = $this->getCurrComplaintEngLabel() . ': Your Toolkit';
+        $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
+            . ': Your Toolkit</span>';
         return '<div class="pT20 pB20">' 
             . $GLOBALS["SL"]->printAccard($title, $ret, true) 
             . '</div>';
@@ -150,7 +151,8 @@ class OpenReportTools extends OpenReport
      */
     protected function printComplaintSessPath()
     {
-        if ($this->v["isOwner"] || $this->v["user"]->hasRole('administrator|databaser|staff')) {
+        if ($this->v["isOwner"] 
+            || $this->v["user"]->hasRole('administrator|databaser|staff')) {
             $this->loadCustLoop($GLOBALS["SL"]->REQ, 1, 1);
             $this->custReport->loadTree(1);
             $analyze = new SessAnalysis(1);

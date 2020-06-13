@@ -59,7 +59,7 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintListing($nID);
         //} elseif ($nID == 1848) {
         //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
-                
+        
         // FAQ
         } elseif ($nID == 1884) {
             $scroll = 'if (typeof bodyOnScroll === \'function\') bodyOnScroll();';
@@ -151,9 +151,13 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1373) {
             return $this->reportStory($nID);
         } elseif (in_array($nID, [2330, 2332])) {
-            return $this->chkGetReportDept($this->sessData->getLatestDataBranchID());
+            $deptID = $this->getLoopLinkDeptID();
+            if ($deptID == 18124) {
+                return '<!-- Not sure about department -->';
+            }
+            return $this->chkGetReportDept($deptID);
         } elseif (in_array($nID, [1382, 1734])) {
-            return $this->getReportDept($this->sessData->getLatestDataBranchID());
+            return $this->getReportDept($this->getLoopLinkDeptID());
         } elseif ($nID == 1690) {
             return $this->getReportByLine();
         } elseif ($nID == 1687) {
@@ -190,6 +194,8 @@ class OpenPolice extends OpenInitExtras
             return $this->reportEventTitle($this->sessData->getLatestDataBranchID());
         } elseif ($nID == 1710) {
             return $this->printReportShare();
+        } elseif ($nID == 2899) {
+            return $this->reportDeptDesires($nID);
         } elseif (in_array($nID, [1795, 2266, 2335])) {
             return $this->getReportUploads($nID);
         } elseif ($nID == 1707) {
@@ -205,7 +211,8 @@ class OpenPolice extends OpenInitExtras
         //} elseif ($nID == 2633) {
         } elseif ($nID == 1385) {
             $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 
-                width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px; } ';
+                width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px;
+            } ';
             $this->saveComplaintOversight();
         //} elseif ($nID == 2634) {
             $this->processOwnerUpdate();
@@ -222,6 +229,12 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
             return $this->printComplaintReportForAdmin($nID);
+
+        // Department Listings
+        } elseif ($nID == 2958) {
+            return $this->browseSearchDepts($nID);
+        } elseif ($nID == 2960) {
+            return $this->printSimpleDeptList($nID);
 
         // Staff Area Nodes
         } elseif ($nID == 1420) {
@@ -272,11 +285,19 @@ class OpenPolice extends OpenInitExtras
                 'vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', 
                 $this->v
             )->render();
-        } elseif ($nID == 1231) {
+        } elseif ($nID == 2962) {
             return view(
+                'vendor.openpolice.nodes.2962-volun-dept-edit-search-oversight', 
+                $this->v
+            )->render();
+        } elseif ($nID == 1231) {
+            $hist = view(
                 'vendor.openpolice.volun.volun-dept-edit-history', 
                 $this->v
             )->render();
+            return '<div class="nodeAnchor">'
+                . '<a id="deptEdits" name="deptEdits"></a></div>'
+                . $GLOBALS["SL"]->printAccard('Past Volunteer Edits', $hist);
         } elseif ($nID == 1338) {
             return $GLOBALS["SL"]->getBlurbAndSwap('Volunteer Checklist');
         } elseif ($nID == 1340) {
@@ -290,10 +311,10 @@ class OpenPolice extends OpenInitExtras
             return $this->v["openDash"]->volunDepts();
             
         // Admin Dashboard Page
-        } elseif ($nID == 2345) {
+        } elseif (in_array($nID, [2345, 2961])) {
             $this->initAdmDash();
             return $this->v["openDash"]->printDashTopLevStats();
-        } elseif ($nID == 1359) {
+        } elseif (in_array($nID, [1359, 2965])) {
             $this->initAdmDash();
             return $this->v["openDash"]->printDashSessGraph();
         } elseif ($nID == 1342) {

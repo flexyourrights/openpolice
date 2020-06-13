@@ -971,6 +971,87 @@ class OpenDepts extends OpenPolicePCIF
     }
     
     /**
+     * Print a simple table filled with links to all department pages
+     * in the database, whether or not they have been researched.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printSimpleDeptList($nID)
+    {
+        $ret = $GLOBALS["SL"]->chkCache('/list-all-departments', 'list-cust', 1);
+        if (trim($ret) == '' || $GLOBALS["SL"]->REQ->has('refresh')) {
+            $GLOBALS["SL"]->loadStates();
+            $fedDef = $GLOBALS["SL"]->def->getID(
+                'Department Types',
+                'Federal Law Enforcement'
+            );
+            $ret = view(
+                'vendor.openpolice.nodes.2960-all-departments-list', 
+                [
+                    "nID"   => $nID,
+                    "depts" => OPDepartments::where('dept_type', 'NOT LIKE', $fedDef)
+                        ->where('dept_name', 'NOT LIKE', 'Not sure about department')
+                        ->orderBy('dept_address_state', 'asc')
+                        ->orderBy('dept_address_county', 'asc')
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                            'dept_slug', 'dept_score_openness', 'dept_verified')
+                        ->get(),
+                    "feds" => OPDepartments::where('dept_type', 'LIKE', $fedDef)
+                        ->orderBy('dept_address_state', 'asc')
+                        ->orderBy('dept_address_county', 'asc')
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                            'dept_slug', 'dept_score_openness', 'dept_verified')
+                        ->get()
+                ]
+            )->render();
+            $GLOBALS["SL"]->putCache('/list-all-departments', $ret, 'list-cust', 1);
+        }
+        return $ret;
+    }
+    
+    /**
+     * Print a simple table filled with links to all department pages
+     * in the database, whether or not they have been researched.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function browseSearchDepts($nID)
+    {
+        if ($GLOBALS["SL"]->REQ->has('refresh')) {
+            $GLOBALS["SL"]->forgetAllCachesOfType('search');
+        }
+        $this->initSearcher();
+        $this->searcher->getSearchFilts();
+        $this->chkDeptStateFlt($GLOBALS["SL"]->REQ);
+        $deptSearch = $this->chkDeptSearchFlt($GLOBALS["SL"]->REQ);
+        $this->getDeptStateFltNames();
+//echo 'deptSearch: ' . $deptSearch . ', reqState:<pre>'; print_r($this->v["reqState"]); echo '</pre>';
+//echo '???'; exit;
+        list($sortLab, $sortDir) = $this->chkDeptSorts();
+        $stateFilts = $GLOBALS["SL"]->printAccordian(
+            'By State',
+            view(
+                'vendor.openpolice.complaint-listing-filters-states', 
+                [ "srchFilts" => $this->searcher->searchFilts ]
+            )->render(),
+            (sizeof($this->v["reqState"]) > 0)
+        );
+//echo 'deptSearch: ' . $deptSearch; exit;
+        return view(
+            'vendor.openpolice.nodes.2958-depts-browse-search', 
+            [
+                "nID"        => $nID,
+                "stateFilts" => $stateFilts,
+                "sortLab"    => $sortLab,
+                "sortDir"    => $sortDir,
+                "deptSearch" => $deptSearch
+            ]
+        )->render();
+    }
+    
+    /**
      * Load whatever's needed to print the department profile page.
      *
      * @param  int $nID
@@ -1219,48 +1300,39 @@ class OpenDepts extends OpenPolicePCIF
      */
     public function getOverUpdateRow($cid, $deptID)
     {
-        $civDef = $GLOBALS["SL"]->def->getID(
+        $iaDef = $GLOBALS["SL"]->def->getID(
             'Investigative Agency Types', 
-            'Civilian Oversight'
+            'Internal Affairs'
         );
         if (!isset($this->v["currOverRow"])) {
             $this->v["currOverRow"] = [];
         }
         if (!isset($this->v["currOverRow"][$deptID])) {
             $this->v["currOverRow"][$deptID] = NULL;
-            $overs = OPOversight::where('over_dept_id', $deptID)
+            $this->v["currOverRow"][$deptID] = OPOversight::where('over_type', $iaDef)
+                ->where('over_dept_id', $deptID)
                 ->orderBy('created_at', 'asc')
                 ->get();
-            if ($overs->isNotEmpty()) {
-                if ($overs->count() == 1) {
-                    $this->v["currOverRow"][$deptID] = $overs[0];
-                } else {
-                    foreach ($overs as $i => $ovr) {
-                        if ($ovr 
-                            && isset($ovr->over_type) 
-                            && $ovr->over_type == $civDef) {
-                            $this->v["currOverRow"][$deptID] = $ovr;
-                        }
-                    }
-                }
-            }
         }
         if (!isset($this->v["currOverUpdateRow"])) {
             $this->v["currOverUpdateRow"] = [];
         }
         if (!isset($this->v["currOverUpdateRow"][$deptID])) {
             $this->v["currOverUpdateRow"][$deptID] = OPLinksComplaintOversight::where(
-                    'lnk_com_over_complaint_id', $this->coreID)
+                    'lnk_com_over_complaint_id', $cid)
                 ->where('lnk_com_over_dept_id', $deptID)
+                ->orderBy('created_at', 'asc')
                 ->first();
+            /*
             if (!$this->v["currOverUpdateRow"][$deptID]
                 || !isset($this->v["currOverUpdateRow"][$deptID]->lnk_com_over_id)) {
                 $lnk = new OPLinksComplaintOversight;
-                $lnk->lnk_com_over_complaint_id = $this->coreID;
+                $lnk->lnk_com_over_complaint_id = $cid;
                 $lnk->lnk_com_over_dept_id = $deptID;
                 $lnk->save();
                 $this->v["currOverUpdateRow"][$deptID] = $lnk;
             }
+            */
         }
         return $this->v["currOverUpdateRow"];
     }

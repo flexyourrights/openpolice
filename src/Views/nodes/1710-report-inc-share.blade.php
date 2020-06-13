@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1710-report-inc-share.blade.php -->
 <div class="row">
     <div class="col-lg-6 pB20">
-        <h3 class="slBlueDark mT0 mB15">Read, Print, or Download</h3>
+        <h4 class="slBlueDark mT0 mB15">Read, Print, or Download</h4>
     @if (in_array($GLOBALS["SL"]->pageView, ['pdf', 'full-pdf']))
         <div id="readPrintLnks">
             <div class="pT10 pB10"><a class="noUnd" href="/complaint/read-{{ $pubID }}" 

@@ -23,10 +23,10 @@
                 @if (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
                     @if (isset($complaintRec->com_all_charges_resolved)
-                        && trim($complaintRec->com_all_charges_resolved) != 'Y')
-                        Pending Charges
-                    @else
+                        && trim($complaintRec->com_all_charges_resolved) == 'Y')
                         Charges Resolved
+                    @else
+                        Pending Charges
                     @endif
                 @else
                     No Pending Charges

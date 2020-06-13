@@ -310,11 +310,13 @@ class OpenPoliceUtils extends OpenPoliceVars
         if ($coreTbl == 'complaints') {
             $set = 'Complaint Status';
             return [
-                $GLOBALS["SL"]->def->getID($set, 'Hold'), 
+                $GLOBALS["SL"]->def->getID($set, 'Incomplete'), 
                 $GLOBALS["SL"]->def->getID($set, 'New'), 
+                $GLOBALS["SL"]->def->getID($set, 'Hold'), 
+                $GLOBALS["SL"]->def->getID($set, 'Reviewed'), 
+                $GLOBALS["SL"]->def->getID($set, 'Needs More Work'), 
                 $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'), 
-                $GLOBALS["SL"]->def->getID($set, 'Attorney\'d'), 
-                $GLOBALS["SL"]->def->getID($set, 'Reviewed')
+                $GLOBALS["SL"]->def->getID($set, 'Attorney\'d')
             ];
         } elseif ($coreTbl == 'compliments') {
             $set = 'Compliment Status';
@@ -456,6 +458,9 @@ class OpenPoliceUtils extends OpenPoliceVars
                 ->first();
             if (!$this->v["yourContact"] || !isset($this->v["yourContact"]->prsn_id)) {
                 $this->v["yourContact"] = new OPPersonContact;
+                $this->v["yourContact"]->prsn_user_id = Auth::user()->id;
+                $this->v["yourContact"]->save();
+            } elseif (!isset($this->v["yourContact"]->prsn_user_id)) {
                 $this->v["yourContact"]->prsn_user_id = Auth::user()->id;
                 $this->v["yourContact"]->save();
             }

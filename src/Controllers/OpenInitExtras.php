@@ -91,6 +91,7 @@ class OpenInitExtras extends OpenPartners
         $this->minorSections[0][] = [437,  'Legal Needs'];
         $this->minorSections[0][] = [158,  'About You'];
         $this->minorSections[0][] = [707,  'The Scene'];
+        $this->minorSections[0][] = [2122, 'Evidence Uploads'];
         
         $this->minorSections[1][] = [140,  'Victims'];
         $this->minorSections[1][] = [141,  'Witnesses'];
@@ -327,23 +328,6 @@ class OpenInitExtras extends OpenPartners
             date("n"), date("j")-14, date("Y"));
         $cutoff = date("Y-m-d H:i:s", $cutoff);
         $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
-        /*
-        $chk = OPComplaints::whereNull('com_public_id')
-            ->where('com_status', 'LIKE', $incDef)
-            ->where('created_at', '<', $cutoff)
-            ->limit(2000)
-            ->get();
-        if ($chk->isNotEmpty()) {
-            foreach ($chk as $com) {
-                if ((!isset($com->com_user_id) 
-                        || intVal($com->com_user_id) <= 0)
-                    && (!isset($com->com_summary) 
-                        || trim($com->com_summary) == '')) {
-                    $com->delete();
-                }
-            }
-        }
-        */
         DB::select(DB::raw(
             "DELETE FROM `op_complaints` 
             WHERE `com_public_id` IS NULL
@@ -429,6 +413,7 @@ class OpenInitExtras extends OpenPartners
                 || intVal($GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id) <= 0) {
                 $thisUser = User::select('email')->find($uID);
                 $this->v["yourUserContact"] = new OPPersonContact;
+                $this->v["yourUserContact"]->prsn_user_id = $uID;
                 $this->v["yourUserContact"]->prsn_email = $thisUser->email;
                 $this->v["yourUserContact"]->save();
                 $GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id 
@@ -441,10 +426,7 @@ class OpenInitExtras extends OpenPartners
             }
             return [ $GLOBALS["SL"]->x["yourUserInfo"], $this->v["yourUserContact"] ];
         }
-        return [
-            [], 
-            [] 
-        ];
+        return [ [], [] ];
     }
     
     /**

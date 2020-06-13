@@ -1,7 +1,4 @@
 <!-- resources/views/vendor/openpolice/volun/volun-dept-edit-history.blade.php -->
-<div class="nodeAnchor"><a id="deptEdits" name="deptEdits"></a></div>
-<h2 class="m0">Past Volunteer Edits</h2>
-
 @if ($editsIA)
     <table class="table table-striped" >
     <tr>

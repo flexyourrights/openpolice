@@ -9,8 +9,14 @@
 	|| (isset($d["iaRow"]->over_facebook) && trim($d["iaRow"]->over_facebook) != '')
 	|| (isset($d["iaRow"]->over_twitter) && trim($d["iaRow"]->over_twitter) != '')
 	|| (isset($d["iaRow"]->over_youtube) && trim($d["iaRow"]->over_youtube) != ''))
+
 	<div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"><hr></div>
-    <h2>Web Presence</h2>
+    <h2>
+        @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
+            {!! $d["deptAbbr"] !!}
+        @endif
+        Web Presence
+    </h2>
     @if (isset($d["iaRow"]->over_website) && trim($d["iaRow"]->over_website) != '')
         <p><a href="{{ $d['iaRow']->over_website }}" target="_blank" 
             ><i class="fa fa-home mR5" aria-hidden="true"></i> {{ 

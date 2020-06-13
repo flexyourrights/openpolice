@@ -40,7 +40,8 @@ class OpenDashAdmin
             "betas"      => 0,
             "incomplete" => 0,
             "complete"   => 0,
-            "processed"  => 0,
+            "attorney"   => 0,
+            "published"  => 0,
             "submitted"  => 0
         ];
         $stats["betas"] = DB::table('op_tester_beta')
@@ -60,31 +61,28 @@ class OpenDashAdmin
         if ($chk->isNotEmpty()) {
             $defSet = 'Complaint Status';
             foreach ($chk as $com) {
-                switch (intVal($com->com_status)) {
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Incomplete'):
-                        $stats["incomplete"]++;
-                        break;
-                    case $GLOBALS["SL"]->def->getID($defSet, 'New'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Hold'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Reviewed'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Needs More Work'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'):
-                        $stats["complete"]++;
-                        break;
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Attorney\'d'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'):
-                        $stats["processed"]++;
-                        $stats["complete"]++;
-                        break;
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Declined To Investigate (Closed)'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Investigated (Closed)'):
-                    case $GLOBALS["SL"]->def->getID($defSet, 'Closed'):
+                if ($com->com_status == $GLOBALS["SL"]->def->getID($defSet, 'Incomplete')) {
+                    $stats["incomplete"]++;
+                } else {
+                    $stats["complete"]++;
+                }
+                if (in_array($com->com_status, [
+                    $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'),
+                    $GLOBALS["SL"]->def->getID($defSet, 'Attorney\'d')])) {
+                    $stats["attorney"]++;
+                }
+                if (in_array($com->com_status, [
+                    $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'),
+                    $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight'),
+                    $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight'),
+                    $GLOBALS["SL"]->def->getID($defSet, 'Declined To Investigate (Closed)'),
+                    $GLOBALS["SL"]->def->getID($defSet, 'Investigated (Closed)')])) {
+                    $stats["published"]++;
+                    if ($com->com_status 
+                        != $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight')) {
                         $stats["submitted"]++;
-                        $stats["processed"]++;
-                        $stats["complete"]++;
-                        break;
+                    }
+
                 }
             }
         }
@@ -498,10 +496,10 @@ class OpenDashAdmin
             }
         }
         
-        $edits  = OPzEditOversight::where('op_z_edit_oversight.zed_over_over_type', 303)
-            ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
-            ->where('op_z_edit_oversight.zed_over_over_verified', 
+        $edits  = OPzEditOversight::where('op_z_edit_oversight.zed_over_over_verified', 
                 '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
+            //->where('op_z_edit_oversight.zed_over_over_type', 303)
+            ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
             ->select('op_z_edit_oversight.*', 'op_z_edit_departments.zed_dept_user_id')
             ->get();
         if ($edits->isNotEmpty()) {

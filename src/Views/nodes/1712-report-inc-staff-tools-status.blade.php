@@ -3,10 +3,8 @@
 @if ($comStatus == 'New')
     <div class="alert alert-danger fade in alert-dismissible show mB30" 
         style="padding: 10px 15px;">
-        <h4>
-            Is this complaint OK to Submit 
-            <nobr>to Investigative Agency?</nobr>
-        </h4>
+        Is this complaint OK to Submit 
+        <nobr>to Investigative Agency?</nobr>
     </div>
 @endif
 

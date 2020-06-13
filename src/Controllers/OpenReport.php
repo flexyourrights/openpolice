@@ -142,7 +142,7 @@ class OpenReport extends OpenOfficers
                 $ret = $GLOBALS["SL"]->textSaferHtml($story);
             }
         }
-        return '<h3 class="slBlueDark mT0 mB10">Story</h3><p>' . $ret . '</p>';
+        return '<h4 class="slBlueDark mT0 mB10">Story</h4><p>' . $ret . '</p>';
     }
 
     /**
@@ -198,21 +198,16 @@ class OpenReport extends OpenOfficers
      * @param  int $overLnkID
      * @return string
      */
-    protected function chkGetReportDept($overLnkID)
+    protected function chkGetReportDept($deptID)
     {
         if (!isset($this->v["reportDepts"])) {
             $this->v["reportDepts"] = [];
         }
-        $overLnk = $this->sessData->getRowById('links_complaint_oversight', $overLnkID);
-        if ($overLnk && isset($overLnk->lnk_com_over_dept_id)) {
-            $deptID = intVal($overLnk->lnk_com_over_dept_id);
-            if ($deptID > 0 
-                && !in_array($deptID, $this->v["reportDepts"])) {
-                $this->v["reportDepts"][] = $deptID;
-                return '';
-            }
+        if ($deptID > 0 && !in_array($deptID, $this->v["reportDepts"])) {
+            $this->v["reportDepts"][] = $deptID;
+            return '';
         }
-        return '<!-- skipping overLnk #' . $overLnkID . ' -->';
+        return '<!-- skipping overLnk #' . $deptID . ' -->';
     }
     
     /**
@@ -224,17 +219,15 @@ class OpenReport extends OpenOfficers
     protected function getReportDept($deptID)
     {
         $dept = $this->sessData->getRowById('departments', $deptID);
+//echo 'getReportDept(' . $deptID . '<pre>'; print_r($dept); echo '</pre>'; exit;
         if ($dept && isset($dept->dept_name)) {
-            $extra = '';
-            if ($dept->dept_name == 'Not sure about department') {
-                $extra = '<style> #repNode1467cyc0 { display: none; } </style>';
-            }
-            return '<h3 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug . '" class="slBlueDark">'
-                . 'Misconduct Incident Report for ' . $dept->dept_name . '</a></h3>'
+            $status = $this->sessData->dataSets["complaints"][0]->com_status;
+            return '<h4 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug 
+                . '" class="slBlueDark">Misconduct Incident Report for ' 
+                . $dept->dept_name . '</a></h4>'
                 . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
                 . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
-                . $this->printComplaintStatus($this->sessData->dataSets["complaints"][0]->com_status)
-                . '</b></div>' . $extra;
+                . $this->printComplaintStatus($status) . '</b></div>';
         }
         $this->v["reportDepts"][] = $deptID;
         return '';
@@ -429,10 +422,11 @@ class OpenReport extends OpenOfficers
     protected function hideWitnessName($civRow)
     {
         $views = [ 'full', 'full-pdf' ];
-        return (isset($civRow->civ_role)
+        return (/* isset($civRow->civ_role)
             && $civRow->civ_role == 'Witness' 
-            && isset($civRow->civ_is_creator)
-            && $civRow->civ_is_creator != 'Y'
+            && */
+            (!isset($civRow->civ_is_creator)
+                || $civRow->civ_is_creator != 'Y')
             && ($GLOBALS["SL"]->dataPerms != 'sensitive' 
                 || !in_array($GLOBALS["SL"]->pageView, $views)));
     }
@@ -512,8 +506,9 @@ class OpenReport extends OpenOfficers
     protected function getCivReportNameHeader($nID)
     {
 //echo '<br /><br /><br />getCivReportNameHeader(' . $nID . ', branch: ' . $this->sessData->getLatestDataBranchID() . ', name: ' . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '<br />'; exit;
-        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
-            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '</h3>';
+        return '<h4 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) 
+            . '</h4>';
     }
     
     /**
@@ -532,12 +527,12 @@ class OpenReport extends OpenOfficers
         }
         if (!isset($this->v["civNames"][$civID]) 
             || trim($this->v["civNames"][$civID]) == '') {
+            $name = '';
             $civRow = $this->sessData->getRowById('civilians', $civID);
             if (!$prsn) {
                 list($prsn, $phys) = $this->queuePeopleSubsets($civID);
             }
 //echo 'getCivReportName(' . $civID . '<pre>'; print_r($this->sessData->dataSets["civilians"]); print_r($civRow); echo '</pre><pre>'; print_r($prsn); echo '</pre><pre>'; print_r($phys); echo '</pre>';
-            $name = '';
             $com = $this->sessData->dataSets["complaints"][0];
             $civ1 = $this->sessData->dataSets["civilians"][0];
             if ($this->canPrintFullReport()) {
@@ -605,8 +600,8 @@ class OpenReport extends OpenOfficers
         list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('officers');
         //$offID = $this->sessData->getLatestDataBranchID();
         $offRow = $this->sessData->getRowById('officers', $itemID);
-        return '<h3 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
-            . $this->getOffReportName($offRow, $itemInd) . '</h3>';
+        return '<h4 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+            . $this->getOffReportName($offRow, $itemInd) . '</h4>';
     }
     
     /**
@@ -944,6 +939,36 @@ class OpenReport extends OpenOfficers
             case 'Arrests':  return $h3 . 'Arrest</h3>';
         }
         return '';
+    }
+    
+    /**
+     * Print out desires for departments.
+     *
+     * @return string
+     */
+    protected function reportDeptDesires($nID)
+    {
+        $ret = '';
+        $defAll = $GLOBALS["SL"]->def->getID(
+            'Desires for Departments',
+            'All three of these things'
+        );
+        if (isset($this->sessData->dataSets["scenes"])
+            && isset($this->sessData->dataSets["scenes"][0]->scn_desires_depts)) {
+            $ret = intVal($this->sessData->dataSets["scenes"][0]->scn_desires_depts);
+            if ($ret == $defAll) {
+                $ret = 'New rules limiting police use of force, '
+                    . 'Stronger accountability systems for police misconduct, '
+                    . 'Better training for officers';
+            } else {
+                $ret = $GLOBALS["SL"]->def->getVal('Desires for Departments', $ret);
+            }
+        }
+        $label = '<a id="hidivBtn2899" class="hidivBtn slGrey" href="javascript:;"'
+            . '>Desires for Department(s) Involved</a>'
+            . '<div id="hidiv2899" class="disNon">'
+            . '"I want the police department to adopt..."</div>';
+        return ['', $ret];
     }
     
     /**

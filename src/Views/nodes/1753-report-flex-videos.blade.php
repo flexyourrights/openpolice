@@ -1,9 +1,9 @@
 <!-- Stored in resources/views/openpolice/nodes/1753-report-flex-videos.blade.php -->
 
 @if (isset($allUrls) && sizeof($allUrls) > 0 && sizeof($allUrls["vid"]) > 0)
-    <h3 class="slBlueDark mT0 mB20">
+    <h4 class="slBlueDark mT0 mB20">
         Flex Your Rights videos related to this complaint
-    </h3>
+    </h4>
     <div class="row @if (sizeof($allUrls['txt']) > 0) mT15 @endif ">
     @foreach ($allUrls["vid"] as $i => $url)
         @if (in_array(sizeof($allUrls["vid"]), [1, 2, 4]))

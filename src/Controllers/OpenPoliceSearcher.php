@@ -147,7 +147,8 @@ class OpenPoliceSearcher extends Searcher
                     switch ($gend) {
                         case 'M': $filtDescTmp .= ', Male'; break;
                         case 'F': $filtDescTmp .= ', Female'; break;
-                        case 'T': $filtDescTmp .= ', Transgender/Other'; break;
+                        case 'T': 
+                        case 'O': $filtDescTmp .= ', Transgender/Other'; break;
                     }
                 }
                 $ret .= ' & ' . $type[0] . ' is ' . substr($filtDescTmp, 2);

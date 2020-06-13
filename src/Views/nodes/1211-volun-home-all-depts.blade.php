@@ -1,12 +1,15 @@
 <!-- resources/views/vendor/openpolice/nodes/1211-volun-home-all-depts.blade.php -->
+
 <h2 class="mT0">All Departments</h2>
 <div class="row mB10">
     <div class="col-6">
         <i class="fa fa-search" aria-hidden="true"></i> Search Phrase<br />
         <input type="text" name="deptSearch" id="deptSearchID" 
             class="form-control slTab" {!! $GLOBALS["SL"]->tabInd() !!}
-            @if ($GLOBALS["SL"]->REQ->has('s') && trim($GLOBALS["SL"]->REQ->get('s')) != '')
-                value="{!! trim($GLOBALS["SL"]->REQ->get('s')) !!}" @else value="" @endif >
+            @if ($GLOBALS["SL"]->REQ->has('s') 
+                && trim($GLOBALS["SL"]->REQ->get('s')) != '')
+                value="{!! trim($GLOBALS["SL"]->REQ->get('s')) !!}" 
+            @else value="" @endif >
     </div><div class="col-6">
         <i class="fa fa-filter" aria-hidden="true"></i> Filter by<br />
         <select name="deptState" id="deptStateID" class="form-control slTab" 

@@ -12,7 +12,7 @@
             !!}</b></p>
             <div class="nFld mT0">
             @foreach ($oversightDates as $d => $date)
-                <div class="row pT10 pB10">
+                <div class="row mB10">
                     <div class="col-md-8">
                         <label class="finger">
                             <input type="checkbox" value="{{ $d }}" 

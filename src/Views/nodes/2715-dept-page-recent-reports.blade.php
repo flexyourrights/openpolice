@@ -7,9 +7,9 @@
 <div class="mBn5"><p>
 @if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-']))
     <a href="/filing-your-police-complaint/{{ $d['deptRow']->dept_slug }}">
+    File a complaint against this department.</a>
 @else
     <a href="/join-beta-test/{{ $d['deptRow']->dept_slug }}">
+    OpenPolice.org is currently beta testing with individual users.</a>
 @endif
-	OpenPolice.org is currently beta testing with individual users.
-	</a>
 </p></div>

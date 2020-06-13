@@ -19,27 +19,28 @@
 @endif
 
     <div class="row">
+    @if ($comUser && isset($comUser->id))
         <div class="col-md-3 col-sm-4 complaintPrevPic taC">
             <div class="pB20">
-                <img src="/openpolice/uploads/avatar-shell.png" border=0 
-                    class="bigTmbRound mB15" >
+                {!! $comUser->profileImg() !!}
             @if (isset($titleWho) && trim($titleWho) != '')
-                <h5>{!! $titleWho !!}</h5>
+                <a href="{{ $comUser->urlSlug() }}"
+                    ><h5 class="mT30">{!! $titleWho !!}</h5></a>
             @endif
             </div>
         </div>
+    @endif
         <div class="col-md-9 col-sm-8">
             <div class="pB10">
                 <a href="{{ $url }}"><h4>
-                    @if (trim($allegations[0]) == '') Incident 
-                    @else {!! $allegations[0] !!} 
+                    @if (trim($allegations[0]) == '') {!! $comWhere !!}
+                    @else {!! $allegations[0] !!}
                     @endif
-                    in {!! $comWhere !!}
                 </h4></a>
 
             @if (trim(strip_tags($deptList)) != '' 
                 || trim(strip_tags($allegations[1])) != '') 
-                @if (trim(strip_tags($deptList)) != '') 
+                @if (trim(strip_tags($deptList)) != '')
                     <h5>{!! $deptList !!}</h5>
                 @endif
                 @if (trim(strip_tags($allegations[1])) != '') 
@@ -52,18 +53,18 @@
     <div class="pB15">
         <div class="row mB10">
             <div class="col-6">
-                Incident Date
-            </div><div class="col-6">
-                <div class="dateFull">{{ $comDate }}</div>
-                <div class="dateAbbr">{{ $comDateAb }}</div>
-            </div>
-        </div>
-        <div class="row mB10">
-            <div class="col-6">
                 Submitted to OpenPolice.org
             </div><div class="col-6">
                 <div class="dateFull">{{ $comDateFile }}</div>
                 <div class="dateAbbr">{{ $comDateFileAb }}</div>
+            </div>
+        </div>
+        <div class="row mB10">
+            <div class="col-6">
+                Incident Date
+            </div><div class="col-6">
+                <div class="dateFull">{{ $comDate }}</div>
+                <div class="dateAbbr">{{ $comDateAb }}</div>
             </div>
         </div>
     @if ($uID > 0 

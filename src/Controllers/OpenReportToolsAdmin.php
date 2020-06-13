@@ -76,7 +76,8 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             )->render();
         }
 
-        $title = $this->getCurrComplaintEngLabel() . ': Admin Toolkit';
+        $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
+            . ': Admin Toolkit</span>';
         $tools = view(
             'vendor.openpolice.nodes.1712-report-inc-staff-tools', 
             $this->v
@@ -647,25 +648,32 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
      */
     protected function fixDeptsClean()
     {
+        $iaDef = $GLOBALS["SL"]->def->getID(
+            'Investigative Agency Types', 
+            'Internal Affairs'
+        );
         $deptIDs = [];
         $depts = OPLinksComplaintDept::where('lnk_com_dept_complaint_id', $this->coreID)
             ->get();
         if ($depts->count() > 0) {
             foreach ($depts as $d) {
-                $deptIDs[] = $d->lnk_com_dept_dept_id;
-                $overs = OPOversight::where('over_dept_id', $d->lnk_com_dept_dept_id)
+                $deptID = $d->lnk_com_dept_dept_id;
+                $deptIDs[] = $deptID;
+                $overs = OPOversight::where('over_dept_id', $deptID)
+                    ->where('over_type', $iaDef)
                     ->get();
                 if ($overs->count() > 0) {
                     foreach ($overs as $over) {
                         $chk = OPLinksComplaintOversight::where(
                                 'lnk_com_over_complaint_id', $this->coreID)
-                            ->where('lnk_com_over_dept_id', $d->lnk_com_dept_dept_id)
+                            ->where('lnk_com_over_dept_id', $deptID)
                             ->where('lnk_com_over_over_id', $over->over_id)
+                            ->orderBy('created_at', 'asc')
                             ->first();
                         if (!$chk || !isset($chk->LnkComOverID)) {
                             $newLnk = new OPLinksComplaintOversight;
                             $newLnk->lnk_com_over_complaint_id = $this->coreID;
-                            $newLnk->lnk_com_over_dept_id = $d->lnk_com_dept_dept_id;
+                            $newLnk->lnk_com_over_dept_id = $deptID;
                             $newLnk->lnk_com_over_over_id = $over->over_id;
                             $newLnk->save();
                         }

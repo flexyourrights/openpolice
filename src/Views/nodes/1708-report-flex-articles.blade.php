@@ -1,9 +1,9 @@
 <!-- Stored in resources/views/openpolice/nodes/1708-report-flex-articles.blade.php -->
 
 @if (isset($allUrls) && sizeof($allUrls) > 0 && sizeof($allUrls["txt"]) > 0)
-    <h3 class="slBlueDark mT0">
+    <h4 class="slBlueDark mT0">
         Flex Your Rights articles related to this complaint
-    </h3>
+    </h4>
     <div class="row">
         <div class="col-lg-6">
         @foreach ($allUrls["txt"] as $i => $url)

@@ -64,6 +64,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveForceTypes($nID);
         } elseif ($nID == 2824) {
             return $this->saveForceTypeLnkOneVictim($nID);
+        } elseif ($nID == 388) {
+          return $this->saveArrestChargesDropped($nID);
         } elseif ($nID == 976) {
             return $this->saveStatusCompletion($nID);
             
@@ -317,6 +319,24 @@ class OpenComplaintSaves extends OpenComplaintConditions
             }
         }
         return true;
+    }
+    
+    /**
+     * Check discreprency with previous answer.
+     *
+     * @param  int $nID
+     * @return boolean
+     */
+    protected function saveArrestChargesDropped($nID)
+    {
+        if ((!isset($this->sessData->dataSets["complaints"][0]->com_all_charges_resolved)
+                || $this->sessData->dataSets["complaints"][0]->com_all_charges_resolved != 'Y')
+            && $GLOBALS["SL"]->REQ->has('n388fld')
+            && trim($GLOBALS["SL"]->REQ->n388fld) == 'Y') {
+            $this->sessData->dataSets["complaints"][0]->com_all_charges_resolved = 'Y';
+            $this->sessData->dataSets["complaints"][0]->save();
+        }
+        return false;
     }
     
     /**

@@ -258,7 +258,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             case '[{ Complaint URL XML }]':
             case '[{ Complaint URL JSON }]':
                 $swap = '<a href="' . $url . '/complaint/read-' . $this->corePublicID 
-                    . '/xml" target="_blank">Download full complaint as a XML</a>';
+                    . '/xml" target="_blank">Download full complaint as an XML</a>';
                 break;
             case '[{ Complaint URL XML Link }]':
             case '[{ Complaint URL JSON Link }]':
@@ -589,7 +589,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             "deptRow" => $deptRow
         ];
         $defTyp = 'Investigative Agency Types';
-        $iaDef = $GLOBALS["SL"]->def->getID($defTyp, 'Internal Affairs');
+        $iaDef  = $GLOBALS["SL"]->def->getID($defTyp, 'Internal Affairs');
         $civDef = $GLOBALS["SL"]->def->getID($defTyp, 'Civilian Oversight');
         $this->v["comDepts"][$cnt]["iaRow"] = OPOversight::where('over_type', $iaDef)
             ->where('over_dept_id', $deptRow->dept_id)
@@ -634,6 +634,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 'lnk_com_over_complaint_id', $this->coreID)
             ->where('lnk_com_over_dept_id', $deptRow->dept_id)
             //->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
+            ->orderBy('created_at', 'asc')
             ->first();
         /* if (!$this->v["comDepts"][$cnt]["overDates"] 
             || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_dept_id)) {
@@ -661,6 +662,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             foreach ($deptIDs as $deptID) {
                 $chk = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $this->coreID)
                     ->where('lnk_com_over_dept_id', $deptID)
+                    ->orderBy('created_at', 'asc')
                     ->first();
                 if (!$chk && !isset($chk->lnk_com_over_over_id)) {
                     $lnk = new OPLinksComplaintOversight;

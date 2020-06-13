@@ -351,10 +351,10 @@ class OpenComplaintPrints extends OpenComplaintEmails
             +$this->v["uploadPrintMap"]["vid"]
             +$this->v["uploadPrintMap"]["fil"];
         $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
-            . 'document.getElementById("uploadDelayed").innerHTML="' . $GLOBALS["SL"]->addSlashLines($ret) 
-            . '"; }, 1500); ';
-        return '<h3 class="mT0 slBlueDark">' 
-            . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h3>'
+            . 'document.getElementById("uploadDelayed").innerHTML="' 
+            . $GLOBALS["SL"]->addSlashLines($ret) . '"; }, 1500); ';
+        return '<h4 class="mT0 slBlueDark">' 
+            . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h4>'
             . '<div id="uploadDelayed" class="w100"><div class="w100 taC">'
             . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div></div>';
     }
@@ -362,7 +362,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
     /* Double-Checking [For Now] */
     protected function canShowUpload($nID, $upDeets, $isAdmin = false, $isOwner = false)
     {
-        if ($isAdmin || $isOwner) {
+        if ($isAdmin || $isOwner || $this->v["isAdmin"] || $this->v["isOwner"]) {
             return true;
         }
         if (isset($this->sessData->dataSets["complaints"])) {
@@ -381,6 +381,9 @@ class OpenComplaintPrints extends OpenComplaintEmails
     
     protected function loadUpDeetPrivacy($upRow = NULL)
     {
+        if ($this->v["isAdmin"] || $this->v["isOwner"]) {
+            return 'Public';
+        }
         if ($upRow && isset($upRow->up_privacy)) {
             if ($upRow->up_tree_id == 1) {
                 if ($upRow->up_privacy == 'Private') {

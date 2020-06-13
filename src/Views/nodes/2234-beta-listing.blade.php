@@ -1,16 +1,16 @@
 <!-- resources/views/vendor/openpolice/nodes/2234-beta-listing.blade.php -->
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <a href="/dash/beta-test-signups"><h2>Beta Tester Signups</h2></a>
         <p>
             Below are the users who have signed up so far. 
             <a href="#stats" class="hsho">Stats Below</a>
         </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h3>
             {{ number_format($tots["invited"]) }} Invited<br />
-            {{ number_format($tots["waiting"]) }} Waiting
+            <nobr>{{ number_format($tots["waiting"]) }} Duplicates/Other/Waiting<nobr>
         </h3>
     </div>
 </div>

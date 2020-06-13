@@ -4,11 +4,16 @@
     <div class="mB20">
         <div class="alert alert-warning" role="alert">
             <p><b>No police departments found by searching 
-            <span class="slBlueDark">"{{ $search }}"</span> in 
-            <span class="slBlueDark">{{ 
-                ((trim($stateName) != '') ? $stateName
-                    : 'Federal Law Enforcement')
-            }}</span>. 
+            <span class="slBlueDark">"{{ $search }}"</span> 
+            @if (trim($stateName) != '') 
+                @if (trim($stateName) == 'US') 
+                    in <span class="slBlueDark">Federal Law Enforcement</span>.
+                @else
+                    in <span class="slBlueDark">{{ $stateName }}</span>.
+                @endif
+            @else 
+                <span class="mLn5">.</span>
+            @endif
             Please type something else in the search bar above.</b></p>
         </div>
     </div>
@@ -56,9 +61,9 @@
 
 @if (!$GLOBALS["SL"]->REQ->has('loadNewFixDept'))
     <p>&nbsp;</p>
-    <h2>Tips for finding the right department</h2>
+    <h2>Can't find the right department?</h2>
     <ul>
-        <li>Type the name of the county instead of the city</li>
+        <li>Type the name of the county...</li>
         <li>Make sure you select the right state</li>
         <li>Double-check spelling of the department name</li>
     </ul>
@@ -75,7 +80,7 @@
     <div id="hidivAddNewDept" class="slCard disNon mT20 mB20">
         <div id="addNewDeptError" class="disNon alert alert-danger" role="alert">
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
-            Please type the name of the new department, and select the state.
+            Please type the name of the law enforcement department, and select the state.
         </div>
         <div class="row">
             <div class="col-md-7 pB20">

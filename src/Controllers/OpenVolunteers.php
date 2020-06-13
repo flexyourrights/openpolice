@@ -83,7 +83,8 @@ class OpenVolunteers extends OpenDevelopment
                     break;
             }
             $this->v["state"] = '';
-            if ($GLOBALS["SL"]->REQ->has('state')) {
+            if ($GLOBALS["SL"]->REQ->has('state') 
+                && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
                 $this->v["state"] = trim($GLOBALS["SL"]->REQ->get('state'));
             } elseif (isset($this->v["yourContact"]->prsn_address_state) 
                 && trim($this->v["yourContact"]->prsn_address_state) != '') {
@@ -178,11 +179,11 @@ class OpenVolunteers extends OpenDevelopment
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
             }
-            if ($this->v["deptRows"] && sizeof($this->v["deptRows"]) > 0) {
+            /* if ($this->v["deptRows"] && sizeof($this->v["deptRows"]) > 0) {
                 foreach ($this->v["deptRows"] as $dept) {
                     $this->isDeptBeingEdited($dept->dept_id);
                 }
-            }
+            } */
             $this->loadRecentDeptEdits();
             $GLOBALS["SL"]->loadStates();
         }
@@ -272,7 +273,7 @@ class OpenVolunteers extends OpenDevelopment
                     && (!isset($dept->dept_score_openness)
                         || !isset($dept->dept_verified) 
                         || strtotime($dept->dept_verified) < $this->v["yearold"])) {
-                    $this->isDeptBeingEdited($dept->dept_id);
+                    //$this->isDeptBeingEdited($dept->dept_id);
                     $this->v["deptPriorityRows"][] = $dept;
                     $done[] = $dept->dept_id;
                 } else {
@@ -411,7 +412,7 @@ class OpenVolunteers extends OpenDevelopment
     }
     
     /**
-     * Print the shorm form for volunteers to share their state
+     * Print the short form for volunteers to share their state
      * for a default filter of all departments.
      *
      * @return string
@@ -420,24 +421,36 @@ class OpenVolunteers extends OpenDevelopment
     {
         $GLOBALS["SL"]->loadStates();
         $this->loadYourContact();
-        if ($GLOBALS["SL"]->REQ->has('saveDefaultState')) {
-            if (isset($this->v["yourContact"]) && isset($this->v["yourContact"]->prsn_id)) {
-                if ($GLOBALS["SL"]->REQ->has('newState')) {
-                    $this->v["yourContact"]->update([
-                        "prsn_address_state" => $GLOBALS["SL"]->REQ->get('newState')
-                    ]);
-                }
-                if ($GLOBALS["SL"]->REQ->has('newPhone')) {
-                    $this->v["yourContact"]->update([
-                        "prsn_phone_mobile" => $GLOBALS["SL"]->REQ->get('newPhone')
-                    ]);
-                }
-            }
-        }
         return view(
             'vendor.openpolice.nodes.1217-volun-home-your-info', 
             $this->v
         )->render();
+    }
+    
+    /**
+     * Save the state volunteers are in.
+     *
+     * @return string
+     */
+    public function saveVolunLocationForm(Request $request)
+    {
+        $this->survLoopInit($request, '/ajax/saveDefaultState/');
+        $this->loadYourContact();
+        if (isset($this->v["yourContact"]) 
+            && isset($this->v["yourContact"]->prsn_id)) {
+            if ($GLOBALS["SL"]->REQ->has('newState')) {
+                $this->v["yourContact"]->update([
+                    "prsn_address_state" => $GLOBALS["SL"]->REQ->get('newState')
+                ]);
+            }
+            if ($GLOBALS["SL"]->REQ->has('newPhone')) {
+                $this->v["yourContact"]->update([
+                    "prsn_phone_mobile" => $GLOBALS["SL"]->REQ->get('newPhone')
+                ]);
+            }
+        }
+        return '<h1 class="slGreenDark">'
+            . '<i class="fa fa-check-circle" aria-hidden="true"></i></h1>';
     }
     
     

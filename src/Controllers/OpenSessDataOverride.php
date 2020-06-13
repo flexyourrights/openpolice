@@ -31,7 +31,9 @@ class OpenSessDataOverride extends OpenComplaintPrints
             return [];
         }
         $nID = $curr->nID;
-        if ($nID == 28) { // Complainant's Role
+        if (in_array($nID, [1696, 1700, 1697, 1698, 1699])) {
+            return $this->sessDataOverrideOversight($curr);
+        } elseif ($nID == 28) { // Complainant's Role
             if (isset($this->sessData->dataSets["civilians"])) {
                 return [ trim($this->sessData->dataSets["civilians"][0]->civ_role) ];
             }
@@ -208,6 +210,40 @@ class OpenSessDataOverride extends OpenComplaintPrints
             $sessData[] = 'time_limit';
         }
         return $sessData;
+    }
+
+    /**
+     * Overrides current session data for the investigative timeline.
+     *
+     * @return array
+     */
+    protected function sessDataOverrideOversight($curr)
+    {
+        $deptID = $this->getLoopLinkDeptID();
+        list($tbl, $fld) = $curr->getTblFld();
+        if (isset($this->sessData->dataSets[$tbl])
+            && sizeof($this->sessData->dataSets[$tbl]) > 0) {
+            foreach ($this->sessData->dataSets[$tbl] as $lnk) {
+                if ($lnk->lnk_com_over_dept_id == $deptID
+                    && isset($lnk->{$fld})) {
+                    return [$lnk->{$fld}];
+                }
+            }
+        }
+        return ['0000-00-00 00:00:00'];
+    }
+
+
+    protected function getLoopLinkDeptID()
+    {
+        $deptID = 0;
+        $deptLnk = $this->sessData->getLatestDataBranchRow();
+        if ($deptLnk && isset($deptLnk->lnk_com_dept_dept_id)) {
+            $deptID = intVal($deptLnk->lnk_com_dept_dept_id);
+        } elseif ($deptLnk && isset($deptLnk->dept_id)) {
+            $deptID = intVal($deptLnk->dept_id);
+        }
+        return $deptID;
     }
 
 }
