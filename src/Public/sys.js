@@ -261,7 +261,7 @@ function checkNodeUp(nID, response, isMobile) {
 }
 
 function formKeyUpOther(nID, j) {
-    if (document.getElementById("n"+nID+"fldOtherID").value.trim() != "") {
+    if (document.getElementById("n"+nID+"fldOtherID") && document.getElementById("n"+nID+"fldOtherID").value.trim() != "") {
         document.getElementById("n"+nID+"fld"+j+"").checked=true;
         checkFingerClass(nID);
     }
@@ -270,7 +270,7 @@ function formKeyUpOther(nID, j) {
 }
 
 function formClickGender(nID) {
-    if (document.getElementById("n"+nID+"fldOtherID")) {
+    if (document.getElementById("n"+nID+"fldOtherID") && document.getElementById("n"+nID+"fldOtherID")) {
         if ((document.getElementById("n"+nID+"fld0") && document.getElementById("n"+nID+"fld0").checked)
             || (document.getElementById("n"+nID+"fld1") && document.getElementById("n"+nID+"fld1").checked)
             || (document.getElementById("n"+nID+"fld3") && document.getElementById("n"+nID+"fld3").checked)) {

@@ -151,7 +151,8 @@ class OpenPolicePCIF extends OpenListing
 		$this->v["pcif"]->addFldID('civilians', 1220);   // prsn_name_first
 		$this->v["pcif"]->addFldID('civilians', 1222);   // prsn_name_last
 		$this->v["pcif"]->addFldID('civilians', 1169);   // phys_race_race 
-		$this->v["pcif"]->addFldID('civilians', 628);    // phys_gender 
+        $this->v["pcif"]->addFldID('civilians', 628);    // phys_gender 
+        $this->v["pcif"]->addFldID('civilians', 1114);   // phys_gender_other
 		$this->v["pcif"]->addFldID('civilians', 629);    // phys_age
 		$this->v["pcif"]->addFldID('civilians', 1233);   // prsn_birthday
 		$this->loadPcifSchemaAllegOP();
@@ -221,7 +222,7 @@ class OpenPolicePCIF extends OpenListing
 			'raheem_allegations', 
 			'money_property', 
 			'Money/Property Seized/Destroyed, or Excessive Fine?', 
-			'Did police take money, take or destroy property, or issue an excessive fine during this encounter?',
+			'Did the police take money, take or destroy property, or issue an excessive fine during this encounter?',
 			$enums
 		);
 		$this->v["pcif"]->addFld(

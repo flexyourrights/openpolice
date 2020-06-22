@@ -230,21 +230,23 @@ class DepartmentScores
             eval($eval);
             if ($this->scoreDepts->isNotEmpty()) {
                 foreach ($this->scoreDepts as $i => $dept) {
-                    if (sizeof($searchFilts) == 0 
-                        || !isset($searchFilts["state"]) 
-                        || $searchFilts["state"] == $dept->dept_address_state) {
-                        $deptName = str_replace('Police Dept', '', trim($dept->dept_name));
-                        $deptName = str_replace('Police Department', '', $deptName);
-                        $deptName = trim(str_replace('Department', 'Dept', $deptName));
-                        $this->deptNames[$dept->dept_id] = $deptName 
-                            . ', ' . $dept->dept_address_state;
-                        $this->deptOvers[$dept->dept_id]["ia"] = OPOversight::where('over_dept_id', $dept->dept_id)
+                //if (sizeof($searchFilts) == 0) { 
+                //    || !isset($searchFilts["state"]) 
+                //    || $searchFilts["state"] == $dept->dept_address_state
+                    $deptName = str_replace('Police Dept', 'PD', trim($dept->dept_name));
+                    $deptName = str_replace('Police Department', 'PD', $deptName);
+                    $deptName = trim(str_replace('Department', 'Dept', $deptName));
+                    $this->deptNames[$dept->dept_id] = $deptName 
+                        . ', ' . $dept->dept_address_state;
+                    $this->deptOvers[$dept->dept_id]["ia"] 
+                        = OPOversight::where('over_dept_id', $dept->dept_id)
                             ->where('over_type', $GLOBALS["SL"]->x["defOverIA"])
                             ->first();
-                        $this->deptOvers[$dept->dept_id]["civ"] = OPOversight::where('over_dept_id', $dept->dept_id)
+                    $this->deptOvers[$dept->dept_id]["civ"] 
+                        = OPOversight::where('over_dept_id', $dept->dept_id)
                             ->where('over_type', $GLOBALS["SL"]->x["defOverCiv"])
                             ->first();
-                    }
+                //}
                 }
             }
             $this->loaded = true;
@@ -316,7 +318,8 @@ class DepartmentScores
         if ($this->scoreDepts->isNotEmpty()) {
             foreach ($this->scoreDepts as $i => $dept) {
                 $id = $dept->dept_id;
-                if ($this->deptOvers[$id]["ia"]) {
+                if (isset($this->deptOvers[$id])
+                    && $this->deptOvers[$id]["ia"]) {
                     $this->scoreDepts[$i]->dept_score_openness = 0;
                     foreach ($this->vals as $type => $specs) {
                         $score = $this->checkRecFld($specs, $dept->dept_id);
@@ -358,7 +361,7 @@ class DepartmentScores
     public function checkRecFld($specs, $deptID, $overrow = null)
     {
         if ($overrow === null) {
-            if ($deptID <= 0) {
+            if ($deptID <= 0 || !isset($this->deptOvers[$deptID])) {
                 return 0;
             }
             $overrow = $this->deptOvers[$deptID]["ia"];

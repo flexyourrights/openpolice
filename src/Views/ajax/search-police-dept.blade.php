@@ -43,7 +43,7 @@
             @endif
                 <div class="row mT10 mB10 @if ($i == 0) mT0 @endif ">
                     <div class="col-sm-9 pB20">
-                        {!! $GLOBALS["SL"]->printRowAddy($dept, 'Dept') !!}
+                        {!! $GLOBALS["SL"]->printRowAddy($dept, 'dept_') !!}
                         @if (trim($dept->dept_address_county) != '') 
                             <br />{{ $dept->dept_address_county }} County
                         @endif

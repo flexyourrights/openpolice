@@ -350,6 +350,11 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $cnt = $this->v["uploadPrintMap"]["img"]
             +$this->v["uploadPrintMap"]["vid"]
             +$this->v["uploadPrintMap"]["fil"];
+        if ($GLOBALS["SL"]->isPdfView()) {
+            return '<h4 class="mT0 slBlueDark">' 
+                . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h4>'
+                . '<div class="w100">' . $ret . '</div>';
+        }
         $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
             . 'document.getElementById("uploadDelayed").innerHTML="' 
             . $GLOBALS["SL"]->addSlashLines($ret) . '"; }, 1500); ';

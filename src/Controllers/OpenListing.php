@@ -47,7 +47,7 @@ class OpenListing extends OpenAjax
         $incident = $this->sessData->dataSets["incidents"][0];
         $titleWho = '';
         if ($this->canPrintFullReportByRecordSpecs(
-                $this->sessData->dataSets["complaints"][0])) {
+                $this->sessData->dataSets[$coreTbl][0])) {
             $titleWho = $this->getCivName(
                 'Civilians', 
                 $this->sessData->dataSets["civilians"][0], 
@@ -352,6 +352,18 @@ class OpenListing extends OpenAjax
      */
     protected function printComplaintListing($nID, $view = 'list')
     {
+        $pageUrl = $_SERVER["REQUEST_URI"];
+        if (isset($this->v["isAdmin"]) && $this->v["isAdmin"]) {
+            $pageUrl .= '—ADMIN';
+        } elseif (!isset($this->v["uID"]) && $this->v["uID"] <= 0) {
+            $pageUrl .= '—PUBLIC';
+        }
+        $ret = $GLOBALS["SL"]->chkCache($pageUrl, 'search-html', 1);
+        if ($GLOBALS["SL"]->REQ->has('showPreviews')
+            && !$GLOBALS["SL"]->REQ->has('refresh')
+            && trim($ret) != '') {
+            return $ret;
+        }
         if (!isset($GLOBALS["SL"]->x["isHomePage"])) {
             $GLOBALS["SL"]->x["isHomePage"] = false;
         }
@@ -410,6 +422,7 @@ class OpenListing extends OpenAjax
                 'vendor.openpolice.nodes.1418-admin-complaints-listing-styles', 
                 $this->v
             )->render();
+        $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
         if ($GLOBALS["SL"]->REQ->has('ajax')) {
             echo $ret;
             exit;
@@ -698,6 +711,11 @@ class OpenListing extends OpenAjax
                     . substr($fltIDs, 2) . "])";
             }
         }
+        if (isset($GLOBALS["SL"]->x["reqPics"]) && $GLOBALS["SL"]->x["reqPics"]) {
+            $eval .= "->whereIn('op_complaints.com_user_id', [" 
+                . implode(", ", $GLOBALS["SL"]->getComplaintWithProfilePics())
+                . "])";
+        }
         $eval .= $this->searcher->getSearchFiltQryStatus()
             . "->select('op_complaints.*', 'op_person_contact.prsn_name_first', 
             'op_person_contact.prsn_name_last', 'op_person_contact.prsn_email', 'op_incidents.*')"
@@ -882,50 +900,73 @@ class OpenListing extends OpenAjax
     protected function printProfileMyComplaints($nID)
     {
         $ret = '';
-        if ($this->v["uID"] > 0) {
-            $usr = User::find($this->v["uID"]);
+        $isOwner = true;
+        $uID = $this->v["uID"];
+        if (isset($this->v["profileUser"]) 
+            && isset($this->v["profileUser"]->id)
+            && intVal($this->v["profileUser"]->id) > 0
+            && $uID != $this->v["profileUser"]->id) {
+            $uID = intVal($this->v["profileUser"]->id);
+            $isOwner = false;
+        }
+        if ($uID > 0) {
+            $usr = User::find($uID);
             /* $name = 'Your';
             if ($usr && isset($usr->name) && trim($usr->name) != '') {
                 $name = trim($usr->name) . '\'s';
             } */
-            $chk = OPComplaints::where('com_user_id', $this->v["uID"])
-                ->where('com_status', '>', 0)
-                ->orderBy('created_at', 'desc')
-                ->get();
-            if ($chk->isNotEmpty()) {
+            $complaints = $compliments = null;
+            if ($isOwner || 
+                (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+                $complaints = OPComplaints::where('com_user_id', $uID)
+                    ->where('com_status', '>', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            } else {
+                $status = $this->getPublishedStatusList('complaints');
+                $complaints = OPComplaints::where('com_user_id', $uID)
+                    ->whereIn('com_status', $status)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            }
+            if ($complaints->isNotEmpty()) {
                 $loadURL = '/record-prevs/1?rawids=';
-                foreach ($chk as $i => $rec) {
+                foreach ($complaints as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->com_id;
                 }
-                $ret .= '<h2 class="slBlueDark m0">Complaints</h2>'
-                    . '<div id="n' . $nID . 'ajaxLoadA" class="w100">' 
-                    . $GLOBALS["SL"]->sysOpts["spinner-code"] 
-                    . '</div>';
                 $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
                     . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
-            } else {
-                $ret .= '<div class="p10"><i>No Complaints</i></div>';
             }
-            $chk = OPCompliments::where('compli_user_id', $this->v["uID"])
-                ->where('compli_status', '>', 0)
-                ->orderBy('created_at', 'desc')
-                ->get();
-            if ($chk->isNotEmpty()) {
+            if ($isOwner || 
+                (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+                $compliments = OPCompliments::where('compli_user_id', $uID)
+                    ->where('compli_status', '>', 0)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            } else {
+                $status = $this->getPublishedStatusList('compliments');
+                $compliments = OPCompliments::where('compli_user_id', $uID)
+                    ->where('compli_status', $status)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            }
+            if ($compliments->isNotEmpty()) {
                 $loadURL = '/record-prevs/5?rawids=';
-                foreach ($chk as $i => $rec) {
+                foreach ($compliments as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->compli_id;
                 }
-                $ret .= '<div class="p20">&nbsp;</div>'
-                    . '<h2 class="slBlueDark m0">Compliments</h2>'
-                    . '<div id="n' . $nID . 'ajaxLoadB" class="w100">'
-                    . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div>';
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoadB").load("' 
-                    . $loadURL . '");' . "\n";
-            } else {
-                $ret .= '<!-- <div class="p10"><i>No Compliments</i></div> -->';
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
+                    . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
             }
         }
-        return $ret;
+        return view(
+            'vendor.openpolice.nodes.1893-profile-complaints-compliments', 
+            [
+                "nID"         => $nID,
+                "complaints"  => $complaints,
+                "compliments" => $compliments
+            ]
+        )->render();
     }
     
     /**

@@ -59,19 +59,17 @@ class OpenReport extends OpenOfficers
      */
     protected function printAllegsWhyDeet($alleg)
     {
-        $alle = '';
-        if (!$this->canPrintFullReport()) {
-            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b>';
-        } else {
+        $alle = '<div style="font-weight: bold; padding-bottom: 5px;">'
+            . $alleg[1] . '</div>';
+        if ($this->canPrintFullReport()) {
             $foundWhy = false;
-            $alle .= '<b class="fPerc125">' . $alleg[1] . '</b><br />';
             foreach ($this->sessData->dataSets["allegations"] as $j => $all) {
                 if (!$foundWhy 
                     && $all 
                     && isset($all->alle_type) 
                     && $all->alle_type == $alleg[0] 
                     && trim($all->alle_description) != '') {
-                    $alle .= $all->alle_description . '<br />';
+                    $alle .= $all->alle_description;
                     $foundWhy = true;
                 }
             }
@@ -89,16 +87,30 @@ class OpenReport extends OpenOfficers
     {
         $fullPrint = false;
         $why = $this->reportAllegsWhyDeets($nID);
-        $deets = 'Allegations</h3>';
+        $deets = 'Allegations';
+        $desc = '';
         if ($this->canPrintFullReport()) {
-            $deets .= '<div class="slGrey mTn10">Including comments from the complainant</div>';
+            $desc = '<div class="slGrey" style="padding-bottom: 15px;">'
+                . 'Including comments from the complainant</div>';
             $fullPrint = true;
         }
-        $deets .= '<h3 class="disNon">';
         if ($fullPrint) {
-            return $this->printReportDeetsBlock($why, $deets, $this->allNodes[$nID]);
+            return $this->printReportDeetsBlock($why, $deets, $this->allNodes[$nID], $desc);
         }
-        return $this->printReportDeetsBlockCols($why, $deets, 2, $this->allNodes[$nID]);
+        if (!$GLOBALS["SL"]->isPdfView()) {
+            return $this->printReportDeetsBlockCols($why, $deets, 2, $this->allNodes[$nID], $desc);
+        }
+        // special printing for PDF...
+        $ret = '<h4 class="slBlueDark" style="margin-top: 30px;">Allegations</h4>'
+            . '<table class="repDeetsBlock"><tr>';
+        $allegsList = $GLOBALS["SL"]->mexplode(',', $this->commaAllegationList());
+        foreach ($allegsList as $i => $alleg) {
+            $ret .= '<td class="w50"><b>' . $alleg . '</b></td>';
+            if ($i%2 == 1) {
+                $ret .= '</tr><tr>';
+            }
+        }
+        return $ret . '</tr></table>';
     }
 
     /**
@@ -222,15 +234,39 @@ class OpenReport extends OpenOfficers
 //echo 'getReportDept(' . $deptID . '<pre>'; print_r($dept); echo '</pre>'; exit;
         if ($dept && isset($dept->dept_name)) {
             $status = $this->sessData->dataSets["complaints"][0]->com_status;
-            return '<h4 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug 
-                . '" class="slBlueDark">Misconduct Incident Report for ' 
-                . $dept->dept_name . '</a></h4>'
-                . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
-                . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
-                . $this->printComplaintStatus($status) . '</b></div>';
+            if ($GLOBALS["SL"]->isPdfView()) {
+                return '<h4 style="margin-bottom: 0px; ">'
+                    . 'Misconduct Incident Report for ' . $dept->dept_name . '</h4>';
+            } else {
+                return '<h4 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug 
+                    . '" class="slBlueDark">Misconduct Incident Report for ' 
+                    . $dept->dept_name . '</a></h4>'
+                    . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
+                    . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
+                    . $this->printComplaintStatus($status) . '</b></div>';
+            }
         }
         $this->v["reportDepts"][] = $deptID;
         return '';
+    }
+    
+    /**
+     * Get the label and value for who submitted a report,
+     * depending on the current permissions and available info.
+     *
+     * @return array
+     */
+    protected function getReportPublicID($nID)
+    {
+        $ret = '';
+        $com = $this->sessData->dataSets["complaints"][0];
+        if (isset($com->com_public_id) && intVal($com->com_public_id) > 0) {
+            return [
+                'OpenPolice.org Report ID', 
+                'Complaint #' . $com->com_public_id
+            ];
+        }
+        return [];
     }
     
     /**
@@ -506,7 +542,11 @@ class OpenReport extends OpenOfficers
     protected function getCivReportNameHeader($nID)
     {
 //echo '<br /><br /><br />getCivReportNameHeader(' . $nID . ', branch: ' . $this->sessData->getLatestDataBranchID() . ', name: ' . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '<br />'; exit;
-        return '<h4 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+        $style = '';
+        if (!$GLOBALS["SL"]->isPdfView()) {
+            $style = ' style="margin: 0px 0px 18px 0px;"';
+        }
+        return '<h4 class="slBlueDark"' . $style . '>' 
             . $this->getCivReportName($this->sessData->getLatestDataBranchID()) 
             . '</h4>';
     }
@@ -600,7 +640,11 @@ class OpenReport extends OpenOfficers
         list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('officers');
         //$offID = $this->sessData->getLatestDataBranchID();
         $offRow = $this->sessData->getRowById('officers', $itemID);
-        return '<h4 class="slBlueDark" style="margin: 0px 0px 18px 0px;">' 
+        $style = '';
+        if (!$GLOBALS["SL"]->isPdfView()) {
+            $style = ' style="margin: 0px 0px 18px 0px;"';
+        }
+        return '<h4 class="slBlueDark"' . $style . '>' 
             . $this->getOffReportName($offRow, $itemInd) . '</h4>';
     }
     
@@ -1000,6 +1044,10 @@ class OpenReport extends OpenOfficers
     protected function fillGlossary()
     {
         $this->v["glossaryList"] = [];
+        $allegLabel = 'Allegation: ';
+        if (!$GLOBALS["SL"]->isPdfView()) {
+            $allegLabel = '<a href="/allegations" target="_blank">Allegation</a>: ';
+        }
         if ((in_array($this->treeID, [1, 42]) || $GLOBALS["SL"]->getReportTreeID() == 1)
             && isset($this->sessData->dataSets["complaints"])) {
             if ($this->sessData->dataSets["complaints"][0]->com_award_medallion == 'Gold') {
@@ -1014,7 +1062,7 @@ class OpenReport extends OpenOfficers
             $this->simpleAllegationList();
             if (sizeof($this->allegations) > 0) {
                 foreach ($this->allegations as $i => $a) {
-                    $allegDesc = '<a href="/allegations" target="_blank">Allegation</a>: ' 
+                    $allegDesc = $allegLabel 
                         . $GLOBALS["SL"]->def->getDesc('Allegation Type', $a[0]);
                     $this->v["glossaryList"][] = [
                         '<b>' . $a[0] . '</b>', 

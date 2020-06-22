@@ -476,6 +476,7 @@ class OpenInitExtras extends OpenPartners
                 $GLOBALS["SL"]->dataPerms = 'none';
             }
         }
+//echo 'tweak ' . $GLOBALS["SL"]->dataPerms; exit;
         return true;
     }
     

@@ -5,7 +5,7 @@
         {{ str_replace('Department', 'Dept.', $dept["deptRow"]->dept_name) }}
     </h3>
     View Department Profile</a><br />
-    {{ $GLOBALS["SL"]->printRowAddy($dept["deptRow"], 'Dept') }}
+    {{ $GLOBALS["SL"]->printRowAddy($dept["deptRow"], 'dept_') }}
     <div class="relDiv mapMrkLgWrp">
         <img src="/openpolice/uploads/map-marker-redblue-lg-{{ 
             round($dept['deptRow']->dept_score_openness/10) 

@@ -10,7 +10,7 @@
             && strpos($loopItem->dept_name, 'Not sure') === false) 
             {{ $GLOBALS['SL']->def->getValById($loopItem->dept_type) }},
         @endif
-        {!! $GLOBALS["SL"]->printRowAddy($loopItem, 'Dept') !!}
+        {!! $GLOBALS["SL"]->printRowAddy($loopItem, 'dept_') !!}
         <?php /*
         @if (trim($loopItem->dept_address_county) != '') 
             , {{ $loopItem->dept_address_county }} County 

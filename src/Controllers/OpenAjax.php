@@ -251,6 +251,7 @@ class OpenAjax extends OpenComplaintSaves
     {
 //echo '<pre>'; print_r($this->v["reqState"]); echo '</pre>';
         $this->v["reqLike"] = $reqLikeOrig = '';
+        $loadUrl = '';
         if ($request->has('policeDept')) {
             $reqLikeOrig = trim($request->policeDept);
             $loadUrl .= '?survey=1';

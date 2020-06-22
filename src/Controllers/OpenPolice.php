@@ -55,6 +55,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2685) { // overwrite preview results
             $GLOBALS["SL"]->x["isHomePage"] = true;
             $GLOBALS["SL"]->x["isPublicList"] = true;
+            $GLOBALS["SL"]->x["reqPics"] = true;
             $GLOBALS["SL"]->pageView = 'public';
             return $this->printComplaintListing($nID);
         //} elseif ($nID == 1848) {
@@ -66,18 +67,17 @@ class OpenPolice extends OpenInitExtras
             $GLOBALS["SL"]->addBodyParams('onscroll="' . $scroll . '"');
             
         // Public Departments Accessibility Overview
-        } elseif ($nID == 1968) {
-            return $this->printDeptAccScoreTitleDesc($nID);
         } elseif ($nID == 1816) {
+            $GLOBALS["SL"]->addHshoo('#n1917');
             return $this->printDeptAccScoreBars($nID);
         } elseif (in_array($nID, [1863, 1858, 2013])) {
             return $this->publicDeptAccessMap($nID);
             
         } elseif ($nID == 1907) { // Donate Social Media Buttons
             return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
-        } elseif (in_array($nID, [859, 1454])) {
+        } elseif ($nID == 1454) {
             return $this->printDeptOverPublic($nID);
-        } elseif (in_array($nID, [2804])) {
+        } elseif ($nID == 2804) {
             return $this->printDeptOverPublicTop50s($nID);
                 
         // How We Rate Departments Page
@@ -88,6 +88,9 @@ class OpenPolice extends OpenInitExtras
             ];
             foreach ($nodes as $n) {
                 $GLOBALS["SL"]->addHshoo('/how-we-rate-departments#n' . $n);
+            }
+            if ($GLOBALS["SL"]->REQ->has('test')) {
+
             }
             
         // Department Profile
@@ -146,6 +149,8 @@ class OpenPolice extends OpenInitExtras
             return $this->printMfaInstruct();
 
         // Complaint Report
+        } elseif ($nID == 3039) {
+            return $this->getReportPublicID($nID);
         } elseif ($nID == 1374) {
             return $this->reportAllegsWhy($nID);
         } elseif ($nID == 1373) {

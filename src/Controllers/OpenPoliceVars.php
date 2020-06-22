@@ -71,13 +71,7 @@ class OpenPoliceVars extends TreeSurvForm
         'Arrests'  => [116, 122]
     ];
 
-    protected $cmplntUpNodes   = [
-        280,
-        324,
-        317,
-        413,
-        371
-    ];
+    protected $cmplntUpNodes   = [ 280 ];
 
     protected $eventTypeLookup = []; // $eveSeqID => 'Event Type'
     protected $eventCivLookup  = []; // array('Event Type' => array($civID, $civID, $civID))

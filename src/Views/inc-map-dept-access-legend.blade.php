@@ -1,7 +1,10 @@
 <!-- resources/views/vendor/openpolice/inc-map-dept-access-legend.blade.php -->
 <div id="legendScoreWrap">
-    <p>Click a police department on the map for more details about its <nobr>Accessibility Score.</nobr>
-    <nobr>(Higher is better.)</nobr></p>
+    <p>
+        Click a police department on the map for more details 
+        about its <nobr>Accessibility Score.</nobr>
+    </p>
+<?php /* 
     <div id="legendScoreTxt" class="row slBlueDark">
         <div class="col-2">0</div>
         <div class="col-3 taC">-</div>
@@ -13,6 +16,7 @@
         <div class="legendScore"><img src="/openpolice/uploads/map-marker-redblue-{{ $i }}.png"
             alt="Accessibility Score {{ (($i == 0) ? 0 : $i . '0') }} out of 100" ></div>
     @endfor
+*/ ?>
 </div>
 <style>
 #legendScoreWrap { width: 98%; text-align: left; }

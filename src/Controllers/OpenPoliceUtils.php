@@ -422,12 +422,12 @@ class OpenPoliceUtils extends OpenPoliceVars
             if (isset($this->sessData->dataSets["civilians"]) 
                 && $this->v["uID"] == $this->sessData->dataSets["civilians"][0]->civ_user_id) {
                 //$this->v["isOwner"] = true;
-                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) {
+                if (isset($GLOBALS["SL"]->x["fullAccess"]) && $GLOBALS["SL"]->x["fullAccess"]) {
                     $GLOBALS["SL"]->pageView = 'full';
                 }
             } elseif (isset($this->sessData->dataSets["complaints"]) 
                 && $this->v["uID"] == $this->sessData->dataSets["complaints"][0]->com_user_id) {
-                if (isset($GLOBALS["fullAccess"]) && $GLOBALS["fullAccess"]) {
+                if (isset($GLOBALS["SL"]->x["fullAccess"]) && $GLOBALS["SL"]->x["fullAccess"]) {
                     $GLOBALS["SL"]->pageView = 'full';
                 }
             } elseif ($this->v["user"]->hasRole('administrator|staff')) {
@@ -470,10 +470,18 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     public function loadDeptStuff($deptID = -3)
     {
+        $GLOBALS["SL"]->loadStates();
         if (!isset($this->v["deptScores"])) {
             $this->v["deptScores"] = new DepartmentScores;
+            if ($deptID <= 0) {
+                $this->initSearcher();
+                $this->searcher->getSearchFilts();
+                $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
+            }
         }
-        $this->v["deptScores"]->loadDeptStuff($deptID);
+        if ($deptID > 0) {
+            $this->v["deptScores"]->loadDeptStuff($deptID);
+        }
         return true;
     }
     

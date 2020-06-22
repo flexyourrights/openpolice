@@ -17,9 +17,9 @@
     @endif
         Type in part of the name of a police department to search for it.
         Or select a state to browse law enforcement agencies in the OpenPolice.org 
-        database, whether or not their policies have been researched.
+        database.
 @else
-    <div class="pB15 pL5 pR5 brdBot">
+    <div class="pB15 pL5 pR5 brdBot relDiv">
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 Department Name
@@ -28,7 +28,12 @@
                 City, State
             </div>
             <div class="col-md-3 col-12">
-                Accessibility <nobr>Score & Grade</nobr>
+                <div id="colHeadDeptScore">
+                    Accessibility 
+                    <div id="colHeadDeptScoreLn2">
+                        <nobr>Score & Grade</nobr>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,3 +84,12 @@
 
 @endif
 </div>
+
+<style>
+#colHeadDeptScore { text-align: left; }
+#colHeadDeptScoreLn2 { display: inline; }
+@media screen and (max-width: 768px) {
+    #colHeadDeptScore { position: absolute; top: -45px; right: 15px; text-align: right; }
+    #colHeadDeptScoreLn2 { display: block; }
+}
+</style>

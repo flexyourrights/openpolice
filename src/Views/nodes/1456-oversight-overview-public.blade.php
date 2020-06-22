@@ -29,7 +29,7 @@
                 $GLOBALS["SL"]->def->getVal('Investigative Agency Types', $over->OverType) 
             }}</div></td>
         <td>{{ $over->over_address_state }}, {{ $over->over_address_county }}
-            <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->printRowAddy($over, 'Dept') }}</span></td>
+            <div class="slGrey fPerc80">{{ $GLOBALS["SL"]->printRowAddy($over, 'dept_') }}</span></td>
         <td> @if ($over->over_tot_officers > 0) {{ number_format($over->over_tot_officers) }} 
             @else <a href="/volunteer" class="slGrey">?</a> @endif </td>
         <td>{{ $over->over_score_openness }}</td></tr>

@@ -309,9 +309,7 @@ class OpenDepts extends OpenPolicePCIF
         }
         $this->loadDeptEditsSummary();
         $GLOBALS["SL"]->loadStates();
-        if (!isset($this->v["deptScores"])) {
-            $this->v["deptScores"] = new DepartmentScores;
-        }
+        $this->loadDeptStuff();
         $GLOBALS["SL"]->addHshoos([
             '#deptContact',
             '#deptWeb',
@@ -673,10 +671,6 @@ class OpenDepts extends OpenPolicePCIF
      */
     protected function publicDeptAccessMap($nID = -3)
     {
-        if ($GLOBALS["SL"]->REQ->has('state') 
-            && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
-            return '<!-- no state map yet -->';
-        }
         $ret = '';
         if ($GLOBALS["SL"]->REQ->has('colorMarker')) {
             $colors = [];
@@ -686,13 +680,15 @@ class OpenDepts extends OpenPolicePCIF
             for ($i = 5; $i < 11; $i++) {
                 $colors[$i] = $GLOBALS["SL"]->printColorFadeHex((11-$i)/7, '#2B3493', '#FFFFFF');
             }
-            $ret = '<br /><br /><br /><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
+            $ret = '<br /><br /><br />'
+                . '<table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
             foreach ($colors as $i => $c) {
                 $ret .= '<td><img border=0 src="/survloop/uploads/template-map-marker.png" '
                     . 'style="width: 80px; background: ' . $c . ';" alt="Accessibility Score ' 
                     . (($i == 0) ? 0 : $i . '0') . ' out of 10"><br /><br />' . $c . '</td>';
             }
-            $ret .= '</tr></table><table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
+            $ret .= '</tr></table>'
+                . '<table border=0 cellpadding=0 cellspacing=5 class="m20" ><tr>';
             foreach ($colors as $i => $c) {
                 $ret .= '<td><img border=0 src="/openpolice/uploads/map-marker-redblue-' 
                     . $i . '.png" alt="Accessibility Score ' . (($i == 0) ? 0 : $i . '0') 
@@ -700,28 +696,22 @@ class OpenDepts extends OpenPolicePCIF
             }
             echo $ret . '</tr></table>';
         }
-        
-        $this->initSearcher();
-        $this->searcher->getSearchFilts();
-        $GLOBALS["SL"]->loadStates();
-        if (!isset($this->v["deptScores"])) {
-            $this->v["deptScores"] = new DepartmentScores;
-            $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
-        }
-        if ($GLOBALS["SL"]->REQ->has('state') 
-            && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
-            $ret .= '<!-- not yet for state filter -->';
-        } elseif (isset($this->v["deptScores"]->scoreDepts)
-            && $this->v["deptScores"]->scoreDepts->isNotEmpty()) {
+        $this->loadDeptStuff();
+        if (isset($this->v["deptScores"]->scoreDepts)
+            && $this->v["deptScores"]->scoreDepts->count() > 0) {
             $cnt = 0;
             $limit = 10;
             $forStart = $this->v["deptScores"]->scoreDepts->count()-1;
             for ($i = $forStart; $i >= 0; $i--) {
                 $dept = $this->v["deptScores"]->scoreDepts[$i];
                 if ($cnt < $limit 
-                    && (!isset($dept->dept_address_lat) || intVal($dept->dept_address_lat) == 0
-                        || !isset($dept->dept_address_lng) || intVal($dept->dept_address_lng) == 0)) {
-                    $addy = $GLOBALS["SL"]->printRowAddy($dept, 'Dept');
+                    && (!isset($dept->dept_address_lat)
+                        || $dept->dept_address_lat === null 
+                        || intVal($dept->dept_address_lat) == 0
+                        || !isset($dept->dept_address_lng) 
+                        || $dept->dept_address_lng === null
+                        || intVal($dept->dept_address_lng) == 0)) {
+                    $addy = $GLOBALS["SL"]->printRowAddy($dept, 'dept_');
                     if (trim($addy) != '') {
                         list($lat, $lng) = $GLOBALS["SL"]->states->getLatLng($addy);
                         $GLOBALS["SL"]->pageJAVA .= ' console.log("' 
@@ -782,31 +772,7 @@ class OpenDepts extends OpenPolicePCIF
     {
         return view('vendor.openpolice.inc-map-dept-access-legend')->render();
     }
-    
-    /**
-     * Prints the main public listing of all departments with
-     * accessibility scores.
-     *
-     * @param  int $nID
-     * @return string
-     */
-    protected function printDeptOverPublic($nID)
-    {
-        $state = '';
-        $this->initSearcher();
-        if (isset($this->searcher->searchFilts["state"])) {
-            $state = $this->searcher->searchFilts["state"];
-        }
-        return view(
-            'vendor.openpolice.nodes.859-depts-overview-public', 
-            [
-                "nID"        => $nID,
-                "deptScores" => $this->v["deptScores"],
-                "state"      => $state
-            ]
-        )->render();
-    }
-    
+
     /**
      * Prints the main public listing of all departments with
      * accessibility scores, updated in 2020 with just some top 50 lists!
@@ -817,7 +783,9 @@ class OpenDepts extends OpenPolicePCIF
     protected function printDeptOverPublicTop50s($nID)
     {
         $biggest = [];
-        if ($this->v["deptScores"]->scoreDepts->isNotEmpty()) {
+        $this->loadDeptStuff();
+        if ($this->v["deptScores"]->scoreDepts
+            && $this->v["deptScores"]->scoreDepts->isNotEmpty()) {
             foreach ($this->v["deptScores"]->scoreDepts as $d => $dept) {
                 $biggest[] = [
                     "id"        => $dept->dept_id,
@@ -897,34 +865,6 @@ class OpenDepts extends OpenPolicePCIF
             }
         }
         return true;
-    }
-    
-    /**
-     * Prints the titles for main public listing of all departments 
-     * with accessibility scores.
-     *
-     * @param  int $nID
-     * @return string
-     */
-    protected function printDeptAccScoreTitleDesc($nID)
-    {
-        $this->initSearcher();
-        $this->searcher->getSearchFilts();
-        if (!isset($this->v["deptScores"])) {
-            $this->v["deptScores"] = new DepartmentScores;
-            $this->v["deptScores"]->loadAllDepts($this->searcher->searchFilts);
-        }
-        $state = '';
-        if ($GLOBALS["SL"]->REQ->has('state')) {
-            $state = $GLOBALS["SL"]->REQ->state;
-        }
-        return view(
-            'vendor.openpolice.nodes.1968-accss-grades-title-desc', 
-            [
-                "nID"   => $nID,
-                "state" => $state
-            ]
-        )->render();
     }
     
     /**
