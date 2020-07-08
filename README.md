@@ -24,10 +24,10 @@
 * SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 2.1 MB
 * <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.4 MB
 
-Open Police is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
+OpenPolice is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
 users to publish reports online, we aim to establish better public transparency and oversight of police activity in the 
-U.S.. Open Police extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">SurvLoop</a>, which runs atop
+U.S. OpenPolice extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">SurvLoop</a>, which runs atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
 <a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
@@ -37,7 +37,7 @@ I plan to provide more documentation in the coming weeks. Thank you for your int
 This software began as an internal tool to design our database, then prototype survey generation. Then it was adapted to the 
 Laravel framework, and has continued to grow towards a content-management system for data-focused websites.
 
-The upcoming Open Police web app can be tested out here, 
+The upcoming OpenPolice web app can be tested out here, 
 feedback welcome via the end of the <b>beta demo</b> submission process:<br />
 <a href="https://openpolice.org/file-your-police-complaint" target="_blank">/file-your-police-complaint</a><br />
 The resulting database designed using the engine, as well as the branching tree which specifies the user's experience: 
@@ -60,7 +60,7 @@ XML included an automatically generated schema, eg.<br />
 
 # <a name="getting-started"></a>Getting Started
 
-## Installing Open Police Complaints
+## Installing OpenPolice
 
 <a href="https://openpolice.org/how-to-install-local-openpolice" target="_blank">Full install instructions</a> also describe how to set up a development environment using VirutalBox, Vargrant, and Laravel's Homestead.
 
