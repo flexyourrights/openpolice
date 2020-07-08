@@ -57,6 +57,7 @@
                 </div>
             </div>
         @endif
+        <?php /* 
             <div class="fR">
                 <div class="relDiv">
                     <div class="dropdown">
@@ -79,6 +80,7 @@
 
                 </div>
             </div>
+        */ ?>
         @if ($sView == 'list')
             <div class="fR pR15">
                 <button type="button" id="toggleSearchFilts"

@@ -539,6 +539,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintAnonOnly($complaint)
     {
+        if (!$this->isTypeComplaint($complaint)) {
+            return 1;
+        }
         $unPub = $this->getUnPublishedStatusList();
         $types = [ 'public', 'pdf' ];
         if (isset($GLOBALS["SL"]->pageView) 
@@ -699,6 +702,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
         }
         if ($this->v["isAdmin"] || $this->v["isOwner"]) {
             return 0;
+        }
+        if (!$this->isTypeComplaint($complaint)) {
+            return 1;
         }
         if (isset($complaint->com_status)) {
             $status = $complaint->com_status;

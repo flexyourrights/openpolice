@@ -282,7 +282,7 @@ class OpenInitExtras extends OpenPartners
     }
     
     /**
-     * Run any validation needed specific to OP.org
+     * Run any validation and cleanup needed specific to OP.org
      *
      * @return boolean
      */

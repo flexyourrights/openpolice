@@ -213,8 +213,13 @@ class OpenListing extends OpenAjax
         //$GLOBALS["SL"]->pageView = 'public';
         $this->initSearcher();
         $this->searcher->getSearchFilts();
+        $typeDef = $GLOBALS["SL"]->def->getID(
+            'Complaint Type', 
+            'Police Complaint'
+        );
         $xtra = "whereIn('com_status', [" 
-            . implode(", ", $this->getPublishedStatusList('complaints')) . "])->";
+            . implode(", ", $this->getPublishedStatusList('complaints')) . "])->"
+            . "where('com_type', " . $typeDef . ")->";
         $this->searcher->loadAllComplaintsPublic($xtra);
         if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
             foreach ($this->searcher->v["allcomplaints"] as $i => $com) {
@@ -565,7 +570,7 @@ class OpenListing extends OpenAjax
         if (sizeof($this->v["complaints"]) > 0) {
             foreach ($this->v["complaints"] as $i => $com) {
                 if (!$GLOBALS["SL"]->x["isHomePage"] 
-                    || sizeof($this->v["complaintsPreviews"]) < 3) {
+                    || sizeof($this->v["complaintsPreviews"]) < 6) {
                     $ret = '';
                     $view = (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
                     $cacheName = 'complaint' . $com->com_id . '-preview-' . $view;
@@ -909,6 +914,10 @@ class OpenListing extends OpenAjax
             $uID = intVal($this->v["profileUser"]->id);
             $isOwner = false;
         }
+        $typeDef = $GLOBALS["SL"]->def->getID(
+            'Complaint Type', 
+            'Police Complaint'
+        );
         if ($uID > 0) {
             $usr = User::find($uID);
             /* $name = 'Your';
@@ -916,8 +925,8 @@ class OpenListing extends OpenAjax
                 $name = trim($usr->name) . '\'s';
             } */
             $complaints = $compliments = null;
-            if ($isOwner || 
-                (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+            if ($isOwner 
+                || (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
                 $complaints = OPComplaints::where('com_user_id', $uID)
                     ->where('com_status', '>', 0)
                     ->orderBy('created_at', 'desc')
@@ -926,6 +935,7 @@ class OpenListing extends OpenAjax
                 $status = $this->getPublishedStatusList('complaints');
                 $complaints = OPComplaints::where('com_user_id', $uID)
                     ->whereIn('com_status', $status)
+                    ->where('com_type', $typeDef)
                     ->orderBy('created_at', 'desc')
                     ->get();
             }
@@ -937,8 +947,8 @@ class OpenListing extends OpenAjax
                 $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
                     . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
             }
-            if ($isOwner || 
-                (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+            if ($isOwner 
+                || (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
                 $compliments = OPCompliments::where('compli_user_id', $uID)
                     ->where('compli_status', '>', 0)
                     ->orderBy('created_at', 'desc')

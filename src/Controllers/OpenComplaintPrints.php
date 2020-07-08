@@ -365,7 +365,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
     }
     
     /* Double-Checking [For Now] */
-    protected function canShowUpload($nID, $upDeets, $isAdmin = false, $isOwner = false)
+    protected function canShowUpload($upDeets, $isAdmin = false, $isOwner = false)
     {
         if ($isAdmin || $isOwner || $this->v["isAdmin"] || $this->v["isOwner"]) {
             return true;
@@ -374,7 +374,8 @@ class OpenComplaintPrints extends OpenComplaintEmails
             $com = $this->sessData->dataSets["complaints"][0];
             if (isset($com->com_status)
                 && in_array($com->com_status, $this->getPublishedStatusList())
-                && $this->canPrintFullReportByRecordSpecs()) {
+                && $this->canPrintFullReportByRecordSpecs()
+                && $this->isTypeComplaint($com)) {
                 if ($upDeets["privacy"] == 'Block') {
                     return false;
                 }

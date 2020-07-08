@@ -95,13 +95,24 @@ class OpenPoliceUtils extends OpenPoliceVars
         return $this->isPublicComplainantName() && $this->isPublicOfficerName();
     }
     
+    public function isTypeComplaint($coreRec)
+    {
+        $def = $GLOBALS["SL"]->def->getID(
+            'Complaint Type', 
+            'Police Complaint'
+        );
+        return (isset($coreRec->com_type) && $coreRec->com_type == $def);
+    }
+    
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
     {
         if ($coreTbl == 'complaints') {
             if (!$coreRec || !isset($coreRec->com_status)) {
                 $coreRec = OPComplaints::find($coreID);
             }
-            if ($coreRec && isset($coreRec->com_status)) {
+            if ($coreRec 
+                && isset($coreRec->com_status)
+                && $this->isTypeComplaint($coreRec)) {
                 return in_array(
                     $coreRec->com_status, 
                     $this->getPublishedStatusList($coreTbl)
@@ -254,16 +265,19 @@ class OpenPoliceUtils extends OpenPoliceVars
         $this->allPublicCoreIDs = $list = [];
         $list = null;
         if ($coreTbl == 'complaints') {
-            $list = OPComplaints::whereIn('com_status', 
-                    $this->getPublishedStatusList($coreTbl))
-                //->where('com_type', $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'))
+            $typeDef = $GLOBALS["SL"]->def->getID(
+                'Complaint Type', 
+                'Police Complaint'
+            );
+            $list = OPComplaints::where('com_type', $typeDef)
+                ->whereIn('com_status', $this->getPublishedStatusList($coreTbl))
                 ->select('com_id', 'com_public_id')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } elseif ($coreTbl == 'compliments') {
             $list = OPCompliments::whereIn('compli_status', 
                     $this->getPublishedStatusList($coreTbl))
-                //->where('compli_type', $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'))
+                //->where('compli_type', $typeDef)
                 ->select('compli_id') //, 'compli_public_id')
                 ->orderBy('created_at', 'desc')
                 ->get();

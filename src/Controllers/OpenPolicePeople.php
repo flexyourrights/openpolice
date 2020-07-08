@@ -406,12 +406,17 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function chkAllOfficerVerifiedRecords()
     {
         $found = true;
+        $typeDef = $GLOBALS["SL"]->def->getID(
+            'Complaint Type', 
+            'Police Complaint'
+        );
         $chk = OPOfficers::whereIn('off_complaint_id', function($query)
             {
                 $status = $this->getPublishedStatusList('complaints');
                 $query->select('com_id')
                     ->from(with(new OPComplaints)->getTable())
-                    ->whereIn('com_status', $status);
+                    ->whereIn('com_status', $status)
+                    ->where('com_type', $typeDef);
             })
             ->get();
         if ($chk->isNotEmpty()) {

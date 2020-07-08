@@ -22,7 +22,7 @@
     @if ($comUser && isset($comUser->id))
         <div class="col-md-3 col-sm-4 complaintPrevPic taC">
             <div class="pB20">
-                {!! $comUser->profileImg() !!}
+                {!! $comUser->profileImg($url) !!}
             @if (isset($titleWho) && trim($titleWho) != '')
                 <a href="{{ $comUser->urlSlug() }}"
                     ><h5 class="mT30">{!! $titleWho !!}</h5></a>
