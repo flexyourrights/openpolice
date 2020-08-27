@@ -41,11 +41,23 @@ class OpenReportTools extends OpenReport
     /**
      * Clear all SurvLoop-level report caches of the current complaint.
      *
+     * @param  boolean $redirRefresh
      * @return boolean
      */
-    protected function clearComplaintCaches()
+    protected function clearComplaintCaches($redirRefresh = false)
     {
-        return $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
+        $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
+        $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
+        $GLOBALS["SL"]->forgetAllCachesTypeTree('search', 1);
+        $GLOBALS["SL"]->forgetAllCachesTypeTree('srch-results', 1);
+        if ($redirRefresh) {
+            echo view(
+                'vendor.openpolice.ajax.redir-complaint-refresh',
+                [ "coreID" => $this->coreID ]
+            )->render();
+            exit;
+        }
+        return true;
     }
     
     /**
@@ -192,7 +204,7 @@ class OpenReportTools extends OpenReport
                 } elseif ($hasPublish) {
                     $this->processOwnerUpdatePublish();
                 }
-                $this->clearComplaintCaches();
+                $this->clearComplaintCaches(true);
                 $redir = '?refresh=1';
                 $this->redir($redir, true);
                 return true;
@@ -219,7 +231,7 @@ class OpenReportTools extends OpenReport
             && $this->sessData->dataSets["oversight"][1]->over_type == 303) {
             $overID = $this->sessData->dataSets["oversight"][1]->over_id;
         }
-        $overUpdateRow = $this->getOverUpdateRow($this->coreID, $deptID);
+        $overUpdateRow = $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"];
         $evalNotes .= $this->processComplaintOwnerStatus();
 
         $this->logComplaintReview('Owner', $evalNotes, $GLOBALS["SL"]->REQ->overStatus);
@@ -231,7 +243,7 @@ class OpenReportTools extends OpenReport
             $recDef = $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight');
 
             if (trim($GLOBALS["SL"]->REQ->overStatus) == 'Received by Oversight') {
-                $this->logOverUpDate($this->coreID, $deptID, 'received', $overUpdateRow);
+                $this->logOverUpDate($this->coreID, $deptID, 'received');
                 if ($this->sessData->dataSets["complaints"][0]->com_status == $okDef) {
                     $this->sessData->dataSets["complaints"][0]->update([ 
                         "com_status" => $subDef
@@ -243,7 +255,7 @@ class OpenReportTools extends OpenReport
                     'OK to Submit to Oversight'
                 ];
                 if ($GLOBALS["SL"]->REQ->overStatus == 'Investigated (Closed)') {
-                    $this->logOverUpDate($this->coreID, $deptID, 'investigated', $overUpdateRow);
+                    $this->logOverUpDate($this->coreID, $deptID, 'investigated');
                 } elseif (in_array($GLOBALS["SL"]->REQ->overStatus, $okTypes)) {
                     if (isset($overUpdateRow->lnk_com_over_received) 
                         && $overUpdateRow->lnk_com_over_received != '') {

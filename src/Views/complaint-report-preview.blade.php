@@ -20,7 +20,9 @@
 
     <div class="row">
     @if ($comUser && isset($comUser->id))
-        <div class="col-md-3 col-sm-4 complaintPrevPic taC">
+        <div class=" @if ($GLOBALS['SL']->REQ->has('d')) col-lg-5 col-md-4
+            @else col-md-3 col-sm-4 
+            @endif complaintPrevPic taC">
             <div class="pB20">
                 {!! $comUser->profileImg($url) !!}
             @if (isset($titleWho) && trim($titleWho) != '')
@@ -30,7 +32,9 @@
             </div>
         </div>
     @endif
-        <div class="col-md-9 col-sm-8">
+        <div class=" @if ($GLOBALS['SL']->REQ->has('d')) col-lg-7 col-md-8
+            @else col-md-9 col-sm-8
+            @endif ">
             <div class="pB10">
                 <a href="{{ $url }}"><h4>
                     @if (trim($allegations[0]) == '') {!! $comWhere !!}

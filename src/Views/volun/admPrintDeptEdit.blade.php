@@ -7,8 +7,10 @@
     <b>{{ date("n/j/y g:i a", strtotime($deptEdit->zed_dept_dept_verified)) }}</b><br />
     <span class="slGrey"><i>by</i></span> {!! $user !!}<br />
     <br />
+    <?php /*
     <span class="slGrey"><i>took</i></span> {{ 
         number_format(($deptEdit->zed_dept_dept_duration/60), 1) }} minutes<br />
+    */ ?>
     <br />
     
     @if (isset($iaEdit) && $iaEdit)
@@ -49,7 +51,8 @@
         @endif
         @if (trim($deptEdit->zed_dept_dept_email) != '')
             <a href="mailto:{{ $deptEdit->zed_dept_dept_email }}"
-                >{{ $deptEdit->zed_dept_dept_email }}</a><br />
+                >{{ str_replace('@', ' @', str_replace('/', ' /', 
+                    $deptEdit->zed_dept_dept_email)) }}</a><br />
         @endif
         @if (trim($deptEdit->zed_dept_dept_phone_work) != '')
             {{ $deptEdit->zed_dept_dept_phone_work }}<br />
@@ -124,7 +127,7 @@
             {{ $iaEdit->zed_over_over_submit_deadline }}</nobr><br />
         @endif
         @if (trim($iaEdit->zed_over_over_email) != '')
-            {{ $iaEdit->zed_over_over_email }}<br />
+            {{ str_replace('@', ' @', $iaEdit->zed_over_over_email) }}<br />
         @endif
         @if (trim($iaEdit->zed_over_over_phone_work) != '')
             {{ $iaEdit->zed_over_over_phone_work }}<br />
@@ -148,7 +151,7 @@
             {{ $civEdit->zed_over_over_agnc_name }}<br />
         @endif
         @if (trim($civEdit->zed_over_over_email) != '')
-            {{ $civEdit->zed_over_over_email }}<br />
+            {{ str_replace('@', ' @', $civEdit->zed_over_over_email) }}<br />
         @endif
         @if (trim($civEdit->zed_over_over_phone_work) != '')
             {{ $civEdit->zed_over_over_phone_work }}<br />

@@ -190,7 +190,8 @@
         please login to your account to let us know.
     </p>
 
-@elseif ($d["editCnt"] == 0)
+@elseif (!isset($d["deptRow"]->dept_verified) 
+    || trim($d["deptRow"]->dept_verified) == '')
     
     <div class="alert alert-primary fade in alert-dismissible show" 
         style="padding: 10px 15px; margin-bottom: 30px;">

@@ -71,27 +71,18 @@ class OpenReportToolsOversight extends OpenReportTools
                 && intVal($GLOBALS["SL"]->REQ->get('overUpdate')) == 1
                 && $overRow 
                 && isset($overRow->over_dept_id)) {
+                $deptID = $overRow->over_dept_id;
 
-                $overUpdateRow = $this->getOverUpdateRow($this->coreID, $overRow->over_dept_id);
+                $overUpdateRow = $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"];
                 $status = '';
                 $evalNotes = (($GLOBALS["SL"]->REQ->has('overNote')) 
                     ? trim($GLOBALS["SL"]->REQ->overNote) : '');
                 if ($GLOBALS["SL"]->REQ->has('overStatus')) { 
                     $status = trim($GLOBALS["SL"]->REQ->overStatus);
                     if ($status == 'Received by Oversight') {
-                        $this->logOverUpDate(
-                            $this->coreID, 
-                            $overRow->over_dept_id, 
-                            'received', 
-                            $overUpdateRow
-                        );
+                        $this->logOverUpDate($this->coreID, $deptID, 'received');
                     } elseif ($status == 'Investigated (Closed)') {
-                        $this->logOverUpDate(
-                            $this->coreID, 
-                            $overRow->over_dept_id, 
-                            'investigated', 
-                            $overUpdateRow
-                        );
+                        $this->logOverUpDate($this->coreID, $deptID, 'investigated');
                     }
                     $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', $status);
                     $this->sessData->dataSets["complaints"][0]->com_status = $statusID;

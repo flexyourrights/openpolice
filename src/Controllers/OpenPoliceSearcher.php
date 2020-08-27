@@ -141,7 +141,8 @@ class OpenPoliceSearcher extends Searcher
             ['Officer', 'off' ]
         ];
         foreach ($physTypes as $type) {
-            if (sizeof($this->searchFilts[$type[1] . "gend"]) > 0) {
+            if (isset($this->searchFilts[$type[1] . "gend"])
+                && sizeof($this->searchFilts[$type[1] . "gend"]) > 0) {
                 $filtDescTmp = '';
                 foreach ($this->searchFilts[$type[1] . "gend"] as $gend) {
                     switch ($gend) {
@@ -153,7 +154,8 @@ class OpenPoliceSearcher extends Searcher
                 }
                 $ret .= ' & ' . $type[0] . ' is ' . substr($filtDescTmp, 2);
             }
-            if (sizeof($this->searchFilts[$type[1] . "race"]) > 0) {
+            if (isset($this->searchFilts[$type[1] . "race"])
+                && sizeof($this->searchFilts[$type[1] . "race"]) > 0) {
                 $filtDescTmp = '';
                 foreach ($this->searchFilts[$type[1] . "race"] as $race) {
                     $filtDescTmp .= ', ' . $GLOBALS["SL"]->def->getVal('Races', $race);

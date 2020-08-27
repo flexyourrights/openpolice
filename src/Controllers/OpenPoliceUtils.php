@@ -14,6 +14,7 @@ use Auth;
 use App\Models\User;
 use App\Models\OPComplaints;
 use App\Models\OPCompliments;
+use App\Models\OPDepartments;
 use App\Models\OPIncidents;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
@@ -274,17 +275,45 @@ class OpenPoliceUtils extends OpenPoliceVars
                 ->select('com_id', 'com_public_id')
                 ->orderBy('created_at', 'desc')
                 ->get();
+            if ($list && $list->isNotEmpty()) {
+                foreach ($list as $l) {
+                    $this->allPublicCoreIDs[] = $l->com_id;
+                }
+            }
         } elseif ($coreTbl == 'compliments') {
             $list = OPCompliments::whereIn('compli_status', 
                     $this->getPublishedStatusList($coreTbl))
                 //->where('compli_type', $typeDef)
-                ->select('compli_id') //, 'compli_public_id')
+                ->select('compli_id', 'compli_public_id')
                 ->orderBy('created_at', 'desc')
                 ->get();
-        }
-        if ($list && $list->isNotEmpty()) {
-            foreach ($list as $l) {
-                $this->allPublicCoreIDs[] = $l->com_public_id;
+            if ($list && $list->isNotEmpty()) {
+                foreach ($list as $l) {
+                    $this->allPublicCoreIDs[] = $l->compli_id;
+                }
+            }
+        } elseif ($coreTbl == 'departments') {
+            $list = null;
+            if ($GLOBALS["SL"]->REQ->has('state') 
+                && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
+                $list = OPDepartments::whereNotNull('dept_name')
+                    ->where('dept_name', 'NOT LIKE', '')
+                    ->where('dept_address_state', trim($GLOBALS["SL"]->REQ->get('state')))
+                    ->select('dept_id')
+                    ->orderBy('dept_name', 'asc')
+                    ->get();
+            } else {
+                $list = OPDepartments::whereNotNull('dept_name')
+                    ->where('dept_name', 'NOT LIKE', '')
+                    ->select('dept_id')
+                    ->orderBy('dept_address_state', 'asc')
+                    ->orderBy('dept_name', 'asc')
+                    ->get();
+            }
+            if ($list && $list->isNotEmpty()) {
+                foreach ($list as $l) {
+                    $this->allPublicCoreIDs[] = $l->dept_id;
+                }
             }
         }
         //echo '<pre>'; print_r($this->allPublicCoreIDs); echo '</pre>';
@@ -330,7 +359,7 @@ class OpenPoliceUtils extends OpenPoliceVars
                 $GLOBALS["SL"]->def->getID($set, 'Reviewed'), 
                 $GLOBALS["SL"]->def->getID($set, 'Needs More Work'), 
                 $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'), 
-                $GLOBALS["SL"]->def->getID($set, 'Attorney\'d')
+                $GLOBALS["SL"]->def->getID($set, 'Has Attorney')
             ];
         } elseif ($coreTbl == 'compliments') {
             $set = 'Compliment Status';
@@ -427,7 +456,7 @@ class OpenPoliceUtils extends OpenPoliceVars
             || in_array($this->sessData->dataSets["complaints"][0]->com_status, [
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
-                $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney'),
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
             ])) {
             $GLOBALS["SL"]->pageView = 'public';
@@ -520,7 +549,7 @@ class OpenPoliceUtils extends OpenPoliceVars
             && sizeof($this->sessData->dataSets["links_complaint_dept"]) > 0) {
             foreach ($this->sessData->dataSets["links_complaint_dept"] as $deptLnk) {
                 $deptID = $deptLnk->lnk_com_dept_dept_id;
-                $this->loadDeptStuff($deptID);
+                $this->loadDeptStuff($deptID, $this->coreID);
                 $wchOvr = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
                 if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && (!isset($GLOBALS["SL"]->x["depts"][$deptID]["overUser"]) 
@@ -659,7 +688,7 @@ class OpenPoliceUtils extends OpenPoliceVars
             case 197: return 'Reviewed';
             case 627: return 'Needs More Work';
             case 198: return 'Pending Attorney';
-            case 199: return 'Attorney\'d';
+            case 199: return 'Has Attorney';
             case 202: return 'OK to Submit to Investigative Agency';
             case 200: return 'Submitted to Investigative Agency';
             case 201: return 'Received by Investigative Agency';
@@ -674,7 +703,7 @@ class OpenPoliceUtils extends OpenPoliceVars
     {
         $this->v["reportUploadTypes"] = [
             [
-                'full',
+                'sensitive',
                 'Full Sensitive Report'
             ],[
                 'public',

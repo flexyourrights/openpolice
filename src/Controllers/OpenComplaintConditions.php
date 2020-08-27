@@ -423,7 +423,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function hasNoAllegations()
     {
-        return ($this->cntAllegations() == 0);
+        $this->simpleAllegationList();
+        return (sizeof($this->allegations) == 0);
+        //return ($this->cntAllegations() == 0);
     }
     
     /**
@@ -624,26 +626,22 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintName($type = 'user')
     {
-        if (isset($this->sessData->dataSets["complaints"])
-            && isset($this->sessData->dataSets["complaints"][0])) {
-            $com = $this->sessData->dataSets["complaints"][0];
-            if ($GLOBALS["SL"]->REQ->has('publicView')) {
-                if (!isset($com->{ 'com_publish_' . $type . '_name' })
-                    || intVal($com->{ 'com_publish_' . $type . '_name' }) == 0) {
-                    return 0;
-                } elseif ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-                    || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
-                    return 1;
-                }
-            } elseif (isset($com->{ 'com_publish_' . $type . '_name' })
-                && intVal($com->{ 'com_publish_' . $type . '_name' }) == 1
-                && in_array($com->com_status, [200, 201, 203, 204])) {
+        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
             }
         }
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
-            return 1;
+        if (isset($this->sessData->dataSets["complaints"])
+            && isset($this->sessData->dataSets["complaints"][0])) {
+            $com = $this->sessData->dataSets["complaints"][0];
+            if (isset($com->{ 'com_publish_' . $type . '_name' })
+                && intVal($com->{ 'com_publish_' . $type . '_name' }) == 1
+                && in_array($com->com_status, [200, 201, 203, 204])) {
+                if (!$GLOBALS["SL"]->REQ->has('publicView')) {
+                    return 1;
+                }
+            }
         }
         return 0;
     }
@@ -659,10 +657,11 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if ($this->canPrintFullReport()) {
             return 1;
         }
-        if ($GLOBALS["SL"]->REQ->has('publicView')) {
-            if ($this->canPrintFullReportByRecSettings()
-                && ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-                    || (isset($this->v["isOwner"]) && $this->v["isOwner"]))) {
+        
+        if ($this->canPrintFullReportByRecSettings()
+            && ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+                || (isset($this->v["isOwner"]) && $this->v["isOwner"]))) {
+            if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
             }
         }

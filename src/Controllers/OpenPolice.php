@@ -11,7 +11,6 @@
 namespace OpenPolice\Controllers;
 
 use DB;
-use Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OPPersonContact;
@@ -52,12 +51,6 @@ class OpenPolice extends OpenInitExtras
         // Home Page
         } elseif ($nID == 1876) {
             return view('vendor.openpolice.nodes.1876-home-page-hero-credit')->render();
-        } elseif ($nID == 2685) { // overwrite preview results
-            $GLOBALS["SL"]->x["isHomePage"] = true;
-            $GLOBALS["SL"]->x["isPublicList"] = true;
-            $GLOBALS["SL"]->x["reqPics"] = true;
-            $GLOBALS["SL"]->pageView = 'public';
-            return $this->printComplaintListing($nID);
         //} elseif ($nID == 1848) {
         //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
         
@@ -213,8 +206,12 @@ class OpenPolice extends OpenInitExtras
             return $this->printComplaintSessPath();
         } elseif ($nID == 2632) {
             //$this->saveComplaintAdmin();
-        //} elseif ($nID == 2633) {
+        } elseif ($nID == 3063) { // end of Toolbox
+            $GLOBALS["SL"]->setFullPageLoaded(1000); 
         } elseif ($nID == 1385) {
+            if ($GLOBALS["SL"]->REQ->has('refresh')) {
+                $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
+            }
             $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 
                 width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px;
             } ';
@@ -231,6 +228,7 @@ class OpenPolice extends OpenInitExtras
                 $GLOBALS["SL"]->x["isPublicList"] = true;
                 $GLOBALS["SL"]->pageView = 'public';
             }
+            $GLOBALS["SL"]->x["needsWsyiwyg"] = $this->v["needsWsyiwyg"] = true;
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
             return $this->printComplaintReportForAdmin($nID);
@@ -240,6 +238,11 @@ class OpenPolice extends OpenInitExtras
             return $this->browseSearchDepts($nID);
         } elseif ($nID == 2960) {
             return $this->printSimpleDeptList($nID);
+        } elseif (in_array($nID, [2375, 3058])) {
+            return $this->printTopComplaintDepts($nID);
+
+        } elseif (in_array($nID, [1221, 1219])) {
+            return $this->printSearchResults($nID);
 
         // Staff Area Nodes
         } elseif ($nID == 1420) {

@@ -1146,6 +1146,14 @@ a.overUnd:hover { text-decoration: underline; }
 .disBlo { display: block; }
 .ovrFlo { overflow: auto; }
 
+.hid1px {
+    width: 1px; 
+    height: 1px; 
+    margin-bottom: -1px;
+    padding-top: 30px; 
+    overflow: hidden; 
+}
+
 .ww { word-wrap: break-word; }
 
 .h100, table.h100, table tr td.h100 { height: 100%; }

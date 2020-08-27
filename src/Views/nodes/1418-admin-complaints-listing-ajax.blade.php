@@ -1,5 +1,6 @@
 /* resources/views/vendor/openpolice/nodes/1418-admin-complaints-listing-ajax.blade.php */
 
+sView = '{{ $sView }}';
 
 function logSrchFilts() {
     if (document.getElementById("sFiltID")) {
@@ -83,10 +84,18 @@ function logSrchFilts() {
             filts += "__offrace_"+offRace.substring(1);
         }
         document.getElementById("sFiltID").value = filts;
-console.log(document.getElementById("sFiltID").value);
+//console.log("logSrchFilts: "+document.getElementById("sFiltID").value);
     }
     return true;
 }
+$(document).on("click", ".updateComplaintFilts", function() {
+    logSrchFilts();
+});
+function autoLogSrchFilts() {
+    logSrchFilts();
+    setTimeout(function() { autoLogSrchFilts(); }, 1000);
+}
+setTimeout(function() { autoLogSrchFilts(); }, 100);
 
 $(document).on("click", ".fltStatus", function() {
     var status = $(this).val();
@@ -103,83 +112,3 @@ $(document).on("click", ".fltStatus", function() {
     }
 });
 
-function loadComplaint(idPub, id) {
-    if (id > 0) {
-        currRightPane = 'preview';
-        updateRightPane();
-        loadResultSpinner(id);
-        if (document.getElementById("reportAdmPreview")) {
-            //document.getElementById("reportAdmPreview").src="/spinner";
-            var url = "/complaint/readi-"+id+"/full?frame=1&wdg=1";
-            if (idPub > 0) {
-                url = "/complaint/read-"+idPub+"/full?frame=1&wdg=1";
-            }
-            setTimeout("document.getElementById('reportAdmPreview').src='"+url+"'", 100);
-        }
-    @forelse ($complaints as $j => $com)
-        $("#comRow{{ $com->com_id }}").removeClass( "complaintRowWrpActive" );
-        $("#comRow{{ $com->com_id }}").addClass( "complaintRowWrp" );
-    @empty
-    @endforelse
-        $("#comRow"+id+"").removeClass( "complaintRowWrp" );
-        $("#comRow"+id+"").addClass( "complaintRowWrpActive" );
-    }
-    return true;
-}
-setTimeout(function() {
-    loadComplaint({{ $firstComplaint[0] }}, {{ $firstComplaint[1] }});
-}, 10);
-$(document).on("click", ".complaintRowA", function() {
-    var idPub = $(this).attr("data-com-pub-id");
-    var id = $(this).attr("data-com-id");
-    loadComplaint(idPub, id);
-});
-
-sView = '{{ $sView }}';
-
-function loadResultSpinner(id) {
-    if (document.getElementById("resultSpin"+id+"")) {
-        document.getElementById("resultSpin"+id+"").innerHTML="<i class=\"fa fa-spinner fa-pulse fa-fw margin-bottom\"></i>";
-        chkResultLoaded(id, 0);
-    }
-    return true;
-}
-function chkResultLoaded(id, cnt) {
-    if (document.getElementById("reportAdmPreview")) {
-        var iframe = document.getElementById("reportAdmPreview");
-        if (iframe.contentWindow.document.getElementById("resultLoadedID")) {
-            resultLoaded = iframe.contentWindow.document.getElementById("resultLoadedID").value;
-        }
-        if (resultLoaded == id) {
-            return clearResultSpinner(id);
-        }
-        if (cnt < 360) { // times out after two minutes
-            setTimeout(function() { chkResultLoaded(id, (1+cnt)); }, 300);
-        }
-    }
-}
-function clearResultSpinner(id) {
-    if (document.getElementById("resultSpin"+id+"")) {
-        document.getElementById("resultSpin"+id+"").innerHTML="";
-    }
-    return true;
-}
-
-function updateSearchDeets() {
-    logSrchFilts();
-    if (document.getElementById("sViewID")) {
-        document.getElementById("sViewID").value="{{ $sView }}";
-    }
-    if (document.getElementById("complaintPreviews")) {
-        document.getElementById("complaintPreviews").innerHTML=getSpinner();
-        var sFilt = '';
-        if (document.getElementById("sFiltID")) {
-            sFilt = document.getElementById("sFiltID").value
-        }
-        $("#complaintPreviews").load("?showPreviews=1&ajax=1&sFilt="+sFilt);
-    }
-}
-setTimeout(function() { logSrchFilts(); }, 100);
-$(document).on("click", ".searchDeetFld", function() { updateSearchDeets(); });
-$(document).on("change", ".searchDeetFld", function() { updateSearchDeets(); });
-$(document).on("submit", "#dashSearchFrmID", function() { updateSearchDeets(); });

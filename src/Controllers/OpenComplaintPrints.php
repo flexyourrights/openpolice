@@ -125,7 +125,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
             . '</style>';
     }
     
-    protected function customLabels($nIDtxt = '', $str = '')
+    protected function customLabels($curr, $str = '')
     {
         if (in_array($this->treeID, [1, 5])) {
             $event = [];
@@ -194,29 +194,29 @@ class OpenComplaintPrints extends OpenComplaintEmails
                     && $this->sessData->dataSets["civilians"][0]->civ_role == 'Victim');
                 $multipleVic = (sizeof($this->sessData->getLoopRows('Victims')) > 1);
                 $nodes = ['209', '212', '852', '248', '222', '227', '234', '243'];
-                if (in_array($nIDtxt, $nodes)) {
+                if (in_array($curr->nIDtxt, $nodes)) {
                     if ($complainantVic && !$multipleVic) {
                         $str = str_replace('anybody', 'you', $str);
                     } elseif ($complainantVic && $multipleVic) {
                         $str = str_replace('anybody', 'you or anybody else', $str);
                     }
-                } elseif (in_array($nIDtxt, ['204'])) {
+                } elseif (in_array($curr->nIDtxt, ['204'])) {
                     if ($complainantVic && !$multipleVic) {
                         $str = str_replace('anybody', 'you', $str);
                     } elseif ($complainantVic && $multipleVic) {
                         $str = str_replace('anybody', 'you (or anybody else)', $str);
                     }
-                } elseif (in_array($nIDtxt, ['205', '213'])) {
+                } elseif (in_array($curr->nIDtxt, ['205', '213'])) {
                     if ($complainantVic && !$multipleVic) {
                         $str = str_replace('anybody was', 'you were', $str);
                     } elseif ($complainantVic && $multipleVic) {
                         $str = str_replace('anybody was', 'anybody was', $str);
                     }
-                } elseif (in_array($nIDtxt, ['591'])) {
+                } elseif (in_array($curr->nIDtxt, ['591'])) {
                     if ($complainantVic && !$multipleVic) {
                         $str = str_replace('anybody', 'you', $str);
                     }
-                } elseif (in_array($nIDtxt, ['228'])) {
+                } elseif (in_array($curr->nIDtxt, ['228'])) {
                     if ($complainantVic && !$multipleVic) {
                         $str = str_replace('anybody was', 'you were', $str);
                     }

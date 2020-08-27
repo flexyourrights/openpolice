@@ -5,7 +5,7 @@
 	{!! $GLOBALS["SL"]->sysOpts["spinner-code"] !!}
 </div>
 <div class="mBn5"><p>
-@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-']))
+@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-', 'DC-']))
     <a href="/filing-your-police-complaint/{{ $d['deptRow']->dept_slug }}">
     File a complaint against this department.</a>
 @else

@@ -19,55 +19,14 @@
         Or select a state to browse law enforcement agencies in the OpenPolice.org 
         database.
 @else
-    <div class="pB15 pL5 pR5 brdBot relDiv">
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                Department Name
-            </div>
-            <div class="col-md-3 col-8">
-                City, State
-            </div>
-            <div class="col-md-3 col-12">
-                <div id="colHeadDeptScore">
-                    Accessibility 
-                    <div id="colHeadDeptScoreLn2">
-                        <nobr>Score & Grade</nobr>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @foreach ($depts as $i => $dept)
-        @if ($i < 1000)
-            <div class="pT15 pB15 pL5 pR5 @if ($i%2 == 0) row2 @endif ">
-                <div class="row">
-                    <div class="col-md-6 col-12">
-                        <a href="/dept/{{ $dept->dept_slug }}">{{ 
-                            str_replace('Department', 'Dept', $dept->dept_name) 
-                        }}</a>
-                    </div>
-                    <div class="col-md-3 col-8">
-                        {{ $dept->dept_address_city }}, {{ $dept->dept_address_state }}
-                    </div>
-                @if (isset($dept->dept_verified) && trim($dept->dept_verified) != '')
-                    <div class="col-md-3 col-4">
-                        <div class="pull-left" style="width: 40px;">
-                            {{ $dept->dept_score_openness }}
-                        </div>
-                        <div class="pull-left">
-                            {{ $GLOBALS["SL"]->calcGrade($dept->dept_score_openness) }}
-                        </div>
-                    </div>
-                @else
-                    <div class="col-md-3 col-4"> </div>
-                @endif
-                </div>
-            </div>
-        @endif
-    @endforeach
-    @if (sizeof($depts) >= 1000)
-        {{ number_format(sizeof($depts)-1000) }} more results found
-    @endif
+
+    {!! view(
+        'vendor.openpolice.ajax.department-previews-table', 
+        [
+            "depts" => $depts,
+            "limit" => ((isset($limit)) ? $limit : 1000)
+        ]
+    )->render() !!}
 
     <script type="text/javascript"> $(document).ready(function(){
 

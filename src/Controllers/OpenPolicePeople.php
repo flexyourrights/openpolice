@@ -86,14 +86,7 @@ class OpenPolicePeople extends OpenPoliceUtils
             && (($loop == 'Victims' && $civ->civ_role == 'Victim') 
             || ($loop == 'Witnesses' && $civ->civ_role == 'Witness'))) {
             if ($this->isReport) {
-                if (isset($civ->civ_person_id) && intVal($civ->civ_person_id) > 0) {
-                    $contact = $this->sessData->getChildRow(
-                        'civilians', 
-                        $civ->civ_person_id, 
-                        'PersonContact'
-                    );
-                    $name = $contact->prsn_name_first . ' ' . $contact->prsn_name_last;
-                }
+                $name = $this->getCivFirstLastName($civ);
                 if (trim($name) == '') {
                     $name = 'Complainant';
                 }
@@ -112,6 +105,44 @@ class OpenPolicePeople extends OpenPoliceUtils
             
         }
         return trim($name);
+    }
+    
+    protected function getCivFirstLastName($civ = [])
+    {
+        if ($civ && isset($civ->civ_person_id) && intVal($civ->civ_person_id) > 0) {
+            $contact = $this->sessData->getRowById('person_contact', $civ->civ_person_id);
+            $name = '';
+            if (isset($contact->prsn_name_first)
+                && trim($contact->prsn_name_first) != '') {
+                $name .= $contact->prsn_name_first . ' ';
+            }
+            if (isset($contact->prsn_name_last) 
+                && trim($contact->prsn_name_last) != '') {
+                $name .= $contact->prsn_name_last;
+            }
+            if ($name == '' 
+                && isset($contact->prsn_nickname)
+                && trim($contact->prsn_nickname) != '') {
+                $name = $contact->prsn_nickname;
+            }
+            return trim($name);
+        }
+        return '';
+    }
+    
+    protected function getComplaintFilenamePDF()
+    {
+        $ret = '';
+        if (isset($this->sessData->dataSets["civilians"])) {
+            $civ = $this->sessData->dataSets["civilians"][0];
+            $name = str_replace(' ', '_', $this->getCivFirstLastName($civ));
+            if ($name != '') {
+                $ret .= $name . '-';
+            }
+            $ret .= 'Complaint_' . $this->corePublicID 
+                . '-' . $GLOBALS["SL"]->dataPerms . '.pdf';
+        }
+        return $ret;
     }
     
     public function getCivilianNameFromID($civID)
@@ -406,13 +437,13 @@ class OpenPolicePeople extends OpenPoliceUtils
     protected function chkAllOfficerVerifiedRecords()
     {
         $found = true;
-        $typeDef = $GLOBALS["SL"]->def->getID(
-            'Complaint Type', 
-            'Police Complaint'
-        );
         $chk = OPOfficers::whereIn('off_complaint_id', function($query)
             {
                 $status = $this->getPublishedStatusList('complaints');
+                $typeDef = $GLOBALS["SL"]->def->getID(
+                    'Complaint Type', 
+                    'Police Complaint'
+                );
                 $query->select('com_id')
                     ->from(with(new OPComplaints)->getTable())
                     ->whereIn('com_status', $status)
@@ -479,7 +510,6 @@ class OpenPolicePeople extends OpenPoliceUtils
                 }
             }
         }
-        $this->getOverUpdateRow($this->coreID, $newDeptID);
         $this->sessData->refreshDataSets();
         $this->runLoopConditions();
         return true;

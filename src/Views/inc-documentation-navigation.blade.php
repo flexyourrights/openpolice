@@ -23,3 +23,5 @@
         class="btn btn-secondary btn-block taL"><nobr><i class="fa fa-github mR5" aria-hidden="true"></i> 
         flexyourrights/openpolice</nobr></a>
 </div>
+
+<p><br></p><hr><p><br></p>

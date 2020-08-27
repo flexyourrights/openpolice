@@ -5,7 +5,7 @@
         <div class="fL" style="width: 21px;">
             <input type="checkbox" id="states{{ $abbr }}" name="states[]" value="{{ $abbr }}"
                 @if (in_array($abbr, $srchFilts["states"])) CHECKED @endif 
-                class="searchDeetFld fltStates" autocomplete="off">
+                class="searchDeetFld fltStates updateSearchFilts mLn10 mT5" autocomplete="off">
         </div>
         <div class="fL" style="width: 30px;">{{ $abbr }}</div>
         <div class="fL">{{ $state }}</div>
@@ -16,7 +16,7 @@
     <div class="fL" style="width: 21px;">
         <input type="checkbox" id="statesUS" name="states[]" value="US"
             @if (in_array($abbr, $srchFilts["states"])) CHECKED @endif 
-            class="searchDeetFld fltStates" autocomplete="off">
+            class="searchDeetFld fltStates updateSearchFilts mLn10 mT5" autocomplete="off">
     </div>
     <div class="fL" style="width: 30px;">US</div>
     <div class="fL">Federal Law Enforcement</div>

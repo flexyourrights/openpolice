@@ -128,7 +128,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                         ),
                         $this->admMenuLnk(
                             '/dash/development-team-update', 
-                            'Software Development Updates'
+                            'Software Updates'
                         )
                     ]
                 )
@@ -192,7 +192,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                 ),
                 $this->admMenuLnk(
                     '/dash/development-team-update', 
-                    'Software Development Updates'
+                    'Software Updates'
                 )
             ]
         );
@@ -237,7 +237,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                         ),
                         $this->admMenuLnk(
                             '/dash/development-team-update', 
-                            'Software Development Updates'
+                            'Software Updates'
                         )
                     ]
                 )
@@ -311,7 +311,7 @@ class OpenPoliceAdminMenu extends AdminMenu
             ),
             $this->admMenuLnk(
                 '/department-accessibility', 
-                'Accessibility Scores Report'
+                'Accessibility Scores'
             )
         ];
         if ($GLOBALS["SL"]->REQ->has('cid')) {

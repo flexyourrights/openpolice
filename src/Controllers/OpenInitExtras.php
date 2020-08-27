@@ -57,6 +57,134 @@ class OpenInitExtras extends OpenPartners
         $this->initComplaintToolbox();
         return true;
     }
+    
+    /**
+     * Initializing extra things after loading a core record's data.
+     *
+     * @return boolean
+     */
+    protected function loadAllSessDataChecks()
+    {
+        if ($this->treeID == 201) {
+            if (isset($this->sessData->dataSets["departments"])
+                && (!isset($this->sessData->dataSets["oversight"])
+                    || sizeof($this->sessData->dataSets["oversight"]) == 0)) {
+                $dID = $this->sessData->dataSets["departments"][0]->dept_id;
+                $subObjs = [];
+                $tmp = $this->sessData->dataWhere('oversight', 'over_dept_id', $dID);
+                if (sizeof($tmp) > 0) {
+                    foreach ($tmp as $over) {
+                        if (isset($over->over_agnc_name) 
+                            && trim($over->over_agnc_name) != '') {
+                            $subObjs[] = $over;
+                        }
+                    }
+                }
+                $this->sessData->processSubObjs('departments', $dID, 0, 'oversight', $subObjs);
+            }
+            return true;
+        }
+        if (isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) == 1
+            && isset($this->sessData->dataSets["incidents"])
+            && sizeof($this->sessData->dataSets["incidents"]) == 1
+            && isset($this->sessData->dataSets["person_contact"])
+            && sizeof($this->sessData->dataSets["person_contact"]) > 0) {
+            $this->loadAllSessDataChecksComplaint();
+        } 
+        return true;
+    }
+    
+    /**
+     * Initializing extra things after loading a core record's data.
+     *
+     * @return boolean
+     */
+    protected function loadAllSessDataChecksComplaint()
+    {
+        $inc = $this->sessData->dataSets["incidents"][0];
+        if (isset($inc->inc_address_city)
+            && trim($inc->inc_address_city) != '') {
+            $fix = $GLOBALS["SL"]->fixAllUpOrLow($inc->inc_address_city);
+            if ($inc->inc_address_city != $fix) {
+                $this->sessData->dataSets["incidents"][0]->inc_address_city = $fix;
+                $this->sessData->dataSets["incidents"][0]->save();
+            }
+        }
+        foreach ($this->sessData->dataSets["person_contact"] as $i => $civ) {
+            if (isset($civ->prsn_name_first) && trim($civ->prsn_name_first) != '') {
+                $fix = $GLOBALS["SL"]->fixAllUpOrLow($civ->prsn_name_first);
+                if ($civ->prsn_name_first != $fix) {
+                    $this->sessData->dataSets["person_contact"][$i]->prsn_name_first = $fix;
+                    $this->sessData->dataSets["person_contact"][$i]->save();
+                }
+            }
+            if (isset($civ->prsn_name_middle) && trim($civ->prsn_name_middle) != '') {
+                $fix = $GLOBALS["SL"]->fixAllUpOrLow($civ->prsn_name_middle);
+                if ($civ->prsn_name_middle != $fix) {
+                    $this->sessData->dataSets["person_contact"][$i]->prsn_name_middle = $fix;
+                    $this->sessData->dataSets["person_contact"][$i]->save();
+                }
+            }
+            if (isset($civ->prsn_name_last) && trim($civ->prsn_name_last) != '') {
+                $fix = $GLOBALS["SL"]->fixAllUpOrLow($civ->prsn_name_last);
+                if ($civ->prsn_name_last != $fix) {
+                    $this->sessData->dataSets["person_contact"][$i]->prsn_name_last = $fix;
+                    $this->sessData->dataSets["person_contact"][$i]->save();
+                }
+            }
+        }
+        $this->loadAllSessDataChecksComplaintPrivacy();
+        return true;
+    }
+    
+    /**
+     * Convert old privacy settings. To be deleted after transition.
+     *
+     * @return boolean
+     */
+    protected function loadAllSessDataChecksComplaintPrivacy()
+    {
+        $com = $this->sessData->dataSets["complaints"][0];
+        if (isset($com->com_privacy)
+            && intVal($com->com_privacy) > 0
+            && (!isset($com->com_publish_user_name)
+                || !isset($com->com_publish_officer_name))) {
+            $set = 'Privacy Types';
+            $d = $GLOBALS['SL']->def->getID($set, 'Submit Publicly');
+            if (intVal($com->com_privacy) == $d) {
+                $com->com_publish_user_name
+                    = $com->com_publish_officer_name
+                    = 1;
+                if (!isset($com->com_anon)) {
+                    $com->com_anon = 0;
+                }
+            } else {
+                $d = 'Names Visible to Police but not Public';
+                $d = $GLOBALS['SL']->def->getID($set, $d);
+                if (intVal($com->com_privacy) == $d) {
+                    $com->com_publish_user_name
+                        = $com->com_publish_officer_name
+                        = 0;
+                    if (!isset($com->com_anon)) {
+                        $com->com_anon = 0;
+                    }
+                } else {
+                    $d = $GLOBALS['SL']->def->getID($set, 'Completely Anonymous');
+                    $d2 = $GLOBALS['SL']->def->getID($set, 'Anonymized');
+                    if (in_array(intVal($com->com_privacy), [$d, $d2])) {
+                        $com->com_publish_user_name
+                            = $com->com_publish_officer_name
+                            = 0;
+                        if (!isset($com->com_anon)) {
+                            $com->com_anon = 1;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * Initializing extra things for special admin pages.
@@ -295,8 +423,8 @@ class OpenInitExtras extends OpenPartners
             return false;
         }
         if (!session()->has('opcChks') 
-                || !session()->get('opcChks') 
-                || $GLOBALS["SL"]->REQ->has('refresh')) {
+            || !session()->get('opcChks') 
+            || $GLOBALS["SL"]->REQ->has('clean')) {
             $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
             $chk = OPComplaints::whereNull('com_public_id')
                 ->where('com_status', 'NOT LIKE', $incDef)
@@ -312,7 +440,6 @@ class OpenInitExtras extends OpenPartners
             $this->clearLostSessionHelpers();
             session()->put('opcChks', true);
         }
-
 
         return true;
     }
@@ -335,7 +462,7 @@ class OpenInitExtras extends OpenPartners
                 AND `created_at` < '" . $cutoff . "'
                 AND (`com_user_id` IS NULL OR `com_user_id` <= 0)
                 AND (`com_summary` IS NULL OR `com_summary` LIKE '')
-            LIMIT 2000"
+            LIMIT 1000"
         ));
         DB::select(DB::raw(
             "DELETE FROM `sl_sess` 
@@ -458,11 +585,9 @@ class OpenInitExtras extends OpenPartners
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        if ($this->v["uID"] > 0 
-            && $this->v["user"] 
-            && $this->v["user"]->hasRole('administrator|staff')) {
-            $GLOBALS["SL"]->dataPerms = 'sensitive';
-        } else {
+        if ($this->v["uID"] <= 0 
+            || !$this->v["user"] 
+            || !$this->v["user"]->hasRole('administrator|staff')) {
             $com = $this->sessData->dataSets["complaints"][0];
             $isPublished = $this->isPublished('complaints', $this->coreID, $com);
             if ($isPublished) {
@@ -476,7 +601,6 @@ class OpenInitExtras extends OpenPartners
                 $GLOBALS["SL"]->dataPerms = 'none';
             }
         }
-//echo 'tweak ' . $GLOBALS["SL"]->dataPerms; exit;
         return true;
     }
     

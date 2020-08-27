@@ -19,6 +19,7 @@ use App\Models\OPzComplaintReviews;
 use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPOversightModels;
+use App\Models\OPLinksComplaintOversight;
 
 class DepartmentScores
 {
@@ -201,8 +202,8 @@ class DepartmentScores
             '#2B3493',
             $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#2B3493'),
             $GLOBALS["SL"]->printColorFadeHex(0.6, '#FFFFFF', '#2B3493'),
-            $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#EC2327'),
-            '#EC2327'
+            $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#FF6059'),
+            '#FF6059'
         ];
         $this->stats = [
             "count" => 0,
@@ -424,7 +425,7 @@ class DepartmentScores
         )->render();
     }
     
-    public function loadDeptStuff($deptID = -3)
+    public function loadDeptStuff($deptID = -3, $complaintID = -3)
     {
         if (!isset($GLOBALS["SL"]->x["depts"])) {
             $GLOBALS["SL"]->x["depts"] = [];
@@ -527,6 +528,15 @@ class DepartmentScores
                         ($this->checkRecFld($specs, -3, $d["iaRow"]) != 0)
                     ];
                 }
+            }
+            $d["overUpdate"] = null;
+            if ($complaintID <= 0 && $GLOBALS["SL"]->coreID > 0) {
+                $complaintID = $GLOBALS["SL"]->coreID;
+            }
+            if ($complaintID > 0) {
+                $d["overUpdate"] = OPLinksComplaintOversight::where('lnk_com_over_dept_id', $deptID)
+                    ->where('lnk_com_over_complaint_id', $complaintID)
+                    ->first();
             }
             $chk = OPzEditDepartments::where('zed_dept_dept_id', $deptID)
                 ->select('zed_dept_dept_id')

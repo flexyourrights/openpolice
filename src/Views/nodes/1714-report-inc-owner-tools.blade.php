@@ -81,7 +81,7 @@
 
             @endif
 
-        @elseif ($comStatus == 'Attorney\'d')
+        @elseif ($comStatus == 'Has Attorney')
 
             <p><b>Hi, {{ $user->name }},</b></p>
             <p>
@@ -297,7 +297,7 @@
             <div class="col-sm-6">
                 <a id="ownBtnDel" href="javascript:;" 
                     class="btn btn-lg btn-danger w100 taL" 
-                    onMouseOver="this.style.color='#EC2327';" 
+                    onMouseOver="this.style.color='#FF6059';" 
                     onMouseOut="this.style.color='#FFF';" 
                     onClick="if (confirm('{!! $warning 
                         !!}')) { window.location='/delSess/1/{{ 
@@ -364,37 +364,37 @@
 
 <script type="text/javascript"> $(document).ready(function(){
 
-    function postToolboxUpdateStatus() {
-        if (document.getElementById('complaintToolbox')) {
-            var formData = new FormData($('#comUpdateID').get(0));
-            document.getElementById('complaintToolbox').innerHTML = getSpinner();
-            window.scrollTo(0, 0);
-            $.ajax({
-                url: "/complaint-toolbox",
-                type: "POST", 
-                data: formData, 
-                contentType: false,
-                processData: false,
-                //headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                success: function(data) {
-                    $("#complaintToolbox").empty();
-                    $("#complaintToolbox").append(data);
-                },
-                error: function(xhr, status, error) {
-                    $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
-                }
-            });
-        }
-        return false;
+function postToolboxUpdateStatus() {
+    if (document.getElementById('complaintToolbox')) {
+        var formData = new FormData($('#comUpdateID').get(0));
+        document.getElementById('complaintToolbox').innerHTML = getSpinner();
+        window.scrollTo(0, 0);
+        $.ajax({
+            url: "/complaint-toolbox",
+            type: "POST", 
+            data: formData, 
+            contentType: false,
+            processData: false,
+            //headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            success: function(data) {
+                $("#complaintToolbox").empty();
+                $("#complaintToolbox").append(data);
+            },
+            error: function(xhr, status, error) {
+                $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
+            }
+        });
     }
+    return false;
+}
 
-    $("#ownBtn7").click(function() {
-        postToolboxUpdateStatus();
-    });
+$("#ownBtn7").click(function() {
+    postToolboxUpdateStatus();
+});
 
-    $("#comUpdateID").submit(function( event ) {
-        postToolboxUpdateStatus();
-        event.preventDefault();
-    });
+$("#comUpdateID").submit(function( event ) {
+    postToolboxUpdateStatus();
+    event.preventDefault();
+});
 
 }); </script>

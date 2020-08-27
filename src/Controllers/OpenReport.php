@@ -17,9 +17,9 @@ use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
-use OpenPolice\Controllers\OpenOfficers;
+use OpenPolice\Controllers\OpenDeptStats;
 
-class OpenReport extends OpenOfficers
+class OpenReport extends OpenDeptStats
 {
     /**
      * Load detail blocks for big printing of allegations on complaint reports.

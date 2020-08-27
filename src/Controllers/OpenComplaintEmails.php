@@ -152,6 +152,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             '[{ Complaint Department Complaint PDF }]', 
             '[{ Complaint Department Complaint Web }]', 
             '[{ Complaint Officers Reference }]', 
+            '[{ Complaint Auto-Sent For Investigation }]', 
             '[{ Flex Article Suggestions Based On Responses }]'
         ];
         
@@ -209,6 +210,9 @@ class OpenComplaintEmails extends OpenPoliceEvents
     {
         $swap = '[{ Complaint Investigative Agency }]';
         if (strpos($emailBody, $swap) !== false) {
+            if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
+                $deptID = intVal($GLOBALS["SL"]->REQ->get('d'));
+            }
             if (isset($GLOBALS["SL"]->x["depts"][$deptID])) {
                 $d = $GLOBALS["SL"]->x["depts"][$deptID];
                 if (isset($d[$d["whichOver"]]) && isset($d["deptRow"]->dept_name)) {
@@ -230,7 +234,46 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
             }
         }
+        $emailBody = str_replace(
+            '[{ Complaint Investigative Agency }]', 
+            '<span></span>', 
+            $emailBody
+        );
         return $emailBody;
+    }
+    
+    protected function swapBlurbsSentForInvestigation($deptID = -3)
+    {
+        if (sizeof($GLOBALS["SL"]->x["depts"]) == 1) {
+            return '';
+        }
+        if ($GLOBALS["SL"]->REQ->has('d') && intVal($GLOBALS["SL"]->REQ->get('d')) > 0) {
+            $deptID = intVal($GLOBALS["SL"]->REQ->get('d'));
+        }
+        list($submitted, $compliant) = $this->chkDeptSubmissionStatus();
+        $submittedDepts = [];
+        foreach ($GLOBALS["SL"]->x["depts"] as $dID => $dept) {
+            if ($dID != $deptID
+                && in_array($dID, $compliant) 
+                && in_array($dID, $submitted)) {
+                $submittedDepts[] = $dept["deptRow"]->dept_name;
+            }
+        }
+        if (sizeof($submittedDepts) > 0) {
+            $ret = ' We just attempted to email your complaint to the ';
+            foreach ($submittedDepts as $i => $d) {
+                if ($i > 0) {
+                    if ($i == sizeof($submittedDepts)-1) {
+                        $ret .= ', and the ';
+                    } else {
+                        $ret .= ', the ';
+                    }
+                }
+                $ret .= str_replace('Department', 'Dept', $d);
+            }
+            return $ret . '.';
+        }
+        return '';
     }
     
     protected function swapBlurbsDynamo($emailBody, $dy, $deptID)
@@ -314,12 +357,18 @@ class OpenComplaintEmails extends OpenPoliceEvents
                     $swap = $GLOBALS["SL"]->swapURLwrap($url . '/dept/' 
                         . $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_slug);
                 }
+                if (trim($swap) == '') {
+                    $swap = $GLOBALS["SL"]->swapURLwrap($url . '/departments');
+                }
                 break;
             case '[{ Complaint Police Department URL Link }]':
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name)) {
                     $swap = $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name;
+                }
+                if (trim($swap) == '') {
+                    $swap = $url . '/departments';
                 }
                 break;
             case '[{ Complaint Police Department URL How }]':
@@ -348,21 +397,23 @@ class OpenComplaintEmails extends OpenPoliceEvents
             case '[{ Dear Primary Investigative Agency }]':
                 $swap = 'To Whom It May Concern,';
                 break;
+            case '[{ Complaint Auto-Sent For Investigation }]':
+                $swap = $this->swapBlurbsSentForInvestigation($deptID);
+                break;
             case '[{ Complaint Officers Reference }]':
-                if (isset($this->sessData->dataSets["officers"])) {
-                    if (empty($this->sessData->dataSets["officers"])) {
-                        $swap = 'no officers';
-                    } elseif (sizeof($this->sessData->dataSets["officers"]) == 1) {
-                        $swap = 'one officer';
-                    } elseif (sizeof($this->sessData->dataSets["officers"]) < 10) {
-                        switch (sizeof($this->sessData->dataSets["officers"])) {
-                            case 2: $swap = 'two'; break;
-                            case 3: $swap = 'three'; break;
-                        }
-                        $swap .= ' officers';
-                    } else {
-                        $swap = $f->format(sizeof($this->sessData->dataSets["officers"])) . ' officers';
+                if (!isset($this->sessData->dataSets["officers"])
+                    || sizeof($this->sessData->dataSets["officers"]) == 0) {
+                    $swap = 'no specific officers';
+                } elseif (sizeof($this->sessData->dataSets["officers"]) == 1) {
+                    $swap = 'one officer';
+                } elseif (sizeof($this->sessData->dataSets["officers"]) < 10) {
+                    switch (sizeof($this->sessData->dataSets["officers"])) {
+                        case 2: $swap = 'two'; break;
+                        case 3: $swap = 'three'; break;
                     }
+                    $swap .= ' officers';
+                } else {
+                    $swap = sizeof($this->sessData->dataSets["officers"]) . ' officers';
                 }
                 break;
             case '[{ Complaint Officers Count }]':
@@ -440,6 +491,9 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         }
                     }
                 }
+                if (trim($swap) == '') {
+                    $swap = '<!-- Complaint Department Complaint PDF -->';
+                }
                 break;
             case '[{ Complaint Department Complaint Web }]':
                 if (isset($GLOBALS["SL"]->x["depts"]) && isset($deptID)
@@ -465,6 +519,9 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         }
                     }
                 }
+                if (trim($swap) == '') {
+                    $swap = '<!-- Complaint Department Complaint Web -->';
+                }
                 break;
             case '[{ Flex Article Suggestions Based On Responses }]':
                 if (isset($this->v["allUrls"])) {
@@ -476,6 +533,9 @@ class OpenComplaintEmails extends OpenPoliceEvents
                             "showVidUrls" => true
                         ]
                     )->render();
+                }
+                if (trim($swap) == '') {
+                    $swap = '<!-- Flex Article Suggestions Based On Responses -->';
                 }
                 break;
         }
@@ -492,8 +552,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
             "deptID"     => $deptID,
             "to"         => '',
             "cc"         => '',
-            "bcc"        => '',
-            "attachType" => ''
+            "bcc"        => ''
         ];
         if ($emailID > 0) {
             if (sizeof($this->v["emailList"]) > 0) {
@@ -586,6 +645,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
     {
         $this->v["comDepts"][$cnt] = [
             "id"      => $deptRow->dept_id,
+            "name"    => $deptRow->dept_name,
             "deptRow" => $deptRow
         ];
         $defTyp = 'Investigative Agency Types';
@@ -630,21 +690,21 @@ class OpenComplaintEmails extends OpenPoliceEvents
             }
         }
         $this->v["comDepts"][$cnt]["overDates"] 
-            = OPLinksComplaintOversight::where(
-                'lnk_com_over_complaint_id', $this->coreID)
+            = OPLinksComplaintOversight::where('lnk_com_over_complaint_id', $this->coreID)
             ->where('lnk_com_over_dept_id', $deptRow->dept_id)
             //->where('lnk_com_over_over_id', $this->v["comDepts"][0][$w]->over_id)
             ->orderBy('created_at', 'asc')
             ->first();
-        /* if (!$this->v["comDepts"][$cnt]["overDates"] 
-            || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_dept_id)) {
+//echo 'cnt: ' . $cnt . ', coreID: ' . $this->coreID . ', dept_id: ' . $deptRow->dept_id . '<pre>'; print_r($this->v["comDepts"][$cnt]["overDates"]); echo '</pre>'; exit;
+        if (!$this->v["comDepts"][$cnt]["overDates"] 
+            || !isset($this->v["comDepts"][$cnt]["overDates"]->lnk_com_over_dept_id)) {
             $lnk = new OPLinksComplaintOversight;
             $lnk->lnk_com_over_complaint_id = $this->coreID;
             $lnk->lnk_com_over_dept_id      = $deptRow->dept_id;
             $lnk->lnk_com_over_over_id      = $this->v["comDepts"][0][$w]->over_id;
             $lnk->save();
             $this->v["comDepts"][$cnt]["overDates"] = $lnk;
-        } */
+        }
         return true;
     }
     
@@ -685,5 +745,26 @@ class OpenComplaintEmails extends OpenPoliceEvents
             "nID" => 1896
             ])->render(); */
     }
+    
+    protected function chkDeptSubmissionStatus()
+    {
+        $submitted = $compliant = [];
+        if (isset($GLOBALS["SL"]->x["depts"]) && sizeof($GLOBALS["SL"]->x["depts"]) > 0) {
+            $cutoff = strtotime('2015-01-01 00:00:00');
+            foreach ($GLOBALS["SL"]->x["depts"] as $deptID => $dept) {
+                if ($dept["overUpdate"] 
+                    && isset($dept["overUpdate"]->lnk_com_over_submitted)
+                    && strtotime($dept["overUpdate"]->lnk_com_over_submitted) > $cutoff) {
+                    $submitted[] = $deptID;
+                }
+                if (isset($dept["deptRow"]->dept_op_compliant)
+                    && intVal($dept["deptRow"]->dept_op_compliant) == 1) {
+                    $compliant[] = $deptID;
+                }
+            }
+        }
+        return [ $submitted, $compliant ];
+    }
+
     
 }

@@ -22,6 +22,7 @@ use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPLinksComplimentOversight;
 use SurvLoop\Controllers\PageLoadUtils;
+use SurvLoop\Controllers\Globals\ObjSort;
 use OpenPolice\Controllers\OpenPolice;
 use OpenPolice\Controllers\DepartmentScores;
 use OpenPolice\Controllers\OpenPolicePCIF;
@@ -99,8 +100,8 @@ class OpenDepts extends OpenPolicePCIF
      */
     protected function getNextDept()
     {
-        $this->v["nextDept"] = array(0, '', '');
-        $recentDate = time(date("H")-3, date("i"), date("s"), 
+        $this->v["nextDept"] = [ 0, '', '' ];
+        $recentDate = mktime(date("H")-3, date("i"), date("s"), 
             date("n"), date("j"), date("Y"));
         $recentDate = date("Y-m-d H:i:s", $recentDate);
         /*
@@ -129,7 +130,7 @@ class OpenDepts extends OpenPolicePCIF
                 $nextRow = NULL;
                 $qmen = [];
                 $qBase = "SELECT `dept_id`, `dept_name`, `dept_slug` FROM `op_departments` WHERE ";
-                $qReserves = " AND `dept_id` NOT IN (SELECT `tmp_val` FROM `op_zvolun_tmp` WHERE "
+                $qReserves = " AND `dept_id` NOT IN (SELECT `tmp_val` FROM `op_z_volun_tmp` WHERE "
                     . "`tmp_type` LIKE 'zed_dept' AND `tmp_user` NOT LIKE '"
                     . intVal(Auth::user()->id) . "')";
                 $qmen[] = $qBase . "(`dept_verified` < '2015-01-01 00:00:00' "
@@ -675,7 +676,7 @@ class OpenDepts extends OpenPolicePCIF
         if ($GLOBALS["SL"]->REQ->has('colorMarker')) {
             $colors = [];
             for ($i = 0; $i < 5; $i++) {
-                $colors[$i] = $GLOBALS["SL"]->printColorFadeHex($i/7, '#EC2327', '#FFFFFF');
+                $colors[$i] = $GLOBALS["SL"]->printColorFadeHex($i/7, '#FF6059', '#FFFFFF');
             }
             for ($i = 5; $i < 11; $i++) {
                 $colors[$i] = $GLOBALS["SL"]->printColorFadeHex((11-$i)/7, '#2B3493', '#FFFFFF');
@@ -904,8 +905,8 @@ class OpenDepts extends OpenPolicePCIF
         $statGrades->calcStats();
         $blue1 = $GLOBALS["SL"]->printColorFadeHex(0.6, '#FFFFFF', '#2B3493');
         $blue2 = $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#2B3493');
-        $red2 = $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#EC2327');
-        $colors = [ '#2B3493', $blue1, $blue2, $red2, '#EC2327' ];
+        $red2 = $GLOBALS["SL"]->printColorFadeHex(0.3, '#FFFFFF', '#FF6059');
+        $colors = [ '#2B3493', $blue1, $blue2, $red2, '#FF6059' ];
         $ret = $statGrades->piePercCntCore('grade', 0.2, $colors);
         */
     }
@@ -967,8 +968,6 @@ class OpenDepts extends OpenPolicePCIF
         $this->chkDeptStateFlt($GLOBALS["SL"]->REQ);
         $deptSearch = $this->chkDeptSearchFlt($GLOBALS["SL"]->REQ);
         $this->getDeptStateFltNames();
-//echo 'deptSearch: ' . $deptSearch . ', reqState:<pre>'; print_r($this->v["reqState"]); echo '</pre>';
-//echo '???'; exit;
         list($sortLab, $sortDir) = $this->chkDeptSorts();
         $stateFilts = $GLOBALS["SL"]->printAccordian(
             'By State',
@@ -978,7 +977,10 @@ class OpenDepts extends OpenPolicePCIF
             )->render(),
             (sizeof($this->v["reqState"]) > 0)
         );
-//echo 'deptSearch: ' . $deptSearch; exit;
+        $GLOBALS["SL"]->pageAJAX .= view(
+            'vendor.openpolice.nodes.2958-depts-browse-search-ajax', 
+            [ "nID" => $nID ]
+        )->render();
         return view(
             'vendor.openpolice.nodes.2958-depts-browse-search', 
             [
@@ -1073,8 +1075,8 @@ class OpenDepts extends OpenPolicePCIF
         if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
             return 'Department Not Found';
         }
-        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load("/record-prevs/1?d=' 
-            . $this->v["deptID"] . '&limit=20");' . "\n";
+        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load('
+            . '"/record-prevs/1?d=' . $this->v["deptID"] . '&limit=20");' . "\n";
         return view(
             'vendor.openpolice.nodes.2715-dept-page-recent-reports', 
             [
@@ -1150,7 +1152,7 @@ class OpenDepts extends OpenPolicePCIF
             $GLOBALS["SL"]->def->getID($set, 'Hold'),
             $GLOBALS["SL"]->def->getID($set, 'Reviewed'),
             $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'),
-            $GLOBALS["SL"]->def->getID($set, 'Attorney\'d'),
+            $GLOBALS["SL"]->def->getID($set, 'Has Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Closed')
         ];
         return $this->printComplaintListing($nID);
@@ -1231,53 +1233,6 @@ class OpenDepts extends OpenPolicePCIF
     }
     
     /**
-     * Retrieves the record used to track this department's response. 
-     * If it doesn't exist, this record will be created.
-     *
-     * @param  int $cid
-     * @param  int $deptID
-     * @return App\Models\OPLinksComplaintOversight
-     */
-    public function getOverUpdateRow($cid, $deptID)
-    {
-        $iaDef = $GLOBALS["SL"]->def->getID(
-            'Investigative Agency Types', 
-            'Internal Affairs'
-        );
-        if (!isset($this->v["currOverRow"])) {
-            $this->v["currOverRow"] = [];
-        }
-        if (!isset($this->v["currOverRow"][$deptID])) {
-            $this->v["currOverRow"][$deptID] = NULL;
-            $this->v["currOverRow"][$deptID] = OPOversight::where('over_type', $iaDef)
-                ->where('over_dept_id', $deptID)
-                ->orderBy('created_at', 'asc')
-                ->get();
-        }
-        if (!isset($this->v["currOverUpdateRow"])) {
-            $this->v["currOverUpdateRow"] = [];
-        }
-        if (!isset($this->v["currOverUpdateRow"][$deptID])) {
-            $this->v["currOverUpdateRow"][$deptID] = OPLinksComplaintOversight::where(
-                    'lnk_com_over_complaint_id', $cid)
-                ->where('lnk_com_over_dept_id', $deptID)
-                ->orderBy('created_at', 'asc')
-                ->first();
-            /*
-            if (!$this->v["currOverUpdateRow"][$deptID]
-                || !isset($this->v["currOverUpdateRow"][$deptID]->lnk_com_over_id)) {
-                $lnk = new OPLinksComplaintOversight;
-                $lnk->lnk_com_over_complaint_id = $cid;
-                $lnk->lnk_com_over_dept_id = $deptID;
-                $lnk->save();
-                $this->v["currOverUpdateRow"][$deptID] = $lnk;
-            }
-            */
-        }
-        return $this->v["currOverUpdateRow"];
-    }
-    
-    /**
      * Update the timestamp for when this step of the submission
      * process has been confirmed by one party.
      *
@@ -1287,26 +1242,28 @@ class OpenDepts extends OpenPolicePCIF
      * @param  array $row
      * @return boolean
      */
-    public function logOverUpDate($cid, $deptID, $type = 'submitted', &$row = [])
+    public function logOverUpDate($cid, $deptID, $type = 'submitted')
     {
+//echo 'logOverUpDate(' . $cid . ', deptID: ' . $deptID . ', type: ' . $type . ', <pre>'; print_r($row); print_r($GLOBALS["SL"]->x["depts"][$deptID]); echo '</pre>'; exit;
+        if (!isset($GLOBALS["SL"]->x["depts"][$deptID])
+            || !isset($GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"])) {
+            return false;
+        }
+        $row = $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"];
         if ($this->treeID == 5) {
-            if (!$row || !isset($row->lnk_compli_dept_id)) {
-                $row = $this->getOverUpdateRow($cid, $deptID);
-            }
-            $row->{ 'lnk_compli_over_' . $type } = date("Y-m-d H:i:s");
-            $row->save();
+            $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"]
+                ->{ 'lnk_compli_over_' . $type } = date("Y-m-d H:i:s");
+            $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"]->save();
         } else {
-            if (!$row || !isset($row->lnk_com_dept_id)) {
-                $row = $this->getOverUpdateRow($cid, $deptID);
-            }
-//echo 'logOverUpDate(' . $cid . ', ' . $deptID . ', ' . $type . '<pre>'; print_r($row); echo '</pre>'; exit;
-            $row->{ 'lnk_com_over_' . $type } = date("Y-m-d H:i:s");
+            $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"]
+                ->{ 'lnk_com_over_' . $type } = date("Y-m-d H:i:s");
             if ($type == 'received' 
                 && isset($row->lnk_com_over_investigated)
                 && trim($row->lnk_com_over_investigated) != '') {
-                $row->lnk_com_over_investigated = null;
+                $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"]
+                    ->lnk_com_over_investigated = null;
             }
-            $row->save();
+            $GLOBALS["SL"]->x["depts"][$deptID]["overUpdate"]->save();
         }
         return true;
     }
@@ -1374,8 +1331,5 @@ class OpenDepts extends OpenPolicePCIF
         $custLoop = new OpenPolice($request, -3, 1, 36, true);
         return $custLoop->xmlAll($request);
     }
-    
-    
-
     
 }

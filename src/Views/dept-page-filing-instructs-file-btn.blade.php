@@ -2,7 +2,7 @@
 <?php /* /share-complaint-or-compliment/{slug} */ ?>
 <div class="d-none d-md-block">
     <p><a class="btn btn-xl btn-primary btn-block mT20 mB20" 
-@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-']))
+@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-', 'DC-']))
         href="/filing-your-police-complaint/{{ $d['deptRow']->dept_slug }}"
 @else
         href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"
@@ -12,7 +12,7 @@
 </div>
 <div class="d-md-none">
     <p><a class="btn btn-lg btn-primary btn-block mT20 mB20" 
-@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-']))
+@if (in_array(substr($d['deptRow']->dept_slug, 0, 3), ['NY-', 'MD-', 'MN-', 'DC-']))
         href="/filing-your-police-complaint/{{ $d['deptRow']->dept_slug }}"
 @else
         href="/join-beta-test/{{ $d['deptRow']->dept_slug }}"

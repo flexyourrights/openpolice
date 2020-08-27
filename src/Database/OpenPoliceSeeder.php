@@ -16363,7 +16363,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'DefSubset' => 'Complaint Status',
 			'DefOrder' => '6',
 			'DefIsActive' => '0',
-			'DefValue' => 'Attorney\'d',
+			'DefValue' => 'Has Attorney',
 			'DefDescription' => 'Not published. This complainant has an attorney.'
 		]);
 		DB::table('SL_Definitions')->insert([

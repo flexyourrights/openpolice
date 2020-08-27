@@ -1,177 +1,128 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-warnings.blade.php -->
 
 <div class="row mTn5" style="color: #333;">
-    <div class="col-md-4">
-        <div class="relDiv ovrSho" style="height: 30px;">
-            <div class="absDiv" style="top: 8px; left: 15px;">
+    <div class="col-lg-4">
+        <div class="relDiv">
+            <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
                 @if (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
                     @if (isset($complaintRec->com_all_charges_resolved)
                         && trim($complaintRec->com_all_charges_resolved) != 'Y')
-                        #EC2327;
+                        #FF6059;
                     @else
-                        #29B76F;
+                        #29CD42;
                     @endif
                 @else
-                    #29B76F;
+                    #29CD42;
                 @endif ">
-                <img src="/survloop/uploads/spacer.gif" alt="" border="0">
+            <?php /* <img src="/survloop/uploads/spacer.gif" alt="" border="0"> */ ?>
                 </div>
             </div>
-            <div class="absDiv" style="top: 7px; left: 40px;">
-                @if (isset($complaintRec->com_anyone_charged) 
-                    && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
-                    @if (isset($complaintRec->com_all_charges_resolved)
-                        && trim($complaintRec->com_all_charges_resolved) == 'Y')
-                        Charges Resolved
-                    @else
-                        Pending Charges
-                    @endif
+        </div>
+        <div class="pL20">
+            @if (isset($complaintRec->com_anyone_charged) 
+                && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
+                @if (isset($complaintRec->com_all_charges_resolved)
+                    && trim($complaintRec->com_all_charges_resolved) == 'Y')
+                    Charges Resolved
                 @else
-                    No Pending Charges
+                    Pending Charges
                 @endif
-            </div>
+            @else
+                No Pending Charges
+            @endif
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="relDiv ovrSho" style="height: 30px;">
-            <div class="absDiv" style="top: 8px; left: 15px;">
+    <div class="col-lg-4">
+        <div class="relDiv">
+            <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
                 @if ((isset($complaintRec->com_attorney_has) 
                         && trim($complaintRec->com_attorney_has) == 'Y')
                     || (isset($complaintRec->com_status) 
                         && intVal($complaintRec->com_status) 
-                        == $GLOBALS["SL"]->def->getID('Complaint Status', 'Attorney\'d')))
-                    #29B76F;
+                        == $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney')))
+                    #29CD42;
                 @elseif (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
                     && isset($complaintRec->com_all_charges_resolved)
                     && trim($complaintRec->com_all_charges_resolved) != 'Y')
-                    #EC2327;
+                    #FF6059;
                 @elseif (isset($complaintRec->com_attorney_want) 
                     && trim($complaintRec->com_attorney_want) == 'Y')
-                    #F0AD4E;
+                    #FFBD2E;
                 @else
-                    #29B76F;
+                    #29CD42;
                 @endif ">
-                <img src="/survloop/uploads/spacer.gif" alt="" border="0">
+            <?php /* <img src="/survloop/uploads/spacer.gif" alt="" border="0"> */ ?>
                 </div>
             </div>
-            <div class="absDiv" style="top: 7px; left: 40px;">
-                @if ((isset($complaintRec->com_attorney_has) 
-                        && trim($complaintRec->com_attorney_has) == 'Y')
-                    || (isset($complaintRec->com_status) 
-                        && intVal($complaintRec->com_status) == $GLOBALS["SL"]->def->getID(
-                            'Complaint Status', 'Attorney\'d')))
-                    Has Attorney
-                @elseif (isset($complaintRec->com_anyone_charged) 
-                    && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
-                    && isset($complaintRec->com_all_charges_resolved)
-                    && trim($complaintRec->com_all_charges_resolved) != 'Y')
-                    Needs Attorney
-                @elseif (isset($complaintRec->com_attorney_want) 
-                    && trim($complaintRec->com_attorney_want) == 'Y')
-                    Wants Attorney
-                @else
-                    No Attorney Needs
-                @endif
-            </div>
+        </div>
+        <div class="pL20">
+            @if ((isset($complaintRec->com_attorney_has) 
+                    && trim($complaintRec->com_attorney_has) == 'Y')
+                || (isset($complaintRec->com_status) 
+                    && intVal($complaintRec->com_status) == $GLOBALS["SL"]->def->getID(
+                        'Complaint Status', 'Has Attorney')))
+                Has Attorney
+            @elseif (isset($complaintRec->com_anyone_charged) 
+                && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
+                && isset($complaintRec->com_all_charges_resolved)
+                && trim($complaintRec->com_all_charges_resolved) != 'Y')
+                Needs Attorney
+            @elseif (isset($complaintRec->com_attorney_want) 
+                && trim($complaintRec->com_attorney_want) == 'Y')
+                Wants Attorney
+            @else
+                No Attorney Needs
+            @endif
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="relDiv ovrSho" style="height: 30px;">
-            <div class="absDiv" style="top: 8px; left: 15px;">
+    <div class="col-lg-4">
+        <div class="relDiv">
+            <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
-                @if ($complaintRec->com_privacy == $GLOBALS['SL']->def->getID(
-                    'Privacy Types', 'Submit Publicly'))
-                    #29B76F;
-                @elseif ($complaintRec->com_privacy == $GLOBALS['SL']->def->getID(
-                    'Privacy Types', 'Names Visible to Police but not Public'))
-                    #63C6FF;
-                @elseif (in_array($complaintRec->com_privacy, [
-                    $GLOBALS['SL']->def->getID('Privacy Types', 'Completely Anonymous'),
-                    $GLOBALS['SL']->def->getID('Privacy Types', 'Anonymized')
-                    ]))
-                    #EC2327;
+                @if ($complaintRec->com_publish_user_name == 1
+                    && $complaintRec->com_publish_officer_name == 1)
+                    #29CD42;
+                @elseif ($complaintRec->com_anon != 1)
+                    @if (isset($complaintRec->com_publish_user_name)
+                        && isset($complaintRec->com_publish_officer_name))
+                        #63C6FF;
+                    @else 
+                        #888;
+                    @endif
                 @else
-                    #888;
+                    #FF6059;
                 @endif ">
-                <img src="/survloop/uploads/spacer.gif" alt="" border="0">
+            <?php /* <img src="/survloop/uploads/spacer.gif" alt="" border="0"> */ ?>
                 </div>
             </div>
-            <div class="absDiv" style="top: 7px; left: 40px;">
-                @if ($complaintRec->com_privacy == $GLOBALS["SL"]->def->getID(
-                    'Privacy Types', 'Submit Publicly'))
+        </div>
+        <div class="pL20">
+            @if ($complaintRec->com_publish_user_name == 1
+                && $complaintRec->com_publish_officer_name == 1)
+                Submit Publicly
+            @elseif ($complaintRec->com_anon != 1)
+                @if ($complaintRec->com_publish_user_name == 1
+                    && $complaintRec->com_publish_officer_name == 1)
                     Submit Publicly
-                @elseif ($complaintRec->com_privacy == $GLOBALS['SL']->def->getID(
-                    'Privacy Types', 'Names Visible to Police but not Public'))
-                    No Names Public
-                @elseif (in_array($complaintRec->com_privacy, [
-                    $GLOBALS['SL']->def->getID('Privacy Types', 'Completely Anonymous'),
-                    $GLOBALS['SL']->def->getID('Privacy Types', 'Anonymized')
-                    ]))
-                    Anonymous
-                @else
-                    <span style="color: #888;">No Privacy Setting</span>
+                @elseif ($complaintRec->com_publish_user_name == 1)
+                    Publish Complainant's Name
+                @elseif ($complaintRec->com_publish_officer_name == 1)
+                    Publish Officers' Names
+                @elseif (isset($complaintRec->com_publish_user_name)
+                    && isset($complaintRec->com_publish_officer_name))
+                    Publish No Names
+                @else 
+                    No Publishing Settings
                 @endif
-            </div>
+            @else
+                Anonymous
+            @endif
         </div>
     </div>
 </div>
-
-<?php /*
-
-<div class="pT10 bld">
-    @if (isset($complaintRec->com_anyone_charged) 
-        && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
-        @if (isset($complaintRec->com_all_charges_resolved)
-            && trim($complaintRec->com_all_charges_resolved) != 'Y')
-            <div class="disIn mR10 red">Pending Charges,</div>
-        @else
-            <div class="disIn mR10 grn">Charges Resolved,</div>
-        @endif
-    @else
-        <div class="disIn mR10 grn">No Pending Charges,</div>
-    @endif
-
-    @if ((isset($complaintRec->com_attorney_has) 
-            && trim($complaintRec->com_attorney_has) == 'Y')
-        || (isset($complaintRec->com_status) 
-            && intVal($complaintRec->com_status) 
-            == $GLOBALS["SL"]->def->getID(
-            'Complaint Status', 'Attorney\'d')))
-        <div class="disIn mR10 grn">Has Attorney,</div>
-    @elseif (isset($complaintRec->com_anyone_charged) 
-        && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
-        && isset($complaintRec->com_all_charges_resolved)
-        && trim($complaintRec->com_all_charges_resolved) != 'Y')
-        <div class="disIn mR10 red">Needs Attorney,</div>
-    @elseif (isset($complaintRec->com_attorney_want) 
-        && trim($complaintRec->com_attorney_want) == 'Y')
-        <div class="disIn mR10 clrWarn">Wants Attorney,</div>
-    @else
-        <div class="disIn mR10 grn">No Attorney Needs,</div>
-    @endif
-
-    @if ($complaintRec->com_privacy == $GLOBALS["SL"]->def->getID(
-        'Privacy Types', 'Submit Publicly'))
-        <div class="disIn mR10 grn">Submit Publicly</div>
-    @elseif ($complaintRec->com_privacy == $GLOBALS['SL']->def->getID(
-        'Privacy Types', 'Names Visible to Police but not Public'))
-        <div class="disIn mR10 clrInfo">No Names Public</div>
-    @elseif (in_array($complaintRec->com_privacy, [
-        $GLOBALS['SL']->def->getID('Privacy Types', 'Completely Anonymous'),
-        $GLOBALS['SL']->def->getID('Privacy Types', 'Anonymized')
-        ]))
-        <div class="disIn mR10 red">Anonymous</div>
-    @else
-        <div class="disIn mR10 slGrey">No Privacy Setting</div>
-    @endif
-
-
-</div>
-
-*/ ?>

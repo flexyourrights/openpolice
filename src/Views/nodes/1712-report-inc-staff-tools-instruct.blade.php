@@ -7,18 +7,18 @@ Next, this complaint could use help with...
         && trim($complaintRec->com_attorney_has) == 'Y')
     || (isset($complaintRec->com_status) 
         && intVal($complaintRec->com_status) == $GLOBALS["SL"]->def->getID(
-        'Complaint Status', 'Attorney\'d')))
-    #29B76F;
+        'Complaint Status', 'Has Attorney')))
+    #29CD42;
 @elseif (isset($complaintRec->com_anyone_charged) 
     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
     && isset($complaintRec->com_all_charges_resolved)
     && trim($complaintRec->com_all_charges_resolved) != 'Y')
-    #EC2327;
+    #FF6059;
 @elseif (isset($complaintRec->com_attorney_want) 
     && trim($complaintRec->com_attorney_want) == 'Y')
-    #F0AD4E;
+    #FFBD2E;
 @else
-    #29B76F;
+    #29CD42;
 @endif
 */ ?>
 

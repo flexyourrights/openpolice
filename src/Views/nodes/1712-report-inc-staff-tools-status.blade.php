@@ -1,13 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-status.blade.php -->
 
-@if ($comStatus == 'New')
-    <div class="alert alert-danger fade in alert-dismissible show mB30" 
-        style="padding: 10px 15px;">
-        Is this complaint OK to Submit 
-        <nobr>to Investigative Agency?</nobr>
-    </div>
-@endif
-
 <form name="comUpdate" id="comUpdateID" method="post">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="cid" value="{{ $complaintRec->com_id }}">
@@ -22,7 +14,7 @@
             @if ($comStatus == 'Incomplete') disBlo @else disNon @endif ">
             <select name="revComplaintType" id="revComplaintTypeID" 
                 autocomplete="off" class="form-control form-control-lg mB10">
-                <option value="">Select complaint type...</option>
+                <option value="">Assign complaint type...</option>
                 <option value="194" 
                     @if ($complaintRec->com_status == 194) SELECTED @endif 
                     >Incomplete</option>
@@ -51,16 +43,16 @@
         </div>
         <div id="hidivlegitStatus" class="
             @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
-            <select name="revStatus" id="revStatusID" 
-                autocomplete="off"
+            <select name="revStatus" id="revStatusID" autocomplete="off"
                 class="form-control form-control-lg mB10">
-                <option value="">Select complaint status...</option>
+                <option value="">Assign complaint status...</option>
                 {!! view(
                     'vendor.openpolice.nodes.1712-report-inc-status', 
                     [
-                        "firstReview"  => false, 
-                        "lastReview"   => $lastReview, 
-                        "fullList"     => true
+                        "firstReview" => false, 
+                        "lastStatus"  => ((isset($lastReview->com_rev_status))
+                            ? trim($lastReview->com_rev_status) : ''), 
+                        "fullList"    => true
                     ]
                 )->render() !!}
             </select>
@@ -110,11 +102,12 @@
 
 @if (isset($complaintRec->com_type)
     && in_array($GLOBALS["SL"]->def->getVal('Complaint Type', $complaintRec->com_type), 
-        ['Unreviewed', 'Police Complaint', 'Not Sure']))
+        ['Unreviewed', 'Police Complaint', 'Not Sure'])
+    && $uID == 1)
+    <div class="w100 p20"><center><div class="w50"><hr></div></center></div>
 
     <div id="docUploads" class="
         @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
-        <div class="p20"> </div>
     {!! view(
         'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-upload', 
         [
@@ -123,30 +116,7 @@
             "reportUploadFolder" => $reportUploadFolder
         ]
     )->render() !!}
-    </div>
-
-    <div class="p20"> </div>
-    {!! view(
-        'vendor.openpolice.nodes.1712-report-inc-staff-tools-report-dept', 
-        [
-            "complaintRec"  => $complaintRec,
-            "incidentState" => $incidentState
-        ]
-    )->render() !!}
-
-    <div class="pT20 mT20 pB20">
-        <a href="?refresh=2{{ $GLOBALS['SL']->getReqParams() }}"
-            class="btn btn-lg btn-secondary pull-left mR10"
-            ><i class="fa fa-refresh mR3" aria-hidden="true"></i> 
-            Refresh Report
-        </a>
-        <a href="/switch/1/{{ $complaintRec->com_id }}"
-            class="btn btn-lg btn-secondary pull-left mR10"
-            ><i class="fa fa-pencil mR3" aria-hidden="true"></i> 
-            Edit Complaint
-        </a>
+        <div class="p20"> </div>
     </div>
 
 @endif
-
-<div class="p20"> </div>

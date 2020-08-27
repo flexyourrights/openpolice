@@ -68,7 +68,7 @@ class OpenDashAdmin
                 }
                 if (in_array($com->com_status, [
                     $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Attorney\'d')])) {
+                    $GLOBALS["SL"]->def->getID($defSet, 'Has Attorney')])) {
                     $stats["attorney"]++;
                 }
                 if (in_array($com->com_status, [
@@ -149,14 +149,14 @@ class OpenDashAdmin
     {
         $this->v["isDash"] = true;
         $grapher = new SurvTrends('' . rand(1000000, 10000000) . '', '', 28);
-        $grapher->addDataLineType('complete', 'Complete', '', '#29B76F', '#29B76F');
-        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#EC2327', '#EC2327');
+        $grapher->addDataLineType('complete', 'Complete', '', '#29CD42', '#29CD42');
+        $grapher->addDataLineType('incomplete', 'Incomplete', '', '#FF6059', '#FF6059');
         $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
         $grapher->addDataLineType('received', 'Received by Oversight', '', '#63C6FF', '#63C6FF');
         $grapher->addDataLineType('contacts', 'Staff Emails', '', '#416CBD', '#416CBD');
         $grapher->addDataLineType('notes', 'Staff Notes', '', '#333333', '#333333');
-        $grapher->addDataLineType('owners', 'User Followups', '', '#F0AD4E', '#F0AD4E');
-        $grapher->addDataLineType('oversights', 'Oversight Followups', '', '#EB9316', '#EB9316');
+        $grapher->addDataLineType('owners', 'User Followups', '', '#FFBD2E', '#FFBD2E');
+        $grapher->addDataLineType('oversights', 'Oversight Followups', '', '#FFBD2E', '#FFBD2E');
         $startDate = $grapher->getPastStartDate() . ' 00:00:00';
         $recentAttempts = OPComplaints::whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
@@ -428,7 +428,7 @@ class OpenDashAdmin
         $grapher->addDataLineType('depts', 'Unique Depts', 'volun_stat_depts_unique', '#2b3493', '#2b3493');
         $grapher->addDataLineType('users', 'Unique Users', 'volun_stat_users_unique', '#63c6ff', '#63c6ff');
         $grapher->addDataLineType('edits', 'Total Edits', 'volun_stat_total_edits', '#c3ffe1', '#c3ffe1');
-        $grapher->addDataLineType('calls', 'Total Calls', 'volun_stat_calls_tot', '#29B76F', '#29B76F');
+        $grapher->addDataLineType('calls', 'Total Calls', 'volun_stat_calls_tot', '#29CD42', '#29CD42');
         $grapher->addDataLineType('signup', 'Signups', 'volun_stat_signups', '#ffd2c9', '#ffd2c9');
         $grapher->processRawDataResults(
             OPzVolunStatDays::where('volun_stat_date', '>=', $grapher->getPastStartDate())
@@ -496,15 +496,17 @@ class OpenDashAdmin
             }
         }
         
-        $edits  = OPzEditOversight::where('op_z_edit_oversight.zed_over_over_verified', 
-                '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
+        $edits  = DB::table('op_z_edit_oversight')
+            ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', 
+                '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
             //->where('op_z_edit_oversight.zed_over_over_type', 303)
-            ->join('op_z_edit_departments', 'op_z_edit_departments.zed_dept_id', '=', 'op_z_edit_oversight.zed_over_zed_dept_id')
+            ->where('op_z_edit_departments.created_at', 
+                '>', date("Y-m-d", strtotime($startDate)).' 00:00:00')
             ->select('op_z_edit_oversight.*', 'op_z_edit_departments.zed_dept_user_id')
             ->get();
         if ($edits->isNotEmpty()) {
             foreach ($edits as $i => $e) {
-                $day = date("Y-m-d", strtotime($e->zed_over_over_verified));
+                $day = date("Y-m-d", strtotime($e->created_at));
                 if (!isset($days[$day])) {
                     $days[$day] = $this->volunStatsInitDay();
                 }
@@ -525,8 +527,8 @@ class OpenDashAdmin
                 if (!in_array($e->zed_dept_user_id, $days[$day]["users"])) {
                     $days[$day]["users"][] = $e->zed_dept_user_id;
                 }
-                if (!in_array($e->zed_over_dept_id, $days[$day]["depts"])) {
-                    $days[$day]["depts"][] = $e->zed_over_dept_id;
+                if (!in_array($e->zed_over_over_dept_id, $days[$day]["depts"])) {
+                    $days[$day]["depts"][] = $e->zed_over_over_dept_id;
                 }
             }
         }

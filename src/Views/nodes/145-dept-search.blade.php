@@ -16,11 +16,10 @@
             <select name="deptState" id="deptStateID" 
                 class="form-control form-control-lg">
                 <option value="">Select State</option>
-                {!! str_replace(
-                    'All United States', 
-                    'Federal Law Enforcement', 
-                    $stateDropstateDrop
-                ) !!}
+                {!! str_replace('All United States', 'Federal Law Enforcement', 
+                        str_replace('value=""', 'value="US"', 
+                            $stateDropstateDrop
+                )) !!}
             </select>
         </div>
     </div>

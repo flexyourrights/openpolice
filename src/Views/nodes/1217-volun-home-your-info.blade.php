@@ -25,7 +25,7 @@
     </div>
     <script type="text/javascript"> $(document).ready(function(){
         $(document).on("click", "#saveVolunState", function() {
-            var url='/ajax/saveDefaultState/?newState=';
+            var url='/ajax/save-default-state/?newState=';
             if (document.getElementById('newStateID')) {
                 url += document.getElementById('newStateID').value;
             }

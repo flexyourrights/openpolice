@@ -55,6 +55,30 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         $this->loadOversightDateLookups();
         $this->loadComplaintAdminHistory();
         $this->prepEmailComplaintData();
+        $GLOBALS["SL"]->loadStates();
+        $this->v["needsWsyiwyg"] = true;
+        $this->v["incidentState"] = $this->sessData->dataSets["incidents"][0]->inc_address_state;
+        $this->v["complaintRec"] = $this->sessData->dataSets["complaints"][0];
+        if ($GLOBALS["SL"]->REQ->has('ajaxEmaForm')) {
+            $this->chkForEmailID();
+            $this->loadCurrEmail();
+            $this->prepAdminComplaintEmailing();
+            echo view(
+                'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form', 
+                $this->v
+            )->render();
+            exit;
+        }
+        return $this->printComplaintAdminCard();
+    }
+
+    /**
+     * Wrap OpenPolice.org staff admin tools in an accordian card.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminCard()
+    {
         $hasEmailLoaded = $this->prepAdminComplaintEmailing();
         if ($GLOBALS["SL"]->REQ->has('open')) {
             $hasEmailLoaded = true;
@@ -63,92 +87,83 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         if ($GLOBALS["SL"]->REQ->has('emailSent')) {
             $hasEmailSent = intVal($GLOBALS["SL"]->REQ->has('emailSent'));
         }
-        $GLOBALS["SL"]->loadStates();
-        $this->v["needsWsyiwyg"] = true;
-        $this->v["incidentState"] = trim($this->sessData
-            ->dataSets["incidents"][0]->inc_address_state);
-        $this->v["complaintRec"] = $this->sessData->dataSets["complaints"][0];
-
-        if ($GLOBALS["SL"]->REQ->has('ajaxEmaForm')) {
-            return view(
-                'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form', 
-                $this->v
-            )->render();
-        }
-
+        $comStatus = $this->v["complaintRec"]->com_status;
+        $status = $GLOBALS['SL']->def->getVal('Complaint Status', $comStatus);
+        $openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
         $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
             . ': Admin Toolkit</span>';
+        $this->v["alertIco"] = '<span class="mL5 slRedDark"><b>(Next Step)</b></span>';
+        $this->v["updateTitle"] = ' <b>Assign Complaint Status</b>';
+        if ($this->v["firstRevDone"]
+            || ($GLOBALS["SL"]->REQ->has('open') && $GLOBALS["SL"]->REQ->open == 'status')
+            || $status == 'New') {
+            $this->v["updateTitle"] .= $this->v["alertIco"];
+        }
         $tools = view(
-            'vendor.openpolice.nodes.1712-report-inc-staff-tools', 
-            $this->v
-        )->render();
-        $status = $GLOBALS['SL']->def->getVal(
-            'Complaint Status', 
-            $this->v["complaintRec"]->com_status
-        );
-        $openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
+                'vendor.openpolice.nodes.1712-report-inc-staff-tools', 
+                $this->v
+            )->render() 
+            . $this->printComplaintAdminChkPdfs();
         return '<div class="pT20 pB20">' 
             . $GLOBALS["SL"]->printAccard($title, $tools, $openToolbox)
             . '</div>';
     }
+
+    /**
+     * Check for sensitive and public PDFs while loading admin tools.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminChkPdfs()
+    {
+        $ret = '';
+        $prevView = $GLOBALS["SL"]->pageView;
+        $GLOBALS["SL"]->pageView = 'full-pdf';
+        if (!$this->chkCachePdfByID(true)) {
+            $ret = '/complaint/read-' . $this->corePublicID 
+                . '/full-pdf?refresh=1&pdf=1';
+        } else {
+            $prevPerm = $GLOBALS["SL"]->dataPerms;
+            $GLOBALS["SL"]->dataPerms = 'public';
+            $GLOBALS["SL"]->pageView = 'pdf';
+            if (!$this->chkCachePdfByID(true)) {
+                $ret = '/complaint/read-' . $this->corePublicID 
+                    . '/pdf?refresh=1&pdf=1&publicView=1';
+            }
+            $GLOBALS["SL"]->dataPerms = $prevPerm;
+        }
+        $GLOBALS["SL"]->pageView = $prevView;
+        if ($ret != '') {
+            return '<div class="hid1px"><iframe src="' . $ret
+                . '" frameborder=0 width=1 height=1 ></iframe></div>';
+        }
+        return $ret;
+    }
     
     /**
-     * Prepare everything needed for staff to select and send emails
-     * to complainants from the top of their complaint report.
+     * Check for pre-loaded email ID.
+     *
+     * @return int
+     */
+    protected function chkForEmailID()
+    {
+        $this->v["emailID"] = -3;
+        if ($GLOBALS["SL"]->REQ->has('email')) {
+            $this->v["emailID"] = intVal($GLOBALS["SL"]->REQ->email);
+        }
+        if (!isset($this->v["deptID"])) {
+            $this->v["deptID"] = 0;
+        }
+        return $this->v["emailID"];
+    }
+    
+    /**
+     * Pre-loaded email details and settings.
      *
      * @return boolean
      */
-    protected function prepAdminComplaintEmailing()
+    protected function loadCurrEmail()
     {
-        $w = '';
-        $isOverCompatible = false;
-        if (isset($this->v["comDepts"][0])) {
-            if (isset($this->v["comDepts"][0]["deptRow"])
-                && isset($this->v["comDepts"][0]["deptRow"]->dept_op_compliant)
-                && intVal($this->v["comDepts"][0]["deptRow"]->dept_op_compliant) == 1) {
-                $isOverCompatible = true;
-            }
-            $w = $this->v["comDepts"][0]["whichOver"];
-        }
-        $this->v["emailsTo"] = [
-            "To Complainant" => [],
-            "To Oversight"   => []
-        ];
-        $userID = $this->sessData->dataSets["complaints"][0]->com_user_id;
-        $complainantUser = User::find($userID);
-        if ($complainantUser && isset($complainantUser->email)) {
-            $name = $complainantUser->name;
-            if (isset($this->sessData->dataSets["person_contact"])) {
-                $pers = $this->sessData->dataSets["person_contact"];
-                if (sizeof($pers) > 0 && isset($pers[0]->prsn_name_first)) {
-                    $name = $pers[0]->prsn_name_first . ' ' 
-                        . $pers[0]->prsn_name_last;
-                }
-            }
-            $this->v["emailsTo"]["To Complainant"][] = [
-                $complainantUser->email,
-                $name,
-                true
-            ];
-        }
-        if ($isOverCompatible) {
-            $this->v["emailsTo"]["To Oversight"][] = [
-                $this->v["comDepts"][0][$w]->over_email,
-                $this->v["comDepts"][0][$w]->over_agnc_name,
-                true
-            ];
-        }
-        $this->v["emailMap"] = [ // 'Review Status' => Email ID#
-            'Submitted to Oversight'    => [7, 12], 
-            'Hold: Go Gold'             => [6],
-            'Pending Attorney: Needed'  => [17],
-            'Pending Attorney: Hook-Up' => [18]
-        ];
-        $this->v["emailID"] = ($GLOBALS["SL"]->REQ->has('email') 
-            ? intVal($GLOBALS["SL"]->REQ->email) : -3);
-        $this->autoloadAdminComplaintEmail($isOverCompatible);
-        
-        $this->loadDeptStuff();
         $this->v["currEmail"] = [];
         if (isset($this->sessData->dataSets["links_complaint_dept"])) {
             $depts = $this->sessData->dataSets["links_complaint_dept"];
@@ -162,16 +177,46 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                         $this->sessData->dataSets["links_complaint_dept"][$i]
                             ->lnk_com_dept_dept_id = 18124; 
                     }
-                    $this->loadDeptStuff($deptLnk->lnk_com_dept_dept_id);
-                    $this->v["currEmail"][] = $this->processEmail(
-                        $this->v["emailID"], 
-                        $deptLnk->lnk_com_dept_dept_id
-                    );
+                    if (!isset($this->v["deptID"])
+                        || $deptLnk->lnk_com_dept_dept_id == $this->v["deptID"]) {
+                        $this->loadDeptStuff($deptLnk->lnk_com_dept_dept_id, $this->coreID);
+                        $this->v["currEmail"][] = $this->processEmail(
+                            $this->v["emailID"], 
+                            $deptLnk->lnk_com_dept_dept_id
+                        );
+                    }
                 }
             }
         }
-        $hasEmailLoaded = ($this->v["emailID"] > 0 
-            && sizeof($this->v["currEmail"]) > 0);
+        return true;
+    }
+    
+    /**
+     * Prepare everything needed for staff to select and send emails
+     * to complainants from the top of their complaint report.
+     *
+     * @return boolean
+     */
+    protected function prepAdminComplaintEmailing()
+    {
+        $w = '';
+        $this->chkForEmailID();
+        $this->autoloadAdminComplaintEmail();
+        $currDept = $this->prepAdminComplaintEmailGetDept();
+        $isOverCompatible = false;
+        if (sizeof($currDept) > 0) {
+            if (isset($currDept["deptRow"])
+                && isset($currDept["deptRow"]->dept_op_compliant)
+                && intVal($currDept["deptRow"]->dept_op_compliant) == 1) {
+                $isOverCompatible = true;
+            }
+            $w = $currDept["whichOver"];
+        }
+        $this->prepAdminComplaintEmailOpts($w, $currDept, $isOverCompatible);
+        $this->loadDeptStuff();
+        $this->chkAdminComplaint();
+        $this->loadCurrEmail();
+        $hasEmailLoaded = ($this->v["emailID"] > 0 && sizeof($this->v["currEmail"]) > 0);
         if ($hasEmailLoaded) {
             $this->v["needsWsyiwyg"] = true;
             foreach ($this->v["currEmail"] as $j => $email) {
@@ -183,12 +228,86 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
     }
     
     /**
+     * Check for currently selected department, and
+     *
+     * @return array
+     */
+    protected function prepAdminComplaintEmailGetDept()
+    {
+        $currDept = [];
+        if ($GLOBALS["SL"]->REQ->has('d')) {
+            $this->v["deptID"] = intVal($GLOBALS["SL"]->REQ->get('d'));
+        }
+        if (sizeof($this->v["comDepts"]) > 0) {
+            if ($this->v["deptID"] <= 0) {
+                $this->v["deptID"] = $this->v["comDepts"][0]["id"];
+            }
+            if ($this->v["deptID"] > 0) {
+                foreach ($this->v["comDepts"] as $dept) {
+                    if ($dept["id"] == $this->v["deptID"]) {
+                        $currDept = $dept;
+                    }
+                }
+            }
+        }
+        return $currDept;
+    }
+    
+    /**
+     * Load sending options for this email template, primarily contact lists.
+     *
+     * @return boolean
+     */
+    protected function prepAdminComplaintEmailOpts($w, $currDept, $isOverCompatible)
+    {
+        $this->v["emailsTo"] = [
+            "to Complainant" => [],
+            "to Oversight"   => []
+        ];
+        $userID = $this->sessData->dataSets["complaints"][0]->com_user_id;
+        $complainantUser = User::find($userID);
+        if ($complainantUser && isset($complainantUser->email)) {
+            $name = $complainantUser->name;
+            if (isset($this->sessData->dataSets["person_contact"])) {
+                $pers = $this->sessData->dataSets["person_contact"];
+                if (sizeof($pers) > 0 && isset($pers[0]->prsn_name_first)) {
+                    $name = $pers[0]->prsn_name_first . ' ' 
+                        . $pers[0]->prsn_name_last;
+                }
+            }
+            $this->v["emailsTo"]["to Complainant"][] = [
+                $complainantUser->email,
+                $name,
+                true
+            ];
+        }
+        if ($isOverCompatible) {
+            $this->v["emailsTo"]["to Oversight"][] = [
+                $currDept[$w]->over_email,
+                $currDept[$w]->over_agnc_name,
+                true
+            ];
+        }
+        $this->v["emailsTo"]["to Complainant"][] = [
+            $this->v["user"]->email,
+            '',
+            false
+        ];
+        $this->v["emailsTo"]["to Oversight"][] = [
+            $this->v["user"]->email,
+            '',
+            false
+        ];
+        return true;
+    }
+
+    /**
      * If an email template has not already been selected, 
      * check for suggested emails for staff to send next.
      *
      * @return int
      */
-    protected function autoloadAdminComplaintEmail($isOverCompatible)
+    protected function autoloadAdminComplaintEmail()
     {
         if ($this->v["emailID"] <= 0) {
             $com = $this->sessData->dataSets["complaints"][0];
@@ -198,19 +317,16 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                     $this->v["emailID"] = 36; // Incomplete Complaint Check-In
                     break;
                 case $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'):
-                    if (isset($com->com_all_charges_resolved)
+                    $this->v["emailID"] = 32; // Lawyer, No Charges
+                    if (isset($com->com_anyone_charged) 
+                        && in_array(trim($com->com_anyone_charged), ['Y', '?'])
+                        && isset($com->com_all_charges_resolved)
                         && trim($com->com_all_charges_resolved) != 'Y') {
                         $this->v["emailID"] = 22; // Lawyer, Charges
-                    } else {
-                        $this->v["emailID"] = 32; // Lawyer, No Charges
                     }
                     break;
                 case $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'):
-                    if ($isOverCompatible) {
-                        $this->v["emailID"] = 12; // Send to investigative agency
-                    } else {
-                        $this->v["emailID"] = 9; // How to manually submit
-                    }
+                    $this->v["emailID"] = $this->autoloadEmailOkToSubmit();
                     break;
                 case $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight'):
                 case $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight'):
@@ -224,6 +340,106 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                     break;
             }
         }
+
+        // Check that auto-suggested email has not already been sent
+        if ($this->v["emailID"] > 0) {
+            $found = false;
+            // Simple version
+            if (isset($GLOBALS["SL"]->x["depts"])
+                && sizeof($GLOBALS["SL"]->x["depts"]) == 1) {
+                foreach ($this->v["history"] as $hist) {
+                    if (isset($hist["emaID"]) 
+                        && intVal($hist["emaID"]) == $this->v["emailID"]) {
+                        $found = true;
+                    }
+                }
+            }
+            if ($found) {
+                if ($this->v["emailID"] == 22) { // Lawyer, Charges
+                    $this->v["emailID"] = 42;
+                } elseif ($this->v["emailID"] == 32) { // Lawyer, No Charges
+                    $this->v["emailID"] = 35;
+                } elseif ($this->v["emailID"] == 9) { // How To File, Full Transparent
+                    $this->v["emailID"] = 33;
+                } elseif ($this->v["emailID"] == 40) { // How To File, Not Transparent
+                    $this->v["emailID"] = 34;
+                } elseif ($this->v["emailID"] == 7) { // We Filed It
+                    $this->v["emailID"] = 16; // What's the status?
+
+                } else {
+                    $this->v["emailID"] = 0;
+                }
+            }
+        }
+//echo '<pre>'; print_r($this->v["history"]); echo '</pre>'; exit;
+
+        return $this->v["emailID"];
+    }
+    
+    /**
+     * Check for suggested emails for staff to send next 
+     * if the complaint is OK to submit to investigative agency.
+     *
+     * @return int
+     */
+    protected function autoloadEmailOkToSubmit()
+    {
+        $com = $this->sessData->dataSets["complaints"][0];
+        $cnt = sizeof($GLOBALS["SL"]->x["depts"]);
+        list($submitted, $compliant) = $this->chkDeptSubmissionStatus();
+
+//echo 'AAA — emailID: ' . $this->v["emailID"] . ', deptID: ' . $this->v["deptID"] . '<br />submitted: <pre>'; print_r($submitted); echo '</pre>compliant: <pre>'; print_r($compliant); echo '</pre>';
+
+        // Figure out default instructions
+        if ($this->v["deptID"] <= 0
+            && !$GLOBALS["SL"]->REQ->has('d')
+            && !$GLOBALS["SL"]->REQ->has('email')) {
+
+            // First check if any departments are OP-Compatible
+            foreach ($GLOBALS["SL"]->x["depts"] as $deptID => $dept) {
+                if ($this->v["deptID"] <= 0 && $this->v["emailID"] <= 0) {
+                    if (in_array($deptID, $compliant)) {
+                        if (!in_array($deptID, $submitted)) {
+                            // Send to investigative agency
+                            $this->v["emailID"] = 12; 
+                            $this->v["deptID"]  = $deptID;
+                        } elseif ($cnt == 1) {
+                            // Sent to investigative agency
+                            $this->v["emailID"] = 7;
+                        }
+                    }
+                }
+            }
+
+            foreach ($GLOBALS["SL"]->x["depts"] as $deptID => $dept) {
+                if ($this->v["deptID"] <= 0 && $this->v["emailID"] <= 0) {
+                    if (!in_array($deptID, $compliant) && !in_array($deptID, $submitted)) {
+                        // How to manually file your complaint with investigative agency
+                        if ((!isset($com->com_anon) || intVal($com->com_anon) == 0)
+                            && intVal($com->com_publish_user_name) == 1
+                            && intVal($com->com_publish_officer_name) == 1) {
+                            // Fully transparent, with incentive to file for full publishing
+                            $this->v["emailID"] = 9;
+                            $this->v["deptID"]  = $deptID;
+                        } else {
+                            // Not fully transparent
+                            $this->v["emailID"] = 40;
+                            $this->v["deptID"]  = $deptID;
+                        }
+                    }
+                }
+            }
+
+        }
+
+//echo 'BBB — emailID: ' . $this->v["emailID"] . ', deptID: ' . $this->v["deptID"] . '<br />submitted: <pre>'; print_r($submitted); echo '</pre>compliant: <pre>'; print_r($compliant); echo '</pre>'; exit;
+
+        if ($this->v["emailID"] <= 0 && $cnt > 1) {
+            if ($cnt == sizeof($submitted) && $cnt == sizeof($compliant)) {
+                $this->v["emailID"] = 7;
+            }
+        }
+
         return $this->v["emailID"];
     }
     
@@ -234,7 +450,6 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
      */
     protected function saveComplaintAdmin()
     {
-//if ($GLOBALS["SL"]->REQ->has('firstReview')) { echo '<pre>'; print_r($GLOBALS["SL"]->REQ->all()); echo '</pre>'; exit; }
         $hasSave = $GLOBALS["SL"]->REQ->has('save');
         $hasFirstReview = ($GLOBALS["SL"]->REQ->has('firstReview') 
             && $GLOBALS["SL"]->REQ->has('n1712fld') 
@@ -263,23 +478,9 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             } elseif ($hasFixDepts) {
                 $this->processComplaintFixDepts();
             } elseif ($hasEmailSend) {
-                if ($this->sendComplaintAdminEmail()) {
-                    $emaID = -1;
-                    if ($GLOBALS["SL"]->REQ->has('emailID')) {
-                        $emaID = intVal($GLOBALS["SL"]->REQ->emailID);
-                    }
-                    return view(
-                        'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-redir', 
-                        [
-                            "coreID" => $this->coreID,
-                            "emaID"  => $emaID
-                        ]
-                    )->render();
-                } else {
-                    return 'Sorry, something went wrong trying to send the email.';
-                }
+                return $this->saveComplaintAdminSendEmail();
             }
-            $this->clearComplaintCaches();
+            $this->clearComplaintCaches(true);
         } elseif ($GLOBALS["SL"]->REQ->has('refresh')
             && intVal($GLOBALS["SL"]->REQ->has('refresh')) == 2) {
             $this->clearComplaintCaches();
@@ -333,9 +534,9 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 [ 'Pending Attorney: Needed', 'Pending Attorney: Hook-Up' ])) {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney');
-            } elseif (in_array($status, [ 'Attorney\'d' ])) {
+            } elseif (in_array($status, [ 'Has Attorney' ])) {
                 $this->sessData->dataSets["complaints"][0]->com_status 
-                    = $GLOBALS["SL"]->def->getID($defSet, 'Attorney\'d');
+                    = $GLOBALS["SL"]->def->getID($defSet, 'Has Attorney');
             } else {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, $status);
@@ -444,36 +645,101 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 $coreID, 
                 $userToID,
                 $cc,
-                $bcc
+                $bcc,
+                $this->sendComplaintAdminEmailAttach($emaInd)
             );
-            if (intVal($GLOBALS["SL"]->REQ->get('emailID')) == 12) {
-                $this->sessData->dataSets["complaints"][0]->update([ 
-                    "com_status" => $GLOBALS["SL"]->def->getID(
-                        'Complaint Status', 
-                        'Submitted to Oversight'
-                    )
-                ]);
-                $deptID = $this->v["currEmail"][$emaInd]["deptID"];
-                if (isset($GLOBALS["SL"]->x["depts"][$deptID]) 
-                    && isset($GLOBALS["SL"]->x["depts"][$deptID]["whichOver"])) {
-                    $whichOver = $GLOBALS["SL"]->x["depts"][$deptID]["whichOver"];
-                    $whichRow = $GLOBALS["SL"]->x["depts"][$deptID][$whichOver];
-                    if ($whichRow && isset($whichRow->over_id)) {
-                        $this->logOverUpDate($coreID, $deptID, 'Submitted');
-                    }
-                }
-                $newRev = new OPzComplaintReviews;
-                $newRev->com_rev_complaint = $this->coreID;
-                $newRev->com_rev_user      = $this->v["user"]->id;
-                $newRev->com_rev_date      = date("Y-m-d H:i:s");
-                $newRev->com_rev_type      = 'Update';
-                $newRev->com_rev_status    = 'Submitted to Oversight';
-                $newRev->save();
-            }
+            $this->sendComplaintAdminEmailExtras($emaInd);
             $emailSent = true;
             $emaInd++;
         }
         return $emailSent;
+    }
+    
+    /**
+     * Get path and filename for attachment needed on this email.
+     *
+     * @return string
+     */
+    protected function sendComplaintAdminEmailAttach($emaInd)
+    {
+        $attach = [];
+        if ($GLOBALS["SL"]->REQ->has('attachType' . $emaInd . '')) {
+            $prevPerm = $GLOBALS["SL"]->dataPerms;
+            $prevView = $GLOBALS["SL"]->pageView;
+            $attach = trim($GLOBALS["SL"]->REQ->get('attachType' . $emaInd . ''));
+            if ($attach == 'sensitive') {
+                $GLOBALS["SL"]->dataPerms = 'sensitive';
+                $GLOBALS["SL"]->pageView  = 'full-pdf';
+            } elseif ($attach == 'public') {
+                $GLOBALS["SL"]->dataPerms = 'public';
+                $GLOBALS["SL"]->pageView  = 'pdf';
+            }
+            $file = $this->loadPdfByID();
+            $fileWithAttach = str_replace('.pdf', '-with-attach.pdf', $file);
+            if (file_exists($fileWithAttach)) {
+                $file = $fileWithAttach;
+            }
+            $GLOBALS["SL"]->x["pdfFilename"] = $this->getComplaintFilenamePDF();
+            $output = $this->v["pdf-gen"]->setOutput($file, $GLOBALS["SL"]->x["pdfFilename"]);
+            $attach = [ $output ];
+            $GLOBALS["SL"]->dataPerms = $prevPerm;
+            $GLOBALS["SL"]->pageView  = $prevView;
+        }
+        return $attach;
+    }
+    
+    protected function loadPdfFilename()
+    {
+        if ($GLOBALS["SL"]->coreTbl == 'complaints') {
+            return $this->getComplaintFilenamePDF();
+        }
+        return '';
+    }
+    
+    /**
+     * Send an email send by staff, and log with this conduct report.
+     *
+     * @return boolean
+     */
+    protected function sendComplaintAdminEmailExtras($emaInd)
+    {
+        $deptID = intVal($GLOBALS["SL"]->REQ->get('d'));
+        if (intVal($GLOBALS["SL"]->REQ->get('emailID')) == 12
+            && isset($GLOBALS["SL"]->x["depts"][$deptID])) {
+            $this->logOverUpDate($this->coreID, $deptID, 'submitted');
+        }
+//echo 'emailID: ' . $GLOBALS["SL"]->REQ->get('emailID') . ', dept: ' . $deptID . '<pre>'; print_r($GLOBALS["SL"]->REQ->all()); echo '</pre>'; exit;
+
+        return true;
+    }
+    
+    /**
+     * Initialize the loading of the widget for the complaint toolbox.
+     *
+     * @return boolean
+     */
+    protected function chkAdminComplaint()
+    {
+        $subDef = 'OK to Submit to Oversight';
+        $subDef = $GLOBALS["SL"]->def->getID('Complaint Status', $subDef);
+        list($submitted, $compliant) = $this->chkDeptSubmissionStatus();
+//echo 'chkAdminComplaint?? ' . sizeof($GLOBALS["SL"]->x["depts"]) . ', submitted: ' . sizeof($submitted) . ' - com_status: ' . $this->sessData->dataSets["complaints"][0]->com_status . ' ?= ' . $subDef . '<br />'; exit;
+        if (isset($GLOBALS["SL"]->x["depts"])
+            && sizeof($GLOBALS["SL"]->x["depts"]) == sizeof($submitted)
+            && $this->sessData->dataSets["complaints"][0]->com_status == $subDef) {
+            $subDef = 'Submitted to Oversight';
+            $subDef = $GLOBALS["SL"]->def->getID('Complaint Status', $subDef);
+            $this->sessData->dataSets["complaints"][0]->com_status = $subDef;
+            $this->sessData->dataSets["complaints"][0]->save();
+            $newRev = new OPzComplaintReviews;
+            $newRev->com_rev_complaint = $this->coreID;
+            $newRev->com_rev_user      = $this->v["user"]->id;
+            $newRev->com_rev_date      = date("Y-m-d H:i:s");
+            $newRev->com_rev_type      = 'Update';
+            $newRev->com_rev_status    = 'Submitted to Oversight';
+            $newRev->save();
+        }
+        return true;
     }
     
     /**
@@ -522,8 +788,15 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 } else {
                     $desc .= $r->com_rev_status;
                 }
+                $desc = str_replace('Oversight', 'Investigative Agency', $desc);
                 $desc .= '</span>';
                 $note = ((isset($r->com_rev_note)) ? trim($r->com_rev_note) : '');
+                $note = trim(str_replace("\n\n", "\n", $note));
+                $note = str_replace("\n", "<br />", $note);
+                $desc .= ((strlen(trim(strip_tags($note))) > 0) 
+                    ? ' <span class="fPerc80 slGrey">(Notes: ' 
+                        . number_format(strlen(strip_tags($note))) . ' Chars)</span>'
+                    : '');
                 $this->v["history"][] = [
                     "type" => 'Status', 
                     "date" => strtotime($r->com_rev_date), 
@@ -543,17 +816,27 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         if ($emails->isNotEmpty()) {
             foreach ($emails as $i => $e) {
                 if (!isset($allUserNames[$e->emailed_from_user])) {
-                    $allUserNames[$e->emailed_from_user] = $this->printUserLnk($e->emailed_from_user);
+                    $allUserNames[$e->emailed_from_user] 
+                        = $this->printUserLnk($e->emailed_from_user);
                 }
-                $desc = '<a href="javascript:;" id="hidivBtnEma' . $e->emailed_id . '" class="hidivBtn">"' 
-                    . $e->emailed_subject . '"</a><br />sent to ' . $e->emailed_to 
-                    . '<div id="hidivEma' . $e->emailed_id . '" class="disNon p10">' 
-                    . $e->emailed_body . '</div><div style="margin-bottom: -36px;"></div>';
+                $desc = '"' . $e->emailed_subject . '"'
+                    . ((strlen(trim(strip_tags($e->emailed_body))) > 0) 
+                        ? ' <span class="fPerc80 slGrey">(Email Body: ' 
+                            . number_format(strlen(strip_tags($e->emailed_body))) 
+                            . ' characters)</span>'
+                        : '')
+                    . '<br /><span class="blk">sent to ' . $e->emailed_to 
+                    . ((isset($e->emailed_attach) && trim($e->emailed_attach) != '')
+                        ? '<i class="fa fa-paperclip mL15 mR3" aria-hidden="true"></i>'
+                            . $e->emailed_attach 
+                        : '') . '</span>';
                 $this->v["history"][] = [
-                    "type" => 'Email', 
-                    "date" => strtotime($e->created_at), 
-                    "desc" => $desc, 
-                    "who"  => $allUserNames[$e->emailed_from_user]
+                    "type"  => 'Email', 
+                    "emaID" => $e->emailed_email_id, 
+                    "date"  => strtotime($e->created_at), 
+                    "desc"  => $desc, 
+                    "note"  => $e->emailed_body,
+                    "who"   => $allUserNames[$e->emailed_from_user]
                 ];
             }
         }
@@ -601,6 +884,29 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             exit;
         }
         return false;
+    }
+    
+    /**
+     * Admin sends an email to a complainant regarding one complaint.
+     *
+     * @return boolean
+     */
+    protected function saveComplaintAdminSendEmail()
+    {
+        if ($this->sendComplaintAdminEmail()) {
+            $emaID = -1;
+            if ($GLOBALS["SL"]->REQ->has('emailID')) {
+                $emaID = intVal($GLOBALS["SL"]->REQ->emailID);
+            }
+            return view(
+                'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-redir', 
+                [
+                    "coreID" => $this->coreID,
+                    "emaID"  => $emaID
+                ]
+            )->render();
+        }
+        return 'Sorry, something went wrong trying to send the email.';
     }
 
     /**

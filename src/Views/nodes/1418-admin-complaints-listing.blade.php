@@ -38,10 +38,11 @@
             @endif
         @endif
             <div id="searchFoundCnt" class="disIn">
-                {!! $complaintFiltDescPrev !!}
+                <?php /* {!! $complaintFiltDescPrev !!} */ ?>
             </div>
         </div>
         <div class="col-md-4">
+        <?php /*
         @if (!$GLOBALS["SL"]->x["isPublicList"])
             <div class="fR pL15">
                 <div class="btn-group">
@@ -57,7 +58,9 @@
                 </div>
             </div>
         @endif
-        <?php /* 
+        */ ?>
+
+        <?php /*
             <div class="fR">
                 <div class="relDiv">
                     <div class="dropdown">
@@ -105,17 +108,13 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <div id="complaintPreviews" class="w100">
-                    @if (isset($complaintPreviews) && trim($complaintPreviews) != '')
-                        {!! $complaintPreviews !!}
-                    @else
-                        <div class="slCard p20 mT10 taC">
-                            {!! $GLOBALS["SL"]->spinner() !!}
-                            <h4 class="mTn20 mB20">
-                                We're gathering the data, hold tight!
-                            </h4>
-                        </div>
-                    @endif
+                <div id="complaintResultsWrap" class="w100 pT10">
+                    <div class="slCard taC pB30">
+                        {!! $GLOBALS["SL"]->spinner() !!}
+                        <h4 class="mTn15">
+                            We're gathering the data, hold tight!
+                        </h4>
+                    </div>
                 </div>
                 <?php /* <p><a href="?showPreviews=1{!! $searchFiltsURL !!}" 
                     target="_blank" class="mT30">
@@ -127,100 +126,29 @@
             </div>
         </div>
     </div> <!-- end admDashLargeView -->
-    @if (!isset($complaintPreviews) || trim($complaintPreviews) == '')
-        <script type="text/javascript">
-        $(document).ready(function(){
-            //setTimeout(function() {
-            $("#complaintPreviews").load("?showPreviews=1&ajax=1{!! $searchFiltsURL !!}");
-            //}, 10);
-        });
-        </script>
-    @endif
+
+    <script type="text/javascript">
+    setTimeout("document.getElementById('sResultsDivID').value='complaintResultsWrap'", 10);
+    setTimeout("document.getElementById('sResultsUrlID').value='/ajax/search-complaint-previews?showPreviews=1&ajax=1&limit=0'", 10);
+    setTimeout("autoRunDashResults=true", 15);
+    </script>
     
 @elseif ($sView == 'list')
 
     <div id="admDashListView">
-        <div id="dashResultsWrap" class="fL h100 ovrFloY" style="width: 40%;">
-            <div class="pB10 pL15 slGrey">
-                Incident Location, Complainant Name<br />
-                Complaint ID# and Status, Date Submitted to OpenPolice.org
-            </div>
-            <div id="dashResultsWrap">
-    <?php $cnt = 0; ?>
-    @forelse ($complaints as $j => $com)
-        <?php $cnt++; ?>
-        <div id="comRow{{ $com->com_id }}" class="complaintRowWrp">
-
-            <a class="complaintRowA" href="javascript:;"
-                data-com-id="{{ $com->com_id }}" 
-                data-com-pub-id="{{ intVal($com->com_public_id) }}">
-                <div class="float-left complaintAlert">
-                    <div>&nbsp;
-                    @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type), 
-                            ['Unreviewed', 'Not Sure'])
-                        || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
-                            == 'Police Complaint'
-                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
-                            ['New', 'Hold', 'Reviewed'])))
-                        <div class="litRedDot"></div>
-                    @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) == 'Police Complaint'
-                        && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
-                            ['Needs More Work', 'Pending Attorney', 'OK to Submit to Oversight']))
-                        <div class="litRedDottie"></div>
-                    @endif
-                    </div>
-                </div>
-                <div class="float-left">
-                    <b>{{ trim($com->inc_address_city) }}, {{ $com->inc_address_state }},
-                    {{ $GLOBALS["SL"]->convertAllCallToUp1stChars(
-                        $com->prsn_name_first . ' ' . $com->prsn_name_last
-                    ) }}</b><br />
-                    <span class="slGrey">
-                    @if ($com->com_public_id <= 0)
-                        #i{{ number_format($com->com_id) }}
-                        @if ($com->com_submission_progress > 0 
-                            && isset($lastNodes[$com->com_submission_progress]))
-                            /{{ $lastNodes[$com->com_submission_progress] }}
-                        @endif
-                    @else
-                        #{{ number_format($com->com_public_id) }}
-                        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
-                            == 'Police Complaint')
-                            {{ $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status) }}
-                        @endif
-                    @endif
-                    @if ($com->com_status != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete') 
-                        && $com->com_type != $GLOBALS["SL"]->def->getID('Complaint Type',  'Police Complaint'))
-                        ({{ $GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) }})
-                    @endif
-                    </span>
-                </div>
-                <div class="float-right">
-                    @if (isset($com->com_record_submitted))
-                        &nbsp;<br /><span class="slGrey">{{ 
-                            date("n/j/y", strtotime($com->com_record_submitted)) 
-                        }}</span>
-                    @endif
-                </div>
-                <div class="fC"></div>
-            </a>
-
-            <a class="complaintRowFull" 
-                @if ($com->com_public_id > 0) 
-                    href="/dash/complaint/read-{{ $com->com_public_id }}"
-                @else 
-                    href="/dash/complaint/readi-{{ $com->com_id }}"
-                @endif ><i class="fa fa-arrows-alt" aria-hidden="true"></i></a>
-            
-            <div id="resultSpin{{ $com->com_id }}" class="resultSpin"></div>
-
+        <div id="dashResultsWrap" class="fL h100 ovrFloY brdRgtGrey" style="width: 40%;">
+            {!! view(
+                'vendor.openpolice.nodes.1418-admin-complaints-dash-results', 
+                [ 
+                    "complaints"            => $complaints,
+                    "sortLab"               => $sortLab,
+                    "sortDir"               => $sortDir,
+                    "firstComplaint"        => $firstComplaint,
+                    "complaintFiltDescPrev" => $complaintFiltDescPrev
+                ]
+            )->render() !!}
         </div>
-    @empty
-        <div class="pL15">No complaints found in this filter</div>
-    @endforelse
-                </div>
-        </div>
-        <div id="dashPreviewWrap" class="fR h100" style="width: 59%;">
+        <div id="dashPreviewWrap" class="fL h100" style="width: 60%;">
             <div id="hidivDashTools" class="h100 ovrFloY" style="display: none;">
                 <div id="searchFilts" style="display: none;">
                     <div id="filtsCard" class="slCard mR20">
@@ -228,20 +156,25 @@
                     </div>
                 </div>
             </div>
-            <iframe id="reportAdmPreview" src="" width="100%" height="100%" 
-                frameborder="0" style="display: block;"></iframe>
+            <div id="reportAdmPreview" class="w100 h100 disBlo ovrFloY"></div>
         </div>
         <div class="fC"></div>
     </div> <!-- end admDashListView -->
 
 @endif
-    
+
 </div> <!-- end outer height div -->
 
 @endif
 
-<style> 
 @if ($sView == 'list') 
-    body { overflow-y: hidden; } 
-@endif
+<style> 
+    body {
+        overflow-y: hidden;
+    }
+    #node2632kids .pT20.pB20 {
+        padding-top: 2px;
+        padding-bottom: 0px;
+    }
 </style>
+@endif

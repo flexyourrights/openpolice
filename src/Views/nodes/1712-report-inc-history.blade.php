@@ -2,17 +2,22 @@
 @if (isset($history) && sizeof($history) > 0)
     @foreach ($history as $i => $h)
         @if ($i > 0) <hr> @endif
-        <p>
-        @if ($h["type"] == 'Status') Status: 
-        @elseif ($h["type"] == 'Email') Email: 
-        @endif
-        {!! str_replace('Oversight', 'Investigative Agency', $h["desc"]) !!}
-        @if (isset($h["note"]) && trim($h["note"]) != '') 
-            @if (trim($h["desc"]) != '') <br /> @endif
-            {!! str_replace("\n", "<br />", $h["note"]) !!}
-        @endif
-        <br />{{ date("n/j/y g:i a", $h["date"]) }} by {!! $h["who"] !!}
-        </p>
+        <div class="disBlo">
+        {!! $GLOBALS["SL"]->printAccordian(
+            (($h["type"] == 'Status') 
+                ? 'Status: ' 
+                : (($h["type"] == 'Email') ? 'Email: ' : ''))
+                . $h["desc"],
+            '<div class="pB15">' . $h["note"] . '</div>',
+            false,
+            false,
+            'text'
+        ) !!}
+        </div>
+        <div class="clearfix"></div>
+        <div class="disBlo">
+            {{ date("n/j/y g:i a", $h["date"]) }} by {!! $h["who"] !!}
+        </div>
     @endforeach
 @else
     <p><i>This complaint has not been reviewed yet.</i></p>

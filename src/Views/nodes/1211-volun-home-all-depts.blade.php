@@ -99,8 +99,8 @@ function checkNewDept() {
 }
 /* s='+document.getElementById('admSrchFld').value+'&
 function tweakSearchForm() {
-    if (document.getElementById('dashSearchFrmID')) {
-        document.getElementById('dashSearchFrmID').action+='?state='+document.getElementById('deptStateID').value+'&sort='+document.getElementById('deptSortID').value;
+    if (document.getElementById('dashSearchFormID')) {
+        document.getElementById('dashSearchFormID').action+='?state='+document.getElementById('deptStateID').value+'&sort='+document.getElementById('deptSortID').value;
     }
 }
 setTimeout("tweakSearchForm()", 10);

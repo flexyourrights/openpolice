@@ -24,6 +24,7 @@ class OpenPoliceAllegations extends OpenPolicePeople
                 $allegInfo = [$alleg[1], '', -3, [], []]; // Alleg Name, Alleg Why, Alleg ID, Civs, Offs
                 switch ($alleg[1]) {
                     case 'Sexual Assault':
+                    case 'Sexual Harassment':
                     case 'Unreasonable Force':
                     case 'Wrongful Arrest':
                     case 'Wrongful Property Seizure':
@@ -41,7 +42,10 @@ class OpenPoliceAllegations extends OpenPolicePeople
                         break;
                     case 'Intimidating Display of Weapon':
                         if ($this->checkAllegIntimidWeaponSilver($allegSilv)) {
-                            $allegInfo[1] .= ', ' . $this->getAllegDesc($allegName, $allegID);
+                            $allegInfo[1] .= ', ' . $GLOBALS["SL"]->def->getVal(
+                                    'Intimidating Displays Of Weapon', 
+                                    $allegSilv->alle_sil_intimidating_weapon
+                                );
                         }
                     case 'Wrongful Entry':
                         if (isset($this->sessData->dataSets["stops"]) 
@@ -198,11 +202,9 @@ class OpenPoliceAllegations extends OpenPolicePeople
     
     protected function checkAllegIntimidWeaponSilver($allegSilv)
     {
-        if (isset($allegSilv->alle_sil_intimidating_weapon) 
-            && in_array(intVal($allegSilv->alle_sil_intimidating_weapon), $this->intimidWeaponNos())) {
-
-        }
-
+//echo '(checkAllegIntimidWeaponSilver(<pre>'; print_r($allegSilv); echo '</pre>';
+        return (isset($allegSilv->alle_sil_intimidating_weapon) 
+            && !in_array(intVal($allegSilv->alle_sil_intimidating_weapon), $this->intimidWeaponNos()));
     }
     
     protected function checkAllegIntimidWeapon($alleg)

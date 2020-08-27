@@ -14,7 +14,9 @@ use DB;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\OPComplaints;
 use App\Models\OPDepartments;
+use App\Models\SLSearchRecDump;
 use App\Models\SLZips;
 use OpenPolice\Controllers\OpenComplaintSaves;
 
@@ -49,12 +51,44 @@ class OpenAjax extends OpenComplaintSaves
     {
         if ($type == 'dept-kml-desc') {
             return $this->ajaxDeptKmlDesc($request);
-        } elseif ($type == 'saveDefaultState') {
+        } elseif ($type == 'save-default-state') {
             return $this->saveVolunLocationForm($request);
         } elseif ($type == 'dept-search') { // public
             return $this->ajaxPoliceDeptSearch($request, 'public');
+        } elseif ($type == 'home-complaint-previews') {
+            $this->ajaxLoadHomeComplaintPreviews($request);
+        } elseif ($type == 'search-complaint-previews') {
+            $this->ajaxLoadSearchComplaintPreviews($request);
         }
         return '';
+    }
+
+    /**
+     * Print home page complaints previews.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function ajaxLoadHomeComplaintPreviews(Request $request)
+    {
+        $GLOBALS["SL"]->x["isHomePage"] = true;
+        $GLOBALS["SL"]->x["isPublicList"] = true;
+        $GLOBALS["SL"]->x["reqPics"] = true;
+        $GLOBALS["SL"]->pageView = 'public';
+        return $this->printComplaintListing(2685, 'lrg');
+    }
+
+    /**
+     * Print search complaints previews.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function ajaxLoadSearchComplaintPreviews(Request $request)
+    {
+        $GLOBALS["SL"]->x["isPublicList"] = true;
+        $GLOBALS["SL"]->pageView = 'public';
+        return $this->printComplaintListing(2685, 'lrg');
     }
     
     /**
@@ -73,153 +107,25 @@ class OpenAjax extends OpenComplaintSaves
         $loadUrl = '/ajax/dept-search';
         // Prioritize by Incident City first, also by Department size (# of officers)
         $this->chkDeptStateFlt($request);
-        $reqLikeOrig = $this->chkDeptSearchFlt($request);
+        $searchStr = $this->chkDeptSearchFlt($request);
         $this->getDeptStateFltNames();
 
         list($sortLab, $sortDir) = $this->chkDeptSorts($this->v["reqState"]);
-        $depts = $deptIDs = [];
         $loadUrl .= $this->v["reqLike"] . '&states=' . implode(',', $this->v["reqState"]) 
             . '&sortLab=' . $sortLab . '&sortDir=' . $sortDir;
         $ret = $GLOBALS["SL"]->chkCache($loadUrl, 'search', 1);
         if (trim($ret) == '' || $request->has('refresh')) {
-            $fedDef = $GLOBALS["SL"]->def->getID(
-                'Department Types',
-                'Federal Law Enforcement'
-            );
-            if (sizeof($this->v["reqState"]) > 0
-                && (sizeof($this->v["reqState"]) > 1 || $this->v["reqState"][0] != 'US')) {
-                if (in_array($this->v["reqLike"], ['', '%%'])) {
-                    $deptsRes = OPDepartments::whereIn('dept_address_state', $this->v["reqState"])
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-                } else {
-                    $deptsRes = OPDepartments::where('dept_name', 'LIKE', $this->v["reqLike"])
-                        ->whereIn('dept_address_state', $this->v["reqState"])
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-                    $deptsRes = OPDepartments::where('dept_address_city', 'LIKE', $this->v["reqLike"])
-                        ->whereIn('dept_address_state', $this->v["reqState"])
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-                    $deptsRes = OPDepartments::where('dept_address', 'LIKE', $this->v["reqLike"])
-                        ->whereIn('dept_address_state', $this->v["reqState"])
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-                    $zips = $counties = [];
-                    $cityZips = SLZips::where('zip_city', 'LIKE', $this->v["reqLike"])
-                        ->whereIn('zip_state', $this->v["reqState"])
-                        ->get();
-                    /* if ($cityZips->isEmpty()) {
-                        $cityZips = SLZips::where('zip_city', 'LIKE', $this->v["reqLike"])
-                            ->get();
-                    } */
-                    if ($cityZips->isNotEmpty()) {
-                        foreach ($cityZips as $z) {
-                            $zips[] = $z->zip_zip;
-                            $counties[] = $z->zip_county;
-                        }
-                        $deptsMore = OPDepartments::whereIn('dept_address_zip', $zips)
-                            ->orderBy('dept_name', 'asc')
-                            ->get();
-                        $this->addDeptToResults($deptIDs, $depts, $deptsMore);
-                        foreach ($counties as $c) {
-                            $deptsMore = OPDepartments::where('dept_name', 'LIKE', '%' . $c . '%')
-                                ->whereIn('dept_address_state', $this->v["reqState"])
-                                ->orderBy('dept_jurisdiction_population', 'desc')
-                                ->orderBy('dept_tot_officers', 'desc')
-                                ->orderBy('dept_name', 'asc')
-                                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                                    'dept_address_city', 'dept_address_state')
-                                ->get();
-                            $this->addDeptToResults($deptIDs, $depts, $deptsMore);
-                            $deptsMore = OPDepartments::where('dept_address_county', 'LIKE', '%' . $c . '%')
-                                ->whereIn('dept_address_state', $this->v["reqState"])
-                                ->orderBy('dept_jurisdiction_population', 'desc')
-                                ->orderBy('dept_tot_officers', 'desc')
-                                ->orderBy('dept_name', 'asc')
-                                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                                    'dept_address_city', 'dept_address_state')
-                                ->get();
-                            $this->addDeptToResults($deptIDs, $depts, $deptsMore);
-                        }
-                    }
-                }
-            } elseif (!in_array($this->v["reqLike"], ['', '%%'])
-                && sizeof($this->v["reqState"]) == 0) {
-                $deptsRes = OPDepartments::where('dept_name', 'LIKE', $this->v["reqLike"])
-                    ->orWhere('dept_address', 'LIKE', $this->v["reqLike"])
-                    ->orWhere('dept_address_city', 'LIKE', $this->v["reqLike"])
-                    ->orWhere('dept_address_county', 'LIKE', $this->v["reqLike"])
-                    ->orderBy('dept_jurisdiction_population', 'desc')
-                    ->orderBy('dept_tot_officers', 'desc')
-                    ->orderBy('dept_name', 'asc')
-                    ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                        'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                        'dept_address_city', 'dept_address_state')
-                    ->get();
-                $this->addDeptToResults($deptIDs, $depts, $deptsRes);
-            }
-            if (sizeof($this->v["reqState"]) > 0 
-                && in_array('US', $this->v["reqState"])) {
-                if (!in_array($this->v["reqLike"], ['', '%%'])) {
-                    $deptsFed = OPDepartments::where('dept_type', $fedDef)
-                        ->where('dept_name', 'LIKE', $this->v["reqLike"])
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsFed);
-                } else {
-                    $deptsFed = OPDepartments::where('dept_type', $fedDef)
-                        ->orderBy('dept_jurisdiction_population', 'desc')
-                        ->orderBy('dept_tot_officers', 'desc')
-                        ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
-                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
-                            'dept_address_city', 'dept_address_state')
-                        ->get();
-                    $this->addDeptToResults($deptIDs, $depts, $deptsFed);
-                }
-            }
+            $this->ajaxRunDeptSearch($this->v["reqLike"]);
             if ($sortLab != 'match') {
-                $this->applyDeptSorts($depts, $sortLab, $sortDir);
+                $this->applyDeptSorts($this->v["depts"], $sortLab, $sortDir);
             }
             if ($view == 'survey') {
                 $drop = $GLOBALS["SL"]->states->stateDrop($this->v["reqState"][0], true);
                 $ret = view(
                     'vendor.openpolice.ajax.search-police-dept', 
                     [
-                        "depts"            => $depts, 
-                        "search"           => $reqLikeOrig, 
+                        "depts"            => $this->v["depts"], 
+                        "search"           => $searchStr, 
                         "stateName"        => $this->v["stateNames"], 
                         "newDeptStateDrop" => $drop
                     ]
@@ -228,8 +134,8 @@ class OpenAjax extends OpenComplaintSaves
                 $ret = view(
                     'vendor.openpolice.ajax.department-previews', 
                     [
-                        "depts"      => $depts,
-                        "deptSearch" => $reqLikeOrig,
+                        "depts"      => $this->v["depts"],
+                        "deptSearch" => $searchStr,
                         "stateName"  => $this->v["stateNames"],
                         "sortLab"    => $sortLab,
                         "sortDir"    => $sortDir
@@ -241,6 +147,216 @@ class OpenAjax extends OpenComplaintSaves
         echo $ret;
         exit;
     }
+    
+    /**
+     * Run the ranked search for police departments.
+     *
+     * @param  string  $str
+     * @return boolean
+     */
+    protected function ajaxRunDeptSearch($str)
+    {
+        if (!isset($this->v["deptIDs"])) {
+            $this->v["deptIDs"] 
+                = $this->v["depts"] 
+                = [];
+        }
+        if (!isset($this->v["reqState"])) {
+            $this->v["reqState"] = [];
+        }
+        $str = $this->loadDeptSearchFlt($str);
+        if (sizeof($this->v["reqState"]) > 0
+            && (sizeof($this->v["reqState"]) > 1 || $this->v["reqState"][0] != 'US')) {
+            $this->ajaxRunDeptSearchStates($str);
+        } elseif (!in_array($str, ['', '%%']) && sizeof($this->v["reqState"]) == 0) {
+            $this->ajaxRunDeptSearchBasic($str);
+        }
+        if (sizeof($this->v["reqState"]) > 0 && in_array('US', $this->v["reqState"])) {
+            $this->ajaxRunDeptSearchFederal($str);
+        }
+        return true;
+    }
+    
+    /**
+     * Run the ranked search for police departments within certain states.
+     *
+     * @param  string  $str
+     * @param  boolean  $states
+     * @return array
+     */
+    private function ajaxRunDeptSearchBasic($str, $states = false)
+    {
+        if (sizeof($this->v["deptSearchWords"]) == 0) {
+            return false;
+        }
+        $evalStates = "";
+        if ($states) {
+            $evalStates = "->whereIn('dept_address_state', \$this->v['reqState'])";
+        }
+        foreach ($this->v["deptSearchWords"] as $word) {
+            $wrd = '%' . $word . '%';
+            $eval = "\$deptsRes = App\\Models\\OPDepartments::where('dept_name', 'LIKE', \$wrd)
+                " . $evalStates . "
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();";
+            eval($eval);
+            $this->addDeptToResults($deptsRes);
+        }
+        foreach ($this->v["deptSearchWords"] as $word) {
+            $wrd = '%' . $word . '%';
+            $eval = "\$deptsRes = App\\Models\\OPDepartments::where('dept_address_city', 'LIKE', \$wrd)
+                " . $evalStates . "
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();";
+            eval($eval);
+            $this->addDeptToResults($deptsRes);
+        }
+        foreach ($this->v["deptSearchWords"] as $word) {
+            $wrd = '%' . $word . '%';
+            $eval = "\$deptsRes = App\\Models\\OPDepartments::where('dept_address_county', 'LIKE', \$wrd)
+                " . $evalStates . "
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();";
+            eval($eval);
+            $this->addDeptToResults($deptsRes);
+        }
+        foreach ($this->v["deptSearchWords"] as $word) {
+            $wrd = '%' . $word . '%';
+            $eval = "\$deptsRes = App\\Models\\OPDepartments::where('dept_address', 'LIKE', \$wrd)
+                " . $evalStates . "
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();";
+            eval($eval);
+            $this->addDeptToResults($deptsRes);
+        }
+        return true;
+    }
+    
+    /**
+     * Run the ranked search for police departments within certain states.
+     *
+     * @param  string  $str
+     * @return array
+     */
+    private function ajaxRunDeptSearchStates($str)
+    {
+        if (in_array($str, ['', '%%'])) {
+            $deptsRes = OPDepartments::whereIn('dept_address_state', $this->v["reqState"])
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();
+            $this->addDeptToResults($deptsRes);
+        } else {
+            $this->ajaxRunDeptSearchBasic($str, true);
+            $zips = $counties = [];
+            $cityZips = SLZips::where('zip_city', 'LIKE', $str)
+                ->whereIn('zip_state', $this->v["reqState"])
+                ->get();
+            /* if ($cityZips->isEmpty()) {
+                $cityZips = SLZips::where('zip_city', 'LIKE', $str)
+                    ->get();
+            } */
+            if ($cityZips->isNotEmpty()) {
+                foreach ($cityZips as $z) {
+                    $zips[] = $z->zip_zip;
+                    $counties[] = $z->zip_county;
+                }
+                $deptsMore = OPDepartments::whereIn('dept_address_zip', $zips)
+                    ->orderBy('dept_name', 'asc')
+                    ->get();
+                $this->addDeptToResults($deptsMore);
+                foreach ($counties as $c) {
+                    $deptsMore = OPDepartments::where('dept_name', 'LIKE', '%' . $c . '%')
+                        ->whereIn('dept_address_state', $this->v["reqState"])
+                        ->orderBy('dept_jurisdiction_population', 'desc')
+                        ->orderBy('dept_tot_officers', 'desc')
+                        ->orderBy('dept_name', 'asc')
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                            'dept_address_city', 'dept_address_state')
+                        ->get();
+                    $this->addDeptToResults($deptsMore);
+                    $deptsMore = OPDepartments::where('dept_address_county', 'LIKE', '%' . $c . '%')
+                        ->whereIn('dept_address_state', $this->v["reqState"])
+                        ->orderBy('dept_jurisdiction_population', 'desc')
+                        ->orderBy('dept_tot_officers', 'desc')
+                        ->orderBy('dept_name', 'asc')
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                            'dept_address_city', 'dept_address_state')
+                        ->get();
+                    $this->addDeptToResults($deptsMore);
+                }
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Run the ranked search for police departments within certain federal jurisdictions.
+     *
+     * @param  string  $str
+     * @return array
+     */
+    private function ajaxRunDeptSearchFederal($str)
+    {
+        $fedDef = $GLOBALS["SL"]->def->getID(
+            'Department Types',
+            'Federal Law Enforcement'
+        );
+        if (!in_array($str, ['', '%%'])) {
+            if (sizeof($this->v["deptSearchWords"]) > 0) {
+                foreach ($this->v["deptSearchWords"] as $word) {
+                    $wrd = '%' . $word . '%';
+                    $deptsFed = OPDepartments::where('dept_type', $fedDef)
+                        ->where('dept_name', 'LIKE', $wrd)
+                        ->orderBy('dept_jurisdiction_population', 'desc')
+                        ->orderBy('dept_tot_officers', 'desc')
+                        ->orderBy('dept_name', 'asc')
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                            'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                            'dept_address_city', 'dept_address_state')
+                        ->get();
+                    $this->addDeptToResults($deptsFed);
+                }
+            }
+        } else {
+            $deptsFed = OPDepartments::where('dept_type', $fedDef)
+                ->orderBy('dept_jurisdiction_population', 'desc')
+                ->orderBy('dept_tot_officers', 'desc')
+                ->orderBy('dept_name', 'asc')
+                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                    'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
+                    'dept_address_city', 'dept_address_state')
+                ->get();
+            $this->addDeptToResults($deptsFed);
+        }
+        return true;
+    }
 
     /**
      * Check for filtering by text search for department listings.
@@ -249,25 +365,32 @@ class OpenAjax extends OpenComplaintSaves
      */
     protected function chkDeptSearchFlt($request)
     {
-//echo '<pre>'; print_r($this->v["reqState"]); echo '</pre>';
-        $this->v["reqLike"] = $reqLikeOrig = '';
-        $loadUrl = '';
-        if ($request->has('policeDept')) {
-            $reqLikeOrig = trim($request->policeDept);
+        $this->v["reqLike"] = $str = $loadUrl = '';
+        if ($request->has('policeDept') && trim($request->policeDept)) {
+            $str = trim($request->policeDept);
             $loadUrl .= '?survey=1';
-        } elseif ($request->has('deptSearch')) {
-            $reqLikeOrig = trim($request->deptSearch);
+        } elseif ($request->has('deptSearch') && trim($request->deptSearch) != '') {
+            $str = trim($request->deptSearch);
+        } elseif ($request->has('s') && trim($request->get('s')) != '') {
+            $str = trim($request->get('s'));
         }
-        if (in_array($request->policeDept, ['washington dc', 'washington d.c.'])) {
-            $reqLikeOrig = 'washington';
-        }
-        $searchWords = [];
-        $searchRaw = $GLOBALS["SL"]->mexplode(' ', $reqLikeOrig);
+        return $this->loadDeptSearchFlt($str);
+    }
+
+    /**
+     * Check for filtering by text search for department listings.
+     *
+     * @return array
+     */
+    protected function loadDeptSearchFlt($str)
+    {
+        $str = $this->chkDeptSearchTweak($str);
+        $this->v["deptSearchWords"] = $tmp = [];
+        $searchRaw = $GLOBALS["SL"]->mexplode(' ', $str);
         if (sizeof($searchRaw) > 0) {
             foreach ($searchRaw as $word) {
                 $abbr = strtoupper($word);
                 $state = $GLOBALS["SL"]->getState($abbr);
-//echo 'adding ' . $abbr . ', state: ' . $state;
                 if ($state != '') {
                     $this->chkDeptSearchAddState($abbr);
                 } else {
@@ -275,16 +398,83 @@ class OpenAjax extends OpenComplaintSaves
                     if ($abbr != '') {
                         $this->chkDeptSearchAddState($abbr);
                     } else {
-                        $searchWords[] = $word;
+                        if (!in_array($word, $this->v["deptSearchWords"])) {
+                            $tmp[] = $word;
+                        }
                     }
                 }
             }
         }
-        $reqLikeOrig = implode(' ', $searchWords);
-        $this->v["reqLike"] = '%' . strtolower($reqLikeOrig) . '%';
-//echo '<pre>'; print_r($this->v["reqState"]); echo '</pre> reqLikeOrig: ' . $reqLikeOrig . '<br />';
-//exit;
-        return $reqLikeOrig;
+        if (sizeof($tmp) > 0) {
+            if ($str == implode(' ', $tmp)) {
+                $this->v["deptSearchWords"][] = $str;
+            } else {
+                $str = implode(' ', $tmp);
+            }
+            foreach ($tmp as $word) {
+                if (!in_array($word, $this->v["deptSearchWords"])) {
+                    $this->v["deptSearchWords"][] = $word;
+                }
+            }
+        }
+        $this->v["reqLike"] = '%' . strtolower($str) . '%';
+        return $str;
+    }
+
+    /**
+     * Tweak certain searches to improve results.
+     *
+     * @return string
+     */
+    protected function chkDeptSearchTweak($str)
+    {
+        if (in_array(strtolower($str), ['washington dc', 'washington d.c.'])) {
+            $this->chkDeptSearchAddState('DC');
+            return 'washington';
+        }
+        return $str;
+    }
+
+    /**
+     * Customize search results from one data sets.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  array  $tblInfo
+     * @return string
+     */
+    protected function printDataSetResultsAjaxCustom(Request $request, $tblInfo)
+    {
+        $limit = 10;
+        if ($request->has('limit') && intVal($request->get('limit')) > 0) {
+            $limit = intVal($request->get('limit'));
+        }
+        $str = '';
+        if ($request->has('s')) {
+            $str = trim($request->get('s'));
+        }
+        if ($tblInfo["name"] == 'Police Departments') {
+            return $this->printDataSetResultsAjaxDepts($request, $limit);
+        }
+        return $this->printDataSetResultsAjaxComplaints($request, $limit);
+    }
+
+    /**
+     * Customize multi-set search results from departments.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
+    protected function printDataSetResultsAjaxDepts(Request $request, $limit)
+    {
+        $str = $this->chkDeptSearchFlt($request);
+        $this->ajaxRunDeptSearch($str);
+        return view(
+            'vendor.openpolice.ajax.department-previews-table', 
+            [
+                "limit" => $limit,
+                "depts" => $this->v["depts"]
+            ]
+        )->render();
     }
 
     /**
@@ -294,6 +484,9 @@ class OpenAjax extends OpenComplaintSaves
      */
     protected function chkDeptSearchAddState($abbr)
     {
+        if (!isset($this->v["reqState"])) {
+            $this->v["reqState"] = [];
+        }
         if (!in_array($abbr, $this->v["reqState"])) {
             $this->v["reqState"][] = $abbr;
         }
@@ -313,16 +506,27 @@ class OpenAjax extends OpenComplaintSaves
      */
     protected function chkDeptStateFlt($request)
     {
-        $this->v["reqState"] = [];
+        if (!isset($this->v["reqState"])) {
+            $this->v["reqState"] = [];
+        }
         if ($request->has('policeState')) {
             $this->v["reqState"] = [
                 trim(strtoupper($request->get('policeState')))
             ];
         } elseif ($request->has('states')) {
-            $this->v["reqState"] = $GLOBALS["SL"]->mexplode(
-                ',', 
-                strtoupper($request->get('states'))
-            );
+            $states = strtoupper($request->get('states'));
+            $this->v["reqState"] = $GLOBALS["SL"]->mexplode(',', $states);
+        } elseif ($request->has('sFilt') && strpos($request->sFilt, '__states_') !== false) {
+            $filts = $GLOBALS["SL"]->mexplode('__', $GLOBALS["SL"]->REQ->get('sFilt'));
+            if (sizeof($filts) > 0) {
+                foreach ($filts as $flt) {
+                    $filtParts = $GLOBALS["SL"]->mexplode('_', $flt);
+                    if (sizeof($filtParts) == 2 
+                        && $filtParts[0] == 'states') {
+                        $this->v["reqState"] = $GLOBALS["SL"]->mexplode(',', $filtParts[1]);
+                    }
+                }
+            }
         }
         return $this->v["reqState"];
     }   
@@ -444,22 +648,295 @@ class OpenAjax extends OpenComplaintSaves
      * Add a new set of departments ($deptsIn) into the larger
      * sets of results.
      *
-     * @param  array &$deptIDs
-     * @param  array &$depts
      * @param  array $deptsIn
      * @return boolean
      */
-    protected function addDeptToResults(&$deptIDs, &$depts, $deptsIn)
+    protected function addDeptToResults($deptsIn)
     {
         if ($deptsIn->isNotEmpty()) {
             foreach ($deptsIn as $d) {
-                if (!in_array($d->dept_id, $deptIDs)) {
-                    $deptIDs[] = $d->dept_id;
-                    $depts[] = $d;
+                if (!in_array($d->dept_id, $this->v["deptIDs"])) {
+                    $this->v["deptIDs"][] = $d->dept_id;
+                    $this->v["depts"][]   = $d;
                 }
             }
         }
         return true;
     }
+
+    /**
+     * Customize multi-set search results from complaints.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return string
+     */
+    protected function printDataSetResultsAjaxComplaints(Request $request, $limit)
+    {
+        $str = '';
+        if ($request->has('s')) {
+            $str = trim($request->get('s'));
+        }
+        $this->ajaxRunComplaintSearch($str);
+        $this->prepDataSetPreviewComplaints();
+        return view(
+            'vendor.openpolice.nodes.1221-search-results-multi-data-sets-complaints', 
+            [
+                "limit"      => $limit,
+                "isStaff"    => $this->isStaffOrAdmin(),
+                "complaints" => $this->v["complaints"]
+            ]
+        )->render();
+    }
     
+    /**
+     * Load baseline data fields needed to preview complaints 
+     * for multi-set search results.
+     *
+     * @param  string  $str
+     * @return boolean
+     */
+    private function prepDataSetPreviewComplaints()
+    {
+        if (sizeof($this->v["comIDs"]) > 0) {
+            foreach ($this->v["comIDs"] as $i => $comID) {
+                $this->v["complaints"][$i] = new ComplaintPreview($comID);
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Run the ranked search for complaints.
+     *
+     * @param  string  $str
+     * @return boolean
+     */
+    protected function ajaxRunComplaintSearch($str)
+    {
+        if (!isset($this->v["comIDs"])) {
+            $this->v["comIDs"] 
+                = $this->v["complaints"] 
+                = $this->v["allComIDs"] 
+                = $this->v["allIncIDs"] 
+                = [];
+        }
+        $this->v["comSearchTxt"] = $GLOBALS["SL"]->parseSearchWords($str);
+        $this->ajaxRunComplaintSearchLoadAll();
+        if (sizeof($this->v["comSearchTxt"]) > 0) {
+            $this->ajaxRunComplaintSearchAddBasic();
+            foreach ($this->v["comSearchTxt"] as $str) {
+                $GLOBALS["strLike"] = '%' . $str . '%';
+                $comMatches = OPComplaints::whereIn('com_id', $this->v["allComIDs"])
+                    ->where('com_summary', 'LIKE', $GLOBALS["strLike"])
+                    ->select('com_id')
+                    ->get();
+                $this->addComplaintToResults($comMatches, 'com_id');
+            }
+
+        }
+        return true;
+    }
+    
+    /**
+     * Run the ranked search for complaints.
+     *
+     * @param  string  $str
+     * @return boolean
+     */
+    protected function ajaxRunComplaintSearchAddBasic()
+    {
+        foreach ($this->v["comSearchTxt"] as $str) {
+            $GLOBALS["strLike"] = '%' . $str . '%';
+            $civMatches = DB::table('op_civilians')
+                ->join('op_person_contact', 'op_person_contact.prsn_id',
+                    '=', 'op_civilians.civ_person_id')
+                ->where('op_civilians.civ_is_creator', 'LIKE', 'Y')
+                ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
+                ->where(function ($query) {
+                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
+                })
+                ->select('op_civilians.civ_complaint_id')
+                ->get();
+            $this->addComplaintToResults($civMatches, 'civ_complaint_id');
+        }
+        foreach ($this->v["comSearchTxt"] as $str) {
+            $GLOBALS["strLike"] = '%' . $str . '%';
+            $incMatches = DB::table('op_incidents')
+                ->join('op_complaints', 'op_complaints.com_incident_id',
+                    '=', 'op_incidents.inc_id')
+                ->whereIn('op_complaints.com_id', $this->v["allComIDs"])
+                ->where(function ($query) {
+                    return $query->where('op_incidents.inc_address_city', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_incidents.inc_address', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_incidents.inc_landmarks', 'LIKE', $GLOBALS["strLike"]);
+                })
+                ->select('op_complaints.com_id')
+                ->get();
+            $this->addComplaintToResults($incMatches, 'com_id');
+        }
+        foreach ($this->v["comSearchTxt"] as $str) {
+            $GLOBALS["strLike"] = '%' . $str . '%';
+            $civMatches = DB::table('op_civilians')
+                ->join('op_person_contact', 'op_person_contact.prsn_id',
+                    '=', 'op_civilians.civ_person_id')
+                ->where('op_civilians.civ_is_creator', 'NOT LIKE', 'Y')
+                ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
+                ->where(function ($query) {
+                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
+                })
+                ->select('op_civilians.civ_complaint_id')
+                ->get();
+            $this->addComplaintToResults($civMatches, 'civ_complaint_id');
+        }
+        foreach ($this->v["comSearchTxt"] as $str) {
+            $GLOBALS["strLike"] = '%' . $str . '%';
+            $offMatches = DB::table('op_officers')
+                ->join('op_person_contact', 'op_person_contact.prsn_id',
+                    '=', 'op_officers.off_person_id')
+                ->whereIn('op_officers.off_complaint_id', $this->v["allComIDs"])
+                ->where(function ($query) {
+                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
+                })
+                ->select('op_officers.off_complaint_id')
+                ->get();
+            $this->addComplaintToResults($offMatches, 'off_complaint_id');
+        }
+        if ($this->isStaffOrAdmin()) {
+            foreach ($this->v["comSearchTxt"] as $str) {
+                $GLOBALS["strLike"] = '%' . $str . '%';
+                $dumpMatches = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
+                    ->whereIn('sch_rec_dmp_rec_id', $this->v["allComIDs"])
+                    ->where('sch_rec_dmp_rec_dump', 'LIKE', $GLOBALS["strLike"])
+                    ->orderBy('sch_rec_dmp_rec_id', 'desc')
+                    ->select('sch_rec_dmp_rec_id')
+                    ->get();
+                $this->addComplaintToResults($dumpMatches, 'sch_rec_dmp_rec_id');
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Load the list of all complaint IDs in the searching pool.
+     *
+     * @return boolean
+     */
+    protected function ajaxRunComplaintSearchLoadAll()
+    {
+        $chk = null;
+        if ($this->isStaffOrAdmin()) {
+            $chk = OPComplaints::whereNotNull('com_summary')
+                ->where('com_summary', 'NOT LIKE', '')
+                ->orderBy('com_id', 'desc')
+                ->select('com_id')
+                ->get();
+        } else {
+            $chk = OPComplaints::whereNotNull('com_summary')
+                ->where('com_summary', 'NOT LIKE', '')
+                ->whereIn('com_status', $this->getPublishedStatusList('complaints'))
+                ->orderBy('com_id', 'desc')
+                ->select('com_id')
+                ->get();
+        }
+        $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+        return $chk;
+    }
+    
+    /**
+     * Add a new set of complaints into the larger sets of results, 
+     * based on the requested data field.
+     *
+     * @param  array $complaintsIn
+     * @param  string $fld
+     * @return boolean
+     */
+    protected function addComplaintToResults($complaintsIn, $fld = '')
+    {
+        if ($complaintsIn->isNotEmpty()) {
+            foreach ($complaintsIn as $complaint) {
+                if (isset($complaint->{ $fld })
+                    && !in_array($complaint->{ $fld }, $this->v["comIDs"])) {
+                    $this->v["comIDs"][] = $complaint->{ $fld };
+                }
+            }
+        }
+        return true;
+    }
+
+    
+}
+
+class ComplaintPreview
+{
+    public $comID       = 0;
+    public $complaint   = null;
+    public $complainant = null;
+    public $officers    = null;
+    public $depts       = null;
+    private $isStaff    = false;
+
+    public function __construct($comID)
+    {
+        $this->isStaff = (Auth::user() && Auth::user()->hasRole('administrator|staff'));
+        $this->comID = $comID;
+        $this->complaint = DB::table('op_incidents')
+            ->join('op_complaints', 'op_complaints.com_incident_id',
+                '=', 'op_incidents.inc_id')
+            ->where('op_complaints.com_id', $comID)
+            ->select('op_complaints.com_id', 
+                'op_complaints.com_public_id', 
+                'op_complaints.com_status', 
+                'op_complaints.com_record_submitted',
+                'op_complaints.com_publish_user_name', 
+                'op_complaints.com_publish_officer_name', 
+                'op_incidents.inc_address_city', 
+                'op_incidents.inc_address_state')
+            ->first();
+        OPComplaints::find($comID);
+        if ($this->complaint && isset($this->complaint->com_id)) {
+            $this->complainant = DB::table('op_civilians')
+                ->join('op_person_contact', 'op_person_contact.prsn_id',
+                    '=', 'op_civilians.civ_person_id')
+                ->where('op_civilians.civ_complaint_id', $comID)
+                ->where('op_civilians.civ_is_creator', 'Y')
+                ->select('op_person_contact.prsn_name_first', 
+                    'op_person_contact.prsn_name_last',
+                    'op_person_contact.prsn_nickname')
+                ->first();
+            $this->officers = DB::table('op_officers')
+                ->join('op_person_contact', 'op_person_contact.prsn_id',
+                    '=', 'op_officers.off_person_id')
+                ->where('op_officers.off_complaint_id', $comID)
+                ->orderBy('op_officers.off_id', 'asc')
+                ->select('op_person_contact.prsn_name_first', 
+                    'op_person_contact.prsn_name_last',
+                    'op_person_contact.prsn_nickname')
+                ->get();
+            $this->depts = DB::table('op_departments')
+                ->join('op_links_complaint_dept', 'op_links_complaint_dept.lnk_com_dept_dept_id',
+                    '=', 'op_departments.dept_id')
+                ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', $comID)
+                ->orderBy('op_departments.dept_name', 'asc')
+                ->select('op_departments.dept_id', 
+                    'op_departments.dept_name', 
+                    'op_departments.dept_slug')
+                ->get();
+        }
+    }
+
+
+    protected function setTreePageFadeInDelay()
+    {
+        /* if (in_array($this->treeID, [35, 34])) {
+            return 3500;
+        } */
+        return 500;
+    }
+
 }

@@ -1,10 +1,11 @@
 <!-- resources/views/vendor/openpolice/nodes/2377-admin-dash-load-complaint.blade.php -->
 @if ($coreID > 0)
-    <div id="admDashReportWrap" class="w100 h100"></div>
+    <div id="admDashReportWrap" class="w100 h100">
+        <div class="pT30 pB30">{!! $GLOBALS["SL"]->spinner() !!}</div>
+    </div>
     <style> 
     body, #admDashReportWrap, #mainBody {
         overflow-y: visible; 
-        background: #F5FBFF; 
     }
     #mainBody {
         padding-bottom: 70px;

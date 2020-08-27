@@ -7,9 +7,6 @@ body {
     overflow-y: hidden;
 }
 @endif
-#mainBody {
-    background: #F5FBFF;
-}
 #hidivBtnAdmFoot {
     display: none;
 }
@@ -28,12 +25,14 @@ body {
 .complaintRowWrp, .complaintRowWrpActive {
     position: relative;
     min-height: 75px;
+    width: 100%;
 }
 .complaintRowWrp .resultSpin, .complaintRowWrpActive .resultSpin {
     position: absolute;
-    right: 50px;
-    top: 15px;
+    right: 15px;
+    top: 58px;
     color: #FFF;
+    font-size: 80%;
 }
 a.complaintRowA:link .float-left, a.complaintRowA:visited .float-left, 
 a.complaintRowA:active .float-left, a.complaintRowA:hover .float-left {
@@ -60,7 +59,7 @@ a.complaintRowA:active .float-right, a.complaintRowA:hover .float-right {
     text-decoration: none;
     color: #416CBD;
     background: #FFF;
-    border-bottom: 1px #CCC solid;
+    border-top: 1px #CCC solid;
 }
 .complaintRowWrp a.complaintRowA:hover {
     background: #F5FBFF;

@@ -347,6 +347,7 @@ function checkFingerClass(nID) {
 
 function checkMutEx(nID, response) {
     if (nID > 0 && response > 0 && nodeMutEx[nID] && nodeMutEx[nID].length > 0) {
+console.log("checkMutEx("+nID+" - "+nodeMutEx[nID]);
         var hasMutEx = false;
         var clickedMutEx = false;
         for (var i=0; i<nodeMutEx[nID].length; i++) {

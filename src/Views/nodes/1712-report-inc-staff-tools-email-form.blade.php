@@ -2,7 +2,7 @@
 
 
 <div class="nodeAnchor"><a name="emailer"></a></div>
-<div class="pB20"> </div>
+<div class="p5"> </div>
 
 <form name="complaintEmailForm" id="complaintEmailFormID">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -12,22 +12,23 @@
 <input type="hidden" name="refresh" value="1">
 <input type="hidden" name="send" value="1">
 <input type="hidden" name="ajax" value="1">
+<input type="hidden" name="d" id="emailSubDeptID" 
+    @if (!$GLOBALS['SL']->REQ->has('d')) value="0"
+    @else value="{{ intVal($GLOBALS['SL']->REQ->get('d')) }}"
+    @endif >
 
 <div id="analystEmailComposer" 
     class=" @if (intVal($emailID) > 0) disBlo @else disNon @endif ">
 
-@if ($emailID == 12)
-    @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
-        @if (!isset($d["deptRow"]->dept_op_compliant) 
-            || intVal($d["deptRow"]->dept_op_compliant) != 1)
-            <div class="alert alert-danger mT10 fPerc133" role="alert">
-                <strong>{{ $d["deptRow"]->dept_name }}</strong> 
-                is <nobr>NOT OpenPolice-Compliant!</nobr><br />
-                Do not send them an email!
-            </div>
-        @endif
-    @empty
-    @endforelse
+@if ($emailID == 12 && $deptID > 0)
+    @if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) 
+        || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
+        <div class="alert alert-danger mT15" role="alert">
+            <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
+            is NOT OpenPolice-Compliant!<br />
+            You should not send them this email!</b>
+        </div>
+    @endif
 @endif
 
     <div class="nFld m0">
@@ -50,7 +51,7 @@
             <div class="p10"></div>
         @endif
 
-        <div id="emailTo{{ $j }}CustID" class="mT5 
+        <div id="emailTo{{ $j }}CustID" class=" 
             @if (sizeof($emailsTo[$email['rec']->email_type]) > 0) disNon 
             @else disBlo 
             @endif ">
@@ -68,8 +69,8 @@
                         class="form-control form-control-lg" >
                 </div>
             </div>
+            <div class="p10"></div>
         </div>
-        <div class="p10"></div>
 
         <div class="row">
             <div class="col-6">
@@ -93,14 +94,17 @@
             name="attachType{{ $j }}" id="attachType{{ $j }}ID" 
             autocomplete=off >
             <option value=""
-                @if (!isset($email["attachType"]) 
-                    || trim($email["attachType"]) == '') 
+                @if (!isset($email['rec']->email_attach) 
+                    || trim($email['rec']->email_attach) == '') 
                     SELECTED
                 @endif >Select type ...</option>
             @foreach ($reportUploadTypes as $i => $type)
-                <option value="{{ $type[0] }}"
-                    @if ($email["attachType"] == $type[0]) SELECTED @endif 
-                    >{{ $type[1] }} PDF</option>
+                @if (in_array($type[0], ['sensitive', 'public']))
+                    <option value="{{ $type[0] }}"
+                        @if (isset($email['rec']->email_attach)
+                            && $email['rec']->email_attach == $type[0]) SELECTED @endif 
+                        >{{ $type[1] }} PDF</option>
+                @endif
             @endforeach
         </select>
         <div class="p10"></div>
@@ -110,6 +114,15 @@
             name="emailSubj{{ $j }}" id="emailSubj{{ $j }}ID" 
             value="{{ $email['subject'] }}" autocomplete=off >
         <div class="p10"></div>
+
+        @if ($emailID == 12)
+            <div class="alert alert-danger mT10" role="alert">
+                <i class="fa fa-exclamation-triangle mR5" aria-hidden="true"></i>
+                <b>DO NOT use the custom Key Code for testing. 
+                This will "use it up" — break it — 
+                before the investigative agency receives it.</b>
+            </div>
+        @endif
 
         Email Body
         <textarea name="emailBodyCust{{ $j }}" id="emailBodyCust{{ $j }}ID" 
@@ -125,17 +138,15 @@
     @endforelse
     </div>
     
-    @if ($emailID == 12)
-        @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
-            @if (!isset($d["deptRow"]->dept_op_compliant) 
-                || intVal($d["deptRow"]->dept_op_compliant) != 1)
-                <div class="alert alert-danger mT10 fPerc133" role="alert">
-                    <strong>{{ $d["deptRow"]->dept_name }}</strong> is 
-                    NOT OpenPolice-Compliant!<br />Do not send them an email!
-                </div>
-            @endif
-        @empty
-        @endforelse
+    @if ($emailID == 12 && $deptID > 0)
+        @if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) 
+            || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
+            <div class="alert alert-danger mT30" role="alert">
+                <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
+                is NOT OpenPolice-Compliant!<br />
+                You should not send them this email!</b>
+            </div>
+        @endif
     @endif
     
     <div class="mT20 mB20">

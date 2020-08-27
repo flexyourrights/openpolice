@@ -244,7 +244,7 @@ class OpenVolunteers extends OpenDevelopment
             $GLOBALS["SL"]->def->getID($set, 'Reviewed'),
             $GLOBALS["SL"]->def->getID($set, 'Needs More Work'),
             $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'),
-            $GLOBALS["SL"]->def->getID($set, 'Attorney\'d'),
+            $GLOBALS["SL"]->def->getID($set, 'Has Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight')
         ];
         $set = 'Complaint Type';
@@ -434,7 +434,7 @@ class OpenVolunteers extends OpenDevelopment
      */
     public function saveVolunLocationForm(Request $request)
     {
-        $this->survLoopInit($request, '/ajax/saveDefaultState/');
+        $this->survLoopInit($request, '/ajax/save-default-state/');
         $this->loadYourContact();
         if (isset($this->v["yourContact"]) 
             && isset($this->v["yourContact"]->prsn_id)) {
