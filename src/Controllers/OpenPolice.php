@@ -158,6 +158,8 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportDept($this->getLoopLinkDeptID());
         } elseif ($nID == 1690) {
             return $this->getReportByLine();
+        } elseif ($nID == 3073) {
+            return $this->getReportUserLine();
         } elseif ($nID == 1687) {
             return $this->getReportWhenLine();
         } elseif (in_array($nID, [1688, 1732])) {
@@ -227,8 +229,19 @@ class OpenPolice extends OpenInitExtras
             if ($nID == 2384) {
                 $GLOBALS["SL"]->x["isPublicList"] = true;
                 $GLOBALS["SL"]->pageView = 'public';
+            } elseif ($GLOBALS["SL"]->REQ->has('refresh')) {
+                $GLOBALS["SL"]->forgetAllCachesOfTrees([1, 42, 197]);
+                if (trim($GLOBALS["SL"]->REQ->get('refresh')) == 'repeat') {
+                    echo '<h2>Refresh Complaints, & Repeat ...</h2>' 
+                        . date("H:i:s") . '<script type="text/javascript"> '
+                        . 'setTimeout("window.location=\'?refresh=repeat\'", '
+                        . '(30*60000)); </script>';
+                    exit;
+                }
             }
-            $GLOBALS["SL"]->x["needsWsyiwyg"] = $this->v["needsWsyiwyg"] = true;
+            $GLOBALS["SL"]->x["needsWsyiwyg"] 
+                = $this->v["needsWsyiwyg"] 
+                = true;
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
             return $this->printComplaintReportForAdmin($nID);
@@ -241,10 +254,14 @@ class OpenPolice extends OpenInitExtras
         } elseif (in_array($nID, [2375, 3058])) {
             return $this->printTopComplaintDepts($nID);
 
-        } elseif (in_array($nID, [1221, 1219])) {
+        } elseif (in_array($nID, [1221, 2091, 2093, 1219])) {
             return $this->printSearchResults($nID);
 
         // Staff Area Nodes
+        } elseif ($nID == 1416) {
+            if (in_array($this->v["uID"], [863, 897])) {
+                return '<h4>Staff Dashboard</h4>';
+            }
         } elseif ($nID == 1420) {
             return $this->printComplaintListing($nID, 'incomplete');
         } elseif ($nID == 1939) {

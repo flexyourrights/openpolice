@@ -35,11 +35,11 @@ class OpenPoliceServiceProvider extends ServiceProvider
             __DIR__.'/Database/2019_11_01_000000_create_openpolice_tables.php'
                 => base_path('database/migrations/2019_11_01_000000_create_openpolice_tables.php'),
             __DIR__.'/Database/OpenPoliceSeeder.php'
-                => base_path('database/seeds/OpenPoliceSeeder.php'),
+                => base_path('database/seeders/OpenPoliceSeeder.php'),
             __DIR__.'/Database/OpenPoliceSLSeeder.php'
-                => base_path('database/seeds/OpenPoliceSLSeeder.php'),
+                => base_path('database/seeders/OpenPoliceSLSeeder.php'),
             base_path('/vendor/flexyourrights/openpolice-departments/src/OpenPoliceDeptSeeder.php')
-                => base_path('database/seeds/OpenPoliceDeptSeeder.php')
+                => base_path('database/seeders/OpenPoliceDeptSeeder.php')
         ]);
     }
 }

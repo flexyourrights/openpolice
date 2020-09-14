@@ -104,7 +104,7 @@ class OpenListing extends OpenListFilters
                 if (isset($d->dept_name) && trim($d->dept_name) != $notSure) {
                     $deptList .= ((trim($deptList) != '') ? ', ' : '') 
                         . '<a href="/dept/' . $d->dept_slug . '">'
-                        . str_replace('Department', 'Dept', $d->dept_name) 
+                        . str_replace('Department', 'Dept.', $d->dept_name) 
                         . '</a>';
                 }
             }
@@ -273,54 +273,57 @@ class OpenListing extends OpenListFilters
      */
     protected function printComplaintListing($nID, $view = 'list')
     {
-        $pageUrl = $_SERVER["REQUEST_URI"];
-        if (isset($this->v["isAdmin"]) && $this->v["isAdmin"]) {
+        $pageUrl = $_SERVER["REQUEST_URI"] . '?nID=' . $nID . '&view=' . $view;
+        if ($GLOBALS["SL"]->REQ->has('dashResults')) {
+            $pageUrl .= '&dashResults=1';
+        }
+        $this->printComplaintListingInit($nID, $view);
+        $this->searcher->searchFiltsURL();
+        $pageUrl .= $this->searcher->v["searchFiltsURL"];
+        if ($this->isStaffOrAdmin()) {
             $pageUrl .= '—ADMIN';
         } elseif (!isset($this->v["uID"]) && $this->v["uID"] <= 0) {
             $pageUrl .= '—PUBLIC';
         }
         $ret = $GLOBALS["SL"]->chkCache($pageUrl, 'search-html', 1);
-        if ($GLOBALS["SL"]->REQ->has('showPreviews')
-            && !$GLOBALS["SL"]->REQ->has('refresh')
-            && trim($ret) != '') {
-            return $ret;
-        }
-        $this->printComplaintListingInit($nID, $view);
-        $listings = $this->printComplaintListingResults($nID, $view);
-        if (!$GLOBALS["SL"]->REQ->has('dashResults')
-            && $GLOBALS["SL"]->REQ->has('showPreviews')) {
-            if ($nID == 2685) {
-                echo $listings;
-                exit;
+        if (trim($ret) == '' || $GLOBALS["SL"]->REQ->has('refresh')) {
+            $listings = $this->printComplaintListingResults($nID, $view);
+            $this->printComplaintFiltDescPrev();
+            $this->searcher->searchFiltsURL();
+            $this->v["searchFiltsURL"] = $this->searcher->v["searchFiltsURL"];
+            $this->v["sortLab"]        = $this->searcher->v["sortLab"];
+            $this->v["sortDir"]        = $this->searcher->v["sortDir"];
+            $this->v["allegTypes"]     = $this->worstAllegations;
+            if ($nID == 2384) {
+                $this->v["sView"] = 'lrg';
+                $GLOBALS["SL"]->setAutoRunSearch();
+                $divID = 'complaintResultsWrap';
+                $GLOBALS["SL"]->setDashSearchDiv($divID);
+                $url = '/ajax/search-complaint-previews?dashResults=1&ajax=1&limit=0';
+                $GLOBALS["SL"]->setDashSearchUrl($url);
             }
-            return $listings;
+            if ($GLOBALS["SL"]->REQ->has('dashResults')) {
+                if ($nID == 2384) {
+                    $ret = $listings;
+                    //$ret = $this->printComplaintListingResultsLrg($nID);
+                } else {
+                    $ret = view(
+                        'vendor.openpolice.nodes.1418-admin-complaints-dash-results', 
+                        $this->v
+                    )->render();
+                }
+            } else {
+                $blade = 'vendor.openpolice.nodes.1418-admin-complaints-listing';
+                if (in_array($nID, [1418, 2384])) { // !$GLOBALS["SL"]->x["isHomePage"]) {
+                    $GLOBALS["SL"]->pageAJAX .= view($blade . '-ajax', $this->v)->render();
+                }
+                $ret = view($blade, $this->v)->render() 
+                    . view($blade . '-styles', $this->v)->render();
+            }
+            $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
         }
-
-        $this->printComplaintFiltDescPrev();
-        $this->searcher->searchFiltsURL();
-        $this->v["searchFiltsURL"] = $this->searcher->v["searchFiltsURL"];
-        $this->v["sortLab"]        = $this->searcher->v["sortLab"];
-        $this->v["sortDir"]        = $this->searcher->v["sortDir"];
-        $this->v["allegTypes"]     = $this->worstAllegations;
-        if ($nID == 2384) {
-            $this->v["sView"] = 'lrg';
-        }
-
-        if ($GLOBALS["SL"]->REQ->has('dashResults')) {
-            echo view(
-                'vendor.openpolice.nodes.1418-admin-complaints-dash-results', 
-                $this->v
-            )->render();
-            exit;
-        }
-        $blade = 'vendor.openpolice.nodes.1418-admin-complaints-listing';
-        if (in_array($nID, [1418, 2384])) { // !$GLOBALS["SL"]->x["isHomePage"]) {
-            $GLOBALS["SL"]->pageAJAX .= view($blade . '-ajax', $this->v)->render();
-        }
-        $ret = view($blade, $this->v)->render() 
-            . view($blade . '-styles', $this->v)->render();
-        $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
         if ($GLOBALS["SL"]->REQ->has('ajax')) {
+//echo '??' . $nID . '??<pre>'; print_r($GLOBALS["SL"]->REQ->all()); echo '</pre>' . $ret; exit;
             echo $ret;
             exit;
         }
@@ -373,14 +376,16 @@ class OpenListing extends OpenListFilters
      */
     protected function printComplaintListingResults($nID, $view = 'list')
     {
-        $cacheKey = $this->searcher->searchFiltsURL() . $GLOBALS["SL"]->getCacheSffxAdds();
+        /* $cacheKey = 'complaintListingResults' 
+            . $this->searcher->searchFiltsURL() 
+            . $GLOBALS["SL"]->getCacheSffxAdds();
         $cache = '';
         if ($this->v["sView"] == 'lrg') {
-            $cache = $GLOBALS["SL"]->chkCache($cacheKey, 'srch-results', 1);
-            if ($cache && isset($cache->cach_value)) {
-                return $cache->cach_value;
+            $cache = $GLOBALS["SL"]->chkCache($cacheKey, 'ajax', 1);
+            if ($cache != '') {
+                return $cache;
             }
-        }
+        } */
         $complaints = $this->runComplaintListQueries($nID);
         $this->printComplaintFiltsDesc($nID);
         if ($complaints && sizeof($complaints) > 0) {
@@ -409,16 +414,26 @@ class OpenListing extends OpenListFilters
             $this->v["limit"] = intVal($GLOBALS["SL"]->REQ->get('limit'));
         }
         if ($this->v["sView"] == 'lrg') {
-            $this->printComplaintListingResultsPreviews();
-            $this->printComplaintFiltDescPrev();
-            $content = view(
-                'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
-                $this->v
-            )->render();
-            $GLOBALS["SL"]->putCache($cacheKey, $content, 'srch-results', 1);
-            return $content;
+            return $this->printComplaintListingResultsLrg($nID);
+            //$GLOBALS["SL"]->putCache($cacheKey, $content, 'ajax', 1);
         }
         return '<!-- -->';
+    }
+    
+    /**
+     * Print the actual search results for large complaint previews.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function printComplaintListingResultsLrg($nID)
+    {
+        $this->printComplaintListingResultsPreviews();
+        $this->printComplaintFiltDescPrev();
+        return view(
+            'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
+            $this->v
+        )->render();
     }
     
     /**
@@ -483,8 +498,7 @@ class OpenListing extends OpenListFilters
                 $name = trim($usr->name) . '\'s';
             } */
             $complaints = $compliments = null;
-            if ($isOwner 
-                || (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+            if ($isOwner || $this->isStaffOrAdmin()) {
                 $complaints = OPComplaints::where('com_user_id', $uID)
                     ->where('com_status', '>', 0)
                     ->orderBy('created_at', 'desc')
@@ -505,8 +519,7 @@ class OpenListing extends OpenListFilters
                 $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
                     . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
             }
-            if ($isOwner 
-                || (isset($this->v["isAdmin"]) && $this->v["isAdmin"])) {
+            if ($isOwner || $this->isStaffOrAdmin()) {
                 $compliments = OPCompliments::where('compli_user_id', $uID)
                     ->where('compli_status', '>', 0)
                     ->orderBy('created_at', 'desc')

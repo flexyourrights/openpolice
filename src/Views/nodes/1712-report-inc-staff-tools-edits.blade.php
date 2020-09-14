@@ -33,7 +33,14 @@
     </a>
     <div class="clearfix pB15"></div>
 
-    <a href="/switch/1/{{ $complaintRec->com_id }}"
+@if (Auth::user() && in_array(Auth::user()->id, [1, 32]))
+    <a href="/dashboard/debug-node-saves?tree=1&cidi={{ $complaintRec->com_id }}"
+        class="btn btn-lg btn-secondary pull-left mR10" target="_blank"
+        ><i class="fa fa-history mR3" aria-hidden="true"></i>
+        Response History
+    </a>
+@endif
+    <a href="/switch/1/{{ $complaintRec->com_id }}" target="_blank"
         class="btn btn-lg btn-secondary pull-left mR10"
         ><i class="fa fa-pencil mR3" aria-hidden="true"></i> 
         Edit Complaint

@@ -236,7 +236,7 @@ class DepartmentScores
                 //    || $searchFilts["state"] == $dept->dept_address_state
                     $deptName = str_replace('Police Dept', 'PD', trim($dept->dept_name));
                     $deptName = str_replace('Police Department', 'PD', $deptName);
-                    $deptName = trim(str_replace('Department', 'Dept', $deptName));
+                    $deptName = trim(str_replace('Department', 'Dept.', $deptName));
                     $this->deptNames[$dept->dept_id] = $deptName 
                         . ', ' . $dept->dept_address_state;
                     $this->deptOvers[$dept->dept_id]["ia"] 
@@ -504,6 +504,12 @@ class DepartmentScores
                         ($paren1+1),
                         ($paren2-$paren1-1)
                     );
+                    $exceptions = [
+                        'city', 'county', 'village', 'dallas', 'lancaster co.'
+                    ];
+                    if (in_array(strtolower(trim($d["deptAbbr"])), $exceptions)) {
+                        $d["deptAbbr"] = '';
+                    }
                 }
             }
             

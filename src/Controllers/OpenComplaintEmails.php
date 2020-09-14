@@ -269,7 +269,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         $ret .= ', the ';
                     }
                 }
-                $ret .= str_replace('Department', 'Dept', $d);
+                $ret .= str_replace('Department', 'Dept.', $d);
             }
             return $ret . '.';
         }

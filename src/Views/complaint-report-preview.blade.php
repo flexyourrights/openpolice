@@ -73,7 +73,8 @@
         </div>
     @if ($uID > 0 
         && ((isset($complaint->{ $coreAbbr . 'user_id' }) 
-        && $complaint->{ $coreAbbr . 'user_id' } == $uID) || $GLOBALS["SL"]->isAdmin))
+        && $complaint->{ $coreAbbr . 'user_id' } == $uID) 
+            || $GLOBALS["SL"]->isStaffOrAdmin()))
         <div class="row mB10">
             <div class="col-6">
                 Complaint Status

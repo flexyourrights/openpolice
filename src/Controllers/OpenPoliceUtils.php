@@ -434,7 +434,7 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+        if ($this->isStaffOrAdmin()
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             return true;
         }
@@ -473,7 +473,7 @@ class OpenPoliceUtils extends OpenPoliceVars
                 if (isset($GLOBALS["SL"]->x["fullAccess"]) && $GLOBALS["SL"]->x["fullAccess"]) {
                     $GLOBALS["SL"]->pageView = 'full';
                 }
-            } elseif ($this->v["user"]->hasRole('administrator|staff')) {
+            } elseif ($this->isStaffOrAdmin()) {
                 $GLOBALS["SL"]->pageView = 'full';
             } elseif ($this->v["user"]->hasRole('partner') 
                 && $this->v["user"]->hasRole('oversight')) {

@@ -92,10 +92,57 @@ $(document).on("click", ".updateComplaintFilts", function() {
     logSrchFilts();
 });
 function autoLogSrchFilts() {
-    logSrchFilts();
-    setTimeout(function() { autoLogSrchFilts(); }, 1000);
+    if (document.getElementById("sFiltID")) {
+        logSrchFilts();
+        setTimeout(function() { autoLogSrchFilts(); }, 1000);
+    } else {
+        setTimeout(function() { autoLogSrchFilts(); }, 90);
+    }
 }
-setTimeout(function() { autoLogSrchFilts(); }, 100);
+setTimeout(function() { autoLogSrchFilts(); }, 1);
+
+
+$(document).on("click", ".clearComplaintFilts", function() {
+    for (var i = 0; i < 20; i++) {
+        if (document.getElementById("fltStatus"+i+"")) {
+            if (i < 3) {
+                document.getElementById("fltStatus"+i+"").checked = true;
+            } else {
+                document.getElementById("fltStatus"+i+"").checked = false;
+            }
+        }
+        if (document.getElementById("filtAllegs"+i+"")) {
+            document.getElementById("filtAllegs"+i+"").checked = false;
+        }
+        if (document.getElementById("filtVictRace"+i+"")) {
+            document.getElementById("filtVictRace"+i+"").checked = false;
+        }
+        if (document.getElementById("filtOffRace"+i+"")) {
+            document.getElementById("filtOffRace"+i+"").checked = false;
+        }
+    }
+    if (document.getElementById("filtVictGendM")) {
+        document.getElementById("filtVictGendM").checked = false;
+    }
+    if (document.getElementById("filtVictGendF")) {
+        document.getElementById("filtVictGendF").checked = false;
+    }
+    if (document.getElementById("filtVictGendT")) {
+        document.getElementById("filtVictGendT").checked = false;
+    }
+    if (document.getElementById("filtOffGendM")) {
+        document.getElementById("filtOffGendM").checked = false;
+    }
+    if (document.getElementById("filtOffGendF")) {
+        document.getElementById("filtOffGendF").checked = false;
+    }
+    @foreach ($GLOBALS["SL"]->states->stateList as $abbr => $state)
+        if (document.getElementById("states{{ $abbr }}")) {
+            document.getElementById("states{{ $abbr }}").checked = false;
+        }
+    @endforeach
+    logSrchFilts();
+});
 
 $(document).on("click", ".fltStatus", function() {
     var status = $(this).val();

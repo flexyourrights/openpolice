@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-warnings.blade.php -->
 
-<div class="row mTn5" style="color: #333;">
-    <div class="col-lg-4">
+<div style="color: #333; margin-top: -25px;">
+    <div>
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
@@ -34,8 +34,8 @@
             @endif
         </div>
     </div>
-
-    <div class="col-lg-4">
+    
+    <div>
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
@@ -44,7 +44,12 @@
                     || (isset($complaintRec->com_status) 
                         && intVal($complaintRec->com_status) 
                         == $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney')))
-                    #29CD42;
+                    @if (!isset($complaint->com_attorney_oked) 
+                        || trim($complaint->com_attorney_oked) != 'Y')
+                        #FFBD2E;
+                    @else
+                        #29CD42;
+                    @endif
                 @elseif (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
                     && isset($complaintRec->com_all_charges_resolved)
@@ -81,7 +86,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div>
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:

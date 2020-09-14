@@ -143,7 +143,7 @@ class OpenDepts extends OpenPolicePCIF
                 }
                 $this->v["nextDept"] = [
                     $nextRow[0]->dept_id, 
-                    str_replace('Department', 'Dept', $nextRow[0]->dept_name), 
+                    str_replace('Department', 'Dept.', $nextRow[0]->dept_name), 
                     $nextRow[0]->dept_slug
                 ];
                 
@@ -290,7 +290,7 @@ class OpenDepts extends OpenPolicePCIF
                     $this->v["userNames"][$edit->zed_dept_user_id] 
                         = $this->printUserLnk($edit->zed_dept_user_id);
                 }
-                if ($this->v["user"]->hasRole('administrator|staff')) {
+                if ($this->isStaffOrAdmin()) {
                     $type = $GLOBALS["SL"]->def->getVal('Department Types', $edit->dept_type);
                     $this->v["recentEdits"] .= view(
                         'vendor.openpolice.volun.admPrintDeptEdit', 

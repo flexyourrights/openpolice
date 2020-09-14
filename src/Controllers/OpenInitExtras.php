@@ -382,10 +382,10 @@ class OpenInitExtras extends OpenPartners
         // used to be admin initializations:
         $this->v["allowEdits"] = ($this->v["uID"] > 0
             && $this->v["user"] 
-            && $this->v["user"]->hasRole('administrator|staff'));
+            && $this->isStaffOrAdmin());
         $this->v["management"] = ($this->v["uID"] > 0 
             && $this->v["user"] 
-            && $this->v["user"]->hasRole('administrator|staff'));
+            && $this->isStaffOrAdmin());
         $this->v["volunOpts"] = 1;
         if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
             $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
@@ -419,7 +419,7 @@ class OpenInitExtras extends OpenPartners
         if (!isset($this->v["uID"]) 
             || $this->v["uID"] <= 0 
             || !isset($this->v["user"])
-            || !$this->v["user"]->hasRole('administrator|staff')) {
+            || !$this->isStaffOrAdmin()) {
             return false;
         }
         if (!session()->has('opcChks') 
@@ -587,7 +587,7 @@ class OpenInitExtras extends OpenPartners
         }
         if ($this->v["uID"] <= 0 
             || !$this->v["user"] 
-            || !$this->v["user"]->hasRole('administrator|staff')) {
+            || !$this->isStaffOrAdmin()) {
             $com = $this->sessData->dataSets["complaints"][0];
             $isPublished = $this->isPublished('complaints', $this->coreID, $com);
             if ($isPublished) {

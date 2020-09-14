@@ -14,7 +14,7 @@
             <div class="col-5">
                 <a href="/dashboard/start-{{ $dept->dept_id }}/volunteers-research-departments">
                     @if (isset($dept->dept_name)) {{ str_replace('Police Dept', 'PD',
-                        str_replace('Department', 'Dept', $dept->dept_name)) }}
+                        str_replace('Department', 'Dept.', $dept->dept_name)) }}
                     @else <span class="slGrey">(empty)</span> @endif </a>
             </div>
             <div class="col-3">

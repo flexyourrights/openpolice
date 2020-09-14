@@ -14,7 +14,8 @@
                     && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
                         ['New', 'Hold', 'Reviewed'])))
                 <div class="litRedDot"></div>
-            @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) == 'Police Complaint'
+            @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
+                    == 'Police Complaint'
                 && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
                     ['Needs More Work', 'Pending Attorney', 'OK to Submit to Oversight']))
                 <div class="litRedDottie"></div>
@@ -43,7 +44,11 @@
             #{{ number_format($com->com_public_id) }}
             @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                 == 'Police Complaint')
-                {{ $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status) }}
+                {{ str_replace(
+                    'Oversight', 
+                    'Investigators',
+                    $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status)
+                ) }}
             @endif
         @endif
         @if ($com->com_status 

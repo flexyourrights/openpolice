@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-md-6 col-12">
                         <a href="/dept/{{ $dept->dept_slug }}">{{ 
-                            str_replace('Department', 'Dept', $dept->dept_name) 
+                            str_replace('Department', 'Dept.', $dept->dept_name) 
                         }}</a>
                     </div>
                     <div class="col-md-3 col-8">
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-md-3 col-4 slGrey">Not score yet</div>
+                    <div class="col-md-3 col-4 slGrey">No score yet</div>
                 @endif
                 </div>
             </div>

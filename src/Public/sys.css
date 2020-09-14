@@ -212,7 +212,7 @@ a.socialIco:link img, a.socialIco:visited img, a.socialIco:active img, a.socialI
 }
 .nodeAnchor a {
     position: absolute;
-    top: -40px;
+    top: -70px;
 }
 .nodeWrap, .nodeWrapError {
 	background: #FFF;

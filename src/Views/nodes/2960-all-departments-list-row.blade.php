@@ -3,7 +3,7 @@
     <td> </td>
     <td>
         <a href="/dept/{{ $dept->dept_slug }}">{{ 
-            str_replace('Department', 'Dept', $dept->dept_name) 
+            str_replace('Department', 'Dept.', $dept->dept_name) 
         }}</a>
     </td>
 @if (isset($dept->dept_verified) && trim($dept->dept_verified) != '')

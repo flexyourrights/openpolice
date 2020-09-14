@@ -93,7 +93,7 @@
         @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
             {!! $d["deptAbbr"] !!}
         @else
-            {!! str_replace('Department', 'Dept', $d["deptRow"]->dept_name) !!} 
+            {!! str_replace('Department', 'Dept.', $d["deptRow"]->dept_name) !!} 
         @endif
         Internal Affairs
     </h2>
@@ -243,12 +243,17 @@
     <div style="padding-bottom: 13px; padding-top: 1px; margin-top: -3px;"
         ><hr></div>
     <h2>
+    @if (isset($d["iaRow"]->over_agnc_name)
+        && !in_array(trim($d["iaRow"]->over_agnc_name), ['', 'Internal Affairs']))
+        {{ $d["iaRow"]->over_agnc_name }}
+    @else
         @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
             {!! $d["deptAbbr"] !!}
         @else
-            {!! str_replace('Department', 'Dept', $d["deptRow"]->dept_name) !!} 
+            {!! str_replace('Department', 'Dept.', $d["deptRow"]->dept_name) !!} 
         @endif
         Internal Affairs
+    @endif
     </h2>
     <p><a href="{{ $GLOBALS['SL']->mapsURL($d['iaAddy']) }}" target="_blank"
         ><i class="fa fa-map-marker mR5" aria-hidden="true"></i> 

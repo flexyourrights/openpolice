@@ -213,8 +213,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
     {
         if ((isset($complaint->com_attorney_has) 
             && in_array(trim($complaint->com_attorney_has), ['Y', '?']))
-            || (isset($complaint->com_attorney_want) 
-            && in_array(trim($complaint->com_attorney_want), ['Y']))) {
+            && (!isset($complaint->com_attorney_oked) 
+                || trim($complaint->com_attorney_oked) != 'Y')) {
+            return 1;
+        }
+        if (isset($complaint->com_attorney_want) 
+            && in_array(trim($complaint->com_attorney_want), ['Y'])) {
             return 1;
         }
         if ((isset($complaint->com_anyone_charged) 
@@ -475,7 +479,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
     {
         $uploads = $this->getUploadsMultNodes(
             $this->cmplntUpNodes, 
-            $this->v["isAdmin"], 
+            $this->isStaffOrAdmin(), 
             $this->v["isOwner"]
         );
         if ($uploads && sizeof($uploads) > 0) {
@@ -501,7 +505,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if ($this->complaintHasUploads() == 0) {
             return 0;
         }
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+        if ($this->isStaffOrAdmin()
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
@@ -526,7 +530,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function complaintCanEditUploads()
     {
-        if ($this->v["isAdmin"]) {
+        if ($this->isStaffOrAdmin()) {
             return 1;
         }
         return -1;
@@ -587,7 +591,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
         if ($this->canPrintIncidentLocation()) {
             return 1;
         }
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+        if ($this->isStaffOrAdmin()
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
@@ -626,7 +630,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintName($type = 'user')
     {
-        if ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
+        if ($this->isStaffOrAdmin()
             || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
@@ -655,12 +659,6 @@ class OpenComplaintConditions extends OpenSessDataOverride
     protected function condPrintFullReport()
     {
         if ($this->canPrintFullReport()) {
-            return 1;
-        }
-        
-        if ($this->canPrintFullReportByRecSettings()
-            && ((isset($this->v["isAdmin"]) && $this->v["isAdmin"])
-                || (isset($this->v["isOwner"]) && $this->v["isOwner"]))) {
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
             }
@@ -699,7 +697,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
             && isset($this->sessData->dataSets["complaints"][0])) {
             $complaint = $this->sessData->dataSets["complaints"][0];
         }
-        if ($this->v["isAdmin"] || $this->v["isOwner"]) {
+        if ($this->isStaffOrAdmin() || $this->v["isOwner"]) {
             return 0;
         }
         if (!$this->isTypeComplaint($complaint)) {
@@ -738,13 +736,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condComplaintNotIncompleteOrCurrIsStaff($complaint)
     {
-        $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
+        $defSet = 'Complaint Status';
+        $incDef = $GLOBALS["SL"]->def->getID($defSet, 'Incomplete');
         if (isset($complaint->com_status) 
-            && $complaint->com_status != $incDef) {
+            && intVal($complaint->com_status) != $incDef) {
             return 1;
         }
-        if ($this->v["uID"] > 0 
-            && $this->v["user"]->hasRole('administrator|staff')) {
+        if ($this->v["uID"] > 0 && $this->isStaffOrAdmin()) {
             return 1;
         }
         return 0;
@@ -772,7 +770,8 @@ class OpenComplaintConditions extends OpenSessDataOverride
             $caps = OPPartnerCapac::where('prt_cap_part_id', $partID)
                 ->get();
         }
-        if (sizeof($caps) == 1 && $caps[0]->prt_cap_capacity == $capDef) {
+        if (sizeof($caps) == 1 
+            && $caps[0]->prt_cap_capacity == $capDef) {
             return 1;
         }
         return 0;

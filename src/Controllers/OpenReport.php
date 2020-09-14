@@ -12,6 +12,7 @@ namespace OpenPolice\Controllers;
 
 use DB;
 use Auth;
+use App\Models\User;
 use App\Models\OPDepartments;
 use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
@@ -298,6 +299,27 @@ class OpenReport extends OpenDeptStats
     }
     
     /**
+     * Get the label and value for the user who submitted a report.
+     *
+     * @return array
+     */
+    protected function getReportUserLine()
+    {
+        if ($this->sessData->dataSets["complaints"][0]
+            && isset($this->sessData->dataSets["complaints"][0]->com_user_id)) {
+            $uID = intVal($this->sessData->dataSets["complaints"][0]->com_user_id);
+            $user = User::find($uID);
+            if ($user && isset($user->name) && trim($user->name) != '') {
+                return [
+                    'OpenPolice.org User', 
+                    $user->printUsername()
+                ];
+            }
+        }
+        return [];
+    }
+    
+    /**
      * Check the current permissions on printing the incident's detailed time.
      *
      * @param  App\Models\OPComplaints $complaint
@@ -308,8 +330,9 @@ class OpenReport extends OpenDeptStats
         if (!$complaint && isset($this->sessData->dataSets["complaints"])) {
             $complaint = $this->sessData->dataSets["complaints"][0];
         }
-        return (($this->v["isOwner"] || $this->v["isAdmin"]) 
-            && (!isset($GLOBALS["SL"]->x["isPublicList"]) || !$GLOBALS["SL"]->x["isPublicList"]));
+        return (($this->v["isOwner"] || $this->isStaffOrAdmin()) 
+            && (!isset($GLOBALS["SL"]->x["isPublicList"]) 
+                || !$GLOBALS["SL"]->x["isPublicList"]));
     }
     
     /**
@@ -432,12 +455,9 @@ class OpenReport extends OpenDeptStats
             && intVal($com->com_publish_user_name) == 1) {
             $ret .= ', Publish Complainant\'s Name';
         }
-        if (isset($com->com_publish_officer_name) 
+        if (isset($com->com_publish_officer_name)
             && intVal($com->com_publish_officer_name) == 1) {
             $ret .= ', Publish Officer Names';
-        }
-        if ($ret == '') {
-            $ret .= ', Publish No Names';
         }
         if (isset($inc->inc_public) 
             && intVal($inc->inc_public) == 1) {
@@ -744,6 +764,7 @@ class OpenReport extends OpenDeptStats
                 $name = ' ';
                 if ($this->canPrintFullReport()) {
                     if (trim($prsn->prsn_nickname) != '') {
+                        $name = trim(str_ireplace('Police Officer ', '', $prsn->prsn_nickname));
                         $name = trim(str_ireplace('Officer ', '', $prsn->prsn_nickname));
                     } else {
                         $name = trim($prsn->prsn_name_first . ' ' . $prsn->prsn_name_middle 

@@ -39,7 +39,7 @@ Select which email template you want to send:<br />
         @endforelse
         </select>
     @else
-        <input type="hidden" name="d" id="emailDeptID" 
+        <input name="d" id="emailDeptID" type="hidden" 
             value="{{ $comDepts[0]['id'] }}" >
     @endif
 </div>

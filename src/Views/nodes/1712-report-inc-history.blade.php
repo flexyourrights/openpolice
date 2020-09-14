@@ -1,4 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-history.blade.php -->
+<div class="pL15 pR15">
 @if (isset($history) && sizeof($history) > 0)
     @foreach ($history as $i => $h)
         @if ($i > 0) <hr> @endif
@@ -22,3 +23,4 @@
 @else
     <p><i>This complaint has not been reviewed yet.</i></p>
 @endif
+</div>

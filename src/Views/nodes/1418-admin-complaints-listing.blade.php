@@ -87,7 +87,7 @@
         @if ($sView == 'list')
             <div class="fR pR15">
                 <button type="button" id="toggleSearchFilts"
-                    class="btn btn-sm btn-outline-secondary"> Filter by
+                    class="btn btn-sm btn-primary"> Filter by
                     <i id="toggleSearchFiltsArr" class="fa fa-caret-down" 
                         aria-hidden="true" style="margin-left: 5px;"></i>
                 </button>
@@ -126,12 +126,6 @@
             </div>
         </div>
     </div> <!-- end admDashLargeView -->
-
-    <script type="text/javascript">
-    setTimeout("document.getElementById('sResultsDivID').value='complaintResultsWrap'", 10);
-    setTimeout("document.getElementById('sResultsUrlID').value='/ajax/search-complaint-previews?showPreviews=1&ajax=1&limit=0'", 10);
-    setTimeout("autoRunDashResults=true", 15);
-    </script>
     
 @elseif ($sView == 'list')
 
@@ -166,6 +160,13 @@
 </div> <!-- end outer height div -->
 
 @endif
+
+<div class="relDiv w100">
+    <div class="absDiv" style="right: -18px; top: 20px;">
+        <a href="?refresh=1" class="slGreenDark"
+            ><i class="fa fa-refresh" aria-hidden="true"></i></a>
+    </div>
+</div>
 
 @if ($sView == 'list') 
 <style> 

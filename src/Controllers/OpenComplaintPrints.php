@@ -344,7 +344,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
     {
         $ret = $this->reportUploadsMultNodes(
             $this->cmplntUpNodes, 
-            $this->v["isAdmin"], 
+            $this->isStaffOrAdmin(), 
             $this->v["isOwner"]
         );
         $cnt = $this->v["uploadPrintMap"]["img"]
@@ -367,7 +367,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
     /* Double-Checking [For Now] */
     protected function canShowUpload($upDeets, $isAdmin = false, $isOwner = false)
     {
-        if ($isAdmin || $isOwner || $this->v["isAdmin"] || $this->v["isOwner"]) {
+        if ($isAdmin || $isOwner || $this->isStaffOrAdmin() || $this->v["isOwner"]) {
             return true;
         }
         if (isset($this->sessData->dataSets["complaints"])) {
@@ -387,7 +387,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
     
     protected function loadUpDeetPrivacy($upRow = NULL)
     {
-        if ($this->v["isAdmin"] || $this->v["isOwner"]) {
+        if ($this->isStaffOrAdmin() || $this->v["isOwner"]) {
             return 'Public';
         }
         if ($upRow && isset($upRow->up_privacy)) {

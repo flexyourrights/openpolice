@@ -596,5 +596,12 @@ class OpenPolicePeople extends OpenPoliceUtils
         }
         return '';
     }
+    
+    protected function profilePhotoUploadInstruct()
+    {
+        return 'Please upload an <a href="/privacy-policy#n3075">'
+            . 'appropriate photo of yourself</a>. This will '
+            . 'be <nobr>visible to the public.</nobr>';
+    }
 
 }

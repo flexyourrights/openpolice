@@ -3,14 +3,16 @@
 <div style="margin: -15px -15px 0px -15px;"></div>
 
 @if (isset($complaintRec->com_status)
-    && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) == 'Incomplete')
+    && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) 
+        == 'Incomplete')
     
     <div style="margin-top: -15px; padding-bottom: 15px;">
         <div class="row mTn5" style="color: #333;">
             <div class="col-lg-4">
                 <div class="relDiv ovrSho" style="height: 30px;">
                     <div class="absDiv" style="top: 8px; left: 15px;">
-                        <div class="vertPrgDone" style="background: #FF6059;"></div>
+                        <div class="vertPrgDone" 
+                            style="background: #FF6059;"></div>
                     </div>
                     <div class="absDiv" style="top: 7px; left: 40px;">
                         Incomplete
@@ -34,7 +36,8 @@
 @endif
 
 @if ($firstReview 
-    && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) != 'Incomplete')
+    && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) 
+        != 'Incomplete')
     
     <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
     {!! $GLOBALS["SL"]->printAccordian(
@@ -46,7 +49,8 @@
         )->render(),
         true,
         false,
-        'text'
+        'text',
+        $ico
     ) !!}
     </div>
     
@@ -76,7 +80,8 @@
             )->render(),
             false,
             false,
-            'text'
+            'text',
+            $ico
         ) !!}
         </div>
 
@@ -101,7 +106,8 @@
             )->render(),
             false,
             false,
-            'text'
+            'text',
+            $ico
         ) !!}
         <?php /* (($emailID > 0) ? true : false), */ ?>
         </div>
@@ -126,7 +132,8 @@
             )->render(),
             false,
             false,
-            'text'
+            'text',
+            $ico
         ) !!}
         </div>
 
@@ -143,7 +150,8 @@
                     && $GLOBALS["SL"]->REQ->view == 'history'))
                 ? true : false),
             false,
-            'text'
+            'text',
+            $ico
         ) !!}
         </div>
 

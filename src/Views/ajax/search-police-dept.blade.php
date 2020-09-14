@@ -38,7 +38,7 @@
                 <h3 @if ($i == 0) class="mT0" @endif >{{ $dept->dept_name }}</h3>
                 <div class="mTn10"><b><i>(Federal)</i></b></div>
             @else
-                <h3>{{ str_replace('Department', 'Dept', $dept->dept_name) }}</h3>
+                <h3>{{ str_replace('Department', 'Dept.', $dept->dept_name) }}</h3>
             @endif
                 <div class="row mT10 mB10 @if ($i == 0) mT0 @endif ">
                     <div class="col-sm-9 pB20">

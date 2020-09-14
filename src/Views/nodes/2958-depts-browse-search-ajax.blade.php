@@ -31,7 +31,7 @@ function logSrchFilts() {
             filts += "__states_" + statesChecked.substring(1);
         }
         document.getElementById("sFiltID").value = filts;
-console.log("logSrchFilts: "+document.getElementById("sFiltID").value);
+//console.log("logSrchFilts: "+document.getElementById("sFiltID").value);
     }
     setTimeout(function() { logSrchFilts(); }, 1000);
     return true;
@@ -80,6 +80,4 @@ $(document).on("click", ".fltDeptSortDirBtn", function() {
         updateDeptSortDir(srtDir);
     }
 });
-
-
 

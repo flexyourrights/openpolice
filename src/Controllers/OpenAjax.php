@@ -59,6 +59,11 @@ class OpenAjax extends OpenComplaintSaves
             $this->ajaxLoadHomeComplaintPreviews($request);
         } elseif ($type == 'search-complaint-previews') {
             $this->ajaxLoadSearchComplaintPreviews($request);
+
+        } elseif ($type == 'staff-complaint-status') {
+            $this->ajaxStaffComplaintStatus($request);
+        } elseif ($type == 'staff-complaint-correct') {
+            $this->ajaxStaffComplaintCorrect($request);
         }
         return '';
     }
@@ -86,9 +91,9 @@ class OpenAjax extends OpenComplaintSaves
      */
     public function ajaxLoadSearchComplaintPreviews(Request $request)
     {
-        $GLOBALS["SL"]->x["isPublicList"] = true;
         $GLOBALS["SL"]->pageView = 'public';
-        return $this->printComplaintListing(2685, 'lrg');
+        $GLOBALS["SL"]->x["isPublicList"] = true;
+        return $this->printComplaintListing(2384, 'lrg');
     }
     
     /**
@@ -113,7 +118,7 @@ class OpenAjax extends OpenComplaintSaves
         list($sortLab, $sortDir) = $this->chkDeptSorts($this->v["reqState"]);
         $loadUrl .= $this->v["reqLike"] . '&states=' . implode(',', $this->v["reqState"]) 
             . '&sortLab=' . $sortLab . '&sortDir=' . $sortDir;
-        $ret = $GLOBALS["SL"]->chkCache($loadUrl, 'search', 1);
+        $ret = $GLOBALS["SL"]->chkCache($loadUrl, 'search', 36);
         if (trim($ret) == '' || $request->has('refresh')) {
             $this->ajaxRunDeptSearch($this->v["reqLike"]);
             if ($sortLab != 'match') {
@@ -142,7 +147,7 @@ class OpenAjax extends OpenComplaintSaves
                     ]
                 )->render();
             }
-            $GLOBALS["SL"]->putCache($loadUrl, $ret, 'search', 1);
+            $GLOBALS["SL"]->putCache($loadUrl, $ret, 'search', 36);
         }
         echo $ret;
         exit;

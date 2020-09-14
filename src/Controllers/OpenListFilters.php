@@ -462,7 +462,7 @@ class OpenListFilters extends OpenAjax
             foreach ($dChk as $i => $d) {
                 $comma = (($i > 0) ? ', ' : '');
                 $this->v["comInfo"][$com->com_public_id]["depts"] .= $comma
-                    . str_replace('Department' , 'Dept', $d->dept_name);
+                    . str_replace('Department' , 'Dept.', $d->dept_name);
             }
         }
         $comTime = strtotime($com->updated_at);

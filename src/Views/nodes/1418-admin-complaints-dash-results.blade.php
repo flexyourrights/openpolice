@@ -122,7 +122,8 @@ $(document).on("click", ".complaintRowA", function() {
 function loadResultSpinner(id) {
     if (document.getElementById("resultSpin"+id+"")) {
         document.getElementById("resultSpin"+id+"").style.display="block";
-        document.getElementById("resultSpin"+id+"").innerHTML="<i>Loading...</i><i class=\"fa fa-circle-o-notch fa-spin fa-fw margin-bottom\" aria-hidden=\"true\"></i>";
+        document.getElementById("resultSpin"+id+"").innerHTML="<i>Loading...</i>";
+// <i class=\"fa fa-circle-o-notch fa-spin fa-fw margin-bottom\" aria-hidden=\"true\"></i>
         chkResultLoaded(id, 0);
     }
     return true;

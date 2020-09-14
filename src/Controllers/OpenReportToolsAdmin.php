@@ -56,9 +56,9 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         $this->loadComplaintAdminHistory();
         $this->prepEmailComplaintData();
         $GLOBALS["SL"]->loadStates();
-        $this->v["needsWsyiwyg"] = true;
+        $this->v["needsWsyiwyg"]  = true;
         $this->v["incidentState"] = $this->sessData->dataSets["incidents"][0]->inc_address_state;
-        $this->v["complaintRec"] = $this->sessData->dataSets["complaints"][0];
+        $this->v["complaintRec"]  = $this->sessData->dataSets["complaints"][0];
         if ($GLOBALS["SL"]->REQ->has('ajaxEmaForm')) {
             $this->chkForEmailID();
             $this->loadCurrEmail();
@@ -89,9 +89,12 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         }
         $comStatus = $this->v["complaintRec"]->com_status;
         $status = $GLOBALS['SL']->def->getVal('Complaint Status', $comStatus);
-        $openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
+        $openToolbox = true;
+        //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
+        $titleStatus = str_replace('Oversight', 'Investigative Agency', $status);
         $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
-            . ': Admin Toolkit</span>';
+            . ': Admin Toolkit</span><div class="mT5" style="color: #333; font-size: 16px;"><b>'
+            . 'Status: ' . $titleStatus . '</b></div>';
         $this->v["alertIco"] = '<span class="mL5 slRedDark"><b>(Next Step)</b></span>';
         $this->v["updateTitle"] = ' <b>Assign Complaint Status</b>';
         if ($this->v["firstRevDone"]
@@ -99,6 +102,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             || $status == 'New') {
             $this->v["updateTitle"] .= $this->v["alertIco"];
         }
+        $this->v["ico"] = 'caret';
         $tools = view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools', 
                 $this->v
@@ -530,8 +534,10 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             } elseif ($status == 'Needs More Work') {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, 'Needs More Work');
-            } elseif (in_array($status, 
-                [ 'Pending Attorney: Needed', 'Pending Attorney: Hook-Up' ])) {
+            } elseif (in_array($status, [
+                    'Pending Attorney: Defense Needed', 
+                    'Pending Attorney: Civil Rights Needed/Wanted' 
+                ])) {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney');
             } elseif (in_array($status, [ 'Has Attorney' ])) {
