@@ -18,6 +18,6 @@ class OPPhysicalDesc extends Model
 		'phys_general_desc', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

@@ -34,6 +34,6 @@ class OPCompliments extends Model
 		'compli_share_data', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

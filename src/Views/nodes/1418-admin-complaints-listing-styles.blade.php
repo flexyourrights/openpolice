@@ -94,4 +94,10 @@ a.complaintRowA:active .float-right, a.complaintRowA:hover .float-right {
     color: #FFF;
 }
 
+@media screen and (max-width: 1420px) {
+    #complaintWarn1, #complaintWarn2, #complaintWarn3 {
+        width: 100%;
+    }
+}
+
 </style>

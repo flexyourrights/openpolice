@@ -24,7 +24,7 @@ class OpenAjax extends OpenComplaintSaves
 {
     /**
      * Check for ajax requests customized beyond 
-     * SurvLoop's default behavior.
+     * Survloop's default behavior.
      *
      * @param  Illuminate\Http\Request  $request
      * @param  string $over
@@ -41,7 +41,7 @@ class OpenAjax extends OpenComplaintSaves
     
     /**
      * Check for ajax requests customized beyond 
-     * SurvLoop's default behavior, called via /ajax/{type}.
+     * Survloop's default behavior, called via /ajax/{type}.
      *
      * @param  Illuminate\Http\Request  $request
      * @param  string $type

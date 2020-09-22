@@ -13,6 +13,6 @@ class OPPartnerCaseTypes extends Model
 		'prt_cas_partner_id', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

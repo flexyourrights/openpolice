@@ -12,7 +12,7 @@ namespace OpenPolice\Controllers;
 
 use App\Models\OPDepartments;
 use App\Models\OPzComplaintReviews;
-use SurvLoop\Controllers\Stats\SessAnalysis;
+use Survloop\Controllers\Stats\SessAnalysis;
 use OpenPolice\Controllers\OpenReport;
 
 class OpenReportTools extends OpenReport
@@ -39,7 +39,7 @@ class OpenReportTools extends OpenReport
     }
 
     /**
-     * Clear all SurvLoop-level report caches of the current complaint.
+     * Clear all Survloop-level report caches of the current complaint.
      *
      * @param  boolean $redirRefresh
      * @return boolean

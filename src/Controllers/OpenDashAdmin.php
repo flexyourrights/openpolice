@@ -20,7 +20,7 @@ use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPzVolunStatDays;
 use App\Models\OPTesterBeta;
-use SurvLoop\Controllers\Stats\SurvTrends;
+use Survloop\Controllers\Stats\SurvTrends;
 
 // temp...
 use App\Models\OPEventSequence;
@@ -54,7 +54,7 @@ class OpenDashAdmin
             ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->get();
@@ -97,7 +97,7 @@ class OpenDashAdmin
             ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
@@ -162,7 +162,7 @@ class OpenDashAdmin
             ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->where('com_record_submitted', '>=', $startDate)
@@ -285,7 +285,7 @@ class OpenDashAdmin
             ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
             ->get();

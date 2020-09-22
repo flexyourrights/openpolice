@@ -14,6 +14,6 @@ class OPLinksCivilianEvents extends Model
 		'lnk_civ_eve_eve_id', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

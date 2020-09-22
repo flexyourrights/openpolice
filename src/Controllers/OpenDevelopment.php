@@ -58,7 +58,7 @@ class OpenDevelopment extends OpenReportToolsAdmin
                     ],
                     [
                         'https://survloop.org/package-files-folders-classes', 
-                        'SurvLoop Package Files'
+                        'Survloop Package Files'
                     ]
                 ]
             ]

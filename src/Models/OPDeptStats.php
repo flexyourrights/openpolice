@@ -21,6 +21,6 @@ class OPDeptStats extends Model
 		'dept_stat_investigate_declined', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

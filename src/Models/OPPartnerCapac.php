@@ -14,6 +14,6 @@ class OPPartnerCapac extends Model
 		'prt_cap_capacity', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

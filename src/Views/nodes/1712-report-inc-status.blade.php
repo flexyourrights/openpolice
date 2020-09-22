@@ -1,4 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-status.blade.php -->
+<option value="New" 
+    @if (!$firstReview && in_array(trim($lastStatus), ['', 'New', 'Police Complaint'])) SELECTED @endif 
+    >New (On Hold)</option>
 <?php /*
 <option value="Hold: Go Gold" 
     @if (!$firstReview && $lastStatus == 'Hold: Go Gold') SELECTED @endif 

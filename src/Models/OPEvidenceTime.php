@@ -16,6 +16,6 @@ class OPEvidenceTime extends Model
 		'evi_tim_description', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

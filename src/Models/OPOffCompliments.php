@@ -22,6 +22,6 @@ class OPOffCompliments extends Model
         'off_comp_community', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

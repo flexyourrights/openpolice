@@ -31,6 +31,6 @@ class OPOfficers extends Model
 		'off_gave_compliment', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

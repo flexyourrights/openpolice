@@ -476,7 +476,7 @@ class OpenListFilters extends OpenAjax
                 ->update([ "com_status" => $com->com_status ]);
         }
         if (!isset($com->com_type) || intVal($com->com_type) <= 0) {
-            $com->com_type = $GLOBALS['SL']->def->getID('Complaint Type', 'Unreviewed');
+            $com->com_type = $GLOBALS['SL']->def->getID('Complaint Type', 'Unverified');
             OPComplaints::find($com->com_id)
                 ->update([ "com_type" => $com->com_type ]);
         }
@@ -559,7 +559,7 @@ class OpenListFilters extends OpenAjax
         $status = $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status);
         if ($type == 'Not Sure') {
             $sortInd += 990000000;
-        } elseif ($type == 'Unreviewed') {
+        } elseif ($type == 'Unverified') {
             $sortInd += 950000000;
         } elseif ($status == 'New') {
             $sortInd += 900000000;

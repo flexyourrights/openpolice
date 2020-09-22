@@ -2,7 +2,7 @@
 /**
   * OpenPolicePCIF is a class to manually create the exports for the
   * Police Complaint Interchange Format (PCIF), so that entire 
-  * parallel data strutures aren't managed via SurvLoop.
+  * parallel data strutures aren't managed via Survloop.
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
@@ -14,8 +14,8 @@ namespace OpenPolice\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use SurvLoop\Controllers\Globals\Globals;
-use SurvLoop\Controllers\Tree\TreeCustomAPI;
+use Survloop\Controllers\Globals\Globals;
+use Survloop\Controllers\Tree\TreeCustomAPI;
 
 class OpenPolicePCIF extends OpenListing
 {

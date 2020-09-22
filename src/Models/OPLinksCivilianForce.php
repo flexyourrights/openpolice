@@ -14,6 +14,6 @@ class OPLinksCivilianForce extends Model
         'lnk_civ_frc_civ_id', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

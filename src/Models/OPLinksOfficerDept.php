@@ -15,6 +15,6 @@ class OPLinksOfficerDept extends Model
 		'lnk_off_dept_date_verified', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

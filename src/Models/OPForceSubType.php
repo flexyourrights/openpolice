@@ -14,6 +14,6 @@ class OPForceSubType extends Model
 		'force_sub_type', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

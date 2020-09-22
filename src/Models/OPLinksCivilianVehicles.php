@@ -15,6 +15,6 @@ class OPLinksCivilianVehicles extends Model
 		'lnk_civ_vehic_role', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

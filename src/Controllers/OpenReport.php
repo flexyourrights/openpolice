@@ -235,6 +235,7 @@ class OpenReport extends OpenDeptStats
 //echo 'getReportDept(' . $deptID . '<pre>'; print_r($dept); echo '</pre>'; exit;
         if ($dept && isset($dept->dept_name)) {
             $status = $this->sessData->dataSets["complaints"][0]->com_status;
+            $type   = $this->sessData->dataSets["complaints"][0]->com_type;
             if ($GLOBALS["SL"]->isPdfView()) {
                 return '<h4 style="margin-bottom: 0px; ">'
                     . 'Misconduct Incident Report for ' . $dept->dept_name . '</h4>';
@@ -244,7 +245,7 @@ class OpenReport extends OpenDeptStats
                     . $dept->dept_name . '</a></h4>'
                     . '<div id="complaintReportStatusLine" class="mB10"><b>Complaint #'
                     . $this->sessData->dataSets["complaints"][0]->com_public_id . ': ' 
-                    . $this->printComplaintStatus($status) . '</b></div>';
+                    . $this->printComplaintStatus($status, $type) . '</b></div>';
             }
         }
         $this->v["reportDepts"][] = $deptID;
@@ -1058,7 +1059,7 @@ class OpenReport extends OpenDeptStats
     }
     
     /**
-     * Fill in the SurvLoop glossary with everything worthy in this report.
+     * Fill in the Survloop glossary with everything worthy in this report.
      *
      * @return string
      */
@@ -1131,7 +1132,7 @@ class OpenReport extends OpenDeptStats
     }
     
     /**
-     * This SurvLoop function provides customization of values reported
+     * This Survloop function provides customization of values reported
      * in detail blocks.
      *
      * @param  int $nID

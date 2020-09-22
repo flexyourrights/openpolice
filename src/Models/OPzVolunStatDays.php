@@ -27,6 +27,6 @@ class OPzVolunStatDays extends Model
 		'volun_stat_total_edits_v', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

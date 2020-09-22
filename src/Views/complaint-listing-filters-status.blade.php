@@ -5,13 +5,13 @@
         <input type="checkbox" id="fltStatus0" name="fltStatus[]" value="295"
             @if (in_array(295, $srchFilts['comstatus'])) CHECKED @endif 
             class="mR5 searchDeetFld fltStatus" autocomplete="off">
-            Unreviewed Survey Submissions
+            Unverified Survey Submissions
     </label>
     <label class="disBlo pB5 pT5">
         <input type="checkbox" id="fltStatus1" name="fltStatus[]" value="301"
             @if (in_array(301, $srchFilts['comstatus'])) CHECKED @endif 
             class="mR5 searchDeetFld fltStatus" autocomplete="off">
-            Reviewed But Not Sure If Legit
+            Verified But Not Sure If Legit
     </label>
     <label class="disBlo pB5 pT5">
         <input type="checkbox" id="fltStatus2" name="fltStatus[]" value="296"

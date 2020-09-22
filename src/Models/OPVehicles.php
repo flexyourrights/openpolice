@@ -21,6 +21,6 @@ class OPVehicles extends Model
 		'vehic_vehicle_number', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

@@ -32,6 +32,6 @@ class OPzComplaintReviews extends Model
 		'com_rev_graphic_content', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

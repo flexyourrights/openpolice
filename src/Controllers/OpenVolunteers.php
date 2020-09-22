@@ -249,7 +249,7 @@ class OpenVolunteers extends OpenDevelopment
         ];
         $set = 'Complaint Type';
         $types = [
-            $GLOBALS["SL"]->def->getID($set, 'Unreviewed'),
+            $GLOBALS["SL"]->def->getID($set, 'Unverified'),
             $GLOBALS["SL"]->def->getID($set, 'Police Complaint')
         ];
         $chk = DB::table('op_departments')

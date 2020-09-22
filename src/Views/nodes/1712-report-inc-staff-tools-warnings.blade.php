@@ -1,7 +1,8 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-warnings.blade.php -->
 
-<div style="color: #333; margin-top: -25px;">
-    <div>
+<div class="disBlo ovrSho pT15" 
+    style="color: #333; min-height: 45px;">
+    <div id="complaintWarn1" class="fL disBlo mR20">
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
@@ -20,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="pL20">
+        <div class="pL20" style="min-height: 30px;">
             @if (isset($complaintRec->com_anyone_charged) 
                 && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
                 @if (isset($complaintRec->com_all_charges_resolved)
@@ -35,7 +36,7 @@
         </div>
     </div>
     
-    <div>
+    <div id="complaintWarn2" class="fL disBlo mR20">
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
@@ -65,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="pL20">
+        <div class="pL20" style="min-height: 30px;">
             @if ((isset($complaintRec->com_attorney_has) 
                     && trim($complaintRec->com_attorney_has) == 'Y')
                 || (isset($complaintRec->com_status) 
@@ -86,7 +87,7 @@
         </div>
     </div>
 
-    <div>
+    <div id="complaintWarn3" class="fL disBlo mR20">
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
@@ -107,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="pL20">
+        <div class="pL20" style="min-height: 30px;">
             @if ($complaintRec->com_publish_user_name == 1
                 && $complaintRec->com_publish_officer_name == 1)
                 Submit Publicly
@@ -116,7 +117,7 @@
                     && $complaintRec->com_publish_officer_name == 1)
                     Submit Publicly
                 @elseif ($complaintRec->com_publish_user_name == 1)
-                    Publish Complainant's Name
+                    Publish User's Name
                 @elseif ($complaintRec->com_publish_officer_name == 1)
                     Publish Officers' Names
                 @elseif (isset($complaintRec->com_publish_user_name)
@@ -130,4 +131,5 @@
             @endif
         </div>
     </div>
+    <div class="fC p5"></div>
 </div>

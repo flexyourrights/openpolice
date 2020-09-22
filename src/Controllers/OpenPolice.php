@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPolice the core top-level class for which extends both SurvLoop,
+  * OpenPolice the core top-level class for which extends both Survloop,
   * and most functions specific to OpenPolice.org.
   *
   * OpenPolice.org
@@ -21,9 +21,9 @@ use OpenPolice\Controllers\OpenInitExtras;
 class OpenPolice extends OpenInitExtras
 {
     /**
-     * Overrides primary SurvLoop printing of individual nodes from 
+     * Overrides primary Survloop printing of individual nodes from 
      * surveys and site pages. This is one of the main routing hubs
-     * for OpenPolice.org customizations beyond SurvLoop defaults.
+     * for OpenPolice.org customizations beyond Survloop defaults.
      *
      * @param  int $nID
      * @param  array $tmpSubTier
@@ -364,7 +364,7 @@ class OpenPolice extends OpenInitExtras
     }
     
     /**
-     * Overrides default SurvLoop behavior for responses to multiple-choice questions.
+     * Overrides default Survloop behavior for responses to multiple-choice questions.
      *
      * @param  int $nID
      * @param  SLNode &$curr

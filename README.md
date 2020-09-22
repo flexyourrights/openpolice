@@ -2,7 +2,7 @@
 # FlexYourRights/OpenPolice
 
 [![Laravel](https://img.shields.io/badge/Laravel-7.6-orange.svg?style=flat-square)](http://laravel.com)
-[![SurvLoop](https://img.shields.io/badge/SurvLoop-0.2-orange.svg?style=flat-square)](https://github.com/rockhopsoft/survloop)
+[![Survloop](https://img.shields.io/badge/Survloop-0.2-orange.svg?style=flat-square)](https://github.com/rockhopsoft/survloop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Table of Contents
@@ -20,14 +20,14 @@
 
 * PHP Controllers ~ 537 KB (on disk)
 * Blade Template Views HTML with some JS CSS ~ 520 KB
-* SurvLoop-Generated PHP Eloquent Data Table Models ~ 332 KB
-* SurvLoop-Generated PHP Laravel Database Migration & Seeders ~ 2.1 MB
-* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">SurvLoop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.4 MB
+* Survloop-Generated PHP Eloquent Data Table Models ~ 332 KB
+* Survloop-Generated PHP Laravel Database Migration & Seeders ~ 2.1 MB
+* <a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">Survloop-Generated PHP Police Departments & Oversight Seeders</a> ~ 9.4 MB
 
 OpenPolice is an open-source, open data web app empowering citizens to prepare, file, and track reports of police 
 conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing 
 users to publish reports online, we aim to establish better public transparency and oversight of police activity in the 
-U.S. OpenPolice extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">SurvLoop</a>, which runs atop
+U.S. OpenPolice extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">Survloop</a>, which runs atop
 <a href="https://laravel.com/" target="_blank">Laravel</a>.
 
 <a href="https://openpolice.org" target="_blank">OpenPolice.org</a><br />
@@ -108,7 +108,7 @@ $ nano composer.json
     "psr-4": {
         ...
         "OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
-        "SurvLoop\\": "vendor/rockhopsoft/survloop/src/",
+        "Survloop\\": "vendor/rockhopsoft/survloop/src/",
     }
     ...
 }, ...
@@ -128,7 +128,7 @@ $ nano config/app.php
 'providers' => [
     ...
     OpenPolice\OpenPoliceServiceProvider::class,
-    SurvLoop\SurvLoopServiceProvider::class,
+    Survloop\SurvloopServiceProvider::class,
     Intervention\Image\ImageServiceProvider::class,
     ...
 ],
@@ -136,7 +136,7 @@ $ nano config/app.php
 'aliases' => [
     ...
     'OpenPolice' => 'FlexYourRights\OpenPolice\OpenPoliceFacade',
-    'SurvLoop' => 'RockHopSoft\SurvLoop\SurvLoopFacade',
+    'Survloop' => 'RockHopSoft\Survloop\SurvloopFacade',
     'Image' => Intervention\Image\Facades\Image::class,
     ...
 ], ...
@@ -208,7 +208,7 @@ Better documentation is juuust beginning to be created...
 
 <a href="https://openpolice.org/code-package-files-folders-and-classes" target="_blank">openpolice.org/code-package-files-folders-and-classes</a>
 
-More on the SurvLoop level is also starting here: <a href="https://survloop.org/package-files-folders-classes" target="_blank">https://survloop.org/package-files-folders-classes</a>.
+More on the Survloop level is also starting here: <a href="https://survloop.org/package-files-folders-classes" target="_blank">https://survloop.org/package-files-folders-classes</a>.
 
 # <a name="roadmap"></a>Roadmap
 

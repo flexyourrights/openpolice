@@ -1,13 +1,11 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools.blade.php -->
 <?php $defSet = 'Complaint Status'; ?>
-<div style="margin: -15px -15px 0px -15px;"></div>
-
 @if (isset($complaintRec->com_status)
     && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) 
         == 'Incomplete')
     
-    <div style="margin-top: -15px; padding-bottom: 15px;">
-        <div class="row mTn5" style="color: #333;">
+    <div class="pB15">
+        <div class="row" style="color: #333;">
             <div class="col-lg-4">
                 <div class="relDiv ovrSho" style="height: 30px;">
                     <div class="absDiv" style="top: 8px; left: 15px;">
@@ -26,12 +24,10 @@
     && $GLOBALS["SL"]->def->getVal('Complaint Type', $complaintRec->com_type) 
         == 'Police Complaint')
 
-    <div style="margin-top: -15px; padding-bottom: 15px;"> 
-        {!! view(
-            'vendor.openpolice.nodes.1712-report-inc-staff-tools-warnings', 
-            [ "complaintRec" => $complaintRec ]
-        )->render() !!}
-    </div>
+    {!! view(
+        'vendor.openpolice.nodes.1712-report-inc-staff-tools-warnings', 
+        [ "complaintRec" => $complaintRec ]
+    )->render() !!}
 
 @endif
 
@@ -39,29 +35,24 @@
     && $GLOBALS["SL"]->def->getVal($defSet, $complaintRec->com_status) 
         != 'Incomplete')
     
-    <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
-    {!! $GLOBALS["SL"]->printAccordian(
-        '<i class="fa fa-check-square-o mL5 mR5" aria-hidden="true"></i>'
-            . ' <b>Is This a Complaint?</b>' . str_replace('Next', 'First', $alertIco),
-        view(
-            'vendor.openpolice.nodes.1712-report-inc-staff-tools-first-review',
-            [ "complaintRec" => $complaintRec ]
-        )->render(),
-        true,
-        false,
-        'text',
-        $ico
-    ) !!}
+    <div class="pT15 pB15 slBlueDark">
+        <i class="fa fa-check-square-o mL5 mR5" aria-hidden="true"></i>
+            <b>Is this a <i>Police</i> Complaint?</b>
+            {!! str_replace('Next', 'First', $alertIco) !!}
     </div>
+    {!! view(
+        'vendor.openpolice.nodes.1712-report-inc-staff-tools-first-review',
+        [ "complaintRec" => $complaintRec ]
+    )->render() !!}
     
 @elseif (in_array($view, ['', 'history', 'update', 'emails', 'emailsType']))
 
     <div id="analystHistory">
 
-        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        <div class="brdTopGrey">
         {!! $GLOBALS["SL"]->printAccordian(
             '<i class="fa fa-sliders mL5 mR5" aria-hidden="true"></i> ' . $updateTitle,
-            view(
+            '<div class="pL15 pR15">' . view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools-status', 
                 [
                     "complaintRec"       => $complaintRec,
@@ -77,7 +68,7 @@
                     "incidentState"      => $incidentState,
                     "uID"                => $uID
                 ]
-            )->render(),
+            )->render() . '</div>',
             false,
             false,
             'text',
@@ -86,11 +77,11 @@
         </div>
 
     @if (isset($complaintRec->com_status) && intVal($complaintRec->com_status) > 0)
-        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        <div class="brdTopGrey">
         {!! $GLOBALS["SL"]->printAccordian(
             '<i class="fa fa-envelope-o mL5 mR5" aria-hidden="true"></i>'
                 . ' <b>Send Email</b>' . (($emailID > 0) ? $alertIco : ''),
-            view(
+            '<div class="pL15 pR15">' . view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools-email', 
                 [
                     "complaintRec"       => $complaintRec,
@@ -103,7 +94,7 @@
                     "reportUploadTypes"  => $reportUploadTypes,
                     "reportUploadFolder" => $reportUploadFolder
                 ]
-            )->render(),
+            )->render() . '</div>',
             false,
             false,
             'text',
@@ -113,11 +104,11 @@
         </div>
     @endif
 
-        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        <div class="brdTopGrey">
         {!! $GLOBALS["SL"]->printAccordian(
             '<i class="fa fa-pencil-square-o mL5 mR5" aria-hidden="true"></i>'
                 . ' <b>Make Complaint Corrections</b>',
-            view(
+            '<div class="pL15 pR15">' . view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools-edits', 
                 [
                     "complaintRec"       => $complaintRec,
@@ -129,7 +120,7 @@
                     "reportUploadFolder" => $reportUploadFolder,
                     "incidentState"      => $incidentState
                 ]
-            )->render(),
+            )->render() . '</div>',
             false,
             false,
             'text',
@@ -137,14 +128,14 @@
         ) !!}
         </div>
 
-        <div class="brdTopGrey" style="padding: 15px 0px 25px 0px;">
+        <div class="brdTopGrey">
         {!! $GLOBALS["SL"]->printAccordian(
             '<i class="fa fa-comments-o mL5 mR5" aria-hidden="true"></i>'
                 . ' <b>Complaint History</b>',
-            view(
+            '<div class="pL15 pR15">' . view(
                 'vendor.openpolice.nodes.1712-report-inc-history', 
                 [ "history" => $history ]
-            )->render(),
+            )->render() . '</div>',
             (($view == 'history' 
                 || ($GLOBALS["SL"]->REQ->has('view') 
                     && $GLOBALS["SL"]->REQ->view == 'history'))

@@ -14,6 +14,6 @@ class OPPartnerStates extends Model
 		'prt_sta_state', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

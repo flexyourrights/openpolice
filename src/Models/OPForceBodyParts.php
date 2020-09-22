@@ -14,6 +14,6 @@ class OPForceBodyParts extends Model
 		'frc_bdy_part', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

@@ -51,6 +51,6 @@ class OPOversight extends Model
 		'over_keep_email_private', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

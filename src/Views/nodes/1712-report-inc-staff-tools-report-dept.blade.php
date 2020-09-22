@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<div class="mT20 mB20">
+<div class="mT15">
     <input type="submit" id="stfBtnDept"
         class="btn btn-lg btn-primary" style="color: #FFF;"
         onMouseOver="this.style.color='#2b3493';" 

@@ -17,6 +17,6 @@ class OPAdminActions extends Model
 		'adm_act_new_data', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

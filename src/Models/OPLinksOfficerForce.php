@@ -14,6 +14,6 @@ class OPLinksOfficerForce extends Model
         'lnk_off_frc_off_id', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

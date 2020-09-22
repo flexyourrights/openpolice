@@ -56,6 +56,6 @@ class OPzEditOversight extends Model
 		'zed_over_over_keep_email_private', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

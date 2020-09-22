@@ -1,7 +1,7 @@
 <?php
 /**
   * OpenComplaintPrints is a mid-level class which handles custom 
-  * printing of data, especially functions which override SurvLoop defaults.
+  * printing of data, especially functions which override Survloop defaults.
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice

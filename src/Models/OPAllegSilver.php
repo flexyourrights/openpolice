@@ -43,6 +43,6 @@ class OPAllegSilver extends Model
 		'alle_sil_animal_force',
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

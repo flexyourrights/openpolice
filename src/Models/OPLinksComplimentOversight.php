@@ -17,6 +17,6 @@ class OPLinksComplimentOversight extends Model
 		'lnk_compli_over_received', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

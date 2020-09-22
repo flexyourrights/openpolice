@@ -87,19 +87,18 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         if ($GLOBALS["SL"]->REQ->has('emailSent')) {
             $hasEmailSent = intVal($GLOBALS["SL"]->REQ->has('emailSent'));
         }
-        $comStatus = $this->v["complaintRec"]->com_status;
-        $status = $GLOBALS['SL']->def->getVal('Complaint Status', $comStatus);
-        $openToolbox = true;
-        //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
-        $titleStatus = str_replace('Oversight', 'Investigative Agency', $status);
+        $status = $this->printComplaintStatus(
+            $this->v["complaintRec"]->com_status, 
+            $this->v["complaintRec"]->com_type
+        );
         $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
-            . ': Admin Toolkit</span><div class="mT5" style="color: #333; font-size: 16px;"><b>'
-            . 'Status: ' . $titleStatus . '</b></div>';
+            . ': Admin Toolkit</span><div class="mT5" style="color: #333; font-size: 16px;">'
+            . '<b>Status: ' . $status . '</b></div>';
         $this->v["alertIco"] = '<span class="mL5 slRedDark"><b>(Next Step)</b></span>';
         $this->v["updateTitle"] = ' <b>Assign Complaint Status</b>';
         if ($this->v["firstRevDone"]
             || ($GLOBALS["SL"]->REQ->has('open') && $GLOBALS["SL"]->REQ->open == 'status')
-            || $status == 'New') {
+            || in_array($status, ['New', 'Unverified'])) {
             $this->v["updateTitle"] .= $this->v["alertIco"];
         }
         $this->v["ico"] = 'caret';
@@ -108,6 +107,8 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 $this->v
             )->render() 
             . $this->printComplaintAdminChkPdfs();
+        $openToolbox = true;
+        //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
         return '<div class="pT20 pB20">' 
             . $GLOBALS["SL"]->printAccard($title, $tools, $openToolbox)
             . '</div>';
@@ -553,7 +554,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             if ($GLOBALS["SL"]->REQ->revComplaintType == $incDef) {
                 $this->sessData->dataSets["complaints"][0]->com_status = $incDef;
                 $this->sessData->dataSets["complaints"][0]->com_type 
-                    = $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed');
+                    = $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified');
                 $status = 'Incomplete';
             } else { 
                 $newTypeVal = $GLOBALS["SL"]->def->getVal(

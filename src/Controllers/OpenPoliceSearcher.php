@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPoliceSearcher extends the SurvLoop Searcher for some hard-coded overrides.
+  * OpenPoliceSearcher extends the Survloop Searcher for some hard-coded overrides.
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
@@ -11,7 +11,7 @@ namespace OpenPolice\Controllers;
 
 use App\Models\OPComplaints;
 use App\Models\OPLinksComplaintDept;
-use SurvLoop\Controllers\Searcher;
+use Survloop\Controllers\Searcher;
 
 class OpenPoliceSearcher extends Searcher
 {
@@ -63,7 +63,7 @@ class OpenPoliceSearcher extends Searcher
                     || in_array($status, [200, 201, 202, 203, 204])) {
                     if ($status == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) { // 194
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
-                            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Unreviewed') 
+                            . $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified') 
                             . "')->where('com_status', '" . $status . "'); })";
                     } elseif (in_array($status, [195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 627])) {
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
@@ -124,7 +124,7 @@ class OpenPoliceSearcher extends Searcher
                 }
             }
         }
-        if ($ret == 'Unreviewed, Not Sure, Police Complaint') {
+        if ($ret == 'Unverified, Not Sure, Police Complaint') {
             $ret = 'Active Complaints';
         }
         if (trim($ret) != '') {

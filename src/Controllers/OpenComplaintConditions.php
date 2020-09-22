@@ -21,7 +21,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
 {
     /**
      * Delegate the conditional checks which are customized from
-     * the simpler default SurvLoop existing thus far.
+     * the simpler default Survloop existing thus far.
      *
      * @param  int $nID
      * @param  string $condition

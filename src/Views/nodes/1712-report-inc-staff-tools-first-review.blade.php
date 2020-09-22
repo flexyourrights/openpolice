@@ -2,7 +2,8 @@
 @if ($GLOBALS['SL']->REQ->has('ajax') 
     || $GLOBALS['SL']->REQ->has('wdg'))
     <form name="firstReviewForm" id="firstReviewFormID" method="get" 
-        src="/complaint-toolbox?cid={{ $complaintRec->com_id }}&ajax=1&firstReview=1">
+        src="/complaint-toolbox?cid={{ $complaintRec->com_id 
+        }}&ajax=1&firstReview=1">
 @else
     <form name="firstReviewForm" id="firstReviewFormID" method="get" 
         src="?firstReview=1">
@@ -14,7 +15,6 @@
 <input type="hidden" name="ajax" value="1">
 <input type="hidden" name="refresh" value="1">
 <input type="hidden" name="firstReview" value="1">
-
 
 <div class="row">
     <div class="col-sm-6">
@@ -69,17 +69,19 @@
     </div>
 </div>
 
-<div class="pT15 mB15">
+<div class="pT15">
     <input type="submit" class="btn btn-primary btn-lg slTab"
-        {{ $GLOBALS['SL']->tabInd() }} value="Set Complaint Type">
+        {{ $GLOBALS['SL']->tabInd() }} value="Set Submission Type">
 </div>
 
-<div class="mT20 mB10">
-    {!! $GLOBALS["SL"]->printAccordTxt(
-        'About these complaint types',
-        view('vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types')
-            ->render()
-    ) !!}
+<div class="pT30 pL15 pR15">
+{!! $GLOBALS["SL"]->printAccordTxt(
+    'About these submission types',
+    view('vendor.openpolice.nodes.1712-report-inc-staff-tools-first-about-types')
+        ->render(),
+    false,
+    'caret'
+) !!}
 </div>
 
 </form>

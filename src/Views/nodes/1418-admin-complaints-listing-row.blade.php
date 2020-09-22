@@ -8,7 +8,7 @@
         <div class="float-left complaintAlert">
             <div class="mLn5">&nbsp;
             @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type), 
-                    ['Unreviewed', 'Not Sure'])
+                    ['Unverified', 'Not Sure'])
                 || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                     == 'Police Complaint'
                     && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 

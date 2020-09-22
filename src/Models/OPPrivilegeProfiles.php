@@ -16,6 +16,6 @@ class OPPrivilegeProfiles extends Model
 		'priv_access_level', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

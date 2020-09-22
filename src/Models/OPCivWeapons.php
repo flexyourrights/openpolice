@@ -14,6 +14,6 @@ class OPCivWeapons extends Model
 		'civ_weap_body_weapon', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

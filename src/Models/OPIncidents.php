@@ -26,6 +26,6 @@ class OPIncidents extends Model
         'inc_borough', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

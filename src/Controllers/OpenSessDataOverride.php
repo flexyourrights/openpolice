@@ -18,7 +18,7 @@ use OpenPolice\Controllers\OpenComplaintPrints;
 class OpenSessDataOverride extends OpenComplaintPrints
 {
     /**
-     * Delegate the custom overrides for SurvLoop default 
+     * Delegate the custom overrides for Survloop default 
      * methods to retrieve current session data required
      * by the current node.
      *

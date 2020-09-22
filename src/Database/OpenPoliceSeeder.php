@@ -684,7 +684,7 @@ Question list and fields coming soon...',
 			'TblDatabase' => '1',
 			'TblName' => 'users',
 			'TblEng' => 'Users',
-			'TblDesc' => 'This represents the Laravel Users table, but will not actually be implemented by SurvLoop as part of the database installation.',
+			'TblDesc' => 'This represents the Laravel Users table, but will not actually be implemented by Survloop as part of the database installation.',
 			'TblGroup' => 'Users',
 			'TblOrd' => '55',
 			'TblExtend' => '0',
@@ -14639,7 +14639,7 @@ Must be careful not to let people post links to their personal blogs, because th
 			'DefDatabase' => '1',
 			'DefSubset' => 'Complaint Type',
 			'DefIsActive' => '0',
-			'DefValue' => 'Unreviewed'
+			'DefValue' => 'Unverified'
 		]);
 		DB::table('SL_Definitions')->insert([
 			'DefID' => 296,
@@ -26131,7 +26131,7 @@ left: 30px;
 			'NodeParentID' => '1052',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<div style="padding: 20px; font-size: 80%;">A longtime activist and 
-coder, Morgan has focused the past four years on building OpenPolice.org . To do this, he developed an open data engine called <a href="https://survloop.org/" target="_blank">SurvLoop</a>,
+coder, Morgan has focused the past four years on building OpenPolice.org . To do this, he developed an open data engine called <a href="https://survloop.org/" target="_blank">Survloop</a>,
  which creates a customized survey experience for end users and securely
  manages their data. It also helps customers manage web content and 
 sharing of open data.<br></div>'
@@ -30453,7 +30453,7 @@ setTimeout("checkIncBlock()", 100);
 			'NodeTree' => '42',
 			'NodeParentID' => '1706',
 			'NodeType' => 'Instructions Raw',
-			'NodePromptText' => '[ Glossary ] hard-coded via SurvLoop\Controllers\Tree\TreeSurvReport.php function printGlossary'
+			'NodePromptText' => '[ Glossary ] hard-coded via Survloop\Controllers\Tree\TreeSurvReport.php function printGlossary'
 		]);
 		DB::table('SL_Node')->insert([
 			'NodeID' => 1708,
@@ -34988,7 +34988,7 @@ $ docker-compose up -d nginx mysql phpmyadmin redis workspace</pre>
 </div>
 
 <div class="pT10">
-<p>SurvLoop Codebase Orientation</p>
+<p>Survloop Codebase Orientation</p>
 <ul>
 <li><a href="https://survloop.org/package-files-folders-classes" target="_blank">Package Files, Folders, and Classes</a></li>
 </ul>
@@ -35165,7 +35165,7 @@ setTimeout("document.getElementById(\'partnerFlowGIF\').src=\'https://s113648.gr
 <p><a href="/how-to-install-open-police-complaints-with-docker" class="btn btn-block taL btn-primary  ">Install Copy of OpenPolice.org Software with Docker</a></p>
 <p><a href="/web-app-technical-specs" class="btn btn-block taL btn-secondary">General Technical Background on App</a></p>
 
-<div class="pT10"><b>SurvLoop Codebase Orientation...</b></div>
+<div class="pT10"><b>Survloop Codebase Orientation...</b></div>
 <p><a href="https://survloop.org/package-files-folders-classes" class="btn btn-block taL btn-primary" target="_blank">Package Files, Folders, and Classes</a></p>
 
 <div class="pT10"><b>More on GitHub...</b></div>
@@ -35185,10 +35185,10 @@ setTimeout("document.getElementById(\'partnerFlowGIF\').src=\'https://s113648.gr
 			'NodeParentID' => '2318',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h4>About the Codebase</h4>
-<p>The OpenPolice.org codebase is mostly PHP and extends SurvLoop, which was built for it. The 
+<p>The OpenPolice.org codebase is mostly PHP and extends Survloop, which was built for it. The 
 OpenPolice package powers OpenPolice.org to collect and share data, and 
 manage site content.</p>
-<p>SurvLoop is an open data engine mostly written PHP, with a fair 
+<p>Survloop is an open data engine mostly written PHP, with a fair 
 amount of JavaScript/jQuery for the front-end. Please share any problems
  you see that could be barriers to entry for other developers. These 
 include issues with code, development processes, community standards, 
@@ -36590,7 +36590,7 @@ $ echo "0" | php artisan vendor:publish --tag=laravel-notifications</pre>'
 	...
 	"psr-4": {
 		...
-		"SurvLoop\\": "vendor/rockhopsoft/survloop/src/",
+		"Survloop\\": "vendor/rockhopsoft/survloop/src/",
 		"OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
 	}
 	...
@@ -36603,14 +36603,14 @@ $ echo "0" | php artisan vendor:publish --tag=laravel-notifications</pre>'
 <pre>...
 \'providers\' =&gt; [
 	...
-	SurvLoop\SurvLoopServiceProvider::class,
+	Survloop\SurvloopServiceProvider::class,
 	OpenPolice\OpenPoliceServiceProvider::class,
 	...
 ],
 ...
 \'aliases\' =&gt; [
 	...
-	\'SurvLoop\' =&gt; \'RockHopSoft\SurvLoop\SurvLoopFacade\',
+	\'Survloop\' =&gt; \'RockHopSoft\Survloop\SurvloopFacade\',
 	\'OpenPolice\' =&gt; \'FlexYourRights\OpenPolice\OpenPoliceFacade\',
 	...
 ], ...
@@ -36693,10 +36693,10 @@ whole community!</p>
 			'NodeParentOrder' => '1',
 			'NodeType' => 'Instructions',
 			'NodePromptText' => '<h4>About the Codebase</h4>
-<p>The OpenPolice.org codebase is mostly PHP and extends SurvLoop, which was built for it. The 
+<p>The OpenPolice.org codebase is mostly PHP and extends Survloop, which was built for it. The 
 OpenPolice package powers OpenPolice.org to collect and share data, and 
 manage site content.</p>
-<p>SurvLoop is an open data engine mostly written PHP, with a fair 
+<p>Survloop is an open data engine mostly written PHP, with a fair 
 amount of JavaScript/jQuery for the front-end. Please share any problems
  you see that could be barriers to entry for other developers. These 
 include issues with code, development processes, community standards, 
@@ -36716,7 +36716,7 @@ etc. Thank you!<br></p>',
 			'NodeTree' => '181',
 			'NodeParentID' => '2701',
 			'NodeType' => 'Instructions',
-			'NodePromptText' => '<h2 class=\"slBlueDark\">OpenPolice Package\\'s File &amp; Folder Layout</h2>\r\n\r\n<p><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">Laravel is a Model View Controller (</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">MVC</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">)</a>,\r\n and the OpenPolice package is installed on top. SurvLoop was built for this project, and it has separate <a href=\"https://survloop.org/package-files-folders-classes\" target=\"_blank\">layout documentation</a>. Below is a general map of\r\n the OpenPolice package.</p><p>If you\\'re new to Laravel, this gets installed \r\nhere: /root-folder/vendor/flexyourrights/openpolice<br></p>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\"> flexyourrights/openpolice</a></h4>\r\n<div class=\"pL20\"><ul><li><b>composer.json</b>: Defines more packages required by OpenPolice, as well as easier references to some packages.</li><li><b>src</b>: Repository\\'s main source code.\r\n<ul><li><b>OpenPoliceServiceProvider.php</b>: OpenPoliceServiceProvider \r\nmanages which package files and folders need to be copied to elsewhere \r\nin the system. This mostly just runs after installation, and perhaps of \r\nsome other code updates.</li><li><b>routes.php</b>: All of OpenPolice\\'s custom routing happens here, passing a url request to the right Controller.</li><li><b>Controllers</b>: Most of the PHP algorithms and logic which process and manipulate data, and call Views to output the proper results.\r\n    \r\n    </li><li><b>Database</b>: Includes migration and seeder files which Laravel can use to install OpenPolice.</li><li><b>Models</b>: Copies of all the <a href=\"https://laravel.com/docs/5.8/eloquent\" target=\"_blank\">Eloquent Models</a> used by this package, generated by this same OpenPolice installation.</li><li><b>Public</b>: Contains images and photos in OpenPolice\\'s public media gallery ï¿½ to be merged into Uploads folder.<br></li><li><b>Uploads</b>: Contains images and photos in OpenPolice\\'s public media gallery.</li><li><b>Views</b>: Includes <a href=\"https://laravel.com/docs/5.8/blade\" target=\"_blank\">Blade Templates</a> which are called by controllers, and where most of OpenPolice\\'s HTML, Javascript, and CSS can be found. Templates for...\r\n    <ul><li><b>admin</b>: general OpenPolice admin interfaces\r\n        <ul><li><b>db</b>: customize database admin tools</li></ul>\r\n        </li><li><b>ajax</b>: printing results of specific jQuery/AJAX requests custom to OpenPolice</li><li><b>nodes</b>: printing hard-coded nodes which appear within OpenPolice surveys or web content pages</li><li><b>volun</b>: printing hard-coded interfaces for volunteers\\' research of police department policies<br></li></ul></li></ul></li><li><b>tests</b>: Holding place to remind me to add as much unit testing as possible and appropriate.</li></ul></div>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice-departments\" target=\"_blank\"> flexyourrights/openpolice-departments</a></h4>\r\n<div class=\"pL20\"><ul><li><b>src/OpenPoliceDeptSeeder.php</b>: database import for 18,000+ police departments and complaint policies.<br></li></ul></div><br>',
+			'NodePromptText' => '<h2 class=\"slBlueDark\">OpenPolice Package\\'s File &amp; Folder Layout</h2>\r\n\r\n<p><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">Laravel is a Model View Controller (</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">MVC</a><a href=\"https://blog.pusher.com/laravel-mvc-use/\" target=\"_blank\">)</a>,\r\n and the OpenPolice package is installed on top. Survloop was built for this project, and it has separate <a href=\"https://survloop.org/package-files-folders-classes\" target=\"_blank\">layout documentation</a>. Below is a general map of\r\n the OpenPolice package.</p><p>If you\\'re new to Laravel, this gets installed \r\nhere: /root-folder/vendor/flexyourrights/openpolice<br></p>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice\" target=\"_blank\"> flexyourrights/openpolice</a></h4>\r\n<div class=\"pL20\"><ul><li><b>composer.json</b>: Defines more packages required by OpenPolice, as well as easier references to some packages.</li><li><b>src</b>: Repository\\'s main source code.\r\n<ul><li><b>OpenPoliceServiceProvider.php</b>: OpenPoliceServiceProvider \r\nmanages which package files and folders need to be copied to elsewhere \r\nin the system. This mostly just runs after installation, and perhaps of \r\nsome other code updates.</li><li><b>routes.php</b>: All of OpenPolice\\'s custom routing happens here, passing a url request to the right Controller.</li><li><b>Controllers</b>: Most of the PHP algorithms and logic which process and manipulate data, and call Views to output the proper results.\r\n    \r\n    </li><li><b>Database</b>: Includes migration and seeder files which Laravel can use to install OpenPolice.</li><li><b>Models</b>: Copies of all the <a href=\"https://laravel.com/docs/5.8/eloquent\" target=\"_blank\">Eloquent Models</a> used by this package, generated by this same OpenPolice installation.</li><li><b>Public</b>: Contains images and photos in OpenPolice\\'s public media gallery ï¿½ to be merged into Uploads folder.<br></li><li><b>Uploads</b>: Contains images and photos in OpenPolice\\'s public media gallery.</li><li><b>Views</b>: Includes <a href=\"https://laravel.com/docs/5.8/blade\" target=\"_blank\">Blade Templates</a> which are called by controllers, and where most of OpenPolice\\'s HTML, Javascript, and CSS can be found. Templates for...\r\n    <ul><li><b>admin</b>: general OpenPolice admin interfaces\r\n        <ul><li><b>db</b>: customize database admin tools</li></ul>\r\n        </li><li><b>ajax</b>: printing results of specific jQuery/AJAX requests custom to OpenPolice</li><li><b>nodes</b>: printing hard-coded nodes which appear within OpenPolice surveys or web content pages</li><li><b>volun</b>: printing hard-coded interfaces for volunteers\\' research of police department policies<br></li></ul></li></ul></li><li><b>tests</b>: Holding place to remind me to add as much unit testing as possible and appropriate.</li></ul></div>\r\n<h4><a href=\"https://github.com/flexyourrights/openpolice-departments\" target=\"_blank\"> flexyourrights/openpolice-departments</a></h4>\r\n<div class=\"pL20\"><ul><li><b>src/OpenPoliceDeptSeeder.php</b>: database import for 18,000+ police departments and complaint policies.<br></li></ul></div><br>',
 			'NodePromptAfter' => '<style> #treeWrap2699 { margin-top: 30px; } </style>'
 		]);
 		DB::table('SL_Node')->insert([
@@ -36795,9 +36795,9 @@ don\'t need to load in some thick trunks.</p>
                                                                             <ul><li>extends OpenPolicePeople
                                                                                 <ul><li>extends OpenPoliceUtils
                                                                                     <ul><li>instantiates DepartmentScores</li><li>extends OpenPoliceVars
-                                                                                        <ul><li>extends SurvLoop\Controllers\Tree\TreeSurvForm
+                                                                                        <ul><li>extends Survloop\Controllers\Tree\TreeSurvForm
                                                                                             <ul><li>instantiates OpenPoliceSearcher
-                                                                                                <ul><li>extends SurvLoop\Controllers\Searcher
+                                                                                                <ul><li>extends Survloop\Controllers\Searcher
                                                                                                 </li></ul>
                                                                                             </li></ul>
                                                                                         </li></ul>
@@ -36824,12 +36824,12 @@ don\'t need to load in some thick trunks.</p>
     </li></ul>
 </div>
 <hr>
-<p><b class="slBlueDark">OpenPoliceAdmin</b> provides some additional customizations to SurvLoop defaults when users are logged in.</p>
+<p><b class="slBlueDark">OpenPoliceAdmin</b> provides some additional customizations to Survloop defaults when users are logged in.</p>
 <div class="pL20">
     <ul><li>extends OpenInitExtras
-        <ul><li>extends SurvLoop\Controllers\Admin\AdminController
+        <ul><li>extends Survloop\Controllers\Admin\AdminController
             <ul><li>instantiates OpenPoliceAdminMenu
-                <ul><li>extends SurvLoop\Controllers\Admin\AdminMenu
+                <ul><li>extends Survloop\Controllers\Admin\AdminMenu
                 </li></ul>
             </li></ul>
         </li></ul>
@@ -36848,7 +36848,7 @@ ul li, ol li, .nPrompt ul li, .nPrompt ol li { margin: 0px 0px 10px -28px; }
 			'NodePromptText' => '<hr>
 <h3 class="slBlueDark">Roadmap for Codebase<br></h3>
 <p>Current plans for improving the organization and structures of the codebase...</p>
-<div class="pL20"><ul><li>Add list of officers with complaints to department pages.</li><li>Complete MVP staff tools for managing complaints.</li><li>Require MFA for staff logins.<br></li><li>Start adding unit tests to functions and ideally whole files.</li><li>Break off any independent components from being within the OpenPolice extension of SurvLoop\'s Tree 
+<div class="pL20"><ul><li>Add list of officers with complaints to department pages.</li><li>Complete MVP staff tools for managing complaints.</li><li>Require MFA for staff logins.<br></li><li>Start adding unit tests to functions and ideally whole files.</li><li>Break off any independent components from being within the OpenPolice extension of Survloop\'s Tree 
 Trunk, which can instead instantiate side-classes when on 
 demand.</li><li>Adding comments to the remaining functions.</li></ul></div><hr>
 Updated October 25, 2019'

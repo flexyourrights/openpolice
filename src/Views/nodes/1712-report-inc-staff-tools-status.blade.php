@@ -8,19 +8,19 @@
 <input type="hidden" name="refresh" value="1">
 <input type="hidden" name="revType" value="Update">
 
-<div class="row mT15 mB10">
+<div class="row">
     <div class="col-md-8 col-sm-12">
         <div id="hidivlegitType" class="
             @if ($comStatus == 'Incomplete') disBlo @else disNon @endif ">
             <select name="revComplaintType" id="revComplaintTypeID" 
-                autocomplete="off" class="form-control form-control-lg mB10">
-                <option value="">Assign complaint type...</option>
+                autocomplete="off" class="form-control form-control-lg mB15">
+                <option value="" DISABLED >Assign complaint type...</option>
                 <option value="194" 
                     @if ($complaintRec->com_status == 194) SELECTED @endif 
                     >Incomplete</option>
                 <option value="295" @if ($complaintRec->com_type == 295 
                     && $complaintRec->com_status != 194) SELECTED @endif 
-                    >Unreviewed</option>
+                    >Unverified</option>
                 <option value="296" @if ($complaintRec->com_type == 296 
                     && $complaintRec->com_status != 194) SELECTED @endif 
                     >Complaint About Police</option>
@@ -44,8 +44,9 @@
         <div id="hidivlegitStatus" class="
             @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
             <select name="revStatus" id="revStatusID" autocomplete="off"
-                class="form-control form-control-lg mB10">
-                <option value="">Assign complaint status...</option>
+                class="form-control form-control-lg mB15">
+                <option value="" DISABLED 
+                    >Assign complaint status...</option>
                 {!! view(
                     'vendor.openpolice.nodes.1712-report-inc-status', 
                     [
@@ -58,7 +59,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-4 col-sm-12 pB20">
+    <div class="col-md-4 col-sm-12 pB15">
         <div class=" @if ($comStatus != 'Incomplete') disBlo @else disNon @endif ">
             Complaint Type:<br />
             <a class="hidivBtn" id="hidivBtnlegitType" 
@@ -71,25 +72,7 @@
     </div>
 </div>
 
-@if (!in_array($comStatus, ['Incomplete', 'New'])) 
-    <div id="progDates" class="disBlo">
-        {!! view(
-            'vendor.openpolice.nodes.1712-report-inc-tools-progress-dates', 
-            [
-                "complaint"      => $complaintRec,
-                "comDepts"       => $comDepts,
-                "oversightDates" => $oversightDates
-            ]
-        )->render() !!}
-        <p><hr></p>
-    </div>
-@endif
-
-<p><b>Notes for other evaluators</b></p>
-<textarea name="revNote" class="form-control form-control-lg" 
-    style="height: 90px;"></textarea>
-
-<div class="w100 mT20 mB20">
+<div class="w100 pT15 pB15">
     <a class="btn btn-lg btn-primary" id="stfBtn7" 
         href="javascript:;" style="color: #FFF;" 
         onMouseOver="this.style.color='#2b3493';" 
@@ -97,14 +80,35 @@
         >Save Status Update</a>
 </div>
 
+@if (!in_array($comStatus, ['Incomplete', 'New'])) 
+    <div id="progDates" class="disBlo mB15">
+    {!! view(
+        'vendor.openpolice.nodes.1712-report-inc-tools-progress-dates', 
+        [
+            "complaint"      => $complaintRec,
+            "comDepts"       => $comDepts,
+            "oversightDates" => $oversightDates
+        ]
+    )->render() !!}
+    </div>
+@else
+    <div class="pB15"></div>
+@endif
+
+<label class="w100 mB15">
+    <div class="pB15"><b>Notes for other evaluators</b></div>
+    <textarea name="revNote" class="form-control form-control-lg" 
+        style="height: 90px;"></textarea>
+</label>
+
 </form>
 
 
 @if (isset($complaintRec->com_type)
     && in_array($GLOBALS["SL"]->def->getVal('Complaint Type', $complaintRec->com_type), 
-        ['Unreviewed', 'Police Complaint', 'Not Sure'])
+        ['Unverified', 'Police Complaint', 'Not Sure'])
     && $uID == 1)
-    <div class="w100 p20"><center><div class="w50"><hr></div></center></div>
+    <div class="w100 pT30 pB15"><hr></div>
 
     <div id="docUploads" class="
         @if ($comStatus == 'Incomplete') disNon @else disBlo @endif ">
@@ -116,7 +120,7 @@
             "reportUploadFolder" => $reportUploadFolder
         ]
     )->render() !!}
-        <div class="p20"> </div>
     </div>
-
 @endif
+
+<div class="p15"> </div>

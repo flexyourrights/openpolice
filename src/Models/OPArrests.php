@@ -22,6 +22,6 @@ class OPArrests extends Model
 		'arst_charges_other', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

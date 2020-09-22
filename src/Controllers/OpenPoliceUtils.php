@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPoliceUtils is the bottom-level class extending SurvLoop
+  * OpenPoliceUtils is the bottom-level class extending Survloop
   * that performs smaller data translation, lookup functions.
   *
   * OpenPolice.org
@@ -679,24 +679,16 @@ class OpenPoliceUtils extends OpenPoliceVars
         return true;
     }
     
-    protected function printComplaintStatus($defID)
+    protected function printComplaintStatus($defID, $type = 0)
     {
-        switch ($defID) {
-            case 194: return 'Incomplete';
-            case 196: return 'New';
-            case 195: return 'Hold';
-            case 197: return 'Reviewed';
-            case 627: return 'Needs More Work';
-            case 198: return 'Pending Attorney';
-            case 199: return 'Has Attorney';
-            case 202: return 'OK to Submit to Investigative Agency';
-            case 200: return 'Submitted to Investigative Agency';
-            case 201: return 'Received by Investigative Agency';
-            case 203: return 'Declined To Investigate (Closed)';
-            case 204: return 'Investigated (Closed)';
-            case 205: return 'Closed';
+        $ret = $GLOBALS["SL"]->def->getVal('Complaint Status', $defID);
+        if ($ret == 'New' 
+            && $type > 0
+            && $type == $GLOBALS['SL']->def->getID('Complaint Type', 'Unverified')) {
+            $ret = 'Unverified';
         }
-        return $GLOBALS["SL"]->def->getVal('Complaint Status', $defID);
+        $ret = str_replace('Oversight', 'Investigative Agency', $ret);
+        return $ret;
     }
 
     protected function loadReportUploadTypes()

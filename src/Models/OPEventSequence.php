@@ -14,6 +14,6 @@ class OPEventSequence extends Model
 		'eve_type', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

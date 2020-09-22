@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPoliceAdmin extends SurvLoop's AdminController for
+  * OpenPoliceAdmin extends Survloop's AdminController for
   * pages and internal systems requiring a user login — or more.
   *
   * OpenPolice.org
@@ -33,7 +33,7 @@ use App\Models\SLEmailed;
 use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
 use OpenPolice\Controllers\OpenPolice;
-use SurvLoop\Controllers\Admin\AdminController;
+use Survloop\Controllers\Admin\AdminController;
 
 class OpenPoliceAdmin extends AdminController
 {

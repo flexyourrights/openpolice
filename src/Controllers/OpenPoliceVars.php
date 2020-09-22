@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPoliceVars is the bottom-level class extending the main SurvLoop trunk,
+  * OpenPoliceVars is the bottom-level class extending the main Survloop trunk,
   * and initializing 
   *
   * OpenPolice.org
@@ -10,7 +10,7 @@
   */
 namespace OpenPolice\Controllers;
 
-use SurvLoop\Controllers\Tree\TreeSurvForm;
+use Survloop\Controllers\Tree\TreeSurvForm;
 
 class OpenPoliceVars extends TreeSurvForm
 {

@@ -18,7 +18,7 @@ class OpenPoliceSLSeeder extends Seeder
             'DbID' => 3,
             'DbUser' => '0',
             'DbPrefix' => 'SL_',
-            'DbName' => 'SurvLoop',
+            'DbName' => 'Survloop',
             'DbDesc' => 'All The Data Are Belong',
             'DbMission' => 'Empower you to design your complex databases, collect data with an easy user experience, and create an API to share the data with the world!',
             'DbTables' => '38',
@@ -31,7 +31,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblAbbr' => 'Tweak',
             'TblName' => 'DesignTweaks',
             'TblEng' => 'Design Tweaks',
-            'TblDesc' => 'Represents one modification to the existing database and user experience designs in SurvLoop. Information stored here is important for tracking history of changes and success of A/B testing in the user experience. This is the Core Data Table of SurvLoop\'s naked installation.',
+            'TblDesc' => 'Represents one modification to the existing database and user experience designs in Survloop. Information stored here is important for tracking history of changes and success of A/B testing in the user experience. This is the Core Data Table of Survloop\'s naked installation.',
             'TblGroup' => 'Users',
             'TblOrd' => '17',
             'TblExtend' => '0',
@@ -45,7 +45,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblAbbr' => 'Db',
             'TblName' => 'Databases',
             'TblEng' => 'Databases',
-            'TblDesc' => 'Each record represents one Database being designed in SurvLoop, a collection of Tables, Fields, Definitions, and Business Rules often owned by a User. Information stored here can define core system settings.',
+            'TblDesc' => 'Each record represents one Database being designed in Survloop, a collection of Tables, Fields, Definitions, and Business Rules often owned by a User. Information stored here can define core system settings.',
             'TblGroup' => 'Databases',
             'TblExtend' => '0',
             'TblNumFields' => '8',
@@ -366,7 +366,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblAbbr' => 'User',
             'TblName' => 'Users',
             'TblEng' => 'Users',
-            'TblDesc' => 'This represents the Laravel Users table, but will not actually be implemented by SurvLoop as part of the database installation.',
+            'TblDesc' => 'This represents the Laravel Users table, but will not actually be implemented by Survloop as part of the database installation.',
             'TblGroup' => 'Users',
             'TblOrd' => '16',
             'TblExtend' => '0',
@@ -378,7 +378,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblAbbr' => 'Email',
             'TblName' => 'Emails',
             'TblEng' => 'Email Templates',
-            'TblDesc' => 'Each record represents one Email Template which can be used throughout SurvLoop.',
+            'TblDesc' => 'Each record represents one Email Template which can be used throughout Survloop.',
             'TblGroup' => 'Users',
             'TblOrd' => '31',
             'TblExtend' => '0',
@@ -391,7 +391,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TblAbbr' => 'Img',
             'TblName' => 'Images',
             'TblEng' => 'Gallery Images',
-            'TblDesc' => 'Each record represents one item in the Media Galleries managed by SurvLoop.',
+            'TblDesc' => 'Each record represents one item in the Media Galleries managed by Survloop.',
             'TblGroup' => 'Trees',
             'TblOrd' => '16',
             'TblExtend' => '0',
@@ -1433,7 +1433,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldSpecSource' => '0',
             'FldName' => 'KeyType',
             'FldEng' => 'Key Type',
-            'FldDesc' => 'Indicates whether or not this Field is some kind of Key in its parent Database Table, including Foreign Keys, Primary Keys, or Alternate Keys. By default, all SurvLoop Tables will automatically generate a Unique, Primary Key if no such Field is specified by the Database Designer. (* Multiple key types are currently stored as comma separated strings, but this should probably be some cleaner method. *)',
+            'FldDesc' => 'Indicates whether or not this Field is some kind of Key in its parent Database Table, including Foreign Keys, Primary Keys, or Alternate Keys. By default, all Survloop Tables will automatically generate a Unique, Primary Key if no such Field is specified by the Database Designer. (* Multiple key types are currently stored as comma separated strings, but this should probably be some cleaner method. *)',
             'FldNotes' => 'Designates this field\'s role within a table. (Hernandez p.292)',
             'FldForeignMin' => 'N',
             'FldForeignMax' => 'N',
@@ -1706,7 +1706,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldName' => 'Opts',
             'FldEng' => 'Field Options',
             'FldDesc' => 'Indicates the multiple of various prime numbers which mark other specific qualities of this Field.',
-            'FldNotes' => '%3 = Field Is Auto-Managed by SurvLoop; 
+            'FldNotes' => '%3 = Field Is Auto-Managed by Survloop; 
     %1 = XML Public Data; %7 = XML Private Data; %11 = XML Sensitive Data; %13 = XML Internal Use Data; ',
             'FldForeignMin' => 'N',
             'FldForeignMax' => 'N',
@@ -1733,7 +1733,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldForeignMax' => 'N',
             'FldForeign2Min' => 'N',
             'FldForeign2Max' => 'N',
-            'FldValues' => 'Def::SurvLoop Definition Types',
+            'FldValues' => 'Def::Survloop Definition Types',
             'FldDefault' => 'Value Ranges',
             'FldDataLength' => '20',
             'FldCharSupport' => ',Letters,Numbers,Keyboard,',
@@ -1917,7 +1917,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldSpecSource' => '0',
             'FldName' => 'IsAppOrient',
             'FldEng' => 'Is Implemented In Application',
-            'FldDesc' => 'Indicates whether or not this Business Rule can be directly implemented within the logical design of the database (Database-Oriented). Application-Oriented Rules will have to be implemented with custom coding, outside the scope of SurvLoop\'s automation.',
+            'FldDesc' => 'Indicates whether or not this Business Rule can be directly implemented within the logical design of the database (Database-Oriented). Application-Oriented Rules will have to be implemented with custom coding, outside the scope of Survloop\'s automation.',
             'FldNotes' => 'Database-Oriented: impose constraints that you can establish within the logical design of the database; Application-Oriented: impose constraints that you cannot establish within the logical design of the database. (Hernandez p.397)',
             'FldForeignMin' => 'N',
             'FldForeignMax' => 'N',
@@ -2159,7 +2159,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldSpecSource' => '0',
             'FldName' => 'Type',
             'FldEng' => 'Tree Type',
-            'FldDesc' => 'Indicates whether this Tree (collection of Nodes) indeed maps out a User Experience, or if it provides a map of the Database Design for the creating XML documents automatically-generated by SurvLoop.',
+            'FldDesc' => 'Indicates whether this Tree (collection of Nodes) indeed maps out a User Experience, or if it provides a map of the Database Design for the creating XML documents automatically-generated by Survloop.',
             'FldForeignMin' => 'N',
             'FldForeignMax' => 'N',
             'FldForeign2Min' => 'N',
@@ -6164,7 +6164,7 @@ class OpenPoliceSLSeeder extends Seeder
             'FldName' => 'Opts',
             'FldEng' => 'Tree Options',
             'FldDesc' => 'Indicates the multiple of various prime numbers which mark specific other qualities of this Node.',
-            'FldNotes' => '%3 Admin-Only; %5 Tree That Is One Big SurvLoop; %7 Area Home Page (for Public, Admin, or Volun); %11 Record Edits Not Allowed (except by Admins); %13 Report for Survey (linked and shares core table); %17 Volunteers Access (& Admin); %19 Contact Form (Auto Page); %23 Page Is Skinny; %29 Page Not [Yet] Simple Enough To Be Cached; %31 Search Bar Results Page (for Public, Admin, or Volun); %37 Survey Navigation Menu Bottom; %41 Partners Member Access; %43 Staff Access; %47 Uses Public ID#; %53 Has Page Form; %59 Survey Navigation Menu Top; %61 Survey Progress Line',
+            'FldNotes' => '%3 Admin-Only; %5 Tree That Is One Big Survloop; %7 Area Home Page (for Public, Admin, or Volun); %11 Record Edits Not Allowed (except by Admins); %13 Report for Survey (linked and shares core table); %17 Volunteers Access (& Admin); %19 Contact Form (Auto Page); %23 Page Is Skinny; %29 Page Not [Yet] Simple Enough To Be Cached; %31 Search Bar Results Page (for Public, Admin, or Volun); %37 Survey Navigation Menu Bottom; %41 Partners Member Access; %43 Staff Access; %47 Uses Public ID#; %53 Has Page Form; %59 Survey Navigation Menu Top; %61 Survey Progress Line',
             'FldForeignMin' => 'N',
             'FldForeignMax' => 'N',
             'FldForeign2Min' => 'N',
@@ -6183,14 +6183,14 @@ class OpenPoliceSLSeeder extends Seeder
     DB::table('SL_Definitions')->insert([
             'DefID' => 35,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefValue' => 'New Database',
-            'DefDescription' => 'This is part of the SurvLoop installation process, where a user creates a new Database and a primary/default Experience to go with it.'
+            'DefDescription' => 'This is part of the Survloop installation process, where a user creates a new Database and a primary/default Experience to go with it.'
         ]);
         DB::table('SL_Definitions')->insert([
             'DefID' => 36,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '5',
             'DefValue' => 'New Experience',
             'DefDescription' => 'Create a new, secondary Experience for an existing Database.'
@@ -6198,7 +6198,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 37,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '3',
             'DefValue' => 'Add a Data Field',
             'DefDescription' => 'Create a new Field in the Database, without adding it as an Experience Node yet.'
@@ -6206,7 +6206,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 38,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '7',
             'DefValue' => 'New Experience Question',
             'DefDescription' => 'Create a new Question Node in a User Experience. This might include a simplified version of adding a new Database Field.'
@@ -6214,7 +6214,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 39,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '1',
             'DefValue' => 'Add a Data Table',
             'DefDescription' => 'Create a new Database Table to later fill with Fields.'
@@ -6222,7 +6222,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 40,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '2',
             'DefValue' => 'Edit Database Table',
             'DefDescription' => 'Edit the basic properties of a Database Table.'
@@ -6230,7 +6230,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 41,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '4',
             'DefValue' => 'Edit Database Field',
             'DefDescription' => 'Edit the basic or thorough properties of a Database Field.'
@@ -6238,7 +6238,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 42,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '6',
             'DefValue' => 'Edit Experience',
             'DefDescription' => 'Edit the basic properties of a User Experience.'
@@ -6246,7 +6246,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 43,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Design Tweak Types',
+            'DefSubset' => 'Survloop Design Tweak Types',
             'DefOrder' => '8',
             'DefValue' => 'Edit Experience Question',
             'DefDescription' => 'Edit the basic properties of a Experience Question Node.'
@@ -6254,14 +6254,14 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 44,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefValue' => 'Value Ranges',
             'DefDescription' => 'Each definition in a set of Value Ranges represents one response a user can choose when responding to some question/prompt.'
         ]);
         DB::table('SL_Definitions')->insert([
             'DefID' => 45,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '1',
             'DefValue' => 'System Settings',
             'DefDescription' => 'Each definition for System Settings represents one system-wide specification.'
@@ -6269,7 +6269,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 46,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '2',
             'DefValue' => 'Style Settings',
             'DefDescription' => 'Each definition for Style Settings represents one color or other branding element needed system-wide.'
@@ -6277,7 +6277,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 47,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '3',
             'DefValue' => 'Instructions',
             'DefDescription' => 'Each definition which is an Instruction represents one blurb, used somewhere in the system, which can be edited by system administrators.'
@@ -6285,7 +6285,7 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 48,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '4',
             'DefValue' => 'Diagrams',
             'DefDescription' => 'Each definition which is a Diagram represents one document uploaded by system administrators.'
@@ -6293,15 +6293,15 @@ class OpenPoliceSLSeeder extends Seeder
         DB::table('SL_Definitions')->insert([
             'DefID' => 49,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '5',
             'DefValue' => 'Custom Settings',
-            'DefDescription' => 'Each definition for Custom Settings represents one system-wide specification, which is established and defined by a client-specific installation of SurvLoop.'
+            'DefDescription' => 'Each definition for Custom Settings represents one system-wide specification, which is established and defined by a client-specific installation of Survloop.'
         ]);
         DB::table('SL_Definitions')->insert([
             'DefID' => 50,
             'DefDatabase' => '3',
-            'DefSubset' => 'SurvLoop Definition Types',
+            'DefSubset' => 'Survloop Definition Types',
             'DefOrder' => '6',
             'DefValue' => 'User Roles',
             'DefDescription' => 'Each definition for User Roles represents one system-wide type of user permissions.'
@@ -6313,8 +6313,8 @@ class OpenPoliceSLSeeder extends Seeder
             'TreeDatabase' => '3',
             'TreeUser' => '0',
             'TreeType' => 'Survey',
-            'TreeName' => 'SurvLoop Database Designer',
-            'TreeDesc' => 'SurvLoop users can add a new field to the database and/or user experience.',
+            'TreeName' => 'Survloop Database Designer',
+            'TreeDesc' => 'Survloop users can add a new field to the database and/or user experience.',
             'TreeSlug' => 'survloop-design',
             'TreeRoot' => '7',
             'TreeFirstPage' => '8',
@@ -6326,7 +6326,7 @@ class OpenPoliceSLSeeder extends Seeder
             'TreeDatabase' => '3',
             'TreeUser' => '0',
             'TreeType' => 'Survey XML',
-            'TreeName' => 'SurvLoop Database Designer',
+            'TreeName' => 'Survloop Database Designer',
             'TreeSlug' => 'survloop-design',
             'TreeRoot' => '1171',
             'TreeCoreTable' => '3'

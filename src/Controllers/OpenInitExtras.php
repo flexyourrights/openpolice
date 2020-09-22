@@ -26,7 +26,7 @@ class OpenInitExtras extends OpenPartners
 {
     /**
      * Initializing a bunch of things which are not [yet] automatically 
-     * determined by the SurvLoop, nor the OpenPolice.org instance.
+     * determined by the Survloop, nor the OpenPolice.org instance.
      *
      * @param  Illuminate\Http\Request  $request
      * @return boolean

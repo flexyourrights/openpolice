@@ -2,7 +2,6 @@
 
 
 <div class="nodeAnchor"><a name="emailer"></a></div>
-<div class="p5"> </div>
 
 <form name="complaintEmailForm" id="complaintEmailFormID">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">

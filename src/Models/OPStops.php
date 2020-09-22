@@ -36,6 +36,6 @@ class OPStops extends Model
 		'stop_sobriety_other_describe', 
     ];
     
-    // END SurvLoop auto-generated portion of Model
+    // END Survloop auto-generated portion of Model
     
 }

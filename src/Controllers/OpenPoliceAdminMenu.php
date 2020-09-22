@@ -10,7 +10,7 @@
   */
 namespace OpenPolice\Controllers;
 
-use SurvLoop\Controllers\Admin\AdminMenu;
+use Survloop\Controllers\Admin\AdminMenu;
 
 class OpenPoliceAdminMenu extends AdminMenu
 {
