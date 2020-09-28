@@ -1,8 +1,8 @@
 <?php
-namespace OpenPolice\Tests;
+namespace FlexYourRights\OpenPolice\Tests;
 
 use PHPUnit\Framework\TestCase;
-use OpenPolice\Controllers\OpenPolice;
+use FlexYourRights\OpenPolice\Controllers\OpenPolice;
 
 class OpenPoliceTest extends TestCase
 {

@@ -8,10 +8,10 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.4
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use App\Models\OPOversight;
-use OpenPolice\Controllers\OpenReportTools;
+use FlexYourRights\OpenPolice\Controllers\OpenReportTools;
 
 class OpenReportToolsOversight extends OpenReportTools
 {

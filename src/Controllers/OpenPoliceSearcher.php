@@ -7,11 +7,11 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use App\Models\OPComplaints;
 use App\Models\OPLinksComplaintDept;
-use Survloop\Controllers\Searcher;
+use RockHopSoft\Survloop\Controllers\Searcher;
 
 class OpenPoliceSearcher extends Searcher
 {

@@ -8,14 +8,14 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.15
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
 use App\Models\OPPartners;
 use App\Models\SLEmailed;
 use App\Models\OPPartnerCapac;
-use OpenPolice\Controllers\OpenSessDataOverride;
+use FlexYourRights\OpenPolice\Controllers\OpenSessDataOverride;
 
 class OpenComplaintConditions extends OpenSessDataOverride
 {

@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use Auth;
 use App\Models\User;
@@ -21,7 +21,7 @@ use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
 use App\Models\OPzVolunUserInfo;
-use OpenPolice\Controllers\OpenPoliceVars;
+use FlexYourRights\OpenPolice\Controllers\OpenPoliceVars;
 
 class OpenPoliceUtils extends OpenPoliceVars
 {

@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
@@ -17,8 +17,8 @@ use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPPartnerCaseTypes;
 use App\Models\OPPartnerCapac;
-use OpenPolice\Controllers\VolunteerLeaderboard;
-use OpenPolice\Controllers\OpenVolunteers;
+use FlexYourRights\OpenPolice\Controllers\VolunteerLeaderboard;
+use FlexYourRights\OpenPolice\Controllers\OpenVolunteers;
 
 class OpenPartners extends OpenVolunteers
 {

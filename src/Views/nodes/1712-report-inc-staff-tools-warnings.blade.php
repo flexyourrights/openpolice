@@ -51,6 +51,7 @@
                     @else
                         #29CD42;
                     @endif
+{!! $complaint->com_attorney_oked !!}
                 @elseif (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
                     && isset($complaintRec->com_all_charges_resolved)
@@ -65,6 +66,7 @@
             <?php /* <img src="/survloop/uploads/spacer.gif" alt="" border="0"> */ ?>
                 </div>
             </div>
+
         </div>
         <div class="pL20" style="min-height: 30px;">
             @if ((isset($complaintRec->com_attorney_has) 

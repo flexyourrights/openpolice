@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.4
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use App\Models\User;
 use App\Models\SLEmails;
@@ -19,7 +19,7 @@ use App\Models\OPOversight;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPzComplaintReviews;
-use OpenPolice\Controllers\OpenReportToolsOversight;
+use FlexYourRights\OpenPolice\Controllers\OpenReportToolsOversight;
 
 class OpenReportToolsAdmin extends OpenReportToolsOversight
 {

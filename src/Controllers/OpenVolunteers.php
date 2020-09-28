@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
@@ -18,8 +18,8 @@ use App\Models\OPDepartments;
 use App\Models\OPzEditDepartments;
 use App\Models\SLSess;
 use App\Models\SLSessPage;
-use OpenPolice\Controllers\VolunteerLeaderboard;
-use OpenPolice\Controllers\OpenDevelopment;
+use FlexYourRights\OpenPolice\Controllers\VolunteerLeaderboard;
+use FlexYourRights\OpenPolice\Controllers\OpenDevelopment;
 
 class OpenVolunteers extends OpenDevelopment
 {

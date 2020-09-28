@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -18,7 +18,7 @@ use App\Models\OPComplaints;
 use App\Models\OPDepartments;
 use App\Models\SLSearchRecDump;
 use App\Models\SLZips;
-use OpenPolice\Controllers\OpenComplaintSaves;
+use FlexYourRights\OpenPolice\Controllers\OpenComplaintSaves;
 
 class OpenAjax extends OpenComplaintSaves
 {

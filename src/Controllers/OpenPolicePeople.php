@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.5
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use App\Models\OPComplaints;
@@ -19,7 +19,7 @@ use App\Models\OPLinksOfficerDept;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
 use App\Models\OPLinksCivilianEvents;
-use OpenPolice\Controllers\OpenPoliceUtils;
+use FlexYourRights\OpenPolice\Controllers\OpenPoliceUtils;
 
 class OpenPolicePeople extends OpenPoliceUtils
 {

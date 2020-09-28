@@ -8,9 +8,9 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.25
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
-use Survloop\Controllers\Tree\TreeSurvForm;
+use RockHopSoft\Survloop\Controllers\Tree\TreeSurvForm;
 
 class OpenPoliceVars extends TreeSurvForm
 {

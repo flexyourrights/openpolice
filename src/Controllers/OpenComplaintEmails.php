@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -16,7 +16,7 @@ use App\Models\OPAllegSilver;
 use App\Models\OPDepartments;
 use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
-use OpenPolice\Controllers\OpenPoliceEvents;
+use FlexYourRights\OpenPolice\Controllers\OpenPoliceEvents;
 
 class OpenComplaintEmails extends OpenPoliceEvents
 {

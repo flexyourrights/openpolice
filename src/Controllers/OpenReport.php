@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -18,7 +18,7 @@ use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPzVolunTmp;
 use App\Models\OPOversight;
-use OpenPolice\Controllers\OpenDeptStats;
+use FlexYourRights\OpenPolice\Controllers\OpenDeptStats;
 
 class OpenReport extends OpenDeptStats
 {

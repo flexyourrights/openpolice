@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.1
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -32,8 +32,8 @@ use App\Models\SLEmails;
 use App\Models\SLEmailed;
 use App\Models\OPzComplaintEmailed;
 use App\Models\OPzComplaintReviews;
-use OpenPolice\Controllers\OpenPolice;
-use Survloop\Controllers\Admin\AdminController;
+use FlexYourRights\OpenPolice\Controllers\OpenPolice;
+use RockHopSoft\Survloop\Controllers\Admin\AdminController;
 
 class OpenPoliceAdmin extends AdminController
 {

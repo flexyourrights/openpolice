@@ -1,5 +1,5 @@
 <?php
-namespace OpenPolice;
+namespace FlexYourRights\OpenPolice;
 
 use Illuminate\Support\ServiceProvider;
 

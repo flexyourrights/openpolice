@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.18
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -22,11 +22,11 @@ use App\Models\OPOversight;
 use App\Models\OPDeptStats;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPLinksComplimentOversight;
-use Survloop\Controllers\PageLoadUtils;
-use Survloop\Controllers\Globals\ObjSort;
-use OpenPolice\Controllers\OpenPolice;
-use OpenPolice\Controllers\DepartmentScores;
-use OpenPolice\Controllers\OpenOfficers;
+use RockHopSoft\Survloop\Controllers\PageLoadUtils;
+use RockHopSoft\Survloop\Controllers\Globals\ObjSort;
+use FlexYourRights\OpenPolice\Controllers\OpenPolice;
+use FlexYourRights\OpenPolice\Controllers\DepartmentScores;
+use FlexYourRights\OpenPolice\Controllers\OpenOfficers;
 
 class OpenDeptStats extends OpenOfficers
 {

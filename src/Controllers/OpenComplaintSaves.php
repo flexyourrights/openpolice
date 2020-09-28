@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
@@ -19,7 +19,7 @@ use App\Models\OPLinksCivilianEvents;
 use App\Models\OPLinksCivilianForce;
 use App\Models\OPLinksCivilianVehicles;
 use App\Models\OPLinksOfficerVehicles;
-use OpenPolice\Controllers\OpenComplaintConditions;
+use FlexYourRights\OpenPolice\Controllers\OpenComplaintConditions;
 
 class OpenComplaintSaves extends OpenComplaintConditions
 {

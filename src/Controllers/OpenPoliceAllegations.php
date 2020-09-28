@@ -8,9 +8,9 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.5
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
-use OpenPolice\Controllers\OpenPolicePeople;
+use FlexYourRights\OpenPolice\Controllers\OpenPolicePeople;
 
 class OpenPoliceAllegations extends OpenPolicePeople
 {

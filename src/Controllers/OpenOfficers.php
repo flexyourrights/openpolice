@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.5
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use App\Models\OPOfficersVerified;
@@ -20,7 +20,7 @@ use App\Models\OPOversight;
 use App\Models\OPLinksComplaintOversight;
 use App\Models\OPLinksComplimentOversight;
 use App\Models\OPLinksOfficerDept;
-use OpenPolice\Controllers\OpenDepts;
+use FlexYourRights\OpenPolice\Controllers\OpenDepts;
 
 class OpenOfficers extends OpenDepts
 {

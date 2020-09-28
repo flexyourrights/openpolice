@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.5
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use App\Models\OPEventSequence;
@@ -19,7 +19,7 @@ use App\Models\OPForce;
 use App\Models\OPLinksOfficerEvents;
 use App\Models\OPLinksCivilianEvents;
 use App\Models\OPPersonContact;
-use OpenPolice\Controllers\OpenPoliceAllegations;
+use FlexYourRights\OpenPolice\Controllers\OpenPoliceAllegations;
 
 class OpenPoliceEvents extends OpenPoliceAllegations
 {

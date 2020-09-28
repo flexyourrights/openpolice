@@ -9,13 +9,13 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.17
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Survloop\Controllers\Globals\Globals;
-use Survloop\Controllers\Tree\TreeCustomAPI;
+use RockHopSoft\Survloop\Controllers\Globals\Globals;
+use RockHopSoft\Survloop\Controllers\Tree\TreeCustomAPI;
 
 class OpenPolicePCIF extends OpenListing
 {

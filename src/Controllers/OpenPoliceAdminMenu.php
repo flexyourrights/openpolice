@@ -8,9 +8,9 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.1
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
-use Survloop\Controllers\Admin\AdminMenu;
+use RockHopSoft\Survloop\Controllers\Admin\AdminMenu;
 
 class OpenPoliceAdminMenu extends AdminMenu
 {

@@ -1,7 +1,7 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-email.blade.php -->
 
 <div class="disBlo pB30">
-    Select which email template you want to send:<br />
+    Select Email Template<br />
     <select name="email" id="emailID" autocomplete="off" 
         class="form-control form-control-lg">
         <option value="" >No email right now</option>
@@ -30,7 +30,7 @@
     <div id="emailChooseDept" 
         class="@if ($emailID == 12) disBlo @else disNon @endif ">
         @if (sizeof($comDepts) > 0)
-            <div class="pT15 pB10">Select the investigative agency:</div>
+            <div class="pT15 pB10">Select Investigative Agency</div>
             <select name="d" id="emailDeptID" autocomplete="off" 
                 class="form-control form-control-lg">
             @forelse ($comDepts as $cnt => $dept)

@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Cache;
@@ -20,7 +20,7 @@ use App\Models\OPAllegations;
 use App\Models\SLNode;
 use App\Models\OPTesterBeta;
 use App\Models\User;
-use OpenPolice\Controllers\OpenListFilters;
+use FlexYourRights\OpenPolice\Controllers\OpenListFilters;
 
 class OpenListing extends OpenListFilters
 {

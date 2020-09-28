@@ -8,14 +8,14 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.18
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use App\Models\OPComplaints;
 use App\Models\OPPhysicalDescRace;
 use App\Models\SLNode;
 use App\Models\SLSearchRecDump;
-use OpenPolice\Controllers\OpenAjax;
+use FlexYourRights\OpenPolice\Controllers\OpenAjax;
 
 class OpenListFilters extends OpenAjax
 {

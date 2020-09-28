@@ -25,22 +25,22 @@
         }
     ],
     "require": {
-        "rockhopsoft/survloop": "0.2.*",
+        "rockhopsoft/survloop": "^0.2.28",
         "flexyourrights/openpolice-departments": "^0.1.2",
         "flexyourrights/openpolice-website": "^0.1.1"
     },
     "autoload": {
         "psr-4": {
-            "OpenPolice\\": "src/"
+            "FlexYourRights\\OpenPolice\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "OpenPolice\\OpenPoliceServiceProvider"
+                "FlexYourRights\\OpenPolice\\OpenPoliceServiceProvider"
             ],
             "aliases": {
-                "OpenPolice": "OpenPolice\\OpenPoliceFacade"
+                "OpenPolice": "FlexYourRights\\OpenPolice\\OpenPoliceFacade"
             }
         }
     }

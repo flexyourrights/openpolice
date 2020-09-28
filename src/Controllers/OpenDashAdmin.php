@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use App\Models\User;
@@ -20,7 +20,7 @@ use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPzVolunStatDays;
 use App\Models\OPTesterBeta;
-use Survloop\Controllers\Stats\SurvTrends;
+use RockHopSoft\Survloop\Controllers\Stats\SurvTrends;
 
 // temp...
 use App\Models\OPEventSequence;

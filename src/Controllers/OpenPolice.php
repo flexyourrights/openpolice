@@ -8,15 +8,15 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since  v0.0.1
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OPPersonContact;
 use App\Models\OPPhysicalDesc;
-use OpenPolice\Controllers\OpenDashAdmin;
-use OpenPolice\Controllers\OpenInitExtras;
+use FlexYourRights\OpenPolice\Controllers\OpenDashAdmin;
+use FlexYourRights\OpenPolice\Controllers\OpenInitExtras;
 
 class OpenPolice extends OpenInitExtras
 {

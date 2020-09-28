@@ -8,7 +8,7 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.15
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
 use App\Models\OPTesterBeta;
 use App\Models\OPzVolunUserInfo;
-use OpenPolice\Controllers\OpenPartners;
+use FlexYourRights\OpenPolice\Controllers\OpenPartners;
 
 class OpenInitExtras extends OpenPartners
 {

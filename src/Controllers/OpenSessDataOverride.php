@@ -9,11 +9,11 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.15
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use Auth;
 use App\Models\SLNodeSavesPage;
-use OpenPolice\Controllers\OpenComplaintPrints;
+use FlexYourRights\OpenPolice\Controllers\OpenComplaintPrints;
 
 class OpenSessDataOverride extends OpenComplaintPrints
 {

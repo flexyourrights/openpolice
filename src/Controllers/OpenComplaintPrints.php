@@ -8,13 +8,13 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use DB;
 use Auth;
 use App\Models\OPAllegations;
 use App\Models\OPAllegSilver;
-use OpenPolice\Controllers\OpenComplaintEmails;
+use FlexYourRights\OpenPolice\Controllers\OpenComplaintEmails;
 
 class OpenComplaintPrints extends OpenComplaintEmails
 {

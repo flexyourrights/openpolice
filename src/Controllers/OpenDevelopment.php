@@ -8,9 +8,9 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.2.1
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
-use OpenPolice\Controllers\OpenReportToolsAdmin;
+use FlexYourRights\OpenPolice\Controllers\OpenReportToolsAdmin;
 
 class OpenDevelopment extends OpenReportToolsAdmin
 {

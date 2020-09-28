@@ -8,12 +8,12 @@
   * @author  Morgan Lesko <rockhoppers@runbox.com>
   * @since v0.0.12
   */
-namespace OpenPolice\Controllers;
+namespace FlexYourRights\OpenPolice\Controllers;
 
 use App\Models\OPDepartments;
 use App\Models\OPzComplaintReviews;
-use Survloop\Controllers\Stats\SessAnalysis;
-use OpenPolice\Controllers\OpenReport;
+use RockHopSoft\Survloop\Controllers\Stats\SessAnalysis;
+use FlexYourRights\OpenPolice\Controllers\OpenReport;
 
 class OpenReportTools extends OpenReport
 {
