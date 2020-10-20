@@ -8,8 +8,8 @@ class OpenPoliceServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->app->bind('survlooporg', function($app) {
-            return new SurvloopOrgFacade();
+        $this->app->bind('openpolice', function($app) {
+            return new OpenPoliceFacade();
         });
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         //$this->loadViewsFrom(__DIR__ . '/Views', 'openpolice');
@@ -20,9 +20,6 @@ class OpenPoliceServiceProvider extends ServiceProvider
             __DIR__.'/Uploads' => base_path('storage/app/up/openpolice'),
             __DIR__.'/Models'  => base_path('app/Models'),
 
-            //base_path('/vendor/flexyourrights/openpolice-website/src')
-            //    => base_path('storage/app/up/openpolice-website'),
-
             __DIR__.'/Database/' . $dbMig . '.php'
                 => base_path('database/migrations/' . $dbMig . '.php'),
             __DIR__.'/Database/OpenPoliceSeeder.php'
@@ -30,7 +27,10 @@ class OpenPoliceServiceProvider extends ServiceProvider
             __DIR__.'/Database/OpenPoliceSLSeeder.php'
                 => base_path('database/seeders/OpenPoliceSLSeeder.php'),
             base_path('/vendor/flexyourrights/openpolice-departments/src/OpenPoliceDeptSeeder.php')
-                => base_path('database/seeders/OpenPoliceDeptSeeder.php')
+                => base_path('database/seeders/OpenPoliceDeptSeeder.php'),
+
+            base_path('/vendor/flexyourrights/openpolice-website/src')
+                => base_path('storage/app/up/openpolice')
         ]);
     }
 }
