@@ -5,24 +5,15 @@ use Illuminate\Support\ServiceProvider;
 
 class OpenPoliceServiceProvider extends ServiceProvider
 {
-//    public function register()
-//    {
-        /*
-        * Register the service provider for the dependency.
-        */
-//        $this->app->register('OpenPolice\OpenPoliceServiceProvider');
-        /*
-        * Create aliases for the dependency.
-        */
-//        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-//        $loader->alias('OpenPolice', 'FlexYourRights\OpenPolice\OpenPoliceFacade');
-//    }
 
     public function boot()
     {
-        //require __DIR__ . '/routes.php';
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
-        $this->loadViewsFrom(__DIR__.'/Views', 'openpolice');
+        $this->app->bind('survlooporg', function($app) {
+            return new SurvloopOrgFacade();
+        });
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        //$this->loadViewsFrom(__DIR__ . '/Views', 'openpolice');
+        $dbMig = '2019_11_01_000000_create_openpolice_tables';
         $this->publishes([
             __DIR__.'/Views'   => base_path('resources/views/vendor/openpolice'),
             __DIR__.'/Public'  => base_path('public/openpolice'),
@@ -32,8 +23,8 @@ class OpenPoliceServiceProvider extends ServiceProvider
             //base_path('/vendor/flexyourrights/openpolice-website/src')
             //    => base_path('storage/app/up/openpolice-website'),
 
-            __DIR__.'/Database/2019_11_01_000000_create_openpolice_tables.php'
-                => base_path('database/migrations/2019_11_01_000000_create_openpolice_tables.php'),
+            __DIR__.'/Database/' . $dbMig . '.php'
+                => base_path('database/migrations/' . $dbMig . '.php'),
             __DIR__.'/Database/OpenPoliceSeeder.php'
                 => base_path('database/seeders/OpenPoliceSeeder.php'),
             __DIR__.'/Database/OpenPoliceSLSeeder.php'
