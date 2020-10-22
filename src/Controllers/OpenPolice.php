@@ -46,6 +46,8 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2341) {
             return $this->printAllegAudit();
         } elseif (in_array($nID, [270, 973])) {
+            $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
+            $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
             return $this->printEndOfComplaintRedirect($nID);
             
         // Home Page
@@ -212,6 +214,7 @@ class OpenPolice extends OpenInitExtras
             $GLOBALS["SL"]->setFullPageLoaded(1000); 
         } elseif ($nID == 1385) {
             if ($GLOBALS["SL"]->REQ->has('refresh')) {
+                $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
                 $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
             }
             $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 

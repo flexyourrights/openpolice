@@ -131,7 +131,7 @@ $(document).ready(function(){
         document.getElementById('ajaxSearchFixDepts').innerHTML=getSpinner();
         document.getElementById("ajaxSearchFixDepts").style.display="block";
         setTimeout(function() {
-            var loadUrl = "/ajax/?policeDept="+encodeURIComponent(document.getElementById("fixDeptsSearchInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateSearchID").value)+"&loadNewFixDept=1";
+            var loadUrl = "/ajax/dept-search-survey?policeDept="+encodeURIComponent(document.getElementById("fixDeptsSearchInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateSearchID").value)+"&loadNewFixDept=1";
             $("#ajaxSearchFixDepts").load(loadUrl);
             return true;
         }, 800);

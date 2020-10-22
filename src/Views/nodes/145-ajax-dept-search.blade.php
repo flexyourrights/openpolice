@@ -5,7 +5,7 @@ if (document.getElementById('nFormNext')) {
 }
 function submitAjaxSearch() {
     setTimeout(function() {
-        var loadUrl = "/ajax/?policeDept="+encodeURIComponent(document.getElementById("deptNameInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateID").value)+"";
+        var loadUrl = "/ajax/dept-search-survey?policeDept="+encodeURIComponent(document.getElementById("deptNameInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateID").value)+"";
         $("#ajaxSearch").load(loadUrl);
         document.getElementById("ajaxSearch").style.display="block";
         //alert("submitAjaxSearch() " + loadUrl + "");
@@ -13,7 +13,7 @@ function submitAjaxSearch() {
     }, 10);
 }
 $(document).ready(function(){ // couldn\'t figure out how to call submitAjaxSearch() from here :-\
-    var loadUrl = "/ajax/?policeDept="+encodeURIComponent(document.getElementById("deptNameInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateID").value)+"";
+    var loadUrl = "/ajax/dept-search-survey?policeDept="+encodeURIComponent(document.getElementById("deptNameInID").value)+"&policeState="+encodeURIComponent(document.getElementById("deptStateID").value)+"";
     $("#ajaxSearch").load(loadUrl);
     document.getElementById("ajaxSearch").style.display="block";
 });

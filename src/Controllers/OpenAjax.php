@@ -24,23 +24,6 @@ class OpenAjax extends OpenComplaintSaves
 {
     /**
      * Check for ajax requests customized beyond 
-     * Survloop's default behavior.
-     *
-     * @param  Illuminate\Http\Request  $request
-     * @param  string $over
-     * @return boolean
-     */
-    public function runAjaxChecksCustom(Request $request, $over = '')
-    {
-        if ($request->has('policeDept')) {
-            echo $this->ajaxPoliceDeptSearch($request);
-            exit;
-        }
-        return false;
-    }
-    
-    /**
-     * Check for ajax requests customized beyond 
      * Survloop's default behavior, called via /ajax/{type}.
      *
      * @param  Illuminate\Http\Request  $request
@@ -53,8 +36,10 @@ class OpenAjax extends OpenComplaintSaves
             return $this->ajaxDeptKmlDesc($request);
         } elseif ($type == 'save-default-state') {
             return $this->saveVolunLocationForm($request);
+        } elseif ($type == 'dept-search-survey') { // survey
+            $this->ajaxPoliceDeptSearch($request);
         } elseif ($type == 'dept-search') { // public
-            return $this->ajaxPoliceDeptSearch($request, 'public');
+            $this->ajaxPoliceDeptSearch($request, 'public');
         } elseif ($type == 'home-complaint-previews') {
             $this->ajaxLoadHomeComplaintPreviews($request);
         } elseif ($type == 'search-complaint-previews') {
@@ -106,7 +91,8 @@ class OpenAjax extends OpenComplaintSaves
     public function ajaxPoliceDeptSearch(Request $request, $view = 'survey')
     {
         if ($view == 'survey' && trim($request->get('policeDept')) == '') {
-            return '<i>Please type part of the department\'s name to find it.</i>';
+            echo '<i>Please type part of the department\'s name to find it.</i>';
+            exit;
         }
         $GLOBALS["SL"]->loadStates();
         $loadUrl = '/ajax/dept-search';
