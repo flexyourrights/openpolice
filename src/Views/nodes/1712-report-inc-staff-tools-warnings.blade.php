@@ -51,7 +51,6 @@
                     @else
                         #29CD42;
                     @endif
-{!! $complaint->com_attorney_oked !!}
                 @elseif (isset($complaintRec->com_anyone_charged) 
                     && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
                     && isset($complaintRec->com_all_charges_resolved)
@@ -74,7 +73,12 @@
                 || (isset($complaintRec->com_status) 
                     && intVal($complaintRec->com_status) == $GLOBALS["SL"]->def->getID(
                         'Complaint Status', 'Has Attorney')))
-                Has Attorney
+                @if (!isset($complaint->com_attorney_oked) 
+                    || trim($complaint->com_attorney_oked) != 'Y')
+                    Attorney OK?
+                @else
+                    Has Attorney
+                @endif
             @elseif (isset($complaintRec->com_anyone_charged) 
                 && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
                 && isset($complaintRec->com_all_charges_resolved)
@@ -93,13 +97,15 @@
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
-                @if ($complaintRec->com_publish_user_name == 1
+                @if (isset($complaintRec->com_publish_user_name)
+                    && $complaintRec->com_publish_user_name == 1
+                    && isset($complaintRec->com_publish_officer_name)
                     && $complaintRec->com_publish_officer_name == 1)
                     #29CD42;
                 @elseif ($complaintRec->com_anon != 1)
                     @if (isset($complaintRec->com_publish_user_name)
                         && isset($complaintRec->com_publish_officer_name))
-                        #63C6FF;
+                        #416CBD;
                     @else 
                         #888;
                     @endif
@@ -111,7 +117,9 @@
             </div>
         </div>
         <div class="pL20" style="min-height: 30px;">
-            @if ($complaintRec->com_publish_user_name == 1
+            @if (isset($complaintRec->com_publish_user_name)
+                && $complaintRec->com_publish_user_name == 1
+                && isset($complaintRec->com_publish_officer_name)
                 && $complaintRec->com_publish_officer_name == 1)
                 Submit Publicly
             @elseif ($complaintRec->com_anon != 1)
@@ -119,7 +127,7 @@
                     && $complaintRec->com_publish_officer_name == 1)
                     Submit Publicly
                 @elseif ($complaintRec->com_publish_user_name == 1)
-                    Publish User's Name
+                    Publish Complainant's Name
                 @elseif ($complaintRec->com_publish_officer_name == 1)
                     Publish Officers' Names
                 @elseif (isset($complaintRec->com_publish_user_name)

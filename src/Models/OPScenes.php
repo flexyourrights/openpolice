@@ -22,6 +22,9 @@ class OPScenes extends Model
         'scn_desires_officers_other', 
         'scn_desires_depts', 
         'scn_desires_depts_other', 
+        'scn_attorney_first_name', 
+        'scn_attorney_last_name',
+        'scn_attorney_email',
     ];
     
     // END Survloop auto-generated portion of Model

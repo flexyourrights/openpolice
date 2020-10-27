@@ -91,13 +91,17 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             $this->v["complaintRec"]->com_status, 
             $this->v["complaintRec"]->com_type
         );
-        $title = '<span class="slBlueDark">' . $this->getCurrComplaintEngLabel() 
-            . ': Admin Toolkit</span><div class="mT5" style="color: #333; font-size: 16px;">'
+        $status = str_replace('Investigative Agency', 'IA', $status);
+        $title = '<span class="slBlueDark">' 
+            . $this->getCurrComplaintEngLabel() . ': Admin Toolkit</span>'
+            . '<div class="mT5" style="color: #333; font-size: 16px;">'
             . '<b>Status: ' . $status . '</b></div>';
-        $this->v["alertIco"] = '<span class="mL5 slRedDark"><b>(Next Step)</b></span>';
+        $this->v["alertIco"] = '<span class="mL5 slRedDark"><b>'
+            . '(Next Step)</b></span>';
         $this->v["updateTitle"] = ' <b>Assign Complaint Status</b>';
         if ($this->v["firstRevDone"]
-            || ($GLOBALS["SL"]->REQ->has('open') && $GLOBALS["SL"]->REQ->open == 'status')
+            || ($GLOBALS["SL"]->REQ->has('open') 
+                && $GLOBALS["SL"]->REQ->open == 'status')
             || in_array($status, ['New', 'Unverified'])) {
             $this->v["updateTitle"] .= $this->v["alertIco"];
         }
@@ -108,7 +112,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             )->render() 
             . $this->printComplaintAdminChkPdfs();
         $openToolbox = true;
-        //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
+    //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
         return '<div class="pT20 pB20">' 
             . $GLOBALS["SL"]->printAccard($title, $tools, $openToolbox)
             . '</div>';
@@ -400,7 +404,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             && !$GLOBALS["SL"]->REQ->has('d')
             && !$GLOBALS["SL"]->REQ->has('email')) {
 
-            // First check if any departments are OP-Compatible
+            // First check if any departments are OP-Friendly
             foreach ($GLOBALS["SL"]->x["depts"] as $deptID => $dept) {
                 if ($this->v["deptID"] <= 0 && $this->v["emailID"] <= 0) {
                     if (in_array($deptID, $compliant)) {

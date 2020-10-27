@@ -29,7 +29,7 @@
                 value="{{ $status->def_id }}" class="mR5 searchDeetFld fltStatus" autocomplete="off"
                 @if (in_array($status->def_id, $srchFilts['comstatus'])) CHECKED @endif 
                 > @if (!$GLOBALS["SL"]->x["isPublicList"]) - @endif
-                {{ $status->def_value }}
+                {{ $GLOBALS['CUST']->printComplaintStatusAbbr($status->def_id, 1) }}
         </label>
     @endif
 @endforeach

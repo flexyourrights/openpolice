@@ -658,7 +658,8 @@ class OpenReport extends OpenDeptStats
      */
     protected function getOffReportNameHeader($nID)
     {
-        list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('officers');
+        list($itemInd, $itemID) = $this->sessData
+            ->currSessDataPosBranchOnly('officers');
         //$offID = $this->sessData->getLatestDataBranchID();
         $offRow = $this->sessData->getRowById('officers', $itemID);
         $style = '';
@@ -667,6 +668,28 @@ class OpenReport extends OpenDeptStats
         }
         return '<h4 class="slBlueDark"' . $style . '>' 
             . $this->getOffReportName($offRow, $itemInd) . '</h4>';
+    }
+    
+    /**
+     * Print an officer's department name for reports.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function getOffReportDeptName($nID)
+    {
+        list($itemInd, $itemID) = $this->sessData
+            ->currSessDataPosBranchOnly('officers');
+        //$offID = $this->sessData->getLatestDataBranchID();
+        $offRow = $this->sessData->getRowById('officers', $itemID);
+        if (isset($offRow->off_dept_id)
+            && intVal($offRow->off_dept_id) > 0) {
+            $dept = $this->sessData->getRowById('departments', $offRow->off_dept_id);
+            if ($dept && isset($dept->dept_name) && trim($dept->dept_name) != '') {
+                return [ 'Department Name', $dept->dept_name ];
+            }
+        }
+        return [];
     }
     
     /**

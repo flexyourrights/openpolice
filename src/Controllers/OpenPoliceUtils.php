@@ -46,8 +46,8 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        return ($this->sessData->dataSets["complaints"][0]
-            ->com_award_medallion == 'Silver'); 
+        return ($this->sessData->dataSets["complaints"][0]->com_award_medallion 
+            == 'Silver'); 
     }
     
     protected function isGold()
@@ -55,8 +55,8 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        return ($this->sessData->dataSets["complaints"][0]
-            ->com_award_medallion == 'Gold');
+        return ($this->sessData->dataSets["complaints"][0]->com_award_medallion 
+            == 'Gold');
     }
 
     protected function isPublicOfficerName()
@@ -93,7 +93,8 @@ class OpenPoliceUtils extends OpenPoliceVars
 
     protected function isPublic()
     {
-        return $this->isPublicComplainantName() && $this->isPublicOfficerName();
+        return $this->isPublicComplainantName() 
+            && $this->isPublicOfficerName();
     }
     
     public function isTypeComplaint($coreRec)
@@ -102,7 +103,8 @@ class OpenPoliceUtils extends OpenPoliceVars
             'Complaint Type', 
             'Police Complaint'
         );
-        return (isset($coreRec->com_type) && $coreRec->com_type == $def);
+        return (isset($coreRec->com_type) 
+            && $coreRec->com_type == $def);
     }
     
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
@@ -185,7 +187,8 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     public function multiRecordCheckRowSummary($coreRecord)
     {
-        $ret = 'Started ' . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
+        $ret = 'Started ' 
+            . date('n/j/y, g:ia', strtotime($coreRecord[1]->created_at));
         if ($this->treeID == 1) {
             $incident = OPIncidents::find($coreRecord[1]->com_incident_id);
             if ($incident && isset($incident->inc_address_city)) {
@@ -244,13 +247,13 @@ class OpenPoliceUtils extends OpenPoliceVars
             return false;
         }
         if ($this->treeID == 1) {
-            if ($coreRec->com_status == $GLOBALS["SL"]->def
-                ->getID('Complaint Status', 'Incomplete')) {
+            $def = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
+            if ($coreRec->com_status == $def) {
                 return true;
             }
         } elseif ($this->treeID == 5) {
-            if ($coreRec->compli_status == $GLOBALS["SL"]->def
-                ->getID('Compliment Status', 'Incomplete')) {
+            $def = $GLOBALS["SL"]->def->getID('Compliment Status', 'Incomplete');
+            if ($coreRec->compli_status == $def) {
                 return true;
             }
         }
@@ -298,7 +301,8 @@ class OpenPoliceUtils extends OpenPoliceVars
                 && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
                 $list = OPDepartments::whereNotNull('dept_name')
                     ->where('dept_name', 'NOT LIKE', '')
-                    ->where('dept_address_state', trim($GLOBALS["SL"]->REQ->get('state')))
+                    ->where('dept_address_state', 
+                        trim($GLOBALS["SL"]->REQ->get('state')))
                     ->select('dept_id')
                     ->orderBy('dept_name', 'asc')
                     ->get();
@@ -681,14 +685,7 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     protected function printComplaintStatus($defID, $type = 0)
     {
-        $ret = $GLOBALS["SL"]->def->getVal('Complaint Status', $defID);
-        if ($ret == 'New' 
-            && $type > 0
-            && $type == $GLOBALS['SL']->def->getID('Complaint Type', 'Unverified')) {
-            $ret = 'Unverified';
-        }
-        $ret = str_replace('Oversight', 'Investigative Agency', $ret);
-        return $ret;
+        return $GLOBALS["CUST"]->printComplaintStatus($defID, $type);
     }
 
     protected function loadReportUploadTypes()
@@ -716,13 +713,13 @@ class OpenPoliceUtils extends OpenPoliceVars
         $this->v["oversightDateLookups"] = [
             [
                 'lnk_com_over_submitted',       
-                'Submitted to Investigative Agency'
+                'Filed with Investigative Agency'
             ],[
                 'lnk_com_over_received',        
                 'Received by Investigative Agency'
             ],[
                 'lnk_com_over_still_no_response', 
-                'Still No Response from Agency'
+                'Still No Response from Investigative Agency'
             ],[
                 'lnk_com_over_investigated',
                 'Investigated by Investigative Agency'

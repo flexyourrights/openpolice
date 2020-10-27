@@ -7,13 +7,13 @@
         <div class="d-md-none">
             <h5 class="mB0">
             <i class="fa fa-handshake-o mR5" aria-hidden="true"></i>
-            OpenPolice-Compatible Department
+            OpenPolice-Friendly Department
             </h5>
         </div>
         <div class="d-none d-md-block">
             <h3 class="m0">
             <i class="fa fa-handshake-o mR5" aria-hidden="true"></i>
-            OpenPolice-Compatible Department
+            OpenPolice-Friendly Department
             </h3>
         </div>
     </div>

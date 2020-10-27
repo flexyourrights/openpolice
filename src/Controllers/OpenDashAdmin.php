@@ -151,12 +151,12 @@ class OpenDashAdmin
         $grapher = new SurvTrends('' . rand(1000000, 10000000) . '', '', 28);
         $grapher->addDataLineType('complete', 'Complete', '', '#29CD42', '#29CD42');
         $grapher->addDataLineType('incomplete', 'Incomplete', '', '#FF6059', '#FF6059');
-        $grapher->addDataLineType('submitted', 'Submitted to Oversight', '', '#2B3493', '#2B3493');
-        $grapher->addDataLineType('received', 'Received by Oversight', '', '#63C6FF', '#63C6FF');
+        $grapher->addDataLineType('submitted', 'Filed with IA', '', '#2B3493', '#2B3493');
+        $grapher->addDataLineType('received', 'Received by IA', '', '#63C6FF', '#63C6FF');
         $grapher->addDataLineType('contacts', 'Staff Emails', '', '#416CBD', '#416CBD');
         $grapher->addDataLineType('notes', 'Staff Notes', '', '#333333', '#333333');
         $grapher->addDataLineType('owners', 'User Followups', '', '#FFBD2E', '#FFBD2E');
-        $grapher->addDataLineType('oversights', 'Oversight Followups', '', '#FFBD2E', '#FFBD2E');
+        $grapher->addDataLineType('oversights', 'IA Followups', '', '#FFBD2E', '#FFBD2E');
         $startDate = $grapher->getPastStartDate() . ' 00:00:00';
         $recentAttempts = OPComplaints::whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
@@ -279,7 +279,8 @@ class OpenDashAdmin
                 $this->v["dashTopStats"][$j][$def->def_id] = 0;
             }
         }
-        $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
+        $chk = OPComplaints::select('com_id', 'com_public_id', 
+                'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
             ->whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')

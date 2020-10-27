@@ -44,11 +44,7 @@
             #{{ number_format($com->com_public_id) }}
             @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                 == 'Police Complaint')
-                {{ str_replace(
-                    'Oversight', 
-                    'Investigators',
-                    $GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status)
-                ) }}
+                {{ $GLOBALS['CUST']->printComplaintStatusAbbr($com->com_status, 1) }}
             @endif
         @endif
         @if ($com->com_status 

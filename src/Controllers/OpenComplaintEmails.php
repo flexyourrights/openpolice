@@ -456,7 +456,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 $deptUser = $this->getDeptUser($deptID);
                 if (!isset($deptUser->id)) {
                     $swap = '<span style="color: red;">* '
-                        . 'DEPARTMENT IS NOT OPENPOLICE-COMPATIBLE *</span>';
+                        . 'DEPARTMENT IS NOT OPENPOLICE-FRIENDLY *</span>';
                 } else {
                     $swap = $this->createToken(
                         'MFA', 

@@ -175,7 +175,8 @@ class OpenPolice extends OpenInitExtras
             return $this->getCivReportNameHeader($nID);
         } elseif (in_array($nID, [1505, 2637, 1506, 1507])) {
             return $this->getCivReportNameRow($nID);
-
+        } elseif ($nID == 1520) {
+            return $this->getOffReportDeptName($nID);
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
         } elseif ($nID == 1478) {

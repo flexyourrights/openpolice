@@ -415,9 +415,9 @@ class OpenReportTools extends OpenReport
         if ($GLOBALS["SL"]->REQ->has('n2787fld')) {
             $pubOwn = intVal($GLOBALS["SL"]->REQ->n2787fld);
             if ($pubOwn == 1) {
-                $evalNotes .= 'Publish Owner\'s Name. ';
+                $evalNotes .= 'Publish Complainant\'s Name. ';
             } else {
-                $evalNotes .= 'Do Not Publish Owner\'s Name. ';
+                $evalNotes .= 'Do Not Publish Complainant\'s Name. ';
             }
         }
         if ($GLOBALS["SL"]->REQ->has('n2789fld')) {

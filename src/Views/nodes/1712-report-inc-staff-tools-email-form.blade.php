@@ -24,7 +24,7 @@
         || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
         <div class="alert alert-danger mT15" role="alert">
             <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
-            is NOT OpenPolice-Compliant!<br />
+            is NOT OpenPolice-Friendly!<br />
             You should not send them this email!</b>
         </div>
     @endif
@@ -142,7 +142,7 @@
             || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
             <div class="alert alert-danger mT30" role="alert">
                 <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
-                is NOT OpenPolice-Compliant!<br />
+                is NOT OpenPolice-Friendly!<br />
                 You should not send them this email!</b>
             </div>
         @endif

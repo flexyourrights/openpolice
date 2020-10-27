@@ -5,27 +5,23 @@
     <select name="email" id="emailID" autocomplete="off" 
         class="form-control form-control-lg">
         <option value="" >No email right now</option>
-        <?php $set = '00'; ?>
-        @forelse ($emailList as $i => $email)
-            @if ($email->email_type != 'Blurb')
-                <?php
-                $currSet = substr($email->email_name, 0, 1) . '0';
-                if ($set != $currSet) {
-                    $set = $currSet;
-                    echo '<option disabled ></option>';
-                }
-                ?>
-                @if (!in_array(
-                        substr($email->email_name, 0, 2), 
-                        [ '01', '02', '04', '06', '21' ]
-                    ))
-                    <option value="{{ $email->email_id }}" 
-                        @if ($emailID == $email->email_id) SELECTED @endif
-                        >{{ $email->email_name }} ({{ $email->email_type }})</option>
-                @endif
+    @forelse ($emailList as $i => $email)
+        <?php $emaID2 = substr($email->email_name, 0, 2); ?>
+        <?php $emaID3 = substr($email->email_name, 2, 1); ?>
+        @if ($email->email_type != 'Blurb')
+            @if (in_array($emaID2, [ '01', '10', '16' ]) && $emaID3 == '.')
+                <option disabled ></option>
             @endif
-        @empty
-        @endforelse
+            @if ($emaID2 != '01' || $email->email_id == 36)
+                <option value="{{ $email->email_id }}" 
+                    @if ($emailID == $email->email_id) SELECTED @endif
+                    >{{ $email->email_name }} 
+                    ({{ str_replace('Oversight', 'IA', $email->email_type) }})
+                </option>
+            @endif
+        @endif
+    @empty
+    @endforelse
     </select>
     <div id="emailChooseDept" 
         class="@if ($emailID == 12) disBlo @else disNon @endif ">
