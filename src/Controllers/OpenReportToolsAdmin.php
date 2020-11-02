@@ -511,7 +511,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             $this->sessData->dataSets["complaints"][0]->com_type = $type;
             $this->sessData->dataSets["complaints"][0]->save();
             $this->v["firstRevDone"] = true;
-            $this->v["firstReview"] = false;
+            $this->v["firstReview"]  = false;
         }
         return true;
     }

@@ -249,8 +249,8 @@ class OpenListing extends OpenListFilters
             'Police Complaint'
         );
         $xtra = "whereIn('com_status', [" 
-            . implode(", ", $this->getPublishedStatusList('complaints')) . "])->"
-            . "where('com_type', " . $typeDef . ")->";
+            . implode(", ", $this->getPublishedStatusList('complaints')) 
+            . "])->where('com_type', " . $typeDef . ")->";
         $this->searcher->loadAllComplaintsPublic($xtra);
         if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
             foreach ($this->searcher->v["allcomplaints"] as $i => $com) {

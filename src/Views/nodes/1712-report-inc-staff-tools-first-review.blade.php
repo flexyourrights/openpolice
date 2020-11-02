@@ -35,34 +35,41 @@
         </label>
         <label for="n1712fld2" id="n1712fld2lab" class="finger">
             <div class="disIn mR5">
-                <input id="n1712fld2" value="301" type="radio" name="n1712fld" 
+                <input id="n1712fld2" value="722" type="radio" name="n1712fld" 
                     class="nCbox1712 slTab slNodeChange ntrStp n1712fldCls" 
-                    data-nid="1712" autocomplete="off" tabindex="3">
+                    data-nid="1712" autocomplete="off" tabindex="4">
+            </div> Corrections Case
+        </label>
+        <label for="n1712fld3" id="n1712fld2lab" class="finger">
+            <div class="disIn mR5">
+                <input id="n1712fld3" value="301" type="radio" name="n1712fld" 
+                    class="nCbox1712 slTab slNodeChange ntrStp n1712fldCls" 
+                    data-nid="1712" autocomplete="off" tabindex="5">
             </div> Not Sure
         </label>
 
     </div>
     <div class="col-sm-6">
 
-        <label for="n1712fld3" id="n1712fld3lab" class="finger">
+        <label for="n1712fld4" id="n1712fld3lab" class="finger">
             <div class="disIn mR5">
-                <input id="n1712fld3" value="298" type="radio" name="n1712fld" 
+                <input id="n1712fld4" value="298" type="radio" name="n1712fld" 
                     class="nCbox1712 slTab slNodeChange ntrStp n1712fldCls" 
-                    data-nid="1712" autocomplete="off" tabindex="1">
+                    data-nid="1712" autocomplete="off" tabindex="6">
             </div> Abuse
         </label>
-        <label for="n1712fld4" id="n1712fld4lab" class="finger">
+        <label for="n1712fld5" id="n1712fld4lab" class="finger">
             <div class="disIn mR5">
-                <input id="n1712fld4" value="299" type="radio" name="n1712fld" 
+                <input id="n1712fld5" value="299" type="radio" name="n1712fld" 
                     class="nCbox1712 slTab slNodeChange ntrStp n1712fldCls" 
-                    data-nid="1712" autocomplete="off" tabindex="2">
+                    data-nid="1712" autocomplete="off" tabindex="7">
             </div> Spam
         </label>
-        <label for="n1712fld5" id="n1712fld5lab" class="finger">
+        <label for="n1712fld6" id="n1712fld5lab" class="finger">
             <div class="disIn mR5">
-                <input id="n1712fld5" value="300" type="radio" name="n1712fld" 
+                <input id="n1712fld6" value="300" type="radio" name="n1712fld" 
                     class="nCbox1712 slTab slNodeChange ntrStp n1712fldCls" 
-                    data-nid="1712" autocomplete="off" tabindex="3">
+                    data-nid="1712" autocomplete="off" tabindex="8">
             </div> Test
         </label>
 

@@ -6,7 +6,7 @@ function logSrchFilts() {
     if (document.getElementById("sFiltID")) {
         var filts = "";
         var comstatus = "";
-        for (var i = 0; i < {!! (7+sizeof($GLOBALS["SL"]->def->getSet('Complaint Status'))) !!}; i++) {
+        for (var i = 0; i < {!! (5+sizeof($GLOBALS["SL"]->def->getSet('Complaint Status'))+sizeof($GLOBALS["SL"]->def->getSet('Complaint Type'))) !!}; i++) {
             if (document.getElementById("fltStatus"+i+"") && document.getElementById("fltStatus"+i+"").checked) {
                 comstatus += "," + document.getElementById("fltStatus"+i+"").value;
             }

@@ -27,6 +27,9 @@
                 <option value="297" @if ($complaintRec->com_type == 297 
                     && $complaintRec->com_status != 194) SELECTED @endif 
                     >Not About Police</option>
+                <option value="722" @if ($complaintRec->com_type == 722 
+                    && $complaintRec->com_status != 194) SELECTED @endif 
+                    >Corrections Case</option>
                 <option value="298" @if ($complaintRec->com_type == 298 
                     && $complaintRec->com_status != 194) SELECTED @endif 
                     >Abuse</option>

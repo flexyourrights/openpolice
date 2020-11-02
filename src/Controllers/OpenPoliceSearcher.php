@@ -57,26 +57,28 @@ class OpenPoliceSearcher extends Searcher
     public function getSearchFiltQryStatus()
     {
         $eval = "";
+        $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
         if (sizeof($this->searchFilts["comstatus"]) > 0) {
             foreach ($this->searchFilts["comstatus"] as $i => $status) {
                 if (!$GLOBALS["SL"]->x["isPublicList"] 
                     || in_array($status, [200, 201, 202, 203, 204])) {
-                    if ($status == $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) { // 194
+                    if ($status == $incDef) { // 194
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
                             . $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified') 
                             . "')->where('com_status', '" . $status . "'); })";
-                    } elseif (in_array($status, [195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 627])) {
+                    } elseif (in_array($status, [195, 196, 197, 198, 
+                        199, 200, 201, 202, 203, 204, 205, 627])) {
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
                             . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
                             . "')->where('com_status', '" . $status . "'); })";
                     } else {
-                        $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '" 
-                            . $status . "')->where('com_status', 'NOT LIKE', '"
-                            . $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete') . "'); })";
+                        $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i . "->where('com_type', '" . $status . "')
+                            ->where('com_status', 'NOT LIKE', '" . $incDef . "'); })";
                     }
                 }
             }
         }
+//echo '<pre>'; print_r($this->searchFilts["comstatus"]); echo '</pre>'; exit;
         if (trim($eval) != '') {
             $eval = "->where(function (\$query) { \$query->where" . substr($eval, 9) . "; })";
         } elseif ($GLOBALS["SL"]->x["isPublicList"]) {
@@ -120,7 +122,8 @@ class OpenPoliceSearcher extends Searcher
             foreach ($this->searchFilts["comstatus"] as $i => $status) {
                 if (!$GLOBALS["SL"]->x["isPublicList"] 
                     || in_array($status, [200, 201, 202, 203, 204])) {
-                    $ret .= (($i > 0) ? ', ' : '') . $GLOBALS["SL"]->def->getValById($status);
+                    $ret .= (($i > 0) ? ', ' : '') 
+                        . $GLOBALS["SL"]->def->getValById($status);
                 }
             }
         }
@@ -137,8 +140,8 @@ class OpenPoliceSearcher extends Searcher
     {
         $ret = '';
         $physTypes = [
-            ['Victim',  'vict'],
-            ['Officer', 'off' ]
+            [ 'Victim',  'vict' ],
+            [ 'Officer', 'off'  ]
         ];
         foreach ($physTypes as $type) {
             if (isset($this->searchFilts[$type[1] . "gend"])

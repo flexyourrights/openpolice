@@ -18,6 +18,9 @@
     government service agencies or complaints related to 
     unidentified stalking or surveillance entities.
     </li>
+    <li><b>Corrections Case</b><br />
+    We don't file these submissions with prisons.
+    </li>
     <li><b>Abuse</b><br />
     Submissions intended to harass OpenPolice.org, 
     its staff, partners, volunteers, or other users.
