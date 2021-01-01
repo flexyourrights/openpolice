@@ -35,64 +35,66 @@ class OpenDashAdmin
     
     public function printDashTopLevStats()
     {
-        $this->transitionData();
         $stats = [
-            "betas"      => 0,
-            "incomplete" => 0,
-            "complete"   => 0,
-            "attorney"   => 0,
-            "published"  => 0,
-            "submitted"  => 0
+            "incomplete"   => 0,
+            "complete"     => 0,
+            "attorneyWant" => 0,
+            "attorney"     => 0,
+            "published"    => 0,
+            "submitted"    => 0
         ];
-        $stats["betas"] = DB::table('op_tester_beta')
-            ->whereNotNull('beta_invited')
-            ->distinct('beta_email')
-            ->count();
-        $chk = OPComplaints::select('com_id', 'com_public_id', 'com_status', 'com_record_submitted')
+        $types = [
+            $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
+            $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
+            $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
+        ];
+        $chk = OPComplaints::select('com_id', 'com_public_id', 
+                'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
             ->whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
-            ->whereIn('com_type', [
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
-                $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
-            ])
+            ->whereIn('com_type', $types)
             ->get();
         if ($chk->isNotEmpty()) {
-            $defSet = 'Complaint Status';
+            $set = 'Complaint Status';
             foreach ($chk as $com) {
-                if ($com->com_status == $GLOBALS["SL"]->def->getID($defSet, 'Incomplete')) {
+                if ($com->com_status == $GLOBALS["SL"]->def->getID($set, 'Incomplete')) {
                     $stats["incomplete"]++;
                 } else {
                     $stats["complete"]++;
                 }
-                if (in_array($com->com_status, [
-                    $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Has Attorney')])) {
+                if ($com->com_status == $GLOBALS["SL"]->def->getID($set, 'Wants Attorney')) {
+                    $stats["attorneyWant"]++;
+                } elseif (in_array($com->com_status, [
+                        $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'),
+                        $GLOBALS["SL"]->def->getID($set, 'Has Attorney')
+                    ])) {
                     $stats["attorney"]++;
                 }
                 if (in_array($com->com_status, [
-                    $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Submitted to Oversight'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Received by Oversight'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Declined To Investigate (Closed)'),
-                    $GLOBALS["SL"]->def->getID($defSet, 'Investigated (Closed)')])) {
+                    $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight'),
+                    $GLOBALS["SL"]->def->getID($set, 'Submitted to Oversight'),
+                    $GLOBALS["SL"]->def->getID($set, 'Received by Oversight'),
+                    $GLOBALS["SL"]->def->getID($set, 'Declined To Investigate (Closed)'),
+                    $GLOBALS["SL"]->def->getID($set, 'Investigated (Closed)')])) {
                     $stats["published"]++;
                     if ($com->com_status 
-                        != $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight')) {
+                        != $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight')) {
                         $stats["submitted"]++;
                     }
 
                 }
             }
         }
+
         $statsWeek = [
-            "activeU"   => [],
-            "contactsU" => []
+            "complete"  => [],
+            "published" => []
         ];
-        $chk = OPComplaints::select('com_id', 'com_user_id', 
+        $chk = OPComplaints::select('com_id', 'com_public_id', 
                 'com_status', 'com_record_submitted')
             ->where('com_status', '>', 0)
+            ->where('com_status', 'NOT LIKE', $GLOBALS["SL"]->def->getID($set, 'Incomplete'))
             ->whereNotNull('com_summary')
             ->where('com_summary', 'NOT LIKE', '')
             ->whereIn('com_type', [
@@ -100,38 +102,36 @@ class OpenDashAdmin
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified'),
                 $GLOBALS["SL"]->def->getID('Complaint Type', 'Not Sure')
             ])
-            ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->where('com_record_submitted', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
             ->get();
         if ($chk->isNotEmpty()) {
             foreach ($chk as $com) {
-                if (intVal($com->com_user_id) > 0) {
-                    $statsWeek["activeU"][] = $com->com_user_id;
+                if (intVal($com->com_id) > 0) {
+                    $statsWeek["complete"][] = $com->com_id;
                 }
             }
         }
-        /* $contacts = DB::table('op_z_complaint_reviews')
-            ->join('op_z_complaint_reviews', 'op_complaints.com_id', 
-                '=', 'op_z_complaint_reviews.ComRevComplaint')
-            ->where('op_z_complaint_reviews.com_rev_type', 'LIKE', 'Update')
-            ->whereNotNull('op_z_complaint_reviews.com_rev_note')
-            ->where('op_z_complaint_reviews.com_rev_note', 'NOT LIKE', 'Update')
-            ->where('op_z_complaint_reviews.created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
-            ->select('op_complaints.com_user_id', 'op_z_complaint_reviews.*')
-            ->get(); */
-        $contacts = OPzComplaintReviews::where('com_rev_type', 'LIKE', 'Update')
-            ->whereNotNull('com_rev_note')
-            ->where('com_rev_note', 'NOT LIKE', 'Update')
+        $pubStatus = [
+            'OK to Submit to Oversight', 
+            'Submitted to Oversight', 
+            'Received by Oversight', 
+            'Declined To Investigate (Closed)'
+        ];
+        $published = OPzComplaintReviews::whereNotNull('com_rev_note')
+            ->whereIn('com_rev_status', $pubStatus)
+            ->where('com_rev_complaint', '>', 0)
             ->where('created_at', '>', $GLOBALS["SL"]->pastDateTimeStr(7))
+            ->orderBy('created_at', 'asc')
             ->get();
-        if ($contacts->isNotEmpty()) {
-            foreach ($contacts as $i => $rec) {
-                $com = OPComplaints::find($rec->com_rev_complaint);
-                if ($com && isset($com->com_user_id) && intVal($com->com_user_id) > 0) {
-                    if (!in_array($com->com_user_id, $statsWeek["activeU"])) {
-                        $statsWeek["activeU"][] = $com->com_user_id;
-                    }
-                    if (!in_array($com->com_user_id, $statsWeek["contactsU"])) {
-                        $statsWeek["contactsU"][] = $com->com_user_id;
+        if ($published->isNotEmpty()) {
+            foreach ($published as $i => $rev) {
+                if (!in_array($rev->com_rev_complaint, $statsWeek["published"])) {
+                    $chk = OPzComplaintReviews::whereIn('com_rev_status', $pubStatus)
+                        ->where('com_rev_complaint', $rev->com_rev_complaint)
+                        ->where('created_at', '<', $GLOBALS["SL"]->pastDateTimeStr(7))
+                        ->get();
+                    if ($chk->isEmpty()) {
+                        $statsWeek["published"][] = $rev->com_rev_complaint;
                     }
                 }
             }
@@ -559,111 +559,4 @@ class OpenDashAdmin
         return true;
     }
 
-
-    // For March 2020 transition. Should be deleted soon
-    protected function transitionData()
-    {
-        if ($GLOBALS["SL"]->REQ->has('trans')) {
-            ini_set('max_execution_time', '300');
-            $transition = intVal($GLOBALS["SL"]->REQ->get('trans'));
-            if ($transition == 1) {
-                $defPub = $GLOBALS["SL"]->def->getID(
-                    'Privacy Types', 
-                    'Submit Publicly'
-                );
-                $defMid = $GLOBALS["SL"]->def->getID(
-                    'Privacy Types', 
-                    'Names Visible to Police but not Public'
-                );
-                $chk = OPComplaints::whereNotNull('com_privacy')
-                    ->whereNull('com_publish_user_name')
-                    ->select('com_id', 'com_privacy', 'com_anon', 
-                        'com_publish_user_name',
-                        'com_publish_officer_name')
-                    ->get();
-                if ($chk->isNotEmpty()) {
-                    foreach ($chk as $com) {
-                        if ($com->com_privacy == $defPub) {
-                            $com->com_anon                 = 0;
-                            $com->com_publish_user_name    = 1;
-                            $com->com_publish_officer_name = 1;
-                        } elseif ($com->com_privacy == $defMid) {
-                            $com->com_anon                 = 0;
-                            $com->com_publish_user_name    = 0;
-                            $com->com_publish_officer_name = 0;
-                        } else {
-                            $com->com_anon                 = 1;
-                            $com->com_publish_user_name    = 0;
-                            $com->com_publish_officer_name = 0;
-                        }
-                        $com->save();
-                    }
-                }
-            } elseif ($transition == 2) {
-                $chk = DB::table('op_stops')
-                    ->join('op_event_sequence', 'op_stops.stop_event_sequence_id', 
-                        '=', 'op_event_sequence.eve_id')
-                    ->whereNull('op_stops.stop_com_id')
-                    ->orWhere('op_stops.stop_com_id', '<=', 0)
-                    ->select('op_stops.*', 'op_event_sequence.eve_complaint_id')
-                    ->get();
-                if ($chk->isNotEmpty()) {
-                    foreach ($chk as $stop) {
-                        DB::table('op_stops')
-                            ->where('stop_id', $stop->stop_id)
-                            ->update([ 'stop_com_id' => $stop->eve_complaint_id ]);
-                    }
-                }
-            } elseif ($transition == 3) {
-                $chk = DB::table('op_searches')
-                    ->join('op_event_sequence', 'op_searches.srch_event_sequence_id', 
-                        '=', 'op_event_sequence.eve_id')
-                    ->whereNull('op_searches.srch_com_id')
-                    ->orWhere('op_searches.srch_com_id', '<=', 0)
-                    ->select('op_searches.*', 'op_event_sequence.eve_complaint_id')
-                    ->get();
-                if ($chk->isNotEmpty()) {
-                    foreach ($chk as $search) {
-                        DB::table('op_searches')
-                            ->where('srch_id', $search->srch_id)
-                            ->update([ 'srch_com_id' => $search->eve_complaint_id ]);
-                    }
-                }
-            } elseif ($transition == 4) {
-                $chk = DB::table('op_arrests')
-                    ->join('op_event_sequence', 'op_arrests.arst_event_sequence_id', 
-                        '=', 'op_event_sequence.eve_id')
-                    ->whereNull('op_arrests.arst_com_id')
-                    ->orWhere('op_arrests.arst_com_id', '<=', 0)
-                    ->select('op_arrests.*', 'op_event_sequence.eve_complaint_id')
-                    ->get();
-                if ($chk->isNotEmpty()) {
-                    foreach ($chk as $arrest) {
-                        DB::table('op_arrests')
-                            ->where('arst_id', $arrest->arst_id)
-                            ->update([ 'arst_com_id' => $arrest->eve_complaint_id ]);
-                    }
-                }
-            } elseif ($transition == 5) {
-                $chk = DB::table('op_force')
-                    ->join('op_event_sequence', 'op_force.for_event_sequence_id', 
-                        '=', 'op_event_sequence.eve_id')
-                    ->whereNull('op_force.for_com_id')
-                    ->orWhere('op_force.for_com_id', '<=', 0)
-                    ->select('op_force.*', 'op_event_sequence.eve_complaint_id')
-                    ->get();
-                if ($chk->isNotEmpty()) {
-                    foreach ($chk as $force) {
-                        DB::table('op_force')
-                            ->where('for_id', $force->for_id)
-                            ->update([ 'for_com_id' => $force->eve_complaint_id ]);
-                    }
-                }
-            }
-            $transition++;
-            echo '<a href="?trans=' . $transition . '">Next</a>';
-            exit;
-        }
-        return true;
-    }
 }

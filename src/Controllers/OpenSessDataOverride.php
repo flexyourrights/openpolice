@@ -31,7 +31,7 @@ class OpenSessDataOverride extends OpenComplaintPrints
             return [];
         }
         $nID = $curr->nID;
-        if (in_array($nID, [1696, 1700, 1697, 1698, 1699])) {
+        if (in_array($nID, [1696, 1700, 1697, 1698, 1699, 3176])) {
             return $this->sessDataOverrideOversight($curr);
         } elseif ($nID == 28) { // Complainant's Role
             if (isset($this->sessData->dataSets["civilians"])) {
@@ -226,11 +226,11 @@ class OpenSessDataOverride extends OpenComplaintPrints
             foreach ($this->sessData->dataSets[$tbl] as $lnk) {
                 if ($lnk->lnk_com_over_dept_id == $deptID
                     && isset($lnk->{$fld})) {
-                    return [$lnk->{$fld}];
+                    return [ $lnk->{$fld} ];
                 }
             }
         }
-        return ['0000-00-00 00:00:00'];
+        return [ '0000-00-00 00:00:00' ];
     }
 
 

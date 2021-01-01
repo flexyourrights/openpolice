@@ -37,6 +37,10 @@ class OpenComplaintEmails extends OpenPoliceEvents
             $this->v["emaBCC"],
             [ 'noreply@openpolice.org', 'OpenPolice.org Contact' ]
         );
+        if (isset($GLOBALS["SL"]->x["hasSessMsgError"])
+            && $GLOBALS["SL"]->x["hasSessMsgError"]) {
+            return false;
+        }
         $emaID = ((isset($currEmail->email_id)) ? $currEmail->email_id : -3);
         $this->logEmailSent(
             $emaContent, 
@@ -269,7 +273,8 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         $ret .= ', the ';
                     }
                 }
-                $ret .= str_replace('Department', 'Dept.', $d);
+                $ret .= $d;
+                //$ret .= str_replace('Department', 'Dept.', $d);
             }
             return $ret . '.';
         }
@@ -325,10 +330,10 @@ class OpenComplaintEmails extends OpenPoliceEvents
                         }
                     }
                 }
+                $swap = ' ';
                 break;
             case '[{ Days From Now: 7, mm/dd/yyyy }]':
-                $swap = date('n/j/y', mktime(0, 0, 0, 
-                    date("n"), (7+date("j")), date("Y")));
+                $swap = date('n/j/y', mktime(0, 0, 0, date("n"), (7+date("j")), date("Y")));
                 break;
             case '[{ Complaint Number of Weeks Old }]':
                 if (isset($this->sessData->dataSets["complaints"])) {
@@ -344,6 +349,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 $swap = $this->v["user"]->email;
                 break;
             case '[{ Complaint Police Department }]':
+                $swap = '-';
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name)) {
@@ -360,8 +366,12 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 if (trim($swap) == '') {
                     $swap = $GLOBALS["SL"]->swapURLwrap($url . '/departments');
                 }
+                if (trim($swap) == '') {
+                    $swap = '-';
+                }
                 break;
             case '[{ Complaint Police Department URL Link }]':
+                $swap = '-';
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name)) {
@@ -372,6 +382,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
             case '[{ Complaint Police Department URL How }]':
+                $swap = '-';
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_slug)) {
@@ -381,6 +392,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
             case '[{ Police Department State Abbr }]':
+                $swap = '-';
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_address_state)) {
@@ -388,6 +400,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
             case '[{ Police Department Zip Code }]':
+                $swap = '-';
                 if (isset($GLOBALS["SL"]->x["depts"]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]) 
                     && isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_address_zip)) {
@@ -555,6 +568,9 @@ class OpenComplaintEmails extends OpenPoliceEvents
             "bcc"        => ''
         ];
         if ($emailID > 0) {
+            if (!isset($this->v["emailList"])) {
+                $this->loadComplaintEmailList();
+            }
             if (sizeof($this->v["emailList"]) > 0) {
                 foreach ($this->v["emailList"] as $e) {
                     if ($e->email_id == $emailID) {

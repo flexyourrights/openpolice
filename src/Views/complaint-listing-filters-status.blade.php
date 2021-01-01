@@ -8,12 +8,6 @@
             Unverified Survey Submissions
     </label>
     <label class="disBlo pB5 pT5">
-        <input type="checkbox" id="fltStatus1" name="fltStatus[]" value="301"
-            @if (in_array(301, $srchFilts['comstatus'])) CHECKED @endif 
-            class="mR5 searchDeetFld fltStatus" autocomplete="off">
-            Verified But Not Sure If Legit
-    </label>
-    <label class="disBlo pB5 pT5">
         <input type="checkbox" id="fltStatus2" name="fltStatus[]" value="296"
             @if (in_array(296, $srchFilts['comstatus'])) CHECKED @endif 
             class="mR5 searchDeetFld fltStatus" autocomplete="off">
@@ -25,8 +19,9 @@
     @if ($status->def_id != 194 && (!$GLOBALS["SL"]->x["isPublicList"] 
         || in_array($status->def_id, [200, 201, 202, 203, 204])))
         <label class="disBlo pB5 pT5">
-            <input type="checkbox" id="fltStatus{{ (3+$i) }}" name="fltStatus[]" 
-                value="{{ $status->def_id }}" class="mR5 searchDeetFld fltStatus" autocomplete="off"
+            <input type="checkbox" id="fltStatus{{ (3+$i) }}" 
+                name="fltStatus[]" value="{{ $status->def_id }}" 
+                class="mR5 searchDeetFld fltStatus" autocomplete="off"
                 @if (in_array($status->def_id, $srchFilts['comstatus'])) CHECKED @endif 
                 > @if (!$GLOBALS["SL"]->x["isPublicList"]) - @endif
                 {{ $GLOBALS['CUST']->printComplaintStatusAbbr($status->def_id, 1) }}

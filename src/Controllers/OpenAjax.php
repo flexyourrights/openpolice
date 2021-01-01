@@ -376,7 +376,7 @@ class OpenAjax extends OpenComplaintSaves
     protected function loadDeptSearchFlt($str)
     {
         $str = $this->chkDeptSearchTweak($str);
-        $this->v["deptSearchWords"] = $tmp = [];
+        $tmp = [];
         $searchRaw = $GLOBALS["SL"]->mexplode(' ', $str);
         if (sizeof($searchRaw) > 0) {
             foreach ($searchRaw as $word) {
@@ -389,25 +389,19 @@ class OpenAjax extends OpenComplaintSaves
                     if ($abbr != '') {
                         $this->chkDeptSearchAddState($abbr);
                     } else {
-                        if (!in_array($word, $this->v["deptSearchWords"])) {
+                        if (!in_array($word, $tmp)) {
                             $tmp[] = $word;
                         }
                     }
                 }
             }
         }
-        if (sizeof($tmp) > 0) {
-            if ($str == implode(' ', $tmp)) {
-                $this->v["deptSearchWords"][] = $str;
-            } else {
-                $str = implode(' ', $tmp);
-            }
-            foreach ($tmp as $word) {
-                if (!in_array($word, $this->v["deptSearchWords"])) {
-                    $this->v["deptSearchWords"][] = $word;
-                }
-            }
+        if ($str == implode(' ', $tmp)) {
+            $this->v["deptSearchWords"][] = $str;
+        } else {
+            $str = implode(' ', $tmp);
         }
+        $this->v["deptSearchWords"] = $tmp;
         $this->v["reqLike"] = '%' . strtolower($str) . '%';
         return $str;
     }
@@ -707,7 +701,6 @@ class OpenAjax extends OpenComplaintSaves
         if (!isset($this->v["comIDs"])) {
             $this->v["comIDs"] 
                 = $this->v["complaints"] 
-                = $this->v["allComIDs"] 
                 = $this->v["allIncIDs"] 
                 = [];
         }
@@ -742,11 +735,14 @@ class OpenAjax extends OpenComplaintSaves
                 ->join('op_person_contact', 'op_person_contact.prsn_id',
                     '=', 'op_civilians.civ_person_id')
                 ->where('op_civilians.civ_is_creator', 'LIKE', 'Y')
-                ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
+                ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDsPubCiv"])
                 ->where(function ($query) {
-                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
+                    return $query->where('op_person_contact.prsn_name_first', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_name_last', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_nickname', 
+                            'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_civilians.civ_complaint_id')
                 ->get();
@@ -759,40 +755,51 @@ class OpenAjax extends OpenComplaintSaves
                     '=', 'op_incidents.inc_id')
                 ->whereIn('op_complaints.com_id', $this->v["allComIDs"])
                 ->where(function ($query) {
-                    return $query->where('op_incidents.inc_address_city', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_incidents.inc_address', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_incidents.inc_landmarks', 'LIKE', $GLOBALS["strLike"]);
+                    return $query->where('op_incidents.inc_address_city', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_incidents.inc_address', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_incidents.inc_landmarks', 
+                            'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_complaints.com_id')
                 ->get();
             $this->addComplaintToResults($incMatches, 'com_id');
         }
-        foreach ($this->v["comSearchTxt"] as $str) {
-            $GLOBALS["strLike"] = '%' . $str . '%';
-            $civMatches = DB::table('op_civilians')
-                ->join('op_person_contact', 'op_person_contact.prsn_id',
-                    '=', 'op_civilians.civ_person_id')
-                ->where('op_civilians.civ_is_creator', 'NOT LIKE', 'Y')
-                ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
-                ->where(function ($query) {
-                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
-                })
-                ->select('op_civilians.civ_complaint_id')
-                ->get();
-            $this->addComplaintToResults($civMatches, 'civ_complaint_id');
+        if ($this->isStaffOrAdmin()) {
+            foreach ($this->v["comSearchTxt"] as $str) {
+                $GLOBALS["strLike"] = '%' . $str . '%';
+                $civMatches = DB::table('op_civilians')
+                    ->join('op_person_contact', 'op_person_contact.prsn_id',
+                        '=', 'op_civilians.civ_person_id')
+                    ->where('op_civilians.civ_is_creator', 'NOT LIKE', 'Y')
+                    ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
+                    ->where(function ($query) {
+                        return $query->where('op_person_contact.prsn_name_first', 
+                                'LIKE', $GLOBALS["strLike"])
+                            ->orWhere('op_person_contact.prsn_name_last', 
+                                'LIKE', $GLOBALS["strLike"])
+                            ->orWhere('op_person_contact.prsn_nickname', 
+                                'LIKE', $GLOBALS["strLike"]);
+                    })
+                    ->select('op_civilians.civ_complaint_id')
+                    ->get();
+                $this->addComplaintToResults($civMatches, 'civ_complaint_id');
+            }
         }
         foreach ($this->v["comSearchTxt"] as $str) {
             $GLOBALS["strLike"] = '%' . $str . '%';
             $offMatches = DB::table('op_officers')
                 ->join('op_person_contact', 'op_person_contact.prsn_id',
                     '=', 'op_officers.off_person_id')
-                ->whereIn('op_officers.off_complaint_id', $this->v["allComIDs"])
+                ->whereIn('op_officers.off_complaint_id', $this->v["allComIDsPubOff"])
                 ->where(function ($query) {
-                    return $query->where('op_person_contact.prsn_name_first', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_name_last', 'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_nickname', 'LIKE', $GLOBALS["strLike"]);
+                    return $query->where('op_person_contact.prsn_name_first', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_name_last', 
+                            'LIKE', $GLOBALS["strLike"])
+                        ->orWhere('op_person_contact.prsn_nickname', 
+                            'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_officers.off_complaint_id')
                 ->get();
@@ -802,6 +809,7 @@ class OpenAjax extends OpenComplaintSaves
             foreach ($this->v["comSearchTxt"] as $str) {
                 $GLOBALS["strLike"] = '%' . $str . '%';
                 $dumpMatches = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
+                    ->where('sch_rec_dmp_perms', $GLOBALS["SL"]->getCacheSffxAdds())
                     ->whereIn('sch_rec_dmp_rec_id', $this->v["allComIDs"])
                     ->where('sch_rec_dmp_rec_dump', 'LIKE', $GLOBALS["strLike"])
                     ->orderBy('sch_rec_dmp_rec_id', 'desc')
@@ -820,6 +828,10 @@ class OpenAjax extends OpenComplaintSaves
      */
     protected function ajaxRunComplaintSearchLoadAll()
     {
+        $this->v["allComIDs"] 
+            = $this->v["allComIDsPubCiv"] 
+            = $this->v["allComIDsPubOff"] 
+            = [];
         $chk = null;
         if ($this->isStaffOrAdmin()) {
             $chk = OPComplaints::whereNotNull('com_summary')
@@ -827,6 +839,9 @@ class OpenAjax extends OpenComplaintSaves
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
+            $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $this->v["allComIDsPubCiv"] = $this->v["allComIDs"];
+            $this->v["allComIDsPubOff"] = $this->v["allComIDs"];
         } else {
             $chk = OPComplaints::whereNotNull('com_summary')
                 ->where('com_summary', 'NOT LIKE', '')
@@ -834,8 +849,24 @@ class OpenAjax extends OpenComplaintSaves
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
+            $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $chk = OPComplaints::whereNotNull('com_summary')
+                ->where('com_summary', 'NOT LIKE', '')
+                ->whereIn('com_status', $this->getPublishedStatusList('complaints'))
+                ->where('com_publish_user_name', 'LIKE', 1)
+                ->orderBy('com_id', 'desc')
+                ->select('com_id')
+                ->get();
+            $this->v["allComIDsPubCiv"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $chk = OPComplaints::whereNotNull('com_summary')
+                ->where('com_summary', 'NOT LIKE', '')
+                ->whereIn('com_status', $this->getPublishedStatusList('complaints'))
+                ->where('com_publish_officer_name', 'LIKE', 1)
+                ->orderBy('com_id', 'desc')
+                ->select('com_id')
+                ->get();
+            $this->v["allComIDsPubOff"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
         }
-        $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
         return $chk;
     }
     

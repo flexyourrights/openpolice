@@ -55,7 +55,8 @@ class OpenComplaintPrints extends OpenComplaintEmails
     
     protected function printAllegAudit()
     {
-        return $this->commaAllegationList(true);
+        return '<div class="pB15"><b>Allegations:</b></div><ul>' 
+            . $this->commaAllegationList(true) . '</ul>';
     }
     
     protected function printEndOfComplaintRedirect($nID)

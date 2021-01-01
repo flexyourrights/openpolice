@@ -1,9 +1,7 @@
 <!-- resources/views/vendor/openpolice/dept-kml-desc.blade.php -->
 <div id="deptMapKmlDesc{{ $dept['deptRow']->dept_id }}">
     <a href="/dept/{{ $dept['deptRow']->dept_slug }}">
-    <h3 class="slBlueDark m0">
-        {{ str_replace('Department', 'Dept.', $dept["deptRow"]->dept_name) }}
-    </h3>
+    <h3 class="slBlueDark m0">{{ $dept["deptRow"]->dept_name }}</h3>
     View Department Profile</a><br />
     {{ $GLOBALS["SL"]->printRowAddy($dept["deptRow"], 'dept_') }}
     <div class="relDiv mapMrkLgWrp">

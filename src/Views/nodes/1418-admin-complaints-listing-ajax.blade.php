@@ -153,8 +153,13 @@ $(document).on("click", ".fltStatus", function() {
                     document.getElementById("fltStatus"+i+"").checked = false;
                 }
             }
-        } else if (jQuery.inArray(status, [195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 627]) && document.getElementById("fltStatus2")) {
-            document.getElementById("fltStatus2").checked = false;
+        } else if (jQuery.inArray(status, [195, 196, 197, 198, 727, 199, 200, 201, 202, 203, 204, 205, 627])) {
+            if (document.getElementById("fltStatus0")) {
+                document.getElementById("fltStatus0").checked = false;
+            }
+            if (document.getElementById("fltStatus2")) {
+                document.getElementById("fltStatus2").checked = false;
+            }
         }
     }
 });

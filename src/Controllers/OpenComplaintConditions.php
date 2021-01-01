@@ -41,9 +41,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
             // could be replaced by OR functionality
 
         } elseif ($condition == '#IntakeOnlyNotFiling') {
-            return $this->condPartnerIntake($complaint)
-                || $this->condAttorneyIntake($complaint)
-                || $this->condLawyerInvolved($complaint);
+            return $this->condIntakeOnlyNotFiling($complaint);
 
         } elseif ($condition == '#PartnerIntake') {
             return $this->condPartnerIntake($complaint);
@@ -51,8 +49,14 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#AttorneyIntake') {
             return $this->condAttorneyIntake($complaint);
 
+        } elseif ($condition == '#WantsAttorneyButNotLikely') {
+            return $this->condWantsAttorneyButNotLikely($complaint);
+
         } elseif ($condition == '#LawyerInvolved') {
             return $this->condLawyerInvolved($complaint);
+
+        } elseif ($condition == '#PublishingOptionsInSurvey') {
+            return $this->condPublishingOptionsInSurvey($complaint);
 
         } elseif ($condition == '#NoSexualAllegation') {
             return $this->condNoSexualAllegation();
@@ -89,6 +93,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
 
         } elseif ($condition == '#EmailConfirmSentToday') {
             return $this->condEmailConfirmSentToday();
+
+        } elseif ($condition == '#HasFeelings') {
+            return $this->complaintHasFeelings();
 
         } elseif ($condition == '#HasUploads') {
             return $this->complaintHasUploads();
@@ -204,6 +211,22 @@ class OpenComplaintConditions extends OpenSessDataOverride
     }
     
     /**
+     * Checks whether or not this complaint is 
+     * associated with an attorney partner's intake process.
+     *
+     * @return int
+     */
+    protected function condIntakeOnlyNotFiling($complaint)
+    {
+        if ($this->condPartnerIntake($complaint) == 1
+            || $this->condAttorneyIntake($complaint) == 1
+            || $this->condLawyerInvolved($complaint) == 1) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    /**
      * Checks whether or not this complaint has or needs
      * a lawyer to be involved.
      *
@@ -211,20 +234,19 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condLawyerInvolved($complaint)
     {
-        if ((isset($complaint->com_attorney_has) 
-            && in_array(trim($complaint->com_attorney_has), ['Y', '?']))
-            && (!isset($complaint->com_attorney_oked) 
-                || trim($complaint->com_attorney_oked) != 'Y')) {
-            return 1;
-        }
-        if (isset($complaint->com_attorney_want) 
+        if (isset($complaint->com_attorney_has) 
+            && in_array(trim($complaint->com_attorney_has), ['Y', '?'])) {
+            if (isset($complaint->com_attorney_oked) 
+                && trim($complaint->com_attorney_oked) == 'Y') {
+                return 0;
+            } else {
+                return 1;
+            }
+        } elseif (isset($complaint->com_attorney_want) 
             && in_array(trim($complaint->com_attorney_want), ['Y'])) {
             return 1;
         }
-        if ((isset($complaint->com_anyone_charged) 
-            && in_array(trim($complaint->com_anyone_charged), ['Y', '?']))
-            && (!isset($complaint->com_all_charges_resolved) 
-                || trim($complaint->com_all_charges_resolved) != 'Y')) {
+        if ($this->condPendingChargs($complaint) == 1) {
             return 1;
         }
         if (isset($complaint->com_anyone_charged) 
@@ -235,7 +257,90 @@ class OpenComplaintConditions extends OpenSessDataOverride
         }
         return 0;
     }
-    
+
+    /**
+     * Checks if this complaint has pending charges.
+     *
+     * @return int
+     */
+    protected function condPendingChargs($complaint)
+    {
+        if ((isset($complaint->com_anyone_charged) 
+            && in_array(trim($complaint->com_anyone_charged), ['Y', '?']))
+            && (!isset($complaint->com_all_charges_resolved) 
+                || trim($complaint->com_all_charges_resolved) != 'Y')) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Checks if this complaint does not need an attorney, 
+     * but unlikely to find one — by automated standards.
+     *
+     * @return int
+     */
+    protected function condWantsAttorneyButNotLikely($complaint)
+    {
+        if (isset($complaint->com_attorney_has) 
+            && in_array(trim($complaint->com_attorney_has), ['Y', '?'])
+            && isset($complaint->com_attorney_oked) 
+            && trim($complaint->com_attorney_oked) == 'Y') {
+            return 0;
+        }
+        if (isset($complaint->com_attorney_want) 
+            && trim($complaint->com_attorney_want) == 'Y'
+            && $this->condPendingChargs($complaint) == 0) {
+            if (isset($this->sessData->dataSets["alleg_silver"])
+                && sizeof($this->sessData->dataSets["alleg_silver"]) > 0) {
+                $silv = $this->sessData->dataSets["alleg_silver"][0];
+                if ((!isset($silv->alle_sil_force_unreason)
+                        || in_array(trim($silv->alle_sil_force_unreason), ['N', '?', '']))
+                    && (!isset($silv->alle_sil_sexual_assault)
+                        || in_array(trim($silv->alle_sil_sexual_assault), ['N', '?', '']))) {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Checks if this complainant needs to choose publishing options
+     * within the complaint survey — instead of during followup.
+     *
+     * @return int
+     */
+    protected function condPublishingOptionsInSurvey($complaint)
+    {
+//echo 'condPublishingOptionsInSurvey( A<pre>'; print_r($complaint); echo '</pre>'; exit;
+        if ($this->condPartnerIntake($complaint) == 0
+            && $this->condAttorneyIntake($complaint) == 0
+            && (!isset($complaint->com_anon)
+                || intVal($complaint->com_anon) == 0)) {
+            if (isset($complaint->com_attorney_has) 
+                && in_array(trim($complaint->com_attorney_has), ['Y', '?'])) {
+                if (isset($complaint->com_attorney_oked) 
+                    && trim($complaint->com_attorney_oked) == 'Y') {
+                    return 1;
+                }
+            } elseif ($this->condPendingChargs($complaint) == 0) {
+                if (isset($complaint->com_attorney_want) 
+                    && trim($complaint->com_attorney_want) == 'Y') {
+                    if (isset($complaint->com_want_attorney_but_file) 
+                        && intVal($complaint->com_want_attorney_but_file) == 1) {
+                        return 1;
+                    }
+                } else {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
     /**
      * Checks if no sexual allegations were made 
      * related to this complaint.
@@ -416,7 +521,7 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function hasTooManyAllegations()
     {
-        return ($this->cntAllegations() > 5);
+        return ($this->cntAllegations() > 8);
     }
     
     /**
@@ -465,6 +570,33 @@ class OpenComplaintConditions extends OpenSessDataOverride
              if ($chk->isNotEmpty()) {
                  return 1;                
              }
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether or not this complainant responded 
+     * to qeustions about their feelings.
+     *
+     * @return int
+     */
+    protected function complaintHasFeelings()
+    {
+        if (isset($this->sessData->dataSets["scenes"]) 
+            && isset($this->sessData->dataSets["scenes"][0])) {
+            $scene = $this->sessData->dataSets["scenes"][0];
+            if ((isset($scene->scn_how_feel)
+                    && trim($scene->scn_how_feel) != '')
+                || (isset($scene->scn_desires_officers)
+                    && trim($scene->scn_desires_officers) != '')
+                || (isset($scene->scn_desires_officers_other)
+                    && trim($scene->scn_desires_officers_other) != '')
+                || (isset($scene->scn_desires_depts)
+                    && trim($scene->scn_desires_depts) != '')
+                || (isset($scene->scn_desires_depts_other)
+                    && trim($scene->scn_desires_depts_other) != '')) {
+                return 1;
+            }
         }
         return 0;
     }

@@ -25,15 +25,10 @@ class OpenPolice extends OpenInitExtras
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
      *
-     * @param  int $nID
-     * @param  array $tmpSubTier
-     * @param  string $nIDtxt
-     * @param  string $nSffx
-     * @param  int $currVisib
+     * @param  TreeNodeSurv $curr
      * @return string
      */
     protected function customNodePrint(&$curr = null)
-        // $nID = -3, $tmpSubTier = [], $nIDtxt = '', $nSffx = '', $currVisib = 1)
     {
         $nID = $curr->nID;
         // Main Complaint Survey
@@ -43,11 +38,10 @@ class OpenPolice extends OpenInitExtras
             $this->cleanDeptLnks();
         } elseif ($nID == 203) {
             $this->initBlnkAllegsSilv();
-        } elseif ($nID == 2341) {
+        } elseif ($nID == 3171) {
             return $this->printAllegAudit();
         } elseif (in_array($nID, [270, 973])) {
-            $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
-            $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
+            $this->clearComplaintCaches();
             return $this->printEndOfComplaintRedirect($nID);
             
         // Home Page
@@ -140,8 +134,21 @@ class OpenPolice extends OpenInitExtras
             $this->processOwnerUpdate();
             $this->saveComplaintAdmin();
             return $this->printComplaintOwner();
+        } elseif ($nID == 2850) {
+            return $this->printComplaintOwnerStatusForm();
+        } elseif ($nID == 2852) {
+            return $this->printComplaintOwnerPrivacy();
         } elseif ($nID == 1780) {
             return $this->printMfaInstruct();
+        } elseif ($nID == 2844) {
+            return $this->printComplaintAdminFirstReview();
+        } elseif ($nID == 2842) {
+            return $this->printComplaintAdminFormStatus();
+        } elseif ($nID == 2846) {
+            return $this->printComplaintAdminEmailForm();
+        } elseif ($nID == 2848) {
+            return $this->printComplaintAdminFormEdits();
+
 
         // Complaint Report
         } elseif ($nID == 3039) {
@@ -195,10 +202,21 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportOffAge($nID);
         } elseif ($nID == 1574) {
             return $this->reportEventTitle($this->sessData->getLatestDataBranchID());
+        } elseif (in_array($nID, [3092, 3095, 3098, 3102, 3104, 3111, 3115, 
+            3118, 3122, 3126, 3131, 3136, 3138, 3143, 3147, 3150, 3153, 3156])) {
+            return $this->getAllegOffNameRow($nID);
+        } elseif (in_array($nID, [])) {
+            return $this->getEventCivNameRow($nID);
+        } elseif ($nID == 1579) {
+            return $this->getStopReasons($nID);
         } elseif ($nID == 1710) {
             return $this->printReportShare();
         } elseif ($nID == 2899) {
             return $this->reportDeptDesires($nID);
+        } elseif ($nID == 1504) {
+            return $this->reportCivCharges($nID);
+        } elseif ($nID == 1501) {
+            return $this->reportCivInjuries($nID);
         } elseif (in_array($nID, [1795, 2266, 2335])) {
             return $this->getReportUploads($nID);
         } elseif ($nID == 1707) {
@@ -215,8 +233,7 @@ class OpenPolice extends OpenInitExtras
             $GLOBALS["SL"]->setFullPageLoaded(1000); 
         } elseif ($nID == 1385) {
             if ($GLOBALS["SL"]->REQ->has('refresh')) {
-                $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
-                $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
+                $this->clearComplaintCaches();
             }
             $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 
                 width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px;
@@ -234,7 +251,8 @@ class OpenPolice extends OpenInitExtras
                 $GLOBALS["SL"]->x["isPublicList"] = true;
                 $GLOBALS["SL"]->pageView = 'public';
             } elseif ($GLOBALS["SL"]->REQ->has('refresh')) {
-                $GLOBALS["SL"]->forgetAllCachesOfTrees([1, 42, 197]);
+                $this->clearComplaintCaches();
+                $GLOBALS["SL"]->forgetAllCachesOfTrees([1, 11, 42, 197]);
                 if (trim($GLOBALS["SL"]->REQ->get('refresh')) == 'repeat') {
                     echo '<h2>Refresh Complaints, & Repeat ...</h2>' 
                         . date("H:i:s") . '<script type="text/javascript"> '
@@ -263,7 +281,7 @@ class OpenPolice extends OpenInitExtras
 
         // Staff Area Nodes
         } elseif ($nID == 1416) {
-            if (in_array($this->v["uID"], [863, 897])) {
+            if (in_array($this->v["uID"], [863])) {
                 return '<h4>Staff Dashboard</h4>';
             }
         } elseif ($nID == 1420) {
@@ -366,7 +384,7 @@ class OpenPolice extends OpenInitExtras
         }
         return '';
     }
-    
+
     /**
      * Overrides default Survloop behavior for responses to multiple-choice questions.
      *
@@ -376,39 +394,26 @@ class OpenPolice extends OpenInitExtras
      */
     protected function customResponses($nID, &$curr)
     {
-        if ($nID == 2126) {
-            if (isset($curr->responses[0]) && isset($curr->responses[0]->node_res_eng) 
-                && isset($this->sessData->dataSets["complaints"]) 
-                && isset($this->sessData->dataSets["complaints"][0]->com_privacy)) {
-                switch ($this->sessData->dataSets["complaints"][0]->com_privacy) {
-                    case $GLOBALS["SL"]->def->getID('Privacy Types', 'Submit Publicly'):
-                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my complaint data on this website 
-                            with <b>Full Transparency</b>.<div class="pL20 mL5 mT10">
-                            We will publish your FULL complaint on OpenPolice.org. This includes your written story, 
-                            the names of civilians and police officers, and all survey answers.
-                            </div>';
-                        break;
-                    case $GLOBALS["SL"]->def->getID('Privacy Types', 'Names Visible to Police but not Public'):
-                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my complaint data on this website 
-                            with <b>No Names Public</b>.<div class="pL20 mL5 mT10">
-                            Only your multiple-choice answers will be published on OpenPolice.org. 
-                            This will NOT include your written story or police officers\' names and badge numbers.
-                            </div>';
-                        break;
-                    case $GLOBALS["SL"]->def->getID('Privacy Types', 'Completely Anonymous'):
-                    case $GLOBALS["SL"]->def->getID('Privacy Types', 'Anonymized'):
-                        $curr->responses[0]->node_res_eng = 'Yes, I agree to publish my <b>Anonymized</b> 
-                            complaint data on this website.<div class="pL20 mL5 mT10">
-                            Only your multiple-choice answers will be published on OpenPolice.org. 
-                            This will NOT include your written story or police officers\' names and badge numbers.
-                            </div>';
-                        break;
-                }
-            }
-        }
         return $curr;
     }
-    
+
+    /**
+     * Overrides primary Survloop printing of individual nodes from 
+     * surveys and site pages. This is one of the main routing hubs
+     * for OpenPolice.org customizations beyond Survloop defaults.
+     *
+     * @param  TreeNodeSurv $curr
+     * @param  string $var
+     * @return string
+     */
+    protected function customNodePrintVertProgress(&$curr = null, $val = null)
+    {
+        if (in_array($curr->nID, [1700, 1697, 1698, 1699, 3176])) {
+            return $this->printReportNoResponseTime($curr, $val);
+        }
+        return null;
+    }
+
     /**
      * Initializes the admin dashboard side-class.
      *

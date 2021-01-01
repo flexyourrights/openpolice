@@ -161,12 +161,14 @@
 
 @endif
 
-<div class="relDiv w100">
-    <div class="absDiv" style="right: -18px; top: 20px;">
-        <a href="?refresh=1" class="slGreenDark"
-            ><i class="fa fa-refresh" aria-hidden="true"></i></a>
+@if (!$GLOBALS["SL"]->x["isPublicList"])
+    <div class="relDiv w100">
+        <div class="absDiv" style="right: -18px; top: 20px;">
+            <a href="?refresh=1" class="slGreenDark"
+                ><i class="fa fa-refresh" aria-hidden="true"></i></a>
+        </div>
     </div>
-</div>
+@endif
 
 @if ($sView == 'list') 
 <style> 

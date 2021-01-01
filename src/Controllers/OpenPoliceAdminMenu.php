@@ -10,6 +10,7 @@
   */
 namespace FlexYourRights\OpenPolice\Controllers;
 
+use Auth;
 use RockHopSoft\Survloop\Controllers\Admin\AdminMenu;
 
 class OpenPoliceAdminMenu extends AdminMenu
@@ -160,6 +161,41 @@ class OpenPoliceAdminMenu extends AdminMenu
             1, 
             $this->genDeptSubMenu()
         );
+        if (in_array(Auth::user()->id, [863, 195, 897])) {
+            $treeMenu[] = $this->admMenuLnk(
+                '/dashboard/contact', 
+                'Contact Form', 
+                '<i class="fa fa-envelope-o" aria-hidden="true"></i>',
+                1, 
+                [ 
+                    $this->admMenuLnk(
+                        '/dashboard/contact',
+                        '', 
+                        '',
+                        1,
+                        [
+                            $this->admMenuLnk(
+                                '/dashboard/contact', 
+                                'Unread'
+                            ),
+                            $this->admMenuLnk(
+                                '/dashboard/contact/hold', 
+                                'On Hold'
+                            ),
+                            $this->admMenuLnk(
+                                '/dashboard/contact/resolved', 
+                                'Resolved'
+                            ),
+                            $this->admMenuLnk(
+                                '/dashboard/contact/trash', 
+                                'Trash'
+                            )
+                        ]
+                    )
+                ]
+            );
+        }
+        /*
         $treeMenu[] = $this->admMenuLnk(
             '/dash/manage-partners', 
             'Manage Partners', 
@@ -196,6 +232,7 @@ class OpenPoliceAdminMenu extends AdminMenu
                 )
             ]
         );
+        */
         return $treeMenu;
     }
 

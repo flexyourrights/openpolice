@@ -8,7 +8,7 @@
 
     <div class="pB15">
         <a id="compFiltBtn{{ $nID }}" href="javascript:;"
-            class="btn btn-secondary btn-sm updateSearchFilts updateComplaintFilts"
+            class="btn btn-primary btn-sm updateSearchFilts updateComplaintFilts"
             ><nobr>Apply Filters</nobr></a>
     </div>
     <a id="compFiltClearBtn{{ $nID }}" href="javascript:;"
@@ -33,7 +33,7 @@
             box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.9);">
         <div class="pB15">
             <a id="compFiltBtn{{ $nID }}" href="javascript:;"
-                class="btn btn-secondary btn-sm updateSearchFilts updateComplaintFilts"
+                class="btn btn-primary btn-sm updateSearchFilts updateComplaintFilts"
                 ><nobr>Apply Filters</nobr></a>
         </div>
         <a id="compFiltClearBtn{{ $nID }}" href="javascript:;"

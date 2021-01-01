@@ -45,30 +45,113 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
     }
 
     /**
+     * Print staff toolkit form for the first complaint review.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminFirstReview()
+    {
+        if ($this->coreID > 0
+            && isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) > 0
+            && $this->isStaffOrAdmin()) {
+            echo view(
+                'vendor.openpolice.nodes.2844-report-staff-form-first-review',
+                [ "complaintRec" => $this->sessData->dataSets["complaints"][0] ]
+            )->render();
+        }
+        exit;
+    }
+
+    /**
+     * Print staff toolkit form to update complaint status, 
+     * and document uploads.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminFormStatus()
+    {
+        if ($this->coreID > 0
+            && isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) > 0
+            && $this->isStaffOrAdmin()) {
+            $this->initComplaintToolbox();
+            $this->loadOversightDateLookups();
+            $this->loadComplaintAdminHistory();
+            $this->prepEmailComplaintData();
+            echo view(
+                'vendor.openpolice.nodes.2842-report-staff-form-status',
+                $this->v
+            )->render();
+        }
+        exit;
+    }
+
+    /**
+     * Print staff admin tools to send email regarding a complaint.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminEmailForm()
+    {
+        if ($this->coreID > 0
+            && isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) > 0
+            && $this->isStaffOrAdmin()) {
+            $this->initComplaintToolbox();
+            $this->prepEmailComplaintData();
+            $this->chkForEmailID();
+            $this->loadComplaintEmailList();
+            $this->loadCurrEmail();
+            $this->prepAdminComplaintEmailing();
+            if ($GLOBALS["SL"]->REQ->has('ajaxEmaForm')) {
+                echo view(
+                    'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form', 
+                    $this->v
+                )->render();
+                exit;
+            }
+            echo view(
+                'vendor.openpolice.nodes.2846-report-inc-staff-tools-email',
+                $this->v
+            )->render();
+        }
+        exit;
+    }
+
+    /**
+     * Print staff toolkit form to edit complaint details.
+     *
+     * @return string
+     */
+    protected function printComplaintAdminFormEdits()
+    {
+        if ($this->coreID > 0
+            && isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) > 0
+            && $this->isStaffOrAdmin()) {
+            $this->initComplaintToolbox();
+            echo view(
+                'vendor.openpolice.nodes.2848-report-inc-staff-tools-edits',
+                $this->v
+            )->render();
+        }
+        exit;
+    }
+
+    /**
      * Print OpenPolice.org staff admin tools for managing one complaint.
      *
      * @return string
      */
     protected function printComplaintAdmin()
     {
-        $this->loadReportUploadTypes();
+        $this->initComplaintToolbox();
         $this->loadOversightDateLookups();
+        //$this->prepEmailComplaintData();
         $this->loadComplaintAdminHistory();
-        $this->prepEmailComplaintData();
-        $GLOBALS["SL"]->loadStates();
+        //$GLOBALS["SL"]->loadStates();
         $this->v["needsWsyiwyg"]  = true;
-        $this->v["incidentState"] = $this->sessData->dataSets["incidents"][0]->inc_address_state;
-        $this->v["complaintRec"]  = $this->sessData->dataSets["complaints"][0];
-        if ($GLOBALS["SL"]->REQ->has('ajaxEmaForm')) {
-            $this->chkForEmailID();
-            $this->loadCurrEmail();
-            $this->prepAdminComplaintEmailing();
-            echo view(
-                'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form', 
-                $this->v
-            )->render();
-            exit;
-        }
         return $this->printComplaintAdminCard();
     }
 
@@ -92,7 +175,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             $this->v["complaintRec"]->com_type
         );
         $status = str_replace('Investigative Agency', 'IA', $status);
-        $title = '<span class="slBlueDark">' 
+        $this->v["toolkitTitle"] = '<span class="slBlueDark">' 
             . $this->getCurrComplaintEngLabel() . ': Admin Toolkit</span>'
             . '<div class="mT5" style="color: #333; font-size: 16px;">'
             . '<b>Status: ' . $status . '</b></div>';
@@ -105,17 +188,14 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             || in_array($status, ['New', 'Unverified'])) {
             $this->v["updateTitle"] .= $this->v["alertIco"];
         }
+        $this->v["hasOfficers"] = (isset($this->sessData->dataSets["officers"])
+            && sizeof($this->sessData->dataSets["officers"]) > 0);
         $this->v["ico"] = 'caret';
-        $tools = view(
+        return view(
                 'vendor.openpolice.nodes.1712-report-inc-staff-tools', 
                 $this->v
             )->render() 
             . $this->printComplaintAdminChkPdfs();
-        $openToolbox = true;
-    //$openToolbox = ($hasEmailLoaded || $hasEmailSent || $status == 'New');
-        return '<div class="pT20 pB20">' 
-            . $GLOBALS["SL"]->printAccard($title, $tools, $openToolbox)
-            . '</div>';
     }
 
     /**
@@ -247,6 +327,9 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
         if ($GLOBALS["SL"]->REQ->has('d')) {
             $this->v["deptID"] = intVal($GLOBALS["SL"]->REQ->get('d'));
         }
+        if (!isset($this->v["comDepts"])) {
+            $this->prepEmailComplaintData();
+        }
         if (sizeof($this->v["comDepts"]) > 0) {
             if ($this->v["deptID"] <= 0) {
                 $this->v["deptID"] = $this->v["comDepts"][0]["id"];
@@ -325,6 +408,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 case $GLOBALS["SL"]->def->getID($defSet, 'Incomplete'):
                     $this->v["emailID"] = 36; // Incomplete Complaint Check-In
                     break;
+                case $GLOBALS["SL"]->def->getID($defSet, 'Wants Attorney'):
                 case $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'):
                     $this->v["emailID"] = 32; // Lawyer, No Charges
                     if (isset($com->com_anyone_charged) 
@@ -539,10 +623,10 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
             } elseif ($status == 'Needs More Work') {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, 'Needs More Work');
-            } elseif (in_array($status, [
-                    'Pending Attorney: Defense Needed', 
-                    'Pending Attorney: Civil Rights Needed/Wanted' 
-                ])) {
+            } elseif ($status == 'Pending Attorney: Civil Rights Needed/Wanted') {
+                $this->sessData->dataSets["complaints"][0]->com_status 
+                    = $GLOBALS["SL"]->def->getID($defSet, 'Wants Attorney');
+            } elseif ($status == 'Pending Attorney: Defense Needed') {
                 $this->sessData->dataSets["complaints"][0]->com_status 
                     = $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney');
             } elseif (in_array($status, [ 'Has Attorney' ])) {
@@ -760,10 +844,36 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
      */
     protected function initComplaintToolbox()
     {
+        $GLOBALS["SL"]->loadStates();
+        $this->loadReportUploadTypes();
+        if (isset($this->sessData->dataSets["complaints"])
+            && sizeof($this->sessData->dataSets["complaints"]) > 0) {
+            $this->v["complaintRec"]
+                = $this->sessData->dataSets["complaints"][0];
+            $this->v["incidentState"] 
+                = $this->sessData->dataSets["incidents"][0]->inc_address_state;
+            $this->v["comStatus"] = $GLOBALS['SL']->def->getVal(
+                'Complaint Status', 
+                $this->v["complaintRec"]->com_status
+            );
+        }
         $this->v["firstRevDone"] = false;
         $this->v["firstReview"]  = true;
         $this->v["lastReview"]   = true;
         $this->v["history"]      = [];
+        return true;
+    }
+    
+    /**
+     * Prepare full list of email templates.
+     *
+     * @return boolean
+     */
+    protected function loadComplaintEmailList()
+    {
+        $this->v["emailList"] = SLEmails::orderBy('email_name', 'asc')
+            ->orderBy('email_type', 'asc')
+            ->get();
         return true;
     }
     
@@ -774,6 +884,7 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
      */
     protected function loadComplaintAdminHistory()
     {
+        $this->loadComplaintEmailList();
         $allUserNames = [];
         $reviews = OPzComplaintReviews::where('com_rev_complaint', 
                 '=', $this->coreID)
@@ -817,9 +928,6 @@ class OpenReportToolsAdmin extends OpenReportToolsOversight
                 ];
             }
         }
-        $this->v["emailList"] = SLEmails::orderBy('email_name', 'asc')
-            ->orderBy('email_type', 'asc')
-            ->get();
         $emails = SLEmailed::whereIn('emailed_tree', [1, 42, 197])
             ->where('emailed_rec_id', $this->coreID) //corePublicID
             ->orderBy('created_at', 'asc')

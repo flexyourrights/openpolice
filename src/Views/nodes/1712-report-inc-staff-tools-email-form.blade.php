@@ -1,6 +1,5 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-email-form.blade.php -->
 
-
 <div class="nodeAnchor"><a name="emailer"></a></div>
 
 <form name="complaintEmailForm" id="complaintEmailFormID">
@@ -22,11 +21,11 @@
 @if ($emailID == 12 && $deptID > 0)
     @if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) 
         || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
-        <div class="alert alert-danger mT15" role="alert">
-            <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
-            is NOT OpenPolice-Friendly!<br />
-            You should not send them this email!</b>
-        </div>
+        <div class="alert alert-danger mT15" role="alert"><b>
+            Please don't send this email. The 
+            {{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }} 
+            doesn't accept complaints that are emailed or filed on third-party formats.
+        </b></div>
     @endif
 @endif
 
@@ -37,7 +36,9 @@
         @endif
 
         Send To
-        @if (sizeof($emailsTo[$email['rec']->email_type]) > 0)
+        @if (isset($email['rec']->email_type)
+            && isset($emailsTo[$email['rec']->email_type])
+            && sizeof($emailsTo[$email['rec']->email_type]) > 0)
             <select class="form-control form-control-lg w100 changeEmailTo" 
                 name="emailTo{{ $j }}" id="emailTo{{ $j }}ID"
                 autocomplete=off >
@@ -51,7 +52,9 @@
         @endif
 
         <div id="emailTo{{ $j }}CustID" class=" 
-            @if (sizeof($emailsTo[$email['rec']->email_type]) > 0) disNon 
+            @if (isset($email['rec']->email_type)
+                && isset($emailsTo[$email['rec']->email_type])
+                && sizeof($emailsTo[$email['rec']->email_type]) > 0) disNon 
             @else disBlo 
             @endif ">
             <div class="row">
@@ -140,11 +143,11 @@
     @if ($emailID == 12 && $deptID > 0)
         @if (!isset($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) 
             || intVal($GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_op_compliant) != 1)
-            <div class="alert alert-danger mT30" role="alert">
-                <b>{{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }}
-                is NOT OpenPolice-Friendly!<br />
-                You should not send them this email!</b>
-            </div>
+            <div class="alert alert-danger mT30" role="alert"><b>
+                Please don't send this email. The 
+                {{ $GLOBALS["SL"]->x["depts"][$deptID]["deptRow"]->dept_name }} 
+                doesn't accept complaints that are emailed or filed on third-party formats.
+            </b></div>
         @endif
     @endif
     

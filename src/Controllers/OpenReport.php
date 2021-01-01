@@ -14,10 +14,11 @@ use DB;
 use Auth;
 use App\Models\User;
 use App\Models\OPDepartments;
+use App\Models\OPOversight;
+use App\Models\OPVehicles;
 use App\Models\OPzEditDepartments;
 use App\Models\OPzEditOversight;
 use App\Models\OPzVolunTmp;
-use App\Models\OPOversight;
 use FlexYourRights\OpenPolice\Controllers\OpenDeptStats;
 
 class OpenReport extends OpenDeptStats
@@ -86,6 +87,7 @@ class OpenReport extends OpenDeptStats
      */
     protected function reportAllegsWhy($nID = -3)
     {
+        $this->checkEmptyVehicleRecs();
         $fullPrint = false;
         $why = $this->reportAllegsWhyDeets($nID);
         $deets = 'Allegations';
@@ -232,7 +234,6 @@ class OpenReport extends OpenDeptStats
     protected function getReportDept($deptID)
     {
         $dept = $this->sessData->getRowById('departments', $deptID);
-//echo 'getReportDept(' . $deptID . '<pre>'; print_r($dept); echo '</pre>'; exit;
         if ($dept && isset($dept->dept_name)) {
             $status = $this->sessData->dataSets["complaints"][0]->com_status;
             $type   = $this->sessData->dataSets["complaints"][0]->com_type;
@@ -240,6 +241,8 @@ class OpenReport extends OpenDeptStats
                 return '<h4 style="margin-bottom: 0px; ">'
                     . 'Misconduct Incident Report for ' . $dept->dept_name . '</h4>';
             } else {
+
+
                 return '<h4 class="mT0 mB5"><a href="/dept/' . $dept->dept_slug 
                     . '" class="slBlueDark">Misconduct Incident Report for ' 
                     . $dept->dept_name . '</a></h4>'
@@ -279,6 +282,7 @@ class OpenReport extends OpenDeptStats
      */
     protected function getReportByLine()
     {
+//$ipChk = true; // ($GLOBALS["SL"]->getIP() == '198.211.110.134');
         $ret = '';
         $com = $this->sessData->dataSets["complaints"][0];
         if ($this->isAnonyLogin()) {
@@ -291,8 +295,12 @@ class OpenReport extends OpenDeptStats
                 $ret = $this->getCivReportName(
                     $this->sessData->dataSets["civilians"][0]->civ_id
                 );
+//if ($ipChk) { echo 'getReportByLine() made a name! ' . $ret . '<br />'; }
             }
+//if ($ipChk) { echo 'getReportByLine() pageView: ' . $GLOBALS["SL"]->pageView . ', isPublished: ' . (($this->isPublished('complaints', $this->coreID, $com)) ? 'true' : 'false') . ', isPublic: ' . (($this->isPublic()) ? 'true' : 'false') . ', ret: ' . $ret . '<br />'; exit; }
+// pageView: public, isPublished: true, isPublic: false
         }
+//if ($ipChk) { echo 'getReportByLine() naww, ret: ' . $ret . '<br />'; exit; }
         if (trim($ret) != '') {
             return [ 'Submitted By', $ret ];
         }
@@ -362,7 +370,7 @@ class OpenReport extends OpenDeptStats
                 $date = date('F Y', strtotime($inc->inc_time_start));
             }
         }
-        return [ 'Indicent Date', $date ];
+        return [ 'Incident Date', $date ];
     }
     
     /**
@@ -401,7 +409,7 @@ class OpenReport extends OpenDeptStats
                 && !$noAddy
                 && $this->condPrintIncidentLocation()) {
                 return [
-                    'Indicent Location', 
+                    'Incident Location', 
                     $addy
                 ];
             }
@@ -417,7 +425,7 @@ class OpenReport extends OpenDeptStats
                 if (trim($c) != '') {
                     $ret = $GLOBALS["SL"]->allCapsToUp1stChars($c) . ', ' . $state;
                     return [
-                        'Indicent Location',
+                        'Incident Location',
                         $this->fixWhereError($ret)
                     ];
                 }
@@ -562,14 +570,15 @@ class OpenReport extends OpenDeptStats
      */
     protected function getCivReportNameHeader($nID)
     {
-//echo '<br /><br /><br />getCivReportNameHeader(' . $nID . ', branch: ' . $this->sessData->getLatestDataBranchID() . ', name: ' . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . '<br />'; exit;
         $style = '';
         if (!$GLOBALS["SL"]->isPdfView()) {
             $style = ' style="margin: 0px 0px 18px 0px;"';
         }
-        return '<h4 class="slBlueDark"' . $style . '>' 
-            . $this->getCivReportName($this->sessData->getLatestDataBranchID()) 
-            . '</h4>';
+        $ret = $this->getCivReportName($this->sessData->getLatestDataBranchID());
+
+//if ($GLOBALS["SL"]->getIP() == '198.211.110.134') { echo 'getCivReportNameHeader(' . $nID . ', branch: ' . $this->sessData->getLatestDataBranchID() . ', name: ' . $this->getCivReportName($this->sessData->getLatestDataBranchID()) . ' — ret: ' . $ret . '<br />'; exit; }
+
+        return '<h4 class="slBlueDark"' . $style . '>' . $ret . '</h4>';
     }
     
     /**
@@ -606,12 +615,12 @@ class OpenReport extends OpenDeptStats
                     $firstLast .= trim($prsn->prsn_name_last);
                 }
                 if ($civID ==  $setCivID 
-                    && ($firstLast == '' || $com->com_privacy == 306)) {
+                    && ($firstLast == '' 
+                        || (isset($com->com_anon) && intVal($com->com_anon) == 1))) {
                     // '<span style="color: #2B3493;" title="'
                     // . 'This complainant did not provide their name to investigators.'
                     $name = 'Complainant';
-                } elseif ($this->canPrintFullReport()
-                    && !$this->hideWitnessName($civRow)) {
+                } elseif (!$this->hideWitnessName($civRow)) {
                     if ($firstLast != '') {
                         // '<span style="color: #2B3493;" title="'
                         // . 'This complainant wanted to publicly provide their name.">' 
@@ -647,6 +656,7 @@ class OpenReport extends OpenDeptStats
                 $this->v["civNames"][$civID] = $name . ' (' . $label . ')';
             }
         }
+//if ($GLOBALS["SL"]->getIP() == '198.211.110.134') { echo 'getCivReportName( canPrintFullReport: ' . (($this->canPrintFullReport()) ? 'true' : 'false') . ', hideWitnessName: ' . (($this->hideWitnessName($civRow)) ? 'true' : 'false') . ' — ret: ' . $this->v["civNames"][$civID] . '<br />'; exit; }
         return $this->v["civNames"][$civID];
     }
     
@@ -736,11 +746,6 @@ class OpenReport extends OpenDeptStats
                         }
                     }
 
-
-                    
-
-
-
                     if (trim($prsn->prsn_nickname) != '') {
                         $name = trim(str_ireplace('Officer ', '', $prsn->prsn_nickname));
                     } else {
@@ -817,7 +822,7 @@ class OpenReport extends OpenDeptStats
      *
      * @return string
      */
-    protected function getForceCivName()
+    protected function getForceCivName($val)
     {
         $ret = '';
         $forceID = $this->sessData->getLatestDataBranchID();
@@ -842,17 +847,20 @@ class OpenReport extends OpenDeptStats
      *
      * @return string
      */
-    protected function getForceOffName()
+    protected function getForceOffName($val)
     {
         $ret = '';
         $forceID = $this->sessData->getLatestDataBranchID();
         if ($forceID > 0
             && isset($this->sessData->dataSets["links_officer_force"])
             && sizeof($this->sessData->dataSets["links_officer_force"]) > 0) {
-            foreach ($this->sessData->dataSets["links_officer_force"] as $lnk) {
+            foreach ($this->sessData->dataSets["links_officer_force"] as $i => $lnk) {
                 if (isset($lnk->lnk_off_frc_force_id)
-                    && $lnk->lnk_off_frc_force_id == $forceID) {
-                    $ret .= ', ' . $this->getOffReportName($lnk->lnk_off_frc_off_id);
+                    && $lnk->lnk_off_frc_force_id == $forceID
+                    && isset($lnk->lnk_off_frc_off_id)
+                    && intVal($lnk->lnk_off_frc_off_id) > 0) {
+                    $off = $this->sessData->getRowById('officers', $lnk->lnk_off_frc_off_id);
+                    $ret .= ', ' . $this->getOffReportName($off);
                 }
             }
             if ($ret != '') {
@@ -860,6 +868,134 @@ class OpenReport extends OpenDeptStats
             }
         }
         return $ret;
+    }
+
+    /**
+     * Print the Officer name tied to this Allegation.
+     *
+     * @param  int $nID
+     * @return array
+     */
+    protected function getAllegOffNameRow($nID)
+    {
+        $ret = [ '', '' ];
+        $allegID = $this->sessData->getLatestDataBranchID();
+        if ($allegID > 0
+            && isset($this->sessData->dataSets["links_officer_allegations"])
+            && sizeof($this->sessData->dataSets["links_officer_allegations"]) > 0) {
+            foreach ($this->sessData->dataSets["links_officer_allegations"] as $i => $lnk) {
+                if (isset($lnk->lnk_off_alle_alle_id)
+                    && $lnk->lnk_off_alle_alle_id == $allegID
+                    && isset($lnk->lnk_off_alle_off_id)
+                    && intVal($lnk->lnk_off_alle_off_id) > 0) {
+                    $off = $this->sessData->getRowById('officers', $lnk->lnk_off_alle_off_id);
+                    $ret[1] .= ', ' . $this->getOffReportName($off);
+
+                }
+            }
+            if ($ret[1] != '') {
+                $ret[1] = trim(substr($ret[1], 1));
+                $off = 'Which officers';
+                switch ($nID) {
+                    case 3092: $ret[0] = $off . ' made stops?'; break;
+                    case 3095: $ret[0] = $off . ' refused to provide ID?'; break;
+                    case 3098: $ret[0] = $off . ' performed the search?'; break;
+                    case 3102: $ret[0] = $off . ' seized property?'; break;
+                    case 3104: $ret[0] = $off . ' damaged property?'; break;
+                    case 3111: $ret[0] = $off . ' sexually harassed somebody?'; break;
+                    case 3115: $ret[0] = $off . ' sexually assaulted somebody?'; break;
+                    case 3118: $ret[0] = $off . ' used unreasonable force?'; break;
+                    case 3122: $ret[0] = $off . ' made the arrests?'; break;
+                    case 3126: $ret[0] = $off . ' used arrest charges in retaliation?'; break;
+                    case 3131: $ret[0] = $off . ' used citation charges in retaliation?'; break;
+                    case 3136: $ret[0] = $off . ' intimidated with a weapon?'; break;
+                    case 3138: $ret[0] = $off . ' acted in a biased or discriminatory manner?'; break;
+                    case 3143: $ret[0] = $off . ' acted in repeat harassment?'; break;
+                    case 3147: $ret[0] = $off . ' neglected their duty?'; break;
+                    case 3150: $ret[0] = $off . ' did not follow appropriate procedure?'; break;
+                    case 3153: $ret[0] = $off . '\' conduct were unbecoming?'; break;
+                    case 3156: $ret[0] = $off . ' were discourteous?'; break;
+                }
+                return $ret;
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Add a deet row for each type of injuries.
+     *
+     * @param  int $nID
+     * @return array
+     */
+    protected function nodePrintDataBlockLoadDeetsCustom($nID)
+    {
+        $deets = [];
+        if ($nID == 1502) {
+            $civID = $this->sessData->getLatestDataBranchID();
+            if ($civID > 0
+                && isset($this->sessData->dataSets["injuries"])
+                && sizeof($this->sessData->dataSets["injuries"]) > 0) {
+                foreach ($this->sessData->dataSets["injuries"] as $inj) {
+                    if ($inj->inj_subject_id == $civID
+                        && isset($inj->inj_type)
+                        && intVal($inj->inj_type) > 0) {
+                        $defInj = $GLOBALS["SL"]->def->getVal('Injury Types', $inj->inj_type);
+                        if (trim($defInj) != '') {
+                            $deet = [ 'Injury: ' . $defInj, '' ];
+                            if (isset($this->sessData->dataSets["injury_body_parts"])
+                                && sizeof($this->sessData->dataSets["injury_body_parts"]) > 0) {
+                                foreach ($this->sessData->dataSets["injury_body_parts"] as $part) {
+                                    if (isset($part->inj_bdy_injury_id)
+                                        && intVal($part->inj_bdy_injury_id) == $inj->inj_id
+                                        && isset($part->inj_bdy_part)
+                                        && intVal($part->inj_bdy_part) > 0) {
+                                        $defPrt = $part->inj_bdy_part;
+                                        $defPrt = $GLOBALS["SL"]->def->getVal('Body Part', $defPrt);
+                                        $deet[1] .= ', ' . $defPrt;
+                                    }
+                                }
+                            }
+                            if (trim($deet[1]) != '') {
+                                $deet[1] = trim(substr($deet[1], 1));
+                            }
+                            if (isset($inj->inj_description)
+                                && trim($inj->inj_description) != '') {
+                                $deet[1] .= ' — ' . $inj->inj_description;
+                            }
+                            $deets[] = $deet;
+                        }
+                    }
+                }
+            }
+        }
+        return $deets;
+    }
+
+    /**
+     * List reasons officer gave for stop.
+     *
+     * @param  int $nID
+     * @return array
+     */
+    protected function getStopReasons($nID)
+    {
+        if (isset($this->sessData->dataSets["stop_reasons"])
+            && sizeof($this->sessData->dataSets["stop_reasons"]) > 0) {
+            $ret = [ 'Officer gave reason for stop?', '' ];
+            foreach ($this->sessData->dataSets["stop_reasons"] as $i => $reas) {
+                if (isset($reas->stop_reas_reason)
+                    && intVal($reas->stop_reas_reason) > 0) {
+                    $rID = $reas->stop_reas_reason;
+                    $ret[1] .= ', ' . $GLOBALS["SL"]->def->getValById($rID);
+                }
+            }
+            if ($ret[1] != '') {
+                $ret[1] = trim(substr($ret[1], 1));
+                return $ret;
+            }
+        }
+        return [];
     }
     
     /**
@@ -903,7 +1039,8 @@ class OpenReport extends OpenDeptStats
         }
         if (trim($info) != '' 
             && ($civID != $this->sessData->dataSets["civilians"][0]->civ_id 
-                || $this->sessData->dataSets["complaints"][0]->com_privacy != 306)) {
+                || (!isset($this->sessData->dataSets["complaints"][0]->com_anon)
+                    || intVal($this->sessData->dataSets["complaints"][0]->com_anon) != 1))) {
             return '<i class="slGrey">Not public: ' . substr($info, 1) . '</i>';
         }
         return '';
@@ -986,10 +1123,7 @@ class OpenReport extends OpenDeptStats
         }
         if (trim($profanity) != '') {
             $desc = 'Civilian' . (($cnt > 1) ? 's' : '') . ' used profanity?';
-            return [
-                $desc, 
-                substr($profanity, 1)
-            ];
+            return [ $desc, substr($profanity, 1) ];
         }
         return [];
     }
@@ -1004,11 +1138,8 @@ class OpenReport extends OpenDeptStats
         $phys = $this->sessData->getLatestDataBranchRow();
         if ($phys && isset($phys->phys_age) && intVal($phys->phys_age) > 0) {
             $defAge = $GLOBALS["SL"]->def->getVal('Age Ranges Officers', $phys->phys_age);
-            return [
-                '<span class="slGrey">Age Range</span>', 
-                $defAge, 
-                $nID
-            ];
+            $label = '<span class="slGrey">Age Range</span>';
+            return [ $label, $defAge, $nID ];
         }
         return [];
     }
@@ -1057,7 +1188,34 @@ class OpenReport extends OpenDeptStats
             . '>Desires for Department(s) Involved</a>'
             . '<div id="hidiv2899" class="disNon">'
             . '"I want the police department to adopt..."</div>';
-        return ['', $ret];
+        return [ $label, $ret ];
+    }
+    
+    /**
+     * Print out list of charges filed against civilian.
+     *
+     * @return array
+     */
+    protected function reportCivCharges($nID)
+    {
+        $ret = '';
+        $civID = $this->sessData->getLatestDataBranchID();
+        if ($civID > 0
+            && isset($this->sessData->dataSets["charges"])
+            && sizeof($this->sessData->dataSets["charges"]) > 0) {
+            foreach ($this->sessData->dataSets["charges"] as $charge) {
+                if (isset($charge->chrg_civ_id) 
+                    && intVal($charge->chrg_civ_id) == $civID
+                    && isset($charge->chrg_charges) 
+                    && intVal($charge->chrg_charges) > 0) {
+                    $ret .= ', ' . $GLOBALS["SL"]->def->getValById($charge->chrg_charges);
+                }
+            }
+            if (trim($ret) != '') {
+                return [ 'Charges Filed Against', trim(substr($ret, 1)) ];
+            }
+        }
+        return [];
     }
     
     /**
@@ -1079,6 +1237,98 @@ class OpenReport extends OpenDeptStats
                 "viewPrfx"  => $viewPrfx
             ]
         )->render();
+    }
+    
+    /**
+     * Print out  section of the report.
+     *
+     * @param  TreeNodeSurv $curr
+     * @param  string $var
+     * @return array
+     */
+    protected function printReportNoResponseTime(&$curr = null, $val = null)
+    {
+        list($itemInd, $itemID) = $this->sessData
+            ->currSessDataPosBranchOnly('links_complaint_dept');
+        $deptLinkRow = $this->sessData->getRowById('links_complaint_dept', $itemID);
+        $overTbl = 'links_complaint_oversight';
+        $fldVals = [
+            "lnk_com_over_complaint_id" => $deptLinkRow->lnk_com_dept_complaint_id,
+            "lnk_com_over_dept_id"      => $deptLinkRow->lnk_com_dept_dept_id
+        ];
+        $overLinkRow = $this->sessData->getRowIDsByFldVal($overTbl, $fldVals, true);
+        if (sizeof($overLinkRow) > 0) {
+            if (!$this->checkIfHasTimelineEvent($overLinkRow, 'submitted')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'received')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'investigated')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'report_date')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'declined')
+                && in_array($curr->nID, [1700, 1697, 1698, 1699, 3176])) {
+                return [ 'skip row' ];
+            }
+            if (!$this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'received')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'investigated')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'report_date')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'declined')
+                && in_array($curr->nID, [1700, 1698, 1699, 3176])) {
+                return [ 'skip row' ];
+            }
+            if ($this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'received')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'investigated')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'report_date')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'declined')
+                && in_array($curr->nID, [1698, 1699, 3176])) {
+                return [ 'skip row' ];
+            }
+            if ($this->checkIfHasTimelineEvent($overLinkRow, 'received')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'investigated')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'report_date')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'declined')) {
+                if (!$this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                    && $curr->nID == 1700) {
+                    return [ 'skip row' ];
+                }
+                if (in_array($curr->nID, [1699, 3176])) {
+                    return [ 'skip row' ];
+                }
+            }
+            if ($this->checkIfHasTimelineEvent($overLinkRow, 'investigated')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'report_date')
+                && !$this->checkIfHasTimelineEvent($overLinkRow, 'declined')) {
+                if (!$this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                    && $curr->nID == 1700) {
+                    return [ 'skip row' ];
+                }
+                if (in_array($curr->nID, [3176])) {
+                    return [ 'skip row' ];
+                }
+            }
+            if ($this->checkIfHasTimelineEvent($overLinkRow, 'declined')) {
+                if (!$this->checkIfHasTimelineEvent($overLinkRow, 'still_no_response')
+                    && $curr->nID == 1700) {
+                    return [ 'skip row' ];
+                }
+                if (in_array($curr->nID, [1698, 1699])) {
+                    return [ 'skip row' ];
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Checks whether or not this complaint processing event has a timestamp.
+     *
+     * @return boolean
+     */
+    private function checkIfHasTimelineEvent($overLinkRow, $type = 'received')
+    {
+        return (isset($overLinkRow[0]->{ 'lnk_com_over_' . $type })
+                && trim($overLinkRow[0]->{ 'lnk_com_over_' . $type }) != ''
+                && substr($overLinkRow[0]->{ 'lnk_com_over_' . $type }, 0, 2) == '20');
     }
     
     /**
@@ -1168,11 +1418,49 @@ class OpenReport extends OpenDeptStats
         if (in_array($nID, [1486, 1528])) {
             return $GLOBALS["SL"]->printHeight(intVal($val));
         } elseif ($nID == 2834) {
-            return $this->getForceCivName();
+            return $this->getForceCivName($val);
         } elseif ($nID == 2835) {
-            return $this->getForceOffName();
+            return $this->getForceOffName($val);
         }
         return $val;
+    }
+    
+    /**
+     * Check for and delete empty vehicle records. This should not be 
+     * needed if the survey loop adding process was perfect. ;)
+     *
+     * @return boolean
+     */
+    protected function checkEmptyVehicleRecs()
+    {
+        if (isset($this->sessData->dataSets["vehicles"])
+            && sizeof($this->sessData->dataSets["vehicles"]) > 0) {
+            $found = false;
+            foreach ($this->sessData->dataSets["vehicles"] as $i => $v) {
+                if ((!isset($v->vehic_is_civilian)
+                        || $v->vehic_is_civilian === null)
+                    && (!isset($v->vehic_transportation)
+                        || $v->vehic_transportation === null
+                        || intVal($v->vehic_transportation) <= 0)
+                    && (!isset($v->vehic_vehicle_make)
+                        || $v->vehic_vehicle_make === null
+                        || trim($v->vehic_vehicle_make) == '')
+                    && (!isset($v->vehic_vehicle_model)
+                        || $v->vehic_vehicle_model === null
+                        || trim($v->vehic_vehicle_model) == '')
+                    && (!isset($v->vehic_vehicle_desc)
+                        || $v->vehic_vehicle_desc === null
+                        || trim($v->vehic_vehicle_desc) == '')) {
+                    $this->sessData->dataSets["vehicles"][$i]->delete();
+                    $found = true;
+                }
+            }
+            if ($found) {
+                $this->sessData->refreshDataSets();
+            }
+        }
+//exit;
+        return true;
     }
 
 }

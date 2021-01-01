@@ -35,7 +35,7 @@
         )->render() !!}
         <div class="p5">
             Departments can earn a score of up to 100. 
-            <a href="/how-we-rate-departments"
+            <a href="/department-accessibility#n2993"
             	>More about how we rate departments.</a>
         </div>
     </div>
@@ -47,7 +47,7 @@
     <div class="mT10"><p class="slGrey">
         Department info updated 
         {{ date('n/j/y', strtotime($d["deptRow"]->dept_verified)) }}<br />
-        <a href="/how-we-rate-departments"
+        <a href="/department-accessibility#n2993"
             >More about how we rate departments.</a>
     </p></div>
 @endif

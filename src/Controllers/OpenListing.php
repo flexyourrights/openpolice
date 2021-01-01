@@ -30,7 +30,7 @@ class OpenListing extends OpenListFilters
      * @param  boolean $isAdmin
      * @return array
      */
-    public function printPreviewReportCustom($isAdmin = false)
+    public function printPreviewReportCustom($isAdmin = false, $view = '')
     {
         $coreTbl = $GLOBALS["SL"]->coreTbl;
         $coreAbbr = $GLOBALS["SL"]->coreTblAbbr();
@@ -42,7 +42,9 @@ class OpenListing extends OpenListFilters
         $incident = $this->sessData->dataSets["incidents"][0];
         $where = $this->getReportWhereLine(0, true);
         $storyPrev = '';
-        if ($this->canPrintFullReport()) {
+        if ($this->isStaffOrAdmin()
+            || $this->canPrintFullReportByRecordSpecs($com)) {
+            // $this->canPrintFullReport()) {
             $storyPrev = $com->{ $coreAbbr . 'summary' };
         }
         return view(
@@ -104,8 +106,7 @@ class OpenListing extends OpenListFilters
                 if (isset($d->dept_name) && trim($d->dept_name) != $notSure) {
                     $deptList .= ((trim($deptList) != '') ? ', ' : '') 
                         . '<a href="/dept/' . $d->dept_slug . '">'
-                        . str_replace('Department', 'Dept.', $d->dept_name) 
-                        . '</a>';
+                        . $d->dept_name . '</a>';
                 }
             }
         }
@@ -175,8 +176,12 @@ class OpenListing extends OpenListFilters
     protected function getComplaintPreviewByRow($com)
     {
         $ret = '';
-        $cacheName = 'complaint' . $com->com_id . '-preview-' 
-            . (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
+        $cacheName = 'complaint' . $com->com_id . '-preview-';
+        if ($this->isStaffOrAdmin()) {
+            $cacheName .= 'sensitive';
+        } else {
+            $cacheName .= 'public';
+        }
         if (!$GLOBALS["SL"]->REQ->has('refresh')) {
             $ret = Cache::get($cacheName, '');
             if ($ret != '') {
@@ -234,36 +239,6 @@ class OpenListing extends OpenListFilters
     }
     
     /**
-     * Printing general preivew listings of complaints.
-     *
-     * @return string
-     */
-    protected function printComplaintsPreviews($limit = 0)
-    {
-        $ret = '';
-        //$GLOBALS["SL"]->pageView = 'public';
-        $this->initSearcher();
-        $this->searcher->getSearchFilts();
-        $typeDef = $GLOBALS["SL"]->def->getID(
-            'Complaint Type', 
-            'Police Complaint'
-        );
-        $xtra = "whereIn('com_status', [" 
-            . implode(", ", $this->getPublishedStatusList('complaints')) 
-            . "])->where('com_type', " . $typeDef . ")->";
-        $this->searcher->loadAllComplaintsPublic($xtra);
-        if ($this->searcher->v["allcomplaints"]->isNotEmpty()) {
-            foreach ($this->searcher->v["allcomplaints"] as $i => $com) {
-                if ($limit <= 0 || $i < $limit) {
-                    $ret .= '<div class="pB20 mB10"><div class="slCard">' 
-                        . $this->getComplaintPreviewByRow($com) . '</div></div>';
-                }
-            }
-        }
-        return $ret;
-    }
-    
-    /**
      * Print the management page for complaints, 
      * with multiple view options.
      *
@@ -282,7 +257,7 @@ class OpenListing extends OpenListFilters
         $pageUrl .= $this->searcher->v["searchFiltsURL"];
         if ($this->isStaffOrAdmin()) {
             $pageUrl .= '—ADMIN';
-        } elseif (!isset($this->v["uID"]) && $this->v["uID"] <= 0) {
+        } else { // if (!isset($this->v["uID"]) && $this->v["uID"] <= 0)
             $pageUrl .= '—PUBLIC';
         }
         $ret = $GLOBALS["SL"]->chkCache($pageUrl, 'search-html', 1);
@@ -296,16 +271,15 @@ class OpenListing extends OpenListFilters
             $this->v["allegTypes"]     = $this->worstAllegations;
             if ($nID == 2384) {
                 $this->v["sView"] = 'lrg';
-                $GLOBALS["SL"]->setAutoRunSearch();
-                $divID = 'complaintResultsWrap';
-                $GLOBALS["SL"]->setDashSearchDiv($divID);
                 $url = '/ajax/search-complaint-previews?dashResults=1&ajax=1&limit=0';
+                $GLOBALS["SL"]->setAutoRunSearch();
+                $GLOBALS["SL"]->setDashSearchDiv('complaintResultsWrap');
                 $GLOBALS["SL"]->setDashSearchUrl($url);
             }
             if ($GLOBALS["SL"]->REQ->has('dashResults')) {
                 if ($nID == 2384) {
-                    $ret = $listings;
-                    //$ret = $this->printComplaintListingResultsLrg($nID);
+                    //$ret = $listings;
+                    $ret = $this->printComplaintListingResultsLrg($nID);
                 } else {
                     $ret = view(
                         'vendor.openpolice.nodes.1418-admin-complaints-dash-results', 
@@ -323,7 +297,6 @@ class OpenListing extends OpenListFilters
             $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
         }
         if ($GLOBALS["SL"]->REQ->has('ajax')) {
-//echo '??' . $nID . '??<pre>'; print_r($GLOBALS["SL"]->REQ->all()); echo '</pre>' . $ret; exit;
             echo $ret;
             exit;
         }
@@ -354,7 +327,9 @@ class OpenListing extends OpenListFilters
         }
         $this->v["complaints"] 
             = $this->v["complaintsPreviews"] 
+            = $this->v["complaintsPreviewsIDs"] 
             = $this->v["complaintsPreviewsUser"]
+            = $this->v["complaintsPreviewsPriv"] 
             = $this->v["comInfo"] 
             = $this->v["lastNodes"] 
             = $this->v["ajaxRefreshs"] 
@@ -402,8 +377,12 @@ class OpenListing extends OpenListFilters
             foreach ($this->v["complaints"] as $com) {
                 if ($first) {
                     $first = false;
+                    $pubID = 0;
+                    if (isset($com->com_public_id)) {
+                        $pubID = intVal($com->com_public_id);
+                    }
                     $this->v["firstComplaint"] = [
-                        ((isset($com->com_public_id)) ? intVal($com->com_public_id) : 0), 
+                        $pubID, 
                         intVal($com->com_id)
                     ];
                 }
@@ -430,6 +409,9 @@ class OpenListing extends OpenListFilters
     {
         $this->printComplaintListingResultsPreviews();
         $this->printComplaintFiltDescPrev();
+//echo '<textarea style="width: 100%; height: 300px;">' . $this->v["complaintsPreviews"][0] . '</textarea><h3>Priv: ' . $this->v["complaintsPreviewsPriv"][0] . '</h3>'; exit;
+//echo '<pre>Priv: '; print_r($this->v["complaintsPreviewsPriv"]); echo '</pre>'; exit;
+        $this->v["isStaffSort"] = $this->isStaffOrAdmin();
         return view(
             'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
             $this->v
@@ -448,20 +430,37 @@ class OpenListing extends OpenListFilters
                 if (!$GLOBALS["SL"]->x["isHomePage"] 
                     || sizeof($this->v["complaintsPreviews"]) < 6) {
                     $ret = '';
-                    $view = (($GLOBALS["SL"]->x["isPublicList"]) ? 'public' : 'sensitive');
-                    $cacheName = 'complaint' . $com->com_id . '-preview-' . $view;
+                    $cacheName = 'complaint' . $com->com_id . '-preview-';
+                    if ($this->isStaffOrAdmin()) {
+                        $cacheName .= 'sensitive';
+                    } else {
+                        $cacheName .= 'public';
+                    }
                     if (!$GLOBALS["SL"]->REQ->has('refresh')) {
-                        $ret = Cache::get($cacheName, '');
+                        $ret = $GLOBALS["SL"]->chkCache(
+                            $cacheName, 
+                            'search-rec', 
+                            1, 
+                            $com->com_id
+                        );
                     }
                     if ($ret == '') {
                         $this->loadAllSessData('complaints', $com->com_id);
                         $ret = $this->printPreviewReport();
-                        Cache::put($cacheName, $ret);
+                        $GLOBALS["SL"]->putCache(
+                            $cacheName, 
+                            $ret,
+                            'search-rec', 
+                            1, 
+                            $com->com_id
+                        );
                         //$this->printPreviewReportCustom($isAdmin);
                     }
-                    $this->v["complaintsPreviewsUser"][] = $com->com_user_id;
                     $this->v["complaintsPreviews"][] = '<div id="reportPreview' 
                         . $com->com_id . '" class="reportPreview">' . $ret . '</div>';
+                    $this->v["complaintsPreviewsIDs"][]  = $com->com_id;
+                    $this->v["complaintsPreviewsUser"][] = intVal($com->com_user_id);
+                    $this->v["complaintsPreviewsPriv"][] = $this->canPrintFullReportByRecordSpecs($com);
                 }
             }
         }

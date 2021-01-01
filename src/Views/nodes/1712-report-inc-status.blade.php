@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/1712-report-inc-status.blade.php -->
 <option value="New" 
-    @if (!$firstReview && in_array(trim($lastStatus), ['', 'New', 'Police Complaint'])) SELECTED @endif 
+    @if (!$firstReview && in_array($status, [0, 196])) SELECTED @endif 
     >New (On Hold)</option>
 <?php /*
 <option value="Hold: Go Gold" 
@@ -8,44 +8,37 @@
     >Invite To Go Gold (On Hold)</option>
 */ ?>
 <option value="Needs More Work" 
-    @if (!$firstReview && $lastStatus == 'Needs More Work') SELECTED @endif 
+    @if (!$firstReview && $status == 627) SELECTED @endif 
     >Needs More Work (On Hold)</option>
 <option DISABLED ></option>
 <option value="Pending Attorney: Defense Needed" 
-    @if (!$firstReview 
-        && in_array($lastStatus, ['Pending Attorney: Needed', 'Pending Attorney: Defense Needed'])) SELECTED @endif 
+    @if (!$firstReview && $status == 198) SELECTED @endif 
     >Defense Attorney Needed (On Hold)</option>
 <option value="Pending Attorney: Civil Rights Needed/Wanted" 
-    @if (!$firstReview 
-        && in_array($lastStatus, ['Pending Attorney: Hook-Up', 'Pending Attorney: Civil Rights Needed/Wanted'])) SELECTED @endif 
+    @if (!$firstReview && $status == 727) SELECTED @endif 
     >Civil Rights Attorney Needed/Wanted (On Hold)</option>
 <option value="Has Attorney" 
-    @if (!$firstReview && $lastStatus == "Has Attorney") SELECTED @endif 
+    @if (!$firstReview && $status == 199) SELECTED @endif 
     >Has Attorney (On Hold)</option>
 <option DISABLED ></option>
 <option value="OK to Submit to Oversight" 
-    @if (!$firstReview && $lastStatus == 'OK to Submit to Oversight') SELECTED @endif 
-    >OK to File with IA (Reviewed)</option>
+    @if (!$firstReview && $status == 202) SELECTED @endif 
+    >OK to File with IA ({{ $transparency }})</option>
 <option value="Submitted to Oversight" 
-    @if (!$firstReview && $lastStatus == 'Submitted to Oversight') SELECTED @endif 
-    >Filed with IA (Full Transparency Public)</option>
+    @if (!$firstReview && $status == 200) SELECTED @endif 
+    >Filed with IA ({{ $transparency }})</option>
 <option value="Received by Oversight" 
-    @if (!$firstReview && $lastStatus == 'Received by Oversight') SELECTED @endif 
-    >Received by IA (Full Transparency Public)</option>
-<?php /*
-<option value="Pending Oversight Investigation" 
-    @if (!$firstReview && $lastStatus == 'Pending Oversight Investigation') SELECTED @endif 
-    >Being Investigated (Full Transparency Public, Presumably)</option>
-*/ ?>
+    @if (!$firstReview && $status == 201) SELECTED @endif 
+    >Received by IA ({{ $transparency }})</option>
 <option value="Investigated (Closed)" 
-    @if (!$firstReview && $lastStatus == 'Investigated (Closed)') SELECTED @endif 
-    >Investigated by IA (Full Transparency Public, Closed)</option>
+    @if (!$firstReview && $status == 204) SELECTED @endif 
+    >Investigated by IA ({{ $transparency }}, Closed)</option>
 <option value="Declined To Investigate (Closed)" 
-    @if (!$firstReview && $lastStatus == 'Declined To Investigate (Closed)') SELECTED @endif 
-    >IA Declined to Investigate (Full Transparency Public, Closed)</option>
+    @if (!$firstReview && $status == 203) SELECTED @endif 
+    >IA Declined to Investigate ({{ $transparency }}, Closed)</option>
 <option value="Closed" 
-    @if (!$firstReview && $lastStatus == 'Closed') SELECTED @endif 
-    >Otherwise Closed (Full Transparency Public, Closed)</option>
+    @if (!$firstReview && $status == 205) SELECTED @endif 
+    >Otherwise Closed ({{ $transparency }}, Closed)</option>
 <?php /*
 <option DISABLED ></option>
 <option value="Incomplete" 

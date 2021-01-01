@@ -44,7 +44,7 @@ class OpenListFilters extends OpenAjax
         }
         if (!isset($this->searcher->searchFilts["comstatus"])) {
             if (!$GLOBALS["SL"]->x["isPublicList"]) {
-                $this->searcher->searchFilts["comstatus"] = [ 295, 301, 296 ];
+                $this->searcher->searchFilts["comstatus"] = [ 295, 296 ]; //301
             } else {
                 $this->searcher->searchFilts["comstatus"] = [];
             }
@@ -151,6 +151,7 @@ class OpenListFilters extends OpenAjax
      */
     protected function runComplaintListQueries($nID)
     {
+        ini_set('max_execution_time', 180);
         // First run query into $compls1
         $eval = $this->printComplaintListQry1($nID);
         eval($eval);
@@ -301,8 +302,10 @@ class OpenListFilters extends OpenAjax
                     }
                 }
                 if ($inFilter && trim($this->searcher->searchTxt) != '') {
+
                     $dump = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
                         ->where('sch_rec_dmp_rec_id', $comID)
+                        ->where('sch_rec_dmp_perms', $GLOBALS["SL"]->getCacheSffxAdds())
                         ->first();
                     if (!$dump || !isset($dump->sch_rec_dmp_id)) {
                         $dump = $this->genRecDump($comID, true);
@@ -315,6 +318,7 @@ class OpenListFilters extends OpenAjax
                     } else {
                         $chk = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
                             ->where('sch_rec_dmp_rec_id', $comID)
+                            ->where('sch_rec_dmp_perms', $GLOBALS["SL"]->getCacheSffxAdds())
                             ->where('sch_rec_dmp_rec_dump', 'LIKE', '%' 
                                 . $this->searcher->searchTxt . '%')
                             ->select('sch_rec_dmp_id')
@@ -461,8 +465,7 @@ class OpenListFilters extends OpenAjax
         if ($dChk && sizeof($dChk) > 0) {
             foreach ($dChk as $i => $d) {
                 $comma = (($i > 0) ? ', ' : '');
-                $this->v["comInfo"][$com->com_public_id]["depts"] .= $comma
-                    . str_replace('Department' , 'Dept.', $d->dept_name);
+                $this->v["comInfo"][$com->com_public_id]["depts"] .= $comma . $d->dept_name;
             }
         }
         $comTime = strtotime($com->updated_at);
@@ -571,8 +574,10 @@ class OpenListFilters extends OpenAjax
             $sortInd += 700000000;
         } elseif ($status == 'OK to Submit to Oversight') {
             $sortInd += 600000000;
+        } elseif ($status == 'Wants Attorney') {
+            $sortInd += 560000000;
         } elseif ($status == 'Pending Attorney') {
-            $sortInd += 550000000;
+            $sortInd += 540000000;
         } elseif ($status == 'Has Attorney') {
             $sortInd += 500000000;
         } elseif ($status == 'Submitted to Oversight') {

@@ -2,8 +2,7 @@
 <div class="nodeAnchor"><a id="deptContact" name="deptContact"></a></div>
 <div id="fixedHeadWidth" class="w100"> </div>
 <div id="fixedHeader" class="fixed" style="margin-top: 38px;">
-    <h3 class="disIn m0 slBlueDark">{{ str_replace('Police Dept', 'PD', 
-        str_replace('Department', 'Dept.', $deptRow->dept_name)) }}</h3>
+    <h3 class="disIn m0 slBlueDark">{{ $deptRow->dept_name }}</h3>
     <b class="mL20 slGreenDark"><nobr>Accessibility Score: 
         <div id="opcScore" class="disIn mL10">{{ 
             intVal($deptRow->dept_score_openness)

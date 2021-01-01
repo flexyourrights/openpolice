@@ -75,6 +75,7 @@ class OpenDeptStats extends OpenOfficers
         $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Hold');
         $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Reviewed');
         $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Needs More Work');
+        $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Wants Attorney');
         $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney');
         $defPublished[] = $GLOBALS["SL"]->def->getID($defSet, 'Has Attorney');
         $lnkOvers = DB::table('op_links_complaint_oversight')
@@ -167,6 +168,7 @@ class DeptComplaintStats
         $this->submittedOP++;
         $defSet = 'Complaint Status';
         $defAtts = [
+            $GLOBALS["SL"]->def->getID($defSet, 'Wants Attorney'),
             $GLOBALS["SL"]->def->getID($defSet, 'Pending Attorney'),
             $GLOBALS["SL"]->def->getID($defSet, 'Has Attorney')
         ];

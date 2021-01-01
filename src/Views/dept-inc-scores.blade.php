@@ -11,7 +11,7 @@
                             <br /><i class="fa fa-check-circle mL3" aria-hidden="true"></i>
                         @endif
                     </div>
-                    <div class="col-10">{{ $s[1] }}</div>
+                    <div class="col-10">{!! $s[1] !!}</div>
                 </div>
             </div>
         @endforeach
@@ -24,8 +24,8 @@
                 <div class=" @if ($i%2 == 0) row2 @endif scoreRowOff"><div class="row">
                 <div class="col-1">&nbsp;</div>
             @endif
-                <div class="col-1 taR">{{ $s[0] }}</div>
-                <div class="col-9">{{ $s[1] }}</div>
+                <div class="col-1 taR">{!! $s[0] !!}</div>
+                <div class="col-9">{!! $s[1] !!}</div>
             </div></div>
         @endforeach
     @endif

@@ -43,12 +43,3 @@
 
 @endif
 </div>
-
-<style>
-#colHeadDeptScore { text-align: left; }
-#colHeadDeptScoreLn2 { display: inline; }
-@media screen and (max-width: 768px) {
-    #colHeadDeptScore { position: absolute; top: -45px; right: 15px; text-align: right; }
-    #colHeadDeptScoreLn2 { display: block; }
-}
-</style>

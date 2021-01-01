@@ -23,8 +23,7 @@
     <th># of Employees</th><th>Score</th></tr>
 @if ($oversights->isNotEmpty())
     @foreach ($oversights as $i => $over)
-        <tr><td><a href="/dept/{{ $over->dept_slug }}"
-            >{{ str_replace('Department', 'Dept.', $over->dept_name) }}</a>
+        <tr><td><a href="/dept/{{ $over->dept_slug }}">{{ $over->dept_name }}</a>
             <div class="slGrey fPerc80">{{ 
                 $GLOBALS["SL"]->def->getVal('Investigative Agency Types', $over->OverType) 
             }}</div></td>

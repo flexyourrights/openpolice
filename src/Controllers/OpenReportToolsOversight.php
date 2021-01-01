@@ -85,8 +85,10 @@ class OpenReportToolsOversight extends OpenReportTools
                         $this->logOverUpDate($this->coreID, $deptID, 'investigated');
                     }
                     $statusID = $GLOBALS["SL"]->def->getID('Complaint Status', $status);
-                    $this->sessData->dataSets["complaints"][0]->com_status = $statusID;
-                    $this->sessData->dataSets["complaints"][0]->save();
+                    if ($statusID > 0) {
+                        $this->sessData->dataSets["complaints"][0]->com_status = $statusID;
+                        $this->sessData->dataSets["complaints"][0]->save();
+                    }
                 }
                 $this->logComplaintReview('Oversight', $evalNotes, $status);
                 $this->clearComplaintCaches();

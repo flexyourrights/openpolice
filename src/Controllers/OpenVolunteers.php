@@ -243,6 +243,7 @@ class OpenVolunteers extends OpenDevelopment
             //$GLOBALS["SL"]->def->getID($set, 'Hold'),
             $GLOBALS["SL"]->def->getID($set, 'Reviewed'),
             $GLOBALS["SL"]->def->getID($set, 'Needs More Work'),
+            $GLOBALS["SL"]->def->getID($set, 'Wants Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Has Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'OK to Submit to Oversight')

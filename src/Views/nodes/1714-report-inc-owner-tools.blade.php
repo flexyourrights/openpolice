@@ -12,8 +12,8 @@
         @else
             @if (isset($overUpdateRow->lnk_com_over_received) 
                 && trim($overUpdateRow->lnk_com_over_received) != '')
-                Received by Oversight
-            @elseif ($comStatus == 'Pending Attorney')
+                Received by Investigative Agency
+            @elseif (in_array($comStatus, ['Wants Attorney', 'Pending Attorney']))
                 Searching for Legal Help
             @elseif ($comStatus == 'OK to Submit to Oversight')
                 OK to File with Investigative Agency
@@ -37,7 +37,7 @@
                 Then, we'll let you know what comes next. So hang tight!
             </p>
 
-        @elseif ($comStatus == 'Pending Attorney')
+        @elseif (in_array($comStatus, ['Wants Attorney', 'Pending Attorney']))
 
             @if ($complaint->com_anyone_charged == 'Y' 
                 && in_array($complaint->com_all_charges_resolved, ['N', '?']))
@@ -77,7 +77,11 @@
                     complaint with the {{ $overList }}. We also recommend that you 
                     publish it on OpenPolice.org.</b> We can help you do both things.
                 </p>
-                {!! $privacyForm !!}
+
+                {!! view(
+                    'vendor.openpolice.nodes.1714-report-inc-owner-embed-privacy-form', 
+                    [ "complaint" => $complaint ]
+                )->render() !!}
 
             @endif
 
@@ -141,30 +145,37 @@
                     || intVal($complaint->com_publish_user_name) < 0)
                     <p><hr></p>
                     <h4>Publishing Privacy Options</h4>
-                    {!! $privacyForm !!}
+                    {!! view(
+                        'vendor.openpolice.nodes.1714-report-inc-owner-embed-privacy-form', 
+                        [ "complaint" => $complaint ]
+                    )->render() !!}
                     <div class="p10"></div>
                 @endif
                 
                 @if (isset($GLOBALS["SL"]->x["depts"]) 
                     && sizeof($GLOBALS["SL"]->x["depts"]) > 0)
                     @foreach ($GLOBALS["SL"]->x["depts"] as $d)
-                        <p><hr></p>
-                        {!! str_replace('slCard mT20', '', 
-                            str_replace('<h3 class="mT0">', '<h4>', 
-                            str_replace('<h3>', '<h4>', 
-                            str_replace('</h3>', '</h4>', 
-                            view(
-                                'vendor.openpolice.dept-page-filing-instructs', 
-                                [
-                                    "d"          => $d,
-                                    "ownerTools" => true
-                                ]
-                            )->render()
-                        )))) !!}
-                        <p><a target="_blank"
-                            href="/dept/{!! $d['deptRow']->dept_slug !!}"
-                            ><i class="fa fa-university" aria-hidden="true"></i>
-                            {!! $d["deptRow"]->dept_name !!}</a></p>
+                        @if (isset($d["deptRow"]->dept_name)
+                            && !in_array(trim($d["deptRow"]->dept_name), 
+                                ['', 'Not sure about department']))
+                            <p></p>
+                            {!! str_replace('slCard mT20', '', 
+                                str_replace('<h3 class="mT0">', '<h4>', 
+                                str_replace('<h3>', '<h4>', 
+                                str_replace('</h3>', '</h4>', 
+                                view(
+                                    'vendor.openpolice.dept-page-filing-instructs', 
+                                    [
+                                        "d"          => $d,
+                                        "ownerTools" => true
+                                    ]
+                                )->render()
+                            )))) !!}
+                            <p><a target="_blank"
+                                href="/dept/{!! $d['deptRow']->dept_slug !!}"
+                                ><i class="fa fa-university" aria-hidden="true"></i>
+                                {!! $d["deptRow"]->dept_name !!}</a></p>
+                        @endif
                     @endforeach
                 @endif
 
@@ -238,8 +249,10 @@
         && !isset($complaint->com_publish_user_name) )
         <p><hr></p>
         <h4>Publishing Privacy Options</h4>
-        {!! $privacyForm !!}
-        <div class="p10"></div>
+        {!! view(
+            'vendor.openpolice.nodes.1714-report-inc-owner-embed-privacy-form', 
+            [ "complaint" => $complaint ]
+        )->render() !!}
     @endif
 
     @if (isset($complaint->com_status) 
@@ -247,34 +260,19 @@
         && $comStatus != 'Incomplete'
         && !in_array($comStatus, ['Hold', 'New', 'Reviewed']) 
         && !$hideUpdate)
-        <form method="post" name="comUpdate" id="comUpdateID">
-        <input type="hidden" id="csrfTok" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="cid" value="{{ $complaint->com_id }}">
-        <input type="hidden" name="ajax" value="1">
-        <input type="hidden" name="refresh" value="1">
-        <input type="hidden" name="ownerUpdate" value="1">
-        <p><hr></p>
-        <h4>Update Your Complaint Status</h4>
-        {!! view(
-            'vendor.openpolice.nodes.1712-report-inc-tools-progress-dates', 
-            [
-                "complaint"      => $complaint,
-                "comDepts"       => $comDepts,
-                "oversightDates" => $oversightDates
-            ]
-        )->render() !!}
-        <div class="nFld mT10 mB20">
-            Notes about the status of this complaint:<br />
-            <textarea name="overNote" class="w100 mT5"></textarea>
-            <small class="slGrey mTn5">
-                This is for administrators of OpenPolice.org. 
-                We will not make it public.
-            </small>
+
+        <div id="ownerUpdatesWrap" class="pL15 pR15">
+            <div class="mTn30 mB30">{!! $GLOBALS["SL"]->spinner() !!}</div>
         </div>
-        <center><input value="Save Status Changes" id="ownBtn7"
-            type="button" class="btn btn-lg btn-primary"></center>
-        <div class="p20"></div>
-        </form>
+        <script type="text/javascript"> $(document).ready(function(){
+            <?php $src = "/toolbox-complainant-update-form/readi-" 
+                . $complaint->com_id . "?ajax=1"; ?>
+            setTimeout(function() {
+                console.log("{!! $src !!}"); 
+                $("#ownerUpdatesWrap").load("{!! $src !!}");
+            }, 100);
+        }); </script>
+
     @endif
 
     </div>
@@ -360,41 +358,3 @@
 
     </div>
 </div>
-
-
-<script type="text/javascript"> $(document).ready(function(){
-
-function postToolboxUpdateStatus() {
-    if (document.getElementById('complaintToolbox')) {
-        var formData = new FormData($('#comUpdateID').get(0));
-        document.getElementById('complaintToolbox').innerHTML = getSpinner();
-        window.scrollTo(0, 0);
-        $.ajax({
-            url: "/complaint-toolbox",
-            type: "POST", 
-            data: formData, 
-            contentType: false,
-            processData: false,
-            //headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-            success: function(data) {
-                $("#complaintToolbox").empty();
-                $("#complaintToolbox").append(data);
-            },
-            error: function(xhr, status, error) {
-                $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
-            }
-        });
-    }
-    return false;
-}
-
-$("#ownBtn7").click(function() {
-    postToolboxUpdateStatus();
-});
-
-$("#comUpdateID").submit(function( event ) {
-    postToolboxUpdateStatus();
-    event.preventDefault();
-});
-
-}); </script>

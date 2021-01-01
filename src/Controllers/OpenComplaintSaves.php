@@ -46,6 +46,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
         // Main Complaint Survey...
         if (in_array($nID, [16, 17, 2262, 2263])) {
             return $this->saveStartTime($curr);
+        } elseif ($nID == 2261) {
+            return true;
         } elseif (in_array($nID, [145, 920])) {
             return $this->saveNewDept($nID);
         } elseif ($nID == 234) {
@@ -113,7 +115,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
         } else {
             $date .= ' ' . $time;
         }
-        $this->sessData->currSessData($curr, 'update', $date);
+        if (strpos($date, '0000-') === false && strpos($date, '-00') === false) {
+            $this->sessData->currSessData($curr, 'update', $date);
+        }
         return true;
     }
     

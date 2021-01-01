@@ -3,15 +3,12 @@
 @if (isset($comDepts) && sizeof($comDepts) > 0)
     @foreach ($comDepts as $c => $dept)
         @if (isset($dept["deptRow"]) 
-            && isset($dept["deptRow"]->dept_name))
+            && isset($dept["deptRow"]->dept_name)
+            && strpos(strtolower($dept["deptRow"]->dept_name), 'not sure') === false)
             <div class="pB10">
-                <p><b>Progress with the {!! 
-                    str_replace("Police Department", "PD", 
-                        str_replace("Sheriff's Office", "Sheriff", 
-                            $dept["deptRow"]->dept_name)) 
-                !!}</b></p>
+                <p><b>Progress with the {!! $dept["deptRow"]->dept_name !!}</b></p>
                 <div class="nFld mT0">
-                @foreach ($oversightDates as $d => $date)
+                @foreach ($oversightDateLookups as $d => $date)
                     <div class="row mB5">
                         <div class="col-md-8">
                             <label class="finger">
@@ -64,7 +61,7 @@ $(document).ready(function(){
 @if (isset($comDepts) && sizeof($comDepts) > 0)
     @foreach ($comDepts as $c => $dept)
         @if (isset($dept["deptRow"]) && isset($dept["deptRow"]->dept_name))
-            @foreach ($oversightDates as $d => $date)
+            @foreach ($oversightDateLookups as $d => $date)
                 chkOverStatusBox({{ $dept["id"] }}, {{ $d }});
             @endforeach
         @endif

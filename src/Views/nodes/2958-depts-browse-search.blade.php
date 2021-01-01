@@ -1,4 +1,6 @@
 <!-- resources/views/vendor/openpolice/nodes/2958-depts-browse-search.blade.php -->
+
+
 <div class="nodeAnchor"><a id="n{{ $nID }}" name="n{{ $nID }}"></a></div>
 <div id="node{{ $nID }}">
 
@@ -46,32 +48,34 @@
             <div class="row">
                 <div class="col-xl-4">
                     <div id="filtsCard" class="slCard nodeWrap">
-                    <input name="showPreviews" id="showPreviewsID" type="hidden" value="0">
-                    <div id="hidivCompFilts{{ $nID }}" class="disBlo">
-                        <?php /*
-                        <div class="row">
-                            <div class="col-6">
-                        */ ?>
-                                <h4>Filter</h4>
-                        <?php /*
-                            </div><div class="col-6">
-                                <a id="compFiltBtn{{ $nID }}" href="javascript:;" 
-                                    class="btn btn-secondary btn-sm fR searchDeptDeetFld"
-                                    >Apply Filters</a>
+                        <input name="showPreviews" id="showPreviewsID" type="hidden" value="0">
+                        <div id="hidivCompFilts{{ $nID }}" class="disBlo">
+                            <?php /*
+                            <div class="row">
+                                <div class="col-6">
+                            */ ?>
+                                    <h4>Filter</h4>
+                            <?php /*
+                                </div><div class="col-6">
+                                    <a id="compFiltBtn{{ $nID }}" href="javascript:;" 
+                                        class="btn btn-primary btn-sm fR searchDeptDeetFld"
+                                        >Apply Filters</a>
+                                </div>
                             </div>
+                            */ ?>
+                            <div class="p0"><br></div>
+                            {!! $stateFilts !!}
                         </div>
-                        */ ?>
-                        <div class="p0"><br></div>
-                        {!! $stateFilts !!}
                     </div>
                 </div>
+                <div class="col-xl-8">
+                    <div class="nodeAnchor"><a id="results" name="results"></a></div>
+                    <div id="deptResultsWrap" class="w100"></div>
+                </div>
             </div>
-            <div class="col-xl-8">
-                <div class="nodeAnchor"><a id="results" name="results"></a></div>
-                <div id="deptResultsWrap" class="w100"></div>
-            </div>
-        </div>
-    </div> <!-- end admDashLargeView -->
+        </div> <!-- end admDashLargeView -->
+
+    </div>
 
 </div> <!-- end #node{{ $nID }} -->
 

@@ -44,9 +44,12 @@
     @endif
     </a> |
     <a data-sort-type="date" 
-    @if ($sortLab != 'date') data-sort-dir="desc"
-    @else @if ($sortDir != 'desc') data-sort-dir="desc" @else data-sort-dir="asc" @endif
-    @endif
+        @if ($sortLab != 'date') data-sort-dir="desc"
+        @else 
+            @if ($sortDir != 'desc') data-sort-dir="desc" 
+            @else data-sort-dir="asc" 
+            @endif
+        @endif
         class="fltSortTypeBtn @if ($sortLab == 'date') bld @endif "
         href="javascript:;" >Date Submitted to OpenPolice.org
     @if ($sortLab == 'date') 
@@ -55,24 +58,29 @@
     </a>
 </div>
 <?php $cnt = 0; ?>
-@forelse ($complaints as $j => $com)
-    <div id="dashResultsAnim{{ $cnt }}" 
-        class="dashResultsAnim" style="display: none;">
-    <?php $cnt++; ?>
-        {!! view(
-            'vendor.openpolice.nodes.1418-admin-complaints-listing-row', 
-            [ 
-                "cnt"     => $cnt,
-                "com"     => $com,
-                "sortLab" => $sortLab
-            ]
-        )->render() !!}
-    </div>
-@empty
+@if (sizeof($complaints) > 0)
+    @foreach ($complaints as $j => $com)
+        <div id="dashResultsAnim{{ $cnt }}" 
+            class="dashResultsAnim" style="display: none;">
+            <div id="comRow{{ $com->com_id }}" class="complaintRowWrp">
+                <?php $cnt++; ?>
+                {!! view(
+                    'vendor.openpolice.nodes.1418-admin-complaints-listing-row', 
+                    [ 
+                        "cnt"     => $cnt,
+                        "com"     => $com,
+                        "sortLab" => $sortLab
+                    ]
+                )->render() !!}
+            </div>
+        </div>
+    @endforeach
+    <div id="dashResultsSpin">{!! $GLOBALS["SL"]->spinner() !!}</div>
+@else
     <div id="dashResultsNone" class="pL15">
         No complaints found in this filter
     </div>
-@endforelse
+@endif
 
 <script type="text/javascript"> $(document).ready(function(){
 
@@ -156,5 +164,15 @@ function clearResultSpinner(id) {
 setTimeout(function() {
     document.getElementById("searchFoundCnt").innerHTML={!! json_encode($complaintFiltDescPrev) !!};
 }, 100);
+
+
+$(document).on("click", ".updateSearchFilts", function() {
+    document.getElementById("dashResultsWrap").innerHTML=getSpinner();
+    document.getElementById("reportAdmPreview").innerHTML=getSpinner();
+    document.getElementById("searchFoundCnt").innerHTML='';
+    currRightPane = 'preview';
+    updateRightPane();
+});
+
 
 }); </script>

@@ -143,7 +143,7 @@ class OpenDepts extends OpenPolicePCIF
                 }
                 $this->v["nextDept"] = [
                     $nextRow[0]->dept_id, 
-                    str_replace('Department', 'Dept.', $nextRow[0]->dept_name), 
+                    $nextRow[0]->dept_name, 
                     $nextRow[0]->dept_slug
                 ];
                 
@@ -618,6 +618,8 @@ class OpenDepts extends OpenPolicePCIF
      */
     protected function redirAfterDeptEdit()
     {
+        $deptScores = new DepartmentScores;
+        $deptScores->recalcAllDepts();
         $redir = '/dash/volunteer';
         $msg = 'Back To The Department List...';
         if ($GLOBALS["SL"]->REQ->has('n1335fld')) {
@@ -1075,8 +1077,8 @@ class OpenDepts extends OpenPolicePCIF
         if (!isset($this->v["deptID"]) || intVal($this->v["deptID"]) <= 0) {
             return 'Department Not Found';
         }
-        $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID . 'ajaxLoad").load('
-            . '"/record-prevs/1?d=' . $this->v["deptID"] . '&limit=20");' . "\n";
+        $GLOBALS["SL"]->pageAJAX .= ' $("#n' . $nID . 'ajaxLoad").load('
+            . '"/record-prevs/1?d=' . $this->v["deptID"] . '&limit=20"); ';
         return view(
             'vendor.openpolice.nodes.2715-dept-page-recent-reports', 
             [
@@ -1151,6 +1153,7 @@ class OpenDepts extends OpenPolicePCIF
             $GLOBALS["SL"]->def->getID($set, 'New'),
             $GLOBALS["SL"]->def->getID($set, 'Hold'),
             $GLOBALS["SL"]->def->getID($set, 'Reviewed'),
+            $GLOBALS["SL"]->def->getID($set, 'Wants Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Has Attorney'),
             $GLOBALS["SL"]->def->getID($set, 'Closed')
@@ -1174,6 +1177,8 @@ class OpenDepts extends OpenPolicePCIF
         if ($deptRow && isset($deptRow->dept_id)) {
             $deptID = $deptRow->dept_id;
             $request->d = $deptRow->dept_id;
+        } else {
+            return $this->redir('/departments?s=' . $deptSlug);
         }
         $url = '/dept/' . $deptSlug;
         $this->loadPageVariation($request, 1, 25, $url);

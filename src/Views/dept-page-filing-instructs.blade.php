@@ -18,16 +18,20 @@
         </div>
     </div>
     <p>
-        OpenPolice.org is an independent project developed by 
-        Flex Your Rights, a 501(c)(3) educational nonprofit.
-    </p>
-    <p class="mB20">
         This police department's policy permits them 
         to investigate complaints sent via email. 
         They also accept complaints filed on non-department forms. 
         <b class="bld">That means OpenPolice.org can automatically 
             file your report after you put it together.</b>
     </p>
+    @if (!isset($GLOBALS["SL"]->x["showIndependentDisclaim"]))
+        <div class="mTn3 mB30" style="padding-top: 1px;"><hr></div>
+        <p class="mB20">
+            OpenPolice.org is an independent project developed by 
+            Flex Your Rights, a 501(c)(3) educational nonprofit.
+        </p>
+        <?php $GLOBALS["SL"]->x["showIndependentDisclaim"] = true; ?>
+    @endif
 
     @if (!isset($ownerTools) || !$ownerTools)
         {!! view(
@@ -41,7 +45,9 @@
         to submit a formal complaint to the 
         {{ $d[$d["whichOver"]]->over_agnc_name }}.
     </p>
+
 @else
+
     @if (isset($d["iaRow"]->over_way_sub_paper_in_person) 
         && intVal($d["iaRow"]->over_way_sub_paper_in_person) == 1)
         <div class="alert alert-danger mT10" role="alert">
@@ -50,10 +56,15 @@
             <nobr>submitted in-person.</nobr>
         </div>
     @endif
-    <p>
-        OpenPolice.org is an independent project developed by 
-        Flex Your Rights, a 501(c)(3) educational nonprofit.
-    </p>
+
+    @if (!isset($GLOBALS["SL"]->x["showIndependentDisclaim"]))
+        <div class="mTn3 mB30" style="padding-top: 1px;"><hr></div>
+        <p>
+            OpenPolice.org is an independent project developed by 
+            Flex Your Rights, a 501(c)(3) educational nonprofit.
+        </p>
+        <?php $GLOBALS["SL"]->x["showIndependentDisclaim"] = true; ?>
+    @endif
     <!--- <p>
     This department does not investigate OpenPolice.org reports sent by email.
     </p> --->
@@ -93,7 +104,7 @@
         @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
             {!! $d["deptAbbr"] !!}
         @else
-            {!! str_replace('Department', 'Dept.', $d["deptRow"]->dept_name) !!} 
+            {!! $d["deptRow"]->dept_name !!} 
         @endif
         Internal Affairs
     </h2>
@@ -250,7 +261,7 @@
         @if (isset($d["deptAbbr"]) && trim($d["deptAbbr"]) != '')
             {!! $d["deptAbbr"] !!}
         @else
-            {!! str_replace('Department', 'Dept.', $d["deptRow"]->dept_name) !!} 
+            {!! $d["deptRow"]->dept_name !!}
         @endif
         Internal Affairs
     @endif

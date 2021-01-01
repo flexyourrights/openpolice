@@ -62,11 +62,19 @@ class OpenPoliceUtils extends OpenPoliceVars
     protected function isPublicOfficerName()
     {
         if ($this->treeID == 1) {
+            if (!isset($this->sessData->dataSets["officers"])
+                || sizeof($this->sessData->dataSets["officers"]) == 0) {
+                return true;
+            }
             return $this->sessData->dataFieldIsInt(
                 'complaints', 
                 'com_publish_officer_name'
             );
         } elseif ($this->treeID == 5) {
+            if (!isset($this->sessData->dataSets["officers"])
+                || sizeof($this->sessData->dataSets["officers"]) == 0) {
+                return true;
+            }
             return $this->sessData->dataFieldIsInt(
                 'compliments', 
                 'compli_publish_officer_name'
@@ -116,10 +124,8 @@ class OpenPoliceUtils extends OpenPoliceVars
             if ($coreRec 
                 && isset($coreRec->com_status)
                 && $this->isTypeComplaint($coreRec)) {
-                return in_array(
-                    $coreRec->com_status, 
-                    $this->getPublishedStatusList($coreTbl)
-                );
+                $pubDefs = $this->getPublishedStatusList($coreTbl);
+                return in_array($coreRec->com_status, $pubDefs);
             }
             return false;
         }
@@ -362,6 +368,7 @@ class OpenPoliceUtils extends OpenPoliceVars
                 $GLOBALS["SL"]->def->getID($set, 'Hold'), 
                 $GLOBALS["SL"]->def->getID($set, 'Reviewed'), 
                 $GLOBALS["SL"]->def->getID($set, 'Needs More Work'), 
+                $GLOBALS["SL"]->def->getID($set, 'Wants Attorney'), 
                 $GLOBALS["SL"]->def->getID($set, 'Pending Attorney'), 
                 $GLOBALS["SL"]->def->getID($set, 'Has Attorney')
             ];
@@ -433,13 +440,14 @@ class OpenPoliceUtils extends OpenPoliceVars
             && $this->canPrintFullReportByRecSettings($com));
     }
     
-    protected function canPrintFullReport()
+    protected function canPrintFullReport($view = '')
     {
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        if ($this->isStaffOrAdmin()
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+        if ($view != 'public'
+            && ((isset($this->v["isOwner"]) && $this->v["isOwner"])
+                || $this->isStaffOrAdmin())) {
             return true;
         }
         $com = $this->sessData->dataSets["complaints"][0];
@@ -459,6 +467,7 @@ class OpenPoliceUtils extends OpenPoliceVars
         if ($this->isPublic()
             || in_array($this->sessData->dataSets["complaints"][0]->com_status, [
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'Reviewed'),
+                $GLOBALS["SL"]->def->getID('Complaint Status', 'Wants Attorney'),
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'Pending Attorney'),
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney'),
                 $GLOBALS["SL"]->def->getID('Complaint Status', 'OK to Submit to Oversight')
@@ -726,6 +735,9 @@ class OpenPoliceUtils extends OpenPoliceVars
             ],[
                 'lnk_com_over_report_date',
                 'Investigative Agency Report Uploaded'
+            ],[
+                'lnk_com_over_declined',
+                'Investigative Agency Declined To Investigate'
             ]
         ];
         return $this->v["oversightDateLookups"];

@@ -66,7 +66,7 @@ class OpenPoliceSearcher extends Searcher
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
                             . $GLOBALS["SL"]->def->getID('Complaint Type', 'Unverified') 
                             . "')->where('com_status', '" . $status . "'); })";
-                    } elseif (in_array($status, [195, 196, 197, 198, 
+                    } elseif (in_array($status, [195, 196, 197, 198, 727,
                         199, 200, 201, 202, 203, 204, 205, 627])) {
                         $eval .= "->orWhere(function (\$query" . $i .") { \$query" . $i ."->where('com_type', '"
                             . $GLOBALS["SL"]->def->getID('Complaint Type', 'Police Complaint') 
@@ -122,8 +122,8 @@ class OpenPoliceSearcher extends Searcher
             foreach ($this->searchFilts["comstatus"] as $i => $status) {
                 if (!$GLOBALS["SL"]->x["isPublicList"] 
                     || in_array($status, [200, 201, 202, 203, 204])) {
-                    $ret .= (($i > 0) ? ', ' : '') 
-                        . $GLOBALS["SL"]->def->getValById($status);
+                    $ret .= (($i > 0) ? ', ' : '') . '<nobr>'
+                        . $GLOBALS["SL"]->def->getValById($status) . '</nobr>';
                 }
             }
         }

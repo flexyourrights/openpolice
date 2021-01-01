@@ -68,7 +68,7 @@ class DepartmentScores
             'over_homepage_complaint_link', 
             '', 
             'Y',
-            'Has complaint information linked from home page'
+            'Complaint information link visible on police department homepage'
         );
         $this->vals["PdfForm"] = new DeptFldScore(
             10, 
@@ -89,7 +89,7 @@ class DepartmentScores
             'over_official_form_not_req', 
             '', 
             '1',
-            'Official department form not required for investigation'
+            'Official department form <i>not</i> required for investigation'
         );
         $this->vals["Anonymous"] = new DeptFldScore(
             10, 
@@ -234,9 +234,10 @@ class DepartmentScores
                 //if (sizeof($searchFilts) == 0) { 
                 //    || !isset($searchFilts["state"]) 
                 //    || $searchFilts["state"] == $dept->dept_address_state
-                    $deptName = str_replace('Police Dept', 'PD', trim($dept->dept_name));
-                    $deptName = str_replace('Police Department', 'PD', $deptName);
-                    $deptName = trim(str_replace('Department', 'Dept.', $deptName));
+                    $deptName = trim($dept->dept_name);
+                    //$deptName = str_replace('Police Dept', 'PD', $deptName);
+                    //$deptName = str_replace('Police Department', 'PD', $deptName);
+                    //$deptName = trim(str_replace('Department', 'Dept.', $deptName));
                     $this->deptNames[$dept->dept_id] = $deptName 
                         . ', ' . $dept->dept_address_state;
                     $this->deptOvers[$dept->dept_id]["ia"] 

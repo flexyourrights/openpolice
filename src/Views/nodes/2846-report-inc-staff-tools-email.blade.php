@@ -1,4 +1,4 @@
-<!-- resources/views/vendor/openpolice/nodes/1712-report-inc-staff-tools-email.blade.php -->
+<!-- resources/views/vendor/openpolice/nodes/2846-report-inc-staff-tools-email.blade.php -->
 
 <div class="disBlo pB30">
     Select Email Template<br />
@@ -25,7 +25,7 @@
     </select>
     <div id="emailChooseDept" 
         class="@if ($emailID == 12) disBlo @else disNon @endif ">
-        @if (sizeof($comDepts) > 0)
+        @if (sizeof($comDepts) > 1)
             <div class="pT15 pB10">Select Investigative Agency</div>
             <select name="d" id="emailDeptID" autocomplete="off" 
                 class="form-control form-control-lg">
@@ -38,7 +38,11 @@
             </select>
         @else
             <input name="d" id="emailDeptID" type="hidden" 
-                value="{{ $comDepts[0]['id'] }}" >
+            @if (sizeof($comDepts) > 0 && isset($comDepts[0]['id']))
+                value="{{ $comDepts[0]['id'] }}"
+            @else
+                value=""
+            @endif >
         @endif
     </div>
 
@@ -59,3 +63,47 @@
     @endif
     </div>
 </div>
+
+<script type="text/javascript"> $(document).ready(function(){
+
+
+function loadComplaintEmail() {
+    if (document.getElementById('emailFormWrap')) {
+        document.getElementById('emailFormWrap').innerHTML = getSpinner();
+        var url = "/dash/complaint-toolbox-email-form/readi-{{ $complaintRec->com_id }}?ajax=1&ajaxEmaForm=1&email="+document.getElementById("emailID").value;
+        var deptID = 0;
+        if (document.getElementById('emailDeptID')) {
+            deptID = document.getElementById('emailDeptID').value;
+        }
+        if (deptID > 0) {
+            url += "&d="+deptID;
+        }
+        console.log(url);
+        $("#emailFormWrap").load(url);
+    }
+}
+
+$(document).on("change", "#emailID", function() { 
+    if (document.getElementById('emailChooseDept')) {
+        var emailID = document.getElementById('emailID').value;
+        if (emailID == 12) {
+            $("#emailChooseDept").slideDown("fast");
+        } else {
+            $("#emailChooseDept").slideUp("fast");
+        }
+    }
+    loadComplaintEmail();
+});
+
+$(document).on("change", "#emailDeptID", function() {
+    loadComplaintEmail();
+});
+
+function pushDeptID() {
+    if (document.getElementById('emailDeptID') && document.getElementById('emailSubDeptID')) {
+        document.getElementById('emailSubDeptID').value = document.getElementById('emailDeptID').value;
+    }
+}
+setTimeout(function() { pushDeptID(); }, 100);
+
+}); </script>

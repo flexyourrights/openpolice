@@ -23,36 +23,38 @@
     </div>
 </div>
 @forelse ($betas as $i => $beta)
-    <div class="nodeAnchor"><a name="beta{{ $beta->beta_id }}"></a></div>
-    <div class="w100 p15 @if ($i%2 == 0) row2 @endif " 
-        style="word-wrap: break-word;">
-        <div class="row">
-            <div class="col-md-4">
-                <b>{{ $beta->beta_name }} {{ $beta->beta_last_name }}</b><br />
-                <a href="mailto:{{ $beta->beta_email }}">{{ $beta->beta_email }}</a>
+    @if ($i < 1000 || $GLOBALS["SL"]->REQ->has('all'))
+        <div class="nodeAnchor"><a name="beta{{ $beta->beta_id }}"></a></div>
+        <div class="w100 p15 @if ($i%2 == 0) row2 @endif " 
+            style="word-wrap: break-word;">
+            <div class="row">
+                <div class="col-md-4">
+                    <b>{{ $beta->beta_name }} {{ $beta->beta_last_name }}</b><br />
+                    <a href="mailto:{{ $beta->beta_email }}">{{ $beta->beta_email }}</a>
+                </div>
+                <div class="col-md-4">
+                    {{ $GLOBALS["SL"]->printTimeZoneShift($beta->created_at) }}<br />
+                    @if (isset($beta->beta_how_hear))
+                        <span class="slGrey">{{ $beta->beta_how_hear }}</span>
+                    @endif
+                </div>
+                <div class="col-md-4">
+                    @if (isset($beta->beta_invited))
+                        {{ date('n/j/y', strtotime($beta->beta_invited)) }}
+                    @else
+                        <a href="{!! $betaLinks[$beta->beta_id] !!}"
+                            class="btn btn-secondary btn-sm">Send Invite</a>
+                    @endif
+                </div>
             </div>
-            <div class="col-md-4">
-                {{ $GLOBALS["SL"]->printTimeZoneShift($beta->created_at) }}<br />
-                @if (isset($beta->beta_how_hear))
-                    <span class="slGrey">{{ $beta->beta_how_hear }}</span>
-                @endif
-            </div>
-            <div class="col-md-4">
-                @if (isset($beta->beta_invited))
-                    {{ date('n/j/y', strtotime($beta->beta_invited)) }}
-                @else
-                    <a href="{!! $betaLinks[$beta->beta_id] !!}"
-                        class="btn btn-secondary btn-sm">Send Invite</a>
-                @endif
+            <div style="max-width: 1000px; overflow-x: hidden;">
+            @if (isset($beta->beta_year)) {{ $beta->beta_year }} - @endif
+            {!! $GLOBALS["SL"]->breakUpLongLinesPrint(
+                strip_tags($beta->beta_narrative)
+            ) !!}
             </div>
         </div>
-        <div style="max-width: 1000px; overflow-x: hidden;">
-        @if (isset($beta->beta_year)) {{ $beta->beta_year }} - @endif
-        {!! $GLOBALS["SL"]->breakUpLongLinesPrint(
-            strip_tags($beta->beta_narrative)
-        ) !!}
-        </div>
-    </div>
+    @endif
 @empty
     <i>None found</i>
 @endforelse

@@ -1,6 +1,6 @@
 <!-- resources/views/vendor/openpolice/inc-static-privacy-page.blade.php -->
 
-<form name="ownerPublish" name="ownerPublishID" 
+<form name="ownerPublish" id="ownerPublishID" 
     method="post" action="?ownerPublish=1">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <input type="hidden" name="ownerPublish" value="1">
@@ -213,32 +213,31 @@
 //console.log("postToolboxOwnerPublish");
         triedToSubmit = true;
         if (chkPublishForm()) {
-            document.ownerPublish.submit();
+            /* document.ownerPublish.submit(); */
+            if (document.getElementById('ownerPrivacyWrap')) {
+                var formData = new FormData($('#ownerPublishID').get(0));
+                var loadSrc = "/toolbox-complainant-privacy-form/readi-{{ $complaint->com_id }}?ajax=1";
+                document.getElementById('ownerPrivacyWrap').innerHTML = getSpinner();
+                console.log(loadSrc);
+                window.scrollTo(0, 0);
+                $.ajax({
+                    url: loadSrc,
+                    type: "POST", 
+                    data: formData, 
+                    contentType: false,
+                    processData: false,
+                    //headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    success: function(data) {
+                        $("#ownerPrivacyWrap").empty();
+                        $("#ownerPrivacyWrap").append(data);
+                    },
+                    error: function(xhr, status, error) {
+                        $("#ownerPrivacyWrap").append("<div>(error - "+xhr.responseText+")</div>");
+                    }
+                });
+            }
         }
 
-        /*
-        if (document.getElementById('complaintToolbox')) {
-            var formData = new FormData($('#ownerPublishID').get(0));
-console.log(formData);
-            document.getElementById('complaintToolbox').innerHTML = getSpinner();
-            window.scrollTo(0, 0);
-            $.ajax({
-                url: "/complaint-toolbox",
-                type: "POST", 
-                data: formData, 
-                contentType: false,
-                processData: false,
-                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                success: function(data) {
-                    $("#complaintToolbox").empty();
-                    $("#complaintToolbox").append(data);
-                },
-                error: function(xhr, status, error) {
-                    $("#complaintToolbox").append("<div>(error - "+xhr.responseText+")</div>");
-                }
-            });
-        }
-        */
         return false;
     }
 

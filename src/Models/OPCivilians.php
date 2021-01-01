@@ -32,7 +32,8 @@ class OPCivilians extends Model
 		'civ_given_citation', 
 		'civ_given_warning', 
 		'civ_citation_number', 
-		'civ_charges_other', 
+		'civ_charges_other',
+        'civ_no_charges_filed', 
     ];
     
     // END Survloop auto-generated portion of Model

@@ -6,10 +6,10 @@
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
-                @if (isset($complaintRec->com_anyone_charged) 
-                    && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
-                    @if (isset($complaintRec->com_all_charges_resolved)
-                        && trim($complaintRec->com_all_charges_resolved) != 'Y')
+                @if (isset($com->com_anyone_charged) 
+                    && in_array(trim($com->com_anyone_charged), ['Y', '?']))
+                    @if (isset($com->com_all_charges_resolved)
+                        && trim($com->com_all_charges_resolved) != 'Y')
                         #FF6059;
                     @else
                         #29CD42;
@@ -22,10 +22,10 @@
             </div>
         </div>
         <div class="pL20" style="min-height: 30px;">
-            @if (isset($complaintRec->com_anyone_charged) 
-                && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?']))
-                @if (isset($complaintRec->com_all_charges_resolved)
-                    && trim($complaintRec->com_all_charges_resolved) != 'Y')
+            @if (isset($com->com_anyone_charged) 
+                && in_array(trim($com->com_anyone_charged), ['Y', '?']))
+                @if (isset($com->com_all_charges_resolved)
+                    && trim($com->com_all_charges_resolved) != 'Y')
                     Pending Charges
                 @else
                     Charges Resolved
@@ -36,31 +36,31 @@
         </div>
     </div>
     
+<?php $defHasAtt = $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney'); ?>
     <div id="complaintWarn2" class="fL disBlo mR20">
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
-                @if ((isset($complaintRec->com_attorney_has) 
-                        && trim($complaintRec->com_attorney_has) == 'Y')
-                    || (isset($complaintRec->com_status) 
-                        && intVal($complaintRec->com_status) 
-                        == $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney')))
-                    @if (isset($complaint->com_attorney_oked) 
-                        && trim($complaint->com_attorney_oked) == 'Y')
+                @if ((isset($com->com_attorney_has) 
+                        && trim($com->com_attorney_has) == 'Y')
+                    || (isset($com->com_status) 
+                        && intVal($com->com_status) == $defHasAtt))
+                    @if (isset($com->com_attorney_oked) 
+                        && trim($com->com_attorney_oked) == 'Y')
                         #29CD42;
                     @else
                         #FFBD2E;
                     @endif
-                @elseif (isset($complaintRec->com_anyone_charged) 
-                    && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
-                    && isset($complaintRec->com_all_charges_resolved)
-                    && trim($complaintRec->com_all_charges_resolved) != 'Y')
+                @elseif (isset($com->com_anyone_charged) 
+                    && in_array(trim($com->com_anyone_charged), ['Y', '?'])
+                    && isset($com->com_all_charges_resolved)
+                    && trim($com->com_all_charges_resolved) != 'Y')
                     #FF6059;
-                @elseif (isset($complaintRec->com_file_lawsuit) 
-                    && trim($complaintRec->com_file_lawsuit) == 'Y')
+                @elseif (isset($com->com_file_lawsuit) 
+                    && trim($com->com_file_lawsuit) == 'Y')
                     #FFBD2E;
-                @elseif (isset($complaintRec->com_attorney_want) 
-                    && trim($complaintRec->com_attorney_want) == 'Y')
+                @elseif (isset($com->com_attorney_want) 
+                    && trim($com->com_attorney_want) == 'Y')
                     #FFBD2E;
                 @else
                     #29CD42;
@@ -70,27 +70,26 @@
             </div>
         </div>
         <div class="pL20" style="min-height: 30px;">
-            @if ((isset($complaintRec->com_attorney_has) 
-                    && trim($complaintRec->com_attorney_has) == 'Y')
-                || (isset($complaintRec->com_status) 
-                    && intVal($complaintRec->com_status) 
-                    == $GLOBALS["SL"]->def->getID('Complaint Status', 'Has Attorney')))
-                @if (isset($complaint->com_attorney_oked) 
-                    && trim($complaint->com_attorney_oked) == 'Y')
+            @if ((isset($com->com_attorney_has) 
+                    && trim($com->com_attorney_has) == 'Y')
+                || (isset($com->com_status) 
+                    && intVal($com->com_status) == $defHasAtt))
+                @if (isset($com->com_attorney_oked) 
+                    && trim($com->com_attorney_oked) == 'Y')
                     Attorney OK'd
                 @else
                     Attorney OK?
                 @endif
-            @elseif (isset($complaintRec->com_anyone_charged) 
-                && in_array(trim($complaintRec->com_anyone_charged), ['Y', '?'])
-                && isset($complaintRec->com_all_charges_resolved)
-                && trim($complaintRec->com_all_charges_resolved) != 'Y')
+            @elseif (isset($com->com_anyone_charged) 
+                && in_array(trim($com->com_anyone_charged), ['Y', '?'])
+                && isset($com->com_all_charges_resolved)
+                && trim($com->com_all_charges_resolved) != 'Y')
                 Needs Attorney
-            @elseif (isset($complaintRec->com_file_lawsuit) 
-                && trim($complaintRec->com_file_lawsuit) == 'Y')
+            @elseif (isset($com->com_file_lawsuit) 
+                && trim($com->com_file_lawsuit) == 'Y')
                 Filing Lawsuit
-            @elseif (isset($complaintRec->com_attorney_want) 
-                && trim($complaintRec->com_attorney_want) == 'Y')
+            @elseif (isset($com->com_attorney_want) 
+                && trim($com->com_attorney_want) == 'Y')
                 Wants Attorney
             @else
                 No Attorney Needs
@@ -102,16 +101,23 @@
         <div class="relDiv">
             <div class="absDiv" style="top: 2px; left: 0px;">
                 <div class="vertPrgDone" style="background:
-                @if (isset($complaintRec->com_publish_user_name)
-                    && $complaintRec->com_publish_user_name == 1
-                    && isset($complaintRec->com_publish_officer_name)
-                    && $complaintRec->com_publish_officer_name == 1)
+                @if (isset($com->com_publish_user_name)
+                    && intVal($com->com_publish_user_name) == 1
+                    && (!$hasOfficers 
+                        || isset($com->com_publish_officer_name)
+                            && intVal($com->com_publish_officer_name) == 1))
                     #29CD42;
-                @elseif (intVal($complaintRec->com_anon) == 1)
+                @elseif (isset($com->com_anon) && intVal($com->com_anon) == 1)
                     #FF6059;
                 @else
-                    @if (isset($complaintRec->com_publish_user_name)
-                        && isset($complaintRec->com_publish_officer_name))
+                    @if (isset($com->com_publish_user_name)
+                        && intVal($com->com_publish_user_name) == 1)
+                        #416CBD;
+                    @elseif (isset($com->com_publish_officer_name)
+                        && intVal($com->com_publish_officer_name) == 1)
+                        #416CBD;
+                    @elseif (isset($com->com_publish_user_name)
+                        && (!$hasOfficers || isset($com->com_publish_officer_name)))
                         #416CBD;
                     @else 
                         #888;
@@ -122,23 +128,23 @@
             </div>
         </div>
         <div class="pL20" style="min-height: 30px;">
-            @if (isset($complaintRec->com_publish_user_name)
-                && $complaintRec->com_publish_user_name == 1
-                && isset($complaintRec->com_publish_officer_name)
-                && $complaintRec->com_publish_officer_name == 1)
+            @if (isset($com->com_publish_user_name)
+                && intVal($com->com_publish_user_name) == 1
+                && (!$hasOfficers 
+                    || isset($com->com_publish_officer_name)
+                        && intVal($com->com_publish_officer_name) == 1))
                 Submit Publicly
-            @elseif (intVal($complaintRec->com_anon) == 1)
+            @elseif (isset($com->com_anon) && intVal($com->com_anon) == 1)
                 Anonymous
             @else
-                @if ($complaintRec->com_publish_user_name == 1
-                    && $complaintRec->com_publish_officer_name == 1)
-                    Submit Publicly
-                @elseif ($complaintRec->com_publish_user_name == 1)
-                    Publish Complainants' Name
-                @elseif ($complaintRec->com_publish_officer_name == 1)
+                @if (isset($com->com_publish_user_name)
+                    && intVal($com->com_publish_user_name) == 1)
+                    Publish Complainant's Name
+                @elseif (isset($com->com_publish_officer_name)
+                    && intVal($com->com_publish_officer_name) == 1)
                     Publish Officers' Names
-                @elseif (isset($complaintRec->com_publish_user_name)
-                    && isset($complaintRec->com_publish_officer_name))
+                @elseif (isset($com->com_publish_user_name)
+                    && (!$hasOfficers || isset($com->com_publish_officer_name)))
                     Publish No Names
                 @else 
                     <span class="slGrey">No Publishing Settings</span>

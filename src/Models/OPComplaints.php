@@ -53,6 +53,7 @@ class OPComplaints extends Model
 		'com_anon', 
 		'com_publish_user_name',
 		'com_publish_officer_name',
+		'com_want_attorney_but_file',
     ];
     
     // END Survloop auto-generated portion of Model

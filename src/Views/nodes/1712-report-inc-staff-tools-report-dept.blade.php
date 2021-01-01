@@ -16,6 +16,8 @@
 <div class="row mB10">
     <div class="col-md-6">
 @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
+    @if (isset($d["deptRow"])
+        && isset($d["deptRow"]->dept_name))
         <div class="mB10">
             <label class="finger">
                 <div class="disIn mR5">
@@ -29,6 +31,7 @@
                 @endif
             </label>
         </div>
+    @endif
 @empty
 @endforelse
         <div id="fixDeptsAddNew" class="disNon mB10">

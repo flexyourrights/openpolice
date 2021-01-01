@@ -91,7 +91,32 @@ class OpenInitExtras extends OpenPartners
             && isset($this->sessData->dataSets["person_contact"])
             && sizeof($this->sessData->dataSets["person_contact"]) > 0) {
             $this->loadAllSessDataChecksComplaint();
-        } 
+        }
+        $this->loadAllSessDataCheckFullTransparency();
+        return true;
+    }
+    
+    /**
+     * Initializing the full transparency flag on the core record.
+     *
+     * @return boolean
+     */
+    protected function loadAllSessDataCheckFullTransparency()
+    {
+        if (isset($this->sessData->dataSets["complaints"])) {
+            $com = $this->sessData->dataSets["complaints"][0];
+            $this->sessData->dataSets["complaints"][0]->com_privacy = 0;
+            $pubUser = (isset($com->com_publish_user_name)
+                && intVal($com->com_publish_user_name) == 1);
+            $pubOffs = (isset($com->com_publish_officer_name)
+                && intVal($com->com_publish_officer_name) == 1);
+            $noOffs = (!isset($this->sessData->dataSets["officers"])
+                || sizeof($this->sessData->dataSets["officers"]) == 0);
+            if ($pubUser && ($pubOffs || $noOffs)) {
+                $this->sessData->dataSets["complaints"][0]->com_privacy = 304;
+            }
+            $this->sessData->dataSets["complaints"][0]->save();
+        }
         return true;
     }
     
@@ -131,55 +156,6 @@ class OpenInitExtras extends OpenPartners
                 if ($civ->prsn_name_last != $fix) {
                     $this->sessData->dataSets["person_contact"][$i]->prsn_name_last = $fix;
                     $this->sessData->dataSets["person_contact"][$i]->save();
-                }
-            }
-        }
-        $this->loadAllSessDataChecksComplaintPrivacy();
-        return true;
-    }
-    
-    /**
-     * Convert old privacy settings. To be deleted after transition.
-     *
-     * @return boolean
-     */
-    protected function loadAllSessDataChecksComplaintPrivacy()
-    {
-        $com = $this->sessData->dataSets["complaints"][0];
-        if (isset($com->com_privacy)
-            && intVal($com->com_privacy) > 0
-            && (!isset($com->com_publish_user_name)
-                || !isset($com->com_publish_officer_name))) {
-            $set = 'Privacy Types';
-            $d = $GLOBALS['SL']->def->getID($set, 'Submit Publicly');
-            if (intVal($com->com_privacy) == $d) {
-                $com->com_publish_user_name
-                    = $com->com_publish_officer_name
-                    = 1;
-                if (!isset($com->com_anon)) {
-                    $com->com_anon = 0;
-                }
-            } else {
-                $d = 'Names Visible to Police but not Public';
-                $d = $GLOBALS['SL']->def->getID($set, $d);
-                if (intVal($com->com_privacy) == $d) {
-                    $com->com_publish_user_name
-                        = $com->com_publish_officer_name
-                        = 0;
-                    if (!isset($com->com_anon)) {
-                        $com->com_anon = 0;
-                    }
-                } else {
-                    $d = $GLOBALS['SL']->def->getID($set, 'Completely Anonymous');
-                    $d2 = $GLOBALS['SL']->def->getID($set, 'Anonymized');
-                    if (in_array(intVal($com->com_privacy), [$d, $d2])) {
-                        $com->com_publish_user_name
-                            = $com->com_publish_officer_name
-                            = 0;
-                        if (!isset($com->com_anon)) {
-                            $com->com_anon = 1;
-                        }
-                    }
                 }
             }
         }
