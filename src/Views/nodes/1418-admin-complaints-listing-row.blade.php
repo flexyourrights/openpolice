@@ -1,5 +1,4 @@
 <!-- resources/views/vendor/openpolice/nodes/1418-admin-complaints-listing-row.blade.php -->
-
 <a class="complaintRowA" href="javascript:;"
     data-com-id="{{ $com->com_id }}" 
     data-com-pub-id="{{ intVal($com->com_public_id) }}">
@@ -15,7 +14,8 @@
         @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
                 == 'Police Complaint'
             && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
-                ['Needs More Work', 'Wants Attorney', 'Pending Attorney', 'OK to Submit to Oversight']))
+                ['Needs More Work', 'Wants Attorney', 
+                    'Pending Attorney', 'OK to Submit to Oversight']))
             <div class="litRedDottie"></div>
         @endif
         </div>
@@ -23,12 +23,12 @@
     <div class="float-left">
         <b>{!! $GLOBALS["SL"]->charLimitDotDotDot(
             ( ((isset($com->com_anon) && intVal($com->com_anon) == 1)
-                || trim($com->prsn_name_first . ' ' . $com->prsn_name_last) == '')
+                || trim($prsn->prsn_name_first . ' ' . $prsn->prsn_name_last) == '')
                     ? 'Anonymous, '
                     : $GLOBALS["SL"]->convertAllCallToUp1stChars(
-                        $com->prsn_name_first . ' ' . $com->prsn_name_last
+                        $prsn->prsn_name_first . ' ' . $prsn->prsn_name_last
                     ) . ', ')
-                . trim($com->inc_address_city) . ', ' . $com->inc_address_state,
+                . trim($inc->inc_address_city) . ', ' . $inc->inc_address_state,
             42
         ) !!}</b><br />
         <span class="slGrey">

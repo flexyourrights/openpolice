@@ -64,6 +64,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $url = '';
         $defNew = $GLOBALS["SL"]->def->getID('Complaint Status', 'New');
         if ($nID == 270) {
+            $this->clearComplaintCaches();
             $this->sessData->currSessDataTblFld(
                 $nID, 
                 'complaints', 
@@ -91,6 +92,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
             $url = '/complaint/read-' . $this->sessData
                 ->dataSets["complaints"][0]->com_public_id;
         } else {
+            //$this->clearComplimentCaches();
             $this->sessData->currSessDataTblFld(
                 $nID, 
                 'compliments', 
@@ -359,7 +361,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
             . 'document.getElementById("uploadDelayed").innerHTML="' 
             . $GLOBALS["SL"]->addSlashLines($ret) . '"; }, 1500); ';
-        return '<h4 class="mT0 slBlueDark">' 
+        return '<h4 class="mT30 slBlueDark">' 
             . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h4>'
             . '<div id="uploadDelayed" class="w100"><div class="w100 taC">'
             . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div></div>';

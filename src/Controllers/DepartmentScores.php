@@ -431,6 +431,7 @@ class DepartmentScores
         if (!isset($GLOBALS["SL"]->x["depts"])) {
             $GLOBALS["SL"]->x["depts"] = [];
         }
+        $GLOBALS["SL"]->x["deptsCnt"] = 0;
         if ($deptID > 0 && !isset($GLOBALS["SL"]->x["depts"][$deptID])) {
             $d = [ "id" => $deptID ];
             $d["deptRow"] = OPDepartments::find($deptID);
@@ -511,6 +512,9 @@ class DepartmentScores
                     if (in_array(strtolower(trim($d["deptAbbr"])), $exceptions)) {
                         $d["deptAbbr"] = '';
                     }
+                }
+                if ($d["deptRow"]->dept_name != 'Not sure about department') {
+                    $GLOBALS["SL"]->x["deptsCnt"]++;
                 }
             }
             

@@ -528,7 +528,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                             }
                             $currWhich = $d[$i]["whichOver"];
                             $swap .= $d[$deptID][$which]->over_agnc_name . ': ' 
-                                . $GLOBALS["SL"]->swapURLwrap($d[$i][$currWhich]->over_complaint_web_form);
+                                . $GLOBALS["SL"]->swapURLwrap($d[$i][$which]->over_complaint_web_form);
                         }
                     }
                 }
@@ -552,7 +552,7 @@ class OpenComplaintEmails extends OpenPoliceEvents
                 }
                 break;
         }
-        $swap = trim($swap);
+        $emailBody = trim(str_replace('Hi ,', 'Hi,', str_replace('  ', ' ', $emailBody)));
         return str_replace($dy, $swap, $emailBody);
     }
     

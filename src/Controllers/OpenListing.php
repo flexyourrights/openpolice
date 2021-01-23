@@ -251,6 +251,21 @@ class OpenListing extends OpenListFilters
         $pageUrl = $_SERVER["REQUEST_URI"] . '?nID=' . $nID . '&view=' . $view;
         if ($GLOBALS["SL"]->REQ->has('dashResults')) {
             $pageUrl .= '&dashResults=1';
+            $searchTxt = '?s=';
+            if ($GLOBALS["SL"]->REQ->has('s')
+                && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+                $searchTxt .= trim($GLOBALS["SL"]->REQ->get('s'));
+            }
+            if (!$GLOBALS["SL"]->REQ->has('sDataSet')
+                || intVal($GLOBALS["SL"]->REQ->sDataSet) == 0) {
+                return $this->redir('/search' . $searchTxt, true);
+            } elseif ($GLOBALS["SL"]->REQ->has('sDataSet')
+                && intVal($GLOBALS["SL"]->REQ->sDataSet) == 111) {
+                return $this->redir('/departments' . $searchTxt, true);
+            }
+        } else {
+            $GLOBALS["SL"]->currSearchTbls  = [ 112 ];
+            $GLOBALS["SL"]->v["showSearch"] = true;
         }
         $this->printComplaintListingInit($nID, $view);
         $this->searcher->searchFiltsURL();
@@ -381,10 +396,7 @@ class OpenListing extends OpenListFilters
                     if (isset($com->com_public_id)) {
                         $pubID = intVal($com->com_public_id);
                     }
-                    $this->v["firstComplaint"] = [
-                        $pubID, 
-                        intVal($com->com_id)
-                    ];
+                    $this->v["firstComplaint"] = [ $pubID, intVal($com->com_id) ];
                 }
             }
         }
@@ -409,8 +421,6 @@ class OpenListing extends OpenListFilters
     {
         $this->printComplaintListingResultsPreviews();
         $this->printComplaintFiltDescPrev();
-//echo '<textarea style="width: 100%; height: 300px;">' . $this->v["complaintsPreviews"][0] . '</textarea><h3>Priv: ' . $this->v["complaintsPreviewsPriv"][0] . '</h3>'; exit;
-//echo '<pre>Priv: '; print_r($this->v["complaintsPreviewsPriv"]); echo '</pre>'; exit;
         $this->v["isStaffSort"] = $this->isStaffOrAdmin();
         return view(
             'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
@@ -557,6 +567,28 @@ class OpenListing extends OpenListFilters
      */
     protected function printSearchResults($nID)
     {
+        $searchTxt = '?s=';
+        if ($GLOBALS["SL"]->REQ->has('s')
+            && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+            $searchTxt .= trim($GLOBALS["SL"]->REQ->get('s'));
+        }
+        if ($GLOBALS["SL"]->REQ->has('sDataSet')) {
+            if (intVal($GLOBALS["SL"]->REQ->sDataSet) == 112) {
+                $redir = '/complaints' . $searchTxt;
+                if ($this->isStaffOrAdmin()) {
+                    $redir = '/dash/all-complete-complaints' . $searchTxt;
+                }
+                return $this->redir($redir, true);
+            } elseif (intVal($GLOBALS["SL"]->REQ->sDataSet) == 111) {
+                $redir = '/departments' . $searchTxt;
+                if ($this->isStaffOrAdmin()) {
+                    $redir = '/dash/volunteer' . $searchTxt;
+                }
+                return $this->redir($redir, true);
+            }
+        }
+        $GLOBALS["SL"]->v["showSearch"] = true;
+
         $this->initSearcher();
         $this->searcher->getSearchFilts();
         $GLOBALS["SL"]->addHshoo("#departments");

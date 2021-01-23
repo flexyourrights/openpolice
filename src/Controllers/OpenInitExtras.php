@@ -55,6 +55,29 @@ class OpenInitExtras extends OpenPartners
             }
         }
         $this->initComplaintToolbox();
+        $this->loadSearchCoreTbls();
+        return true;
+    }
+    
+    /**
+     * Initializing core table options for search bar.
+     *
+     * @return boolean
+     */
+    protected function loadSearchCoreTbls()
+    {
+        $GLOBALS["SL"]->x["searchCoreTbls"] = [
+            [
+                "id"   => 112,
+                "name" => 'Complaints',
+                "slug" => 'complaint'
+            ], [
+                "id"   => 111,
+                "name" => 'Police Departments',
+                "slug" => 'dept'
+
+            ]
+        ];
         return true;
     }
     
@@ -159,6 +182,45 @@ class OpenInitExtras extends OpenPartners
                 }
             }
         }
+
+        $notSureInd = -1;
+        $this->v["notSureDeptID"] = 18124;
+        $lnkTbl = 'links_complaint_dept';
+        if (isset($this->sessData->dataSets[$lnkTbl])) {
+            $deptLinkCnt = sizeof($this->sessData->dataSets[$lnkTbl]);
+            if ($deptLinkCnt > 0) {
+                $deptIDs = $delInds = [];
+                foreach ($this->sessData->dataSets[$lnkTbl] as $i => $lnk) {
+                    if (isset($lnk->lnk_com_dept_dept_id) 
+                        && !in_array($lnk->lnk_com_dept_dept_id, $deptIDs)) {
+                        $deptIDs[] = $lnk->lnk_com_dept_dept_id;
+                    } else {
+                        $delInds[] = $i;
+                    }
+                }
+                if (sizeof($delInds) > 0) {
+                    for ($i = sizeof($delInds)-1; $i >= 0; $i--) {
+                        $this->sessData->dataSets[$lnkTbl][$delInds[$i]]->delete();
+                    }
+                }
+                foreach ($this->sessData->dataSets[$lnkTbl] as $i => $lnk) {
+                    if (isset($lnk->lnk_com_dept_dept_id)
+                        && intVal($lnk->lnk_com_dept_dept_id) == $this->v["notSureDeptID"]) {
+                        $notSureInd = $i;
+                    }
+                }
+                if ($notSureInd >= 0
+                    && $notSureInd < ($deptLinkCnt-1)) {
+                    $this->sessData->dataSets[$lnkTbl][$notSureInd]->lnk_com_dept_dept_id
+                        = $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->lnk_com_dept_dept_id;
+                    $this->sessData->dataSets[$lnkTbl][$notSureInd]->save();
+                    $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->lnk_com_dept_dept_id 
+                        = $this->v["notSureDeptID"];
+                    $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->save();
+                }
+            }
+        }
+
         return true;
     }
 
@@ -590,9 +652,9 @@ class OpenInitExtras extends OpenPartners
 //if ($GLOBALS["SL"]->REQ->has('ajax')) { echo 'runPageExtra(' . $nID . ', perms: ' . $GLOBALS["SL"]->dataPerms . '<br />'; exit; }
         if ($nID == 1362) { 
             // Loading Complaint Report: Check for oversight permissions
-            if (!isset($GLOBALS["SL"]->pageView)) {
-                $this->maxUserView(); // shouldn't be needed?
-            }
+            // if (!isset($GLOBALS["SL"]->pageView)) {
+            //     $this->maxUserView(); // shouldn't be needed?
+            // }
             if ($this->chkOverUserHasCore()) {
                 $GLOBALS["SL"]->dataPerms = 'sensitive';
             }

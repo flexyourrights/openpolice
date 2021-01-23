@@ -2,6 +2,7 @@
 <div class="slReportPreview">
 
 @if ($uID > 0 
+    && $editable
     && (isset($complaint->{ $coreAbbr . 'user_id' }) 
     && $complaint->{ $coreAbbr . 'user_id' } == $uID))
 

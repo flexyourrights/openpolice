@@ -8,10 +8,12 @@ function refreshComplaint(coreID, pubID) {
     }
     if (document.getElementById("reportAdmPreview")) {
         document.getElementById("reportAdmPreview").innerHTML=getSpinner();
+        console.log(url);
         $("#reportAdmPreview").load(url);
         setTimeout(function() { window.location="#top"; }, 1);
     } else if (document.getElementById("admDashReportWrap")) {
         document.getElementById("admDashReportWrap").innerHTML=getSpinner();
+        console.log(url);
         $("#admDashReportWrap").load(url);
         setTimeout(function() { window.location="#top"; }, 1);
     } else {
@@ -22,8 +24,14 @@ function refreshComplaint(coreID, pubID) {
         if (pubID > 0) {
             url = "/complaint/read-"+pubID+"/full?refresh=1";
         }
+        console.log(url);
         setTimeout(function() { window.location=url; }, 1);
     }
+@if (isset($newLeftCol) && trim($newLeftCol) != '')
+    if (document.getElementById("comRow"+coreID)) {
+        document.getElementById("comRow"+coreID).innerHTML={!! json_encode($newLeftCol) !!};
+    }
+@endif
     return true;
 }
 setTimeout(function() { refreshComplaint({{ $coreID }}, {{ $pubID }}); }, 1);

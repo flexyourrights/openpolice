@@ -112,6 +112,12 @@ class OpenComplaintConditions extends OpenSessDataOverride
         } elseif ($condition == '#PrintAnonOnly') {
             return $this->condPrintAnonOnly($complaint);
 
+        } elseif ($condition == '#IsTransparent') {
+            return $this->condIsTransparent();
+
+        } elseif ($condition == '#IsNotTransparent') {
+            return $this->condIsNotTransparent();
+
         } elseif ($condition == '#PrintFullReport') {
             return $this->condPrintFullReport();
 
@@ -720,11 +726,13 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function condPrintIncidentLocation()
     {
-        if ($this->canPrintIncidentLocation()) {
+        $com = $this->sessData->dataSets["complaints"][0];
+        if ($this->canPrintIncidentLocation()
+            && $this->canPrintFullReportByRecordSpecs($com)) {
             return 1;
         }
-        if ($this->isStaffOrAdmin()
-            || (isset($this->v["isOwner"]) && $this->v["isOwner"])) {
+        if ((isset($this->v["isOwner"]) && $this->v["isOwner"])
+            || $this->isStaffOrAdmin()) {
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
             }
@@ -794,6 +802,34 @@ class OpenComplaintConditions extends OpenSessDataOverride
             if (!$GLOBALS["SL"]->REQ->has('publicView')) {
                 return 1;
             }
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether or not this complainant 
+     * did full transparency.
+     *
+     * @return int
+     */
+    protected function condIsTransparent()
+    {
+        if ($this->canPrintFullReportByRecSettings()) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether or not this complainant 
+     * did not chose full transparency.
+     *
+     * @return int
+     */
+    protected function condIsNotTransparent()
+    {
+        if (!$this->canPrintFullReportByRecSettings()) {
+            return 1;
         }
         return 0;
     }

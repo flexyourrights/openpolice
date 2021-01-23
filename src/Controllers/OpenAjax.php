@@ -18,9 +18,9 @@ use App\Models\OPComplaints;
 use App\Models\OPDepartments;
 use App\Models\SLSearchRecDump;
 use App\Models\SLZips;
-use FlexYourRights\OpenPolice\Controllers\OpenComplaintSaves;
+use FlexYourRights\OpenPolice\Controllers\OpenAjaxCachePrep;
 
-class OpenAjax extends OpenComplaintSaves
+class OpenAjax extends OpenAjaxCachePrep
 {
     /**
      * Check for ajax requests customized beyond 
@@ -45,10 +45,10 @@ class OpenAjax extends OpenComplaintSaves
         } elseif ($type == 'search-complaint-previews') {
             $this->ajaxLoadSearchComplaintPreviews($request);
 
-        } elseif ($type == 'staff-complaint-status') {
-            $this->ajaxStaffComplaintStatus($request);
-        } elseif ($type == 'staff-complaint-correct') {
-            $this->ajaxStaffComplaintCorrect($request);
+        } elseif ($type == 'complaint-preloads') {
+            $this->ajaxComplaintPreloads($request);
+        } elseif ($type == 'complaint-preloads-staff') {
+            $this->ajaxStaffComplaintPreloads($request);
         }
         return '';
     }
@@ -93,6 +93,25 @@ class OpenAjax extends OpenComplaintSaves
         if ($view == 'survey' && trim($request->get('policeDept')) == '') {
             echo '<i>Please type part of the department\'s name to find it.</i>';
             exit;
+        }
+        $searchTxt = '?s=';
+        if ($GLOBALS["SL"]->REQ->has('s')
+            && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
+            $searchTxt .= trim($GLOBALS["SL"]->REQ->get('s'));
+        }
+        if ($view == 'public') {
+            if ($GLOBALS["SL"]->REQ->has('ajax')) {
+                if (!$GLOBALS["SL"]->REQ->has('sDataSet')
+                    || intVal($GLOBALS["SL"]->REQ->sDataSet) == 0) {
+                    return $this->redir('/search' . $searchTxt, true);
+                } elseif ($GLOBALS["SL"]->REQ->has('sDataSet')
+                    && intVal($GLOBALS["SL"]->REQ->sDataSet) == 112) {
+                    return $this->redir('/complaints' . $searchTxt, true);
+                }
+            } else {
+                $GLOBALS["SL"]->currSearchTbls  = [ 111 ];
+                $GLOBALS["SL"]->v["showSearch"] = true;
+            }
         }
         $GLOBALS["SL"]->loadStates();
         $loadUrl = '/ajax/dept-search';
@@ -951,7 +970,6 @@ class ComplaintPreview
                 ->get();
         }
     }
-
 
     protected function setTreePageFadeInDelay()
     {

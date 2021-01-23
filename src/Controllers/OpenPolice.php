@@ -171,7 +171,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportUserLine();
         } elseif ($nID == 1687) {
             return $this->getReportWhenLine();
-        } elseif (in_array($nID, [1688, 1732])) {
+        } elseif ($nID == 1688) {
             return $this->getReportWhereLine($nID);
         } elseif ($nID == 1691) {
             return [
@@ -186,6 +186,8 @@ class OpenPolice extends OpenInitExtras
             return $this->getOffReportDeptName($nID);
         } elseif ($nID == 1476) {
             return $this->getOffReportNameHeader($nID);
+        } elseif ($nID == 3188) {
+            return $this->getOffNoName();
         } elseif ($nID == 1478) {
             $civID = $this->sessData->getLatestDataBranchID();
             return [ $this->getCivSnstvFldsNotPrinted($civID) ];
@@ -231,6 +233,16 @@ class OpenPolice extends OpenInitExtras
             //$this->saveComplaintAdmin();
         } elseif ($nID == 3063) { // end of Toolbox
             $GLOBALS["SL"]->setFullPageLoaded(1000); 
+        } elseif ($nID == 3060) {
+            if (!isset($this->sessData->dataSets["complaints"])
+                || sizeof($this->sessData->dataSets["complaints"]) == 0
+                || !isset($this->sessData->dataSets["complaints"][0]->com_type)
+                || (!$this->isTypeComplaint($this->sessData->dataSets["complaints"][0])
+                    && !$this->isTypeUnverified($this->sessData->dataSets["complaints"][0])
+                    && !$this->isPartnerStaffAdminOrOwner())) {
+                return '<div class="container mT30"><p>Record not found.</p><p>'
+                    . '<a href="/complaints">Back to All Complaints</a></p></div>';
+            }
         } elseif ($nID == 1385) {
             if ($GLOBALS["SL"]->REQ->has('refresh')) {
                 $this->clearComplaintCaches();
@@ -249,17 +261,10 @@ class OpenPolice extends OpenInitExtras
             $GLOBALS["SL"]->x["isPublicList"] = false;
             if ($nID == 2384) {
                 $GLOBALS["SL"]->x["isPublicList"] = true;
-                $GLOBALS["SL"]->pageView = 'public';
+                //$GLOBALS["SL"]->pageView = 'public';
             } elseif ($GLOBALS["SL"]->REQ->has('refresh')) {
                 $this->clearComplaintCaches();
                 $GLOBALS["SL"]->forgetAllCachesOfTrees([1, 11, 42, 197]);
-                if (trim($GLOBALS["SL"]->REQ->get('refresh')) == 'repeat') {
-                    echo '<h2>Refresh Complaints, & Repeat ...</h2>' 
-                        . date("H:i:s") . '<script type="text/javascript"> '
-                        . 'setTimeout("window.location=\'?refresh=repeat\'", '
-                        . '(30*60000)); </script>';
-                    exit;
-                }
             }
             $GLOBALS["SL"]->x["needsWsyiwyg"] 
                 = $this->v["needsWsyiwyg"] 

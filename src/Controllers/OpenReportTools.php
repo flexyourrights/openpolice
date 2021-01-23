@@ -46,26 +46,41 @@ class OpenReportTools extends OpenReport
      */
     protected function clearComplaintCaches($redirRefresh = false)
     {
+        $GLOBALS["SL"]->forgetAllItemCaches(1, $this->coreID);
         $GLOBALS["SL"]->forgetAllItemCaches(42, $this->coreID);
         $GLOBALS["SL"]->forgetAllItemCaches(197, $this->coreID);
-        $GLOBALS["SL"]->forgetAllItemCaches(11, 0);
-        $GLOBALS["SL"]->forgetAllItemCaches(45, 0);
-        $GLOBALS["SL"]->forgetAllItemCaches(44, 0);
-        $GLOBALS["SL"]->forgetAllItemCaches(43, 0);
+        $GLOBALS["SL"]->forgetAllItemCaches(11, 0); // Admin Dash
+        $GLOBALS["SL"]->forgetAllItemCaches(45, 0); // Staff Dash
+        $GLOBALS["SL"]->forgetAllItemCaches(43, 0); // Partner Dash
         $GLOBALS["SL"]->forgetAllCachesTypeTree('search', 1);
-        $GLOBALS["SL"]->forgetAllCachesTypeTree('srch-results', 1);
+        $GLOBALS["SL"]->forgetAllCachesTypeTree('search-html', 1);
         if ($redirRefresh) {
             $pubID = 0;
+            $newLeftCol = '';
             if (isset($this->sessData->dataSets["complaints"])
-                && sizeof($this->sessData->dataSets["complaints"]) > 0
-                && isset($this->sessData->dataSets["complaints"][0]->com_public_id)) {
-                $pubID = intVal($this->sessData->dataSets["complaints"][0]->com_public_id);
+                && sizeof($this->sessData->dataSets["complaints"]) > 0) {
+                if (isset($this->sessData->dataSets["complaints"][0]->com_public_id)) {
+                    $pubID = intVal($this->sessData->dataSets["complaints"][0]->com_public_id);
+                }
+                $prsn = $this->sessData->getRowById(
+                    'person_contact', 
+                    $this->sessData->dataSets["civilians"][0]->civ_person_id
+                );
+                $newLeftCol = view(
+                        'vendor.openpolice.nodes.1418-admin-complaints-listing-row', 
+                        [
+                            "com"  => $this->sessData->dataSets["complaints"][0],
+                            "inc"  => $this->sessData->dataSets["incidents"][0],
+                            "prsn" => $prsn
+                        ]
+                    )->render();
             }
             echo view(
                 'vendor.openpolice.ajax.redir-complaint-refresh',
                 [
-                    "coreID" => $this->coreID,
-                    "pubID"  => $pubID
+                    "coreID"     => $this->coreID,
+                    "pubID"      => $pubID,
+                    "newLeftCol" => $newLeftCol
                 ]
             )->render();
             exit;
@@ -542,6 +557,19 @@ class OpenReportTools extends OpenReport
             }
         }
         return $ret;
+    }
+
+    /**
+     * Specify the example record for individual XML exports.
+     *
+     * @return int
+     */
+    protected function getXmlExampleID()
+    {
+        if (in_array($GLOBALS["SL"]->treeID, [1, 2])) {
+            
+        }
+        return -3;
     }
     
 }

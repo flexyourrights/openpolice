@@ -147,7 +147,9 @@ class OpenReport extends OpenDeptStats
     protected function reportStory($nID)
     {
         $ret = '';
-        if ($nID > 0 && isset($this->allNodes[$nID])) {
+        if ($nID > 0 
+            && isset($this->allNodes[$nID])
+            && $this->canPrintFullReportOrPrivs()) {
             $story = $this->sessData->dataSets["complaints"][0]->com_summary;
             $views = [ 'pdf', 'full-pdf' ];
             if (!in_array($GLOBALS["SL"]->pageView, $views)) {
@@ -156,8 +158,11 @@ class OpenReport extends OpenDeptStats
             if (trim($ret) == '') {
                 $ret = $GLOBALS["SL"]->textSaferHtml($story);
             }
+            if (trim($ret) != '') {
+                $ret = '<p>' . $ret . '</p><div class="p15"></div>';
+            }
         }
-        return '<h4 class="slBlueDark mT0 mB10">Story</h4><p>' . $ret . '</p>';
+        return '<h4 class="slBlueDark mT0 mB10">Story</h4>' . $ret;
     }
 
     /**
@@ -818,6 +823,38 @@ class OpenReport extends OpenDeptStats
     }
 
     /**
+     * Print a data row, if needed, reporting
+     * that no officer name was provided.
+     *
+     * @return array
+     */
+    protected function getOffNoName()
+    {
+        list($itemInd, $itemID) = $this->sessData->currSessDataPosBranchOnly('officers');
+        //$offID = $this->sessData->getLatestDataBranchID();
+        if ($itemID > 0) {
+            $off = $this->sessData->getRowById('officers', $itemID);
+            list($prsn, $phys) = $this->queuePeopleSubsets($off->off_id, 'officers');
+            if ($prsn 
+                && (!isset($prsn->prsn_name_first)
+                    || trim($prsn->prsn_name_first) == '')
+                && (!isset($prsn->prsn_name_last)
+                    || trim($prsn->prsn_name_last) == '')) {
+                return '<div class="alert alert-primary fade in alert-dismissible show" '
+                    . 'style="padding: 10px 15px;">Officer name not provided.</div>';
+            }
+            if ($this->canPrintFullReportByRecSettings()
+                && !$this->canPrintFullReport()) {
+                return '<div class="alert alert-warning fade in alert-dismissible show" '
+                    . 'style="padding: 10px 15px;">Officer name to be published after '
+                    . 'this user confirms that they have formally filed this complaint.'
+                    . '</div>';
+            }
+        }
+        return '<div clas="mTn30 mBn30"></div>';
+    }
+
+    /**
      * Print the Civilian name tied to this Use of Force.
      *
      * @return string
@@ -960,7 +997,8 @@ class OpenReport extends OpenDeptStats
                                 $deet[1] = trim(substr($deet[1], 1));
                             }
                             if (isset($inj->inj_description)
-                                && trim($inj->inj_description) != '') {
+                                && trim($inj->inj_description) != ''
+                                && $this->canPrintFullReport()) {
                                 $deet[1] .= ' — ' . $inj->inj_description;
                             }
                             $deets[] = $deet;

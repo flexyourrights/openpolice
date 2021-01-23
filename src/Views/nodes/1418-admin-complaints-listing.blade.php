@@ -18,7 +18,11 @@
 
 @else 
 
-<div class="h100">
+@if ($GLOBALS["SL"]->x["isPublicList"]) 
+    <div class="h100" style="padding-top: 55px;">
+@else
+    <div class="h100 pT20 mT20">
+@endif
 
 <div class="admDashTopCard">
 @if ($GLOBALS["SL"]->x["isPublicList"]) <div class="slCard"> @endif
@@ -85,7 +89,7 @@
             </div>
         */ ?>
         @if ($sView == 'list')
-            <div class="fR pR15">
+            <div class="fR">
                 <button type="button" id="toggleSearchFilts"
                     class="btn btn-sm btn-primary"> Filter by
                     <i id="toggleSearchFiltsArr" class="fa fa-caret-down" 
@@ -161,17 +165,22 @@
 
 @endif
 
+<div class="disNon">
+    <iframe id="cachePreloads" src=""></iframe>
+</div>
+
 @if (!$GLOBALS["SL"]->x["isPublicList"])
     <div class="relDiv w100">
-        <div class="absDiv" style="right: -18px; top: 20px;">
+        <div class="absDiv" style="right: -11px; top: 20px;">
             <a href="?refresh=1" class="slGreenDark"
-                ><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                ><i class="fa fa-refresh" aria-hidden="true"
+                    style="font-size: 8pt;"></i></a>
         </div>
     </div>
 @endif
 
-@if ($sView == 'list') 
 <style> 
+@if ($sView == 'list') 
     body {
         overflow-y: hidden;
     }
@@ -179,5 +188,25 @@
         padding-top: 2px;
         padding-bottom: 0px;
     }
-</style>
 @endif
+@if (!isset($GLOBALS["SL"]->x["isHomePage"])
+    || !$GLOBALS["SL"]->x["isHomePage"])
+    #topNavSearch {
+        display: block;
+    }
+    #topNavSearchBtn {
+        display: none;
+    }
+@endif
+@if ($GLOBALS["SL"]->x["isPublicList"]) 
+    #node2385kids {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+@else
+    #treeWrap2152 {
+        padding-left: 5px;
+        padding-right: 0px;
+    }
+@endif
+</style>

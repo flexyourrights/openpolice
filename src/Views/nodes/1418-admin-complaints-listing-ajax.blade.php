@@ -164,3 +164,12 @@ $(document).on("click", ".fltStatus", function() {
     }
 });
 
+setTimeout(function() {
+    if (document.getElementById("cachePreloads")) {
+    @if ($GLOBALS["SL"]->x["isPublicList"])
+        document.getElementById("cachePreloads").src="/ajax/complaint-preloads";
+    @else
+        document.getElementById("cachePreloads").src="/ajadm/complaint-preloads-staff";
+    @endif
+    }
+}, 20000);

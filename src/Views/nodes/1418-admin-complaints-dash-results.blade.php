@@ -66,10 +66,10 @@
                 <?php $cnt++; ?>
                 {!! view(
                     'vendor.openpolice.nodes.1418-admin-complaints-listing-row', 
-                    [ 
-                        "cnt"     => $cnt,
-                        "com"     => $com,
-                        "sortLab" => $sortLab
+                    [
+                        "com" => $com,
+                        "inc"  => $com,
+                        "prsn" => $com
                     ]
                 )->render() !!}
             </div>

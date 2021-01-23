@@ -3,7 +3,7 @@
 <div class="disBlo pB30">
     Select Email Template<br />
     <select name="email" id="emailID" autocomplete="off" 
-        class="form-control form-control-lg">
+        class="form-control form-control-lg mB5">
         <option value="" >No email right now</option>
     @forelse ($emailList as $i => $email)
         <?php $emaID2 = substr($email->email_name, 0, 2); ?>
@@ -23,19 +23,23 @@
     @empty
     @endforelse
     </select>
-    <div id="emailChooseDept" 
-        class="@if ($emailID == 12) disBlo @else disNon @endif ">
-        @if (sizeof($comDepts) > 1)
-            <div class="pT15 pB10">Select Investigative Agency</div>
-            <select name="d" id="emailDeptID" autocomplete="off" 
-                class="form-control form-control-lg">
-            @forelse ($comDepts as $cnt => $dept)
-                <option value="{{ $dept['id'] }}"
-                    @if ($dept['id'] == $deptID) SELECTED @endif
-                    >{{ $dept['name'] }}</option>
-            @empty
-            @endforelse
-            </select>
+    <div id="emailChooseDept" class="
+        @if ($GLOBALS['SL']->x['deptsCnt'] > 1 && $emailID == 12) disBlo 
+        @else disNon 
+        @endif ">
+        @if ($GLOBALS["SL"]->x["deptsCnt"] > 1)
+            <div class="pT30">
+                Select Investigative Agency<br />
+                <select name="d" id="emailDeptID" autocomplete="off" 
+                    class="form-control form-control-lg">
+                @forelse ($comDepts as $cnt => $dept)
+                    <option value="{{ $dept['id'] }}"
+                        @if ($dept['id'] == $deptID) SELECTED @endif
+                        >{{ $dept['name'] }}</option>
+                @empty
+                @endforelse
+                </select>
+            </div>
         @else
             <input name="d" id="emailDeptID" type="hidden" 
             @if (sizeof($comDepts) > 0 && isset($comDepts[0]['id']))
@@ -83,21 +87,23 @@ function loadComplaintEmail() {
     }
 }
 
-$(document).on("change", "#emailID", function() { 
-    if (document.getElementById('emailChooseDept')) {
-        var emailID = document.getElementById('emailID').value;
-        if (emailID == 12) {
-            $("#emailChooseDept").slideDown("fast");
-        } else {
-            $("#emailChooseDept").slideUp("fast");
+@if ($GLOBALS["SL"]->x["deptsCnt"] > 1)
+    $(document).on("change", "#emailID", function() { 
+        if (document.getElementById('emailChooseDept')) {
+            var emailID = document.getElementById('emailID').value;
+            if (emailID == 12) {
+                $("#emailChooseDept").slideDown("fast");
+            } else {
+                $("#emailChooseDept").slideUp("fast");
+            }
         }
-    }
-    loadComplaintEmail();
-});
+        loadComplaintEmail();
+    });
 
-$(document).on("change", "#emailDeptID", function() {
-    loadComplaintEmail();
-});
+    $(document).on("change", "#emailDeptID", function() {
+        loadComplaintEmail();
+    });
+@endif
 
 function pushDeptID() {
     if (document.getElementById('emailDeptID') && document.getElementById('emailSubDeptID')) {

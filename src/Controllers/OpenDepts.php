@@ -965,6 +965,8 @@ class OpenDepts extends OpenPolicePCIF
         if ($GLOBALS["SL"]->REQ->has('refresh')) {
             $GLOBALS["SL"]->forgetAllCachesOfType('search');
         }
+        $GLOBALS["SL"]->currSearchTbls  = [ 111 ];
+        $GLOBALS["SL"]->v["showSearch"] = true;
         $this->initSearcher();
         $this->searcher->getSearchFilts();
         $this->chkDeptStateFlt($GLOBALS["SL"]->REQ);

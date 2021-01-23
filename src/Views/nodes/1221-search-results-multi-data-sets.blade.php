@@ -15,12 +15,18 @@
 
 @else
 
-    @if (!$dashView) <div class="slCard mT15 mB25"> @endif
-    <h4 class="mT0">Search Results for "{{ $searcher->searchTxt }}"</h4>
+    @if (!$dashView)
+        <div class="slCard mB25" style="margin-top: 70px;">
+            <h4 style="mT0">Search Results for "{{ $searcher->searchTxt }}"</h4>
+    @else
+        <h4 style="margin-top: 45px;">Search Results for "{{ $searcher->searchTxt }}"</h4>
+    @endif
+    <?php /*
     <div class="mB0">
         <a href="#departments">Departments</a> | 
         <a href="#complaints">Complaints</a>
     </div>
+    */ ?>
     <div class="nodeAnchor"><a id="departments" name="departments"></a></div>
     @if (!$dashView)
         </div><div class="slCard mB25">
@@ -67,3 +73,15 @@
     }); </script>
 
 @endif
+
+<style>
+@if ($dashView)
+    #treeWrap3064 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+@endif
+#topNavSearchBtn {
+    display: none;
+}
+</style>

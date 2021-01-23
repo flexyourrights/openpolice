@@ -4,9 +4,9 @@
 <div class="nodeAnchor"><a id="n{{ $nID }}" name="n{{ $nID }}"></a></div>
 <div id="node{{ $nID }}">
 
-    <div class="h100 pT15">
+    <div class="h100 pT30 mT30">
 
-        <div class="admDashTopCard">
+        <div class="admDashTopCard mT10">
             <div class="slCard">
                 <div class="row">
                     <div class="col-md-8">
@@ -87,6 +87,12 @@
     font-size: 16px; 
     font-weight: normal; 
     margin-left: 10px; 
+}
+#topNavSearch {
+    display: block;
+}
+#topNavSearchBtn {
+    display: none;
 }
 </style>
 

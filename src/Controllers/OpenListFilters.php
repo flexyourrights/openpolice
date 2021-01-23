@@ -179,7 +179,6 @@ class OpenListFilters extends OpenAjax
             $this->v["filtersDesc"] .= ' & ' 
                 . implode(', ', $this->searcher->searchFilts["states"]);
         }
-
         if (isset($this->searcher->searchFilts["allegs"])
             && sizeof($this->searcher->searchFilts["allegs"]) > 0) {
             $filtDescTmp = '';
@@ -187,9 +186,23 @@ class OpenListFilters extends OpenAjax
                 \$joi->on('op_complaints.com_id', 
                     '=', 'op_alleg_silver.alle_sil_complaint_id')";
             foreach ($this->searcher->searchFilts["allegs"] as $i => $allegID) {
-                $eval .= "->" . (($i > 0) ? "orWhere" : "where") 
-                    . "('op_alleg_silver." . $this->getAllegFldName($allegID) 
-                    . "', 'Y')";
+                $allegFld = $this->getAllegFldName($allegID);
+                if ($allegFld == 'alle_sil_intimidating_weapon') {
+                    if ($i > 0) {
+                        $eval .= "->orWhereIn";
+                    } else {
+                        $eval .= "->whereIn";
+                    }
+                    $eval .= "('op_alleg_silver." . $allegFld 
+                        . "', [277, 278, 279, 280])";
+                } else {
+                    if ($i > 0) {
+                        $eval .= "->orWhere";
+                    } else {
+                        $eval .= "->where";
+                    }
+                    $eval .= "('op_alleg_silver." . $allegFld . "', 'LIKE', 'Y')";
+                }
                 $filtDescTmp = ' or ' 
                     . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
             }
@@ -301,33 +314,27 @@ class OpenListFilters extends OpenAjax
                         }
                     }
                 }
-                if ($inFilter && trim($this->searcher->searchTxt) != '') {
-
-                    $dump = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
-                        ->where('sch_rec_dmp_rec_id', $comID)
-                        ->where('sch_rec_dmp_perms', $GLOBALS["SL"]->getCacheSffxAdds())
-                        ->first();
-                    if (!$dump || !isset($dump->sch_rec_dmp_id)) {
-                        $dump = $this->genRecDump($comID, true);
+                if ($inFilter 
+                    && trim($this->searcher->searchTxt) != ''
+                    && sizeof($this->searcher->searchParse) > 0) {
+                    $perms = 'public';
+                    if ($this->isStaffOrAdmin()) {
+                        $perms = 'sensitive';
                     }
-                    $pos = stripos($dump->sch_rec_dmp_rec_dump, $this->searcher->searchTxt);
-                    if ($pos === false) {
+                    $eval = "\$dump = App\\Models\\SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
+                        ->where('sch_rec_dmp_rec_id', " . $comID . ")
+                        ->where('sch_rec_dmp_perms', '" . $perms . "')
+                        ->where(function(\$query) { \$query";
+                    foreach ($this->searcher->searchParse as $w => $word) {
+                        $eval .= (($w == 0) ? "->where" : "->orWhere") 
+                            . "('sch_rec_dmp_rec_dump', 'LIKE', \"%" 
+                            . $word . "%\")";
+                    }
+                    $eval .= "; })->select('sch_rec_dmp_id')->first();";
+                    eval($eval);
+                    if (!$dump || !isset($dump->sch_rec_dmp_id)) {
                         $inFilter = false;
                     }
-                    /*
-                    } else {
-                        $chk = SLSearchRecDump::where('sch_rec_dmp_tree_id', 1)
-                            ->where('sch_rec_dmp_rec_id', $comID)
-                            ->where('sch_rec_dmp_perms', $GLOBALS["SL"]->getCacheSffxAdds())
-                            ->where('sch_rec_dmp_rec_dump', 'LIKE', '%' 
-                                . $this->searcher->searchTxt . '%')
-                            ->select('sch_rec_dmp_id')
-                            ->get();
-                        if ($chk->isEmpty()) {
-                            $inFilter = false;
-                        }
-                    }
-                    */
                 }
                 if ($inFilter) {
                     $compls2[] = $com;
@@ -351,6 +358,21 @@ class OpenListFilters extends OpenAjax
         }
         $this->v["filtersDesc"] .= $this->searcher->getSearchFiltDescPeeps()
             . $this->searcher->getSearchFiltDescStatus();
+        $this->v["filtersDesc"] = str_replace(
+            'OK to Submit to Oversight',
+            'OK to Submit to Investigative Agency',
+            $this->v["filtersDesc"]
+        );
+        $this->v["filtersDesc"] = str_replace(
+            'Submitted to Oversight',
+            'Submitted to Investigative Agency',
+            $this->v["filtersDesc"]
+        );
+        $this->v["filtersDesc"] = str_replace(
+            'Received by Oversight',
+            'Received by Investigative Agency',
+            $this->v["filtersDesc"]
+        );
         if (trim($this->v["filtersDesc"]) != '') {
             $this->v["filtersDesc"] = substr($this->v["filtersDesc"], 2);
         }
@@ -421,9 +443,11 @@ class OpenListFilters extends OpenAjax
         }
         if (isset($this->searcher->searchTxt) 
             && trim($this->searcher->searchTxt) != '') {
-            $this->v["filtersDesc"] = '<span class="mR5 slGrey">"' 
-                . $this->searcher->searchTxt . '",</span>'
-                . $this->v["filtersDesc"];
+            $srch = '<span class="mR5 slGrey">"' 
+                . $this->searcher->searchTxt . '",</span>';
+            if (strpos($this->v["filtersDesc"], $srch) === false) {
+                $this->v["filtersDesc"] = $srch . $this->v["filtersDesc"];
+            }
         }
         if (isset($this->v["filtersDesc"]) 
             && trim($this->v["filtersDesc"]) != '') {

@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-4 col-sm-12 pB15">
         <div class=" @if ($comStatus != 'Incomplete') disBlo @else disNon @endif ">
-            Complaint Type:<br />
+            Submission Type:<br />
             <a class="hidivBtn" id="hidivBtnlegitType" 
                 href="javascript:;">{{ $GLOBALS['SL']->def->getVal(
                     'Complaint Type', 

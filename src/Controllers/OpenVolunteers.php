@@ -197,6 +197,7 @@ class OpenVolunteers extends OpenDevelopment
      */
     public function printVolunPriorityList()
     {
+        $GLOBALS["SL"]->currSearchTbls  = [ 111 ];
         $this->chkVolunInitLists();
         return view(
             'vendor.openpolice.nodes.1755-volun-home-priority-depts', 

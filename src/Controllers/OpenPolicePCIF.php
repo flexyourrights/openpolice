@@ -262,6 +262,7 @@ class OpenPolicePCIF extends OpenListing
     	if ($abbr == 'com_') {
     		if ($fld->fld_name == 'summary'
     			&& $this->canPrintFullReportByRecordSpecs()) {
+//echo 'genXmlFormatValCustomPerms?'; exit;
     			return true;
     		} elseif ($fld->fld_name == 'address'
     			&& $this->canPrintIncidentLocation()) {

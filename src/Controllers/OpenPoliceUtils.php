@@ -112,13 +112,25 @@ class OpenPoliceUtils extends OpenPoliceVars
             'Police Complaint'
         );
         return (isset($coreRec->com_type) 
-            && $coreRec->com_type == $def);
+            && intVal($coreRec->com_type) == $def);
+    }
+    
+    public function isTypeUnverified($coreRec)
+    {
+        $def = $GLOBALS["SL"]->def->getID(
+            'Complaint Type', 
+            'Unverified'
+        );
+        return (isset($coreRec->com_type) 
+            && intVal($coreRec->com_type) == $def);
     }
     
     public function isPublished($coreTbl, $coreID, $coreRec = NULL)
     {
         if ($coreTbl == 'complaints') {
-            if (!$coreRec || !isset($coreRec->com_status)) {
+            if (!$coreRec 
+                || !isset($coreRec->com_status)
+                || !isset($coreRec->com_type)) {
                 $coreRec = OPComplaints::find($coreID);
             }
             if ($coreRec 
@@ -400,7 +412,8 @@ class OpenPoliceUtils extends OpenPoliceVars
         if (!isset($this->sessData->dataSets["officers"])
             || sizeof($this->sessData->dataSets["officers"]) == 0) {
             $printOff = true;
-        } elseif (isset($com->com_publish_officer_name)
+        } elseif ($com
+            && isset($com->com_publish_officer_name)
             && intVal($com->com_publish_officer_name) == 1) {
             $printOff = true;
         }
@@ -409,7 +422,8 @@ class OpenPoliceUtils extends OpenPoliceVars
     
     protected function canPrintComplainantName($com = null)
     {
-        return (isset($com->com_publish_user_name)
+        return ($com
+            && isset($com->com_publish_user_name)
             && intVal($com->com_publish_user_name) == 1);
     }
     
@@ -452,6 +466,13 @@ class OpenPoliceUtils extends OpenPoliceVars
         }
         $com = $this->sessData->dataSets["complaints"][0];
         return $this->canPrintFullReportByRecordSpecs($com);
+    }
+    
+    protected function canPrintFullReportOrPrivs()
+    {
+        return ((isset($this->v["isOwner"]) && $this->v["isOwner"])
+            || $this->isStaffOrAdmin()
+            || $this->canPrintFullReport());
     }
     
     public function tblsInPackage()
