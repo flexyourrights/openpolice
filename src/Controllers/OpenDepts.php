@@ -129,10 +129,13 @@ class OpenDepts extends OpenPolicePCIF
             } else {
                 $nextRow = NULL;
                 $qmen = [];
+                $chk = OPzVolunTmp::where('tmp_type', 'LIKE', 'zed_dept')
+                    ->where('tmp_user', intVal(Auth::user()->id))
+                    ->select('tmp_val')
+                    ->get();
+                $deptIDs = $GLOBALS["SL"]->resultsToArrIds($chk, 'tmp_val');
+                $qReserves = " AND `dept_id` NOT IN (" . implode(", ", $deptIDs) . ")";
                 $qBase = "SELECT `dept_id`, `dept_name`, `dept_slug` FROM `op_departments` WHERE ";
-                $qReserves = " AND `dept_id` NOT IN (SELECT `tmp_val` FROM `op_z_volun_tmp` WHERE "
-                    . "`tmp_type` LIKE 'zed_dept' AND `tmp_user` NOT LIKE '"
-                    . intVal(Auth::user()->id) . "')";
                 $qmen[] = $qBase . "(`dept_verified` < '2015-01-01 00:00:00' "
                     . "OR `dept_verified` IS NULL) " . $qReserves 
                     . " ORDER BY RAND()";

@@ -436,7 +436,7 @@ class OpenVolunteers extends OpenDevelopment
      */
     public function saveVolunLocationForm(Request $request)
     {
-        $this->survLoopInit($request, '/ajax/save-default-state/');
+        $this->survloopInit($request, '/ajax/save-default-state/');
         $this->loadYourContact();
         if (isset($this->v["yourContact"]) 
             && isset($this->v["yourContact"]->prsn_id)) {

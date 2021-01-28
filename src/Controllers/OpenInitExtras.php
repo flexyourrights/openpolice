@@ -13,8 +13,10 @@ namespace FlexYourRights\OpenPolice\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\SLSess;
 use App\Models\OPComplaints;
 use App\Models\OPDepartments;
+use App\Models\OPEventSequence;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
@@ -493,26 +495,29 @@ class OpenInitExtras extends OpenPartners
             date("n"), date("j")-14, date("Y"));
         $cutoff = date("Y-m-d H:i:s", $cutoff);
         $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
-        DB::select(DB::raw(
-            "DELETE FROM `op_complaints` 
-            WHERE `com_public_id` IS NULL
-                AND `com_status` LIKE '" . $incDef . "'
-                AND `created_at` < '" . $cutoff . "'
-                AND (`com_user_id` IS NULL OR `com_user_id` <= 0)
-                AND (`com_summary` IS NULL OR `com_summary` LIKE '')
-            LIMIT 1000"
-        ));
-        DB::select(DB::raw(
-            "DELETE FROM `sl_sess` 
-            WHERE `sl_sess`.`sess_tree` = 1
-                AND `sl_sess`.`sess_core_id` NOT IN 
-                    (SELECT `op_complaints`.`com_id` FROM `op_complaints`)"
-        ));
-        DB::select(DB::raw(
-            "DELETE FROM `op_event_sequence` 
-            WHERE `op_event_sequence`.`eve_complaint_id` NOT IN 
-                (SELECT `op_complaints`.`com_id` FROM `op_complaints`)"
-        ));
+        OPComplaints::whereNull('com_public_id')
+            ->where('com_status', 'LIKE', $incDef)
+            ->where('created_at', '<', $cutoff)
+            ->where(function($query) {
+                $query->whereNull('com_user_id')
+                      ->orWhere('com_user_id', '<', 1);
+            })
+            ->where(function($query) {
+                $query->whereNull('com_summary')
+                      ->orWhere('com_summary', 'NOT LIKE', '');
+            })
+            ->limit(1000)
+            ->delete();
+        $chk = OPComplaints::select('com_id')
+            ->get();
+        $comIDs = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+        SLSess::where('sess_tree', 1)
+            ->whereNotIn('sess_core_id', $comIDs)
+            ->limit(1000)
+            ->delete();
+        OPEventSequence::whereNotIn('eve_complaint_id', $comIDs)
+            ->limit(1000)
+            ->delete();
         return true;
     }
     
@@ -531,12 +536,13 @@ class OpenInitExtras extends OpenPartners
             ->where('created_at', '<', $cutoff)
             ->limit(2000)
             ->delete();
-        DB::select(DB::raw(
-            "DELETE FROM `sl_sess` 
-            WHERE `sl_sess`.`sess_tree` = 79
-                AND `sl_sess`.`sess_core_id` NOT IN 
-                    (SELECT `op_tester_beta`.`beta_id` FROM `op_tester_beta`)"
-        ));
+        $chk = OPTesterBeta::select('beta_id')
+            ->get();
+        $betaIDs = $GLOBALS["SL"]->resultsToArrIds($chk, 'beta_id');
+        SLSess::where('sess_tree', 79)
+            ->whereNotIn('sess_core_id', $betaIDs)
+            ->limit(1000)
+            ->delete();
         return true;
     }
     
