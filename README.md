@@ -155,13 +155,13 @@ $ php artisan db:seed --class=ZipCodeSeeder4
 
 ### Initialize OpenPolice Installation
 
-Then browsing to the home page should prompt you to create the first admin user account:
+Then browsing to the home page should prompt you to create the first admin user account:<br />
 http://openpolice.local
 
-If everything looks janky, then manually load the style sheets, etc:
+If everything looks janky, then manually load the style sheets, etc:<br />
 http://openpolice.local/css-reload
 
-After logging in as an admin, this link rebuilds many supporting files:
+After logging in as an admin, this link rebuilds many supporting files:<br />
 http://openpolice.local/dashboard/settings?refresh=2
 
 
@@ -169,10 +169,10 @@ http://openpolice.local/dashboard/settings?refresh=2
 
 Once installed, documentation of this system's database design can be found at /dashboard/db/all . This system's user experience design for data entry can be found at /dashboard/tree/map?all=1&alt=1 or publicly visible links like those above.
 
-Better documentation is juuust beginning to be created...
+Better documentation is juuust beginning to be created...<br />
 <a href="https://openpolice.org/code-package-files-folders-and-classes" target="_blank">openpolice.org/code-package-files-folders-and-classes</a>
 
-More on the Survloop level is also starting here: 
+More on the Survloop level is also starting here: <br />
 <a href="https://survloop.org/package-files-folders-classes" target="_blank">survloop.org/package-files-folders-classes</a>.
 
 # <a name="roadmap"></a>Roadmap
@@ -183,8 +183,6 @@ Here's the TODO list for the next release (**1.0**). It's my first time building
 * [ ] Integrate options for MFA using Laravel-compatible package.
 * [ ] Code commenting, learning and adopting more community norms.
 * [ ] Add decent levels of unit testing. Hopefully improve the organization of objects/classes.
-
-# <a name="change-logs"></a>Change Logs
 
 
 # <a name="contribution-guidelines"></a>Contribution Guidelines
