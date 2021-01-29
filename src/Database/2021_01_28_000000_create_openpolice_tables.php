@@ -19,17 +19,12 @@ class CreateOpenPoliceTables extends Migration
     	Schema::create('op_complaints', function(Blueprint $table)
 		{
 			$table->increments('com_id');
-			$table->integer('com_submission_progress')->nullable();
-			$table->string('com_tree_version')->nullable();
-			$table->integer('com_user_id')->nullable();
-			$table->integer('com_user_id')->nullable();
 			$table->integer('com_user_id')->nullable();
 			$table->integer('com_public_id')->nullable();
 			$table->integer('com_status')->unsigned()->nullable();
 			$table->index('com_status');
 			$table->integer('com_type')->unsigned()->nullable();
 			$table->index('com_type');
-			$table->integer('com_user_id')->unsigned()->nullable();
 			$table->integer('com_incident_id')->unsigned()->nullable();
 			$table->integer('com_scene_id')->unsigned()->nullable();
 			$table->integer('com_publish_officer_name')->nullable();
