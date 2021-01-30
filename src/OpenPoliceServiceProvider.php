@@ -1,4 +1,13 @@
 <?php
+/**
+  * OpenPoliceServiceProvider in Laravel extension
+  * which copies files where they are needed after installation.
+  *
+  * OpenPolice.org
+  * @package  flexyourrights/openpolice
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
+  * @since  v0.3.0
+  */
 namespace FlexYourRights\OpenPolice;
 
 use Illuminate\Support\ServiceProvider;

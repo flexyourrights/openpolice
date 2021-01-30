@@ -6,7 +6,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.15
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -21,12 +21,18 @@ class OpenSessDataOverride extends OpenComplaintPrints
      * Delegate the custom overrides for Survloop default 
      * methods to retrieve current session data required
      * by the current node.
+     * This overrides the printNodePublicCurrData function in
+     * RockHopSoft\Survloop\Controllers\Tree\TreeSurvFormPrintLoad.
      *
      * @param  TreeNodeSurv $curr
      * @return array
      */
     protected function printNodeSessDataOverride(&$curr)
     {
+        $extension = $this->extensionPrintNodeSessData($curr);
+        if (sizeof($extension) > 0) {
+            return $extension;
+        }
         if (empty($this->sessData->dataSets)) {
             return [];
         }
@@ -154,6 +160,22 @@ class OpenSessDataOverride extends OpenComplaintPrints
             }
             return [ 'N' ];
         }
+        return [];
+    }
+
+    /**
+     * Delegate the custom overrides for Survloop default 
+     * methods to retrieve current session data required
+     * by the current node.
+     * This overrides the printNodePublicCurrData function in
+     * RockHopSoft\Survloop\Controllers\Tree\TreeSurvFormPrintLoad.
+     * e.g. flexyourrights/openpolice-extension
+     *
+     * @param  TreeNodeSurv $curr
+     * @return array
+     */
+    protected function extensionPrintNodeSessData(&$curr)
+    {
         return [];
     }
 

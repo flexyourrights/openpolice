@@ -4,7 +4,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 class CreateOpenPoliceTables extends Migration
 {
@@ -15,7 +14,6 @@ class CreateOpenPoliceTables extends Migration
      */
     public function up()
     {
-        DB::statement('SET SESSION sql_require_primary_key=0');
     	Schema::create('op_complaints', function(Blueprint $table)
 		{
 			$table->increments('com_id');

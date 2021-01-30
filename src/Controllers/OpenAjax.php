@@ -5,7 +5,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.12
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -25,6 +25,8 @@ class OpenAjax extends OpenAjaxCachePrep
     /**
      * Check for ajax requests customized beyond 
      * Survloop's default behavior, called via /ajax/{type}.
+     * This overrides the ajaxChecks function in
+     * RockHopSoft\Survloop\Controllers\Tree\TreeSurv.
      *
      * @param  Illuminate\Http\Request  $request
      * @param  string $type
@@ -32,6 +34,10 @@ class OpenAjax extends OpenAjaxCachePrep
      */
     public function ajaxChecksCustom(Request $request, $type = '')
     {
+        $extension = $this->extensionAjaxChecks($request, $type);
+        if (trim($extension) != '') {
+            return $extension;
+        }
         if ($type == 'dept-kml-desc') {
             return $this->ajaxDeptKmlDesc($request);
         } elseif ($type == 'save-default-state') {
@@ -50,6 +56,20 @@ class OpenAjax extends OpenAjaxCachePrep
         } elseif ($type == 'complaint-preloads-staff') {
             $this->ajaxStaffComplaintPreloads($request);
         }
+        return '';
+    }
+
+    /**
+     * Check for ajax requests customized beyond 
+     * Survloop's default behavior, called via /ajax/{type}.
+     * e.g. flexyourrights/openpolice-extension
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  string $type
+     * @return boolean
+     */
+    protected function extensionAjaxChecks(Request $request, $type = '')
+    {
         return '';
     }
 

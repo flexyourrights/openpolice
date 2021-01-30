@@ -5,7 +5,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.15
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -22,6 +22,9 @@ class OpenComplaintConditions extends OpenSessDataOverride
     /**
      * Delegate the conditional checks which are customized from
      * the simpler default Survloop existing thus far.
+     * This overrides the parseConditions function in
+     * RockHopSoft\Survloop\Controllers\Tree\TreeSurvConds.
+     * Return 0 or 1 (instead of -1) to override.
      *
      * @param  int $nID
      * @param  string $condition
@@ -29,6 +32,10 @@ class OpenComplaintConditions extends OpenSessDataOverride
      */
     protected function checkNodeConditionsCustom($nID, $condition = '')
     {
+        $extension = $this->extensionCheckNodeConditions($nID, $condition);
+        if (in_array($extension, [0, 1])) {
+            return $extension;
+        }
         $complaint = null;
         if (isset($this->sessData->dataSets["complaints"]) 
             && isset($this->sessData->dataSets["complaints"][0])
@@ -153,6 +160,21 @@ class OpenComplaintConditions extends OpenSessDataOverride
             return $this->condPartnerActiveOrTestLink();
 
         }
+        return -1;
+    }
+
+    /**
+     * Delegate the conditional checks which are customized from
+     * the simpler default OpenPolice.org & Survloop existing thus far.
+     * Return 0 or 1 (instead of -1) to override.
+     * e.g. flexyourrights/openpolice-extension
+     *
+     * @param  int $nID
+     * @param  string $condition
+     * @return int
+     */
+    protected function extensionCheckNodeConditions($nID, $condition = '')
+    {
         return -1;
     }
     

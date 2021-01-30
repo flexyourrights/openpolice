@@ -5,7 +5,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.7
   */
 namespace FlexYourRights\OpenPolice\Controllers;

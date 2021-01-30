@@ -5,7 +5,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.15
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -22,6 +22,7 @@ use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
 use App\Models\OPTesterBeta;
 use App\Models\OPzVolunUserInfo;
+use FlexYourRights\OpenPolice\Controllers\OpenDashAdmin;
 use FlexYourRights\OpenPolice\Controllers\OpenPartners;
 
 class OpenInitExtras extends OpenPartners
@@ -450,6 +451,86 @@ class OpenInitExtras extends OpenPartners
     }
     
     /**
+     * Look up the person contact record and physical description record
+     * for a civilian or officer.
+     *
+     * @return boolean
+     */
+    protected function chkPersonRecs()
+    {
+        // This should've been automated via the data table subset option
+        // but for now, I'm replacing that complication with this check...
+        $found = false;
+        $types = [
+            ['civilians', 'civ'],
+            ['officers',  'off']
+        ];
+        foreach ($types as $type) {
+            if (isset($this->sessData->dataSets[$type[0]]) 
+                && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
+                foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
+                    if (!isset($civ->{ $type[1] . '_person_id' }) 
+                        || intVal($civ->{ $type[1] . '_person_id' }) <= 0) {
+                        $new = new OPPersonContact;
+                        $new->save();
+                        $this->sessData->dataSets[$type[0]][$i]->update([
+                            $type[1] . '_person_id' => $new->getKey() 
+                        ]);
+                        $found = true;
+                    }
+                    if (!isset($civ->{ $type[1] . '_phys_desc_id' }) 
+                        || intVal($civ->{ $type[1] . '_phys_desc_id' }) <= 0) {
+                        $new = new OPPhysicalDesc;
+                        $new->save();
+                        $this->sessData->dataSets[$type[0]][$i]->update([
+                            $type[1] . '_phys_desc_id' => $new->getKey()
+                        ]);
+                        $found = true;
+                    }
+                }
+            }
+        }
+        if ($found) {
+            $this->sessData->refreshDataSets();
+        }
+        // // // //
+        return true;
+    }
+    
+    /**
+     * Look up the record linking fields which should be skipped
+     * when auto-creating a new loop item's database record.
+     *
+     * @return array
+     */
+    protected function newLoopItemSkipLinks($tbl = '')
+    {
+        // Until this can be auto-inferred for 
+        // outgoing linkages to data subsets
+        if ($tbl == 'civilians') {
+            return [ 'civ_person_id', 'civ_phys_desc_id' ];
+        } elseif ($tbl == 'officers') {
+            return [ 'off_person_id', 'off_phys_desc_id' ];
+        }
+        return [];
+    }
+    
+    /**
+     * Double-check behavior after a new item has been created for a data loop.
+     *
+     * @param  string $tbl
+     * @param  int $itemID
+     * @return boolean
+     */
+    protected function afterCreateNewDataLoopItem($tbl = '', $itemID = -3)
+    {
+        if (in_array($tbl, ['civilians', 'officers']) && $itemID > 0) {
+            $this->chkPersonRecs();
+        }
+        return true;
+    }
+    
+    /**
      * Run any validation and cleanup needed specific to OP.org
      *
      * @return boolean
@@ -677,6 +758,32 @@ class OpenInitExtras extends OpenPartners
     {
         $this->allegations = [];
         return true;
-    }    
+    }
+    
+    /**
+     * Print warning message for uploading tool.
+     *
+     * @param  int $nID
+     * @return string
+     */
+    protected function uploadWarning($nID)
+    {
+        return 'WARNING: If documents show sensitive personal information, set this to "private." 
+            This includes addresses, phone numbers, emails, or social security numbers.';
+    }
+
+    /**
+     * Initializes the admin dashboard side-class.
+     *
+     * @return boolean
+     */
+    protected function initAdmDash()
+    {
+        $this->v["isDash"] = true;
+        if (!isset($this->v["openDash"])) {
+            $this->v["openDash"] = new OpenDashAdmin;
+        }
+        return true;
+    }
 
 }

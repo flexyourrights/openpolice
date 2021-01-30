@@ -5,7 +5,7 @@
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since v0.0.12
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -26,14 +26,18 @@ class OpenComplaintSaves extends OpenComplaintConditions
     /**
      * Override default behavior for submitting survey forms,
      * delegateing specifc saving procedures for custom nodes.
+     * This overrides the postNodePublic function in
+     * RockHopSoft\Survloop\Controllers\Tree\TreeSurvInput.
      *
-     * @param  int $nID
-     * @param  string $nIDtxt
-     * @param  array $tmpSubTier
+     * @param  TreeNodeSurv $curr
      * @return boolean
      */
     protected function postNodePublicCustom(&$curr)
     {
+        $extension = $this->extensionPostNodePublic($curr);
+        if ($extension !== false) {
+            return $extension;
+        }
         $nID = $curr->nID;
         if (empty($tmpSubTier)) {
             $tmpSubTier = $this->loadNodeSubTier($nID);
@@ -87,6 +91,19 @@ class OpenComplaintSaves extends OpenComplaintConditions
         } elseif ($nID == 1007) {
             return $this->postContactEmail($nID);
         }
+        return false; // false to continue standard post processing
+    }
+
+    /**
+     * Override default behavior for submitting survey forms,
+     * delegateing specifc saving procedures for custom nodes.
+     * e.g. flexyourrights/openpolice-extension
+     *
+     * @param  TreeNodeSurv $curr
+     * @return boolean
+     */
+    protected function extensionPostNodePublic(&$curr)
+    {
         return false; // false to continue standard post processing
     }
     

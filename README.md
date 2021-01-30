@@ -58,7 +58,7 @@ Among other methods, the resulting data can also be provided as XML included an 
 
 ```
 
-Edit the environment file to connect the default MYSQL database:
+Edit these lines of the environment file to connect the default MYSQL database:
 ```
 % nano .env
 ```
@@ -128,7 +128,9 @@ If installing on a server, you might also need to fix some permissions before th
 
 Clear caches and publish the package migrations...
 ```
-% php artisan optimize:clear
+% php artisan config:cache
+% php artisan route:cache
+% php artisan view:cache
 % echo "0" | php artisan vendor:publish --force
 % composer dump-autoload
 % curl http://myopenpolice.local/css-reload
@@ -158,13 +160,13 @@ $ php artisan db:seed --class=ZipCodeSeeder4
 ### Initialize OpenPolice Installation
 
 Then browsing to the home page should prompt you to create the first admin user account:<br />
-http://openpolice.local
+http://myopenpolice.local
 
 If everything looks janky, then manually load the style sheets, etc:<br />
-http://openpolice.local/css-reload
+http://myopenpolice.local/css-reload
 
 After logging in as an admin, this link rebuilds many supporting files:<br />
-http://openpolice.local/dashboard/settings?refresh=2
+http://myopenpolice.local/dashboard/settings?refresh=2
 
 
 # <a name="documentation"></a>Documentation

@@ -1,11 +1,14 @@
 <?php
 /**
-  * OpenPolice the core top-level class for which extends both Survloop,
-  * and most functions specific to OpenPolice.org.
+  * OpenPolice the core top-level class for which extends 
+  * Survloop and most functions specific to OpenPolice.org.
+  * This class also collects hand-offs to extensions of
+  * this code base to variations in other countries, etc,
+  * found in the flexyourrights/openpolice-extension package.
   *
   * OpenPolice.org
   * @package  flexyourrights/openpolice
-  * @author  Morgan Lesko <rockhoppers@runbox.com>
+  * @author  Morgan Lesko <morgan@flexyourrights.org>
   * @since  v0.0.1
   */
 namespace FlexYourRights\OpenPolice\Controllers;
@@ -15,7 +18,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\OPPersonContact;
 use App\Models\OPPhysicalDesc;
-use FlexYourRights\OpenPolice\Controllers\OpenDashAdmin;
 use FlexYourRights\OpenPolice\Controllers\OpenInitExtras;
 
 class OpenPolice extends OpenInitExtras
@@ -24,12 +26,18 @@ class OpenPolice extends OpenInitExtras
      * Overrides primary Survloop printing of individual nodes from 
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
+     * This overrides the printNodePublicDefault function in
+     * RockHopSoft\Survloop\Tree\TreeSurvForm.
      *
      * @param  TreeNodeSurv $curr
      * @return string
      */
     protected function customNodePrint(&$curr = null)
     {
+        $ret = $this->extensionNodePrint($curr);
+        if (trim($ret) != '') {
+            return $ret;
+        }
         $nID = $curr->nID;
         // Main Complaint Survey
         if (in_array($nID, [145, 920])) {
@@ -391,28 +399,71 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Overrides default Survloop behavior for responses to multiple-choice questions.
+     * Overrides primary OpenPolice.org printing of individual nodes from 
+     * surveys and site pages. This is one of the main routing hubs
+     * for OpenPoliceExtension customizations beyond Survloop defaults.
+     * e.g. flexyourrights/openpolice-extension
      *
-     * @param  int $nID
+     * @param  TreeNodeSurv $curr
+     * @return string
+     */
+    protected function extensionNodePrint(&$curr = null)
+    {
+        return '';
+    }
+
+    /**
+     * Overrides default Survloop behavior for responses 
+     * to multiple-choice questions.
+     * This overrides the printNodePublicElements function in
+     * RockHopSoft\Survloop\Tree\TreeSurvForm.
+     *
      * @param  SLNode &$curr
      * @return SLNode
      */
-    protected function customResponses($nID, &$curr)
+    protected function customResponses(&$curr)
     {
+        $extension = $this->extensionResponses($curr);
+        if ($extension !== null) {
+            $curr = $extension;
+        } else {
+            // custom OpenPolice.org behavior
+        }
         return $curr;
+    }
+
+    /**
+     * Overrides default OpenPolice.org & Survloop behavior
+     * for responses to multiple-choice questions.
+     * Return $curr (instead of null) to override.
+     * e.g. flexyourrights/openpolice-extension
+     *
+     * @param  SLNode &$curr
+     * @return SLNode
+     */
+    protected function extensionResponses(&$curr)
+    {
+        return null;
     }
 
     /**
      * Overrides primary Survloop printing of individual nodes from 
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
+     * Return null to leave defaults alone. Otherwise, return 
+     * report detail array used by nodePrintVertProgress 
+     * in RockHopSoft\Survloop\Tree\TreeSurvDataPrint.
      *
      * @param  TreeNodeSurv $curr
      * @param  string $var
-     * @return string
+     * @return array
      */
     protected function customNodePrintVertProgress(&$curr = null, $val = null)
     {
+        $extension = $this->extensionNodePrintVertProgress($curr, $val);
+        if ($extension !== null) {
+            return $extension;
+        }
         if (in_array($curr->nID, [1700, 1697, 1698, 1699, 3176])) {
             return $this->printReportNoResponseTime($curr, $val);
         }
@@ -420,28 +471,38 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Initializes the admin dashboard side-class.
+     * Overrides OpenPolice.org & Survloop printing of individual nodes from 
+     * surveys and site pages. This is one of the main routing hubs
+     * for OpenPolice.org customizations beyond Survloop defaults.
+     * Return null to leave defaults alone. Otherwise, return 
+     * report detail array used by nodePrintVertProgress 
+     * e.g. flexyourrights/openpolice-extension
      *
-     * @return boolean
+     * @param  TreeNodeSurv $curr
+     * @param  string $var
+     * @return array
      */
-    protected function initAdmDash()
+    protected function extensionNodePrintVertProgress(&$curr = null, $val = null)
     {
-        $this->v["isDash"] = true;
-        if (!isset($this->v["openDash"])) {
-            $this->v["openDash"] = new OpenDashAdmin;
-        }
-        return true;
+        return null;
     }
     
     /**
-     * Overrides or disables the default printing of survey Back/Next buttons.
+     * Overrides or disables the default Survloop printing 
+     * of survey Back/Next buttons.
+     * This overrides the nodePrintButton function in
+     * RockHopSoft\Survloop\Tree\TreeSurvFormUtils.
      *
      * @param  int $nID
      * @param  string $promptNotes
      * @return string
      */
     protected function customNodePrintButton($nID = -3, $promptNotes = '')
-    { 
+    {
+        $extension = $this->extensionNodePrintButton($nID, $promptNotes);
+        if (trim($extension) != '') {
+            return $extension;
+        }
         if (in_array($nID, [270, 973])) {
             return '<!-- no buttons, all done! -->';
         }
@@ -449,95 +510,17 @@ class OpenPolice extends OpenInitExtras
     }
     
     /**
-     * Look up the person contact record and physical description record
-     * for a civilian or officer.
-     *
-     * @return boolean
-     */
-    protected function chkPersonRecs()
-    {
-        // This should've been automated via the data table subset option
-        // but for now, I'm replacing that complication with this check...
-        $found = false;
-        $types = [
-            ['civilians', 'civ'],
-            ['officers',  'off']
-        ];
-        foreach ($types as $type) {
-            if (isset($this->sessData->dataSets[$type[0]]) 
-                && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
-                foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
-                    if (!isset($civ->{ $type[1] . '_person_id' }) 
-                        || intVal($civ->{ $type[1] . '_person_id' }) <= 0) {
-                        $new = new OPPersonContact;
-                        $new->save();
-                        $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . '_person_id' => $new->getKey() 
-                        ]);
-                        $found = true;
-                    }
-                    if (!isset($civ->{ $type[1] . '_phys_desc_id' }) 
-                        || intVal($civ->{ $type[1] . '_phys_desc_id' }) <= 0) {
-                        $new = new OPPhysicalDesc;
-                        $new->save();
-                        $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . '_phys_desc_id' => $new->getKey()
-                        ]);
-                        $found = true;
-                    }
-                }
-            }
-        }
-        if ($found) {
-            $this->sessData->refreshDataSets();
-        }
-        // // // //
-        return true;
-    }
-    
-    /**
-     * Look up the record linking fields which should be skipped
-     * when auto-creating a new loop item's database record.
-     *
-     * @return array
-     */
-    protected function newLoopItemSkipLinks($tbl = '')
-    {
-        // Until this can be auto-inferred for 
-        // outgoing linkages to data subsets
-        if ($tbl == 'civilians') {
-            return [ 'civ_person_id', 'civ_phys_desc_id' ];
-        } elseif ($tbl == 'officers') {
-            return [ 'off_person_id', 'off_phys_desc_id' ];
-        }
-        return [];
-    }
-    
-    /**
-     * Double-check behavior after a new item has been created for a data loop.
-     *
-     * @param  string $tbl
-     * @param  int $itemID
-     * @return boolean
-     */
-    protected function afterCreateNewDataLoopItem($tbl = '', $itemID = -3)
-    {
-        if (in_array($tbl, ['civilians', 'officers']) && $itemID > 0) {
-            $this->chkPersonRecs();
-        }
-        return true;
-    }
-    
-    /**
-     * Print warning message for uploading tool.
+     * Overrides or disables the default Survloop & OpenPolice.org 
+     * printing of survey Back/Next buttons. 
+     * e.g. flexyourrights/openpolice-extension
      *
      * @param  int $nID
+     * @param  string $promptNotes
      * @return string
      */
-    protected function uploadWarning($nID)
+    protected function extensionNodePrintButton($nID = -3, $promptNotes = '')
     {
-        return 'WARNING: If documents show sensitive personal information, set this to "private." 
-            This includes addresses, phone numbers, emails, or social security numbers.';
+        return '';
     }
     
 }
