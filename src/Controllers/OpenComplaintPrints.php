@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenComplaintPrints is a mid-level class which handles custom 
+  * OpenComplaintPrints is a mid-level class which handles custom
   * printing of data, especially functions which override Survloop defaults.
   *
   * OpenPolice.org
@@ -19,7 +19,7 @@ use FlexYourRights\OpenPolice\Controllers\OpenComplaintEmails;
 class OpenComplaintPrints extends OpenComplaintEmails
 {
     /**
-     * 
+     *
      *
      * @return boolean
      */
@@ -31,13 +31,13 @@ class OpenComplaintPrints extends OpenComplaintEmails
             $allegSilv->save();
             $this->sessData->dataSets["alleg_silver"] = [ $allegSilv ];
         }
-        foreach ($this->worstAllegations as $alle) {
+        foreach ($GLOBALS["CUST"]->worstAllegs as $alle) {
             $found = false;
             if (isset($this->sessData->dataSets["allegations"])) {
                 $all = $this->sessData->dataSets["allegations"];
                 if (sizeof($all) > 0) {
                     foreach ($all as $i => $alleRow) {
-                        if ($alle[0] == $alleRow->alle_type) {
+                        if ($alle->defID == $alleRow->alle_type) {
                             $found = true;
                         }
                     }
@@ -52,13 +52,13 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return true;
     }
-    
+
     protected function printAllegAudit()
     {
-        return '<div class="pB15"><b>Allegations:</b></div><ul>' 
+        return '<div class="pB15"><b>Allegations:</b></div><ul>'
             . $this->commaAllegationList(true) . '</ul>';
     }
-    
+
     protected function printEndOfComplaintRedirect($nID)
     {
         $url = '';
@@ -66,60 +66,60 @@ class OpenComplaintPrints extends OpenComplaintEmails
         if ($nID == 270) {
             $this->clearComplaintCaches();
             $this->sessData->currSessDataTblFld(
-                $nID, 
-                'complaints', 
-                'com_status', 
-                'update', 
+                $nID,
+                'complaints',
+                'com_status',
+                'update',
                 $defNew
             );
             $this->sessData->currSessDataTblFld(
-                $nID, 
-                'complaints', 
-                'com_record_submitted', 
-                'update', 
+                $nID,
+                'complaints',
+                'com_record_submitted',
+                'update',
                 date("Y-m-d H:i:s")
             );
             $this->sessData->currSessDataTblFld(
-                $nID, 
-                'complaints', 
-                'com_alleg_list', 
-                'update', 
+                $nID,
+                'complaints',
+                'com_alleg_list',
+                'update',
                 $this->commaAllegationList()
             );
             $this->sessData->dataSets["complaints"][0]->update([
-                'com_public_id' => $GLOBALS["SL"]->genNewCorePubID() 
+                'com_public_id' => $GLOBALS["SL"]->genNewCorePubID()
             ]);
             $url = '/complaint/read-' . $this->sessData
                 ->dataSets["complaints"][0]->com_public_id;
         } else {
             //$this->clearComplimentCaches();
             $this->sessData->currSessDataTblFld(
-                $nID, 
-                'compliments', 
-                'compli_status', 
-                'update', 
+                $nID,
+                'compliments',
+                'compli_status',
+                'update',
                 $defNew
             );
             $this->sessData->currSessDataTblFld(
-                $nID, 
-                'compliments', 
-                'compli_record_submitted', 
-                'update', 
+                $nID,
+                'compliments',
+                'compli_record_submitted',
+                'update',
                 date("Y-m-d H:i:s")
             );
-            //$this->sessData->currSessDataTblFld($nID, 'compliments', 'compli_alleg_list', 'update', 
+            //$this->sessData->currSessDataTblFld($nID, 'compliments', 'compli_alleg_list', 'update',
             //    $this->commaAllegationList());
-            $this->sessData->dataSets["compliments"][0]->update([ 
+            $this->sessData->dataSets["compliments"][0]->update([
                 'compli_public_id' => $GLOBALS["SL"]->genNewCorePubID()
             ]);
-            $url = '/compliment/read-' 
+            $url = '/compliment/read-'
                 . $this->sessData->dataSets["compliments"][0]->compli_public_id;
         }
         $spin = $GLOBALS["SL"]->sysOpts["spinner-code"];
         //$this->restartSess($GLOBALS["SL"]->REQ);
         return '<br /><br /><center><h1>All Done!<br />'
-            . 'Taking you to <a href="' . $url . '">your finished ' 
-            . (($nID == 270) ? 'complaint' : 'compliment') 
+            . 'Taking you to <a href="' . $url . '">your finished '
+            . (($nID == 270) ? 'complaint' : 'compliment')
             . '</a>...</h1>' . $spin . '</center>'
             . '<script id="noExtract" type="text/javascript"> '
             . 'setTimeout("window.location=\'' . $url . '\'", 1500); '
@@ -127,12 +127,12 @@ class OpenComplaintPrints extends OpenComplaintEmails
             . '#nodeSubBtns, #sessMgmt, #dontWorry { display: none; } '
             . '</style>';
     }
-    
+
     protected function customLabels($curr, $str = '')
     {
         if (in_array($this->treeID, [1, 5])) {
             $event = [];
-            if (sizeof($this->sessData->dataBranches) > 1 
+            if (sizeof($this->sessData->dataBranches) > 1
                 && $this->sessData->dataBranches[1]["branch"] == 'event_sequence') {
                 $event = $this->getEventSequence($this->sessData->dataBranches[1]["itemID"]);
             }
@@ -150,14 +150,14 @@ class OpenComplaintPrints extends OpenComplaintEmails
                     }
                 } */
                 $str = str_replace(
-                    '[ForceType]', 
+                    '[ForceType]',
                     '<span class="slBlueDark"><b>' . $forceDesc .'</b></span>',
                     $str
                 );
             } elseif (isset($event[0]) && isset($event[0]["EveID"])) {
                 if (strpos($str, '[LoopItemLabel]') !== false) {
                     $civName = '';
-                    if (isset($event[0]["Civilians"]) 
+                    if (isset($event[0]["Civilians"])
                         && sizeof($event[0]["Civilians"]) > 0) {
                         $civName = $this->getCivilianNameFromID($event[0]["Civilians"][0]);
                     }
@@ -180,15 +180,15 @@ class OpenComplaintPrints extends OpenComplaintEmails
             }
             if (strpos($str, '[[List of Events and Allegations]]') !== false) {
                 $str = str_replace(
-                    '[[List of Events and Allegations]]', 
-                    $this->basicAllegationList(true), 
+                    '[[List of Events and Allegations]]',
+                    $this->basicAllegationList(true),
                     $str
                 );
             }
             if (strpos($str, '[[List of Compliments]]') !== false) {
                 $str = str_replace(
-                    '[[List of Compliments]]', 
-                    $this->commaComplimentList(), 
+                    '[[List of Compliments]]',
+                    $this->commaComplimentList(),
                     $str
                 );
             }
@@ -225,22 +225,22 @@ class OpenComplaintPrints extends OpenComplaintEmails
                     }
                 }
                 $str = str_replace(
-                    'Did you who was not arrested get a ticket or citation?', 
-                    'Did you get a ticket or citation?', 
+                    'Did you who was not arrested get a ticket or citation?',
+                    'Did you get a ticket or citation?',
                     $str
                 );
             }
         }
-        
-        if (strpos($str, '[[PartnerUrl]]') !== false 
+
+        if (strpos($str, '[[PartnerUrl]]') !== false
             && isset($this->sessData->dataSets["partners"])
             && isset($this->sessData->dataSets["partners"][0]->part_slug)) {
             $url = $GLOBALS["SL"]->sysOpts["app-url"] . '/';
             switch ($this->sessData->dataSets["partners"][0]->part_type) {
-                case $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'): 
+                case $GLOBALS["SL"]->def->getID('Partner Types', 'Attorney'):
                     $url .= 'attorney/';
                     break;
-                case $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'): 
+                case $GLOBALS["SL"]->def->getID('Partner Types', 'Organization'):
                     $url .= 'org/';
                     break;
             }
@@ -249,7 +249,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return $str;
     }
-    
+
     protected function getLoopItemLabelCustom($loop, $itemRow = null, $itemInd = -3)
     {
         //if ($itemIndex < 0) return '';
@@ -267,7 +267,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         } elseif ($loop == 'Departments') {
             return $this->getDeptName($itemRow, $itemInd);
         } elseif ($loop == 'Citations') { // why isn't this working?!
-            if (isset($itemRow->stop_event_sequence_id) 
+            if (isset($itemRow->stop_event_sequence_id)
                 && intVal($itemRow->stop_event_sequence_id) > 0) {
                 $eveID = $itemRow->stop_event_sequence_id;
                 $EveSeq = $this->getEventSequence($eveID);
@@ -283,17 +283,17 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return '';
     }
-    
+
     protected function getDeptName($dept = [], $itemIndex = -3)
     {
     //(($itemIndex > 0) ? '<span class="fPerc66 slGrey">(#'.$itemIndex.')</span>' : '');
-        $name = ''; 
+        $name = '';
         if (isset($dept->dept_name) && trim($dept->dept_name) != '') {
             $name = $dept->dept_name . ' ' . $name;
         }
         return trim($name);
     }
-    
+
     protected function getDeptNameByID($deptID)
     {
         $dept = $this->sessData->getRowById('departments', $deptID);
@@ -302,25 +302,30 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return '';
     }
-    
-    protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex) 
+
+    protected function printSetLoopNavRowCustom($nID, $loopItem, $setIndex)
     {
-        if (in_array($nID, [143, 917]) && $loopItem) { 
+        if (in_array($nID, [143, 917]) && $loopItem) {
             // $tbl == 'Departments'
-            $tbl = (($this->treeID == 5) ? 'links_compliment_dept' : 'links_complaint_dept');
-            $child = $this->sessData->getChildRow($tbl, $loopItem->getKey(), 'departments');
+            $tbl = 'links_complaint_dept';
+            $fld = 'lnk_com_dept_id';
+            if ($this->treeID == 5) {
+                $tbl = 'links_compliment_dept';
+                $fld = 'lnk_compli_dept_id';
+            }
+            $child = $this->sessData->getChildRow($tbl, $loopItem->{ $fld }, 'departments');
             return view(
-                'vendor.openpolice.nodes.143-dept-loop-custom-row', 
+                'vendor.openpolice.nodes.143-dept-loop-custom-row',
                 [
-                    "loopItem" => $child, 
-                    "setIndex" => $setIndex, 
-                    "itemID"   => $loopItem->getKey()
+                    "loopItem" => $child,
+                    "setIndex" => $setIndex,
+                    "itemID"   => $loopItem->{ $fld }
                 ]
             )->render();
         }
         return '';
     }
-    
+
     protected function getTableRecLabelCustom($tbl, $rec = [], $ind = -3)
     {
         if ($tbl == 'vehicles' && isset($rec->vehic_transportation)) {
@@ -342,31 +347,31 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return '';
     }
-    
+
     protected function getReportUploads($nID)
     {
         $ret = $this->reportUploadsMultNodes(
-            $this->cmplntUpNodes, 
-            $this->isStaffOrAdmin(), 
+            $this->cmplntUpNodes,
+            $this->isStaffOrAdmin(),
             $this->v["isOwner"]
         );
         $cnt = $this->v["uploadPrintMap"]["img"]
             +$this->v["uploadPrintMap"]["vid"]
             +$this->v["uploadPrintMap"]["fil"];
         if ($GLOBALS["SL"]->isPdfView()) {
-            return '<h4 class="mT0 slBlueDark">' 
+            return '<h4 class="mT0 slBlueDark">'
                 . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h4>'
                 . '<div class="w100">' . $ret . '</div>';
         }
         $GLOBALS["SL"]->pageAJAX .= ' setTimeout(function() { '
-            . 'document.getElementById("uploadDelayed").innerHTML="' 
+            . 'document.getElementById("uploadDelayed").innerHTML="'
             . $GLOBALS["SL"]->addSlashLines($ret) . '"; }, 1500); ';
-        return '<h4 class="mT30 slBlueDark">' 
+        return '<h4 class="mT30 slBlueDark">'
             . (($cnt > 1) ? 'Uploads' : 'Upload') . '</h4>'
             . '<div id="uploadDelayed" class="w100"><div class="w100 taC">'
             . $GLOBALS["SL"]->sysOpts["spinner-code"] . '</div></div>';
     }
-    
+
     /* Double-Checking [For Now] */
     protected function canShowUpload($upDeets, $isAdmin = false, $isOwner = false)
     {
@@ -387,7 +392,7 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return false;
     }
-    
+
     protected function loadUpDeetPrivacy($upRow = NULL)
     {
         if ($this->isStaffOrAdmin() || $this->v["isOwner"]) {
@@ -415,5 +420,5 @@ class OpenComplaintPrints extends OpenComplaintEmails
         }
         return 'Block';
     }
-    
+
 }

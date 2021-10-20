@@ -20,6 +20,7 @@ use App\Models\OPEventSequence;
 use App\Models\OPLinksComplaintDept;
 use App\Models\OPLinksComplimentDept;
 use App\Models\OPPersonContact;
+use App\Models\OPPhysicalDesc;
 use App\Models\OPTesterBeta;
 use App\Models\OPzVolunUserInfo;
 use FlexYourRights\OpenPolice\Controllers\OpenDashAdmin;
@@ -28,7 +29,7 @@ use FlexYourRights\OpenPolice\Controllers\OpenPartners;
 class OpenInitExtras extends OpenPartners
 {
     /**
-     * Initializing a bunch of things which are not [yet] automatically 
+     * Initializing a bunch of things which are not [yet] automatically
      * determined by the Survloop, nor the OpenPolice.org instance.
      *
      * @param  Illuminate\Http\Request  $request
@@ -36,7 +37,7 @@ class OpenInitExtras extends OpenPartners
      */
     protected function initExtra(Request $request)
     {
-        // Establishing Main Navigation Organization, 
+        // Establishing Main Navigation Organization,
         // with Node ID# and Section Titles
         $this->loadYourContact();
         $this->v["reportUploadFolder"] = '../storage/app/up/reports/';
@@ -61,7 +62,7 @@ class OpenInitExtras extends OpenPartners
         $this->loadSearchCoreTbls();
         return true;
     }
-    
+
     /**
      * Initializing core table options for search bar.
      *
@@ -83,7 +84,7 @@ class OpenInitExtras extends OpenPartners
         ];
         return true;
     }
-    
+
     /**
      * Initializing extra things after loading a core record's data.
      *
@@ -100,7 +101,7 @@ class OpenInitExtras extends OpenPartners
                 $tmp = $this->sessData->dataWhere('oversight', 'over_dept_id', $dID);
                 if (sizeof($tmp) > 0) {
                     foreach ($tmp as $over) {
-                        if (isset($over->over_agnc_name) 
+                        if (isset($over->over_agnc_name)
                             && trim($over->over_agnc_name) != '') {
                             $subObjs[] = $over;
                         }
@@ -121,7 +122,7 @@ class OpenInitExtras extends OpenPartners
         $this->loadAllSessDataCheckFullTransparency();
         return true;
     }
-    
+
     /**
      * Initializing the full transparency flag on the core record.
      *
@@ -145,7 +146,7 @@ class OpenInitExtras extends OpenPartners
         }
         return true;
     }
-    
+
     /**
      * Initializing extra things after loading a core record's data.
      *
@@ -194,7 +195,7 @@ class OpenInitExtras extends OpenPartners
             if ($deptLinkCnt > 0) {
                 $deptIDs = $delInds = [];
                 foreach ($this->sessData->dataSets[$lnkTbl] as $i => $lnk) {
-                    if (isset($lnk->lnk_com_dept_dept_id) 
+                    if (isset($lnk->lnk_com_dept_dept_id)
                         && !in_array($lnk->lnk_com_dept_dept_id, $deptIDs)) {
                         $deptIDs[] = $lnk->lnk_com_dept_dept_id;
                     } else {
@@ -217,7 +218,7 @@ class OpenInitExtras extends OpenPartners
                     $this->sessData->dataSets[$lnkTbl][$notSureInd]->lnk_com_dept_dept_id
                         = $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->lnk_com_dept_dept_id;
                     $this->sessData->dataSets[$lnkTbl][$notSureInd]->save();
-                    $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->lnk_com_dept_dept_id 
+                    $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->lnk_com_dept_dept_id
                         = $this->v["notSureDeptID"];
                     $this->sessData->dataSets[$lnkTbl][($deptLinkCnt-1)]->save();
                 }
@@ -233,12 +234,12 @@ class OpenInitExtras extends OpenPartners
      * @param  Illuminate\Http\Request  $request
      * @return boolean
      */
-    protected function constructorExtra()
+    public function constructorExtra()
     {
         $this->runOpenPoliceDataChecks();
         return true;
     }
-    
+
     /**
      * Mapping the Survey Tree Nodes which wrap navigational sections.
      * for the complaint process.
@@ -254,36 +255,36 @@ class OpenInitExtras extends OpenPartners
         $this->majorSections[] = [5,   'What Happened',   'active'];
         $this->majorSections[] = [6,   'Go Gold',         'disabled'];
         $this->majorSections[] = [419, 'Finish',          'active'];
-        
+
         $this->minorSections = [ [], [], [], [], [] ];
         $this->minorSections[0][] = [157,  'Start Your Story'];
         $this->minorSections[0][] = [437,  'Legal Needs'];
         $this->minorSections[0][] = [158,  'About You'];
         $this->minorSections[0][] = [707,  'The Scene'];
         $this->minorSections[0][] = [2122, 'Evidence Uploads'];
-        
+
         $this->minorSections[1][] = [140,  'Victims'];
         $this->minorSections[1][] = [141,  'Witnesses'];
         $this->minorSections[1][] = [144,  'Police Departments'];
         $this->minorSections[1][] = [142,  'Officers'];
-        
+
         $this->minorSections[2][] = [2918, 'Allegations'];
         $this->minorSections[2][] = [2919, 'Other Allegations'];
         $this->minorSections[2][] = [2890, 'Your Feelings'];
-        
+
         //$this->minorSections[3][] = [196, 'GO GOLD!']; // 483
         $this->minorSections[3][] = [149,  'Stops & Searches'];
         $this->minorSections[3][] = [153,  'Arrests & Citations'];
         $this->minorSections[3][] = [151,  'Uses of Force'];
         $this->minorSections[3][] = [410,  'Injuries & Medical'];
-        
+
         $this->minorSections[4][] = [420,  'Review Narrative'];
         $this->minorSections[4][] = [431,  'Sharing Options'];
         $this->minorSections[4][] = [156,  'Confirm Complaint'];
         $this->minorSections[4][] = [2794, 'Complaint Submitted'];
         return true;
     }
-    
+
     /**
      * Mapping the Survey Tree Nodes which wrap navigational sections
      * for the compliment process.
@@ -297,19 +298,19 @@ class OpenInitExtras extends OpenPartners
         $this->majorSections[] = [761, 'Who\'s Involved', 'active'];
         $this->majorSections[] = [763, 'Compliments',     'active'];
         $this->majorSections[] = [764, 'Finish',          'active'];
-        
+
         $this->minorSections = [ [], [], [], [], [] ];
         $this->minorSections[0][] = [753, 'Start Your Story'];
         $this->minorSections[0][] = [867, 'Legal & Options'];
         $this->minorSections[0][] = [877, 'When & Where'];
         $this->minorSections[0][] = [887, 'The Scene'];
-        
+
         $this->minorSections[1][] = [762, 'About You'];
         $this->minorSections[1][] = [765, 'Police Departments'];
         $this->minorSections[1][] = [766, 'Officers'];
-        
+
         $this->minorSections[2][] = [945, 'Compliment Officers'];
-        
+
         $this->minorSections[3][] = [957, 'Review Narrative'];
         $this->minorSections[3][] = [961, 'Feedback'];
         $this->minorSections[3][] = [964, 'Submit Complaint'];
@@ -327,31 +328,31 @@ class OpenInitExtras extends OpenPartners
             $this->majorSections[3][2] = 'active';
         }
         if ($this->treeID == 1 || $GLOBALS["SL"]->getReportTreeID() == 1) {
-            if ($this->v["user"] 
-                && intVal($this->v["user"]->id) > 0 
-                && isset($this->sessData->dataSets["civilians"]) 
+            if ($this->v["user"]
+                && intVal($this->v["user"]->id) > 0
+                && isset($this->sessData->dataSets["civilians"])
                 && isset($this->sessData->dataSets["civilians"][0])
-                && (!isset($this->sessData->dataSets["civilians"][0]->civ_user_id) 
+                && (!isset($this->sessData->dataSets["civilians"][0]->civ_user_id)
                     || intVal($this->sessData->dataSets["civilians"][0]->civ_user_id) <= 0)) {
                 $this->sessData->dataSets["civilians"][0]->update([
                     'civ_user_id' => $this->v["user"]->id
                 ]);
             }
             $this->chkPersonRecs();
-            if (isset($this->sessData->dataSets["departments"]) 
+            if (isset($this->sessData->dataSets["departments"])
                 && sizeof($this->sessData->dataSets["departments"]) > 0) {
                 foreach ($this->sessData->dataSets["departments"] as $i => $d) {
                     $this->chkDeptLinks($d->dept_id);
                 }
             }
-            if (isset($this->sessData->dataSets["complaints"]) 
-                && !isset($this->sessData->dataSets["complaints"][0]->com_record_submitted) 
-                && $this->sessData->dataSets["complaints"][0]->com_status 
+            if (isset($this->sessData->dataSets["complaints"])
+                && !isset($this->sessData->dataSets["complaints"][0]->com_record_submitted)
+                && $this->sessData->dataSets["complaints"][0]->com_status
                     != $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete')) {
-                $this->sessData->dataSets["complaints"][0]->com_record_submitted 
+                $this->sessData->dataSets["complaints"][0]->com_record_submitted
                     = $this->sessData->dataSets["complaints"][0]->created_at;
                 $chk = DB::table('sl_node_saves_page')
-                    ->join('sl_sess', 'sl_sess.sess_id', 
+                    ->join('sl_sess', 'sl_sess.sess_id',
                         '=', 'sl_node_saves_page.page_save_session')
                     ->where('sl_sess.sess_tree', 1)
                     ->where('sl_sess.sess_core_id', $this->coreID)
@@ -374,7 +375,7 @@ class OpenInitExtras extends OpenPartners
                 $this->sessData->dataSets["complaints"][0]->save();
             }
         }
-        if (session()->has('opcDeptID') 
+        if (session()->has('opcDeptID')
             && intVal(session()->get('opcDeptID')) > 0) {
             if ($this->treeID == 1) {
                 if (isset($this->sessData->dataSets["complaints"])
@@ -408,38 +409,38 @@ class OpenInitExtras extends OpenPartners
                 }
             }
         }
-        if ($this->treeID == 1 
-            && session()->has('opcPartID') 
+        if ($this->treeID == 1
+            && session()->has('opcPartID')
             && intVal(session()->get('opcPartID')) > 0
-            && isset($this->sessData->dataSets["complaints"]) 
+            && isset($this->sessData->dataSets["complaints"])
             && intVal($this->sessData->dataSets["complaints"][0]
                 ->com_submission_progress) > 0) {
-            $this->sessData->dataSets["complaints"][0]->com_att_id 
+            $this->sessData->dataSets["complaints"][0]->com_att_id
                 = intVal(session()->get('opcPartID'));
             $this->sessData->dataSets["complaints"][0]->save();
         }
         $this->v["isPublic"] = $this->isPublic();
-        
+
         // used to be admin initializations:
         $this->v["allowEdits"] = ($this->v["uID"] > 0
-            && $this->v["user"] 
+            && $this->v["user"]
             && $this->isStaffOrAdmin());
-        $this->v["management"] = ($this->v["uID"] > 0 
-            && $this->v["user"] 
+        $this->v["management"] = ($this->v["uID"] > 0
+            && $this->v["user"]
             && $this->isStaffOrAdmin());
         $this->v["volunOpts"] = 1;
-        if ($GLOBALS["SL"]->REQ->session()->has('volunOpts')) {
-            $this->v["volunOpts"] = $GLOBALS["SL"]->REQ->session()->get('volunOpts');
+        if (session()->has('volunOpts')) {
+            $this->v["volunOpts"] = session()->get('volunOpts');
         }
-        
+
         // Department Research Survey
         if ($this->treeID == 36) {
-            if (isset($this->sessData->dataSets['oversight']) 
+            if (isset($this->sessData->dataSets['oversight'])
                 && sizeof($this->sessData->dataSets['oversight']) == 1) {
                 $new = $this->sessData->newDataRecord(
-                    'oversight', 
-                    'over_dept_id', 
-                    $this->sessData->dataSets['departments'][0]->dept_id, 
+                    'oversight',
+                    'over_dept_id',
+                    $this->sessData->dataSets['departments'][0]->dept_id,
                     true
                 );
                 $new->over_type = 302;
@@ -449,7 +450,7 @@ class OpenInitExtras extends OpenPartners
         }
         return true;
     }
-    
+
     /**
      * Look up the person contact record and physical description record
      * for a civilian or officer.
@@ -466,24 +467,24 @@ class OpenInitExtras extends OpenPartners
             ['officers',  'off']
         ];
         foreach ($types as $type) {
-            if (isset($this->sessData->dataSets[$type[0]]) 
+            if (isset($this->sessData->dataSets[$type[0]])
                 && sizeof($this->sessData->dataSets[$type[0]]) > 0) {
                 foreach ($this->sessData->dataSets[$type[0]] as $i => $civ) {
-                    if (!isset($civ->{ $type[1] . '_person_id' }) 
+                    if (!isset($civ->{ $type[1] . '_person_id' })
                         || intVal($civ->{ $type[1] . '_person_id' }) <= 0) {
                         $new = new OPPersonContact;
                         $new->save();
                         $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . '_person_id' => $new->getKey() 
+                            $type[1] . '_person_id' => $new->prsn_id
                         ]);
                         $found = true;
                     }
-                    if (!isset($civ->{ $type[1] . '_phys_desc_id' }) 
+                    if (!isset($civ->{ $type[1] . '_phys_desc_id' })
                         || intVal($civ->{ $type[1] . '_phys_desc_id' }) <= 0) {
                         $new = new OPPhysicalDesc;
                         $new->save();
                         $this->sessData->dataSets[$type[0]][$i]->update([
-                            $type[1] . '_phys_desc_id' => $new->getKey()
+                            $type[1] . '_phys_desc_id' => $new->phys_id
                         ]);
                         $found = true;
                     }
@@ -496,7 +497,7 @@ class OpenInitExtras extends OpenPartners
         // // // //
         return true;
     }
-    
+
     /**
      * Look up the record linking fields which should be skipped
      * when auto-creating a new loop item's database record.
@@ -505,7 +506,7 @@ class OpenInitExtras extends OpenPartners
      */
     protected function newLoopItemSkipLinks($tbl = '')
     {
-        // Until this can be auto-inferred for 
+        // Until this can be auto-inferred for
         // outgoing linkages to data subsets
         if ($tbl == 'civilians') {
             return [ 'civ_person_id', 'civ_phys_desc_id' ];
@@ -514,7 +515,7 @@ class OpenInitExtras extends OpenPartners
         }
         return [];
     }
-    
+
     /**
      * Double-check behavior after a new item has been created for a data loop.
      *
@@ -529,7 +530,7 @@ class OpenInitExtras extends OpenPartners
         }
         return true;
     }
-    
+
     /**
      * Run any validation and cleanup needed specific to OP.org
      *
@@ -537,44 +538,52 @@ class OpenInitExtras extends OpenPartners
      */
     protected function runOpenPoliceDataChecks()
     {
-        if (!isset($this->v["uID"]) 
-            || $this->v["uID"] <= 0 
-            || !isset($this->v["user"])
-            || !$this->isStaffOrAdmin()) {
-            return false;
-        }
-        if (!session()->has('opcChks') 
-            || !session()->get('opcChks') 
-            || $GLOBALS["SL"]->REQ->has('clean')) {
-            $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
-            $chk = OPComplaints::whereNull('com_public_id')
-                ->where('com_status', 'NOT LIKE', $incDef)
-                ->get();
-            if ($chk->isNotEmpty()) {
-                foreach ($chk as $i => $complaint) {
-                    $newPubID = $GLOBALS["SL"]->genNewCorePubID('complaints');
-                    $complaint->update([ 'com_public_id' => $newPubID ]);
-                }
+        $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
+        $chk = OPComplaints::whereNull('com_public_id')
+            ->where('com_status', 'NOT LIKE', $incDef)
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $i => $complaint) {
+                $newPubID = $GLOBALS["SL"]->genNewCorePubID('complaints');
+                $complaint->update([ 'com_public_id' => $newPubID ]);
             }
-            $this->clearEmptyComplaints();
-            $this->clearEmptyBetas();
-            $this->clearLostSessionHelpers();
-            session()->put('opcChks', true);
         }
-
         return true;
     }
-    
+
+    /**
+     * Hook into Survloop's Admin Cleaning Scripts
+     * /dashboard/systems-clean
+     *
+     * @return int
+     */
+    protected function customSysClean($step = 0)
+    {
+        if (!$this->isStaffOrAdmin()) {
+            return 1;
+        }
+        $cutoff = mktime(date("H"), date("i"), date("s"),
+            date("n"), date("j")-14, date("Y"));
+        $cutoff = date("Y-m-d H:i:s", $cutoff);
+        if ($step == 4) {
+            $this->clearEmptyComplaints($cutoff);
+        } elseif ($step == 5) {
+            $this->clearEmptyBetas($cutoff);
+        }
+        $step++;
+        if ($step == 6) {
+            $step = 1;
+        }
+        return $step;
+    }
+
     /**
      * Clean out old complaints.
      *
      * @return boolean
      */
-    protected function clearEmptyComplaints()
+    protected function clearEmptyComplaints($cutoff)
     {
-        $cutoff = mktime(date("H"), date("i"), date("s"), 
-            date("n"), date("j")-14, date("Y"));
-        $cutoff = date("Y-m-d H:i:s", $cutoff);
         $incDef = $GLOBALS["SL"]->def->getID('Complaint Status', 'Incomplete');
         OPComplaints::whereNull('com_public_id')
             ->where('com_status', 'LIKE', $incDef)
@@ -585,13 +594,13 @@ class OpenInitExtras extends OpenPartners
             })
             ->where(function($query) {
                 $query->whereNull('com_summary')
-                      ->orWhere('com_summary', 'NOT LIKE', '');
+                      ->orWhere('com_summary', 'LIKE', '');
             })
             ->limit(1000)
             ->delete();
         $chk = OPComplaints::select('com_id')
             ->get();
-        $comIDs = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+        $comIDs = $GLOBALS["SL"]->resToArrIds($chk, 'com_id');
         SLSess::where('sess_tree', 1)
             ->whereNotIn('sess_core_id', $comIDs)
             ->limit(1000)
@@ -601,17 +610,14 @@ class OpenInitExtras extends OpenPartners
             ->delete();
         return true;
     }
-    
+
     /**
      * Clean out old beta test signups.
      *
      * @return boolean
      */
-    protected function clearEmptyBetas()
+    protected function clearEmptyBetas($cutoff)
     {
-        $cutoff = mktime(date("H"), date("i"), date("s"), 
-            date("n"), date("j")-14, date("Y"));
-        $cutoff = date("Y-m-d H:i:s", $cutoff);
         $chk = OPTesterBeta::whereNull('beta_email')
             ->whereNull('beta_narrative')
             ->where('created_at', '<', $cutoff)
@@ -619,14 +625,14 @@ class OpenInitExtras extends OpenPartners
             ->delete();
         $chk = OPTesterBeta::select('beta_id')
             ->get();
-        $betaIDs = $GLOBALS["SL"]->resultsToArrIds($chk, 'beta_id');
+        $betaIDs = $GLOBALS["SL"]->resToArrIds($chk, 'beta_id');
         SLSess::where('sess_tree', 79)
             ->whereNotIn('sess_core_id', $betaIDs)
             ->limit(1000)
             ->delete();
         return true;
     }
-    
+
     /**
      * Override current page as represented in the admin menu.
      *
@@ -640,7 +646,7 @@ class OpenInitExtras extends OpenPartners
         }
         return '';
     }
-    
+
     /**
      * Load additional data related to users who are logged in.
      *
@@ -653,7 +659,7 @@ class OpenInitExtras extends OpenPartners
             $uID = $this->v["uID"];
         }
         if ($uID > 0) {
-            $GLOBALS["SL"]->x["yourUserInfo"] 
+            $GLOBALS["SL"]->x["yourUserInfo"]
                 = OPzVolunUserInfo::where('user_info_user_id', $uID)->first();
             if (!$GLOBALS["SL"]->x["yourUserInfo"]) {
                 $GLOBALS["SL"]->x["yourUserInfo"] = new OPzVolunUserInfo;
@@ -661,14 +667,14 @@ class OpenInitExtras extends OpenPartners
                 $GLOBALS["SL"]->x["yourUserInfo"]->save();
             }
             $this->v["yourUserContact"] = [];
-            if (!isset($GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id) 
+            if (!isset($GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id)
                 || intVal($GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id) <= 0) {
                 $thisUser = User::select('email')->find($uID);
                 $this->v["yourUserContact"] = new OPPersonContact;
                 $this->v["yourUserContact"]->prsn_user_id = $uID;
                 $this->v["yourUserContact"]->prsn_email = $thisUser->email;
                 $this->v["yourUserContact"]->save();
-                $GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id 
+                $GLOBALS["SL"]->x["yourUserInfo"]->user_info_person_contact_id
                     = $this->v["yourUserContact"]->prsn_id;
                 $GLOBALS["SL"]->x["yourUserInfo"]->save();
             } else {
@@ -680,7 +686,7 @@ class OpenInitExtras extends OpenPartners
         }
         return [ [], [] ];
     }
-    
+
     /**
      * Override the default behavior for wrapping a tree which has
      * been called through an ajax call.
@@ -690,16 +696,16 @@ class OpenInitExtras extends OpenPartners
     protected function ajaxContentWrapCustom($str, $nID = -3)
     {
         if ($this->treeID == 1) {
-            if ($GLOBALS["SL"]->REQ->has('treeSlug') 
+            if ($GLOBALS["SL"]->REQ->has('treeSlug')
                 && trim($GLOBALS["SL"]->REQ->get('treeSlug')) == 'complaint'
-                && $GLOBALS["SL"]->REQ->has('nodeSlug') 
+                && $GLOBALS["SL"]->REQ->has('nodeSlug')
                 && trim($GLOBALS["SL"]->REQ->get('nodeSlug')) == 'login') {
                 return $this->redir('/u/complaint/when-and-where', true);
             }
         }
         return $str;
     }
-    
+
     /**
      * Override the default data permissions for this page load.
      *
@@ -710,15 +716,15 @@ class OpenInitExtras extends OpenPartners
         if (!isset($this->sessData->dataSets["complaints"])) {
             return false;
         }
-        if ($this->v["uID"] <= 0 
-            || !$this->v["user"] 
+        if ($this->v["uID"] <= 0
+            || !$this->v["user"]
             || !$this->isStaffOrAdmin()) {
             $com = $this->sessData->dataSets["complaints"][0];
             $isPublished = $this->isPublished('complaints', $this->coreID, $com);
             if ($isPublished) {
                 if ($this->chkOverUserHasCore()) { // Investigative Access
                     $GLOBALS["SL"]->dataPerms = 'sensitive';
-                } elseif ($this->isPublic() 
+                } elseif ($this->isPublic()
                     && in_array($GLOBALS["SL"]->dataPerms, ['', 'public'])) {
                     $GLOBALS["SL"]->dataPerms = 'private';
                 }
@@ -728,7 +734,7 @@ class OpenInitExtras extends OpenPartners
         }
         return true;
     }
-    
+
     /**
      * Run anything else extra which needs to be run for this page load.
      *
@@ -737,7 +743,7 @@ class OpenInitExtras extends OpenPartners
     protected function runPageExtra($nID = -3)
     {
 //if ($GLOBALS["SL"]->REQ->has('ajax')) { echo 'runPageExtra(' . $nID . ', perms: ' . $GLOBALS["SL"]->dataPerms . '<br />'; exit; }
-        if ($nID == 1362) { 
+        if ($nID == 1362) {
             // Loading Complaint Report: Check for oversight permissions
             // if (!isset($GLOBALS["SL"]->pageView)) {
             //     $this->maxUserView(); // shouldn't be needed?
@@ -759,7 +765,7 @@ class OpenInitExtras extends OpenPartners
         $this->allegations = [];
         return true;
     }
-    
+
     /**
      * Print warning message for uploading tool.
      *
@@ -768,7 +774,7 @@ class OpenInitExtras extends OpenPartners
      */
     protected function uploadWarning($nID)
     {
-        return 'WARNING: If documents show sensitive personal information, set this to "private." 
+        return 'WARNING: If documents show sensitive personal information, set this to "private."
             This includes addresses, phone numbers, emails, or social security numbers.';
     }
 

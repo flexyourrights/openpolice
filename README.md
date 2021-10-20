@@ -78,8 +78,7 @@ Next, install Laravel's out-of-the-box user authentication tools, Survloop, and 
 ```
 % php artisan key:generate
 % php artisan cache:clear
-% COMPOSER_MEMORY_LIMIT=-1 composer require laravel/ui paragonie/random_compat mpdf/mpdf rockhopsoft/survloop flexyourrights/openpolice
-% php artisan ui vue --auth
+% COMPOSER_MEMORY_LIMIT=-1 composer require mpdf/mpdf rockhopsoft/survloop flexyourrights/openpolice
 % nano composer.json
 ```
 
@@ -95,6 +94,7 @@ $ nano composer.json
         ...
         "FlexYourRights\\OpenPolice\\": "vendor/flexyourrights/openpolice/src/",
         "RockHopSoft\\Survloop\\": "vendor/rockhopsoft/survloop/src/",
+        "Predis\\": "vendor/predis/predis/src/",
     }
     ...
 }, ...
@@ -108,6 +108,7 @@ $ nano config/app.php
 ...
 'providers' => [
     ...
+    App\Providers\FortifyServiceProvider::class,
     FlexYourRights\OpenPolice\OpenPoliceServiceProvider::class,
     RockHopSoft\Survloop\SurvloopServiceProvider::class,
     ...
@@ -128,9 +129,9 @@ If installing on a server, you might also need to fix some permissions before th
 
 Clear caches and publish the package migrations...
 ```
-% php artisan config:cache
-% php artisan route:cache
-% php artisan view:cache
+% php artisan config:clear
+% php artisan route:clear
+% php artisan view:clear
 % echo "0" | php artisan vendor:publish --force
 % composer dump-autoload
 % curl http://myopenpolice.local/css-reload

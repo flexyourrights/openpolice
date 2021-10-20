@@ -30,16 +30,16 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
             ->select('com_id', 'com_public_id')
             ->orderBy('com_id', 'asc')
             ->get();
-        //$comIDs = $GLOBALS["SL"]->resultsToArrIds($coms, 'com_id');
+        //$comIDs = $GLOBALS["SL"]->resToArrIds($coms, 'com_id');
         if ($coms->isNotEmpty()) {
             foreach ($coms as $com) {
                 $cachKey = 'page-complaint/read-' . $com->com_public_id
                     . '-visitor-c_' . $com->com_id . '-p_public.html';
                 $content = $GLOBALS["SL"]->chkCache($cachKey, 'page', 42, $com->com_id);
                 if (trim($content) == '') {
-                    echo '/complaint/read-' . $com->com_public_id 
-                        . '<br /><iframe src="/complaint/read-' . $com->com_public_id 
-                        . '" style="width: 100%; height: 300px;"></iframe>' 
+                    echo '/complaint/read-' . $com->com_public_id
+                        . '<br /><iframe src="/complaint/read-' . $com->com_public_id
+                        . '" style="width: 100%; height: 300px;"></iframe>'
                         . $this->ajaxAgainComplaintPreloads();
                     exit;
                 } else {
@@ -68,12 +68,12 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
                             $log->log_new_name = 'Rec ' . $com->com_id;
                             $log->save();
                         }
-                        echo 'Search Cache ' . $com->com_id 
+                        echo 'Search Cache ' . $com->com_id
                             . $this->ajaxAgainComplaintPreloads();
                         exit;
                     }
                 }
-            }            
+            }
         }
         echo 'No cache prep needed.';
         exit;
@@ -86,7 +86,7 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
      */
     private function ajaxAgainComplaintPreloads()
     {
-        return '<script type="text/javascript"> 
+        return '<script type="text/javascript">
             setTimeout("window.location=\'/ajax/complaint-preloads\'", 30000);
             </script>';
     }
@@ -113,8 +113,8 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
                 $content = $GLOBALS["SL"]->chkCache($cachKey, 'page', 42, $com->com_id);
                 if (trim($content) == '') {
                     echo '/complaint/read-' . $com->com_public_id . '/full?ajax=1&wdg=1'
-                        . '<br /><iframe src="/complaint/read-' . $com->com_public_id 
-                        . '/full?ajax=1&wdg=1" style="width: 100%; height: 300px;"></iframe>' 
+                        . '<br /><iframe src="/complaint/read-' . $com->com_public_id
+                        . '/full?ajax=1&wdg=1" style="width: 100%; height: 300px;"></iframe>'
                         . $this->ajaxAgainStaffComplaintPreloads();
                     exit;
                 } else {
@@ -135,8 +135,8 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
                 $content = $GLOBALS["SL"]->chkCache($cachKey, 'page', 42, $com->com_id);
                 if (trim($content) == '') {
                     echo '/complaint/readi-' . $com->com_id . '/full?ajax=1&wdg=1'
-                        . '<br /><iframe src="/complaint/readi-' . $com->com_id 
-                        . '/full?ajax=1&wdg=1" style="width: 100%; height: 300px;"></iframe>' 
+                        . '<br /><iframe src="/complaint/readi-' . $com->com_id
+                        . '/full?ajax=1&wdg=1" style="width: 100%; height: 300px;"></iframe>'
                         . $this->ajaxAgainStaffComplaintPreloads();
                     exit;
                 } else {
@@ -196,7 +196,7 @@ class OpenAjaxCachePrep extends OpenComplaintSaves
      */
     private function ajaxAgainStaffComplaintPreloads()
     {
-        return '<script type="text/javascript"> 
+        return '<script type="text/javascript">
             setTimeout("window.location=\'/ajadm/complaint-preloads-staff\'", 15000);
             </script>';
     }

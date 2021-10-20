@@ -1,10 +1,13 @@
 <?php namespace App\Models;
 // generated from /resources/views/admin/db/export-laravel-model-gen.blade.php
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class OPComplaintOversight extends Model
 {
+    use Cachable;
+
     protected $table         = 'op_complaint_oversight';
     protected $primaryKey     = 'comp_oversight_id';
     public $timestamps         = true;

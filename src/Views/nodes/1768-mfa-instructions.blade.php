@@ -5,7 +5,7 @@
 <p>
 Creating an account makes it easier for you to access and manage 
 detailed complaint reports. If the account for <b>{{ $user->email }}</b> 
-has not been setup yet, you can use the <a href="/password/reset">reset 
+has not been setup yet, you can use the <a href="/forgot-password">reset 
 password tool</a> to gain access to it by email.
 </p>
 <p>

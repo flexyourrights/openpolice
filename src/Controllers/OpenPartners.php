@@ -35,11 +35,11 @@ class OpenPartners extends OpenVolunteers
             $this->v["prtnTypes"][$i]["tot"] = OPPartners::where('part_type', $p["defID"])->count();
         }
         return view(
-            'vendor.openpolice.nodes.1939-manage-partners-overview', 
+            'vendor.openpolice.nodes.1939-manage-partners-overview',
             $this->v
         )->render();
     }
-    
+
     /**
      * Print out the capabilities listing for this partner.
      *
@@ -56,11 +56,11 @@ class OpenPartners extends OpenVolunteers
             ];
         }
         return view(
-            'vendor.openpolice.nodes.2169-partner-overview-capabilities', 
+            'vendor.openpolice.nodes.2169-partner-overview-capabilities',
             [ "capac" => $capac ]
         )->render();
     }
-    
+
     /**
      * Print out a top-level listing of partners to be managed from
      * a page which only manages them.
@@ -75,8 +75,8 @@ class OpenPartners extends OpenVolunteers
         $defAtt = $GLOBALS["SL"]->def->getID('Partner Types', $type);
         if ($GLOBALS["SL"]->REQ->has('add')) {
             $newAtt = new OPPartners;
-            $newAtt->part_type = (($GLOBALS["SL"]->REQ->has('type')) 
-                ? $this->loadPrtnDefID($GLOBALS["SL"]->REQ->get('type')) 
+            $newAtt->part_type = (($GLOBALS["SL"]->REQ->has('type'))
+                ? $this->loadPrtnDefID($GLOBALS["SL"]->REQ->get('type'))
                 : null);
             $newAtt->save();
             $redir = '/dashboard/start-' . $newAtt->part_id . '/partner-profile';
@@ -91,14 +91,14 @@ class OpenPartners extends OpenVolunteers
                 $this->v["partners"] = $this->getPartnersOfType($p["defID"], $statusIn);
                 $this->v["prtnType"] = $p;
                 return view(
-                    'vendor.openpolice.nodes.2166-manage-partners', 
+                    'vendor.openpolice.nodes.2166-manage-partners',
                     $this->v
                 )->render();
             }
         }
         return '';
     }
-    
+
     /**
      * Retrieve the Partner records belonging to a certain Partner Type.
      *
@@ -114,20 +114,20 @@ class OpenPartners extends OpenVolunteers
             ->where('op_partners.part_type', $partTypeDef)
             ->whereIn('op_partners.part_status', $statusIn)
             ->select(
-                'op_partners.*', 
-                'users.name', 
-                'users.email', 
-                'op_person_contact.prsn_nickname', 
-                'op_person_contact.prsn_name_first', 
+                'op_partners.*',
+                'users.name',
+                'users.email',
+                'op_person_contact.prsn_nickname',
+                'op_person_contact.prsn_name_first',
                 'op_person_contact.prsn_name_last',
-                'op_person_contact.prsn_address_city', 
+                'op_person_contact.prsn_address_city',
                 'op_person_contact.prsn_address_state',
                 'op_person_contact.prsn_email'
             )
             ->orderBy('op_person_contact.prsn_nickname', 'asc')
             ->get();
     }
-    
+
     /**
      * Retrieve the Partner capabilities for faster lookup later.
      *
@@ -140,8 +140,8 @@ class OpenPartners extends OpenVolunteers
         $links = OPPartnerCapac::get();
         if ($links->isNotEmpty()) {
             foreach ($links as $lnk) {
-                if (isset($lnk->prt_cap_part_id) 
-                    && intVal($lnk->prt_cap_part_id) > 0 
+                if (isset($lnk->prt_cap_part_id)
+                    && intVal($lnk->prt_cap_part_id) > 0
                     && isset($lnk->prt_cap_capacity)
                     && intVal($lnk->prt_cap_capacity) > 0) {
                     if (!isset($lookup[$lnk->prt_cap_part_id])) {
@@ -149,7 +149,7 @@ class OpenPartners extends OpenVolunteers
                     }
                     if ($inEnglish) {
                         $lookup[$lnk->prt_cap_part_id][] = $GLOBALS["SL"]->def->getVal(
-                            'Organization Capabilities', 
+                            'Organization Capabilities',
                             $lnk->prt_cap_capacity
                         );
                     } else {
@@ -160,7 +160,7 @@ class OpenPartners extends OpenVolunteers
         }
         return $lookup;
     }
-    
+
     /**
      * Load the different types of cases the current partner has defined.
      *
@@ -179,15 +179,15 @@ class OpenPartners extends OpenVolunteers
                 $this->sessData->dataSets["partner_case_types"][$i] = $case;
             }
         }
-        if ($GLOBALS["SL"]->REQ->has('nv2074') 
+        if ($GLOBALS["SL"]->REQ->has('nv2074')
             && intVal($GLOBALS["SL"]->REQ->get('nv2074')) > 0
             && isset($this->sessData->dataSets["partners"])) {
-            $this->sessData->dataSets["partners"][0]->part_type 
+            $this->sessData->dataSets["partners"][0]->part_type
                 = intVal($GLOBALS["SL"]->REQ->get('nv2074'));
         }
         return '';
     }
-    
+
     /**
      * Print a staff listing to manage partner organizations.
      *
@@ -198,7 +198,7 @@ class OpenPartners extends OpenVolunteers
     {
         $orgDef = $GLOBALS["SL"]->def->getID('Partner Types', 'Organization');
         return view(
-            'vendor.openpolice.nodes.2179-list-organizations', 
+            'vendor.openpolice.nodes.2179-list-organizations',
             [
                 "orgs"  => $this->getPartnersOfType($orgDef),
                 "capab" => $this->loadPartnerCapabLookups(true)
@@ -231,7 +231,7 @@ class OpenPartners extends OpenVolunteers
         }
         return $this->index($request);
     }
-    
+
     /**
      * Print a partner's page/profile header or main title.
      *
@@ -248,7 +248,7 @@ class OpenPartners extends OpenVolunteers
         $attDef = $GLOBALS['SL']->def->getID('Partner Types', 'Attorney');
         $slg = (($this->sessData->dataSets["partners"][0]->part_type == $attDef) ? 'attorney' : 'org');
         return view(
-            'vendor.openpolice.nodes.1961-public-partner-header', 
+            'vendor.openpolice.nodes.1961-public-partner-header',
             [
                 "nID" => $nID,
                 "dat" => $this->sessData->dataSets,
@@ -274,7 +274,7 @@ class OpenPartners extends OpenVolunteers
         }
         return $coreID;
     }
-    
+
     /**
      * Print a partner's affiliate link for the start of the survey.
      *
@@ -300,7 +300,7 @@ class OpenPartners extends OpenVolunteers
         }
         return $this->index($request);
     }
-    
+
     /**
      * Print a partner's 'affiliate' page for the start of the survey.
      *
@@ -311,23 +311,23 @@ class OpenPartners extends OpenVolunteers
     {
         $coreID = $this->getPartnerCoreID($GLOBALS["SL"]->REQ);
         // link partner with [new] complaint record
-        
+
         $this->loadSessionData('partners', $coreID);
         $psrnCont = $this->sessData->dataSets["person_contact"][0];
-        if (!isset($this->sessData->dataSets["partners"]) 
-            || !isset($psrnCont->prsn_nickname) 
+        if (!isset($this->sessData->dataSets["partners"])
+            || !isset($psrnCont->prsn_nickname)
             || trim($psrnCont->prsn_nickname) == '') {
             return '';
         }
         return view(
-            'vendor.openpolice.nodes.2069-prepare-complaint-org', 
+            'vendor.openpolice.nodes.2069-prepare-complaint-org',
             [
                 "nID" => $nID,
                 "dat" => $this->sessData->dataSets
             ]
         )->render();
     }
-    
+
     /**
      * Print the specific referral listings for attorneys.
      *
@@ -337,11 +337,11 @@ class OpenPartners extends OpenVolunteers
     protected function printAttorneyReferrals($nID = -3)
     {
         return view(
-            'vendor.openpolice.nodes.1896-attorney-referral-listings', 
+            'vendor.openpolice.nodes.1896-attorney-referral-listings',
             [ "nID" => $nID ]
         )->render();
     }
-    
+
     /**
      * Load and print a attorney/law firm partner's page/profile.
      *
@@ -353,7 +353,7 @@ class OpenPartners extends OpenVolunteers
     {
         return $this->loadPartnerPage($request, $prtnSlug, 'attorney', 56);
     }
-    
+
     /**
      * Print an attorney partner's affiliate page to start of the survey.
      *
@@ -365,7 +365,7 @@ class OpenPartners extends OpenVolunteers
     {
         return $this->partnerShareStory($request, $prtnSlug, 'attorney', 62);
     }
-    
+
     /**
      * Print an organizational partner's profile page.
      *
@@ -377,7 +377,7 @@ class OpenPartners extends OpenVolunteers
     {
         return $this->loadPartnerPage($request, $prtnSlug, 'org', 65);
     }
-    
+
     /**
      * Print an organizational partner's affiliate link to start of the survey.
      *
@@ -389,7 +389,7 @@ class OpenPartners extends OpenVolunteers
     {
         return $this->partnerShareStory($request, $prtnSlug, 'org', 66);
     }
-    
+
     /**
      * Print an organizational partner's public profile page.
      *
@@ -402,7 +402,7 @@ class OpenPartners extends OpenVolunteers
             return '';
         }
         return view(
-            'vendor.openpolice.nodes.1898-public-partner-page', 
+            'vendor.openpolice.nodes.1898-public-partner-page',
             [
                 "nID"  => $nID,
                 "dat"  => $this->sessData->dataSets,
@@ -410,7 +410,7 @@ class OpenPartners extends OpenVolunteers
             ]
         )->render();
     }
-    
+
     /**
      * Print an organizational partner's public profile page,
      * which only collaborates with in-person clinics.
@@ -421,14 +421,14 @@ class OpenPartners extends OpenVolunteers
     protected function publicPartnerPageClinicOnly($nID = -3)
     {
         return view(
-            'vendor.openpolice.nodes.2677-partner-clinic-only', 
+            'vendor.openpolice.nodes.2677-partner-clinic-only',
             [
                 "dat"  => $this->sessData->dataSets,
                 "type" => $this->sessData->dataSets["partners"][0]->part_type
             ]
         )->render();
     }
-    
+
     /**
      * Print the current volunteer leaderboard, in stars.
      *
@@ -438,7 +438,7 @@ class OpenPartners extends OpenVolunteers
     {
         $this->v["leaderboard"] = new VolunteerLeaderboard;
         $this->v["yourStats"] = [];
-        if ($this->v["leaderboard"]->UserInfoStars 
+        if ($this->v["leaderboard"]->UserInfoStars
             && sizeof($this->v["leaderboard"]->UserInfoStars) > 0) {
             foreach ($this->v["leaderboard"]->UserInfoStars as $i => $volunUser) {
                 if ($volunUser->user_info_user_id == $this->v["uID"]) {
@@ -448,7 +448,7 @@ class OpenPartners extends OpenVolunteers
         }
         return view('vendor.openpolice.volun.stars', $this->v)->render();
     }
-    
+
     /**
      * Looks up an array of complaint ID#s associated with an oversight agency.
      *
@@ -478,7 +478,7 @@ class OpenPartners extends OpenVolunteers
         }
         return true;
     }
-    
+
     /**
      * Redirect the beta tester campaign link to the signup survey,
      * with the paramater to track the signup referral.
@@ -492,5 +492,5 @@ class OpenPartners extends OpenVolunteers
         header("Location: /start/beta-test-signup?from=" . $campaign);
         exit;
     }
-    
+
 }

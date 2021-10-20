@@ -34,5 +34,5 @@ class OpenPoliceUserLoad extends SurvloopUserLoad
             }
         }
     }
-    
+
 }

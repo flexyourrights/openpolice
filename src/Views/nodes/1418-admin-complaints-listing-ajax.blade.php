@@ -34,7 +34,7 @@ function logSrchFilts() {
             filts += "__states_" + statesChecked.substring(1);
         }
         var filtAllegs = "";
-        for (var i = 0; i < {{ sizeof($allegTypes) }}; i++) {
+        for (var i = 0; i < {{ sizeof($GLOBALS["CUST"]->worstAllegs) }}; i++) {
             if (document.getElementById("filtAllegs"+i+"") && document.getElementById("filtAllegs"+i+"").checked) {
                 filtAllegs += "," + document.getElementById("filtAllegs"+i+"").value;
             }
@@ -82,6 +82,15 @@ function logSrchFilts() {
         }
         if (offRace.trim() != "") {
             filts += "__offrace_"+offRace.substring(1);
+        }
+        var comSetts = "";
+        for (var i = 3; i <= 5; i++) {
+            if (document.getElementById("filtComSetts"+i+"") && document.getElementById("filtComSetts"+i+"").checked) {
+                comSetts += "," + document.getElementById("filtComSetts"+i+"").value;
+            }
+        }
+        if (comSetts.trim() != "") {
+            filts += "__comsetts_"+comSetts.substring(1);
         }
         document.getElementById("sFiltID").value = filts;
 //console.log("logSrchFilts: "+document.getElementById("sFiltID").value);

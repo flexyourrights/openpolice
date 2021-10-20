@@ -1,21 +1,20 @@
 <!-- resources/views/vendor/openpolice/nodes/1418-admin-complaints-listing-row.blade.php -->
 <a class="complaintRowA" href="javascript:;"
-    data-com-id="{{ $com->com_id }}" 
+    data-com-id="{{ $com->com_id }}"
     data-com-pub-id="{{ intVal($com->com_public_id) }}">
     <div class="float-left complaintAlert">
         <div class="mLn5">&nbsp;
-        @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type), 
+        @if (in_array($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type),
                 ['Unverified', 'Not Sure'])
-            || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
+            || ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type)
                 == 'Police Complaint'
-                && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
+                && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status),
                     ['New', 'Hold', 'Reviewed'])))
             <div class="litRedDot"></div>
-        @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
+        @elseif ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type)
                 == 'Police Complaint'
-            && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status), 
-                ['Needs More Work', 'Wants Attorney', 
-                    'Pending Attorney', 'OK to Submit to Oversight']))
+            && in_array($GLOBALS['SL']->def->getVal('Complaint Status', $com->com_status),
+                ['Wants Attorney', 'Pending Attorney', 'OK to Submit to Oversight']))
             <div class="litRedDottie"></div>
         @endif
         </div>
@@ -34,20 +33,20 @@
         <span class="slGrey">
     @if ($com->com_public_id <= 0)
         #i{{ number_format($com->com_id) }}
-        @if ($com->com_submission_progress > 0 
+        @if ($com->com_submission_progress > 0
             && isset($lastNodes[$com->com_submission_progress]))
             /{{ $lastNodes[$com->com_submission_progress] }}
         @endif
     @else
         #{{ number_format($com->com_public_id) }}
-        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) 
+        @if ($GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type)
             == 'Police Complaint')
             {{ $GLOBALS['CUST']->printComplaintStatusAbbr($com->com_status, 1) }}
         @endif
     @endif
-    @if ($com->com_status 
-            != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete') 
-        && $com->com_type 
+    @if ($com->com_status
+            != $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete')
+        && $com->com_type
             != $GLOBALS["SL"]->def->getID('Complaint Type',  'Police Complaint'))
         {{ $GLOBALS['SL']->def->getVal('Complaint Type', $com->com_type) }}
     @endif
@@ -55,18 +54,18 @@
     </div>
     <div class="float-right">
     @if (isset($com->com_record_submitted))
-        &nbsp;<br /><span class="slGrey">{{ 
-            date("n/j/y", strtotime($com->com_record_submitted)) 
+        &nbsp;<br /><span class="slGrey">{{
+            date("n/j/y", strtotime($com->com_record_submitted))
         }}</span>
     @endif
     </div>
     <div class="fC"></div>
 </a>
 
-<a class="complaintRowFull" 
-    @if ($com->com_public_id > 0) 
+<a class="complaintRowFull"
+    @if ($com->com_public_id > 0)
         href="/dash/complaint/read-{{ $com->com_public_id }}"
-    @else 
+    @else
         href="/dash/complaint/readi-{{ $com->com_id }}"
     @endif ><i class="fa fa-arrows-alt" aria-hidden="true"></i></a>
 

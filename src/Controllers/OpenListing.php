@@ -20,6 +20,8 @@ use App\Models\OPAllegations;
 use App\Models\SLNode;
 use App\Models\OPTesterBeta;
 use App\Models\User;
+use FlexYourRights\OpenPolice\Controllers\Stats\OpenComplaintStatsComplete;
+use FlexYourRights\OpenPolice\Controllers\Stats\OpenComplaintStatsDemo;
 use FlexYourRights\OpenPolice\Controllers\OpenListFilters;
 
 class OpenListing extends OpenListFilters
@@ -34,7 +36,7 @@ class OpenListing extends OpenListFilters
     {
         $coreTbl = $GLOBALS["SL"]->coreTbl;
         $coreAbbr = $GLOBALS["SL"]->coreTblAbbr();
-        if (!isset($this->sessData->dataSets[$coreTbl]) 
+        if (!isset($this->sessData->dataSets[$coreTbl])
             || !isset($this->sessData->dataSets["incidents"])) {
             return '';
         }
@@ -48,24 +50,24 @@ class OpenListing extends OpenListFilters
             $storyPrev = $com->{ $coreAbbr . 'summary' };
         }
         return view(
-            'vendor.openpolice.complaint-report-preview', 
+            'vendor.openpolice.complaint-report-preview',
             [
                 "uID"           => $this->v["uID"],
                 "storyPrev"     => $storyPrev,
                 "coreAbbr"      => $coreAbbr,
-                "complaint"     => $com, 
-                "incident"      => $incident, 
+                "complaint"     => $com,
+                "incident"      => $incident,
                 "comDate"       => $this->getComplaintDate($incident, $com),
-                "comDateAb"     => $this->getComplaintDate($incident, $com, 'M'), 
-                "comDateFile"   => $this->getComplaintDateOPC($com), 
-                "comDateFileAb" => $this->getComplaintDateOPC($com, 'M'), 
+                "comDateAb"     => $this->getComplaintDate($incident, $com, 'M'),
+                "comDateFile"   => $this->getComplaintDateOPC($com),
+                "comDateFileAb" => $this->getComplaintDateOPC($com, 'M'),
                 "comUser"       => User::find($com->com_user_id),
                 "titleWho"      => $this->printPreviewReportCustomWho($com),
                 "comWhere"      => ((isset($where[1])) ? $where[1] : ''),
                 "allegations"   => $this->commaAllegationListSplit(),
                 "deptList"      => $this->printPreviewReportCustomDepts(),
                 "url"           => $this->printPreviewReportCustomUrl($com, $coreAbbr),
-                "editable"      => $this->recordIsEditable($coreTbl, $com->getKey(), $com),
+                "editable"      => $this->recordIsEditable($coreTbl, $com->com_id, $com),
                 "featureImg"    => ''
             ]
         )->render();
@@ -98,13 +100,13 @@ class OpenListing extends OpenListFilters
     private function printPreviewReportCustomDepts()
     {
         $deptList = '';
-        $depts = ((isset($this->sessData->dataSets["departments"])) 
+        $depts = ((isset($this->sessData->dataSets["departments"]))
             ? $this->sessData->dataSets["departments"] : null);
         $notSure = 'Not sure about department';
         if ($depts && sizeof($depts) > 0) {
             foreach ($depts as $i => $d) {
                 if (isset($d->dept_name) && trim($d->dept_name) != $notSure) {
-                    $deptList .= ((trim($deptList) != '') ? ', ' : '') 
+                    $deptList .= ((trim($deptList) != '') ? ', ' : '')
                         . '<a href="/dept/' . $d->dept_slug . '">'
                         . $d->dept_name . '</a>';
                 }
@@ -123,7 +125,7 @@ class OpenListing extends OpenListFilters
     private function printPreviewReportCustomUrl($com, $coreAbbr)
     {
         $url = '';
-        if (isset($com->{ $coreAbbr . 'public_id' }) 
+        if (isset($com->{ $coreAbbr . 'public_id' })
             && intVal($com->{ $coreAbbr . 'public_id' }) > 0) {
             $url = '/' . (($coreAbbr == 'com_') ? 'complaint' : 'compliment')
                 . '/read-' . $com->{ $coreAbbr . 'public_id' };
@@ -133,7 +135,7 @@ class OpenListing extends OpenListFilters
         }
         return $url;
     }
-    
+
     /**
      * Retrieve the date of the current complaint's incident.
      *
@@ -143,15 +145,20 @@ class OpenListing extends OpenListFilters
      */
     protected function getComplaintDate($inc, $com, $monthStyle = 'F')
     {
+        if (!isset($inc->inc_time_start)
+            || !$inc->inc_time_start
+            || trim($inc->inc_time_start) == '') {
+            return '';
+        }
         $comDate = date($monthStyle . ' Y', strtotime($inc->inc_time_start));
         if ($this->shouldPrintFullDate($com)) {
             $comDate = date('m/d/Y', strtotime($inc->inc_time_start));
         }
         return $comDate;
     }
-    
+
     /**
-     * Retrieve the date the current complaint 
+     * Retrieve the date the current complaint
      * was submitted to OpenPolice.org.
      *
      * @param  App\Models\OPComplaints $com
@@ -165,9 +172,9 @@ class OpenListing extends OpenListFilters
         }
         return $comDate;
     }
-    
+
     /**
-     * Printing preivews of full reports when only provided 
+     * Printing preivews of full reports when only provided
      * the complaint data record.
      *
      * @param  App\Models\OPComplaints $com
@@ -192,20 +199,20 @@ class OpenListing extends OpenListFilters
         $this->sessData->dataSets["complaints"][0] = $com;
         $this->sessData->dataSets["incidents"][0]
             = OPIncidents::find($com->com_incident_id);
-        $this->sessData->dataSets["alleg_silver"][0] 
+        $this->sessData->dataSets["alleg_silver"][0]
             = OPAllegSilver::where('alle_sil_complaint_id', $com->com_id)
                 ->first();
-        $this->sessData->dataSets["allegations"] 
+        $this->sessData->dataSets["allegations"]
             = OPAllegations::where('alle_complaint_id', $com->com_id)
                 ->get();
         $this->sessData->dataSets["departments"] = DB::table('op_departments')
-            ->join('op_links_complaint_dept', 'op_departments.dept_id', 
+            ->join('op_links_complaint_dept', 'op_departments.dept_id',
                 '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
             ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', $com->com_id)
             ->select('op_departments.*')
             ->get();
         $this->sessData->dataSets["stops"] = DB::table('op_stops')
-            ->join('op_event_sequence', 'op_stops.stop_event_sequence_id', 
+            ->join('op_event_sequence', 'op_stops.stop_event_sequence_id',
                 '=', 'op_event_sequence.eve_id')
             ->where('op_event_sequence.eve_complaint_id', $com->com_id)
             ->select('op_stops.*')
@@ -214,9 +221,9 @@ class OpenListing extends OpenListFilters
         Cache::put($cacheName, $ret);
         return $ret;
     }
-    
+
     /**
-     * Initial tables to print preivews of full reports 
+     * Initial tables to print preivews of full reports
      * when only provided the complaint data record.
      *
      * @return boolean
@@ -224,11 +231,11 @@ class OpenListing extends OpenListFilters
     protected function getComplaintPreviewByRowInit()
     {
         $tbls = [
-            'complaints', 
-            'incidents', 
-            'alleg_silver', 
-            'allegations', 
-            'departments', 
+            'complaints',
+            'incidents',
+            'alleg_silver',
+            'allegations',
+            'departments',
             'stops'
         ];
         $this->allegations = [];
@@ -237,9 +244,9 @@ class OpenListing extends OpenListFilters
         }
         return true;
     }
-    
+
     /**
-     * Print the management page for complaints, 
+     * Print the management page for complaints,
      * with multiple view options.
      *
      * @param  int $nID
@@ -283,7 +290,6 @@ class OpenListing extends OpenListFilters
             $this->v["searchFiltsURL"] = $this->searcher->v["searchFiltsURL"];
             $this->v["sortLab"]        = $this->searcher->v["sortLab"];
             $this->v["sortDir"]        = $this->searcher->v["sortDir"];
-            $this->v["allegTypes"]     = $this->worstAllegations;
             if ($nID == 2384) {
                 $this->v["sView"] = 'lrg';
                 $url = '/ajax/search-complaint-previews?dashResults=1&ajax=1&limit=0';
@@ -297,7 +303,7 @@ class OpenListing extends OpenListFilters
                     $ret = $this->printComplaintListingResultsLrg($nID);
                 } else {
                     $ret = view(
-                        'vendor.openpolice.nodes.1418-admin-complaints-dash-results', 
+                        'vendor.openpolice.nodes.1418-admin-complaints-dash-results',
                         $this->v
                     )->render();
                 }
@@ -306,7 +312,7 @@ class OpenListing extends OpenListFilters
                 if (in_array($nID, [1418, 2384])) { // !$GLOBALS["SL"]->x["isHomePage"]) {
                     $GLOBALS["SL"]->pageAJAX .= view($blade . '-ajax', $this->v)->render();
                 }
-                $ret = view($blade, $this->v)->render() 
+                $ret = view($blade, $this->v)->render()
                     . view($blade . '-styles', $this->v)->render();
             }
             $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
@@ -317,7 +323,7 @@ class OpenListing extends OpenListFilters
         }
         return $ret;
     }
-    
+
     /**
      * Initialize the management page for complaints.
      *
@@ -340,14 +346,14 @@ class OpenListing extends OpenListFilters
         if ($GLOBALS["SL"]->x["isPublicList"]) {
             $this->v["sView"] = 'lrg';
         }
-        $this->v["complaints"] 
-            = $this->v["complaintsPreviews"] 
-            = $this->v["complaintsPreviewsIDs"] 
+        $this->v["complaints"]
+            = $this->v["complaintsPreviews"]
+            = $this->v["complaintsPreviewsIDs"]
             = $this->v["complaintsPreviewsUser"]
-            = $this->v["complaintsPreviewsPriv"] 
-            = $this->v["comInfo"] 
-            = $this->v["lastNodes"] 
-            = $this->v["ajaxRefreshs"] 
+            = $this->v["complaintsPreviewsPriv"]
+            = $this->v["comInfo"]
+            = $this->v["lastNodes"]
+            = $this->v["ajaxRefreshs"]
             = [];
         $this->v["filtersDesc"] = '';
         $this->v["firstComplaint"] = [ 0, 0 ];
@@ -356,7 +362,7 @@ class OpenListing extends OpenListFilters
         $this->v["listPrintFilters"] = $this->printComplaintsFilters($nID, $view);
         return true;
     }
-    
+
     /**
      * Print the actual search results for managing complaints.
      *
@@ -366,8 +372,8 @@ class OpenListing extends OpenListFilters
      */
     protected function printComplaintListingResults($nID, $view = 'list')
     {
-        /* $cacheKey = 'complaintListingResults' 
-            . $this->searcher->searchFiltsURL() 
+        /* $cacheKey = 'complaintListingResults'
+            . $this->searcher->searchFiltsURL()
             . $GLOBALS["SL"]->getCacheSffxAdds();
         $cache = '';
         if ($this->v["sView"] == 'lrg') {
@@ -410,7 +416,7 @@ class OpenListing extends OpenListFilters
         }
         return '<!-- -->';
     }
-    
+
     /**
      * Print the actual search results for large complaint previews.
      *
@@ -423,11 +429,11 @@ class OpenListing extends OpenListFilters
         $this->printComplaintFiltDescPrev();
         $this->v["isStaffSort"] = $this->isStaffOrAdmin();
         return view(
-            'vendor.openpolice.nodes.1418-admin-complaints-listing-previews', 
+            'vendor.openpolice.nodes.1418-admin-complaints-listing-previews',
             $this->v
         )->render();
     }
-    
+
     /**
      * Generate previews for search results.
      *
@@ -437,7 +443,7 @@ class OpenListing extends OpenListFilters
     {
         if (sizeof($this->v["complaints"]) > 0) {
             foreach ($this->v["complaints"] as $i => $com) {
-                if (!$GLOBALS["SL"]->x["isHomePage"] 
+                if (!$GLOBALS["SL"]->x["isHomePage"]
                     || sizeof($this->v["complaintsPreviews"]) < 6) {
                     $ret = '';
                     $cacheName = 'complaint' . $com->com_id . '-preview-';
@@ -448,9 +454,9 @@ class OpenListing extends OpenListFilters
                     }
                     if (!$GLOBALS["SL"]->REQ->has('refresh')) {
                         $ret = $GLOBALS["SL"]->chkCache(
-                            $cacheName, 
-                            'search-rec', 
-                            1, 
+                            $cacheName,
+                            'search-rec',
+                            1,
                             $com->com_id
                         );
                     }
@@ -458,15 +464,15 @@ class OpenListing extends OpenListFilters
                         $this->loadAllSessData('complaints', $com->com_id);
                         $ret = $this->printPreviewReport();
                         $GLOBALS["SL"]->putCache(
-                            $cacheName, 
+                            $cacheName,
                             $ret,
-                            'search-rec', 
-                            1, 
+                            'search-rec',
+                            1,
                             $com->com_id
                         );
                         //$this->printPreviewReportCustom($isAdmin);
                     }
-                    $this->v["complaintsPreviews"][] = '<div id="reportPreview' 
+                    $this->v["complaintsPreviews"][] = '<div id="reportPreview'
                         . $com->com_id . '" class="reportPreview">' . $ret . '</div>';
                     $this->v["complaintsPreviewsIDs"][]  = $com->com_id;
                     $this->v["complaintsPreviewsUser"][] = intVal($com->com_user_id);
@@ -476,9 +482,71 @@ class OpenListing extends OpenListFilters
         }
         return true;
     }
-    
+
     /**
-     * Load all complaints for the current user 
+     * Loads OP complaint stats object, and searcher.
+     *
+     * @param  int $nID
+     * @return FlexYourRights\OpenPolice\Controllers\OpenComplaintStats
+     */
+    protected function loadReportStatsBasic($nID)
+    {
+        $this->initSearcher();
+        $this->searcher->getSearchFilts();
+        $this->searcher->searchFiltsURL();
+        $pageUrl = '/dash/complaint-stats' . $this->searcher->v["searchFiltsURL"];
+        $ret = $GLOBALS["SL"]->chkCache($pageUrl, 'search-html', 1);
+        if (trim($ret) == '' || $GLOBALS["SL"]->REQ->has('refresh')) {
+            $ret = $this->loadStatsReport($nID);
+            $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
+        }
+        return $ret;
+    }
+
+    /**
+     * Loads OP complaint stats object, and searcher.
+     *
+     * @param  int $nID
+     * @return FlexYourRights\OpenPolice\Controllers\OpenComplaintStats
+     */
+    protected function loadReportStatsDemo($nID)
+    {
+        $this->initSearcher();
+        $this->searcher->getSearchFilts();
+        $this->searcher->searchFiltsURL();
+        $pageUrl = '/dash/demographic-stats' . $this->searcher->v["searchFiltsURL"];
+        $ret = $GLOBALS["SL"]->chkCache($pageUrl, 'search-html', 1);
+        if (trim($ret) == '' || $GLOBALS["SL"]->REQ->has('refresh')) {
+            $ret = $this->loadStatsReport($nID, 'demo');
+            $GLOBALS["SL"]->putCache($pageUrl, $ret, 'search-html', 1);
+        }
+        return $ret;
+    }
+
+    /**
+     * Loads OP complaint stats object, and searcher.
+     *
+     * @param  int $nID
+     * @return FlexYourRights\OpenPolice\Controllers\OpenComplaintStats
+     */
+    protected function loadStatsReport($nID, $set = 'complete')
+    {
+        set_time_limit(300);
+        $GLOBALS["SL"]->x["isPublicList"] = false;
+        $this->v["sView"] = 'slim';
+        $this->searcher->v["listPrintFilters"] = $this->printComplaintsFilters($nID, 'slim');
+        $this->printComplaintListingResults($nID, 'slim');
+        $this->printComplaintFiltDescPrev(); // fills searcher->v["complaintFiltDescPrev"]
+        if ($set == 'demo') {
+            $report = new OpenComplaintStatsDemo($this->searcher, $this->v["complaints"]);
+            return $report->printComplaintStatsDemo();
+        }
+        $report = new OpenComplaintStatsComplete($this->searcher, $this->v["complaints"]);
+        return $report->printComplaintStatsBasic();
+    }
+
+    /**
+     * Load all complaints for the current user
      * to appear on their profile.
      *
      * @param  int $nID
@@ -489,7 +557,7 @@ class OpenListing extends OpenListFilters
         $ret = '';
         $isOwner = true;
         $uID = $this->v["uID"];
-        if (isset($this->v["profileUser"]) 
+        if (isset($this->v["profileUser"])
             && isset($this->v["profileUser"]->id)
             && intVal($this->v["profileUser"]->id) > 0
             && $uID != $this->v["profileUser"]->id) {
@@ -497,7 +565,7 @@ class OpenListing extends OpenListFilters
             $isOwner = false;
         }
         $typeDef = $GLOBALS["SL"]->def->getID(
-            'Complaint Type', 
+            'Complaint Type',
             'Police Complaint'
         );
         if ($uID > 0) {
@@ -525,7 +593,7 @@ class OpenListing extends OpenListFilters
                 foreach ($complaints as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->com_id;
                 }
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID
                     . 'ajaxLoadA").load("' . $loadURL . '");' . "\n";
             }
             if ($isOwner || $this->isStaffOrAdmin()) {
@@ -545,12 +613,12 @@ class OpenListing extends OpenListFilters
                 foreach ($compliments as $i => $rec) {
                     $loadURL .= (($i > 0) ? ',' : '') . $rec->compli_id;
                 }
-                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID 
+                $GLOBALS["SL"]->pageAJAX .= '$("#n' . $nID
                     . 'ajaxLoadB").load("' . $loadURL . '");' . "\n";
             }
         }
         return view(
-            'vendor.openpolice.nodes.1893-profile-complaints-compliments', 
+            'vendor.openpolice.nodes.1893-profile-complaints-compliments',
             [
                 "nID"         => $nID,
                 "complaints"  => $complaints,
@@ -558,7 +626,7 @@ class OpenListing extends OpenListFilters
             ]
         )->render();
     }
-    
+
     /**
      * Print search results across multiple data sets.
      *
@@ -594,7 +662,7 @@ class OpenListing extends OpenListFilters
         $GLOBALS["SL"]->addHshoo("#departments");
         $GLOBALS["SL"]->addHshoo("#complaints");
         return view(
-            'vendor.openpolice.nodes.1221-search-results-multi-data-sets', 
+            'vendor.openpolice.nodes.1221-search-results-multi-data-sets',
             [
                 "nID"         => $nID,
                 "dashView"    => ($nID == 1221),
@@ -603,7 +671,7 @@ class OpenListing extends OpenListFilters
             ]
         )->render();
     }
-    
+
     /**
      * Print a listing of all the beta testers who signed up,
      * with links to send them the invite emails,
@@ -639,8 +707,8 @@ class OpenListing extends OpenListFilters
                     $bcc = 'morgan'.'@'.'flexyourrights.org';
                 }
                 $betaLinks[$beta->beta_id] = '/dashboard/send-email?emaTemplate=28&emaTo='
-                    . urlencode($beta->beta_email) . '&emaCC=' 
-                    . urlencode($this->v["user"]->email) . '&emaBCC=' . $bcc 
+                    . urlencode($beta->beta_email) . '&emaCC='
+                    . urlencode($this->v["user"]->email) . '&emaBCC=' . $bcc
                     . '&emaSwapName=' . urlencode($beta->beta_name);
                 if (isset($this->v["yourUserContact"])) {
                     $you = $this->v["yourUserContact"];
@@ -656,12 +724,12 @@ class OpenListing extends OpenListFilters
             ->orWhere('beta_how_hear', 'LIKE', '')
             ->count();
         $tots = [
-            "invited" => 0, 
-            "waiting" => 0, 
-            "emails"  => [] 
+            "invited" => 0,
+            "waiting" => 0,
+            "emails"  => []
         ];
         foreach ($betas as $beta) {
-            if (isset($beta->beta_invited) 
+            if (isset($beta->beta_invited)
                 && trim($beta->beta_invited) != ''
                 && isset($beta->beta_email)
                 && !in_array(strtolower($beta->beta_email), $tots["emails"])) {
@@ -672,7 +740,7 @@ class OpenListing extends OpenListFilters
             }
         }
         return view(
-            'vendor.openpolice.nodes.2234-beta-listing', 
+            'vendor.openpolice.nodes.2234-beta-listing',
             [
                 "betas"      => $betas,
                 "tots"       => $tots,
@@ -682,9 +750,9 @@ class OpenListing extends OpenListFilters
             ]
         )->render();
     }
-    
+
     /**
-     * Sort the sources for beta signups 
+     * Sort the sources for beta signups
      * in order of most referrals.
      *
      * @param  int $nID
@@ -693,9 +761,9 @@ class OpenListing extends OpenListFilters
     protected function sortBetas($betas, $divName)
     {
         $graph = [
-            "divName" => $divName, 
-            "values"  => '', 
-            "labels"  => '' 
+            "divName" => $divName,
+            "values"  => '',
+            "labels"  => ''
         ];
         $tots = [];
         if ($betas->isNotEmpty()) {
@@ -723,7 +791,7 @@ class OpenListing extends OpenListFilters
             }
         }
         $GLOBALS["SL"]->pageJAVA .= view(
-            'vendor.survloop.reports.graph-bar-plot', 
+            'vendor.survloop.reports.graph-bar-plot',
             [
                 "graph"  => $graph,
                 "height" => 700
@@ -731,5 +799,5 @@ class OpenListing extends OpenListFilters
         )->render();
         return $graph;
     }
-    
+
 }

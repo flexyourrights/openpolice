@@ -11,75 +11,29 @@
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
+use FlexYourRights\OpenPolice\Controllers\OpenPolice;
 
-    Route::get(
-        '/join-beta-test/{campaign}', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@joinBetaLink'
-    );
+Route::middleware(['web'])->group(function () {
+
+    Route::get('/dept/{deptSlug}', [OpenPolice::class, 'deptPage']);
+
+    Route::get('/filing-your-police-complaint/{deptSlug}',  [OpenPolice::class, 'shareComplaintDept']);
+    Route::get('/complaint-or-compliment/{deptSlug}',       [OpenPolice::class, 'shareStoryDept']);
+    Route::get('/share-complaint-or-compliment/{deptSlug}', [OpenPolice::class, 'shareStoryDept']);
+
+    Route::get('/org/{prtnSlug}', [OpenPolice::class, 'orgPage']);
+    Route::get('/prepare-complaint-for-org/{prtnSlug}', [OpenPolice::class, 'shareStoryOrg']);
     
-    Route::get(
-        '/dept/{deptSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@deptPage'
-    );
-    Route::get(
-        '/filing-your-police-complaint/{deptSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@shareComplaintDept'
-    );
-    Route::get(
-        '/complaint-or-compliment/{deptSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@shareStoryDept'
-    );
-    Route::get(
-        '/share-complaint-or-compliment/{deptSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@shareStoryDept'
-    );
-    
-    Route::get(
-        '/attorney/{prtnSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@attorneyPage'
-    );
-    Route::get(
-        '/prepare-complaint-for-attorney/{prtnSlug}', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@shareStoryAttorney'
-    );
+    Route::get('/attorney/{prtnSlug}',                       [OpenPolice::class, 'attorneyPage']);
+    Route::get('/prepare-complaint-for-attorney/{prtnSlug}', [OpenPolice::class, 'shareStoryAttorney']);
 
-    Route::get(
-        '/org/{prtnSlug}',
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@orgPage'
-    );
-    Route::get(
-        '/prepare-complaint-for-org/{prtnSlug}', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@shareStoryOrg'
-    );
+    Route::get('/api/dept-all-xml',                [OpenPolice::class, 'apiDeptAllXml']);
+    Route::get('/api/complaints-pcif-schema',      [OpenPolice::class, 'printPcifSchema']);
+    Route::get('/api/complaints-pcif-schema-xml',  [OpenPolice::class, 'printPcifSchemaXml']);
+    Route::get('/api/complaints-pcif-example-xml', [OpenPolice::class, 'printPcifExample']);
+    Route::get('/api/complaints-pcif-xml',         [OpenPolice::class, 'printPcifAll']);
+    Route::get('/api/complaints-pcif-xml/{cid}',   [OpenPolice::class, 'printPcifOne']);
 
-    Route::get(
-        '/api/dept-all-xml', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@apiDeptAllXml'
-    );
-
-    Route::get(
-        '/api/complaints-pcif-schema', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@printPcifSchema'
-    );
-    Route::get(
-        '/api/complaints-pcif-schema-xml', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@printPcifSchemaXml'
-    );
-    Route::get(
-        '/api/complaints-pcif-example-xml', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@printPcifExample'
-    );
-    Route::get(
-        '/api/complaints-pcif-xml', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@printPcifAll'
-    );
-    Route::get(
-        '/api/complaints-pcif-xml/{cid}', 
-        'FlexYourRights\OpenPolice\Controllers\OpenPolice@printPcifOne'
-    );
-
-    
 });    
 
 ?>

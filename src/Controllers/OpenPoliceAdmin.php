@@ -39,13 +39,13 @@ class OpenPoliceAdmin extends AdminController
 {
     private $currUser = null;
     private $currPage = '';
-    
+
     function __construct($currUser = null, $currPage = '')
     {
         $this->currUser = $currUser;
         $this->currPage = $currPage;
     }
-    
+
     function clearIncompletes()
     {
         /*
@@ -53,7 +53,7 @@ class OpenPoliceAdmin extends AdminController
             $qmen = $delComs = [];
             $qman = "SELECT * FROM `complaints` WHERE `com_created` < '" . date("Y-m-d 00:00:00", mktime(0, 0, 0, date("n"), date("j")-2, date("Y"))) . "' AND (`com_submission_progress` < '1' OR `com_summary` IS NULL)";
             $chk = mysqli_query($GLOBALS["SL"], $qman); // echo $qman . '<br />';
-            if ($chk && mysqli_num_rows($chk) > 0) { 
+            if ($chk && mysqli_num_rows($chk) > 0) {
                 while ($row = mysqli_fetch_array($chk)) { $delComs[] = $row["ComID"]; }
                 $qmen[] = "DELETE FROM `Civilians` WHERE `civ_complaint_id` IN ('" . implode("', '", $delComs) . "')";
                 $qmen[] = "DELETE FROM `Scenes` WHERE `scn_complaint_id` IN ('" . implode("', '", $delComs) . "')";
@@ -68,20 +68,20 @@ class OpenPoliceAdmin extends AdminController
         }
         */
     }
-    
-    
-    
-    
+
+
+
+
     public function listOfficers(Request $request)
     {
         $this->admControlInit($request, '/dashboard/officers');
         $this->v["officers"] = OPOfficers::get();
         return view(
-            'vendor.openpolice.admin.lists.officers', 
+            'vendor.openpolice.admin.lists.officers',
             $this->v
         )->render();
     }
-    
+
     public function listDepts(Request $request)
     {
         $this->admControlInit($request, '/dashboard/depts');
@@ -103,7 +103,7 @@ class OpenPoliceAdmin extends AdminController
             ->get();
         return view('vendor.openpolice.admin.lists.depts', $this->v)->render();
     }
-    
+
     public function quickAssign(Request $request)
     {
         $this->admControlInit($request);
@@ -114,7 +114,7 @@ class OpenPoliceAdmin extends AdminController
         }
         return $this->redir('/dashboard/overs#o' . $request->over_id);
     }
-    
+
     public function listLegal(Request $request)
     {
         $this->admControlInit($request, '/dashboard/legal');
@@ -122,7 +122,7 @@ class OpenPoliceAdmin extends AdminController
             ->get();
         return view('vendor.openpolice.admin.lists.legal', $this->v)->render();
     }
-    
+
     public function listAcademic(Request $request)
     {
         $this->admControlInit($request, '/dashboard/academic');
@@ -130,7 +130,7 @@ class OpenPoliceAdmin extends AdminController
             ->get();
         return view('vendor.openpolice.admin.lists.academic', $this->v)->render();
     }
-    
+
     public function listMedia(Request $request)
     {
         $this->admControlInit($request, '/dashboard/media');
@@ -138,5 +138,5 @@ class OpenPoliceAdmin extends AdminController
             ->get();
         return view('vendor.openpolice.admin.lists.media', $this->v)->render();
     }
-    
+
 }

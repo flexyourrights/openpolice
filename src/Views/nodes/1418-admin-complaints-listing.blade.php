@@ -210,3 +210,15 @@
     }
 @endif
 </style>
+<script type="text/javascript">
+
+/*
+function checkComplaintResultsFail() {
+    if (!document.getElementById('complaintResultsSpin')) {
+        window.location = "/complaints";
+    }
+}
+setTimeout("checkComplaintResultsFail()", 60000);
+*/
+
+</script>

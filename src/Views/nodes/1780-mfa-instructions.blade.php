@@ -31,7 +31,7 @@
                     <p>
                     Creating an account makes it easier for you to access and manage complaint 
                     reports. If the account for <b>{{ $user->email }}</b> has not been setup 
-                    yet, you can use the <a href="/password/reset">password reset tool</a> 
+                    yet, you can use the <a href="/forgot-password">password reset tool</a> 
                     to gain access to it by email.
                     </p>
                     <p>
@@ -75,7 +75,7 @@ to view the full details of this record. To finished gaining full access, either
 </p><p>
 <i class="fa fa-key fa-flip-horizontal icoHuge float-right mL5 mB10" align="left" aria-hidden="true"></i>
 If the account for <span class="slBlueDark">{{ $user->email }}</span> has not really been setup yet, you can use the 
-<a href="/password/reset">reset password tool</a> to gain access to it by email.
+<a href="/forgot-password">reset password tool</a> to gain access to it by email.
 This will also make it easier for you to access full records in the future.
 </p>
 <p>

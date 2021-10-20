@@ -15,32 +15,34 @@
 </p>
 <div class="row mB10">
     <div class="col-md-6">
-@forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
-    @if (isset($d["deptRow"])
-        && isset($d["deptRow"]->dept_name))
-        <div class="mB10">
-            <label class="finger">
-                <div class="disIn mR5">
-                    <input type="checkbox" class="slTab ntrStp"
-                        name="keepDepts[]" id="keepDept{{ $deptID }}" 
-                        value="{{ $deptID }}" autocomplete="off" CHECKED >
-                </div> {!! $d["deptRow"]->dept_name !!} 
-                @if (isset($d["deptRow"]->dept_address_state)
-                    && trim($d["deptRow"]->dept_address_state) != '')
-                    , {!! $d["deptRow"]->dept_address_state !!}
-                @endif
-            </label>
-        </div>
-    @endif
-@empty
-@endforelse
+@if (isset($GLOBALS["SL"]->x["depts"]))
+    @forelse ($GLOBALS["SL"]->x["depts"] as $deptID => $d)
+        @if (isset($d["deptRow"])
+            && isset($d["deptRow"]->dept_name))
+            <div class="mB10">
+                <label class="finger">
+                    <div class="disIn mR5">
+                        <input type="checkbox" class="slTab ntrStp"
+                            name="keepDepts[]" id="keepDept{{ $deptID }}"
+                            value="{{ $deptID }}" autocomplete="off" CHECKED >
+                    </div> {!! $d["deptRow"]->dept_name !!}
+                    @if (isset($d["deptRow"]->dept_address_state)
+                        && trim($d["deptRow"]->dept_address_state) != '')
+                        , {!! $d["deptRow"]->dept_address_state !!}
+                    @endif
+                </label>
+            </div>
+        @endif
+    @empty
+    @endforelse
+@endif
         <div id="fixDeptsAddNew" class="disNon mB10">
             <label class="finger">
                 <div class="disIn mR5">
                     <input type="checkbox" class="slTab ntrStp"
-                        name="keepDeptNew" id="keepDeptNewID" 
+                        name="keepDeptNew" id="keepDeptNewID"
                         value="0" autocomplete="off" CHECKED >
-                </div> 
+                </div>
                 <div id="fixDeptsAddNewName" class="disIn"></div>
             </label>
         </div>
@@ -52,12 +54,12 @@
                     <a href="javascript:;" id="ajaxSubmitFixDepts"
                         ><i class="fa fa-search"></i></a>
                     <input type="text" autocomplete="off"
-                        name="fixDeptsSearchIn" id="fixDeptsSearchInID" 
+                        name="fixDeptsSearchIn" id="fixDeptsSearchInID"
                         class="form-control form-control-lg w100 ui-autocomplete-input">
                 </div>
             </div>
             <div class="col-4">
-                <select name="deptStateSearch" id="deptStateSearchID" 
+                <select name="deptStateSearch" id="deptStateSearchID"
                     class="form-control form-control-lg">
                     <option value="">Select State</option>
                     {!! $GLOBALS["SL"]->states->stateDrop($incidentState, true) !!}
@@ -73,7 +75,7 @@
 <div class="mT15">
     <input type="submit" id="stfBtnDept"
         class="btn btn-lg btn-primary" style="color: #FFF;"
-        onMouseOver="this.style.color='#2b3493';" 
+        onMouseOver="this.style.color='#2b3493';"
         onMouseOut="this.style.color='#FFF';"
         value="Apply Department Changes">
 </div>
@@ -95,7 +97,7 @@ function loadNewFixDept(deptID, deptName) {
 }
 
 var holdSearch = false;
-$(document).ready(function(){ 
+$(document).ready(function(){
 
     function postToolboxFixDept() {
         if (document.getElementById('complaintToolbox')) {
@@ -104,8 +106,8 @@ $(document).ready(function(){
             window.scrollTo(0, 0);
             $.ajax({
                 url: "/complaint-toolbox",
-                type: "POST", 
-                data: formData, 
+                type: "POST",
+                data: formData,
                 contentType: false,
                 processData: false,
                 success: function(data) {
@@ -150,7 +152,7 @@ $(document).ready(function(){
         }
         return true;
     });
-    
+
 });
 </script>
 <style>

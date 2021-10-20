@@ -1,7 +1,7 @@
 <?php
 /**
   * OpenPolicePCIF is a class to manually create the exports for the
-  * Police Complaint Interchange Format (PCIF), so that entire 
+  * Police Complaint Interchange Format (PCIF), so that entire
   * parallel data strutures aren't managed via Survloop.
   *
   * OpenPolice.org
@@ -68,10 +68,10 @@ class OpenPolicePCIF extends OpenListing
                 'vendor.survloop.admin.tree.xml-header-custom',
                 [ "apiDesc" => $this->v["pcif"]->apiDesc ]
             )->render();
-            $ret .= '<' . $this->v["pcif"]->corePlural . ' xmlns="' 
-                . $this->v["pcif"]->apiNamespace . '" xmlns:xsi="' 
-                . $this->v["pcif"]->apiNamespace . '" xsi:schemaLocation="' 
-                . $this->v["pcif"]->apiSchema . '" xsi:noNamespaceSchemaLocation="' 
+            $ret .= '<' . $this->v["pcif"]->corePlural . ' xmlns="'
+                . $this->v["pcif"]->apiNamespace . '" xmlns:xsi="'
+                . $this->v["pcif"]->apiNamespace . '" xsi:schemaLocation="'
+                . $this->v["pcif"]->apiSchema . '" xsi:noNamespaceSchemaLocation="'
                 . $this->v["pcif"]->apiSchema . '">';
         	$allIDs = $this->getAllPublicCoreIDs('complaints');
             if (sizeof($allIDs) > 0) {
@@ -79,7 +79,7 @@ class OpenPolicePCIF extends OpenListing
                     if ($i < $limit) {
     		            $this->coreID = $coreID;
     		            $this->loadAllSessData('complaints', $coreID);
-                      	if (isset($this->sessData->dataSets["complaints"]) 
+                      	if (isset($this->sessData->dataSets["complaints"])
                             && sizeof($this->sessData->dataSets["complaints"]) > 0) {
                         	$pcifID = 'OP' . $this->sessData->dataSets["complaints"][0]->com_public_id;
     			            $ret .= $this->printRecordCustomAPI('pcif', $type, $pcifID);
@@ -104,24 +104,24 @@ class OpenPolicePCIF extends OpenListing
 
 		$this->v["pcif"]->addTable('complaints', 'complaint', 'complaints');
 		$this->v["pcif"]->addFld(
-			'complaints', 
-			'pcif_id', 
-			'PCIF Complaint ID#', 
+			'complaints',
+			'pcif_id',
+			'PCIF Complaint ID#',
 			'Indicates the unique PCIF Complaint ID# for this police conduct record. '
 				. 'Records sourced from Raheem.ai begin with "RA" '
 				. 'and OpenPolice.org records begin with "OP". e.g. OP81, RA2397'
 		);
 		$this->v["pcif"]->addFld(
-			'complaints', 
-			'url', 
-			'Published Complaint URL', 
+			'complaints',
+			'url',
+			'Published Complaint URL',
 			'Indicates the URL where this complaint record '
 				. 'can be found published on the internet.'
 		);
 		$this->v["pcif"]->addFldID('complaints', 10269); // com_anon
 		$this->v["pcif"]->addFldID('complaints', 245);   // inc_time_start
-		$this->v["pcif"]->addFldID('complaints', 240);   // inc_address 
-		$this->v["pcif"]->addFldID('complaints', 805);   // inc_address_city 
+		$this->v["pcif"]->addFldID('complaints', 240);   // inc_address
+		$this->v["pcif"]->addFldID('complaints', 805);   // inc_address_city
 		$this->v["pcif"]->addFldID('complaints', 806);   // inc_address_state
 		$this->v["pcif"]->addFldID('complaints', 807);   // inc_address_zip
 		$this->v["pcif"]->addFldID('complaints', 789);   // com_summary
@@ -138,20 +138,20 @@ class OpenPolicePCIF extends OpenListing
 
 		$this->v["pcif"]->addTable('officers', 'officer', 'officers');
 		$this->v["pcif"]->addFldID('officers', 397);     // off_role
-		$this->v["pcif"]->addFldID('officers', 1006);    // off_duty_status 
+		$this->v["pcif"]->addFldID('officers', 1006);    // off_duty_status
 		$this->v["pcif"]->addFldID('officers', 1220);    // prsn_name_first
 		$this->v["pcif"]->addFldID('officers', 1222);    // prsn_name_last
 		$this->v["pcif"]->addFldID('officers', 1339);    // off_badge_number
-		$this->v["pcif"]->addFldID('officers', 1169);    // phys_race_race 
-		$this->v["pcif"]->addFldID('officers', 628);     // phys_gender 
+		$this->v["pcif"]->addFldID('officers', 1169);    // phys_race_race
+		$this->v["pcif"]->addFldID('officers', 628);     // phys_gender
 		$this->v["pcif"]->addFldID('officers', 629);     // phys_age
 
 		$this->v["pcif"]->addTable('civilians', 'civilian', 'civilians');
 		$this->v["pcif"]->addFldID('civilians', 990);    // civ_role
 		$this->v["pcif"]->addFldID('civilians', 1220);   // prsn_name_first
 		$this->v["pcif"]->addFldID('civilians', 1222);   // prsn_name_last
-		$this->v["pcif"]->addFldID('civilians', 1169);   // phys_race_race 
-        $this->v["pcif"]->addFldID('civilians', 628);    // phys_gender 
+		$this->v["pcif"]->addFldID('civilians', 1169);   // phys_race_race
+        $this->v["pcif"]->addFldID('civilians', 628);    // phys_gender
         $this->v["pcif"]->addFldID('civilians', 1114);   // phys_gender_other
 		$this->v["pcif"]->addFldID('civilians', 629);    // phys_age
 		$this->v["pcif"]->addFldID('civilians', 1233);   // prsn_birthday
@@ -180,7 +180,7 @@ class OpenPolicePCIF extends OpenListing
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1165); // alle_sil_citation_excessive
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1109); // alle_sil_bias
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1563); // alle_sil_repeat_harass
-		$this->v["pcif"]->addFldID('openpolice_allegations', 1117); // alle_sil_neglect_duty 
+		$this->v["pcif"]->addFldID('openpolice_allegations', 1117); // alle_sil_neglect_duty
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1107); // alle_sil_procedure
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1111); // alle_sil_unbecoming
 		$this->v["pcif"]->addFldID('openpolice_allegations', 1112); // alle_sil_discourteous
@@ -193,42 +193,42 @@ class OpenPolicePCIF extends OpenListing
 	{
 		$this->v["pcif"]->addTable('raheem_allegations', 'raheem_allegation');
 		$enums = [
-			'helped', 'protected', 'profiled', 'neglected', 'harassed', 
+			'helped', 'protected', 'profiled', 'neglected', 'harassed',
 			'wrongly accused', 'disrespected', 'physically attacked'
 		];
 		$this->v["pcif"]->addFld(
-			'raheem_allegations', 
-			'encounter_type', 
-			'Type of Encounter', 
+			'raheem_allegations',
+			'encounter_type',
+			'Type of Encounter',
 			'Indicates the general type of encounter documented by this record.',
 			$enums
 		);
 		$enums = [ 'Y', 'N' ];
 		$this->v["pcif"]->addFld(
-			'raheem_allegations', 
-			'force_or_weapon', 
-			'Use Physical Force or Point Weapon?', 
+			'raheem_allegations',
+			'force_or_weapon',
+			'Use Physical Force or Point Weapon?',
 			'Did police use physical force against you or point their weapon at you?',
 			$enums
 		);
 		$this->v["pcif"]->addFld(
-			'raheem_allegations', 
-			'verbal_threats', 
-			'Threatened Verbally or Intimidated?', 
+			'raheem_allegations',
+			'verbal_threats',
+			'Threatened Verbally or Intimidated?',
 			'Did police threaten you verbally, use foul language, or intimidate you during this encounter?',
 			$enums
 		);
 		$this->v["pcif"]->addFld(
-			'raheem_allegations', 
-			'money_property', 
-			'Money/Property Seized/Destroyed, or Excessive Fine?', 
+			'raheem_allegations',
+			'money_property',
+			'Money/Property Seized/Destroyed, or Excessive Fine?',
 			'Did the police take money, take or destroy property, or issue an excessive fine during this encounter?',
 			$enums
 		);
 		$this->v["pcif"]->addFld(
-			'raheem_allegations', 
-			'neglect_duty', 
-			'Neglect of Duty?', 
+			'raheem_allegations',
+			'neglect_duty',
+			'Neglect of Duty?',
 			'Did police fail to help you when you needed it?',
 			$enums
 		);
@@ -238,7 +238,7 @@ class OpenPolicePCIF extends OpenListing
     public function overrideRecordValueCustomAPI($name = 'custom_api', $type = 'xml', $tbl = '', $rec = null, $apiFld = null)
     {
     	if ($name == 'pcif') {
-    		if ($tbl == 'complaints' 
+    		if ($tbl == 'complaints'
     			&& isset($this->sessData->dataSets[$tbl])) {
     			$id = $this->sessData->dataSets[$tbl][0]->com_public_id;
     			if ($apiFld->label == 'pcif_id') {
@@ -246,7 +246,7 @@ class OpenPolicePCIF extends OpenListing
     			} elseif ($apiFld->label == 'url') {
                     return 'https://openpolice.org/complaint/read-' . $id;
     			}
-    		} elseif ($tbl == 'civilians' 
+    		} elseif ($tbl == 'civilians'
     			&& $apiFld->label == 'birthday'
     			&& isset($this->sessData->dataSets[$tbl])
     			&& isset($rec->civ_birthday)
@@ -256,7 +256,7 @@ class OpenPolicePCIF extends OpenListing
     	}
     	return '';
     }
-    
+
     protected function genXmlFormatValCustomPerms($rec, $fld, $abbr)
     {
     	if ($abbr == 'com_') {

@@ -23,20 +23,20 @@ class OpenDevelopment extends OpenReportToolsAdmin
     {
         $docuNav = [
             [
-                'About the Web App', 
+                'About the Web App',
                 [
                     [
-                        '/web-app-workflows', 
+                        '/web-app-workflows',
                         'Web App Workflows'
                     ]
                 ]
             ],
             [
-                'For Web Developers', 
+                'For Web Developers',
                 [
                     [
-                        '/how-to-install-local-openpolice', 
-                        'Install Local Copy of OpenPolice', 
+                        '/how-to-install-local-openpolice',
+                        'Install Local Copy of OpenPolice',
                         [
                             ['#n3072', 'Install Homestead'],
                             ['#n3071', 'Install Laravel'],
@@ -44,7 +44,7 @@ class OpenDevelopment extends OpenReportToolsAdmin
                         ]
                     ],
                     [
-                        '/web-app-technical-specs', 
+                        '/web-app-technical-specs',
                         'General Technical Background'
                     ]
                 ]
@@ -53,23 +53,23 @@ class OpenDevelopment extends OpenReportToolsAdmin
                 'Codebase Orientation',
                 [
                     [
-                        '/code-package-files-folders-and-classes', 
+                        '/code-package-files-folders-and-classes',
                         'OpenPolice Package Files'
                     ],
                     [
-                        'https://survloop.org/package-files-folders-classes', 
+                        'https://survloop.org/package-files-folders-classes',
                         'Survloop Package Files'
                     ]
                 ]
             ]
         ];
         return view(
-            'vendor.openpolice.inc-documentation-navigation', 
+            'vendor.openpolice.inc-documentation-navigation',
             [
                 "docuNav"  => $docuNav,
                 "currPage" => $this->getCurrPage()
             ]
         )->render();
     }
-    
+
 }

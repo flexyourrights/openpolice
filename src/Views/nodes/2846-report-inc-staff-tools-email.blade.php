@@ -2,7 +2,7 @@
 
 <div class="disBlo pB30">
     Select Email Template<br />
-    <select name="email" id="emailID" autocomplete="off" 
+    <select name="email" id="emailID" autocomplete="off"
         class="form-control form-control-lg mB5">
         <option value="" >No email right now</option>
     @forelse ($emailList as $i => $email)
@@ -13,9 +13,9 @@
                 <option disabled ></option>
             @endif
             @if ($emaID2 != '01' || $email->email_id == 36)
-                <option value="{{ $email->email_id }}" 
+                <option value="{{ $email->email_id }}"
                     @if ($emailID == $email->email_id) SELECTED @endif
-                    >{{ $email->email_name }} 
+                    >{{ $email->email_name }}
                     ({{ str_replace('Oversight', 'IA', $email->email_type) }})
                 </option>
             @endif
@@ -24,13 +24,14 @@
     @endforelse
     </select>
     <div id="emailChooseDept" class="
-        @if ($GLOBALS['SL']->x['deptsCnt'] > 1 && $emailID == 12) disBlo 
-        @else disNon 
+        @if ($GLOBALS['SL']->x['deptsCnt'] > 1 && $emailID == 12) disBlo
+        @else disNon
         @endif ">
-        @if ($GLOBALS["SL"]->x["deptsCnt"] > 1)
+        @if (isset($GLOBALS["SL"]->x["deptsCnt"])
+            && $GLOBALS["SL"]->x["deptsCnt"] > 1)
             <div class="pT30">
                 Select Investigative Agency<br />
-                <select name="d" id="emailDeptID" autocomplete="off" 
+                <select name="d" id="emailDeptID" autocomplete="off"
                     class="form-control form-control-lg">
                 @forelse ($comDepts as $cnt => $dept)
                     <option value="{{ $dept['id'] }}"
@@ -41,7 +42,7 @@
                 </select>
             </div>
         @else
-            <input name="d" id="emailDeptID" type="hidden" 
+            <input name="d" id="emailDeptID" type="hidden"
             @if (sizeof($comDepts) > 0 && isset($comDepts[0]['id']))
                 value="{{ $comDepts[0]['id'] }}"
             @else
@@ -53,11 +54,11 @@
     <div id="emailFormWrap" class="w100 pB15">
     @if (intVal($emailID) > 0 && sizeof($currEmail) > 0)
         {!! view(
-            'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form', 
+            'vendor.openpolice.nodes.1712-report-inc-staff-tools-email-form',
             [
                 "emailID"           => $emailID,
-                "currEmail"         => $currEmail, 
-                "complaintRec"      => $complaintRec, 
+                "currEmail"         => $currEmail,
+                "complaintRec"      => $complaintRec,
                 "emailID"           => $emailID,
                 "emailsTo"          => $emailsTo,
                 "deptID"            => $deptID,
@@ -87,23 +88,21 @@ function loadComplaintEmail() {
     }
 }
 
-@if ($GLOBALS["SL"]->x["deptsCnt"] > 1)
-    $(document).on("change", "#emailID", function() { 
-        if (document.getElementById('emailChooseDept')) {
-            var emailID = document.getElementById('emailID').value;
-            if (emailID == 12) {
-                $("#emailChooseDept").slideDown("fast");
-            } else {
-                $("#emailChooseDept").slideUp("fast");
-            }
+$(document).on("change", "#emailID", function() {
+    if (document.getElementById('emailChooseDept')) {
+        var emailID = document.getElementById('emailID').value;
+        if (emailID == 12) {
+            $("#emailChooseDept").slideDown("fast");
+        } else {
+            $("#emailChooseDept").slideUp("fast");
         }
-        loadComplaintEmail();
-    });
+    }
+    loadComplaintEmail();
+});
 
-    $(document).on("change", "#emailDeptID", function() {
-        loadComplaintEmail();
-    });
-@endif
+$(document).on("change", "#emailDeptID", function() {
+    loadComplaintEmail();
+});
 
 function pushDeptID() {
     if (document.getElementById('emailDeptID') && document.getElementById('emailSubDeptID')) {

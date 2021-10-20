@@ -64,6 +64,7 @@
                 <div class="dateAbbr">{{ $comDateFileAb }}</div>
             </div>
         </div>
+    @if ($comDate != '')
         <div class="row mB10">
             <div class="col-6">
                 Incident Date
@@ -72,6 +73,7 @@
                 <div class="dateAbbr">{{ $comDateAb }}</div>
             </div>
         </div>
+    @endif
     @if ($uID > 0 
         && ((isset($complaint->{ $coreAbbr . 'user_id' }) 
         && $complaint->{ $coreAbbr . 'user_id' } == $uID) 

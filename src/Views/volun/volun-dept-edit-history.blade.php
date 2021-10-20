@@ -4,7 +4,7 @@
     <tr>
         <th>Date</th>
         <th>Volunteer</th>
-        <th><i class="fa fa-laptop"></i> Online Research, 
+        <th><i class="fa fa-laptop"></i> Online Research,
             <i class="fa fa-phone"></i> Called Dept, <i class="fa fa-phone"></i> Called IA</th>
         <th>Volunteer Notes</th>
     </tr>
@@ -13,14 +13,14 @@
             <tr><td>
                 @if (isset($edit->created_at)) {{ date("n/j/y", strtotime($edit->created_at)) }} @endif
             </td><td>
-                @if (intVal($editsDept[$i]->zed_dept_user_id) > 0 
-                    && isset($userNames[$editsDept[$i]->zed_dept_user_id])) 
+                @if (intVal($editsDept[$i]->zed_dept_user_id) > 0
+                    && isset($userNames[$editsDept[$i]->zed_dept_user_id]))
                     {!! $userNames[$editsDept[$i]->zed_dept_user_id] !!} @endif
             </td><td>
                 <div class="mLn10">
-                @if ($edit->zed_over_online_research == 0 && $edit->zed_over_made_dept_call == 0 
-                    && $edit->zed_over_made_ia_call == 0) <span class="slGrey mL10">Minor Changes</span> 
-                @else 
+                @if ($edit->zed_over_online_research == 0 && $edit->zed_over_made_dept_call == 0
+                    && $edit->zed_over_made_ia_call == 0) <span class="slGrey mL10">Minor Changes</span>
+                @else
                     @if ($edit->zed_over_online_research == 1) <i class="fa fa-laptop mL10"></i> @endif
                     @if ($edit->zed_over_made_dept_call == 1) <i class="fa fa-phone mL10"></i>Dept @endif
                     @if ($edit->zed_over_made_ia_call == 1) <i class="fa fa-phone mL10"></i>IA @endif
@@ -37,7 +37,7 @@
     @endforelse
     </table>
 @else
-    <div class="slGrey"><i>No volunteer edits of this department yet.</i></div>
+    <div class="pT15 pB15 slGrey"><i>No volunteer edits of this department yet.</i></div>
 @endif
 
 @if ($recentEdits != '')

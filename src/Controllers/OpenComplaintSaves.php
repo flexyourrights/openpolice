@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenComplaintSaves is a mid-level class which handles custom overrides 
+  * OpenComplaintSaves is a mid-level class which handles custom overrides
   * for storing survey form field submissions.
   *
   * OpenPolice.org
@@ -74,7 +74,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
           return $this->saveArrestChargesDropped($nID);
         } elseif ($nID == 976) {
             return $this->saveStatusCompletion($nID);
-            
+
         // Department Editor Survey ...
         } elseif ($nID == 2232) {
             $date = date('Y-m-d H:i:s');
@@ -86,7 +86,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
             return $this->saveDeptSubWays2($nID);
         } elseif ($nID == 1329) {
             return $this->saveEditLog($nID);
-            
+
         // Page Nodes ...
         } elseif ($nID == 1007) {
             return $this->postContactEmail($nID);
@@ -106,7 +106,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
     {
         return false; // false to continue standard post processing
     }
-    
+
     /**
      * Store the start date — and optionally start time — of the incident.
      *
@@ -137,7 +137,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
-    
+
     /**
      * If there is only one civilian involved, store whether or not
      * they were given any citations.
@@ -147,9 +147,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
      */
     protected function saveCitationVictim($nID)
     {
-        if (isset($this->sessData->dataSets["civilians"]) 
+        if (isset($this->sessData->dataSets["civilians"])
             && sizeof($this->sessData->dataSets["civilians"]) == 1) {
-            if ($GLOBALS["SL"]->REQ->has('n234fld') 
+            if ($GLOBALS["SL"]->REQ->has('n234fld')
                 && trim($GLOBALS["SL"]->REQ->get('n234fld')) == 'Y') {
                 $this->sessData->dataSets["civilians"][0]->update([
                     'civ_given_citation' => 'Y'
@@ -162,9 +162,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return false;
     }
-    
+
     /**
-     * Since there are more than one civilian involved, store 
+     * Since there are more than one civilian involved, store
      * which of them were given any citations.
      *
      * @param  int $nID
@@ -173,8 +173,8 @@ class OpenComplaintSaves extends OpenComplaintConditions
     protected function saveCitationVictims($nID)
     {
         $nodeFld = 'n' . $nID . 'fld';
-        $isEmpty = (!$GLOBALS["SL"]->REQ->has($nodeFld) 
-            || !is_array($GLOBALS["SL"]->REQ->get($nodeFld)) 
+        $isEmpty = (!$GLOBALS["SL"]->REQ->has($nodeFld)
+            || !is_array($GLOBALS["SL"]->REQ->get($nodeFld))
             || sizeof($GLOBALS["SL"]->REQ->get($nodeFld)) == 0);
         $civs = $this->sessData->getLoopRows('Victims');
         if ($civs && sizeof($civs) > 0) {
@@ -191,7 +191,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
     }
 
     /**
-     * If there is only one of a type of person involved, 
+     * If there is only one of a type of person involved,
      * store whether or not they were given any citations.
      *
      * @param  int $nID
@@ -211,9 +211,9 @@ class OpenComplaintSaves extends OpenComplaintConditions
         $this->sessData->dataSets[$tbl][0]->save();
         return true;
     }
-    
+
     /**
-     * Since there are more than one of a type of person 
+     * Since there are more than one of a type of person
      * civilian involved, store which of them used profanity.
      *
      * @param  int $nID
@@ -222,12 +222,17 @@ class OpenComplaintSaves extends OpenComplaintConditions
      */
     protected function saveProfanePersons($nID, $type = 'off')
     {
-        $tbl = (($type == 'off') ? 'officers' : 'civilians');
+        $tbl = 'civilians';
+        $fld = 'civ_id';
+        if ($type == 'off') {
+            $tbl = 'officers';
+            $fld = 'off_id';
+        }
         $nodeFld = 'n' . $nID . 'fld';
         $profFld = $type . '_used_profanity';
         foreach ($this->sessData->dataSets[$tbl] as $i => $off) {
-            if ($GLOBALS["SL"]->REQ->has($nodeFld) 
-                && in_array($off->getKey(), $GLOBALS["SL"]->REQ->get($nodeFld))) {
+            if ($GLOBALS["SL"]->REQ->has($nodeFld)
+                && in_array($off->{ $fld }, $GLOBALS["SL"]->REQ->get($nodeFld))) {
                 $this->sessData->dataSets[$tbl][$i]->{ $profFld } = 'Y';
             } else {
                 $this->sessData->dataSets[$tbl][$i]->{ $profFld } = '';
@@ -236,7 +241,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
-    
+
     /**
      * Store the different types of force used against which civilians.
      *
@@ -304,7 +309,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
-    
+
     /**
      * In this case there is only one victim, but here we'll
      * make a linkage between them and this type of force
@@ -341,7 +346,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return true;
     }
-    
+
     /**
      * Check discreprency with previous answer.
      *
@@ -359,7 +364,7 @@ class OpenComplaintSaves extends OpenComplaintConditions
         }
         return false;
     }
-    
+
     /**
      * Update the complaint status to 'New', AKA complete.
      *
@@ -376,5 +381,5 @@ class OpenComplaintSaves extends OpenComplaintConditions
         $this->sessData->dataSets["complaints"][0]->save();
         return false;
     }
-    
+
 }

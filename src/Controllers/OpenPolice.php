@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenPolice the core top-level class for which extends 
+  * OpenPolice the core top-level class for which extends
   * Survloop and most functions specific to OpenPolice.org.
   * This class also collects hand-offs to extensions of
   * this code base to variations in other countries, etc,
@@ -23,7 +23,7 @@ use FlexYourRights\OpenPolice\Controllers\OpenInitExtras;
 class OpenPolice extends OpenInitExtras
 {
     /**
-     * Overrides primary Survloop printing of individual nodes from 
+     * Overrides primary Survloop printing of individual nodes from
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
      * This overrides the printNodePublicDefault function in
@@ -51,36 +51,36 @@ class OpenPolice extends OpenInitExtras
         } elseif (in_array($nID, [270, 973])) {
             $this->clearComplaintCaches();
             return $this->printEndOfComplaintRedirect($nID);
-            
+
         // Home Page
         } elseif ($nID == 1876) {
             return view('vendor.openpolice.nodes.1876-home-page-hero-credit')->render();
         //} elseif ($nID == 1848) {
         //    return view('vendor.openpolice.nodes.1848-home-page-disclaimer-bar')->render();
-        
+
         // FAQ
         } elseif ($nID == 1884) {
             $scroll = 'if (typeof bodyOnScroll === \'function\') bodyOnScroll();';
             $GLOBALS["SL"]->addBodyParams('onscroll="' . $scroll . '"');
-            
+
         // Public Departments Accessibility Overview
         } elseif ($nID == 1816) {
             $GLOBALS["SL"]->addHshoo('#n1917');
             return $this->printDeptAccScoreBars($nID);
-        } elseif (in_array($nID, [1863, 1858, 2013])) {
+        } elseif (in_array($nID, [1863, 1858])) {
             return $this->publicDeptAccessMap($nID);
-            
+
         } elseif ($nID == 1907) { // Donate Social Media Buttons
             return view('vendor.openpolice.nodes.1907-donate-share-social')->render();
         } elseif ($nID == 1454) {
             return $this->printDeptOverPublic($nID);
         } elseif ($nID == 2804) {
             return $this->printDeptOverPublicTop50s($nID);
-                
+
         // How We Rate Departments Page
         } elseif ($nID == 1127) {
             $nodes = [
-                1827, 1825, 1829, 1831, 1833, 1837, 1806, 1835, 
+                1827, 1825, 1829, 1831, 1833, 1837, 1806, 1835,
                 1, 2, 3, 4, 5, 6, 7
             ];
             foreach ($nodes as $n) {
@@ -89,7 +89,7 @@ class OpenPolice extends OpenInitExtras
             if ($GLOBALS["SL"]->REQ->has('test')) {
 
             }
-            
+
         // Department Profile
         } elseif ($nID == 1779) {
             return $this->printDeptComplaints($nID);
@@ -109,7 +109,7 @@ class OpenPolice extends OpenInitExtras
             return $this->printDeptOfficerComplaints();
 
 
-            
+
         // Partner Profiles
         } elseif ($nID == 2179) {
             return $this->printPartnersOverviewPublic($nID);
@@ -123,11 +123,11 @@ class OpenPolice extends OpenInitExtras
             return $this->printPreparePartnerHeader($nID);
         } elseif ($nID == 2677) {
             return $this->publicPartnerPageClinicOnly($nID);
-               
+
         // User Profile
         } elseif ($nID == 1893) {
             return $this->printProfileMyComplaints($nID);
-            
+
         // Complaint Report Tools
         } elseif ($nID == 1712) {
             $this->saveComplaintAdmin();
@@ -183,7 +183,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportWhereLine($nID);
         } elseif ($nID == 1691) {
             return [
-                'Publishing Settings', 
+                'Publishing Settings',
                 $this->getReportPrivacy($nID)
             ];
         } elseif ($nID == 1468) {
@@ -212,7 +212,7 @@ class OpenPolice extends OpenInitExtras
             return $this->getReportOffAge($nID);
         } elseif ($nID == 1574) {
             return $this->reportEventTitle($this->sessData->getLatestDataBranchID());
-        } elseif (in_array($nID, [3092, 3095, 3098, 3102, 3104, 3111, 3115, 
+        } elseif (in_array($nID, [3092, 3095, 3098, 3102, 3104, 3111, 3115,
             3118, 3122, 3126, 3131, 3136, 3138, 3143, 3147, 3150, 3153, 3156])) {
             return $this->getAllegOffNameRow($nID);
         } elseif (in_array($nID, [])) {
@@ -240,7 +240,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2632) {
             //$this->saveComplaintAdmin();
         } elseif ($nID == 3063) { // end of Toolbox
-            $GLOBALS["SL"]->setFullPageLoaded(1000); 
+            $GLOBALS["SL"]->setFullPageLoaded(1000);
         } elseif ($nID == 3060) {
             if (!isset($this->sessData->dataSets["complaints"])
                 || sizeof($this->sessData->dataSets["complaints"]) == 0
@@ -255,7 +255,7 @@ class OpenPolice extends OpenInitExtras
             if ($GLOBALS["SL"]->REQ->has('refresh')) {
                 $this->clearComplaintCaches();
             }
-            $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 { 
+            $GLOBALS["SL"]->pageCSS .= ' #treeWrap1385, #treeWrap2766 {
                 width: 100%; max-width: 100%; padding-left: 0px; padding-right: 0px;
             } ';
             $this->saveComplaintOversight();
@@ -263,7 +263,7 @@ class OpenPolice extends OpenInitExtras
             $this->processOwnerUpdate();
         } elseif (in_array($nID, [2635, 2378])) {
             $GLOBALS["SL"]->x["needsWsyiwyg"] = $this->v["needsWsyiwyg"] = true;
-            
+
         // Complaint Listings
         } elseif (in_array($nID, [1418, 2384])) {
             $GLOBALS["SL"]->x["isPublicList"] = false;
@@ -274,8 +274,8 @@ class OpenPolice extends OpenInitExtras
                 $this->clearComplaintCaches();
                 $GLOBALS["SL"]->forgetAllCachesOfTrees([1, 11, 42, 197]);
             }
-            $GLOBALS["SL"]->x["needsWsyiwyg"] 
-                = $this->v["needsWsyiwyg"] 
+            $GLOBALS["SL"]->x["needsWsyiwyg"]
+                = $this->v["needsWsyiwyg"]
                 = true;
             return $this->printComplaintListing($nID);
         } elseif ($nID == 2377) {
@@ -310,7 +310,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1924) {
             return $this->initPartnerCaseTypes($nID);
         } elseif ($nID == 2181) {
-            if ($this->sessData->dataSets["partners"][0]->part_type 
+            if ($this->sessData->dataSets["partners"][0]->part_type
                 == $GLOBALS["SL"]->def->getID('Partner Types', 'Organization')) {
                 $GLOBALS["SL"]->setCurrPage('/dash/manage-organizations');
             } else {
@@ -318,7 +318,7 @@ class OpenPolice extends OpenInitExtras
             }
         } elseif ($nID == 2234) {
             return $this->printBetaTesters($nID);
-            
+
         // Volunteer Area Nodes
         } elseif ($nID == 1211) {
             return $this->printVolunPriorityList();
@@ -332,27 +332,27 @@ class OpenPolice extends OpenInitExtras
             return $this->printDeptEditHeader2();
         } elseif ($nID == 1261) {
             return view(
-                'vendor.openpolice.nodes.1261-volun-dept-edit-wiki-stats', 
+                'vendor.openpolice.nodes.1261-volun-dept-edit-wiki-stats',
                 $this->v
             )->render();
         } elseif ($nID == 1809) {
             return view(
-                'vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate', 
+                'vendor.openpolice.nodes.1809-volun-dept-edit-how-investigate',
                 $this->v
             )->render();
         } elseif ($nID == 1227) {
             return view(
-                'vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint', 
+                'vendor.openpolice.nodes.1227-volun-dept-edit-search-complaint',
                 $this->v
             )->render();
         } elseif ($nID == 2962) {
             return view(
-                'vendor.openpolice.nodes.2962-volun-dept-edit-search-oversight', 
+                'vendor.openpolice.nodes.2962-volun-dept-edit-search-oversight',
                 $this->v
             )->render();
         } elseif ($nID == 1231) {
             $hist = view(
-                'vendor.openpolice.volun.volun-dept-edit-history', 
+                'vendor.openpolice.volun.volun-dept-edit-history',
                 $this->v
             )->render();
             return '<div class="nodeAnchor">'
@@ -369,7 +369,7 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 1351) {
             $this->initAdmDash();
             return $this->v["openDash"]->volunDepts();
-            
+
         // Admin Dashboard Page
         } elseif (in_array($nID, [2345, 2961])) {
             $this->initAdmDash();
@@ -389,7 +389,11 @@ class OpenPolice extends OpenInitExtras
         } elseif ($nID == 2100) {
             $this->initAdmDash();
             return $this->v["openDash"]->volunStatsTable();
-            
+        } elseif ($nID == 1190) {
+            return $this->loadReportStatsBasic($nID);
+        } elseif ($nID == 2013) {
+            return $this->loadReportStatsDemo($nID);
+
         // Software Development Area
         } elseif (in_array($nID, [2690, 2703, 2297, 2759, 2317])) {
             return $this->printNavDevelopmentArea($nID);
@@ -399,7 +403,7 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Overrides primary OpenPolice.org printing of individual nodes from 
+     * Overrides primary OpenPolice.org printing of individual nodes from
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPoliceExtension customizations beyond Survloop defaults.
      * e.g. flexyourrights/openpolice-extension
@@ -413,7 +417,7 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Overrides default Survloop behavior for responses 
+     * Overrides default Survloop behavior for responses
      * to multiple-choice questions.
      * This overrides the printNodePublicElements function in
      * RockHopSoft\Survloop\Tree\TreeSurvForm.
@@ -447,11 +451,11 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Overrides primary Survloop printing of individual nodes from 
+     * Overrides primary Survloop printing of individual nodes from
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
-     * Return null to leave defaults alone. Otherwise, return 
-     * report detail array used by nodePrintVertProgress 
+     * Return null to leave defaults alone. Otherwise, return
+     * report detail array used by nodePrintVertProgress
      * in RockHopSoft\Survloop\Tree\TreeSurvDataPrint.
      *
      * @param  TreeNodeSurv $curr
@@ -471,11 +475,11 @@ class OpenPolice extends OpenInitExtras
     }
 
     /**
-     * Overrides OpenPolice.org & Survloop printing of individual nodes from 
+     * Overrides OpenPolice.org & Survloop printing of individual nodes from
      * surveys and site pages. This is one of the main routing hubs
      * for OpenPolice.org customizations beyond Survloop defaults.
-     * Return null to leave defaults alone. Otherwise, return 
-     * report detail array used by nodePrintVertProgress 
+     * Return null to leave defaults alone. Otherwise, return
+     * report detail array used by nodePrintVertProgress
      * e.g. flexyourrights/openpolice-extension
      *
      * @param  TreeNodeSurv $curr
@@ -486,9 +490,9 @@ class OpenPolice extends OpenInitExtras
     {
         return null;
     }
-    
+
     /**
-     * Overrides or disables the default Survloop printing 
+     * Overrides or disables the default Survloop printing
      * of survey Back/Next buttons.
      * This overrides the nodePrintButton function in
      * RockHopSoft\Survloop\Tree\TreeSurvFormUtils.
@@ -508,10 +512,10 @@ class OpenPolice extends OpenInitExtras
         }
         return '';
     }
-    
+
     /**
-     * Overrides or disables the default Survloop & OpenPolice.org 
-     * printing of survey Back/Next buttons. 
+     * Overrides or disables the default Survloop & OpenPolice.org
+     * printing of survey Back/Next buttons.
      * e.g. flexyourrights/openpolice-extension
      *
      * @param  int $nID
@@ -522,5 +526,5 @@ class OpenPolice extends OpenInitExtras
     {
         return '';
     }
-    
+
 }

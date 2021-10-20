@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class OPzVolunEditsOvers extends Model
 {
+    use Cachable;
+
     protected $table = 'op_z_VolunEditsOvers';
     protected $primaryKey = 'EditOverID';
     public $timestamps = true;

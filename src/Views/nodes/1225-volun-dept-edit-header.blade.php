@@ -3,21 +3,21 @@
 <div id="fixedHeadWidth" class="w100"> </div>
 <div id="fixedHeader" class="fixed" style="margin-top: 38px;">
     <h3 class="disIn m0 slBlueDark">{{ $deptRow->dept_name }}</h3>
-    <b class="mL20 slGreenDark"><nobr>Accessibility Score: 
-        <div id="opcScore" class="disIn mL10">{{ 
+    <b class="mL20 slGreenDark"><nobr>Accessibility Score:
+        <div id="opcScore" class="disIn mL10">{{
             intVal($deptRow->dept_score_openness)
         }}</div></nobr>
     </b>
 </div>
-<div style="margin: 90px 0px -100px 0px;">
+<div id="deptLinkWrap" style="margin: 90px 0px -100px 0px;">
     <a href="/dept/{{ $deptRow->dept_slug }}" target="_blank">
         <i class="fa fa-external-link mR5" aria-hidden="true"></i>
         openpolice.org/dept/{{ $deptRow->dept_slug }}</a><br />
     {!! $editsSummary[0] !!}
 </div>
 <style>
-#pageTopGapID { 
-    display: none; 
+#pageTopGapID {
+    display: none;
 }
 #fixedHeader, #fixedHeader.fixed {
     margin: 55px 0px 0px -16px;
@@ -87,6 +87,6 @@ $(document).ready(function(){
         setTimeout(function() { chkDeptScore(); }, 3000);
     }
     setTimeout(function() { chkDeptScore(); }, 100);
-    
+
 });
 </script>

@@ -29,15 +29,15 @@ class OpenVolunteers extends OpenDevelopment
      *
      * @return string
      */
-    protected function printSidebarLeaderboard() 
+    protected function printSidebarLeaderboard()
     {
         $this->v["leaderboard"] = new VolunteerLeaderboard;
         return view(
-            'vendor.openpolice.volun.volun-sidebar-leaderboard', 
+            'vendor.openpolice.volun.volun-sidebar-leaderboard',
             [ "leaderboard" => $this->v["leaderboard"] ]
         )->render();
     }
-    
+
     /**
      * Prepare and pre-load volunteer research data.
      *
@@ -48,19 +48,19 @@ class OpenVolunteers extends OpenDevelopment
         if (!isset($this->v["chkVolunInitLists"])) {
             $this->v["chkVolunInitLists"] = true;
             $this->loadDeptPriorityRows();
-            if ($GLOBALS["SL"]->REQ->has('newDept') 
+            if ($GLOBALS["SL"]->REQ->has('newDept')
                 && intVal($GLOBALS["SL"]->REQ->get('newDept')) == 1
-                && $GLOBALS["SL"]->REQ->has('deptName') 
+                && $GLOBALS["SL"]->REQ->has('deptName')
                 && trim($GLOBALS["SL"]->REQ->get('deptName')) != '') {
                 $newDept = $this->newDeptAdd(
-                    $GLOBALS["SL"]->REQ->get('deptName'), 
+                    $GLOBALS["SL"]->REQ->get('deptName'),
                     $GLOBALS["SL"]->REQ->get('deptAddressState')
                 );
                 return '<script type="text/javascript"> setTimeout("window.location=\''
-                    . '/dashboard/start-' . $newDept->dept_id 
+                    . '/dashboard/start-' . $newDept->dept_id
                     . '/volunteers-research-departments\'", 10); </script>';
             }
-            $this->v["viewType"] = (($GLOBALS["SL"]->REQ->has('sort')) 
+            $this->v["viewType"] = (($GLOBALS["SL"]->REQ->has('sort'))
                 ? $GLOBALS["SL"]->REQ->get('sort') : 'recent');
             $this->v["deptRows"] = [];
             $this->v["searchForm"] = $this->deptSearchForm();
@@ -69,13 +69,13 @@ class OpenVolunteers extends OpenDevelopment
                 [ 'dept_name',     'asc'  ]
             ];
             switch ($this->v["viewType"]) {
-                case 'best': 
+                case 'best':
                     $orderby[0] = [ 'dept_score_openness', 'desc' ];
                     break;
-                case 'name': 
+                case 'name':
                     $orderby[0] = [ 'dept_name', 'asc' ];
                     break;
-                case 'city': 
+                case 'city':
                     $orderby = [
                         [ 'dept_address_state', 'asc' ],
                         [ 'dept_address_city',  'asc' ]
@@ -83,10 +83,10 @@ class OpenVolunteers extends OpenDevelopment
                     break;
             }
             $this->v["state"] = '';
-            if ($GLOBALS["SL"]->REQ->has('state') 
+            if ($GLOBALS["SL"]->REQ->has('state')
                 && trim($GLOBALS["SL"]->REQ->get('state')) != '') {
                 $this->v["state"] = trim($GLOBALS["SL"]->REQ->get('state'));
-            } elseif (isset($this->v["yourContact"]->prsn_address_state) 
+            } elseif (isset($this->v["yourContact"]->prsn_address_state)
                 && trim($this->v["yourContact"]->prsn_address_state) != '') {
                 $this->v["state"] = trim($this->v["yourContact"]->prsn_address_state);
             }
@@ -94,11 +94,11 @@ class OpenVolunteers extends OpenDevelopment
                 'Department Types',
                 'Federal Law Enforcement'
             );
-            if ($GLOBALS["SL"]->REQ->has('s') 
+            if ($GLOBALS["SL"]->REQ->has('s')
                 && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
                 $this->chkRecsPub($GLOBALS["SL"]->REQ, 36);
                 $searches = [];
-                if ($GLOBALS["SL"]->REQ->has('s') 
+                if ($GLOBALS["SL"]->REQ->has('s')
                     && trim($GLOBALS["SL"]->REQ->get('s')) != '') {
                     $searches = $GLOBALS["SL"]->parseSearchWords(
                         $GLOBALS["SL"]->REQ->get('s')
@@ -161,20 +161,20 @@ class OpenVolunteers extends OpenDevelopment
             } elseif ($this->v["state"] != '') {
                 if ($this->v["state"] == 'US') {
                     $this->v["deptRows"] = OPDepartments::where('dept_type', $fedDef)
-                        ->select('dept_id', 'dept_name', 'dept_score_openness', 
+                        ->select('dept_id', 'dept_name', 'dept_score_openness',
                             'dept_verified', 'dept_address_city', 'dept_address_state')
                         ->orderBy($orderby[0][0], $orderby[0][1])
                         ->get();
                 } else {
                     $this->v["deptRows"] = OPDepartments::where('dept_address_state', $this->v["state"])
                         ->where('dept_type', 'NOT LIKE', $fedDef)
-                        ->select('dept_id', 'dept_name', 'dept_score_openness', 
+                        ->select('dept_id', 'dept_name', 'dept_score_openness',
                             'dept_verified', 'dept_address_city', 'dept_address_state')
                         ->orderBy($orderby[0][0], $orderby[0][1])
                         ->get();
                 }
             } else {
-                $this->v["deptRows"] = OPDepartments::select('dept_id', 'dept_name', 
+                $this->v["deptRows"] = OPDepartments::select('dept_id', 'dept_name',
                     'dept_score_openness', 'dept_verified', 'dept_address_city', 'dept_address_state')
                     ->orderBy($orderby[0][0], $orderby[0][1])
                     ->get();
@@ -189,7 +189,7 @@ class OpenVolunteers extends OpenDevelopment
         }
         return true;
     }
-    
+
     /**
      * Print the priority deparments in most need of research by volunteers.
      *
@@ -200,11 +200,11 @@ class OpenVolunteers extends OpenDevelopment
         $GLOBALS["SL"]->currSearchTbls  = [ 111 ];
         $this->chkVolunInitLists();
         return view(
-            'vendor.openpolice.nodes.1755-volun-home-priority-depts', 
+            'vendor.openpolice.nodes.1755-volun-home-priority-depts',
             $this->v
         )->render();
     }
-    
+
     /**
      * Print the list of all deparments (within one state) for volunteers.
      *
@@ -220,11 +220,11 @@ class OpenVolunteers extends OpenDevelopment
         }
         $this->chkVolunInitLists();
         return view(
-            'vendor.openpolice.nodes.1211-volun-home-all-depts', 
+            'vendor.openpolice.nodes.1211-volun-home-all-depts',
             $this->v
         )->render();
     }
-    
+
     /**
      * Prepare the list of departments which need most urgent help with research.
      *
@@ -233,7 +233,7 @@ class OpenVolunteers extends OpenDevelopment
     protected function loadDeptPriorityRows()
     {
         $this->v["deptPriorityRows"] = $done = $rejects = [];
-        $this->v["yearold"] = mktime(date("H"), date("i"), date("s"), 
+        $this->v["yearold"] = mktime(date("H"), date("i"), date("s"),
             date("m")-18, date("d"), date("Y"));
         $this->v["twomonths"] = mktime(
             date("H"), date("i"), date("s"), date("m")-2, date("d"), date("Y")
@@ -255,9 +255,9 @@ class OpenVolunteers extends OpenDevelopment
             $GLOBALS["SL"]->def->getID($set, 'Police Complaint')
         ];
         $chk = DB::table('op_departments')
-            ->join('op_links_complaint_dept', 'op_departments.dept_id', 
+            ->join('op_links_complaint_dept', 'op_departments.dept_id',
                 '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
-            ->join('op_complaints', 'op_links_complaint_dept.lnk_com_dept_complaint_id', 
+            ->join('op_complaints', 'op_links_complaint_dept.lnk_com_dept_complaint_id',
                 '=', 'op_complaints.com_id')
             //->where('op_departments.dept_name', 'NOT LIKE', 'Not sure about department')
             ->whereIn('op_complaints.com_type', $types)
@@ -273,7 +273,7 @@ class OpenVolunteers extends OpenDevelopment
                 if (!in_array($dept->dept_id, $done)
                     && strtotime($dept->created_at) > $this->v["twomonths"]
                     && (!isset($dept->dept_score_openness)
-                        || !isset($dept->dept_verified) 
+                        || !isset($dept->dept_verified)
                         || strtotime($dept->dept_verified) < $this->v["yearold"])) {
                     //$this->isDeptBeingEdited($dept->dept_id);
                     $this->v["deptPriorityRows"][] = $dept;
@@ -286,7 +286,7 @@ class OpenVolunteers extends OpenDevelopment
 //echo 'priority: <pre>'; print_r($this->v["deptPriorityRows"]); print_r($chk); echo '</pre>'; exit;
         return $this->v["deptPriorityRows"];
     }
-    
+
     /**
      * Prepare the list of departments which need most urgent help with research.
      *
@@ -335,7 +335,7 @@ class OpenVolunteers extends OpenDevelopment
                         $edit = OPzEditDepartments::where('zed_dept_dept_id', $deptID)
                             ->where('zed_dept_user_id', $chk->sess_user_id)
                             ->first();
-                        if ($edit 
+                        if ($edit
                             && isset($edit->created_at)
                             && $editing < strtotime($edit->created_at)) {
                             $editing = 0;
@@ -355,7 +355,7 @@ class OpenVolunteers extends OpenDevelopment
         }
         return $GLOBALS["SL"]->x["deptEditing"][$deptID];
     }
-    
+
     /**
      * Print the shorm form for volunteers and staff to filter the list
      * of 18,000 police departments.
@@ -368,14 +368,14 @@ class OpenVolunteers extends OpenDevelopment
     {
         $GLOBALS["SL"]->loadStates();
         return view(
-            'vendor.openpolice.volun.volunEditSearch', 
-            [ 
-                "deptName"  => $deptName, 
-                "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state) 
+            'vendor.openpolice.volun.volunEditSearch',
+            [
+                "deptName"  => $deptName,
+                "stateDrop" => $GLOBALS["SL"]->states->stateDrop($state)
             ]
         )->render();
     }
-    
+
     /**
      * Print the shorm form for volunteers and staff to filter the list
      * of 18,000 police departments.
@@ -391,9 +391,9 @@ class OpenVolunteers extends OpenDevelopment
         $cutoff = mktime(date("H"), date("i"), date("s"), date("n")-1, date("j"), date("Y"));
         $cutoff = date("Y-m-d H:i:s", $cutoff);
         //where('op_z_edit_departments.zed_dept_dept_verified', '>', $cutoff)
-        $rows = OPzEditDepartments::leftJoin('users', 'users.id', 
+        $rows = OPzEditDepartments::leftJoin('users', 'users.id',
                 '=', 'op_z_edit_departments.zed_dept_user_id')
-            ->select('op_z_edit_departments.zed_dept_dept_id', 'users.id', 
+            ->select('op_z_edit_departments.zed_dept_dept_id', 'users.id',
                 'op_z_edit_departments.zed_dept_dept_verified', 'users.name')
             ->orderBy('op_z_edit_departments.zed_dept_dept_verified', 'desc')
             ->get();
@@ -412,7 +412,7 @@ class OpenVolunteers extends OpenDevelopment
         }
         return $GLOBALS["SL"]->x["recentDeptEdits"];
     }
-    
+
     /**
      * Print the short form for volunteers to share their state
      * for a default filter of all departments.
@@ -424,11 +424,11 @@ class OpenVolunteers extends OpenDevelopment
         $GLOBALS["SL"]->loadStates();
         $this->loadYourContact();
         return view(
-            'vendor.openpolice.nodes.1217-volun-home-your-info', 
+            'vendor.openpolice.nodes.1217-volun-home-your-info',
             $this->v
         )->render();
     }
-    
+
     /**
      * Save the state volunteers are in.
      *
@@ -438,7 +438,7 @@ class OpenVolunteers extends OpenDevelopment
     {
         $this->survloopInit($request, '/ajax/save-default-state/');
         $this->loadYourContact();
-        if (isset($this->v["yourContact"]) 
+        if (isset($this->v["yourContact"])
             && isset($this->v["yourContact"]->prsn_id)) {
             if ($GLOBALS["SL"]->REQ->has('newState')) {
                 $this->v["yourContact"]->update([
@@ -454,6 +454,6 @@ class OpenVolunteers extends OpenDevelopment
         return '<h1 class="slGreenDark">'
             . '<i class="fa fa-check-circle" aria-hidden="true"></i></h1>';
     }
-    
-    
+
+
 }

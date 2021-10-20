@@ -10,6 +10,10 @@
         <h1 class="mB0 slBlueDark">{{ number_format(sizeof($statsWeek["published"])) }}</h1>
         <p><b>Published on OpenPolice.org</b></p>
     </div>
+    <div class="col-lg-3 col-md-6 taC">
+        <h1 class="mB0 slBlueDark">{{ number_format(sizeof($statsWeek["submitted"])) }}</h1>
+        <p><b>Published & Filed with IAs</b></p>
+    </div>
 </div>
 
 <div class="w100 pT15 pB15"><div class="w100 brdTopGrey"></div></div>
@@ -40,7 +44,7 @@
             </div>
             <div class="col-lg-3 col-md-6 taC">
                 <h1 class="mB0 slBlueDark">{{ number_format($stats["submitted"]) }}</h1>
-                <p><b>Filed with Police Investigative Agencies</b></p>
+                <p><b>Published & Filed with IAs</b></p>
             </div>
             <div class="col-lg-3 col-md-6 taC">
                 <h1 class="mB0 slBlueDark">{{ number_format($stats["attorney"]) }}</h1>

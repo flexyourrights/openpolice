@@ -23,7 +23,7 @@ use FlexYourRights\OpenPolice\Controllers\OpenAjaxCachePrep;
 class OpenAjax extends OpenAjaxCachePrep
 {
     /**
-     * Check for ajax requests customized beyond 
+     * Check for ajax requests customized beyond
      * Survloop's default behavior, called via /ajax/{type}.
      * This overrides the ajaxChecks function in
      * RockHopSoft\Survloop\Controllers\Tree\TreeSurv.
@@ -55,12 +55,23 @@ class OpenAjax extends OpenAjaxCachePrep
             $this->ajaxComplaintPreloads($request);
         } elseif ($type == 'complaint-preloads-staff') {
             $this->ajaxStaffComplaintPreloads($request);
+
+        } elseif (in_array($type, ['dash-stats-top', 'dash-stats-graph'])) {
+            $this->initAdmDash();
+            if (Auth::user()
+                && Auth::user()->hasRole('administrator|staff|partner')) {
+                if ($type == 'dash-stats-top') {
+                    return $this->v["openDash"]->printDashTopLevStats($request);
+                } elseif ($type == 'dash-stats-graph') {
+                    return $this->v["openDash"]->printDashSessGraph($request);
+                }
+            }
         }
         return '';
     }
 
     /**
-     * Check for ajax requests customized beyond 
+     * Check for ajax requests customized beyond
      * Survloop's default behavior, called via /ajax/{type}.
      * e.g. flexyourrights/openpolice-extension
      *
@@ -100,9 +111,9 @@ class OpenAjax extends OpenAjaxCachePrep
         $GLOBALS["SL"]->x["isPublicList"] = true;
         return $this->printComplaintListing(2384, 'lrg');
     }
-    
+
     /**
-     * Run the ajax request to search police departments 
+     * Run the ajax request to search police departments
      * and return clickable results.
      *
      * @param  Illuminate\Http\Request  $request
@@ -141,7 +152,7 @@ class OpenAjax extends OpenAjaxCachePrep
         $this->getDeptStateFltNames();
 
         list($sortLab, $sortDir) = $this->chkDeptSorts($this->v["reqState"]);
-        $loadUrl .= $this->v["reqLike"] . '&states=' . implode(',', $this->v["reqState"]) 
+        $loadUrl .= $this->v["reqLike"] . '&states=' . implode(',', $this->v["reqState"])
             . '&sortLab=' . $sortLab . '&sortDir=' . $sortDir;
         $ret = $GLOBALS["SL"]->chkCache($loadUrl, 'search', 36);
         if (trim($ret) == '' || $request->has('refresh')) {
@@ -152,17 +163,17 @@ class OpenAjax extends OpenAjaxCachePrep
             if ($view == 'survey') {
                 $drop = $GLOBALS["SL"]->states->stateDrop($this->v["reqState"][0], true);
                 $ret = view(
-                    'vendor.openpolice.ajax.search-police-dept', 
+                    'vendor.openpolice.ajax.search-police-dept',
                     [
-                        "depts"            => $this->v["depts"], 
-                        "search"           => $searchStr, 
-                        "stateName"        => $this->v["stateNames"], 
+                        "depts"            => $this->v["depts"],
+                        "search"           => $searchStr,
+                        "stateName"        => $this->v["stateNames"],
                         "newDeptStateDrop" => $drop
                     ]
                 )->render();
             } else {
                 $ret = view(
-                    'vendor.openpolice.ajax.department-previews', 
+                    'vendor.openpolice.ajax.department-previews',
                     [
                         "depts"      => $this->v["depts"],
                         "deptSearch" => $searchStr,
@@ -177,7 +188,7 @@ class OpenAjax extends OpenAjaxCachePrep
         echo $ret;
         exit;
     }
-    
+
     /**
      * Run the ranked search for police departments.
      *
@@ -187,8 +198,8 @@ class OpenAjax extends OpenAjaxCachePrep
     protected function ajaxRunDeptSearch($str)
     {
         if (!isset($this->v["deptIDs"])) {
-            $this->v["deptIDs"] 
-                = $this->v["depts"] 
+            $this->v["deptIDs"]
+                = $this->v["depts"]
                 = [];
         }
         if (!isset($this->v["reqState"])) {
@@ -206,7 +217,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Run the ranked search for police departments within certain states.
      *
@@ -230,7 +241,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();";
@@ -244,7 +255,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();";
@@ -258,7 +269,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();";
@@ -272,7 +283,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();";
@@ -281,7 +292,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Run the ranked search for police departments within certain states.
      *
@@ -295,7 +306,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();
@@ -325,7 +336,7 @@ class OpenAjax extends OpenAjaxCachePrep
                         ->orderBy('dept_jurisdiction_population', 'desc')
                         ->orderBy('dept_tot_officers', 'desc')
                         ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name',
                             'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                             'dept_address_city', 'dept_address_state')
                         ->get();
@@ -335,7 +346,7 @@ class OpenAjax extends OpenAjaxCachePrep
                         ->orderBy('dept_jurisdiction_population', 'desc')
                         ->orderBy('dept_tot_officers', 'desc')
                         ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name',
                             'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                             'dept_address_city', 'dept_address_state')
                         ->get();
@@ -345,7 +356,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Run the ranked search for police departments within certain federal jurisdictions.
      *
@@ -367,7 +378,7 @@ class OpenAjax extends OpenAjaxCachePrep
                         ->orderBy('dept_jurisdiction_population', 'desc')
                         ->orderBy('dept_tot_officers', 'desc')
                         ->orderBy('dept_name', 'asc')
-                        ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                        ->select('dept_address_state', 'dept_address_county', 'dept_name',
                             'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                             'dept_address_city', 'dept_address_state')
                         ->get();
@@ -379,7 +390,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('dept_jurisdiction_population', 'desc')
                 ->orderBy('dept_tot_officers', 'desc')
                 ->orderBy('dept_name', 'asc')
-                ->select('dept_address_state', 'dept_address_county', 'dept_name', 
+                ->select('dept_address_state', 'dept_address_county', 'dept_name',
                     'dept_id', 'dept_slug', 'dept_score_openness', 'dept_verified',
                     'dept_address_city', 'dept_address_state')
                 ->get();
@@ -493,7 +504,7 @@ class OpenAjax extends OpenAjaxCachePrep
         $str = $this->chkDeptSearchFlt($request);
         $this->ajaxRunDeptSearch($str);
         return view(
-            'vendor.openpolice.ajax.department-previews-table', 
+            'vendor.openpolice.ajax.department-previews-table',
             [
                 "limit" => $limit,
                 "depts" => $this->v["depts"]
@@ -514,7 +525,7 @@ class OpenAjax extends OpenAjaxCachePrep
         if (!in_array($abbr, $this->v["reqState"])) {
             $this->v["reqState"][] = $abbr;
         }
-        if (isset($this->searcher) 
+        if (isset($this->searcher)
             && isset($this->searcher->searchFilts)
             && isset($this->searcher->searchFilts["states"])
             && !in_array($abbr, $this->searcher->searchFilts["states"])) {
@@ -545,7 +556,7 @@ class OpenAjax extends OpenAjaxCachePrep
             if (sizeof($filts) > 0) {
                 foreach ($filts as $flt) {
                     $filtParts = $GLOBALS["SL"]->mexplode('_', $flt);
-                    if (sizeof($filtParts) == 2 
+                    if (sizeof($filtParts) == 2
                         && $filtParts[0] == 'states') {
                         $this->v["reqState"] = $GLOBALS["SL"]->mexplode(',', $filtParts[1]);
                     }
@@ -553,7 +564,7 @@ class OpenAjax extends OpenAjaxCachePrep
             }
         }
         return $this->v["reqState"];
-    }   
+    }
 
     /**
      * Get the written list of state filters.
@@ -574,7 +585,7 @@ class OpenAjax extends OpenAjaxCachePrep
             }
         }
         return $this->v["stateNames"];
-    }   
+    }
 
     /**
      * Check for sorting specific to department listings.
@@ -586,15 +597,15 @@ class OpenAjax extends OpenAjaxCachePrep
         $sortLab = 'match';
         $sortDir = 'asc';
         if (sizeof($this->v["reqState"]) > 0
-            && (!isset($this->v["reqLike"]) 
+            && (!isset($this->v["reqLike"])
                 || trim($this->v["reqLike"]) == '')) {
             $sortLab = 'name';
         }
-        if ($GLOBALS["SL"]->REQ->has('sDeptSort') 
+        if ($GLOBALS["SL"]->REQ->has('sDeptSort')
             && trim($GLOBALS["SL"]->REQ->get('sDeptSort')) != '') {
             $sortLab = trim($GLOBALS["SL"]->REQ->get('sDeptSort'));
         }
-        if ($GLOBALS["SL"]->REQ->has('sDeptSortDir') 
+        if ($GLOBALS["SL"]->REQ->has('sDeptSortDir')
             && trim($GLOBALS["SL"]->REQ->get('sDeptSortDir')) != '') {
             $sortDir = trim($GLOBALS["SL"]->REQ->get('sDeptSortDir'));
         } elseif ($sortLab == 'score') {
@@ -625,14 +636,14 @@ class OpenAjax extends OpenAjaxCachePrep
             if ($sortDir == 'desc') {
                 usort($depts, function($a, $b) {
                     return (strcasecmp(
-                        $a->dept_address_state . $a->dept_address_city, 
+                        $a->dept_address_state . $a->dept_address_city,
                         $b->dept_address_state . $b->dept_address_city
                     ) <= 0);
                 });
             } else {
                 usort($depts, function($a, $b) {
                     return (strcasecmp(
-                        $a->dept_address_state . $a->dept_address_city, 
+                        $a->dept_address_state . $a->dept_address_city,
                         $b->dept_address_state . $b->dept_address_city
                     ) > 0);
                 });
@@ -650,7 +661,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return $depts;
     }
-    
+
     /**
      * Pull and print the department description to appear when
      * clicking it inside the Google map.
@@ -667,7 +678,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return '';
     }
-    
+
     /**
      * Add a new set of departments ($deptsIn) into the larger
      * sets of results.
@@ -703,7 +714,7 @@ class OpenAjax extends OpenAjaxCachePrep
         $this->ajaxRunComplaintSearch($str);
         $this->prepDataSetPreviewComplaints();
         return view(
-            'vendor.openpolice.nodes.1221-search-results-multi-data-sets-complaints', 
+            'vendor.openpolice.nodes.1221-search-results-multi-data-sets-complaints',
             [
                 "limit"      => $limit,
                 "isStaff"    => $this->isStaffOrAdmin(),
@@ -711,9 +722,9 @@ class OpenAjax extends OpenAjaxCachePrep
             ]
         )->render();
     }
-    
+
     /**
-     * Load baseline data fields needed to preview complaints 
+     * Load baseline data fields needed to preview complaints
      * for multi-set search results.
      *
      * @param  string  $str
@@ -728,7 +739,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Run the ranked search for complaints.
      *
@@ -738,9 +749,9 @@ class OpenAjax extends OpenAjaxCachePrep
     protected function ajaxRunComplaintSearch($str)
     {
         if (!isset($this->v["comIDs"])) {
-            $this->v["comIDs"] 
-                = $this->v["complaints"] 
-                = $this->v["allIncIDs"] 
+            $this->v["comIDs"]
+                = $this->v["complaints"]
+                = $this->v["allIncIDs"]
                 = [];
         }
         $this->v["comSearchTxt"] = $GLOBALS["SL"]->parseSearchWords($str);
@@ -759,7 +770,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Run the ranked search for complaints.
      *
@@ -776,11 +787,11 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->where('op_civilians.civ_is_creator', 'LIKE', 'Y')
                 ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDsPubCiv"])
                 ->where(function ($query) {
-                    return $query->where('op_person_contact.prsn_name_first', 
+                    return $query->where('op_person_contact.prsn_name_first',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_name_last', 
+                        ->orWhere('op_person_contact.prsn_name_last',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_nickname', 
+                        ->orWhere('op_person_contact.prsn_nickname',
                             'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_civilians.civ_complaint_id')
@@ -794,11 +805,11 @@ class OpenAjax extends OpenAjaxCachePrep
                     '=', 'op_incidents.inc_id')
                 ->whereIn('op_complaints.com_id', $this->v["allComIDs"])
                 ->where(function ($query) {
-                    return $query->where('op_incidents.inc_address_city', 
+                    return $query->where('op_incidents.inc_address_city',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_incidents.inc_address', 
+                        ->orWhere('op_incidents.inc_address',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_incidents.inc_landmarks', 
+                        ->orWhere('op_incidents.inc_landmarks',
                             'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_complaints.com_id')
@@ -814,11 +825,11 @@ class OpenAjax extends OpenAjaxCachePrep
                     ->where('op_civilians.civ_is_creator', 'NOT LIKE', 'Y')
                     ->whereIn('op_civilians.civ_complaint_id', $this->v["allComIDs"])
                     ->where(function ($query) {
-                        return $query->where('op_person_contact.prsn_name_first', 
+                        return $query->where('op_person_contact.prsn_name_first',
                                 'LIKE', $GLOBALS["strLike"])
-                            ->orWhere('op_person_contact.prsn_name_last', 
+                            ->orWhere('op_person_contact.prsn_name_last',
                                 'LIKE', $GLOBALS["strLike"])
-                            ->orWhere('op_person_contact.prsn_nickname', 
+                            ->orWhere('op_person_contact.prsn_nickname',
                                 'LIKE', $GLOBALS["strLike"]);
                     })
                     ->select('op_civilians.civ_complaint_id')
@@ -833,11 +844,11 @@ class OpenAjax extends OpenAjaxCachePrep
                     '=', 'op_officers.off_person_id')
                 ->whereIn('op_officers.off_complaint_id', $this->v["allComIDsPubOff"])
                 ->where(function ($query) {
-                    return $query->where('op_person_contact.prsn_name_first', 
+                    return $query->where('op_person_contact.prsn_name_first',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_name_last', 
+                        ->orWhere('op_person_contact.prsn_name_last',
                             'LIKE', $GLOBALS["strLike"])
-                        ->orWhere('op_person_contact.prsn_nickname', 
+                        ->orWhere('op_person_contact.prsn_nickname',
                             'LIKE', $GLOBALS["strLike"]);
                 })
                 ->select('op_officers.off_complaint_id')
@@ -859,7 +870,7 @@ class OpenAjax extends OpenAjaxCachePrep
         }
         return true;
     }
-    
+
     /**
      * Load the list of all complaint IDs in the searching pool.
      *
@@ -867,9 +878,9 @@ class OpenAjax extends OpenAjaxCachePrep
      */
     protected function ajaxRunComplaintSearchLoadAll()
     {
-        $this->v["allComIDs"] 
-            = $this->v["allComIDsPubCiv"] 
-            = $this->v["allComIDsPubOff"] 
+        $this->v["allComIDs"]
+            = $this->v["allComIDsPubCiv"]
+            = $this->v["allComIDsPubOff"]
             = [];
         $chk = null;
         if ($this->isStaffOrAdmin()) {
@@ -878,7 +889,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
-            $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $this->v["allComIDs"] = $GLOBALS["SL"]->resToArrIds($chk, 'com_id');
             $this->v["allComIDsPubCiv"] = $this->v["allComIDs"];
             $this->v["allComIDsPubOff"] = $this->v["allComIDs"];
         } else {
@@ -888,7 +899,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
-            $this->v["allComIDs"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $this->v["allComIDs"] = $GLOBALS["SL"]->resToArrIds($chk, 'com_id');
             $chk = OPComplaints::whereNotNull('com_summary')
                 ->where('com_summary', 'NOT LIKE', '')
                 ->whereIn('com_status', $this->getPublishedStatusList('complaints'))
@@ -896,7 +907,7 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
-            $this->v["allComIDsPubCiv"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $this->v["allComIDsPubCiv"] = $GLOBALS["SL"]->resToArrIds($chk, 'com_id');
             $chk = OPComplaints::whereNotNull('com_summary')
                 ->where('com_summary', 'NOT LIKE', '')
                 ->whereIn('com_status', $this->getPublishedStatusList('complaints'))
@@ -904,13 +915,13 @@ class OpenAjax extends OpenAjaxCachePrep
                 ->orderBy('com_id', 'desc')
                 ->select('com_id')
                 ->get();
-            $this->v["allComIDsPubOff"] = $GLOBALS["SL"]->resultsToArrIds($chk, 'com_id');
+            $this->v["allComIDsPubOff"] = $GLOBALS["SL"]->resToArrIds($chk, 'com_id');
         }
         return $chk;
     }
-    
+
     /**
-     * Add a new set of complaints into the larger sets of results, 
+     * Add a new set of complaints into the larger sets of results,
      * based on the requested data field.
      *
      * @param  array $complaintsIn
@@ -930,7 +941,7 @@ class OpenAjax extends OpenAjaxCachePrep
         return true;
     }
 
-    
+
 }
 
 class ComplaintPreview
@@ -950,14 +961,15 @@ class ComplaintPreview
             ->join('op_complaints', 'op_complaints.com_incident_id',
                 '=', 'op_incidents.inc_id')
             ->where('op_complaints.com_id', $comID)
-            ->select('op_complaints.com_id', 
-                'op_complaints.com_public_id', 
-                'op_complaints.com_status', 
+            ->select('op_complaints.com_id',
+                'op_complaints.com_public_id',
+                'op_complaints.com_status',
                 'op_complaints.com_record_submitted',
-                'op_complaints.com_publish_user_name', 
-                'op_complaints.com_publish_officer_name', 
-                'op_incidents.inc_address_city', 
-                'op_incidents.inc_address_state')
+                'op_complaints.com_publish_user_name',
+                'op_complaints.com_publish_officer_name',
+                'op_incidents.inc_address_city',
+                'op_incidents.inc_address_state',
+                'op_incidents.inc_address_zip')
             ->first();
         OPComplaints::find($comID);
         if ($this->complaint && isset($this->complaint->com_id)) {
@@ -966,7 +978,7 @@ class ComplaintPreview
                     '=', 'op_civilians.civ_person_id')
                 ->where('op_civilians.civ_complaint_id', $comID)
                 ->where('op_civilians.civ_is_creator', 'Y')
-                ->select('op_person_contact.prsn_name_first', 
+                ->select('op_person_contact.prsn_name_first',
                     'op_person_contact.prsn_name_last',
                     'op_person_contact.prsn_nickname')
                 ->first();
@@ -975,7 +987,7 @@ class ComplaintPreview
                     '=', 'op_officers.off_person_id')
                 ->where('op_officers.off_complaint_id', $comID)
                 ->orderBy('op_officers.off_id', 'asc')
-                ->select('op_person_contact.prsn_name_first', 
+                ->select('op_person_contact.prsn_name_first',
                     'op_person_contact.prsn_name_last',
                     'op_person_contact.prsn_nickname')
                 ->get();
@@ -984,8 +996,8 @@ class ComplaintPreview
                     '=', 'op_departments.dept_id')
                 ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', $comID)
                 ->orderBy('op_departments.dept_name', 'asc')
-                ->select('op_departments.dept_id', 
-                    'op_departments.dept_name', 
+                ->select('op_departments.dept_id',
+                    'op_departments.dept_name',
                     'op_departments.dept_slug')
                 ->get();
         }

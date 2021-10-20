@@ -1,6 +1,6 @@
 <?php
 /**
-  * OpenDeptStats is a mid-level class which manages 
+  * OpenDeptStats is a mid-level class which manages
   * aggregate calculations related to department performance.
   *
   * OpenPolice.org
@@ -43,23 +43,23 @@ class OpenDeptStats extends OpenOfficers
             $GLOBALS["SL"]->loadStates();
             $this->calcTopComplaintDepts($nID);
             $this->v["deptStats"] = DB::table('op_dept_stats')
-                ->join('op_departments', 'op_departments.dept_id', 
+                ->join('op_departments', 'op_departments.dept_id',
                     '=', 'op_dept_stats.dept_stat_dept_id')
                 ->orderBy('op_dept_stats.dept_stat_submitted_op', 'desc')
-                ->select('op_departments.dept_name', 'op_departments.dept_slug', 
+                ->select('op_departments.dept_name', 'op_departments.dept_slug',
                     'op_departments.dept_address_state', 'op_dept_stats.*')
                 ->get();
             $this->calcTopComplaintDeptSums();
             $this->v["isStaff"] = ($nID == 3058);
             $ret = view(
-                'vendor.openpolice.nodes.2375-departments-most-complaints', 
+                'vendor.openpolice.nodes.2375-departments-most-complaints',
                 $this->v
             )->render();
             //$GLOBALS["SL"]->putCache('/list-all-departments', $ret, 'list-cust', 1);
         //}
         return $ret;
     }
-    
+
     /**
      * Calculates departments' complaint totals and stored them in the database.
      *
@@ -102,7 +102,7 @@ class OpenDeptStats extends OpenOfficers
             ->delete();
         return true;
     }
-    
+
     /**
      * Sum the department stats.
      *
@@ -175,32 +175,32 @@ class DeptComplaintStats
         if (in_array($lnk->com_status, $defAtts)) {
             $this->attorneys++;
         }
-        if ($lnk->com_status 
+        if ($lnk->com_status
             == $GLOBALS["SL"]->def->getID($defSet, 'OK to Submit to Oversight')) {
             $this->okToFile++;
             $this->publicTotal++;
         }
-        if (isset($lnk->lnk_com_over_submitted) 
+        if (isset($lnk->lnk_com_over_submitted)
             && trim($lnk->lnk_com_over_submitted) != '') {
             $this->submittedOvr++;
             $this->publicTotal++;
         }
-        if (isset($lnk->lnk_com_over_received) 
+        if (isset($lnk->lnk_com_over_received)
             && trim($lnk->lnk_com_over_received) != '') {
             $this->receivedOvr++;
             $this->publicTotal++;
         }
-        if (isset($lnk->lnk_com_over_still_no_response) 
+        if (isset($lnk->lnk_com_over_still_no_response)
             && trim($lnk->lnk_com_over_still_no_response) != '') {
             $this->noResponseOvr++;
             $this->publicTotal++;
         }
-        if (isset($lnk->lnk_com_over_investigated) 
+        if (isset($lnk->lnk_com_over_investigated)
             && trim($lnk->lnk_com_over_investigated) != '') {
             $this->investOvr++;
             $this->publicTotal++;
         }
-        if (isset($lnk->lnk_com_over_declined) 
+        if (isset($lnk->lnk_com_over_declined)
             && trim($lnk->lnk_com_over_declined) != '') {
             $this->declinedOvr++;
             $this->publicTotal++;

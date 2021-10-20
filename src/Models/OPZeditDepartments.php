@@ -1,10 +1,13 @@
 <?php namespace App\Models;
 // generated from /resources/views/vendor/survloop/admin/db/export-laravel-model-gen.blade.php
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class OPzEditDepartments extends Model
 {
+	use Cachable;
+
     protected $table      = 'op_z_edit_departments';
     protected $primaryKey = 'zed_dept_id';
     public $timestamps    = true;

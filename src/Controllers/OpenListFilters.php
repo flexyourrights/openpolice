@@ -15,6 +15,7 @@ use App\Models\OPComplaints;
 use App\Models\OPPhysicalDescRace;
 use App\Models\SLNode;
 use App\Models\SLSearchRecDump;
+use App\Models\SLUploads;
 use FlexYourRights\OpenPolice\Controllers\OpenAjax;
 
 class OpenListFilters extends OpenAjax
@@ -29,11 +30,11 @@ class OpenListFilters extends OpenAjax
      */
     protected function printComplaintsFilters($nID, $view = 'list')
     {
-        if (!isset($this->searcher->v["sortLab"]) 
+        if (!isset($this->searcher->v["sortLab"])
             || $this->searcher->v["sortLab"] == '') {
             $this->searcher->v["sortLab"] = 'date';
         }
-        if (!isset($this->searcher->v["sortDir"]) 
+        if (!isset($this->searcher->v["sortDir"])
             || $this->searcher->v["sortDir"] == '') {
             $alpha = ['first-name', 'last-name', 'city'];
             if (in_array($this->searcher->v["sortLab"], $alpha)) {
@@ -53,11 +54,11 @@ class OpenListFilters extends OpenAjax
         if (!isset($this->searcher->searchFilts["states"])) {
             $this->searcher->searchFilts["states"] = [];
         }
-        if ((!isset($this->searcher->searchFilts["states"]) 
+        if ((!isset($this->searcher->searchFilts["states"])
                 || sizeof($this->searcher->searchFilts["states"]) == 0)
-            && (isset($this->searcher->searchFilts["state"]) 
+            && (isset($this->searcher->searchFilts["state"])
             && trim($this->searcher->searchFilts["state"]) != '')) {
-            $this->searcher->searchFilts["states"][] 
+            $this->searcher->searchFilts["states"][]
                 = trim($this->searcher->searchFilts["state"]);
         }
         if (!isset($this->searcher->searchFilts["allegs"])) {
@@ -75,10 +76,13 @@ class OpenListFilters extends OpenAjax
         if (!isset($this->searcher->searchFilts["offrace"])) {
             $this->searcher->searchFilts["offrace"] = [];
         }
+        if (!isset($this->searcher->searchFilts["comsetts"])) {
+            $this->searcher->searchFilts["comsetts"] = [];
+        }
         $statusFilts = $GLOBALS["SL"]->printAccordian(
             'By Complaint Status',
             view(
-                'vendor.openpolice.complaint-listing-filters-status', 
+                'vendor.openpolice.complaint-listing-filters-status',
                 [ "srchFilts"  => $this->searcher->searchFilts ]
             )->render(),
             (sizeof($this->searcher->searchFilts["comstatus"]) > 0)
@@ -86,7 +90,7 @@ class OpenListFilters extends OpenAjax
         $stateFilts = $GLOBALS["SL"]->printAccordian(
             'By State',
             view(
-                'vendor.openpolice.complaint-listing-filters-states', 
+                'vendor.openpolice.complaint-listing-filters-states',
                 [ "srchFilts"  => $this->searcher->searchFilts ]
             )->render(),
             (sizeof($this->searcher->searchFilts["states"]) > 0)
@@ -94,18 +98,15 @@ class OpenListFilters extends OpenAjax
         $allegFilts = $GLOBALS["SL"]->printAccordian(
             'By Allegation',
             view(
-                'vendor.openpolice.complaint-listing-filters-allegs', 
-                [
-                    "allegTypes" => $this->worstAllegations,
-                    "srchFilts"  => $this->searcher->searchFilts
-                ]
+                'vendor.openpolice.complaint-listing-filters-allegs',
+                [ "srchFilts"  => $this->searcher->searchFilts ]
             )->render(),
             (sizeof($this->searcher->searchFilts["allegs"]) > 0)
         );
         $victFilts = $GLOBALS["SL"]->printAccordian(
             'By Victim Description',
             view(
-                'vendor.openpolice.complaint-listing-filters-vict', 
+                'vendor.openpolice.complaint-listing-filters-vict',
                 [
                     "races"      => $GLOBALS["SL"]->def->getSet('Races'),
                     "srchFilts"  => $this->searcher->searchFilts
@@ -119,7 +120,7 @@ class OpenListFilters extends OpenAjax
         $offFilts = $GLOBALS["SL"]->printAccordian(
             'By Officer Description',
             view(
-                'vendor.openpolice.complaint-listing-filters-off', 
+                'vendor.openpolice.complaint-listing-filters-off',
                 [
                     "races"      => $GLOBALS["SL"]->def->getSet('Races'),
                     "srchFilts"  => $this->searcher->searchFilts
@@ -128,8 +129,16 @@ class OpenListFilters extends OpenAjax
             (sizeof($this->searcher->searchFilts["offgend"]) > 0
                 || sizeof($this->searcher->searchFilts["offrace"]) > 0)
         );
+        $comSetts = $GLOBALS["SL"]->printAccordian(
+            'By Complaint Options',
+            view(
+                'vendor.openpolice.complaint-listing-filters-settings',
+                [ "srchFilts" => $this->searcher->searchFilts ]
+            )->render(),
+            (sizeof($this->searcher->searchFilts["comsetts"]) > 0)
+        );
         return view(
-            'vendor.openpolice.complaint-listing-filters', 
+            'vendor.openpolice.complaint-listing-filters',
             [
                 "nID"         => $nID,
                 "view"        => $view,
@@ -138,6 +147,7 @@ class OpenListFilters extends OpenAjax
                 "allegFilts"  => $allegFilts,
                 "victFilts"   => $victFilts,
                 "offFilts"    => $offFilts,
+                "comSetts"    => $comSetts,
                 "srchFilts"   => $this->searcher->searchFilts
             ]
         )->render();
@@ -172,28 +182,28 @@ class OpenListFilters extends OpenAjax
             ->join('op_incidents', function (\$joi) {
                 \$joi->on('op_complaints.com_incident_id', '=', 'op_incidents.inc_id')"
                 . (($hasStateFilt) ? "->whereIn('op_incidents.inc_address_state', ['"
-                        . implode("', '", $this->searcher->searchFilts["states"]) . "'])" 
+                        . implode("', '", $this->searcher->searchFilts["states"]) . "'])"
                     : "") . ";
             })";
         if ($hasStateFilt) {
-            $this->v["filtersDesc"] .= ' & ' 
+            $this->v["filtersDesc"] .= ' & '
                 . implode(', ', $this->searcher->searchFilts["states"]);
         }
         if (isset($this->searcher->searchFilts["allegs"])
             && sizeof($this->searcher->searchFilts["allegs"]) > 0) {
             $filtDescTmp = '';
             $eval .= "->join('op_alleg_silver', function (\$joi) {
-                \$joi->on('op_complaints.com_id', 
+                \$joi->on('op_complaints.com_id',
                     '=', 'op_alleg_silver.alle_sil_complaint_id')";
             foreach ($this->searcher->searchFilts["allegs"] as $i => $allegID) {
-                $allegFld = $this->getAllegFldName($allegID);
+                $allegFld = $GLOBALS["CUST"]->getAllegFldName($allegID);
                 if ($allegFld == 'alle_sil_intimidating_weapon') {
                     if ($i > 0) {
                         $eval .= "->orWhereIn";
                     } else {
                         $eval .= "->whereIn";
                     }
-                    $eval .= "('op_alleg_silver." . $allegFld 
+                    $eval .= "('op_alleg_silver." . $allegFld
                         . "', [277, 278, 279, 280])";
                 } else {
                     if ($i > 0) {
@@ -203,21 +213,37 @@ class OpenListFilters extends OpenAjax
                     }
                     $eval .= "('op_alleg_silver." . $allegFld . "', 'LIKE', 'Y')";
                 }
-                $filtDescTmp = ' or ' 
+                $filtDescTmp = ' or '
                     . $GLOBALS["SL"]->def->getVal('Allegation Type', $allegID);
             }
             $eval .= "; })";
             $this->v["filtersDesc"] .= ' & ' . substr($filtDescTmp, 3);
+        }
+        if (isset($this->searcher->searchFilts["comsetts"])
+            && sizeof($this->searcher->searchFilts["comsetts"]) > 0) {
+            if (in_array('3', $this->searcher->searchFilts["comsetts"])) {
+                $eval .= "->where('com_publish_user_name', 1)"
+                    . "->where('com_publish_officer_name', 1)";
+            } elseif (in_array('4', $this->searcher->searchFilts["comsetts"])) {
+                $eval .= "->where('com_anon', 1)";
+            }
+            if (in_array('5', $this->searcher->searchFilts["comsetts"])) {
+                $chk = SLUploads::where('up_tree_id', 1)
+                    ->select('up_core_id')
+                    ->get();
+                $psIDs = $GLOBALS["SL"]->resToArrIds($chk, 'up_core_id');
+                $eval .= "->whereIn('com_id', [" . implode(', ', $psIDs) . "])";
+            }
         }
 
         $eval .= "->join('op_civilians', function (\$joi) {
                 \$joi->on('op_complaints.com_id', '=', 'op_civilians.civ_complaint_id')
                     ->where('op_civilians.civ_is_creator', 'Y');
             })
-            ->join('op_person_contact', 'op_civilians.civ_person_id', 
+            ->join('op_person_contact', 'op_civilians.civ_person_id',
                 '=', 'op_person_contact.prsn_id')";
-        
-        if (isset($this->v["fltIDs"]) 
+
+        if (isset($this->v["fltIDs"])
             && sizeof($this->v["fltIDs"]) > 0) {
             $fltIDs = '';
             foreach ($this->v["fltIDs"] as $ids) {
@@ -228,18 +254,18 @@ class OpenListFilters extends OpenAjax
                 }
             }
             if (trim($fltIDs) != '') {
-                $eval .= "->whereIn('op_complaints.com_id', [" 
+                $eval .= "->whereIn('op_complaints.com_id', ["
                     . substr($fltIDs, 2) . "])";
             }
         }
         if (isset($GLOBALS["SL"]->x["reqPics"]) && $GLOBALS["SL"]->x["reqPics"]) {
-            $eval .= "->whereIn('op_complaints.com_user_id', [" 
+            $eval .= "->whereIn('op_complaints.com_user_id', ["
                 . implode(", ", $GLOBALS["SL"]->getUsersWithProfilePics()) . "])";
         }
         $eval .= $this->searcher->getSearchFiltQryStatus()
-            . "->select('op_complaints.*', 'op_person_contact.prsn_name_first', 
+            . "->select('op_complaints.*', 'op_person_contact.prsn_name_first',
             'op_person_contact.prsn_name_last', 'op_person_contact.prsn_email', 'op_incidents.*')"
-            . $this->searcher->getSearchFiltQryOrderBy() 
+            . $this->searcher->getSearchFiltQryOrderBy()
             . "->get();";
         return $eval;
     }
@@ -287,7 +313,7 @@ class OpenListFilters extends OpenAjax
                         }
                     }
                 }
-                if ($inFilter 
+                if ($inFilter
                     && ((isset($this->searcher->searchFilts["offgend"])
                             && sizeof($this->searcher->searchFilts["offgend"]) > 0)
                         || (isset($this->searcher->searchFilts["offrace"])
@@ -314,7 +340,7 @@ class OpenListFilters extends OpenAjax
                         }
                     }
                 }
-                if ($inFilter 
+                if ($inFilter
                     && trim($this->searcher->searchTxt) != ''
                     && sizeof($this->searcher->searchParse) > 0) {
                     $perms = 'public';
@@ -326,8 +352,8 @@ class OpenListFilters extends OpenAjax
                         ->where('sch_rec_dmp_perms', '" . $perms . "')
                         ->where(function(\$query) { \$query";
                     foreach ($this->searcher->searchParse as $w => $word) {
-                        $eval .= (($w == 0) ? "->where" : "->orWhere") 
-                            . "('sch_rec_dmp_rec_dump', 'LIKE', \"%" 
+                        $eval .= (($w == 0) ? "->where" : "->orWhere")
+                            . "('sch_rec_dmp_rec_dump', 'LIKE', \"%"
                             . $word . "%\")";
                     }
                     $eval .= "; })->select('sch_rec_dmp_id')->first();";
@@ -405,7 +431,7 @@ class OpenListFilters extends OpenAjax
         }
         return $inFilterGend;
     }
-    
+
     /**
      * Check whether or not the current race filters match
      * and physical description records passed in.
@@ -437,19 +463,19 @@ class OpenListFilters extends OpenAjax
     protected function printComplaintFiltDescPrev()
     {
         $this->v["complaintFiltDescPrev"] = $found = '';
-        if (isset($this->v["complaints"]) 
+        if (isset($this->v["complaints"])
             && is_array($this->v["complaints"])) {
             $found = number_format(sizeof($this->v["complaints"])) . ' Found: ';
         }
-        if (isset($this->searcher->searchTxt) 
+        if (isset($this->searcher->searchTxt)
             && trim($this->searcher->searchTxt) != '') {
-            $srch = '<span class="mR5 slGrey">"' 
+            $srch = '<span class="mR5 slGrey">"'
                 . $this->searcher->searchTxt . '",</span>';
             if (strpos($this->v["filtersDesc"], $srch) === false) {
                 $this->v["filtersDesc"] = $srch . $this->v["filtersDesc"];
             }
         }
-        if (isset($this->v["filtersDesc"]) 
+        if (isset($this->v["filtersDesc"])
             && trim($this->v["filtersDesc"]) != '') {
             $this->v["filtersDesc"] = trim($this->v["filtersDesc"]);
             $this->v["complaintFiltDescPrev"] .= '<span class="mL5 slGrey">'
@@ -465,7 +491,7 @@ class OpenListFilters extends OpenAjax
             . $this->v["complaintFiltDescPrev"];
         return $this->v["complaintFiltDescPrev"];
     }
-    
+
     /**
      * Add complaint to search results for managing complaints.
      *
@@ -479,9 +505,9 @@ class OpenListFilters extends OpenAjax
             "submitted" => ''
         ];
         $dChk = DB::table('op_links_complaint_dept')
-            ->where('op_links_complaint_dept.lnk_com_dept_complaint_id', 
+            ->where('op_links_complaint_dept.lnk_com_dept_complaint_id',
                 $com->com_id)
-            ->leftJoin('op_departments', 'op_departments.dept_id', 
+            ->leftJoin('op_departments', 'op_departments.dept_id',
                 '=', 'op_links_complaint_dept.lnk_com_dept_dept_id')
             ->select('op_departments.dept_name', 'op_departments.dept_slug')
             ->orderBy('op_departments.dept_name', 'asc')
@@ -493,7 +519,7 @@ class OpenListFilters extends OpenAjax
             }
         }
         $comTime = strtotime($com->updated_at);
-        if (trim($com->com_record_submitted) != '' 
+        if (trim($com->com_record_submitted) != ''
             && $com->com_record_submitted != '0000-00-00 00:00:00') {
             $comTime = strtotime($com->com_record_submitted);
         }
@@ -507,7 +533,7 @@ class OpenListFilters extends OpenAjax
             OPComplaints::find($com->com_id)
                 ->update([ "com_type" => $com->com_type ]);
         }
-        $cutoffTime = mktime(date("H"), date("i"), date("s"), 
+        $cutoffTime = mktime(date("H"), date("i"), date("s"),
             date("m"), date("d")-2, date("Y"));
         if ($comTime < $cutoffTime) {
             if (!isset($com->com_summary) || trim($com->com_summary) == '') {
@@ -520,11 +546,11 @@ class OpenListFilters extends OpenAjax
             $this->v["comInfo"][$com->com_public_id]["submitted"] = date("n/j/Y", $comTime);
             $incDef = $GLOBALS['SL']->def->getID('Complaint Status', 'Incomplete');
             if ($com->com_status == $incDef) {
-                if ($com->com_submission_progress > 0 
+                if ($com->com_submission_progress > 0
                     && !isset($this->v["lastNodes"][$com->com_submission_progress])) {
                     $node = SLNode::find($com->com_submission_progress);
                     if ($node && isset($node->node_prompt_notes)) {
-                        $this->v["lastNodes"][$com->com_submission_progress] 
+                        $this->v["lastNodes"][$com->com_submission_progress]
                             = $node->node_prompt_notes;
                     }
                 }
@@ -537,7 +563,7 @@ class OpenListFilters extends OpenAjax
         }
         return true;
     }
-    
+
     /**
      * Get sorting index for this complaint.
      *
@@ -572,7 +598,7 @@ class OpenListFilters extends OpenAjax
         }
         return $sortInd;
     }
-    
+
     /**
      * Get sorting index by status urgency for this complaint.
      *
