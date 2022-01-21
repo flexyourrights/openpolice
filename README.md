@@ -23,8 +23,7 @@ Code bytes measured as stored on Mac disk:
 * Survloop-Generated PHP Eloquent Data Table Models ~ 340 KB (8%)
 * Survloop-Generated PHP Laravel Database Migration & Seeders ~ 2.5 MB (59%)
 
-<a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank"
->Separate package</a>:
+<a href="https://packagist.org/packages/flexyourrights/openpolice-departments" target="_blank">Separate package</a>:
 * Survloop-Generated PHP Police Departments & Oversight Seeders ~ 15.9 MB
 
 OpenPolice is an open-source, open data web app empowering citizens to prepare, file, and track reports of police conduct. The site helps users submit complaints or commendations to appropriate police oversight agencies. By allowing users to publish reports online, we aim to establish better public transparency and oversight of police activity in the U.S. OpenPolice extends <a href="https://github.com/rockhopsoft/survloop" target="_blank">Survloop</a>, which runs atop <a href="https://laravel.com/" target="_blank">Laravel</a>.
